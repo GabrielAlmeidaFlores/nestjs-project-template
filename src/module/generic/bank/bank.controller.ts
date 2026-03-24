@@ -37,7 +37,7 @@ export class BankController {
   public async processAsaasPaymentWebhook(
     @Body() dto: AsaasWebhookPaymentEventRequestDto,
   ): Promise<AsaasWebhookPaymentEventResponseDto> {
-    return this.processAsaasWebhookPaymentEventUseCase.execute(dto);
+    return await this.processAsaasWebhookPaymentEventUseCase.execute(dto);
   }
 
   @BuildEndpointSpecification({

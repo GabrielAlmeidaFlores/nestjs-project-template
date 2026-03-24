@@ -3,6 +3,8 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { ProcessAffiliateTransferGateway } from '@module/customer/affiliate-customer/lib/process-affiliate-transfer/process-affiliate-transfer.gateway';
+import { OrganizationCreditPackPurchaseQueryRepositoryGateway } from '@module/customer/credit-pack/domain/repository/organization-credit-pack-purchase/query/organization-credit-pack-purchase.query.repository.gateway';
+import { OrganizationCreditPackPurchaseEntity } from '@module/customer/credit-pack/domain/schema/entity/organization-credit-pack-purchase/organization-credit-pack-purchase.entity';
 import { OrganizationCreditPurchaseCommandRepositoryGateway } from '@module/customer/organization-credit/domain/repository/organization-credit-purchase/command/organization-credit-purchase.command.repository.gateway';
 import { OrganizationCreditPurchaseQueryRepositoryGateway } from '@module/customer/organization-credit/domain/repository/organization-credit-purchase/query/organization-credit-purchase.query.repository.gateway';
 import { OrganizationCreditPurchaseEntity } from '@module/customer/organization-credit/domain/schema/entity/organization-credit-purchase/organization-credit-purchase.entity';
@@ -14,12 +16,33 @@ import { OrganizationPaymentPlanBankPaymentEntity } from '@module/customer/payme
 import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 import { BankPaymentCommandRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/command/bank-payment.command.repository.gateway';
 import { BankPaymentQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/query/bank-payment.query.repository.gateway';
-import { GetBankPaymentQueryResult } from '@module/generic/bank/domain/repository/bank-payment/query/result/get-bank-payment.query.result';
 import { BankPaymentEntity } from '@module/generic/bank/domain/schema/entity/bank-payment/bank-payment.entity';
 import { PaymentMethodEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-method.enum';
 import { PaymentStatusEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-status.enum';
 import { AsaasWebhookPaymentEventRequestDto } from '@module/generic/bank/dto/request/asaas-webhook-payment-event.request.dto';
 import { AsaasWebhookPaymentEventResponseDto } from '@module/generic/bank/dto/response/asaas-webhook-payment-event.response.dto';
+
+import type { GetOrganizationPaymentPlanWithRelationsQueryResult } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/result/get-organization-payment-plan-with-relations.query.result';
+import type { GetBankPaymentQueryResult } from '@module/generic/bank/domain/repository/bank-payment/query/result/get-bank-payment.query.result';
+import type { BankPaymentId } from '@module/generic/bank/domain/schema/entity/bank-payment/value-object/bank-payment-id/bank-payment-id.value-object';
+
+enum PaymentOriginEnum {
+  MONTHLY_RECURRING_PLAN = 'MONTHLY_RECURRING_PLAN',
+  YEARLY_PLAN = 'YEARLY_PLAN',
+  MONTHLY_PLAN = 'MONTHLY_PLAN',
+  CREDIT_PACK_PURCHASE = 'CREDIT_PACK_PURCHASE',
+  UNKNOWN = 'UNKNOWN',
+}
+
+type ResolvedPaymentType =
+  | { origin: PaymentOriginEnum.MONTHLY_RECURRING_PLAN }
+  | { origin: PaymentOriginEnum.YEARLY_PLAN }
+  | { origin: PaymentOriginEnum.MONTHLY_PLAN }
+  | {
+      origin: PaymentOriginEnum.CREDIT_PACK_PURCHASE;
+      creditPackPurchase: OrganizationCreditPackPurchaseEntity;
+    }
+  | { origin: PaymentOriginEnum.UNKNOWN };
 
 @Injectable()
 export class ProcessAsaasWebhookPaymentEventUseCase {
@@ -43,6 +66,8 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
     private readonly organizationCreditPurchaseQueryRepository: OrganizationCreditPurchaseQueryRepositoryGateway,
     @Inject(OrganizationCreditPurchaseCommandRepositoryGateway)
     private readonly organizationCreditPurchaseCommandRepository: OrganizationCreditPurchaseCommandRepositoryGateway,
+    @Inject(OrganizationCreditPackPurchaseQueryRepositoryGateway)
+    private readonly organizationCreditPackPurchaseQueryRepository: OrganizationCreditPackPurchaseQueryRepositoryGateway,
     @Inject(ProcessAffiliateTransferGateway)
     private readonly processAffiliateTransferGateway: ProcessAffiliateTransferGateway,
   ) {
@@ -52,21 +77,21 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
   public async execute(
     dto: AsaasWebhookPaymentEventRequestDto,
   ): Promise<AsaasWebhookPaymentEventResponseDto> {
-    const statusProcessorFactory: Record<
+    const statusHandlerMap: Record<
       string,
       (dto: AsaasWebhookPaymentEventRequestDto) => Promise<void>
     > = {
-      PENDING: this.processPaymentPending.bind(this),
-      RECEIVED: this.processPaymentConfirmed.bind(this),
-      CONFIRMED: this.processPaymentConfirmed.bind(this),
-      RECEIVED_IN_CASH: this.processPaymentConfirmed.bind(this),
-      OVERDUE: this.processPaymentOverdue.bind(this),
+      PENDING: this.onPaymentPending.bind(this),
+      RECEIVED: this.onPaymentConfirmed.bind(this),
+      CONFIRMED: this.onPaymentConfirmed.bind(this),
+      RECEIVED_IN_CASH: this.onPaymentConfirmed.bind(this),
+      OVERDUE: this.onPaymentOverdue.bind(this),
     };
 
     const paymentStatus = dto.payment.status;
-    const processor = statusProcessorFactory[paymentStatus];
+    const handler = statusHandlerMap[paymentStatus];
 
-    if (!processor) {
+    if (!handler) {
       return AsaasWebhookPaymentEventResponseDto.build({
         message: `Status ${paymentStatus} não requer processamento`,
         processed: false,
@@ -76,11 +101,11 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
     }
 
     try {
-      await processor(dto);
+      await handler(dto);
     } catch {
       const waitTime = 5000;
       await new Promise((resolve) => setTimeout(resolve, waitTime));
-      await processor(dto);
+      await handler(dto);
     }
 
     return AsaasWebhookPaymentEventResponseDto.build({
@@ -89,6 +114,364 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
       eventId: dto.id,
       eventType: dto.event,
     });
+  }
+
+  private async onPaymentPending(
+    dto: AsaasWebhookPaymentEventRequestDto,
+  ): Promise<void> {
+    await this.upsertBankPayment(dto);
+
+    if (this.isMonthlyRecurringSubscription(dto)) {
+      await this.handleMonthlyRecurringPlanPayment(dto);
+    }
+  }
+
+  private async onPaymentConfirmed(
+    dto: AsaasWebhookPaymentEventRequestDto,
+  ): Promise<void> {
+    await this.upsertBankPayment(dto);
+
+    const bankPayment =
+      await this.bankPaymentQueryRepository.findOneBankPaymentByBankExternalId(
+        dto.payment.id,
+      );
+
+    if (!bankPayment) {
+      return;
+    }
+
+    const resolvedPayment = await this.resolvePaymentOrigin(
+      dto,
+      bankPayment.id,
+    );
+
+    const creditPackPurchase =
+      resolvedPayment.origin === PaymentOriginEnum.CREDIT_PACK_PURCHASE
+        ? resolvedPayment.creditPackPurchase
+        : null;
+
+    const confirmedHandlerMap: Record<PaymentOriginEnum, () => Promise<void>> =
+      {
+        [PaymentOriginEnum.MONTHLY_RECURRING_PLAN]: () =>
+          this.handleMonthlyRecurringPlanPayment(dto),
+
+        [PaymentOriginEnum.YEARLY_PLAN]: () =>
+          this.handleYearlyPlanPayment(dto, bankPayment),
+
+        [PaymentOriginEnum.MONTHLY_PLAN]: () =>
+          this.handleMonthlyPlanPayment(bankPayment),
+
+        [PaymentOriginEnum.CREDIT_PACK_PURCHASE]: () => {
+          if (!creditPackPurchase) {
+            return Promise.resolve();
+          }
+          return this.handleCreditPackPurchasePayment(
+            creditPackPurchase,
+            bankPayment,
+          );
+        },
+
+        [PaymentOriginEnum.UNKNOWN]: () => Promise.resolve(),
+      };
+
+    await confirmedHandlerMap[resolvedPayment.origin]();
+  }
+
+  private async onPaymentOverdue(
+    dto: AsaasWebhookPaymentEventRequestDto,
+  ): Promise<void> {
+    await this.upsertBankPayment(dto);
+  }
+
+  private async resolvePaymentOrigin(
+    dto: AsaasWebhookPaymentEventRequestDto,
+    bankPaymentId: BankPaymentId,
+  ): Promise<ResolvedPaymentType> {
+    if (this.isMonthlyRecurringSubscription(dto)) {
+      return { origin: PaymentOriginEnum.MONTHLY_RECURRING_PLAN };
+    }
+
+    if (this.isYearlyInstallmentPlan(dto)) {
+      return { origin: PaymentOriginEnum.YEARLY_PLAN };
+    }
+
+    const paymentPlanLink =
+      await this.organizationPaymentPlanBankPaymentQueryRepository.findOneOrganizationPaymentPlanBankPaymentByBankPaymentId(
+        bankPaymentId,
+      );
+
+    if (paymentPlanLink) {
+      const organizationPaymentPlan =
+        await this.organizationPaymentPlanQueryRepository.findOneByIdWithRelations(
+          paymentPlanLink.organizationPaymentPlan,
+        );
+
+      if (organizationPaymentPlan?.cycle === PaymentPlanCycleEnum.MONTHLY) {
+        return { origin: PaymentOriginEnum.MONTHLY_PLAN };
+      }
+    }
+
+    const creditPackPurchase =
+      await this.organizationCreditPackPurchaseQueryRepository.findOneByBankPaymentId(
+        bankPaymentId,
+      );
+
+    if (creditPackPurchase) {
+      return {
+        origin: PaymentOriginEnum.CREDIT_PACK_PURCHASE,
+        creditPackPurchase,
+      };
+    }
+
+    return { origin: PaymentOriginEnum.UNKNOWN };
+  }
+
+  private isMonthlyRecurringSubscription(
+    dto: AsaasWebhookPaymentEventRequestDto,
+  ): boolean {
+    return typeof dto.payment.subscription === 'string';
+  }
+
+  private isYearlyInstallmentPlan(
+    dto: AsaasWebhookPaymentEventRequestDto,
+  ): boolean {
+    return typeof dto.payment.installment === 'string';
+  }
+
+  private async handleMonthlyRecurringPlanPayment(
+    dto: AsaasWebhookPaymentEventRequestDto,
+  ): Promise<void> {
+    if (!this.isMonthlyRecurringSubscription(dto)) {
+      return;
+    }
+
+    const organizationPaymentPlan =
+      await this.organizationPaymentPlanQueryRepository.findOneByBankExternalIdWithRelations(
+        dto.payment.subscription as string,
+      );
+
+    if (!organizationPaymentPlan) {
+      return;
+    }
+
+    const bankPayment =
+      await this.bankPaymentQueryRepository.findOneBankPaymentByBankExternalId(
+        dto.payment.id,
+      );
+
+    if (!bankPayment) {
+      return;
+    }
+
+    const alreadyCredited =
+      await this.organizationCreditPurchaseQueryRepository.findOneOrganizationCreditPurchaseByBankPaymentId(
+        bankPayment.id,
+      );
+
+    if (alreadyCredited) {
+      return;
+    }
+
+    const creditPurchase = new OrganizationCreditPurchaseEntity({
+      organization: organizationPaymentPlan.organization.id,
+      bankPayment: bankPayment.id,
+      creditAmount: organizationPaymentPlan.monthlyCreditAmount,
+    });
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute([
+      this.organizationCreditPurchaseCommandRepository.createOrganizationCreditPurchase(
+        creditPurchase,
+      ),
+    ]);
+    await transaction.commit();
+  }
+
+  private async handleYearlyPlanPayment(
+    dto: AsaasWebhookPaymentEventRequestDto,
+    bankPayment: GetBankPaymentQueryResult,
+  ): Promise<void> {
+    const organizationPaymentPlan =
+      await this.organizationPaymentPlanQueryRepository.findOneByIdWithRelations(
+        new OrganizationPaymentPlanId(dto.payment.externalReference),
+      );
+
+    if (!organizationPaymentPlan) {
+      return;
+    }
+
+    await this.ensurePaymentPlanBankPaymentLinkExists(
+      organizationPaymentPlan.id,
+      bankPayment,
+    );
+
+    const alreadyCreditedForThisYear =
+      await this.hasExistingCreditsForPaymentPlan(organizationPaymentPlan.id);
+
+    if (alreadyCreditedForThisYear) {
+      return;
+    }
+
+    await this.grantTwelveMonthsOfCredits(organizationPaymentPlan, bankPayment);
+  }
+
+  private async handleMonthlyPlanPayment(
+    bankPayment: GetBankPaymentQueryResult,
+  ): Promise<void> {
+    const paymentPlanLink =
+      await this.organizationPaymentPlanBankPaymentQueryRepository.findOneOrganizationPaymentPlanBankPaymentByBankPaymentId(
+        bankPayment.id,
+      );
+
+    if (!paymentPlanLink) {
+      return;
+    }
+
+    const organizationPaymentPlan =
+      await this.organizationPaymentPlanQueryRepository.findOneByIdWithRelations(
+        paymentPlanLink.organizationPaymentPlan,
+      );
+
+    if (!organizationPaymentPlan) {
+      return;
+    }
+
+    const alreadyCredited =
+      await this.organizationCreditPurchaseQueryRepository.findOneOrganizationCreditPurchaseByBankPaymentId(
+        bankPayment.id,
+      );
+
+    if (alreadyCredited) {
+      return;
+    }
+
+    const creditPurchase = new OrganizationCreditPurchaseEntity({
+      organization: organizationPaymentPlan.organization.id,
+      bankPayment: bankPayment.id,
+      creditAmount: organizationPaymentPlan.monthlyCreditAmount,
+    });
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute([
+      this.organizationCreditPurchaseCommandRepository.createOrganizationCreditPurchase(
+        creditPurchase,
+      ),
+    ]);
+    await transaction.commit();
+  }
+
+  private async handleCreditPackPurchasePayment(
+    creditPackPurchase: OrganizationCreditPackPurchaseEntity,
+    bankPayment: GetBankPaymentQueryResult,
+  ): Promise<void> {
+    const alreadyCredited =
+      await this.organizationCreditPurchaseQueryRepository.findOneOrganizationCreditPurchaseByBankPaymentId(
+        bankPayment.id,
+      );
+
+    if (alreadyCredited) {
+      return;
+    }
+
+    const creditPurchase = new OrganizationCreditPurchaseEntity({
+      organization: creditPackPurchase.organizationId,
+      bankPayment: bankPayment.id,
+      creditAmount: creditPackPurchase.creditAmount,
+    });
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute([
+      this.organizationCreditPurchaseCommandRepository.createOrganizationCreditPurchase(
+        creditPurchase,
+      ),
+    ]);
+    await transaction.commit();
+  }
+
+  private async ensurePaymentPlanBankPaymentLinkExists(
+    organizationPaymentPlanId: OrganizationPaymentPlanId,
+    bankPayment: GetBankPaymentQueryResult,
+  ): Promise<void> {
+    const existing =
+      await this.organizationPaymentPlanBankPaymentQueryRepository.findOneOrganizationPaymentPlanBankPaymentByBankPaymentId(
+        bankPayment.id,
+      );
+
+    if (existing) {
+      return;
+    }
+
+    const newLink = new OrganizationPaymentPlanBankPaymentEntity({
+      organizationPaymentPlan: organizationPaymentPlanId,
+      bankPayment: bankPayment.id,
+    });
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute([
+      this.organizationPaymentPlanBankPaymentCommandRepository.createOrganizationPaymentPlanBankPayment(
+        newLink,
+      ),
+    ]);
+    await transaction.commit();
+  }
+
+  private async hasExistingCreditsForPaymentPlan(
+    organizationPaymentPlanId: OrganizationPaymentPlanId,
+  ): Promise<boolean> {
+    const allPaymentLinks =
+      await this.organizationPaymentPlanBankPaymentQueryRepository.findManyOrganizationPaymentPlanBankPaymentByOrganizationPaymentPlanId(
+        organizationPaymentPlanId,
+      );
+
+    for (const link of allPaymentLinks) {
+      const existing =
+        await this.organizationCreditPurchaseQueryRepository.findOneOrganizationCreditPurchaseByBankPaymentId(
+          link.bankPayment,
+        );
+
+      if (existing) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  private async grantTwelveMonthsOfCredits(
+    organizationPaymentPlan: GetOrganizationPaymentPlanWithRelationsQueryResult,
+    bankPayment: GetBankPaymentQueryResult,
+  ): Promise<void> {
+    const now = new Date();
+    const monthsInYear = 12;
+
+    const creditPurchaseTransactions = Array.from(
+      { length: monthsInYear },
+      (_, month) => {
+        const validFrom = new Date(now);
+        validFrom.setMonth(now.getMonth() + month);
+        validFrom.setHours(0, 0, 0, 0);
+
+        return this.organizationCreditPurchaseCommandRepository.createOrganizationCreditPurchase(
+          new OrganizationCreditPurchaseEntity({
+            organization: organizationPaymentPlan.organization.id,
+            bankPayment: bankPayment.id,
+            creditAmount: organizationPaymentPlan.monthlyCreditAmount,
+            validFrom,
+          }),
+        );
+      },
+    );
+
+    const markPaymentConfirmed =
+      this.bankPaymentCommandRepository.updateBankPayment(
+        bankPayment.id,
+        new BankPaymentEntity({
+          ...bankPayment,
+          status: PaymentStatusEnum.CONFIRMED,
+        }),
+      );
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute([
+      ...creditPurchaseTransactions,
+      markPaymentConfirmed,
+    ]);
+    await transaction.commit();
   }
 
   private parseDateWithoutTimezoneAdjustment(dateString: string): Date {
@@ -143,7 +526,7 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
       status === PaymentStatusEnum.CONFIRMED ? dto.payment.invoiceUrl : null;
 
     if (existingPayment) {
-      const updateTransaction =
+      const transaction = await this.baseTransactionRepositoryGateway.execute([
         this.bankPaymentCommandRepository.updateBankPayment(
           existingPayment.id,
           new BankPaymentEntity({
@@ -155,428 +538,73 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
             paymentDate: paymentDate ?? clientPaymentDate,
             bankSlipUrl: dto.payment.bankSlipUrl ?? null,
           }),
-        );
-
-      const transaction = await this.baseTransactionRepositoryGateway.execute([
-        updateTransaction,
-      ]);
-      await transaction.commit();
-    } else {
-      const newPayment = new BankPaymentEntity({
-        bankExternalId,
-        paymentMethod,
-        paymentReceipt,
-        amount: new DecimalValue(dto.payment.value),
-        status,
-        dueDate: this.parseDateWithoutTimezoneAdjustment(dto.payment.dueDate),
-        paymentDate: paymentDate ?? clientPaymentDate,
-        installmentNumber: dto.payment.installmentNumber ?? null,
-        description: dto.payment.description,
-        bankSlipUrl: dto.payment.bankSlipUrl ?? null,
-      });
-
-      const createTransaction =
-        this.bankPaymentCommandRepository.createBankPayment(newPayment);
-
-      const transaction = await this.baseTransactionRepositoryGateway.execute([
-        createTransaction,
-      ]);
-      await transaction.commit();
-
-      if (typeof dto.payment.subscription === 'string') {
-        const organizationPaymentPlan =
-          await this.organizationPaymentPlanQueryRepository.findOneByBankExternalId(
-            dto.payment.subscription,
-          );
-
-        if (organizationPaymentPlan) {
-          const existingRelation =
-            await this.organizationPaymentPlanBankPaymentQueryRepository.findOneOrganizationPaymentPlanBankPaymentByBankPaymentId(
-              newPayment.id,
-            );
-
-          if (!existingRelation) {
-            const relation = new OrganizationPaymentPlanBankPaymentEntity({
-              organizationPaymentPlan: organizationPaymentPlan.id,
-              bankPayment: newPayment.id,
-            });
-
-            const createRelationTransaction =
-              this.organizationPaymentPlanBankPaymentCommandRepository.createOrganizationPaymentPlanBankPayment(
-                relation,
-              );
-
-            const relationTransaction =
-              await this.baseTransactionRepositoryGateway.execute([
-                createRelationTransaction,
-              ]);
-            await relationTransaction.commit();
-          }
-        }
-      }
-    }
-  }
-
-  private async processPaymentPending(
-    dto: AsaasWebhookPaymentEventRequestDto,
-  ): Promise<void> {
-    await this.upsertBankPayment(dto);
-
-    if (typeof dto.payment.subscription === 'string') {
-      await this.processPaymentFromMonthlyRecurringPaymentPlan(dto);
-      return;
-    }
-  }
-
-  private async processPaymentConfirmed(
-    dto: AsaasWebhookPaymentEventRequestDto,
-  ): Promise<void> {
-    await this.upsertBankPayment(dto);
-
-    if (typeof dto.payment.subscription === 'string') {
-      await this.processPaymentFromMonthlyRecurringPaymentPlan(dto);
-      return;
-    }
-
-    if (typeof dto.payment.installment === 'string') {
-      await this.processPaymentFromYearlyPaymentPlan(dto);
-      return;
-    }
-
-    const bankPayment =
-      await this.bankPaymentQueryRepository.findOneBankPaymentByBankExternalId(
-        dto.payment.id,
-      );
-
-    if (bankPayment === null) {
-      return;
-    }
-
-    const organizationPaymentPlanBank =
-      await this.organizationPaymentPlanBankPaymentQueryRepository.findOneOrganizationPaymentPlanBankPaymentByBankPaymentId(
-        bankPayment.id,
-      );
-
-    if (organizationPaymentPlanBank !== null) {
-      const organizationPaymentPlan =
-        await this.organizationPaymentPlanQueryRepository.findOneByIdWithRelations(
-          organizationPaymentPlanBank.organizationPaymentPlan,
-        );
-
-      if (organizationPaymentPlan?.cycle === PaymentPlanCycleEnum.MONTHLY) {
-        await this.processPaymentFromMonthlyPaymentPlan(dto);
-        return;
-      }
-
-      if (organizationPaymentPlan?.cycle === PaymentPlanCycleEnum.YEARLY) {
-        await this.updateOrganizationPaymentPlanToActive(
-          organizationPaymentPlanBank.organizationPaymentPlan,
-          bankPayment,
-        );
-        this.processAffiliateTransferGateway
-          .process(
-            bankPayment.id,
-            organizationPaymentPlan.id,
-            bankPayment.amount,
-          )
-          .catch((err) =>
-            this.logger.error('Failed to process affiliate transfer', err),
-          );
-      }
-    }
-  }
-
-  private async updateOrganizationPaymentPlanToActive(
-    organizationPaymentPlanId: OrganizationPaymentPlanId,
-    bankPayment: GetBankPaymentQueryResult,
-  ): Promise<void> {
-    const organizationPaymentPlan =
-      await this.organizationPaymentPlanQueryRepository.findOneByIdWithRelations(
-        organizationPaymentPlanId,
-      );
-
-    if (!organizationPaymentPlan) {
-      return;
-    }
-
-    const existingCreditPurchase =
-      await this.organizationCreditPurchaseQueryRepository.findOneOrganizationCreditPurchaseByBankPaymentId(
-        bankPayment.id,
-      );
-
-    if (existingCreditPurchase) {
-      return;
-    }
-
-    const now = new Date();
-    const creditPurchaseTransactions = [];
-    const monthsInYear = 12;
-
-    for (let month = 0; month < monthsInYear; month++) {
-      const validFromDate = new Date(now);
-      validFromDate.setMonth(now.getMonth() + month);
-      validFromDate.setHours(0, 0, 0, 0);
-
-      const creditPurchase = new OrganizationCreditPurchaseEntity({
-        organization: organizationPaymentPlan.organization.id,
-        bankPayment: bankPayment.id,
-        creditAmount: organizationPaymentPlan.monthlyCreditAmount,
-        validFrom: validFromDate,
-      });
-
-      creditPurchaseTransactions.push(
-        this.organizationCreditPurchaseCommandRepository.createOrganizationCreditPurchase(
-          creditPurchase,
         ),
-      );
-    }
-
-    const transaction = await this.baseTransactionRepositoryGateway.execute(
-      creditPurchaseTransactions,
-    );
-    await transaction.commit();
-  }
-
-  private async processPaymentFromYearlyPaymentPlan(
-    dto: AsaasWebhookPaymentEventRequestDto,
-  ): Promise<void> {
-    if (typeof dto.payment.installment !== 'string') {
+      ]);
+      await transaction.commit();
       return;
     }
 
-    const bankPayment =
-      await this.bankPaymentQueryRepository.findOneBankPaymentByBankExternalId(
-        dto.payment.id,
-      );
-
-    if (!bankPayment) {
-      return;
-    }
-
-    const organizationPaymentPlan =
-      await this.organizationPaymentPlanQueryRepository.findOneByIdWithRelations(
-        new OrganizationPaymentPlanId(dto.payment.externalReference),
-      );
-
-    if (!organizationPaymentPlan) {
-      return;
-    }
-
-    const organizationPaymentPlanBank =
-      await this.organizationPaymentPlanBankPaymentQueryRepository.findOneOrganizationPaymentPlanBankPaymentByBankPaymentId(
-        bankPayment.id,
-      );
-
-    if (!organizationPaymentPlanBank) {
-      const newRelation = new OrganizationPaymentPlanBankPaymentEntity({
-        organizationPaymentPlan: organizationPaymentPlan.id,
-        bankPayment: bankPayment.id,
-      });
-
-      const createRelationTransaction =
-        this.organizationPaymentPlanBankPaymentCommandRepository.createOrganizationPaymentPlanBankPayment(
-          newRelation,
-        );
-
-      const relationTransaction =
-        await this.baseTransactionRepositoryGateway.execute([
-          createRelationTransaction,
-        ]);
-      await relationTransaction.commit();
-    }
-
-    const allPaymentRelations =
-      await this.organizationPaymentPlanBankPaymentQueryRepository.findManyOrganizationPaymentPlanBankPaymentByOrganizationPaymentPlanId(
-        organizationPaymentPlan.id,
-      );
-
-    const allBankPaymentIds = allPaymentRelations.map((pr) => pr.bankPayment);
-
-    let hasExistingCredits = false;
-    for (const paymentId of allBankPaymentIds) {
-      const existingCreditPurchase =
-        await this.organizationCreditPurchaseQueryRepository.findOneOrganizationCreditPurchaseByBankPaymentId(
-          paymentId,
-        );
-      if (existingCreditPurchase) {
-        hasExistingCredits = true;
-        break;
-      }
-    }
-
-    if (hasExistingCredits) {
-      return;
-    }
-
-    const now = new Date();
-    const creditPurchaseTransactions = [];
-    const monthsInYear = 12;
-
-    for (let month = 0; month < monthsInYear; month++) {
-      const validFromDate = new Date(now);
-      validFromDate.setMonth(now.getMonth() + month);
-      validFromDate.setHours(0, 0, 0, 0);
-
-      const creditPurchase = new OrganizationCreditPurchaseEntity({
-        organization: organizationPaymentPlan.organization.id,
-        bankPayment: bankPayment.id,
-        creditAmount: organizationPaymentPlan.monthlyCreditAmount,
-        validFrom: validFromDate,
-      });
-
-      const createCreditPurchaseTransaction =
-        this.organizationCreditPurchaseCommandRepository.createOrganizationCreditPurchase(
-          creditPurchase,
-        );
-
-      creditPurchaseTransactions.push(createCreditPurchaseTransaction);
-    }
-
-    const updatedBankPayment = new BankPaymentEntity({
-      ...bankPayment,
-      status: PaymentStatusEnum.CONFIRMED,
+    const newPayment = new BankPaymentEntity({
+      bankExternalId,
+      paymentMethod,
+      paymentReceipt,
+      amount: new DecimalValue(dto.payment.value),
+      status,
+      dueDate: this.parseDateWithoutTimezoneAdjustment(dto.payment.dueDate),
+      paymentDate: paymentDate ?? clientPaymentDate,
+      installmentNumber: dto.payment.installmentNumber ?? null,
+      description: dto.payment.description,
+      bankSlipUrl: dto.payment.bankSlipUrl ?? null,
     });
 
-    const updateBankPaymentTransaction =
-      this.bankPaymentCommandRepository.updateBankPayment(
-        bankPayment.id,
-        updatedBankPayment,
+    const transaction = await this.baseTransactionRepositoryGateway.execute([
+      this.bankPaymentCommandRepository.createBankPayment(newPayment),
+    ]);
+    await transaction.commit();
+
+    if (this.isMonthlyRecurringSubscription(dto)) {
+      await this.linkNewPaymentToMonthlyRecurringPlan(dto, newPayment);
+    }
+  }
+
+  private async linkNewPaymentToMonthlyRecurringPlan(
+    dto: AsaasWebhookPaymentEventRequestDto,
+    newPayment: BankPaymentEntity,
+  ): Promise<void> {
+    const organizationPaymentPlan =
+      await this.organizationPaymentPlanQueryRepository.findOneByBankExternalId(
+        dto.payment.subscription as string,
       );
 
+    if (!organizationPaymentPlan) {
+      return;
+    }
+
+    const alreadyLinked =
+      await this.organizationPaymentPlanBankPaymentQueryRepository.findOneOrganizationPaymentPlanBankPaymentByBankPaymentId(
+        newPayment.id,
+      );
+
+    if (alreadyLinked) {
+      return;
+    }
+
+    const link = new OrganizationPaymentPlanBankPaymentEntity({
+      organizationPaymentPlan: organizationPaymentPlan.id,
+      bankPayment: newPayment.id,
+    });
+
     const transaction = await this.baseTransactionRepositoryGateway.execute([
-      ...creditPurchaseTransactions,
-      updateBankPaymentTransaction,
+      this.organizationPaymentPlanBankPaymentCommandRepository.createOrganizationPaymentPlanBankPayment(
+        link,
+      ),
     ]);
     await transaction.commit();
 
     this.processAffiliateTransferGateway
-      .process(bankPayment.id, organizationPaymentPlan.id, bankPayment.amount)
+      .process(newPayment.id, organizationPaymentPlan.id, newPayment.amount)
       .catch((err) =>
         this.logger.error('Failed to process affiliate transfer', err),
       );
-  }
-
-  private async processPaymentFromMonthlyPaymentPlan(
-    dto: AsaasWebhookPaymentEventRequestDto,
-  ): Promise<void> {
-    const bankPayment =
-      await this.bankPaymentQueryRepository.findOneBankPaymentByBankExternalId(
-        dto.payment.id,
-      );
-
-    if (!bankPayment) {
-      return;
-    }
-
-    const organizationPaymentPlanBank =
-      await this.organizationPaymentPlanBankPaymentQueryRepository.findOneOrganizationPaymentPlanBankPaymentByBankPaymentId(
-        bankPayment.id,
-      );
-
-    if (!organizationPaymentPlanBank) {
-      return;
-    }
-
-    const organizationPaymentPlan =
-      await this.organizationPaymentPlanQueryRepository.findOneByIdWithRelations(
-        organizationPaymentPlanBank.organizationPaymentPlan,
-      );
-
-    if (organizationPaymentPlan) {
-      const existingCreditPurchase =
-        await this.organizationCreditPurchaseQueryRepository.findOneOrganizationCreditPurchaseByBankPaymentId(
-          bankPayment.id,
-        );
-
-      if (!existingCreditPurchase) {
-        const creditPurchase = new OrganizationCreditPurchaseEntity({
-          organization: organizationPaymentPlan.organization.id,
-          bankPayment: bankPayment.id,
-          creditAmount: organizationPaymentPlan.monthlyCreditAmount,
-        });
-
-        const createCreditPurchaseTransaction =
-          this.organizationCreditPurchaseCommandRepository.createOrganizationCreditPurchase(
-            creditPurchase,
-          );
-
-        const transaction = await this.baseTransactionRepositoryGateway.execute(
-          [createCreditPurchaseTransaction],
-        );
-        await transaction.commit();
-
-        this.processAffiliateTransferGateway
-          .process(
-            bankPayment.id,
-            organizationPaymentPlan.id,
-            bankPayment.amount,
-          )
-          .catch((err) =>
-            this.logger.error('Failed to process affiliate transfer', err),
-          );
-      }
-    }
-  }
-
-  private async processPaymentFromMonthlyRecurringPaymentPlan(
-    dto: AsaasWebhookPaymentEventRequestDto,
-  ): Promise<void> {
-    if (typeof dto.payment.subscription !== 'string') {
-      return;
-    }
-
-    const organizationPaymentPlan =
-      await this.organizationPaymentPlanQueryRepository.findOneByBankExternalIdWithRelations(
-        dto.payment.subscription,
-      );
-
-    if (organizationPaymentPlan) {
-      const bankPayment =
-        await this.bankPaymentQueryRepository.findOneBankPaymentByBankExternalId(
-          dto.payment.id,
-        );
-
-      if (bankPayment) {
-        const existingCreditPurchase =
-          await this.organizationCreditPurchaseQueryRepository.findOneOrganizationCreditPurchaseByBankPaymentId(
-            bankPayment.id,
-          );
-
-        if (!existingCreditPurchase) {
-          const creditPurchase = new OrganizationCreditPurchaseEntity({
-            organization: organizationPaymentPlan.organization.id,
-            bankPayment: bankPayment.id,
-            creditAmount: organizationPaymentPlan.monthlyCreditAmount,
-          });
-
-          const createCreditPurchaseTransaction =
-            this.organizationCreditPurchaseCommandRepository.createOrganizationCreditPurchase(
-              creditPurchase,
-            );
-
-          const transaction =
-            await this.baseTransactionRepositoryGateway.execute([
-              createCreditPurchaseTransaction,
-            ]);
-          await transaction.commit();
-
-          this.processAffiliateTransferGateway
-            .process(
-              bankPayment.id,
-              organizationPaymentPlan.id,
-              bankPayment.amount,
-            )
-            .catch((err) =>
-              this.logger.error('Failed to process affiliate transfer', err),
-            );
-        }
-      }
-    }
-  }
-
-  private async processPaymentOverdue(
-    dto: AsaasWebhookPaymentEventRequestDto,
-  ): Promise<void> {
-    await this.upsertBankPayment(dto);
   }
 }

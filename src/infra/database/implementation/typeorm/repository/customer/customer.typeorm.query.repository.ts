@@ -362,7 +362,7 @@ export class CustomerTypeormQueryRepository
     const customers = await queryBuilder.getMany();
 
     const results = customers
-      .filter((customer) => customer.authIdentity !== undefined)
+      .filter((customer) => Boolean(customer.authIdentity))
       .map((customer) =>
         this.mapperGateway.map(
           customer,

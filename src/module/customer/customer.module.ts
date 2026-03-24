@@ -4,6 +4,7 @@ import { AccountModule } from '@module/customer/account/account.module';
 import { AffiliateCustomerModule } from '@module/customer/affiliate-customer/affiliate-customer.module';
 import { AiConversationModule } from '@module/customer/ai-conversation/ai-conversation.module';
 import { AnalysisToolModule } from '@module/customer/analysis-tool/analysis-tool.module';
+import { CreditPackModule } from '@module/customer/credit-pack/credit-pack.module';
 import { DocumentsSentByEmailModule } from '@module/customer/documents-sent-by-email/documents-sent-by-email.module';
 import { DocumentsToBeGeneratedModule } from '@module/customer/documents-to-be-generated/documents-to-be-generated.module';
 import { LegalProceedingModule } from '@module/customer/legal-proceeding/legal-proceeding.module';
@@ -23,10 +24,11 @@ import { CustomerTutorialModule } from '@module/customer/tutorial/tutorial.modul
     PaymentPlanModule,
     OrganizationCreditModule,
     AiConversationModule,
-    CustomerTutorialModule,
+    CreditPackModule,
     DocumentsToBeGeneratedModule,
     DocumentsSentByEmailModule,
     SystemActivitiesModule,
+    CustomerTutorialModule,
   ],
   controllers: [],
   providers: [],
