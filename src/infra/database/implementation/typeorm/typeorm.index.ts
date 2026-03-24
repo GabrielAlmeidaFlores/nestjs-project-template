@@ -162,6 +162,7 @@ import { AdministrativeProcedureInssAnalysisResultTypeormEntity } from '@infra/d
 import { AdministrativeProcedureInssAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis.entity';
 import { AdministrativeRequestGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-request-generator.typeorm.entity';
 import { AffiliateBankTransferTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-bank-transfer.typeorm.entity';
+import { AffiliateCustomerConfigTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer-config.typeorm.entity';
 import { AffiliateCustomerPaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer-payment-plan.typeorm.entity';
 import { AffiliateCustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer.typeorm.entity';
 import { AnalysisToolClientInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client-inss-benefit.typeorm.entity';
@@ -307,6 +308,7 @@ export class TypeormIndex {
     AuthIdentityTypeormEntity,
     AffiliateCustomerTypeormEntity,
     AffiliateBankTransferTypeormEntity,
+    AffiliateCustomerConfigTypeormEntity,
     AffiliateCustomerPaymentPlanTypeormEntity,
     EmailTemplateTypeormEntity,
     CustomerAddressTypeormEntity,

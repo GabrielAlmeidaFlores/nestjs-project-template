@@ -102,15 +102,22 @@ export class UpdateAffiliateCustomerUseCase {
       await this.baseTransactionRepository.execute(transactions);
     await transaction.commit();
 
+    const updatedAffiliateResult =
+      await this.affiliateCustomerQueryRepository.findOneById(id);
+
+    if (!updatedAffiliateResult) {
+      throw new AffiliateCustomerNotFoundError();
+    }
+
     const updatedPlans =
       await this.affiliateCustomerPaymentPlanQueryRepository.findManyByAffiliateCustomerId(
         id,
       );
 
     return GetAffiliateCustomerResponseDto.build({
-      ...updatedAffiliate,
-      pixAddressKey: updatedAffiliate.pixAddressKey?.toString() ?? null,
-      pixAddressKeyType: updatedAffiliate.pixAddressKeyType ?? null,
+      ...updatedAffiliateResult,
+      pixAddressKey: updatedAffiliateResult.pixAddressKey?.toString() ?? null,
+      pixAddressKeyType: updatedAffiliateResult.pixAddressKeyType ?? null,
       paymentPlanIds: updatedPlans.map((p) => p.paymentPlanId),
     });
   }

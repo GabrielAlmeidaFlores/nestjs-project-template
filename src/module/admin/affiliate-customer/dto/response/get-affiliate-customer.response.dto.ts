@@ -1,3 +1,6 @@
+import { Email } from '@core/domain/schema/value-object/email/email.value-object';
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
+import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { PixAddressKeyTypeEnum } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/enum/pix-address-key-type.enum';
 import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
@@ -18,6 +21,18 @@ export class GetAffiliateCustomerResponseDto extends BaseBuildableDtoObject {
 
   @ResponseDtoValueObjectProperty(CustomerId)
   public customerId: CustomerId;
+
+  @ResponseDtoStringProperty()
+  public customerName: string;
+
+  @ResponseDtoValueObjectProperty(Email)
+  public customerEmail: Email;
+
+  @ResponseDtoValueObjectProperty(FederalDocument)
+  public customerFederalDocument: FederalDocument;
+
+  @ResponseDtoValueObjectProperty(PhoneNumber)
+  public customerPhoneNumber: PhoneNumber;
 
   @ResponseDtoStringProperty({ required: false })
   public pixAddressKey?: string;
