@@ -2,6 +2,9 @@ import { constructUsing, createMap, Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { Email } from '@core/domain/schema/value-object/email/email.value-object';
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
+import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { AffiliateCustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
@@ -34,6 +37,13 @@ export class GetAffiliateCustomerQueryResultAutoMapperProfile {
         });
       }
 
+      if (!source.customer.authIdentity) {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass: GetAffiliateCustomerQueryResult.name,
+          sourceClass: AffiliateCustomerTypeormEntity.name,
+        });
+      }
+
       const pixAddressKey =
         source.pixAddressKey !== null && source.pixAddressKeyType !== null
           ? new PixAddressKey(source.pixAddressKey, source.pixAddressKeyType)
@@ -43,6 +53,12 @@ export class GetAffiliateCustomerQueryResultAutoMapperProfile {
         ...source,
         id: new AffiliateCustomerId(source.id),
         customerId: new CustomerId(source.customer.id),
+        customerName: source.customer.name,
+        customerEmail: new Email(source.customer.authIdentity.email),
+        customerFederalDocument: new FederalDocument(
+          source.customer.authIdentity.federalDocument,
+        ),
+        customerPhoneNumber: new PhoneNumber(source.customer.phoneNumber),
         pixAddressKey,
       });
     };

@@ -15,6 +15,8 @@ import { AffiliateBankTransferTypeormCommandRepository } from '@infra/database/i
 import { AffiliateBankTransferTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/affiliate-bank-transfer/affiliate-bank-transfer.typeorm.query.repository';
 import { AffiliateCustomerTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/affiliate-customer/affiliate-customer.typeorm.command.repository';
 import { AffiliateCustomerTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/affiliate-customer/affiliate-customer.typeorm.query.repository';
+import { AffiliateCustomerConfigTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/affiliate-customer-config/affiliate-customer-config.typeorm.command.repository';
+import { AffiliateCustomerConfigTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/affiliate-customer-config/affiliate-customer-config.typeorm.query.repository';
 import { AffiliateCustomerPaymentPlanTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/affiliate-customer-payment-plan/affiliate-customer-payment-plan.typeorm.command.repository';
 import { AffiliateCustomerPaymentPlanTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/affiliate-customer-payment-plan/affiliate-customer-payment-plan.typeorm.query.repository';
 import { AnalysisToolClientTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client/analysis-tool-client.typeorm.command.repository';
@@ -234,6 +236,8 @@ import { AffiliateBankTransferCommandRepositoryGateway } from '@module/customer/
 import { AffiliateBankTransferQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-bank-transfer/query/affiliate-bank-transfer.query.repository.gateway';
 import { AffiliateCustomerCommandRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-customer/command/affiliate-customer.command.repository.gateway';
 import { AffiliateCustomerQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-customer/query/affiliate-customer.query.repository.gateway';
+import { AffiliateCustomerConfigCommandRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-customer-config/command/affiliate-customer-config.command.repository.gateway';
+import { AffiliateCustomerConfigQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-customer-config/query/affiliate-customer-config.query.repository.gateway';
 import { AffiliateCustomerPaymentPlanCommandRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-customer-payment-plan/command/affiliate-customer-payment-plan.command.repository.gateway';
 import { AffiliateCustomerPaymentPlanQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-customer-payment-plan/query/affiliate-customer-payment-plan.query.repository.gateway';
 import { AnalysisToolClientCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/command/analysis-tool-client.command.repository.gateway';
@@ -643,6 +647,14 @@ const classProvider: ClassProvider[] = [
   {
     provide: AffiliateCustomerQueryRepositoryGateway,
     useClass: AffiliateCustomerTypeormQueryRepository,
+  },
+  {
+    provide: AffiliateCustomerConfigCommandRepositoryGateway,
+    useClass: AffiliateCustomerConfigTypeormCommandRepository,
+  },
+  {
+    provide: AffiliateCustomerConfigQueryRepositoryGateway,
+    useClass: AffiliateCustomerConfigTypeormQueryRepository,
   },
   {
     provide: AffiliateCustomerPaymentPlanCommandRepositoryGateway,

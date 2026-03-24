@@ -25,6 +25,7 @@ export class ListAffiliateCustomersUseCase {
       page: dto.page,
       limit: dto.limit,
       sortField: dto.sortField ?? null,
+      searchBy: dto.searchBy ?? null,
     });
 
     const paginatedResult =
