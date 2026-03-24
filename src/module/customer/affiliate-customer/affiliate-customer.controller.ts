@@ -1,17 +1,30 @@
-import { Body, HttpStatus, Param, RequestMethod, Res } from '@nestjs/common';
+import {
+  Body,
+  HttpStatus,
+  Param,
+  Query,
+  RequestMethod,
+  Res,
+} from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 
+import { ListAffiliateTransfersQueryParam } from '@module/customer/affiliate-customer/domain/repository/affiliate-bank-transfer/query/param/list-affiliate-transfers.query.param';
 import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
+import { ListMyAffiliateCommissionsRequestDto } from '@module/customer/affiliate-customer/dto/request/list-my-affiliate-commissions.request.dto';
+import { ListMyAffiliateTransfersRequestDto } from '@module/customer/affiliate-customer/dto/request/list-my-affiliate-transfers.request.dto';
 import { UpdateMyAffiliatePixKeyRequestDto } from '@module/customer/affiliate-customer/dto/request/update-my-affiliate-pix-key.request.dto';
 import { GetMyAffiliateCustomerSummaryResponseDto } from '@module/customer/affiliate-customer/dto/response/get-my-affiliate-customer-summary.response.dto';
 import { GetMyAffiliateCustomerResponseDto } from '@module/customer/affiliate-customer/dto/response/get-my-affiliate-customer.response.dto';
 import { GetPublicAffiliateCustomerResponseDto } from '@module/customer/affiliate-customer/dto/response/get-public-affiliate-customer.response.dto';
 import { ListMyAffiliateCommissionsResponseDto } from '@module/customer/affiliate-customer/dto/response/list-my-affiliate-commissions.response.dto';
+import { ListMyAffiliateTransfersResponseDto } from '@module/customer/affiliate-customer/dto/response/list-my-affiliate-transfers.response.dto';
 import { GetMyAffiliateCustomerSummaryUseCase } from '@module/customer/affiliate-customer/use-case/get-my-affiliate-customer-summary.use-case';
 import { GetMyAffiliateCustomerUseCase } from '@module/customer/affiliate-customer/use-case/get-my-affiliate-customer.use-case';
 import { GetPublicAffiliateCustomerUseCase } from '@module/customer/affiliate-customer/use-case/get-public-affiliate-customer.use-case';
 import { ListMyAffiliateCommissionsUseCase } from '@module/customer/affiliate-customer/use-case/list-my-affiliate-commissions.use-case';
+import { ListMyAffiliateTransfersUseCase } from '@module/customer/affiliate-customer/use-case/list-my-affiliate-transfers.use-case';
 import { UpdateMyAffiliatePixKeyUseCase } from '@module/customer/affiliate-customer/use-case/update-my-affiliate-pix-key.use-case';
+import { ListAffiliateCommissionsQueryParam } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-affiliate-commission/query/param/list-affiliate-commissions.query.param';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
@@ -30,6 +43,7 @@ export class AffiliateCustomerController {
     private readonly getMyAffiliateCustomerSummaryUseCase: GetMyAffiliateCustomerSummaryUseCase,
     private readonly updateMyAffiliatePixKeyUseCase: UpdateMyAffiliatePixKeyUseCase,
     private readonly listMyAffiliateCommissionsUseCase: ListMyAffiliateCommissionsUseCase,
+    private readonly listMyAffiliateTransfersUseCase: ListMyAffiliateTransfersUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -70,8 +84,38 @@ export class AffiliateCustomerController {
   })
   public async listMyAffiliateCommissions(
     @GetSessionData() sessionData: SessionDataModel,
+    @Query() dto: ListMyAffiliateCommissionsRequestDto,
   ): Promise<ListMyAffiliateCommissionsResponseDto> {
-    return this.listMyAffiliateCommissionsUseCase.execute(sessionData);
+    return this.listMyAffiliateCommissionsUseCase.execute(
+      sessionData,
+      new ListAffiliateCommissionsQueryParam(dto),
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Listar minhas transferências de afiliado',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'me/transfers',
+      method: RequestMethod.GET,
+    },
+    tag: ['affiliate-customer'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Transferências do afiliado autenticado retornadas com sucesso.',
+      type: ListMyAffiliateTransfersResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async listMyAffiliateTransfers(
+    @GetSessionData() sessionData: SessionDataModel,
+    @Query() dto: ListMyAffiliateTransfersRequestDto,
+  ): Promise<ListMyAffiliateTransfersResponseDto> {
+    return this.listMyAffiliateTransfersUseCase.execute(
+      sessionData,
+      new ListAffiliateTransfersQueryParam(dto),
+    );
   }
 
   @BuildEndpointSpecification({
