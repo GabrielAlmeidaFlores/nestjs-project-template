@@ -11,6 +11,7 @@ import {
 } from '@module/customer/affiliate-customer/dto/response/list-my-affiliate-commissions.response.dto';
 import { AffiliateCustomerNotFoundError } from '@module/customer/affiliate-customer/error/affiliate-customer-not-found.error';
 import { OrganizationPaymentPlanAffiliateCommissionQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-affiliate-commission/query/organization-payment-plan-affiliate-commission.query.repository.gateway';
+import { ListAffiliateCommissionsQueryParam } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-affiliate-commission/query/param/list-affiliate-commissions.query.param';
 import { BankTransferQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-transfer/query/bank-transfer.query.repository.gateway';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -33,6 +34,7 @@ export class ListMyAffiliateCommissionsUseCase {
 
   public async execute(
     sessionData: SessionDataModel,
+    filters: ListAffiliateCommissionsQueryParam = new ListAffiliateCommissionsQueryParam(),
   ): Promise<ListMyAffiliateCommissionsResponseDto> {
     const customer =
       await this.customerQueryRepository.findOneByAuthIdentityIdOrFail(
@@ -50,8 +52,9 @@ export class ListMyAffiliateCommissionsUseCase {
     }
 
     const commissions =
-      await this.commissionQueryRepository.findManyByAffiliateCustomerId(
+      await this.commissionQueryRepository.findManyByAffiliateCustomerIdWithFilters(
         affiliate.id,
+        filters,
       );
 
     const affiliateTransfers =

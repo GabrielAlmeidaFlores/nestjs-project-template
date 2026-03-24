@@ -77,15 +77,24 @@ export class CreateAffiliateCustomerUseCase {
       await this.baseTransactionRepository.execute(transactions);
     await transaction.commit();
 
-    const linkedPlans =
-      await this.affiliateCustomerPaymentPlanQueryRepository.findManyByAffiliateCustomerId(
+    const createdAffiliate =
+      await this.affiliateCustomerQueryRepository.findOneById(
         affiliateCustomer.id,
       );
 
+    if (!createdAffiliate) {
+      throw new CustomerAlreadyAffiliateError();
+    }
+
+    const linkedPlans =
+      await this.affiliateCustomerPaymentPlanQueryRepository.findManyByAffiliateCustomerId(
+        createdAffiliate.id,
+      );
+
     return GetAffiliateCustomerResponseDto.build({
-      ...affiliateCustomer,
-      pixAddressKey: affiliateCustomer.pixAddressKey?.toString() ?? null,
-      pixAddressKeyType: affiliateCustomer.pixAddressKeyType ?? null,
+      ...createdAffiliate,
+      pixAddressKey: createdAffiliate.pixAddressKey?.toString() ?? null,
+      pixAddressKeyType: createdAffiliate.pixAddressKeyType ?? null,
       paymentPlanIds: linkedPlans.map((p) => p.paymentPlanId),
     });
   }

@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ListAffiliateTransfersResponseDto } from '@module/admin/affiliate-customer/dto/response/list-affiliate-transfers.response.dto';
 import { AffiliateCustomerNotFoundError } from '@module/admin/affiliate-customer/error/affiliate-customer-not-found.error';
 import { AffiliateBankTransferQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-bank-transfer/query/affiliate-bank-transfer.query.repository.gateway';
+import { ListAffiliateTransfersQueryParam } from '@module/customer/affiliate-customer/domain/repository/affiliate-bank-transfer/query/param/list-affiliate-transfers.query.param';
 import { AffiliateCustomerQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-customer/query/affiliate-customer.query.repository.gateway';
 import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
 import { AffiliateBankTransferItemResponseDto } from '@module/customer/affiliate-customer/dto/response/affiliate-bank-transfer-item.response.dto';
@@ -26,6 +27,7 @@ export class ListAffiliateTransfersUseCase {
 
   public async execute(
     affiliateCustomerId: AffiliateCustomerId,
+    filters: ListAffiliateTransfersQueryParam = new ListAffiliateTransfersQueryParam(),
   ): Promise<ListAffiliateTransfersResponseDto> {
     const affiliate =
       await this.affiliateCustomerQueryRepository.findOneById(
@@ -60,6 +62,20 @@ export class ListAffiliateTransfersUseCase {
       );
 
       if (bankTransfer === undefined) {
+        return [];
+      }
+
+      if (filters.status !== null && bankTransfer.status !== filters.status) {
+        return [];
+      }
+
+      const transferDate = bankTransfer.transferDate ?? bankTransfer.createdAt;
+
+      if (filters.from !== null && transferDate < filters.from) {
+        return [];
+      }
+
+      if (filters.to !== null && transferDate > filters.to) {
         return [];
       }
 

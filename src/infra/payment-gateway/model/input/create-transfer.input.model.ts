@@ -7,6 +7,7 @@ export class CreateTransferInputModel extends BaseBuildableObject {
   public readonly value: DecimalValue;
   public readonly pixAddressKey: string;
   public readonly pixAddressKeyType: PixAddressKeyTypeEnum;
+  public readonly scheduleDate?: string;
   public readonly description?: string;
   public readonly externalReference?: string;
 
