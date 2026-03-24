@@ -147,6 +147,7 @@ import { SpeechGeneratorBenefitTypeormCommandRepository } from '@infra/database/
 import { SpeechGeneratorDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-document/speech-generator-document.typeorm.command.repository';
 import { SpeechGeneratorLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-legal-proceeding/speech-generator-legal-proceeding.typeorm.command.repository';
 import { SpeechGeneratorResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-result/speech-generator-result.typeorm.command.repository';
+import { SystemActivitiesTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/system-activities/system-activities.typeorm.command.repository';
 import { TutorialTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/tutorial/tutorial.typeorm.command.repository';
 import { TutorialTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/tutorial/tutorial.typeorm.query.repository';
 import { AdminTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/admin.typeorm.entity';
@@ -282,6 +283,7 @@ import { SpeechGeneratorDocumentTypeormEntity } from '@infra/database/implementa
 import { SpeechGeneratorLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-legal-proceeding.typeorm.entity';
 import { SpeechGeneratorResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-result.typeorm.entity';
 import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
+import { SystemActivitiesTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/system-activities.typeorm.entity';
 import { TutorialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/tutorial.typeorm.entity';
 import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/source/database.application-variable';
 
@@ -425,6 +427,7 @@ export class TypeormIndex {
     PerCapitaIncomeForBpcAnalysisLegalProceedingTypeormEntity,
     PerCapitaIncomeForBpcAnalysisFamilyMemberTypeormEntity,
     PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentTypeormEntity,
+    SystemActivitiesTypeormEntity,
     TutorialTypeormEntity,
   ];
 
@@ -577,6 +580,7 @@ export class TypeormIndex {
     MedicalQuestionGeneratorInssBenefitTypeormCommandRepository,
     MedicalQuestionGeneratorLegalProceedingTypeormCommandRepository,
     MedicalQuestionGeneratorResultTypeormCommandRepository,
+    SystemActivitiesTypeormCommandRepository,
     TutorialTypeormCommandRepository,
     TutorialTypeormQueryRepository,
   ];
