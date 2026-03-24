@@ -3,9 +3,11 @@ import { FastifyReply } from 'fastify';
 
 import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
 import { UpdateMyAffiliatePixKeyRequestDto } from '@module/customer/affiliate-customer/dto/request/update-my-affiliate-pix-key.request.dto';
+import { GetMyAffiliateCustomerSummaryResponseDto } from '@module/customer/affiliate-customer/dto/response/get-my-affiliate-customer-summary.response.dto';
 import { GetMyAffiliateCustomerResponseDto } from '@module/customer/affiliate-customer/dto/response/get-my-affiliate-customer.response.dto';
 import { GetPublicAffiliateCustomerResponseDto } from '@module/customer/affiliate-customer/dto/response/get-public-affiliate-customer.response.dto';
 import { ListMyAffiliateCommissionsResponseDto } from '@module/customer/affiliate-customer/dto/response/list-my-affiliate-commissions.response.dto';
+import { GetMyAffiliateCustomerSummaryUseCase } from '@module/customer/affiliate-customer/use-case/get-my-affiliate-customer-summary.use-case';
 import { GetMyAffiliateCustomerUseCase } from '@module/customer/affiliate-customer/use-case/get-my-affiliate-customer.use-case';
 import { GetPublicAffiliateCustomerUseCase } from '@module/customer/affiliate-customer/use-case/get-public-affiliate-customer.use-case';
 import { ListMyAffiliateCommissionsUseCase } from '@module/customer/affiliate-customer/use-case/list-my-affiliate-commissions.use-case';
@@ -25,6 +27,7 @@ export class AffiliateCustomerController {
   public constructor(
     private readonly getPublicAffiliateCustomerUseCase: GetPublicAffiliateCustomerUseCase,
     private readonly getMyAffiliateCustomerUseCase: GetMyAffiliateCustomerUseCase,
+    private readonly getMyAffiliateCustomerSummaryUseCase: GetMyAffiliateCustomerSummaryUseCase,
     private readonly updateMyAffiliatePixKeyUseCase: UpdateMyAffiliatePixKeyUseCase,
     private readonly listMyAffiliateCommissionsUseCase: ListMyAffiliateCommissionsUseCase,
   ) {}
@@ -92,6 +95,27 @@ export class AffiliateCustomerController {
     @Body() body: UpdateMyAffiliatePixKeyRequestDto,
   ): Promise<GetMyAffiliateCustomerResponseDto> {
     return this.updateMyAffiliatePixKeyUseCase.execute(sessionData, body);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Buscar resumo dos dados do afiliado autenticado',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'me/summary',
+      method: RequestMethod.GET,
+    },
+    tag: ['affiliate-customer'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Resumo dos dados do afiliado retornado com sucesso.',
+      type: GetMyAffiliateCustomerSummaryResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async getMyAffiliateCustomerSummary(
+    @GetSessionData() sessionData: SessionDataModel,
+  ): Promise<GetMyAffiliateCustomerSummaryResponseDto> {
+    return this.getMyAffiliateCustomerSummaryUseCase.execute(sessionData);
   }
 
   @BuildEndpointSpecification({
