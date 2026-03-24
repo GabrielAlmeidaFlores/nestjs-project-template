@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { CreditCardHolderInfoInputModel } from '@infra/payment-gateway/model/input/credit-card-holder.input.model';
 import { CreditCardInfoInputModel } from '@infra/payment-gateway/model/input/credit-card-info.input.model';
 import { PayBillingInputModel } from '@infra/payment-gateway/model/input/pay-billing.input.model';
@@ -8,11 +7,7 @@ import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
 import { PayCreditPackBillingResponseDto } from '@module/customer/credit-pack/dto/response/pay-credit-pack-billing.response.dto';
 import { PayBillingRequestDto } from '@module/customer/payment-plan/dto/request/pay-billing.request.dto';
 import { BankPaymentNotFoundError } from '@module/customer/payment-plan/error/bank-payment-not-found.error';
-import { BankPaymentCommandRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/command/bank-payment.command.repository.gateway';
 import { BankPaymentQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/query/bank-payment.query.repository.gateway';
-import { BankPaymentEntity } from '@module/generic/bank/domain/schema/entity/bank-payment/bank-payment.entity';
-import { PaymentMethodEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-method.enum';
-import { PaymentStatusEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-status.enum';
 import { BankPaymentId } from '@module/generic/bank/domain/schema/entity/bank-payment/value-object/bank-payment-id/bank-payment-id.value-object';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 
@@ -23,12 +18,8 @@ export class PayCreditPackBillingUseCase {
   public constructor(
     @Inject(BankPaymentQueryRepositoryGateway)
     private readonly bankPaymentQueryRepository: BankPaymentQueryRepositoryGateway,
-    @Inject(BankPaymentCommandRepositoryGateway)
-    private readonly bankPaymentCommandRepository: BankPaymentCommandRepositoryGateway,
     @Inject(PaymentGateway)
     private readonly paymentGateway: PaymentGateway,
-    @Inject(BaseTransactionRepositoryGateway)
-    private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
   ) {}
 
   public async execute(
@@ -67,21 +58,6 @@ export class PayCreditPackBillingUseCase {
       }),
     );
 
-    const updatedBankPayment = new BankPaymentEntity({
-      ...bankPayment,
-      status: PaymentStatusEnum.CONFIRMED,
-      paymentDate: new Date(),
-      paymentMethod: PaymentMethodEnum.CREDIT_CARD,
-    });
-
-    const transaction = await this.baseTransactionRepositoryGateway.execute([
-      this.bankPaymentCommandRepository.updateBankPayment(
-        bankPayment.id,
-        updatedBankPayment,
-      ),
-    ]);
-    await transaction.commit();
-
-    return PayCreditPackBillingResponseDto.build({ status: 'APPROVED' });
+    return PayCreditPackBillingResponseDto.build({ bankPaymentId: bankPayment.id });
   }
 }
