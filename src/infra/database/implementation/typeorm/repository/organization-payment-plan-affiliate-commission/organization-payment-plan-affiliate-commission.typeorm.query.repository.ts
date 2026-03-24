@@ -74,12 +74,12 @@ export class OrganizationPaymentPlanAffiliateCommissionTypeormQueryRepository
       where.organizationPaymentPlan = { id: filters.plan.toString() };
     }
 
-    if (filters.from !== null && filters.to !== null) {
-      where.createdAt = Between(filters.from, filters.to);
-    } else if (filters.from !== null) {
-      where.createdAt = MoreThanOrEqual(filters.from);
-    } else if (filters.to !== null) {
-      where.createdAt = LessThanOrEqual(filters.to);
+    if (filters.startDate !== null && filters.endDate !== null) {
+      where.createdAt = Between(filters.startDate, filters.endDate);
+    } else if (filters.startDate !== null) {
+      where.createdAt = MoreThanOrEqual(filters.startDate);
+    } else if (filters.endDate !== null) {
+      where.createdAt = LessThanOrEqual(filters.endDate);
     }
 
     const relations = ['organizationPaymentPlan', 'affiliateCustomer'];
