@@ -55,7 +55,9 @@ export class SystemLogTypeormQueryRepository extends SystemLogsQueryRepositoryGa
       if (code !== null) {
         where.code = code;
       } else {
-        where.endpoint = Like(`%${this.escapeMysqlLikePattern(searchTrimmed)}%`);
+        where.endpoint = Like(
+          `%${this.escapeMysqlLikePattern(searchTrimmed)}%`,
+        );
       }
     }
 
@@ -97,7 +99,10 @@ export class SystemLogTypeormQueryRepository extends SystemLogsQueryRepositoryGa
   }
 
   private escapeMysqlLikePattern(value: string): string {
-    return value.replace(/\\/g, '\\\\').replace(/%/g, '\\%').replace(/_/g, '\\_');
+    return value
+      .replace(/\\/g, '\\\\')
+      .replace(/%/g, '\\%')
+      .replace(/_/g, '\\_');
   }
 
   private parseStatusCodeFilter(raw: string | undefined): number | null {

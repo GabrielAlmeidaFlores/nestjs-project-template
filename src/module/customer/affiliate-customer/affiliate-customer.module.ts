@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { DatabaseModule } from '@infra/database/database.module';
 import { AffiliateCustomerController } from '@module/customer/affiliate-customer/affiliate-customer.controller';
+import { GetMyAffiliateCustomerSummaryUseCase } from '@module/customer/affiliate-customer/use-case/get-my-affiliate-customer-summary.use-case';
 import { GetMyAffiliateCustomerUseCase } from '@module/customer/affiliate-customer/use-case/get-my-affiliate-customer.use-case';
 import { GetPublicAffiliateCustomerUseCase } from '@module/customer/affiliate-customer/use-case/get-public-affiliate-customer.use-case';
 import { ListMyAffiliateCommissionsUseCase } from '@module/customer/affiliate-customer/use-case/list-my-affiliate-commissions.use-case';
@@ -14,6 +15,7 @@ import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
   providers: [
     GetPublicAffiliateCustomerUseCase,
     GetMyAffiliateCustomerUseCase,
+    GetMyAffiliateCustomerSummaryUseCase,
     UpdateMyAffiliatePixKeyUseCase,
     ListMyAffiliateCommissionsUseCase,
   ],
