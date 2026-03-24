@@ -1,7 +1,9 @@
 import { Body, HttpStatus, Param, Query, RequestMethod } from '@nestjs/common';
 
 import { CreateAffiliateCustomerRequestDto } from '@module/admin/affiliate-customer/dto/request/create-affiliate-customer.request.dto';
+import { ListAffiliateCommissionsRequestDto } from '@module/admin/affiliate-customer/dto/request/list-affiliate-commissions.request.dto';
 import { ListAffiliateCustomersRequestDto } from '@module/admin/affiliate-customer/dto/request/list-affiliate-customers.request.dto';
+import { ListAffiliateTransfersRequestDto } from '@module/admin/affiliate-customer/dto/request/list-affiliate-transfers.request.dto';
 import { UpdateAffiliateCustomerRequestDto } from '@module/admin/affiliate-customer/dto/request/update-affiliate-customer.request.dto';
 import { UpsertAffiliateCustomerConfigRequestDto } from '@module/admin/affiliate-customer/dto/request/upsert-affiliate-customer-config.request.dto';
 import { AffiliateCustomerConfigItemResponseDto } from '@module/admin/affiliate-customer/dto/response/affiliate-customer-config-item.response.dto';
@@ -21,8 +23,10 @@ import { ListAffiliateCustomersUseCase } from '@module/admin/affiliate-customer/
 import { ListAffiliateTransfersUseCase } from '@module/admin/affiliate-customer/use-case/list-affiliate-transfers.use-case';
 import { UpdateAffiliateCustomerUseCase } from '@module/admin/affiliate-customer/use-case/update-affiliate-customer.use-case';
 import { UpsertAffiliateCustomerConfigUseCase } from '@module/admin/affiliate-customer/use-case/upsert-affiliate-customer-config.use-case';
+import { ListAffiliateTransfersQueryParam } from '@module/customer/affiliate-customer/domain/repository/affiliate-bank-transfer/query/param/list-affiliate-transfers.query.param';
 import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
 import { AffiliateCustomerConfigConfigEnum } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer-config/enum/affiliate-customer-config-config.enum';
+import { ListAffiliateCommissionsQueryParam } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-affiliate-commission/query/param/list-affiliate-commissions.query.param';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { AdminControllerRoute } from '@shared/api/util/decorator/class/controller-route/admin-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
@@ -177,8 +181,12 @@ export class AffiliateCustomerController {
   public async listAffiliateTransfers(
     @Param('affiliateCustomerId', new ParseValueObjectPipe(AffiliateCustomerId))
     affiliateCustomerId: AffiliateCustomerId,
+    @Query() dto: ListAffiliateTransfersRequestDto,
   ): Promise<ListAffiliateTransfersResponseDto> {
-    return this.listAffiliateTransfersUseCase.execute(affiliateCustomerId);
+    return this.listAffiliateTransfersUseCase.execute(
+      affiliateCustomerId,
+      new ListAffiliateTransfersQueryParam(dto),
+    );
   }
 
   @BuildEndpointSpecification({
@@ -199,8 +207,12 @@ export class AffiliateCustomerController {
   public async listAffiliateCommissions(
     @Param('affiliateCustomerId', new ParseValueObjectPipe(AffiliateCustomerId))
     affiliateCustomerId: AffiliateCustomerId,
+    @Query() dto: ListAffiliateCommissionsRequestDto,
   ): Promise<ListAffiliateCommissionsResponseDto> {
-    return this.listAffiliateCommissionsUseCase.execute(affiliateCustomerId);
+    return this.listAffiliateCommissionsUseCase.execute(
+      affiliateCustomerId,
+      new ListAffiliateCommissionsQueryParam(dto),
+    );
   }
 
   @BuildEndpointSpecification({
