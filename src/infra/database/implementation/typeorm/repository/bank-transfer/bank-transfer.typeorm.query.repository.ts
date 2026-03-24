@@ -6,9 +6,9 @@ import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeo
 import { BankTransferTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-transfer.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { BankTransferQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-transfer/query/bank-transfer.query.repository.gateway';
-import { BankTransferNotFoundError } from '@module/generic/bank/domain/repository/bank-transfer/query/error/bank-transfer-not-found.error';
 import { GetBankTransferQueryResult } from '@module/generic/bank/domain/repository/bank-transfer/query/result/get-bank-transfer.query.result';
 import { BankTransferId } from '@module/generic/bank/domain/schema/entity/bank-transfer/value-object/bank-transfer-id/bank-transfer-id.value-object';
+import { BankTransferNotFoundError } from '@module/generic/bank/error/bank-transfer-not-found.error';
 
 @Injectable()
 export class BankTransferTypeormQueryRepository
