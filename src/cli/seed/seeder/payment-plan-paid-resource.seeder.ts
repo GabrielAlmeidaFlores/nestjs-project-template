@@ -575,7 +575,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise do CNIS com IA para concessão de aposentadoria urbana geral. Calcula tempo de contribuição, identifica períodos com e sem recolhimento, verifica carência e qualidade de segurado, gerando projeções de elegibilidade para diferentes modalidades de aposentadoria.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e'),
+      id: new PaymentPlanPaidResourceId('4f6a8b2c-7d1e-4c93-8a5f-2b7e1d9c6a4f'),
       resource:
         PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_GRANT_COMPARE_CNIS_CTPS,
       creditCost: 4,
@@ -623,7 +623,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise de tempo de serviço militar obrigatório com IA para cômputo previdenciário na concessão de aposentadoria urbana geral. Valida certificados de reservista, calcula período computável, verifica sobreposição com vínculos civis, orienta sobre procedimento de averbação.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('a7b8c9d0-e1f2-4a3b-8c5d-6e7f8a9b0c1d'),
+      id: new PaymentPlanPaidResourceId('a7b3c9d0-e1f2-4a3b-8c5d-6e7f8a9b0c1d'),
       resource:
         PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_GRANT_PUBLIC_SERVICE_ANALYSIS,
       creditCost: 5,
