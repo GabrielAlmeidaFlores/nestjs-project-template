@@ -209,12 +209,15 @@ import { SpeechGeneratorBenefitTypeormCommandRepository } from '@infra/database/
 import { SpeechGeneratorDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-document/speech-generator-document.typeorm.command.repository';
 import { SpeechGeneratorLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-legal-proceeding/speech-generator-legal-proceeding.typeorm.command.repository';
 import { SpeechGeneratorResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-result/speech-generator-result.typeorm.command.repository';
+import { SystemLogTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/system-log/system-log.typeorm.command.repository';
+import { SystemLogTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/system-log/system-log.typeorm.query.repository';
 import { TutorialTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/tutorial/tutorial.typeorm.command.repository';
 import { TutorialTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/tutorial/tutorial.typeorm.query.repository';
 import { TypeormModule } from '@infra/database/implementation/typeorm/typeorm.module';
 import { MapperModule } from '@lib/mapper/mapper.module';
 import { AdminCommandRepositoryGateway } from '@module/admin/account/domain/repository/admin/command/admin.command.repository.gateway';
 import { AdminQueryRepositoryGateway } from '@module/admin/account/domain/repository/admin/query/admin.query.repository.gateway';
+import { SystemLogsQueryRepositoryGateway } from '@module/admin/system-logs/domain/repository/system-logs/query/system-logs.query.repository.gateway';
 import { CustomerCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer/command/customer.command.repository.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { CustomerAddressCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer-address/command/customer-address.command.repository.gateway';
@@ -422,6 +425,7 @@ import { BankPaymentCommandRepositoryGateway } from '@module/generic/bank/domain
 import { BankPaymentQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/query/bank-payment.query.repository.gateway';
 import { BankTransferCommandRepositoryGateway } from '@module/generic/bank/domain/repository/bank-transfer/command/bank-transfer.command.repository.gateway';
 import { BankTransferQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-transfer/query/bank-transfer.query.repository.gateway';
+import { SystemLogCommandGateway } from '@shared/system/system-log/system-log.command.gateway';
 
 const classProvider: ClassProvider[] = [
   {
@@ -1301,6 +1305,14 @@ const classProvider: ClassProvider[] = [
   {
     provide: PerCapitaIncomeForBpcAnalysisResultCommandRepositoryGateway,
     useClass: PerCapitaIncomeForBpcAnalysisResultTypeormCommandRepository,
+  },
+  {
+    provide: SystemLogCommandGateway,
+    useClass: SystemLogTypeormCommandRepository,
+  },
+  {
+    provide: SystemLogsQueryRepositoryGateway,
+    useClass: SystemLogTypeormQueryRepository,
   },
   {
     provide: TutorialCommandRepositoryGateway,
