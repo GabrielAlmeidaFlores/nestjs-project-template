@@ -6,6 +6,7 @@ import { CreditPackModule } from '@module/admin/credit-pack/credit-pack.module';
 import { CustomerManagementModule } from '@module/admin/customer-management/customer-management.module';
 import { DashboardMetricsModule } from '@module/admin/dashboard-metrics/dashboard-metrics.module';
 import { PaymentPlanModule } from '@module/admin/payment-plan/payment-plan.module';
+import { SystemLogsModule } from '@module/admin/system-logs/system-logs.module';
 import { AdminTutorialModule } from '@module/admin/tutorial/tutorial.module';
 
 @Module({
@@ -17,6 +18,7 @@ import { AdminTutorialModule } from '@module/admin/tutorial/tutorial.module';
     DashboardMetricsModule,
     PaymentPlanModule,
     AdminTutorialModule,
+    SystemLogsModule,
   ],
 })
 export class AdminModule {
