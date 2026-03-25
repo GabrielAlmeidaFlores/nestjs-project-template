@@ -9,7 +9,7 @@ import type { OrganizationCustomizationDocumentHeaderTemplateId } from '@module/
 
 export class OrganizationCustomizationEntity extends BaseEntity<OrganizationCustomizationId> {
   public readonly organizationId: OrganizationId;
-  public readonly organizationLogo: string;
+  public readonly organizationLogo: string | null;
   public readonly organizationCustomizationDocumentFooterDescription:
     | string
     | null;
@@ -24,7 +24,7 @@ export class OrganizationCustomizationEntity extends BaseEntity<OrganizationCust
   public constructor(props: OrganizationCustomizationEntityPropsInterface) {
     super(OrganizationCustomizationId, props);
     this.organizationId = props.organizationId;
-    this.organizationLogo = props.organizationLogo;
+    this.organizationLogo = props.organizationLogo ?? null;
     this.organizationCustomizationDocumentFooterDescription =
       props.organizationCustomizationDocumentFooterDescription ?? null;
     this.organizationCustomizationDocumentHeaderTemplateId =

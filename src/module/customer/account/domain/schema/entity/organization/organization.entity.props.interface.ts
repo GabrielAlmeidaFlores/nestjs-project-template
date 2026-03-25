@@ -3,5 +3,4 @@ import type { OrganizationId } from '@module/customer/account/domain/schema/enti
 
 export interface OrganizationEntityPropsInterface extends BaseEntityPropsInterface<OrganizationId> {
   name: string;
-  organizationLogo?: string | null;
 }

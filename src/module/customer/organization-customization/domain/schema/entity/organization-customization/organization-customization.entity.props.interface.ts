@@ -7,7 +7,7 @@ import type { OrganizationCustomizationDocumentHeaderTemplateId } from '@module/
 
 export interface OrganizationCustomizationEntityPropsInterface extends BaseEntityPropsInterface<OrganizationCustomizationId> {
   organizationId: OrganizationId;
-  organizationLogo: string;
+  organizationLogo?: string | null;
   organizationCustomizationDocumentFooterDescription?: string | null;
   organizationCustomizationDocumentHeaderTemplateId: OrganizationCustomizationDocumentHeaderTemplateId;
   organizationCustomizationDocumentFooterTemplateId: OrganizationCustomizationDocumentFooterTemplateId;

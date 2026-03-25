@@ -10,7 +10,7 @@ import type { OrganizationCustomizationDocumentHeaderTemplateId } from '@module/
 export class GetOrganizationCustomizationQueryResult extends BaseBuildableObject {
   public readonly organizationCustomizationId: OrganizationCustomizationId;
   public readonly organizationId: OrganizationId;
-  public readonly organizationLogo: string;
+  public readonly organizationLogo: string | null;
   public readonly organizationCustomizationDocumentFooterDescription:
     | string
     | null;

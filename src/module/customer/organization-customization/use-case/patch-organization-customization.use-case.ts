@@ -2,6 +2,9 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { ColorValue } from '@core/domain/schema/value-object/color/color.value-object';
+import { OrganizationCommandRepositoryGateway } from '@module/customer/account/domain/repository/organization/command/organization.command.repository.gateway';
+import { OrganizationQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization/query/organization.query.repository.gateway';
+import { OrganizationEntity } from '@module/customer/account/domain/schema/entity/organization/organization.entity';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { FileProcessorGateway } from '@module/customer/account/lib/file-processor/file-processor.gateway';
 import { OrganizationCustomizationCommandRepositoryGateway } from '@module/customer/organization-customization/domain/repository/organization-customization/command/organization-customization.command.repository.gateway';
@@ -17,6 +20,10 @@ export class PatchOrganizationCustomizationUseCase {
   protected readonly _type = PatchOrganizationCustomizationUseCase.name;
 
   public constructor(
+    @Inject(OrganizationCommandRepositoryGateway)
+    private readonly organizationCommandRepository: OrganizationCommandRepositoryGateway,
+    @Inject(OrganizationQueryRepositoryGateway)
+    private readonly organizationQueryRepository: OrganizationQueryRepositoryGateway,
     @Inject(OrganizationCustomizationCommandRepositoryGateway)
     private readonly organizationCustomizationCommandRepository: OrganizationCustomizationCommandRepositoryGateway,
     @Inject(OrganizationCustomizationQueryRepositoryGateway)
@@ -31,16 +38,18 @@ export class PatchOrganizationCustomizationUseCase {
     organizationId: OrganizationId,
     dto: PatchOrganizationCustomizationRequestDto,
   ): Promise<GetOrganizationCustomizationResponseDto> {
-    const existing =
-      await this.organizationCustomizationQueryRepository.findOneOrganizationCustomizationByOrganizationId(
+    const [organization, existing] = await Promise.all([
+      this.organizationQueryRepository.findOneByOrganizationId(organizationId),
+      this.organizationCustomizationQueryRepository.findOneOrganizationCustomizationByOrganizationId(
         organizationId,
-      );
+      ),
+    ]);
 
     if (!existing) {
       throw new OrganizationCustomizationNotFoundError();
     }
 
-    const updated = new OrganizationCustomizationEntity({
+    const updatedCustomization = new OrganizationCustomizationEntity({
       id: existing.organizationCustomizationId,
       organizationId: existing.organizationId,
       organizationLogo: existing.organizationLogo,
@@ -66,14 +75,33 @@ export class PatchOrganizationCustomizationUseCase {
       updatedAt: existing.updatedAt,
     });
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute([
+    const operations = [
       this.organizationCustomizationCommandRepository.updateOrganizationCustomization(
         new OrganizationCustomizationId(
           existing.organizationCustomizationId.toString(),
         ),
-        updated,
+        updatedCustomization,
       ),
-    ]);
+    ];
+
+    if (dto.organizationName !== undefined && organization !== null) {
+      const updatedOrganization = new OrganizationEntity({
+        id: organization.id,
+        name: dto.organizationName,
+        createdAt: organization.createdAt,
+        updatedAt: organization.updatedAt,
+      });
+
+      operations.push(
+        this.organizationCommandRepository.updateOrganization(
+          organizationId,
+          updatedOrganization,
+        ),
+      );
+    }
+
+    const transaction =
+      await this.baseTransactionRepositoryGateway.execute(operations);
 
     await transaction.commit();
 

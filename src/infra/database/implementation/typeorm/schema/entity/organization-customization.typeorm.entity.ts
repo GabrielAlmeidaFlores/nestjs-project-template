@@ -11,9 +11,9 @@ export class OrganizationCustomizationTypeormEntity extends BaseTypeormEntity {
     name: 'organization_logo',
     type: 'varchar',
     length: 255,
-    nullable: false,
+    nullable: true,
   })
-  public organizationLogo: string;
+  public organizationLogo: string | null;
 
   @Column({
     name: 'organization_customization_document_footer_description',

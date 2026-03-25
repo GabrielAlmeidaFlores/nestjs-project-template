@@ -50,12 +50,17 @@ export class PreviewOrganizationCustomizationDocumentHeaderTemplateUseCase {
       throw new OrganizationCustomizationNotFoundError();
     }
 
-    const logoSignedUrl = await this.fileProcessorGateway.getOrganizationLogo(
-      customization.organizationLogo,
-    );
+    const logoSignedUrl =
+      customization.organizationLogo !== null
+        ? (
+            await this.fileProcessorGateway.getOrganizationLogo(
+              customization.organizationLogo,
+            )
+          ).toString()
+        : '';
 
     const htmlContent = template.htmlContent
-      .replace(/\{\{logo\}\}/g, logoSignedUrl.toString())
+      .replace(/\{\{logo\}\}/g, logoSignedUrl)
       .replace(/\{\{organizationName\}\}/g, organization?.name ?? '')
       .replace(/\{\{primaryColor\}\}/g, customization.primaryColor)
       .replace(/\{\{secondaryColor\}\}/g, customization.secondaryColor)
