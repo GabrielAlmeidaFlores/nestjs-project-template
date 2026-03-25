@@ -13,19 +13,25 @@ export const ORGANIZATION_CUSTOMIZATION_DOCUMENT_FOOTER_TEMPLATE_SEED_DATA: Orga
   [
     new OrganizationCustomizationDocumentFooterTemplateEntity({
       id: new OrganizationCustomizationDocumentFooterTemplateId(
-        'b2c3d4e5-f6a7-4b8c-9d0e-000000000001',
+        '7bc43cdc-f2ee-4978-a03a-31e607e51fd6',
       ),
       type: OrganizationCustomizationDocumentFooterTemplateTypeEnum.MODERN,
-      htmlContent:
-        '<footer class="footer-modern"><p>{{organizationName}} - {{footerDescription}}</p></footer>',
+      htmlContent: `<footer style="display:flex;align-items:center;justify-content:space-between;padding:12px 32px;border-top:3px solid {{primaryColor}}">
+  <img src="{{logo}}" alt="Logo" style="height:32px;object-fit:contain" />
+  <span style="font-size:13px;font-weight:600;color:{{primaryColor}}">{{organizationName}}</span>
+  <span style="font-size:12px;color:{{secondaryColor}}">{{footerDescription}}</span>
+</footer>`,
     }),
     new OrganizationCustomizationDocumentFooterTemplateEntity({
       id: new OrganizationCustomizationDocumentFooterTemplateId(
-        'b2c3d4e5-f6a7-4b8c-9d0e-000000000002',
+        '703c6208-9fc0-4cae-a6c5-438bfe79289b',
       ),
       type: OrganizationCustomizationDocumentFooterTemplateTypeEnum.CLASSIC,
-      htmlContent:
-        '<footer class="footer-classic"><hr/><p>{{organizationName}} | {{footerDescription}}</p></footer>',
+      htmlContent: `<footer style="display:flex;flex-direction:column;align-items:center;padding:12px 32px;border-top:1px solid {{secondaryColor}}">
+  <hr style="width:100%;border:none;border-top:1px solid {{tertiaryColor}};margin-bottom:8px" />
+  <img src="{{logo}}" alt="Logo" style="height:28px;object-fit:contain;margin-bottom:4px" />
+  <p style="font-size:12px;color:{{primaryColor}};margin:0">{{organizationName}} | {{footerDescription}}</p>
+</footer>`,
     }),
   ];
 

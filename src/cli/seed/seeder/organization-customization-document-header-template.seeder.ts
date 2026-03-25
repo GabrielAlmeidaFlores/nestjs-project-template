@@ -13,35 +13,44 @@ export const ORGANIZATION_CUSTOMIZATION_DOCUMENT_HEADER_TEMPLATE_SEED_DATA: Orga
   [
     new OrganizationCustomizationDocumentHeaderTemplateEntity({
       id: new OrganizationCustomizationDocumentHeaderTemplateId(
-        'a1b2c3d4-e5f6-4a7b-8c9d-000000000001',
+        '9ae34abf-a3df-4972-9885-67204fa64e41',
       ),
       type: OrganizationCustomizationDocumentHeaderTemplateTypeEnum.MODERN,
-      htmlContent:
-        '<header class="header-modern"><img src="{{logo}}" alt="Logo" /><h1>{{organizationName}}</h1></header>',
+      htmlContent: `<header style="display:flex;align-items:center;justify-content:space-between;padding:16px 32px;border-bottom:3px solid {{primaryColor}}">
+  <img src="{{logo}}" alt="Logo" style="height:48px;object-fit:contain" />
+  <span style="font-size:20px;font-weight:600;color:{{primaryColor}}">{{organizationName}}</span>
+</header>`,
     }),
     new OrganizationCustomizationDocumentHeaderTemplateEntity({
       id: new OrganizationCustomizationDocumentHeaderTemplateId(
-        'a1b2c3d4-e5f6-4a7b-8c9d-000000000002',
+        '255ef03e-34f2-4358-963e-b26c60a17c1b',
       ),
       type: OrganizationCustomizationDocumentHeaderTemplateTypeEnum.CLASSIC,
-      htmlContent:
-        '<header class="header-classic"><h1>{{organizationName}}</h1><img src="{{logo}}" alt="Logo" /></header>',
+      htmlContent: `<header style="display:flex;flex-direction:column;align-items:center;padding:16px 32px;border-bottom:1px solid {{secondaryColor}}">
+  <img src="{{logo}}" alt="Logo" style="height:56px;object-fit:contain;margin-bottom:8px" />
+  <h1 style="font-size:18px;font-weight:700;color:{{primaryColor}};margin:0">{{organizationName}}</h1>
+</header>`,
     }),
     new OrganizationCustomizationDocumentHeaderTemplateEntity({
       id: new OrganizationCustomizationDocumentHeaderTemplateId(
-        'a1b2c3d4-e5f6-4a7b-8c9d-000000000003',
+        '2fdb0e7e-9c28-4180-a14f-be72447c0536',
       ),
       type: OrganizationCustomizationDocumentHeaderTemplateTypeEnum.STANDOUT_CLASSIC,
-      htmlContent:
-        '<header class="header-standout-classic" style="background-color:{{primaryColor}}"><img src="{{logo}}" alt="Logo" /><h1>{{organizationName}}</h1></header>',
+      htmlContent: `<header style="display:flex;flex-direction:column;align-items:center;padding:20px 32px;background-color:{{primaryColor}}">
+  <img src="{{logo}}" alt="Logo" style="height:56px;object-fit:contain;margin-bottom:8px" />
+  <h1 style="font-size:18px;font-weight:700;color:{{secondaryColor}};margin:0">{{organizationName}}</h1>
+</header>`,
     }),
     new OrganizationCustomizationDocumentHeaderTemplateEntity({
       id: new OrganizationCustomizationDocumentHeaderTemplateId(
-        'a1b2c3d4-e5f6-4a7b-8c9d-000000000004',
+        '7c6d980a-c548-4c8f-952c-15f7db49eb39',
       ),
       type: OrganizationCustomizationDocumentHeaderTemplateTypeEnum.MODERN_STANDOUT,
-      htmlContent:
-        '<header class="header-modern-standout" style="background-color:{{primaryColor}};color:{{secondaryColor}}"><img src="{{logo}}" alt="Logo" /><h1>{{organizationName}}</h1></header>',
+      htmlContent: `<header style="display:flex;align-items:center;justify-content:space-between;padding:16px 32px;background-color:{{primaryColor}}">
+  <img src="{{logo}}" alt="Logo" style="height:48px;object-fit:contain" />
+  <span style="font-size:20px;font-weight:600;color:{{secondaryColor}}">{{organizationName}}</span>
+  <div style="width:8px;height:40px;background-color:{{tertiaryColor}};border-radius:4px"></div>
+</header>`,
     }),
   ];
 
