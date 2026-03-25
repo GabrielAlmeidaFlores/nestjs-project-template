@@ -30,7 +30,6 @@ export class ListOrganizationCustomizationDocumentFooterTemplatesUseCase {
         organizationCustomizationDocumentFooterTemplateId:
           item.organizationCustomizationDocumentFooterTemplateId,
         type: item.type,
-        htmlContent: item.htmlContent,
         createdAt: item.createdAt,
       }),
     );

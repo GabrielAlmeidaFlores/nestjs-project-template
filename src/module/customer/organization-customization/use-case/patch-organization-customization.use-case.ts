@@ -40,17 +40,10 @@ export class PatchOrganizationCustomizationUseCase {
       throw new OrganizationCustomizationNotFoundError();
     }
 
-    const organizationLogoLocation = dto.organizationLogo
-      ? await this.fileProcessorGateway.uploadOrganizationLogoFromBase64(
-          dto.organizationLogo,
-          existing.organizationLogo,
-        )
-      : existing.organizationLogo;
-
     const updated = new OrganizationCustomizationEntity({
       id: existing.organizationCustomizationId,
       organizationId: existing.organizationId,
-      organizationLogo: organizationLogoLocation,
+      organizationLogo: existing.organizationLogo,
       organizationCustomizationDocumentFooterDescription:
         dto.organizationCustomizationDocumentFooterDescription ??
         existing.organizationCustomizationDocumentFooterDescription,
@@ -93,14 +86,17 @@ export class PatchOrganizationCustomizationUseCase {
       throw new OrganizationCustomizationNotFoundError();
     }
 
-    const organizationLogoSignedUrl =
-      await this.fileProcessorGateway.getOrganizationLogo(
-        result.organizationLogo,
-      );
+    const organizationLogoSignedUrl = result.organizationLogo
+      ? (
+          await this.fileProcessorGateway.getOrganizationLogo(
+            result.organizationLogo,
+          )
+        ).toString()
+      : null;
 
     return GetOrganizationCustomizationResponseDto.build({
       organizationCustomizationId: result.organizationCustomizationId,
-      organizationLogo: organizationLogoSignedUrl.toString(),
+      organizationLogo: organizationLogoSignedUrl,
       organizationCustomizationDocumentFooterDescription:
         result.organizationCustomizationDocumentFooterDescription,
       organizationCustomizationDocumentHeaderTemplateId:
