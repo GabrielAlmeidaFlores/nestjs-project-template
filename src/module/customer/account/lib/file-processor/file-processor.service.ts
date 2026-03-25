@@ -28,6 +28,18 @@ export class FileProcessorService implements FileProcessorGateway {
     return await this.bucketGateway.getSignedUrl(organizationLogoLocation);
   }
 
+  public async uploadOrganizationLogo(
+    organizationLogo: FileModel,
+    organizationLogoLocation?: string,
+  ): Promise<string> {
+    return organizationLogoLocation === undefined
+      ? await this.bucketGateway.create(organizationLogo)
+      : await this.bucketGateway.update(
+          organizationLogo,
+          organizationLogoLocation,
+        );
+  }
+
   public async processAndUploadProfilePicture(
     profilePicture: FileModel,
     profilePictureLocation?: string,

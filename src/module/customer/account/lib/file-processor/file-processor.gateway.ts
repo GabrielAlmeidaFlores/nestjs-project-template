@@ -11,4 +11,8 @@ export abstract class FileProcessorGateway {
   public abstract getOrganizationLogo(
     organizationLogoLocation: string,
   ): Promise<URL>;
+  public abstract uploadOrganizationLogo(
+    organizationLogo: FileModel,
+    organizationLogoLocation?: string,
+  ): Promise<string>;
 }
