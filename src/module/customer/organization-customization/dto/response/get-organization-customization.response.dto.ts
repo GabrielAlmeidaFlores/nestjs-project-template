@@ -15,8 +15,8 @@ export class GetOrganizationCustomizationResponseDto extends BaseBuildableDtoObj
   @ResponseDtoValueObjectProperty(OrganizationCustomizationId)
   public organizationCustomizationId: OrganizationCustomizationId;
 
-  @ResponseDtoStringProperty()
-  public organizationLogo: string;
+  @ResponseDtoStringProperty({ required: false })
+  public organizationLogo?: string;
 
   @ResponseDtoStringProperty({ required: false })
   public organizationCustomizationDocumentFooterDescription?: string;
