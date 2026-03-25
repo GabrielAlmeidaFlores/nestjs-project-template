@@ -8,10 +8,10 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @RequestDto()
 export class ListAffiliateCommissionsRequestDto extends BaseBuildableDtoObject {
   @RequestDtoDateProperty({ required: false })
-  public from?: Date;
+  public startDate?: Date;
 
   @RequestDtoDateProperty({ required: false })
-  public to?: Date;
+  public endDate?: Date;
 
   @RequestDtoValueObjectProperty(OrganizationPaymentPlanId, { required: false })
   public plan?: OrganizationPaymentPlanId;
