@@ -157,10 +157,10 @@ export class UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase {
       this.analysisActivityTrackerGateway.appendActivityTransaction({
         action: AnalysisActivityActionEnum.UPDATED,
         analysisType: analysisToolRecordQueryResult.type,
-        organizationMemberId: organizationMember.id.toString(),
+        organizationMemberId: organizationMember.id,
         analysisToolClientId:
-          analysisToolRecordQueryResult.analysisToolClient.id.toString(),
-        analysisToolRecordId: analysisToolRecordQueryResult.id.toString(),
+          analysisToolRecordQueryResult.analysisToolClient.id,
+        analysisToolRecordId: analysisToolRecordQueryResult.id,
         transactions: transactionOperations,
       });
 

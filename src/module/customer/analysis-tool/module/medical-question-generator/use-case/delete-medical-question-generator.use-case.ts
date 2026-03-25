@@ -73,10 +73,10 @@ export class DeleteMedicalQuestionGeneratorUseCase {
       this.analysisActivityTrackerGateway.appendActivityTransaction({
         action: AnalysisActivityActionEnum.DELETED,
         analysisType: analysisToolRecordQueryResult.type,
-        organizationMemberId: organizationMember.id.toString(),
+        organizationMemberId: organizationMember.id,
         analysisToolClientId:
-          analysisToolRecordQueryResult.analysisToolClient.id.toString(),
-        analysisToolRecordId: analysisToolRecordQueryResult.id.toString(),
+          analysisToolRecordQueryResult.analysisToolClient.id,
+        analysisToolRecordId: analysisToolRecordQueryResult.id,
         transactions: [deleteTransaction],
       });
 

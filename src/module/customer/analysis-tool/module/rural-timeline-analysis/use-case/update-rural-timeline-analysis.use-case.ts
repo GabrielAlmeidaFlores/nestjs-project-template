@@ -141,10 +141,10 @@ export class UpdateRuralTimelineAnalysisUseCase {
       this.analysisActivityTrackerGateway.appendActivityTransaction({
         action: AnalysisActivityActionEnum.UPDATED,
         analysisType: AnalysisToolRecordTypeEnum.RURAL_TIMELINE_ANALYSIS,
-        organizationMemberId: organizationMember.id.toString(),
+        organizationMemberId: organizationMember.id,
         analysisToolClientId:
-          analysisToolRecordQueryResult.analysisToolClient.id.toString(),
-        analysisToolRecordId: analysisToolRecordQueryResult.id.toString(),
+          analysisToolRecordQueryResult.analysisToolClient.id,
+        analysisToolRecordId: analysisToolRecordQueryResult.id,
         transactions,
       });
 

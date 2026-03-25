@@ -63,10 +63,9 @@ export class DeleteAnalysisToolRecordUseCase {
       this.analysisActivityTrackerGateway.appendActivityTransaction({
         action: AnalysisActivityActionEnum.DELETED,
         analysisType: analysisToolRecordResult.type,
-        organizationMemberId: organizationMember.id.toString(),
-        analysisToolClientId:
-          analysisToolRecordResult.analysisToolClient.id.toString(),
-        analysisToolRecordId: analysisToolRecordResult.id.toString(),
+        organizationMemberId: organizationMember.id,
+        analysisToolClientId: analysisToolRecordResult.analysisToolClient.id,
+        analysisToolRecordId: analysisToolRecordResult.id,
         transactions: [deleteTransaction],
       });
 

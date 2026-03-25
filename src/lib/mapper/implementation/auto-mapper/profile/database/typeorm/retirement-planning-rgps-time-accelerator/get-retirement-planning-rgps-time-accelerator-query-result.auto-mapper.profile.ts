@@ -30,7 +30,7 @@ export class GetRetirementPlanningRgpsTimeAcceleratorQueryResultAutoMapperProfil
         ...rest,
         id: new RetirementPlanningRgpsTimeAcceleratorId(source.id),
         retirementPlanningRgpsId:
-          retirementPlanningRgps?.id != null
+          retirementPlanningRgps?.id !== undefined
             ? new RetirementPlanningRgpsId(retirementPlanningRgps.id)
             : null,
       });

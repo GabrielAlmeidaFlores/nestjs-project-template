@@ -196,10 +196,10 @@ export class CreateSpecialActivityAnalysisResultUseCase {
       this.analysisActivityTrackerGateway.appendActivityTransaction({
         action: AnalysisActivityActionEnum.RESULT_ADDED,
         analysisType: AnalysisToolRecordTypeEnum.SPECIAL_ACTIVITY,
-        organizationMemberId: organizationMember.id.toString(),
+        organizationMemberId: organizationMember.id,
         analysisToolClientId:
-          analysisToolRecordQueryResult.analysisToolClient.id.toString(),
-        analysisToolRecordId: analysisToolRecordQueryResult.id.toString(),
+          analysisToolRecordQueryResult.analysisToolClient.id,
+        analysisToolRecordId: analysisToolRecordQueryResult.id,
         transactions: [
           consumeCreditTransaction,
           createSpecialActivityResultTransaction,

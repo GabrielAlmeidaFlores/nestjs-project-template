@@ -278,9 +278,9 @@ estruture a resposta incluindo:
       this.analysisActivityTrackerGateway.appendActivityTransaction({
         action: AnalysisActivityActionEnum.RESULT_ADDED,
         analysisType: analysisRecord.type,
-        organizationMemberId: organizationMember.id.toString(),
-        analysisToolClientId: analysisRecord.analysisToolClient.id.toString(),
-        analysisToolRecordId: analysisRecord.id.toString(),
+        organizationMemberId: organizationMember.id,
+        analysisToolClientId: analysisRecord.analysisToolClient.id,
+        analysisToolRecordId: analysisRecord.id,
         transactions: transactionList,
       });
 

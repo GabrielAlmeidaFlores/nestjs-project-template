@@ -379,10 +379,9 @@ export class CreateRetirementPlanningRppsUseCase {
       this.analysisActivityTrackerGateway.appendActivityTransaction({
         action: AnalysisActivityActionEnum.CREATED,
         analysisType: AnalysisToolRecordTypeEnum.RETIREMENT_PLANNING_RPPS,
-        organizationMemberId: analysisToolRecord.createdBy.toString(),
-        analysisToolClientId:
-          analysisToolRecord.analysisToolClient.id.toString(),
-        analysisToolRecordId: analysisToolRecord.id.toString(),
+        organizationMemberId: analysisToolRecord.createdBy,
+        analysisToolClientId: analysisToolRecord.analysisToolClient.id,
+        analysisToolRecordId: analysisToolRecord.id,
         transactions: transactionOperations,
       });
 

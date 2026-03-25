@@ -181,18 +181,14 @@ export class UpdatePerCapitaIncomeForBpcAnalysisUseCase {
     transactions.push(...legalProceedingNumberTransactions);
 
     if (transactions.length > 0) {
-      const analysisToolClientIdForActivity =
-        analysisToolClientId !== undefined
-          ? analysisToolClientId.toString()
-          : analysisToolRecordQueryResult.analysisToolClient.id.toString();
-
       const transactionsWithActivity =
         this.analysisActivityTrackerGateway.appendActivityTransaction({
           action: AnalysisActivityActionEnum.UPDATED,
           analysisType: analysisToolRecordQueryResult.type,
-          organizationMemberId: organizationMember.id.toString(),
-          analysisToolClientId: analysisToolClientIdForActivity,
-          analysisToolRecordId: analysisToolRecordQueryResult.id.toString(),
+          organizationMemberId: organizationMember.id,
+          analysisToolClientId:
+            analysisToolRecordQueryResult.analysisToolClient.id,
+          analysisToolRecordId: analysisToolRecordQueryResult.id,
           transactions,
         });
 
