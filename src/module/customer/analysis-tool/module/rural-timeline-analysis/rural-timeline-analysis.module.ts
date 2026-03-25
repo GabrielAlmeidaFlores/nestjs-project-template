@@ -5,6 +5,7 @@ import { GenerativeIaModule } from '@infra/generative-ia/generative-ia.module';
 import { CnisAnalyzerModule } from '@lib/cnis-analyzer/cnis-analyzer.module';
 import { CnisProcessorModule } from '@lib/cnis-processor/cnis-processor.module';
 import { MarkdownConverterModule } from '@lib/markdown-converter/markdown-converter.module';
+import { AnalysisActivityTrackerModule } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.module';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
@@ -62,6 +63,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
 
 @Module({
   imports: [
+    AnalysisActivityTrackerModule,
     AnalysisProcessorModule,
     AuthModule,
     CnisAnalyzerModule,

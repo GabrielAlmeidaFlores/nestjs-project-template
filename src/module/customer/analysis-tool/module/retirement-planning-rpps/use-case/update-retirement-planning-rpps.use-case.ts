@@ -14,6 +14,8 @@ import { CidTenEntity } from '@module/customer/analysis-tool/domain/schema/entit
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { CidTenNotFoundError } from '@module/customer/analysis-tool/error/cid-ten-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { AnalysisActivityTrackerGateway } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.gateway';
+import { AnalysisActivityActionEnum } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/enum/analysis-activity-action.enum';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { RetirementPlanningRppsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps/command/retirement-planning-rpps.command.repository.gateway';
 import { RetirementPlanningRppsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps/query/retirement-planning-rpps.query.repository.gateway';
@@ -81,6 +83,8 @@ export class UpdateRetirementPlanningRppsUseCase {
     private readonly retirementPlanningRppsLegalProceedingCommandRepositoryGateway: RetirementPlanningRppsLegalProceedingCommandRepositoryGateway,
     @Inject(AnalysisToolRecordCommandRepositoryGateway)
     private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
+    @Inject(AnalysisActivityTrackerGateway)
+    private readonly analysisActivityTrackerGateway: AnalysisActivityTrackerGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(FileProcessorGateway)
@@ -296,9 +300,19 @@ export class UpdateRetirementPlanningRppsUseCase {
       );
     transactionOperations.push(analysisToolRecordTransaction);
 
+    const transactionsWithActivity =
+      this.analysisActivityTrackerGateway.appendActivityTransaction({
+        action: AnalysisActivityActionEnum.UPDATED,
+        analysisType: analysisToolRecord.type,
+        organizationMemberId: organizationMember.id,
+        analysisToolClientId: analysisToolRecord.analysisToolClient.id,
+        analysisToolRecordId: analysisToolRecord.id,
+        transactions: transactionOperations,
+      });
+
     const executeTransactions =
       await this.baseTransactionRepositoryGateway.execute(
-        transactionOperations,
+        transactionsWithActivity,
       );
     await executeTransactions.commit();
 
