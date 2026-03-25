@@ -6,12 +6,14 @@ import { OrganizationCustomizationDocumentFooterTemplateId } from '@module/custo
 import { OrganizationCustomizationDocumentHeaderTemplateId } from '@module/customer/organization-customization/domain/schema/entity/organization-customization-document-header-template/value-object/organization-customization-document-header-template-id/organization-customization-document-header-template-id.value-object';
 import { CreateOrganizationCustomizationRequestDto } from '@module/customer/organization-customization/dto/request/create-organization-customization.request.dto';
 import { PatchOrganizationCustomizationRequestDto } from '@module/customer/organization-customization/dto/request/patch-organization-customization.request.dto';
+import { UploadOrganizationCustomizationLogoRequestDto } from '@module/customer/organization-customization/dto/request/upload-organization-customization-logo.request.dto';
 import { GetOrganizationCustomizationResponseDto } from '@module/customer/organization-customization/dto/response/get-organization-customization.response.dto';
 import { ListOrganizationCustomizationDocumentFooterTemplatesResponseDto } from '@module/customer/organization-customization/dto/response/list-organization-customization-document-footer-templates.response.dto';
 import { ListOrganizationCustomizationDocumentHeaderTemplatesResponseDto } from '@module/customer/organization-customization/dto/response/list-organization-customization-document-header-templates.response.dto';
 import { ListOrganizationCustomizationsResponseDto } from '@module/customer/organization-customization/dto/response/list-organization-customizations.response.dto';
 import { PreviewOrganizationCustomizationDocumentFooterTemplateResponseDto } from '@module/customer/organization-customization/dto/response/preview-organization-customization-document-footer-template.response.dto';
 import { PreviewOrganizationCustomizationDocumentHeaderTemplateResponseDto } from '@module/customer/organization-customization/dto/response/preview-organization-customization-document-header-template.response.dto';
+import { UploadOrganizationCustomizationLogoResponseDto } from '@module/customer/organization-customization/dto/response/upload-organization-customization-logo.response.dto';
 import { CreateOrganizationCustomizationUseCase } from '@module/customer/organization-customization/use-case/create-organization-customization.use-case';
 import { ListOrganizationCustomizationDocumentFooterTemplatesUseCase } from '@module/customer/organization-customization/use-case/list-organization-customization-document-footer-templates.use-case';
 import { ListOrganizationCustomizationDocumentHeaderTemplatesUseCase } from '@module/customer/organization-customization/use-case/list-organization-customization-document-header-templates.use-case';
@@ -19,6 +21,7 @@ import { ListOrganizationCustomizationsUseCase } from '@module/customer/organiza
 import { PatchOrganizationCustomizationUseCase } from '@module/customer/organization-customization/use-case/patch-organization-customization.use-case';
 import { PreviewOrganizationCustomizationDocumentFooterTemplateUseCase } from '@module/customer/organization-customization/use-case/preview-organization-customization-document-footer-template.use-case';
 import { PreviewOrganizationCustomizationDocumentHeaderTemplateUseCase } from '@module/customer/organization-customization/use-case/preview-organization-customization-document-header-template.use-case';
+import { UploadOrganizationCustomizationLogoUseCase } from '@module/customer/organization-customization/use-case/upload-organization-customization-logo.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationOwnerGuard } from '@shared/api/gateway/guard/organization-owner/organization-owner.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
@@ -42,7 +45,30 @@ export class OrganizationCustomizationController {
     private readonly listFooterTemplatesUseCase: ListOrganizationCustomizationDocumentFooterTemplatesUseCase,
     private readonly previewHeaderTemplateUseCase: PreviewOrganizationCustomizationDocumentHeaderTemplateUseCase,
     private readonly previewFooterTemplateUseCase: PreviewOrganizationCustomizationDocumentFooterTemplateUseCase,
+    private readonly uploadLogoUseCase: UploadOrganizationCustomizationLogoUseCase,
   ) {}
+
+  @BuildEndpointSpecification({
+    summary: 'Upload do logo da organização',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'logo',
+      method: RequestMethod.PATCH,
+      type: UploadOrganizationCustomizationLogoRequestDto,
+    },
+    tag: ['personalizacao-organizacao'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Logo da organização enviado com sucesso.',
+      type: UploadOrganizationCustomizationLogoResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard, OrganizationOwnerGuard],
+  })
+  public async uploadOrganizationLogo(
+    @Body() dto: UploadOrganizationCustomizationLogoRequestDto,
+  ): Promise<UploadOrganizationCustomizationLogoResponseDto> {
+    return this.uploadLogoUseCase.execute(dto);
+  }
 
   @BuildEndpointSpecification({
     summary: 'Criar personalização da organização',
