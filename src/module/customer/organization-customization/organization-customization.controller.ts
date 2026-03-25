@@ -187,6 +187,8 @@ export class OrganizationCustomizationController {
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async previewDocumentHeaderTemplate(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Param(
       'organizationCustomizationDocumentHeaderTemplateId',
       new ParseValueObjectPipe(
@@ -195,7 +197,10 @@ export class OrganizationCustomizationController {
     )
     id: OrganizationCustomizationDocumentHeaderTemplateId,
   ): Promise<PreviewOrganizationCustomizationDocumentHeaderTemplateResponseDto> {
-    return this.previewHeaderTemplateUseCase.execute(id);
+    return this.previewHeaderTemplateUseCase.execute(
+      id,
+      organizationSessionData.organizationId,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -235,6 +240,8 @@ export class OrganizationCustomizationController {
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async previewDocumentFooterTemplate(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Param(
       'organizationCustomizationDocumentFooterTemplateId',
       new ParseValueObjectPipe(
@@ -243,6 +250,9 @@ export class OrganizationCustomizationController {
     )
     id: OrganizationCustomizationDocumentFooterTemplateId,
   ): Promise<PreviewOrganizationCustomizationDocumentFooterTemplateResponseDto> {
-    return this.previewFooterTemplateUseCase.execute(id);
+    return this.previewFooterTemplateUseCase.execute(
+      id,
+      organizationSessionData.organizationId,
+    );
   }
 }
