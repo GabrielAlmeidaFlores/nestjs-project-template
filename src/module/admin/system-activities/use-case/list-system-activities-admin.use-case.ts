@@ -86,27 +86,17 @@ export class ListSystemActivitiesAdminUseCase {
     start?: Date,
     end?: Date,
   ): { startDate: Date | null; endDate: Date | null } {
-    const HOURS_IN_DAY = 23;
-    const MINUTES_IN_HOUR = 59;
-    const SECONDS_IN_MINUTE = 59;
-    const MILLISECONDS_IN_SECOND = 999;
-
     let startDate: Date | null = null;
     let endDate: Date | null = null;
 
     if (start instanceof Date && !Number.isNaN(start.getTime())) {
-      startDate = new Date(start);
-      startDate.setHours(0, 0, 0, 0);
+      startDate = new Date(
+        start.toISOString().split('T')[0] + 'T00:00:00.000Z',
+      );
     }
 
     if (end instanceof Date && !Number.isNaN(end.getTime())) {
-      endDate = new Date(end);
-      endDate.setHours(
-        HOURS_IN_DAY,
-        MINUTES_IN_HOUR,
-        SECONDS_IN_MINUTE,
-        MILLISECONDS_IN_SECOND,
-      );
+      endDate = new Date(end.toISOString().split('T')[0] + 'T23:59:59.999Z');
     }
 
     return { startDate, endDate };
