@@ -12,6 +12,8 @@ import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domai
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { AnalysisActivityTrackerGateway } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.gateway';
+import { AnalysisActivityActionEnum } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/enum/analysis-activity-action.enum';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { AdministrativeProcedureInssAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/repository/administrative-procedure-inss-analysis/command/administrative-procedure-inss-analysis.command.repository.gateway';
 import { AdministrativeProcedureInssAnalysisBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/repository/administrative-procedure-inss-analysis-benefit/command/administrative-procedure-inss-analysis-benefit.command.repository.gateway';
@@ -55,6 +57,8 @@ export class CreateAdministrativeProcedureInssAnalysisUseCase {
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(AnalysisToolRecordCommandRepositoryGateway)
     private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
+    @Inject(AnalysisActivityTrackerGateway)
+    private readonly analysisActivityTrackerGateway: AnalysisActivityTrackerGateway,
   ) {}
 
   public async execute(
@@ -219,13 +223,26 @@ export class CreateAdministrativeProcedureInssAnalysisUseCase {
         analysisToolRecord,
       );
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute([
-      administrativeProcedureInssAnalysisTransaction,
-      ...administrativeProcedureInssAnalysisBenefitTransaction,
-      ...administrativeProcedureInssAnalysisLegalProceedingTransaction,
-      ...allAdministrativeProcedureInssAnalysisDocuments,
-      analysisToolRecordTransaction,
-    ]);
+    const transactionsWithActivity =
+      this.analysisActivityTrackerGateway.appendActivityTransaction({
+        action: AnalysisActivityActionEnum.CREATED,
+        analysisType:
+          AnalysisToolRecordTypeEnum.ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS,
+        organizationMemberId: analysisToolRecord.createdBy,
+        analysisToolClientId: analysisToolRecord.analysisToolClient.id,
+        analysisToolRecordId: analysisToolRecord.id,
+        transactions: [
+          administrativeProcedureInssAnalysisTransaction,
+          ...administrativeProcedureInssAnalysisBenefitTransaction,
+          ...administrativeProcedureInssAnalysisLegalProceedingTransaction,
+          ...allAdministrativeProcedureInssAnalysisDocuments,
+          analysisToolRecordTransaction,
+        ],
+      });
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute(
+      transactionsWithActivity,
+    );
 
     await transaction.commit();
   }

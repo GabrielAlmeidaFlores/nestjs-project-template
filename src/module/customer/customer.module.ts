@@ -10,6 +10,7 @@ import { DocumentsToBeGeneratedModule } from '@module/customer/documents-to-be-g
 import { LegalProceedingModule } from '@module/customer/legal-proceeding/legal-proceeding.module';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
 import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
+import { SystemActivitiesModule } from '@module/customer/system-activities/system-activities.module';
 import { TranscriptionModule } from '@module/customer/transcription/transcription.module';
 import { CustomerTutorialModule } from '@module/customer/tutorial/tutorial.module';
 
@@ -26,6 +27,7 @@ import { CustomerTutorialModule } from '@module/customer/tutorial/tutorial.modul
     CreditPackModule,
     DocumentsToBeGeneratedModule,
     DocumentsSentByEmailModule,
+    SystemActivitiesModule,
     CustomerTutorialModule,
   ],
   controllers: [],
