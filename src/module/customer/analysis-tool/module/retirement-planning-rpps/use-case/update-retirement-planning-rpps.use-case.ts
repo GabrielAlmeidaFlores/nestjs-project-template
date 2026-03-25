@@ -304,10 +304,9 @@ export class UpdateRetirementPlanningRppsUseCase {
       this.analysisActivityTrackerGateway.appendActivityTransaction({
         action: AnalysisActivityActionEnum.UPDATED,
         analysisType: analysisToolRecord.type,
-        organizationMemberId: organizationMember.id.toString(),
-        analysisToolClientId:
-          analysisToolRecord.analysisToolClient.id.toString(),
-        analysisToolRecordId: analysisToolRecord.id.toString(),
+        organizationMemberId: organizationMember.id,
+        analysisToolClientId: analysisToolRecord.analysisToolClient.id,
+        analysisToolRecordId: analysisToolRecord.id,
         transactions: transactionOperations,
       });
 

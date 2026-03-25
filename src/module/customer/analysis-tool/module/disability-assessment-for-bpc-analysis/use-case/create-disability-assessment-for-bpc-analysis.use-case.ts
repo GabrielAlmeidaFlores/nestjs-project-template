@@ -219,10 +219,9 @@ export class CreateDisabilityAssessmentForBpcAnalysisUseCase {
       this.analysisActivityTrackerGateway.appendActivityTransaction({
         action: AnalysisActivityActionEnum.CREATED,
         analysisType: analysisToolRecord.type,
-        organizationMemberId: analysisToolRecord.createdBy.toString(),
-        analysisToolClientId:
-          analysisToolRecord.analysisToolClient.id.toString(),
-        analysisToolRecordId: analysisToolRecord.id.toString(),
+        organizationMemberId: analysisToolRecord.createdBy,
+        analysisToolClientId: analysisToolRecord.analysisToolClient.id,
+        analysisToolRecordId: analysisToolRecord.id,
         transactions: [
           disabilityAssessmentForBpcAnalysisTransaction,
           ...disabilityAssessmentForBpcAnalysisBenefitTransaction,

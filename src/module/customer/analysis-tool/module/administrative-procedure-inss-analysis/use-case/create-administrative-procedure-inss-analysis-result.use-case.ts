@@ -202,9 +202,9 @@ export class CreateAdministrativeProcedureInssAnalysisResultUseCase {
         action: AnalysisActivityActionEnum.RESULT_ADDED,
         analysisType:
           AnalysisToolRecordTypeEnum.ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS,
-        organizationMemberId: organizationMember.id.toString(),
-        analysisToolClientId: analysisToolClient.id.toString(),
-        analysisToolRecordId: analysisToolRecord.id.toString(),
+        organizationMemberId: organizationMember.id,
+        analysisToolClientId: analysisToolClient.id,
+        analysisToolRecordId: analysisToolRecord.id,
         transactions: [
           consumeCreditTransaction,
           createAdministrativeProcedureInssAnalysisResultTransaction,

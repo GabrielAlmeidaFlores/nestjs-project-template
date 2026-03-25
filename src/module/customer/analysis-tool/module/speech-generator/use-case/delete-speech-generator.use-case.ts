@@ -74,10 +74,10 @@ export class DeleteSpeechGeneratorUseCase {
       this.analysisActivityTrackerGateway.appendActivityTransaction({
         action: AnalysisActivityActionEnum.DELETED,
         analysisType: AnalysisToolRecordTypeEnum.SPEECH_GENERATOR,
-        organizationMemberId: organizationMember.id.toString(),
+        organizationMemberId: organizationMember.id,
         analysisToolClientId:
-          analysisToolRecordQueryResult.analysisToolClient.id.toString(),
-        analysisToolRecordId: analysisToolRecordQueryResult.id.toString(),
+          analysisToolRecordQueryResult.analysisToolClient.id,
+        analysisToolRecordId: analysisToolRecordQueryResult.id,
         transactions: [deleteTransaction],
       });
 

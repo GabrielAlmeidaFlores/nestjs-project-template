@@ -32,15 +32,15 @@ export class SystemActivitiesTypeormCommandRepository
       description: params.description,
       organizationMember:
         params.organizationMemberId !== undefined
-          ? { id: params.organizationMemberId }
+          ? { id: params.organizationMemberId.toString() }
           : null,
       analysisToolClient:
         params.analysisToolClientId !== undefined
-          ? { id: params.analysisToolClientId }
+          ? { id: params.analysisToolClientId.toString() }
           : null,
       analysisToolRecord:
         params.analysisToolRecordId !== undefined
-          ? { id: params.analysisToolRecordId }
+          ? { id: params.analysisToolRecordId.toString() }
           : null,
     });
   }

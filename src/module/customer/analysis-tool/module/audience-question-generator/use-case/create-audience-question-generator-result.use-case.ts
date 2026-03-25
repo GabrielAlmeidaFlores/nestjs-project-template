@@ -189,9 +189,9 @@ export class CreateAudienceQuestionGeneratorResultUseCase {
       this.analysisActivityTrackerGateway.appendActivityTransaction({
         action: AnalysisActivityActionEnum.RESULT_ADDED,
         analysisType: AnalysisToolRecordTypeEnum.AUDIENCE_QUESTIONS_GENERATOR,
-        organizationMemberId: organizationMember.id.toString(),
-        analysisToolClientId: analysisToolClient.id.toString(),
-        analysisToolRecordId: analysisToolRecord.id.toString(),
+        organizationMemberId: organizationMember.id,
+        analysisToolClientId: analysisToolClient.id,
+        analysisToolRecordId: analysisToolRecord.id,
         transactions: [
           consumeCreditTransaction,
           createAudienceQuestionGeneratorResultTransaction,

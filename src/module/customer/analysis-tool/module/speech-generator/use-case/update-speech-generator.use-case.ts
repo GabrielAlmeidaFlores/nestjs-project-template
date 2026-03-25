@@ -193,10 +193,9 @@ export class UpdateSpeechGeneratorUseCase {
       this.analysisActivityTrackerGateway.appendActivityTransaction({
         action: AnalysisActivityActionEnum.UPDATED,
         analysisType: AnalysisToolRecordTypeEnum.SPEECH_GENERATOR,
-        organizationMemberId: organizationMember.id.toString(),
-        analysisToolClientId:
-          analysisToolRecord.analysisToolClient.id.toString(),
-        analysisToolRecordId: analysisToolRecord.id.toString(),
+        organizationMemberId: organizationMember.id,
+        analysisToolClientId: analysisToolRecord.analysisToolClient.id,
+        analysisToolRecordId: analysisToolRecord.id,
         transactions,
       });
 

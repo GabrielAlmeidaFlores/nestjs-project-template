@@ -221,10 +221,9 @@ export class UpdateAdministrativeProcedureInssAnalysisUseCase {
         action: AnalysisActivityActionEnum.UPDATED,
         analysisType:
           AnalysisToolRecordTypeEnum.ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS,
-        organizationMemberId: organizationMember.id.toString(),
-        analysisToolClientId:
-          analysisToolRecord.analysisToolClient.id.toString(),
-        analysisToolRecordId: analysisToolRecord.id.toString(),
+        organizationMemberId: organizationMember.id,
+        analysisToolClientId: analysisToolRecord.analysisToolClient.id,
+        analysisToolRecordId: analysisToolRecord.id,
         transactions,
       });
 

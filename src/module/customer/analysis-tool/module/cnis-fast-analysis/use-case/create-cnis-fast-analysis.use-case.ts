@@ -187,10 +187,9 @@ export class CreateCnisFastAnalysisUseCase {
       this.analysisActivityTrackerGateway.appendActivityTransaction({
         action: AnalysisActivityActionEnum.CREATED,
         analysisType: AnalysisToolRecordTypeEnum.CNIS_FAST_ANALYSIS,
-        organizationMemberId: analysisToolRecord.createdBy.toString(),
-        analysisToolClientId:
-          analysisToolRecord.analysisToolClient.id.toString(),
-        analysisToolRecordId: analysisToolRecord.id.toString(),
+        organizationMemberId: analysisToolRecord.createdBy,
+        analysisToolClientId: analysisToolRecord.analysisToolClient.id,
+        analysisToolRecordId: analysisToolRecord.id,
         transactions: [
           cnisFastAnalysisTransaction,
           ...cnisFastAnalysisInssBenefitTransaction,
