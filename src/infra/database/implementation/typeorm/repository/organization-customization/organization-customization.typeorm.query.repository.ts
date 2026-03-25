@@ -1,0 +1,98 @@
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
+import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
+import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
+import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
+import { OrganizationCustomizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-customization.typeorm.entity';
+import { MapperGateway } from '@lib/mapper/mapper.gateway';
+import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
+import { OrganizationCustomizationQueryRepositoryGateway } from '@module/customer/organization-customization/domain/repository/organization-customization/query/organization-customization.query.repository.gateway';
+import { GetOrganizationCustomizationQueryResult } from '@module/customer/organization-customization/domain/repository/organization-customization/query/result/get-organization-customization.query.result';
+import { OrganizationCustomizationId } from '@module/customer/organization-customization/domain/schema/entity/organization-customization/value-object/organization-customization-id/organization-customization-id.value-object';
+
+@Injectable()
+export class OrganizationCustomizationTypeormQueryRepository
+  extends BaseTypeormQueryRepository<OrganizationCustomizationTypeormEntity>
+  implements OrganizationCustomizationQueryRepositoryGateway
+{
+  protected readonly _type =
+    OrganizationCustomizationTypeormQueryRepository.name;
+
+  public constructor(
+    @InjectRepository(OrganizationCustomizationTypeormEntity)
+    repository: Repository<OrganizationCustomizationTypeormEntity>,
+    private readonly mapperGateway: MapperGateway,
+  ) {
+    super(repository);
+  }
+
+  public async listOrganizationCustomizations(
+    organizationId: OrganizationId,
+    pagination: ListDataInputModel,
+  ): Promise<ListDataOutputModel<GetOrganizationCustomizationQueryResult>> {
+    const data = await this.list(pagination, {
+      where: { organization: { id: organizationId.toString() } },
+      relations: {
+        organizationCustomizationDocumentHeaderTemplate: true,
+        organizationCustomizationDocumentFooterTemplate: true,
+      },
+    });
+
+    const mappedData = this.mapperGateway.mapArray(
+      data.resource,
+      OrganizationCustomizationTypeormEntity,
+      GetOrganizationCustomizationQueryResult,
+    );
+
+    return new ListDataOutputModel<GetOrganizationCustomizationQueryResult>({
+      ...data,
+      resource: mappedData,
+    });
+  }
+
+  public async findOneOrganizationCustomizationById(
+    id: OrganizationCustomizationId,
+  ): Promise<GetOrganizationCustomizationQueryResult | null> {
+    const result = await this.findOne({
+      where: { id: id.toString() },
+      relations: {
+        organizationCustomizationDocumentHeaderTemplate: true,
+        organizationCustomizationDocumentFooterTemplate: true,
+      },
+    });
+
+    if (!result) {
+      return null;
+    }
+
+    return this.mapperGateway.map(
+      result,
+      OrganizationCustomizationTypeormEntity,
+      GetOrganizationCustomizationQueryResult,
+    );
+  }
+
+  public async findOneOrganizationCustomizationByOrganizationId(
+    organizationId: OrganizationId,
+  ): Promise<GetOrganizationCustomizationQueryResult | null> {
+    const result = await this.findOne({
+      where: { organization: { id: organizationId.toString() } },
+      relations: {
+        organizationCustomizationDocumentHeaderTemplate: true,
+        organizationCustomizationDocumentFooterTemplate: true,
+      },
+    });
+
+    if (!result) {
+      return null;
+    }
+
+    return this.mapperGateway.map(
+      result,
+      OrganizationCustomizationTypeormEntity,
+      GetOrganizationCustomizationQueryResult,
+    );
+  }
+}
