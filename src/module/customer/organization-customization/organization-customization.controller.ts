@@ -11,7 +11,6 @@ import { ListOrganizationCustomizationDocumentFooterTemplatesResponseDto } from 
 import { ListOrganizationCustomizationDocumentHeaderTemplatesResponseDto } from '@module/customer/organization-customization/dto/response/list-organization-customization-document-header-templates.response.dto';
 import { PreviewOrganizationCustomizationDocumentFooterTemplateResponseDto } from '@module/customer/organization-customization/dto/response/preview-organization-customization-document-footer-template.response.dto';
 import { PreviewOrganizationCustomizationDocumentHeaderTemplateResponseDto } from '@module/customer/organization-customization/dto/response/preview-organization-customization-document-header-template.response.dto';
-import { UploadOrganizationCustomizationLogoResponseDto } from '@module/customer/organization-customization/dto/response/upload-organization-customization-logo.response.dto';
 import { CreateOrganizationCustomizationUseCase } from '@module/customer/organization-customization/use-case/create-organization-customization.use-case';
 import { GetOrganizationCustomizationUseCase } from '@module/customer/organization-customization/use-case/get-organization-customization.use-case';
 import { ListOrganizationCustomizationDocumentFooterTemplatesUseCase } from '@module/customer/organization-customization/use-case/list-organization-customization-document-footer-templates.use-case';
@@ -39,34 +38,12 @@ export class OrganizationCustomizationController {
     private readonly createOrganizationCustomizationUseCase: CreateOrganizationCustomizationUseCase,
     private readonly getOrganizationCustomizationUseCase: GetOrganizationCustomizationUseCase,
     private readonly patchOrganizationCustomizationUseCase: PatchOrganizationCustomizationUseCase,
+    private readonly uploadOrganizationCustomizationLogoUseCase: UploadOrganizationCustomizationLogoUseCase,
     private readonly listHeaderTemplatesUseCase: ListOrganizationCustomizationDocumentHeaderTemplatesUseCase,
     private readonly listFooterTemplatesUseCase: ListOrganizationCustomizationDocumentFooterTemplatesUseCase,
     private readonly previewHeaderTemplateUseCase: PreviewOrganizationCustomizationDocumentHeaderTemplateUseCase,
     private readonly previewFooterTemplateUseCase: PreviewOrganizationCustomizationDocumentFooterTemplateUseCase,
-    private readonly uploadLogoUseCase: UploadOrganizationCustomizationLogoUseCase,
   ) {}
-
-  @BuildEndpointSpecification({
-    summary: 'Upload do logo da organização',
-    userLevel: [UserLevelEnum.CUSTOMER],
-    http: {
-      path: 'logo',
-      method: RequestMethod.PATCH,
-      type: UploadOrganizationCustomizationLogoRequestDto,
-    },
-    tag: ['personalizacao-organizacao'],
-    successResponse: {
-      statusCode: HttpStatus.OK,
-      description: 'Logo da organização enviado com sucesso.',
-      type: UploadOrganizationCustomizationLogoResponseDto,
-    },
-    guard: [AuthGuard, OrganizationSessionGuard, OrganizationOwnerGuard],
-  })
-  public async uploadOrganizationLogo(
-    @Body() dto: UploadOrganizationCustomizationLogoRequestDto,
-  ): Promise<UploadOrganizationCustomizationLogoResponseDto> {
-    return this.uploadLogoUseCase.execute(dto);
-  }
 
   @BuildEndpointSpecification({
     summary: 'Criar personalização da organização',
@@ -138,6 +115,33 @@ export class OrganizationCustomizationController {
     @Body() dto: PatchOrganizationCustomizationRequestDto,
   ): Promise<GetOrganizationCustomizationResponseDto> {
     return this.patchOrganizationCustomizationUseCase.execute(
+      organizationSessionData.organizationId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Upload do logo da organização',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'logo',
+      method: RequestMethod.PATCH,
+      type: UploadOrganizationCustomizationLogoRequestDto,
+    },
+    tag: ['personalizacao-organizacao'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Logo da organização enviado com sucesso.',
+      type: GetOrganizationCustomizationResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard, OrganizationOwnerGuard],
+  })
+  public async uploadOrganizationCustomizationLogo(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Body() dto: UploadOrganizationCustomizationLogoRequestDto,
+  ): Promise<GetOrganizationCustomizationResponseDto> {
+    return this.uploadOrganizationCustomizationLogoUseCase.execute(
       organizationSessionData.organizationId,
       dto,
     );

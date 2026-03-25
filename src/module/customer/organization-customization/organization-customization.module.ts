@@ -26,11 +26,11 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateOrganizationCustomizationUseCase,
     GetOrganizationCustomizationUseCase,
     PatchOrganizationCustomizationUseCase,
+    UploadOrganizationCustomizationLogoUseCase,
     ListOrganizationCustomizationDocumentHeaderTemplatesUseCase,
     ListOrganizationCustomizationDocumentFooterTemplatesUseCase,
     PreviewOrganizationCustomizationDocumentHeaderTemplateUseCase,
     PreviewOrganizationCustomizationDocumentFooterTemplateUseCase,
-    UploadOrganizationCustomizationLogoUseCase,
   ],
 })
 export class OrganizationCustomizationModule {

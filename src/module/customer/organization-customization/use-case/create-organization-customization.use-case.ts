@@ -29,7 +29,7 @@ export class CreateOrganizationCustomizationUseCase {
   ): Promise<GetOrganizationCustomizationResponseDto> {
     const entity = new OrganizationCustomizationEntity({
       organizationId,
-      organizationLogo: '',
+      organizationLogo: null,
       organizationCustomizationDocumentFooterDescription:
         dto.organizationCustomizationDocumentFooterDescription ?? null,
       organizationCustomizationDocumentHeaderTemplateId:
