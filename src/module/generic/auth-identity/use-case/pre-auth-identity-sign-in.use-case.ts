@@ -2,6 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import bcrypt from 'bcrypt';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
 import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
 import { GetAuthIdentityWithRelationsQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity-with-relations.query.result';
@@ -13,6 +15,8 @@ import {
 import { SignInMFAOptionEnum } from '@module/generic/auth-identity/enum/sign-in-mfa-option.enum';
 import { AccountDeactivatedError } from '@module/generic/auth-identity/error/account-deactivated.error';
 import { AuthIdentitySessionConflictError } from '@module/generic/auth-identity/error/auth-identity-session-conflict.error';
+import { OrganizationMemberDeactivatedError } from '@module/generic/auth-identity/error/organization-member-deactivated.error';
+import { OrganizationMemberRemovedError } from '@module/generic/auth-identity/error/organization-member-removed.error';
 import { WrongSignInCredentialsError } from '@module/generic/auth-identity/error/wrong-sign-in-credentials.error';
 import { AuthIdentitySessionGateway } from '@module/generic/auth-identity/lib/auth-identity-session/auth-identity-session.gateway';
 import { AuthenticatorGateway } from '@module/generic/auth-identity/lib/authenticator/authenticator.gateway';
@@ -37,6 +41,8 @@ export class PreAuthIdentitySignInUseCase {
     private readonly emailMFAGateway: EmailMFAGateway,
     @Inject(AuthIdentitySessionGateway)
     private readonly authIdentitySessionGateway: AuthIdentitySessionGateway,
+    @Inject(OrganizationMemberQueryRepositoryGateway)
+    private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
   ) {}
 
   public async execute(
@@ -72,6 +78,10 @@ export class PreAuthIdentitySignInUseCase {
 
     if (!isPasswordRight) {
       throw new WrongSignInCredentialsError();
+    }
+
+    if (authIdentity.customer !== null) {
+      await this.validateOrganizationMemberStatus(authIdentity.customer.id);
     }
 
     const activeSession = await this.authIdentitySessionGateway.getSession(
@@ -143,5 +153,26 @@ export class PreAuthIdentitySignInUseCase {
     await transaction.commit();
 
     return authenticatorCredentials;
+  }
+
+  private async validateOrganizationMemberStatus(
+    customerId: CustomerId,
+  ): Promise<void> {
+    const member =
+      await this.organizationMemberQueryRepositoryGateway.findOneOrganizationMemberByCustomerIdWithDeleted(
+        customerId,
+      );
+
+    if (member === null) {
+      return;
+    }
+
+    if (member.deletedAt !== null) {
+      throw new OrganizationMemberRemovedError();
+    }
+
+    if (!member.isActive) {
+      throw new OrganizationMemberDeactivatedError();
+    }
   }
 }
