@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { ColorValue } from '@core/domain/schema/value-object/color/color.value-object';
+import { FileProcessorGateway } from '@module/customer/account/lib/file-processor/file-processor.gateway';
 import { OrganizationCustomizationCommandRepositoryGateway } from '@module/customer/organization-customization/domain/repository/organization-customization/command/organization-customization.command.repository.gateway';
 import { OrganizationCustomizationQueryRepositoryGateway } from '@module/customer/organization-customization/domain/repository/organization-customization/query/organization-customization.query.repository.gateway';
 import { OrganizationCustomizationEntity } from '@module/customer/organization-customization/domain/schema/entity/organization-customization/organization-customization.entity';
@@ -21,6 +22,8 @@ export class PatchOrganizationCustomizationUseCase {
     private readonly organizationCustomizationQueryRepository: OrganizationCustomizationQueryRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(FileProcessorGateway)
+    private readonly fileProcessorGateway: FileProcessorGateway,
   ) {}
 
   public async execute(
@@ -36,10 +39,17 @@ export class PatchOrganizationCustomizationUseCase {
       throw new OrganizationCustomizationNotFoundError();
     }
 
+    const organizationLogoLocation = dto.organizationLogo
+      ? await this.fileProcessorGateway.uploadOrganizationLogoFromBase64(
+          dto.organizationLogo,
+          existing.organizationLogo,
+        )
+      : existing.organizationLogo;
+
     const updated = new OrganizationCustomizationEntity({
       id: existing.organizationCustomizationId,
       organizationId: existing.organizationId,
-      organizationLogo: dto.organizationLogo ?? existing.organizationLogo,
+      organizationLogo: organizationLogoLocation,
       organizationCustomizationDocumentFooterDescription:
         dto.organizationCustomizationDocumentFooterDescription ??
         existing.organizationCustomizationDocumentFooterDescription,
@@ -80,9 +90,14 @@ export class PatchOrganizationCustomizationUseCase {
       throw new OrganizationCustomizationNotFoundError();
     }
 
+    const organizationLogoSignedUrl =
+      await this.fileProcessorGateway.getOrganizationLogo(
+        result.organizationLogo,
+      );
+
     return GetOrganizationCustomizationResponseDto.build({
       organizationCustomizationId: result.organizationCustomizationId,
-      organizationLogo: result.organizationLogo,
+      organizationLogo: organizationLogoSignedUrl.toString(),
       organizationCustomizationDocumentFooterDescription:
         result.organizationCustomizationDocumentFooterDescription,
       organizationCustomizationDocumentHeaderTemplateId:

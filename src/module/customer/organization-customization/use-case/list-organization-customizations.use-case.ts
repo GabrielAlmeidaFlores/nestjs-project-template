@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
+import { FileProcessorGateway } from '@module/customer/account/lib/file-processor/file-processor.gateway';
 import { OrganizationCustomizationQueryRepositoryGateway } from '@module/customer/organization-customization/domain/repository/organization-customization/query/organization-customization.query.repository.gateway';
 import { GetOrganizationCustomizationResponseDto } from '@module/customer/organization-customization/dto/response/get-organization-customization.response.dto';
 import { ListOrganizationCustomizationsResponseDto } from '@module/customer/organization-customization/dto/response/list-organization-customizations.response.dto';
@@ -13,6 +14,8 @@ export class ListOrganizationCustomizationsUseCase {
   public constructor(
     @Inject(OrganizationCustomizationQueryRepositoryGateway)
     private readonly organizationCustomizationQueryRepository: OrganizationCustomizationQueryRepositoryGateway,
+    @Inject(FileProcessorGateway)
+    private readonly fileProcessorGateway: FileProcessorGateway,
   ) {}
 
   public async execute(
@@ -25,25 +28,32 @@ export class ListOrganizationCustomizationsUseCase {
         pagination,
       );
 
-    const resource = result.resource.map((item) =>
-      GetOrganizationCustomizationResponseDto.build({
-        organizationCustomizationId: item.organizationCustomizationId,
-        organizationLogo: item.organizationLogo,
-        organizationCustomizationDocumentFooterDescription:
-          item.organizationCustomizationDocumentFooterDescription,
-        organizationCustomizationDocumentHeaderTemplateId:
-          item.organizationCustomizationDocumentHeaderTemplateId,
-        organizationCustomizationDocumentHeaderTemplateType:
-          item.organizationCustomizationDocumentHeaderTemplateType,
-        organizationCustomizationDocumentFooterTemplateId:
-          item.organizationCustomizationDocumentFooterTemplateId,
-        organizationCustomizationDocumentFooterTemplateType:
-          item.organizationCustomizationDocumentFooterTemplateType,
-        primaryColor: item.primaryColor,
-        secondaryColor: item.secondaryColor,
-        tertiaryColor: item.tertiaryColor,
-        createdAt: item.createdAt,
-        updatedAt: item.updatedAt,
+    const resource = await Promise.all(
+      result.resource.map(async (item) => {
+        const organizationLogoSignedUrl =
+          await this.fileProcessorGateway.getOrganizationLogo(
+            item.organizationLogo,
+          );
+
+        return GetOrganizationCustomizationResponseDto.build({
+          organizationCustomizationId: item.organizationCustomizationId,
+          organizationLogo: organizationLogoSignedUrl.toString(),
+          organizationCustomizationDocumentFooterDescription:
+            item.organizationCustomizationDocumentFooterDescription,
+          organizationCustomizationDocumentHeaderTemplateId:
+            item.organizationCustomizationDocumentHeaderTemplateId,
+          organizationCustomizationDocumentHeaderTemplateType:
+            item.organizationCustomizationDocumentHeaderTemplateType,
+          organizationCustomizationDocumentFooterTemplateId:
+            item.organizationCustomizationDocumentFooterTemplateId,
+          organizationCustomizationDocumentFooterTemplateType:
+            item.organizationCustomizationDocumentFooterTemplateType,
+          primaryColor: item.primaryColor,
+          secondaryColor: item.secondaryColor,
+          tertiaryColor: item.tertiaryColor,
+          createdAt: item.createdAt,
+          updatedAt: item.updatedAt,
+        });
       }),
     );
 
