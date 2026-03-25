@@ -88,4 +88,21 @@ export class OrganizationTypeormQueryRepository
 
     return mappedData;
   }
+
+  public async listAllPaginated(
+    listData: ListDataInputModel,
+  ): Promise<ListDataOutputModel<GetOrganizationQueryResult>> {
+    const data = await this.list(listData);
+
+    const mappedData = this.mapperGateway.mapArray(
+      data.resource,
+      OrganizationTypeormEntity,
+      GetOrganizationQueryResult,
+    );
+
+    return new ListDataOutputModel<GetOrganizationQueryResult>({
+      ...data,
+      resource: mappedData,
+    });
+  }
 }
