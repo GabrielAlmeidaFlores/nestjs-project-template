@@ -52,4 +52,7 @@ export abstract class OrganizationMemberQueryRepositoryGateway {
   ): Promise<
     ListDataOutputModel<GetOrganizationCollaboratorWithStatsQueryResult>
   >;
+  public abstract findOneOrganizationMemberByCustomerIdWithDeleted(
+    customerId: CustomerId,
+  ): Promise<GetOrganizationMemberQueryResult | null>;
 }
