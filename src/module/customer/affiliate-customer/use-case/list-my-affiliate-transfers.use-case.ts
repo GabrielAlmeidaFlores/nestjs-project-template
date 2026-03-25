@@ -81,11 +81,11 @@ export class ListMyAffiliateTransfersUseCase {
 
       const transferDate = bankTransfer.transferDate ?? bankTransfer.createdAt;
 
-      if (filters.from !== null && transferDate < filters.from) {
+      if (filters.startDate !== null && transferDate < filters.startDate) {
         return [];
       }
 
-      if (filters.to !== null && transferDate > filters.to) {
+      if (filters.endDate !== null && transferDate > filters.endDate) {
         return [];
       }
 
