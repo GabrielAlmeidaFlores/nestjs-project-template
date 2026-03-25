@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
-import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { OrganizationCustomizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-customization.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
@@ -26,30 +24,6 @@ export class OrganizationCustomizationTypeormQueryRepository
     private readonly mapperGateway: MapperGateway,
   ) {
     super(repository);
-  }
-
-  public async listOrganizationCustomizations(
-    organizationId: OrganizationId,
-    pagination: ListDataInputModel,
-  ): Promise<ListDataOutputModel<GetOrganizationCustomizationQueryResult>> {
-    const data = await this.list(pagination, {
-      where: { organization: { id: organizationId.toString() } },
-      relations: {
-        organizationCustomizationDocumentHeaderTemplate: true,
-        organizationCustomizationDocumentFooterTemplate: true,
-      },
-    });
-
-    const mappedData = this.mapperGateway.mapArray(
-      data.resource,
-      OrganizationCustomizationTypeormEntity,
-      GetOrganizationCustomizationQueryResult,
-    );
-
-    return new ListDataOutputModel<GetOrganizationCustomizationQueryResult>({
-      ...data,
-      resource: mappedData,
-    });
   }
 
   public async findOneOrganizationCustomizationById(

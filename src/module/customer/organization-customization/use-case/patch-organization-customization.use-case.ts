@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { ColorValue } from '@core/domain/schema/value-object/color/color.value-object';
+import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { FileProcessorGateway } from '@module/customer/account/lib/file-processor/file-processor.gateway';
 import { OrganizationCustomizationCommandRepositoryGateway } from '@module/customer/organization-customization/domain/repository/organization-customization/command/organization-customization.command.repository.gateway';
 import { OrganizationCustomizationQueryRepositoryGateway } from '@module/customer/organization-customization/domain/repository/organization-customization/query/organization-customization.query.repository.gateway';
@@ -27,12 +28,12 @@ export class PatchOrganizationCustomizationUseCase {
   ) {}
 
   public async execute(
-    organizationCustomizationId: OrganizationCustomizationId,
+    organizationId: OrganizationId,
     dto: PatchOrganizationCustomizationRequestDto,
   ): Promise<GetOrganizationCustomizationResponseDto> {
     const existing =
-      await this.organizationCustomizationQueryRepository.findOneOrganizationCustomizationById(
-        organizationCustomizationId,
+      await this.organizationCustomizationQueryRepository.findOneOrganizationCustomizationByOrganizationId(
+        organizationId,
       );
 
     if (!existing) {
@@ -74,7 +75,9 @@ export class PatchOrganizationCustomizationUseCase {
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       this.organizationCustomizationCommandRepository.updateOrganizationCustomization(
-        organizationCustomizationId,
+        new OrganizationCustomizationId(
+          existing.organizationCustomizationId.toString(),
+        ),
         updated,
       ),
     ]);
@@ -82,8 +85,8 @@ export class PatchOrganizationCustomizationUseCase {
     await transaction.commit();
 
     const result =
-      await this.organizationCustomizationQueryRepository.findOneOrganizationCustomizationById(
-        organizationCustomizationId,
+      await this.organizationCustomizationQueryRepository.findOneOrganizationCustomizationByOrganizationId(
+        organizationId,
       );
 
     if (!result) {

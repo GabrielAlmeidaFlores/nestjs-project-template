@@ -1,7 +1,6 @@
 import { Body, HttpStatus, Param, Query, RequestMethod } from '@nestjs/common';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
-import { OrganizationCustomizationId } from '@module/customer/organization-customization/domain/schema/entity/organization-customization/value-object/organization-customization-id/organization-customization-id.value-object';
 import { OrganizationCustomizationDocumentFooterTemplateId } from '@module/customer/organization-customization/domain/schema/entity/organization-customization-document-footer-template/value-object/organization-customization-document-footer-template-id/organization-customization-document-footer-template-id.value-object';
 import { OrganizationCustomizationDocumentHeaderTemplateId } from '@module/customer/organization-customization/domain/schema/entity/organization-customization-document-header-template/value-object/organization-customization-document-header-template-id/organization-customization-document-header-template-id.value-object';
 import { CreateOrganizationCustomizationRequestDto } from '@module/customer/organization-customization/dto/request/create-organization-customization.request.dto';
@@ -10,14 +9,13 @@ import { UploadOrganizationCustomizationLogoRequestDto } from '@module/customer/
 import { GetOrganizationCustomizationResponseDto } from '@module/customer/organization-customization/dto/response/get-organization-customization.response.dto';
 import { ListOrganizationCustomizationDocumentFooterTemplatesResponseDto } from '@module/customer/organization-customization/dto/response/list-organization-customization-document-footer-templates.response.dto';
 import { ListOrganizationCustomizationDocumentHeaderTemplatesResponseDto } from '@module/customer/organization-customization/dto/response/list-organization-customization-document-header-templates.response.dto';
-import { ListOrganizationCustomizationsResponseDto } from '@module/customer/organization-customization/dto/response/list-organization-customizations.response.dto';
 import { PreviewOrganizationCustomizationDocumentFooterTemplateResponseDto } from '@module/customer/organization-customization/dto/response/preview-organization-customization-document-footer-template.response.dto';
 import { PreviewOrganizationCustomizationDocumentHeaderTemplateResponseDto } from '@module/customer/organization-customization/dto/response/preview-organization-customization-document-header-template.response.dto';
 import { UploadOrganizationCustomizationLogoResponseDto } from '@module/customer/organization-customization/dto/response/upload-organization-customization-logo.response.dto';
 import { CreateOrganizationCustomizationUseCase } from '@module/customer/organization-customization/use-case/create-organization-customization.use-case';
+import { GetOrganizationCustomizationUseCase } from '@module/customer/organization-customization/use-case/get-organization-customization.use-case';
 import { ListOrganizationCustomizationDocumentFooterTemplatesUseCase } from '@module/customer/organization-customization/use-case/list-organization-customization-document-footer-templates.use-case';
 import { ListOrganizationCustomizationDocumentHeaderTemplatesUseCase } from '@module/customer/organization-customization/use-case/list-organization-customization-document-header-templates.use-case';
-import { ListOrganizationCustomizationsUseCase } from '@module/customer/organization-customization/use-case/list-organization-customizations.use-case';
 import { PatchOrganizationCustomizationUseCase } from '@module/customer/organization-customization/use-case/patch-organization-customization.use-case';
 import { PreviewOrganizationCustomizationDocumentFooterTemplateUseCase } from '@module/customer/organization-customization/use-case/preview-organization-customization-document-footer-template.use-case';
 import { PreviewOrganizationCustomizationDocumentHeaderTemplateUseCase } from '@module/customer/organization-customization/use-case/preview-organization-customization-document-header-template.use-case';
@@ -39,8 +37,8 @@ export class OrganizationCustomizationController {
 
   public constructor(
     private readonly createOrganizationCustomizationUseCase: CreateOrganizationCustomizationUseCase,
+    private readonly getOrganizationCustomizationUseCase: GetOrganizationCustomizationUseCase,
     private readonly patchOrganizationCustomizationUseCase: PatchOrganizationCustomizationUseCase,
-    private readonly listOrganizationCustomizationsUseCase: ListOrganizationCustomizationsUseCase,
     private readonly listHeaderTemplatesUseCase: ListOrganizationCustomizationDocumentHeaderTemplatesUseCase,
     private readonly listFooterTemplatesUseCase: ListOrganizationCustomizationDocumentFooterTemplatesUseCase,
     private readonly previewHeaderTemplateUseCase: PreviewOrganizationCustomizationDocumentHeaderTemplateUseCase,
@@ -98,10 +96,31 @@ export class OrganizationCustomizationController {
   }
 
   @BuildEndpointSpecification({
+    summary: 'Obter personalização da organização',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: { path: '', method: RequestMethod.GET },
+    tag: ['personalizacao-organizacao'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Personalização da organização obtida com sucesso.',
+      type: GetOrganizationCustomizationResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async getOrganizationCustomization(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+  ): Promise<GetOrganizationCustomizationResponseDto> {
+    return this.getOrganizationCustomizationUseCase.execute(
+      organizationSessionData.organizationId,
+    );
+  }
+
+  @BuildEndpointSpecification({
     summary: 'Atualizar personalização da organização',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: ':organizationCustomizationId',
+      path: '',
       method: RequestMethod.PATCH,
       type: PatchOrganizationCustomizationRequestDto,
     },
@@ -114,39 +133,13 @@ export class OrganizationCustomizationController {
     guard: [AuthGuard, OrganizationSessionGuard, OrganizationOwnerGuard],
   })
   public async patchOrganizationCustomization(
-    @Param(
-      'organizationCustomizationId',
-      new ParseValueObjectPipe(OrganizationCustomizationId),
-    )
-    organizationCustomizationId: OrganizationCustomizationId,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Body() dto: PatchOrganizationCustomizationRequestDto,
   ): Promise<GetOrganizationCustomizationResponseDto> {
     return this.patchOrganizationCustomizationUseCase.execute(
-      organizationCustomizationId,
-      dto,
-    );
-  }
-
-  @BuildEndpointSpecification({
-    summary: 'Listar personalizações da organização',
-    userLevel: [UserLevelEnum.CUSTOMER],
-    http: { path: '', method: RequestMethod.GET },
-    tag: ['personalizacao-organizacao'],
-    successResponse: {
-      statusCode: HttpStatus.OK,
-      description: 'Lista de personalizações obtida com sucesso.',
-      type: ListOrganizationCustomizationsResponseDto,
-    },
-    guard: [AuthGuard, OrganizationSessionGuard],
-  })
-  public async listOrganizationCustomizations(
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
-    @Query() dto: ListDataRequestDto,
-  ): Promise<ListOrganizationCustomizationsResponseDto> {
-    return this.listOrganizationCustomizationsUseCase.execute(
       organizationSessionData.organizationId,
-      new ListDataInputModel(dto),
+      dto,
     );
   }
 
