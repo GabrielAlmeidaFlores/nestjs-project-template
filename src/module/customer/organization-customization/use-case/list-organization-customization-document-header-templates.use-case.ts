@@ -30,6 +30,7 @@ export class ListOrganizationCustomizationDocumentHeaderTemplatesUseCase {
         organizationCustomizationDocumentHeaderTemplateId:
           item.organizationCustomizationDocumentHeaderTemplateId,
         type: item.type,
+        htmlContent: item.htmlContent,
         createdAt: item.createdAt,
       }),
     );
