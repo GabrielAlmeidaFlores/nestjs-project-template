@@ -1,14 +1,16 @@
 import { Module } from '@nestjs/common';
 
 import { DatabaseModule } from '@infra/database/database.module';
-import { OrganizationSessionModule } from '@module/customer/account/lib/organization-session/organization-session.module';
 import { OrganizationCustomizationController } from '@module/customer/organization-customization/organization-customization.controller';
 import { CreateOrganizationCustomizationUseCase } from '@module/customer/organization-customization/use-case/create-organization-customization.use-case';
 import { ListOrganizationCustomizationDocumentFooterTemplatesUseCase } from '@module/customer/organization-customization/use-case/list-organization-customization-document-footer-templates.use-case';
 import { ListOrganizationCustomizationDocumentHeaderTemplatesUseCase } from '@module/customer/organization-customization/use-case/list-organization-customization-document-header-templates.use-case';
 import { ListOrganizationCustomizationsUseCase } from '@module/customer/organization-customization/use-case/list-organization-customizations.use-case';
 import { PatchOrganizationCustomizationUseCase } from '@module/customer/organization-customization/use-case/patch-organization-customization.use-case';
+import { PreviewOrganizationCustomizationDocumentFooterTemplateUseCase } from '@module/customer/organization-customization/use-case/preview-organization-customization-document-footer-template.use-case';
+import { PreviewOrganizationCustomizationDocumentHeaderTemplateUseCase } from '@module/customer/organization-customization/use-case/preview-organization-customization-document-header-template.use-case';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
+import { OrganizationSessionModule } from '@shared/api/gateway/guard/organization-session/organization-session.module';
 
 @Module({
   imports: [AuthModule, DatabaseModule, OrganizationSessionModule],
@@ -19,6 +21,8 @@ import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
     ListOrganizationCustomizationsUseCase,
     ListOrganizationCustomizationDocumentHeaderTemplatesUseCase,
     ListOrganizationCustomizationDocumentFooterTemplatesUseCase,
+    PreviewOrganizationCustomizationDocumentHeaderTemplateUseCase,
+    PreviewOrganizationCustomizationDocumentFooterTemplateUseCase,
   ],
 })
 export class OrganizationCustomizationModule {
