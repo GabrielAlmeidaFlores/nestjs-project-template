@@ -14,6 +14,8 @@ import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/exp
 import { UnexpectedHtmlToDocxReturnTypeError } from '@module/customer/analysis-tool/lib/export-document/error/unexpected-html-to-docx-return-type.error';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 
+import type { ExportDocumentDownloadOptionsInterface } from '@module/customer/analysis-tool/lib/export-document/export-document-download-options.interface';
+
 function escapeTableCell(text: string): string {
   return text
     .trim()
@@ -135,7 +137,8 @@ export class ExportDocumentService implements ExportDocumentGateway {
 
   public async downloadFile(
     markdownContent: string,
-    format: string,
+    format: ExportDocumentFormatEnum,
+    options?: ExportDocumentDownloadOptionsInterface,
   ): Promise<Buffer> {
     const isHtml =
       typeof markdownContent === 'string' &&
@@ -146,9 +149,9 @@ export class ExportDocumentService implements ExportDocumentGateway {
 
     switch (format.toLowerCase()) {
       case 'pdf':
-        return this.generatePdfFromHtml(htmlContent);
+        return this.generatePdfFromHtml(htmlContent, options);
       case 'docx':
-        return this.generateDocxFromHtml(htmlContent);
+        return this.generateDocxFromHtml(htmlContent, options);
       default:
         throw new Error(`Unsupported export document format: ${format}`);
     }
@@ -158,8 +161,9 @@ export class ExportDocumentService implements ExportDocumentGateway {
     content: string,
     format: ExportDocumentFormatEnum,
     name: string,
+    options?: ExportDocumentDownloadOptionsInterface,
   ): Promise<StreamableFile> {
-    const fileBuffer = await this.downloadFile(content, format);
+    const fileBuffer = await this.downloadFile(content, format, options);
 
     const formatted = moment().format('DD-MM-YYYY');
 
@@ -187,7 +191,19 @@ export class ExportDocumentService implements ExportDocumentGateway {
     `;
   }
 
-  private async generatePdfFromHtml(htmlContent: string): Promise<Buffer> {
+  private _wrapPdfHeaderFooterFragment(fragmentHtml: string): string {
+    const safeFragment = fragmentHtml.trim();
+    if (!safeFragment) {
+      return `<div style="font-size:10px;line-height:1;"></div>`;
+    }
+
+    return `<div style="width:100%;box-sizing:border-box;font-size:10px;line-height:1.2;">${safeFragment}</div>`;
+  }
+
+  private async generatePdfFromHtml(
+    htmlContent: string,
+    options?: ExportDocumentDownloadOptionsInterface,
+  ): Promise<Buffer> {
     const fullHtml = this._buildFullHtmlDocument(htmlContent);
     const browser = await Puppeteer.launch({
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
@@ -196,25 +212,50 @@ export class ExportDocumentService implements ExportDocumentGateway {
 
     await page.setContent(fullHtml);
 
+    const headerHtml = options?.headerHtml?.trim() ?? '';
+    const footerHtml = options?.footerHtml?.trim() ?? '';
+
+    const hasHeader = headerHtml.length > 0;
+    const hasFooter = footerHtml.length > 0;
+    const displayHeaderFooter = hasHeader || hasFooter;
+
     const pdfUint8Array = await page.pdf({
       format: 'A4',
       printBackground: true,
       margin: { top: '10mm', bottom: '20mm', left: '5mm', right: '10mm' },
+      displayHeaderFooter,
+      headerTemplate: this._wrapPdfHeaderFooterFragment(headerHtml),
+      footerTemplate: this._wrapPdfHeaderFooterFragment(footerHtml),
     });
     await browser.close();
 
     return Buffer.from(pdfUint8Array);
   }
 
-  private async generateDocxFromHtml(htmlContent: string): Promise<Buffer> {
+  private async generateDocxFromHtml(
+    htmlContent: string,
+    options?: ExportDocumentDownloadOptionsInterface,
+  ): Promise<Buffer> {
     const fullHtmlDocument = this._buildFullHtmlDocument(htmlContent);
 
-    const docxResult = await HtmlToDocx(fullHtmlDocument, null, {
-      orientation: 'portrait',
-      table: { row: { cantSplit: true } },
-      footer: false,
-      pageNumber: false,
-    });
+    const headerHtml = options?.headerHtml?.trim() ?? '';
+    const footerHtml = options?.footerHtml?.trim() ?? '';
+
+    const hasHeader = headerHtml.length > 0;
+    const hasFooter = footerHtml.length > 0;
+
+    const docxResult = await HtmlToDocx(
+      fullHtmlDocument,
+      hasHeader ? headerHtml : null,
+      {
+        orientation: 'portrait',
+        table: { row: { cantSplit: true } },
+        header: hasHeader,
+        footer: hasFooter,
+        pageNumber: false,
+      },
+      hasFooter ? footerHtml : null,
+    );
 
     let buffer: Buffer;
     if (docxResult instanceof ArrayBuffer) {

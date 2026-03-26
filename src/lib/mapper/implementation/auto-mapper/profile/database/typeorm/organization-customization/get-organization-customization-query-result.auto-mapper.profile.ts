@@ -41,6 +41,7 @@ export class GetOrganizationCustomizationQueryResultAutoMapperProfile {
       return GetOrganizationCustomizationQueryResult.build({
         organizationCustomizationId: new OrganizationCustomizationId(source.id),
         organizationId: new OrganizationId(source.organization.id),
+        organizationName: source.organization.name,
         organizationLogo: source.organizationLogo,
         organizationCustomizationDocumentFooterDescription:
           source.organizationCustomizationDocumentFooterDescription,
