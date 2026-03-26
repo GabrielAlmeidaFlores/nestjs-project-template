@@ -305,7 +305,6 @@ export class OrganizationMemberTypeormQueryRepository
 
     const searchTerm = (param.search ?? '').trim();
     const baseWhere: FindOptionsWhere<OrganizationMemberTypeormEntity> = {
-      owner: false,
       deletedAt: IsNull(),
     };
 
