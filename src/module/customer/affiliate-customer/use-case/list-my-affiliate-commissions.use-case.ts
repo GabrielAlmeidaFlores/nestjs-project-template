@@ -112,7 +112,12 @@ export class ListMyAffiliateCommissionsUseCase {
       return AffiliateCommissionItemResponseDto.build({
         id: commission.id,
         organizationPaymentPlanId: commission.organizationPaymentPlan,
+        planName: commission.planName,
+        planValue: commission.planPrice,
+        customerName: commission.customerName ?? null,
+        customerEmail: commission.customerEmail ?? null,
         commissionPercentage: commission.commissionPercentage,
+        discountPercentage: commission.discountPercentage,
         createdAt: commission.createdAt,
         updatedAt: commission.updatedAt,
         transfer: transfer ?? null,

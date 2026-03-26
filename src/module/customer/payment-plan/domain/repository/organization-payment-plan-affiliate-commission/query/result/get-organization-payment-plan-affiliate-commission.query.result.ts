@@ -9,6 +9,11 @@ export class GetOrganizationPaymentPlanAffiliateCommissionQueryResult extends Ba
   public readonly organizationPaymentPlan: OrganizationPaymentPlanId;
   public readonly affiliateCustomer: AffiliateCustomerId;
   public readonly commissionPercentage: number;
+  public readonly planName: string;
+  public readonly planPrice: number;
+  public readonly discountPercentage: number;
+  public readonly customerName: string | null;
+  public readonly customerEmail: string | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
 

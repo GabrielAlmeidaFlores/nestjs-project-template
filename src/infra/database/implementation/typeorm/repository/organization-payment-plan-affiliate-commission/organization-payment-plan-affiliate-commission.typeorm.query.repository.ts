@@ -10,6 +10,7 @@ import { OrganizationPaymentPlanAffiliateCommissionQueryRepositoryGateway } from
 import { ListAffiliateCommissionsQueryParam } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-affiliate-commission/query/param/list-affiliate-commissions.query.param';
 import { GetOrganizationPaymentPlanAffiliateCommissionQueryResult } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-affiliate-commission/query/result/get-organization-payment-plan-affiliate-commission.query.result';
 import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
+import { PaymentStatusEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-status.enum';
 
 import type { FindOptionsWhere } from 'typeorm';
 
@@ -21,12 +22,24 @@ export class OrganizationPaymentPlanAffiliateCommissionTypeormQueryRepository
   protected readonly _type =
     OrganizationPaymentPlanAffiliateCommissionTypeormQueryRepository.name;
 
+  private readonly defaultRelations: string[];
+
   public constructor(
     @InjectRepository(OrganizationPaymentPlanAffiliateCommissionTypeormEntity)
     repository: Repository<OrganizationPaymentPlanAffiliateCommissionTypeormEntity>,
     private readonly mapperGateway: MapperGateway,
   ) {
     super(repository);
+    this.defaultRelations = [
+      'organizationPaymentPlan',
+      'organizationPaymentPlan.organization',
+      'organizationPaymentPlan.organization.organizationMember',
+      'organizationPaymentPlan.organization.organizationMember.customer',
+      'organizationPaymentPlan.organization.organizationMember.customer.authIdentity',
+      'organizationPaymentPlan.organizationPaymentPlanBankPayment',
+      'organizationPaymentPlan.organizationPaymentPlanBankPayment.bankPayment',
+      'affiliateCustomer',
+    ];
   }
 
   public async findOneByOrganizationPaymentPlanId(
@@ -34,7 +47,7 @@ export class OrganizationPaymentPlanAffiliateCommissionTypeormQueryRepository
   ): Promise<GetOrganizationPaymentPlanAffiliateCommissionQueryResult | null> {
     const entity = await this.findOne({
       where: { organizationPaymentPlan: { id: id.toString() } },
-      relations: ['organizationPaymentPlan', 'affiliateCustomer'],
+      relations: this.defaultRelations,
       withDeleted: true,
     });
 
@@ -54,7 +67,7 @@ export class OrganizationPaymentPlanAffiliateCommissionTypeormQueryRepository
   ): Promise<GetOrganizationPaymentPlanAffiliateCommissionQueryResult[]> {
     const entities = await this.find({
       where: { affiliateCustomer: { id: affiliateCustomerId.toString() } },
-      relations: ['organizationPaymentPlan', 'affiliateCustomer'],
+      relations: this.defaultRelations,
       withDeleted: true,
     });
 
@@ -84,18 +97,11 @@ export class OrganizationPaymentPlanAffiliateCommissionTypeormQueryRepository
       where.createdAt = LessThanOrEqual(filters.endDate);
     }
 
-    const relations = ['organizationPaymentPlan', 'affiliateCustomer'];
-
-    if (filters.searchBy !== null) {
-      relations.push(
-        'organizationPaymentPlan.organization',
-        'organizationPaymentPlan.organization.organizationMember',
-        'organizationPaymentPlan.organization.organizationMember.customer',
-        'organizationPaymentPlan.organization.organizationMember.customer.authIdentity',
-      );
-    }
+    const relations = [...this.defaultRelations];
 
     let entities = await this.find({ where, relations, withDeleted: true });
+
+    entities = entities.filter((e) => this.hasConfirmedPayment(e));
 
     if (filters.searchBy !== null) {
       const search = filters.searchBy.toLowerCase();
@@ -116,6 +122,16 @@ export class OrganizationPaymentPlanAffiliateCommissionTypeormQueryRepository
       entities,
       OrganizationPaymentPlanAffiliateCommissionTypeormEntity,
       GetOrganizationPaymentPlanAffiliateCommissionQueryResult,
+    );
+  }
+
+  private hasConfirmedPayment(
+    entity: OrganizationPaymentPlanAffiliateCommissionTypeormEntity,
+  ): boolean {
+    const payments =
+      entity.organizationPaymentPlan?.organizationPaymentPlanBankPayment ?? [];
+    return payments.some(
+      (p) => p.bankPayment?.status === PaymentStatusEnum.CONFIRMED,
     );
   }
 }
