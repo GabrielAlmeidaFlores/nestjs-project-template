@@ -5,7 +5,6 @@ import type { OrganizationId } from '@module/customer/account/domain/schema/enti
 export class GetOrganizationQueryResult extends BaseBuildableObject {
   public readonly id: OrganizationId;
   public readonly name: string;
-  public readonly organizationLogo: string | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

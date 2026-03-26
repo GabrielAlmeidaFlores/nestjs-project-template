@@ -6,6 +6,7 @@ import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
+import { OrganizationCustomizationExportDocumentOptionsResolver } from '@module/customer/analysis-tool/lib/organization-customization-resolver/organization-customization-export-document-options.resolver';
 import { DisabilityAssessmentForBpcAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/repository/disability-assessment-for-bpc-analysis/query/disability-assessment-for-bpc-analysis.query.repository.gateway';
 import { DisabilityAssessmentForBpcAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/repository/disability-assessment-for-bpc-analysis-result/command/disability-assessment-for-bpc-analysis-result.command.repository.gateway';
 import { DisabilityAssessmentForBpcAnalysisId } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/value-object/disability-assessment-for-bpc-analysis-id/disability-assessment-for-bpc-analysis-id.value-object';
@@ -41,6 +42,8 @@ export class DownloadDisabilityAssessmentForBpcSimplifiedAnalysisUseCase {
     private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
     @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
+    @Inject(OrganizationCustomizationExportDocumentOptionsResolver)
+    private readonly organizationCustomizationExportDocumentOptionsResolver: OrganizationCustomizationExportDocumentOptionsResolver,
   ) {}
 
   public async execute(
@@ -138,10 +141,16 @@ export class DownloadDisabilityAssessmentForBpcSimplifiedAnalysisUseCase {
       throw new DisabilityAssessmentForBpcAnalysisDoesNotContainSimplifiedAnalysisError();
     }
 
+    const exportOptions =
+      await this.organizationCustomizationExportDocumentOptionsResolver.execute(
+        organizationSessionData.organizationId,
+      );
+
     return this.exportDocumentGateway.downloadFileAsStreamable(
       responseAi,
       format,
       'analise_simplificada_avaliacao_deficiencia_para_bpc',
+      exportOptions,
     );
   }
 }

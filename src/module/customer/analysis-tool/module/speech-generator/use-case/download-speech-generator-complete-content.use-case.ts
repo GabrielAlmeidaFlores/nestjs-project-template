@@ -4,6 +4,7 @@ import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/accou
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
+import { OrganizationCustomizationExportDocumentOptionsResolver } from '@module/customer/analysis-tool/lib/organization-customization-resolver/organization-customization-export-document-options.resolver';
 import { SpeechGeneratorQueryRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/query/speech-generator.query.repository.gateway';
 import { SpeechGeneratorId } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/value-object/speech-generator-id/speech-generator-id.value-object';
 import { SpeechGeneratorDoesNotContainCompleteContentError } from '@module/customer/analysis-tool/module/speech-generator/error/speech-generator-does-not-contain-complete-content.error';
@@ -22,6 +23,8 @@ export class DownloadSpeechGeneratorCompleteContentUseCase {
     private readonly speechGeneratorQueryRepositoryGateway: SpeechGeneratorQueryRepositoryGateway,
     @Inject(ExportDocumentGateway)
     private readonly exportDocumentGateway: ExportDocumentGateway,
+    @Inject(OrganizationCustomizationExportDocumentOptionsResolver)
+    private readonly organizationCustomizationExportDocumentOptionsResolver: OrganizationCustomizationExportDocumentOptionsResolver,
   ) {}
 
   public async execute(
@@ -59,10 +62,16 @@ export class DownloadSpeechGeneratorCompleteContentUseCase {
       throw new SpeechGeneratorDoesNotContainCompleteContentError();
     }
 
+    const exportOptions =
+      await this.organizationCustomizationExportDocumentOptionsResolver.execute(
+        organizationSessionData.organizationId,
+      );
+
     return await this.exportDocumentGateway.downloadFileAsStreamable(
       content,
       format,
       'discurso_completo_gerador_discurso',
+      exportOptions,
     );
   }
 }

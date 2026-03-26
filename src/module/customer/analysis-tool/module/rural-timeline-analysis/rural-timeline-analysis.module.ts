@@ -9,6 +9,7 @@ import { AnalysisActivityTrackerModule } from '@module/customer/analysis-tool/li
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
+import { OrganizationCustomizationExportDocumentOptionsResolverModule } from '@module/customer/analysis-tool/lib/organization-customization-resolver/organization-customization-export-document-options-resolver.module';
 import { RuralTimelineAnalysisController } from '@module/customer/analysis-tool/module/rural-timeline-analysis/rural-timeline-analysis.controller';
 import { AddRuralTimelineAnalysisCnisDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/add-rural-timeline-analysis-cnis-document.use-case';
 import { AddRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/add-rural-timeline-analysis-period-document.use-case';
@@ -76,6 +77,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     OrganizationCreditModule,
     OrganizationSessionModule,
     PaymentPlanModule,
+    OrganizationCustomizationExportDocumentOptionsResolverModule,
   ],
   controllers: [RuralTimelineAnalysisController],
   providers: [

@@ -63,8 +63,11 @@ src/
 │   │       ├── domain/           # Domain layer
 │   │       │   ├── schema/
 │   │       │   │   ├── entity/  # Domain entities
+│   │       │   │   │   └── {entity-name}/
+│   │       │   │   │       ├── enum/  # Enums specific to this entity only
+│   │       │   │   │       └── value-object/  # IDs and VOs specific to this entity
 │   │       │   │   ├── value-object/  # Domain value objects
-│   │       │   │   └── enum/    # Domain enums
+│   │       │   │   └── enum/    # Domain enums shared across multiple entities
 │   │       │   └── repository/  # Repository gateways (interfaces)
 │   │       │       ├── query/   # Query gateways (read operations)
 │   │       │       └── command/ # Command gateways (write operations)
@@ -132,6 +135,7 @@ src/
 - ✅ Immutable properties (`readonly`)
 - ✅ Keep entities lightweight - store only primitive data and value objects
 - ✅ Use arrays of primitives (strings, numbers) instead of bidirectional entity references
+- ✅ **Enums specific to a single entity** must be placed inside the entity folder under `enum/` (e.g., `domain/schema/entity/{entity-name}/enum/{enum-name}.enum.ts`). Only enums shared across multiple unrelated entities go in the module-level `domain/schema/enum/` folder.
 - ❌ NO database concerns (no TypeORM decorators)
 - ❌ NO infrastructure dependencies
 - ❌ NO DTOs or external service calls
