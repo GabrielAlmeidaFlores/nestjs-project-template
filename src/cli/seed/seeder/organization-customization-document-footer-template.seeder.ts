@@ -9,35 +9,11 @@ import { OrganizationCustomizationDocumentFooterTemplateId } from '@module/custo
 
 import type { SeederInterface } from '@cli/seed/interface/seeder.interface';
 
-export const ORGANIZATION_CUSTOMIZATION_DOCUMENT_FOOTER_TEMPLATE_SEED_DATA: OrganizationCustomizationDocumentFooterTemplateEntity[] =
-  [
-    new OrganizationCustomizationDocumentFooterTemplateEntity({
-      id: new OrganizationCustomizationDocumentFooterTemplateId(
-        '7bc43cdc-f2ee-4978-a03a-31e607e51fd6',
-      ),
-      type: OrganizationCustomizationDocumentFooterTemplateTypeEnum.MODERN,
-      htmlContent: `<footer style="display: flex; width: 100%; justify-content: center; align-items: center; padding: 20px 40px; font-family: sans-serif; box-sizing: border-box; border-top: 4px solid {{primaryColor}};">
-  <span style="font-size: 13px; color: #555; text-align: center;">
-    {{footerDescription}}
-  </span>
-</footer>`,
-    }),
-    new OrganizationCustomizationDocumentFooterTemplateEntity({
-      id: new OrganizationCustomizationDocumentFooterTemplateId(
-        '703c6208-9fc0-4cae-a6c5-438bfe79289b',
-      ),
-      type: OrganizationCustomizationDocumentFooterTemplateTypeEnum.CLASSIC,
-      htmlContent: `<footer style="display: flex; width: 100%; justify-content: center; align-items: center; padding: 20px 40px; font-family: sans-serif; box-sizing: border-box; background-color: {{primaryColor}};">
-  <span style="font-size: 13px; color: #fff; text-align: center;">
-    {{footerDescription}}
-  </span>
-</footer>`,
-    }),
-  ];
-
 export class OrganizationCustomizationDocumentFooterTemplateSeeder implements SeederInterface {
   protected readonly _type =
     OrganizationCustomizationDocumentFooterTemplateSeeder.name;
+
+  private readonly seedData: OrganizationCustomizationDocumentFooterTemplateEntity[];
 
   public constructor(
     @Inject(
@@ -48,12 +24,37 @@ export class OrganizationCustomizationDocumentFooterTemplateSeeder implements Se
       OrganizationCustomizationDocumentFooterTemplateQueryRepositoryGateway,
     )
     private readonly queryRepository: OrganizationCustomizationDocumentFooterTemplateQueryRepositoryGateway,
-  ) {}
+  ) {
+    this.seedData = [
+      new OrganizationCustomizationDocumentFooterTemplateEntity({
+        id: new OrganizationCustomizationDocumentFooterTemplateId(
+          '7bc43cdc-f2ee-4978-a03a-31e607e51fd6',
+        ),
+        type: OrganizationCustomizationDocumentFooterTemplateTypeEnum.MODERN,
+        htmlContent: `<footer style="display: flex; width: 100%; justify-content: center; align-items: center; padding: 20px 40px; font-family: sans-serif; box-sizing: border-box; border-top: 4px solid {{primaryColor}};">
+  <span style="font-size: 13px; color: #555; text-align: center;">
+    {{footerDescription}}
+  </span>
+</footer>`,
+      }),
+      new OrganizationCustomizationDocumentFooterTemplateEntity({
+        id: new OrganizationCustomizationDocumentFooterTemplateId(
+          '703c6208-9fc0-4cae-a6c5-438bfe79289b',
+        ),
+        type: OrganizationCustomizationDocumentFooterTemplateTypeEnum.CLASSIC,
+        htmlContent: `<footer style="display: flex; width: 100%; justify-content: center; align-items: center; padding: 20px 40px; font-family: sans-serif; box-sizing: border-box; background-color: {{primaryColor}};">
+  <span style="font-size: 13px; color: #fff; text-align: center;">
+    {{footerDescription}}
+  </span>
+</footer>`,
+      }),
+    ];
+  }
 
   public async execute(): Promise<Array<TransactionType>> {
     const transactions: Array<TransactionType> = [];
 
-    for (const templateData of ORGANIZATION_CUSTOMIZATION_DOCUMENT_FOOTER_TEMPLATE_SEED_DATA) {
+    for (const templateData of this.seedData) {
       const existing =
         await this.queryRepository.findOneOrganizationCustomizationDocumentFooterTemplateById(
           templateData.id,
