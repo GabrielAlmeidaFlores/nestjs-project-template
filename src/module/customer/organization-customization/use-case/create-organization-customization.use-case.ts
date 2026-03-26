@@ -2,7 +2,11 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { ColorValue } from '@core/domain/schema/value-object/color/color.value-object';
+import { OrganizationCommandRepositoryGateway } from '@module/customer/account/domain/repository/organization/command/organization.command.repository.gateway';
+import { OrganizationQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization/query/organization.query.repository.gateway';
+import { OrganizationEntity } from '@module/customer/account/domain/schema/entity/organization/organization.entity';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
+import { OrganizationNotFoundError } from '@module/customer/account/error/organization-not-found.error';
 import { OrganizationCustomizationCommandRepositoryGateway } from '@module/customer/organization-customization/domain/repository/organization-customization/command/organization-customization.command.repository.gateway';
 import { OrganizationCustomizationQueryRepositoryGateway } from '@module/customer/organization-customization/domain/repository/organization-customization/query/organization-customization.query.repository.gateway';
 import { OrganizationCustomizationDocumentFooterTemplateQueryRepositoryGateway } from '@module/customer/organization-customization/domain/repository/organization-customization-document-footer-template/query/organization-customization-document-footer-template.query.repository.gateway';
@@ -33,6 +37,10 @@ export class CreateOrganizationCustomizationUseCase {
     private readonly headerTemplateQueryRepository: OrganizationCustomizationDocumentHeaderTemplateQueryRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(OrganizationCommandRepositoryGateway)
+    private readonly organizationCommandRepository: OrganizationCommandRepositoryGateway,
+    @Inject(OrganizationQueryRepositoryGateway)
+    private readonly organizationQueryRepository: OrganizationQueryRepositoryGateway,
   ) {}
 
   public async execute(
@@ -55,11 +63,38 @@ export class CreateOrganizationCustomizationUseCase {
       tertiaryColor: new ColorValue(dto.tertiaryColor.toString()),
     });
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute([
+    const transactionOperations = [
       this.organizationCustomizationCommandRepository.createOrganizationCustomization(
         entity,
       ),
-    ]);
+    ];
+
+    if (dto.organizationName !== undefined) {
+      const organization =
+        await this.organizationQueryRepository.findOneByOrganizationId(
+          organizationId,
+        );
+
+      if (!organization) {
+        throw new OrganizationNotFoundError();
+      }
+
+      const updatedOrg = new OrganizationEntity({
+        id: organizationId,
+        name: dto.organizationName,
+      });
+
+      transactionOperations.push(
+        this.organizationCommandRepository.updateOrganization(
+          organizationId,
+          updatedOrg,
+        ),
+      );
+    }
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute(
+      transactionOperations,
+    );
 
     await transaction.commit();
 

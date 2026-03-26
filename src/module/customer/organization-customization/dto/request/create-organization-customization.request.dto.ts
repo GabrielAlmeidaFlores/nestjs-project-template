@@ -9,6 +9,9 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @RequestDto()
 export class CreateOrganizationCustomizationRequestDto extends BaseBuildableDtoObject {
   @RequestDtoStringProperty({ required: false })
+  public organizationName?: string;
+
+  @RequestDtoStringProperty({ required: false })
   public organizationCustomizationDocumentFooterDescription?: string;
 
   @RequestDtoValueObjectProperty(
