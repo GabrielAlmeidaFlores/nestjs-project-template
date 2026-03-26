@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BucketGateway } from '@infra/bucket/bucket.gateway';
 import { ImageProcessorGateway } from '@lib/image-processor/image-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/account/lib/file-processor/file-processor.gateway';
+import { Base64FileRequestDto } from '@shared/api/util/dto/request/base64-file.request.dto';
 import { FileModel } from '@shared/system/model/generic/file.model';
 
 @Injectable()
@@ -26,6 +27,34 @@ export class FileProcessorService implements FileProcessorGateway {
     organizationLogoLocation: string,
   ): Promise<URL> {
     return await this.bucketGateway.getSignedUrl(organizationLogoLocation);
+  }
+
+  public async uploadOrganizationLogo(
+    organizationLogo: FileModel,
+    organizationLogoLocation?: string,
+  ): Promise<string> {
+    return organizationLogoLocation === undefined
+      ? await this.bucketGateway.create(organizationLogo)
+      : await this.bucketGateway.update(
+          organizationLogo,
+          organizationLogoLocation,
+        );
+  }
+
+  public async uploadOrganizationLogoFromBase64(
+    organizationLogo: Base64FileRequestDto,
+    organizationLogoLocation?: string,
+  ): Promise<string> {
+    const buffer = Buffer.from(organizationLogo.base64.toString(), 'base64');
+
+    const fileModel = FileModel.build({
+      buffer,
+      originalName: organizationLogo.originalFileName,
+      size: buffer.length,
+      encoding: '7bit',
+    });
+
+    return this.uploadOrganizationLogo(fileModel, organizationLogoLocation);
   }
 
   public async processAndUploadProfilePicture(

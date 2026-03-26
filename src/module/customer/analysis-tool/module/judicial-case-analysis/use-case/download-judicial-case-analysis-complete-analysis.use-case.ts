@@ -4,6 +4,7 @@ import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/accou
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
+import { OrganizationCustomizationExportDocumentOptionsResolver } from '@module/customer/analysis-tool/lib/organization-customization-resolver/organization-customization-export-document-options.resolver';
 import { JudicialCaseAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/repository/judicial-case-analysis/query/judicial-case-analysis.query.repository.gateway';
 import { JudicialCaseAnalysisId } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/value-object/judicial-case-analysis-id/judicial-case-analysis-id.value-object';
 import { JudicialCaseAnalysisDoesNotContainCompleteAnalysisError } from '@module/customer/analysis-tool/module/judicial-case-analysis/error/judicial-case-analysis-does-not-contain-complete-analysis.error';
@@ -23,6 +24,8 @@ export class DownloadJudicialCaseAnalysisCompleteAnalysisUseCase {
     private readonly judicialCaseAnalysisQueryRepositoryGateway: JudicialCaseAnalysisQueryRepositoryGateway,
     @Inject(ExportDocumentGateway)
     private readonly exportDocumentGateway: ExportDocumentGateway,
+    @Inject(OrganizationCustomizationExportDocumentOptionsResolver)
+    private readonly organizationCustomizationExportDocumentOptionsResolver: OrganizationCustomizationExportDocumentOptionsResolver,
   ) {}
 
   public async execute(
@@ -60,10 +63,16 @@ export class DownloadJudicialCaseAnalysisCompleteAnalysisUseCase {
       throw new JudicialCaseAnalysisDoesNotContainCompleteAnalysisError();
     }
 
+    const exportOptions =
+      await this.organizationCustomizationExportDocumentOptionsResolver.execute(
+        organizationSessionData.organizationId,
+      );
+
     return this.exportDocumentGateway.downloadFileAsStreamable(
       responseAi,
       format,
       'analise_completa_caso_judicial',
+      exportOptions,
     );
   }
 }

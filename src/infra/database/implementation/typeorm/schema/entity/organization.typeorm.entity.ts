@@ -9,14 +9,6 @@ export class OrganizationTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'name', type: 'varchar', length: 100 })
   public name: string;
 
-  @Column({
-    name: 'organization_logo',
-    type: 'varchar',
-    length: 255,
-    nullable: true,
-  })
-  public organizationLogo: string | null;
-
   @OneToMany(
     () => OrganizationMemberTypeormEntity,
     (entity) => entity.organization,
