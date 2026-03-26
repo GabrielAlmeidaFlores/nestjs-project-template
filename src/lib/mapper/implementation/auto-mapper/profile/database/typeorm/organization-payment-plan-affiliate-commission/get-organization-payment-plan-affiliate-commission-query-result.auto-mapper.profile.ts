@@ -38,6 +38,11 @@ export class GetOrganizationPaymentPlanAffiliateCommissionQueryResultAutoMapperP
         });
       }
 
+      const ownerMember =
+        source.organizationPaymentPlan.organization?.organizationMember?.find(
+          (m) => m.owner,
+        );
+
       return GetOrganizationPaymentPlanAffiliateCommissionQueryResult.build({
         ...source,
         id: new OrganizationPaymentPlanAffiliateCommissionId(source.id),
@@ -46,6 +51,12 @@ export class GetOrganizationPaymentPlanAffiliateCommissionQueryResultAutoMapperP
         ),
         affiliateCustomer: new AffiliateCustomerId(source.affiliateCustomer.id),
         commissionPercentage: parseFloat(source.commissionPercentage),
+        planName: source.organizationPaymentPlan.name,
+        planPrice: parseFloat(source.organizationPaymentPlan.price),
+        discountPercentage:
+          source.affiliateCustomer.paymentPlanDiscountPercentage,
+        customerName: ownerMember?.customer?.name ?? null,
+        customerEmail: ownerMember?.customer?.authIdentity?.email ?? null,
       });
     };
 

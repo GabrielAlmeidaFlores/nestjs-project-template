@@ -163,9 +163,14 @@ export class OrganizationCustomizationController {
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async listDocumentHeaderTemplates(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Query() dto: ListDataRequestDto,
   ): Promise<ListOrganizationCustomizationDocumentHeaderTemplatesResponseDto> {
-    return this.listHeaderTemplatesUseCase.execute(new ListDataInputModel(dto));
+    return this.listHeaderTemplatesUseCase.execute(
+      new ListDataInputModel(dto),
+      organizationSessionData.organizationId,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -216,9 +221,14 @@ export class OrganizationCustomizationController {
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async listDocumentFooterTemplates(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Query() dto: ListDataRequestDto,
   ): Promise<ListOrganizationCustomizationDocumentFooterTemplatesResponseDto> {
-    return this.listFooterTemplatesUseCase.execute(new ListDataInputModel(dto));
+    return this.listFooterTemplatesUseCase.execute(
+      new ListDataInputModel(dto),
+      organizationSessionData.organizationId,
+    );
   }
 
   @BuildEndpointSpecification({
