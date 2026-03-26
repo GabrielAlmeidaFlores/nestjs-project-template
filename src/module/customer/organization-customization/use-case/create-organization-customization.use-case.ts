@@ -109,7 +109,7 @@ export class CreateOrganizationCustomizationUseCase {
 
     return GetOrganizationCustomizationResponseDto.build({
       organizationCustomizationId: created.organizationCustomizationId,
-      organizationLogo: null,
+      organizationName: created.organizationName,
       organizationCustomizationDocumentFooterDescription:
         created.organizationCustomizationDocumentFooterDescription,
       organizationCustomizationDocumentHeaderTemplateId:
