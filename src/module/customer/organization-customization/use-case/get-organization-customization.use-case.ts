@@ -29,18 +29,27 @@ export class GetOrganizationCustomizationUseCase {
       throw new OrganizationCustomizationNotFoundError();
     }
 
-    const organizationLogoSignedUrl =
+    const [organizationLogoSignedUrl, organizationLogoOriginalFileName] =
       result.organizationLogo !== null
-        ? (
-            await this.fileProcessorGateway.getOrganizationLogo(
+        ? await Promise.all([
+            this.fileProcessorGateway
+              .getOrganizationLogo(result.organizationLogo)
+              .then((url) => url.toString()),
+            this.fileProcessorGateway.getOriginalFileName(
               result.organizationLogo,
-            )
-          ).toString()
-        : null;
+            ),
+          ])
+        : [null, null];
 
     return GetOrganizationCustomizationResponseDto.build({
       organizationCustomizationId: result.organizationCustomizationId,
-      organizationLogo: organizationLogoSignedUrl,
+      organizationName: result.organizationName,
+      ...(organizationLogoSignedUrl !== null && {
+        organizationLogo: organizationLogoSignedUrl,
+      }),
+      ...(organizationLogoOriginalFileName !== null && {
+        organizationLogoOriginalFileName,
+      }),
       organizationCustomizationDocumentFooterDescription:
         result.organizationCustomizationDocumentFooterDescription,
       organizationCustomizationDocumentHeaderTemplateId:

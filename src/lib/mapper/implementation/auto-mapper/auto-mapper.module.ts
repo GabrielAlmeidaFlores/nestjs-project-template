@@ -1,8 +1,8 @@
-import { classes } from '@automapper/classes';
 import { AutomapperModule } from '@automapper/nestjs';
 import { Module } from '@nestjs/common';
 
 import { AutoMapperService } from '@lib/mapper/implementation/auto-mapper/auto-mapper.service';
+import { noopStrategy } from '@lib/mapper/implementation/auto-mapper/noop-strategy';
 import { AdminEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/admin/admin-entity.auto-mapper.profile';
 import { GetAdminQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/admin/get-admin-query-result.auto-mapper.profile';
 import { AdministrativeProcedureInssAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis-entity.auto-mapper.profile';
@@ -300,7 +300,7 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
 @Module({
   imports: [
     AutomapperModule.forRoot({
-      strategyInitializer: classes(),
+      strategyInitializer: noopStrategy(),
     }),
   ],
   providers: [

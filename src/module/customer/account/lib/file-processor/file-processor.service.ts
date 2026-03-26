@@ -80,4 +80,8 @@ export class FileProcessorService implements FileProcessorGateway {
 
     return uploadProfilePicture;
   }
+
+  public async getOriginalFileName(fileLocation: string): Promise<string> {
+    return this.bucketGateway.getOriginalFileName(fileLocation);
+  }
 }
