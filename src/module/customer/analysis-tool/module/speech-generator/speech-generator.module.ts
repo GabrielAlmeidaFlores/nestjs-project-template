@@ -6,6 +6,7 @@ import { AnalysisActivityTrackerModule } from '@module/customer/analysis-tool/li
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
+import { OrganizationCustomizationExportDocumentOptionsResolverModule } from '@module/customer/analysis-tool/lib/organization-customization-resolver/organization-customization-export-document-options-resolver.module';
 import { SpeechGeneratorController } from '@module/customer/analysis-tool/module/speech-generator/speech-generator.controller';
 import { CreateSpeechGeneratorResultUseCase } from '@module/customer/analysis-tool/module/speech-generator/use-case/create-speech-generator-result.use-case';
 import { CreateSpeechGeneratorUseCase } from '@module/customer/analysis-tool/module/speech-generator/use-case/create-speech-generator.use-case';
@@ -32,6 +33,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     FileProcessorModule,
     ExportDocumentModule,
     MarkdownConverterModule,
+    OrganizationCustomizationExportDocumentOptionsResolverModule,
   ],
   controllers: [SpeechGeneratorController],
   providers: [
