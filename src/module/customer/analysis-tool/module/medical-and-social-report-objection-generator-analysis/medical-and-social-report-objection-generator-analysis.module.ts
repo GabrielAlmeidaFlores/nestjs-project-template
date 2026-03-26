@@ -5,6 +5,7 @@ import { AnalysisActivityTrackerModule } from '@module/customer/analysis-tool/li
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
+import { OrganizationCustomizationExportDocumentOptionsResolverModule } from '@module/customer/analysis-tool/lib/organization-customization-resolver/organization-customization-export-document-options-resolver.module';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisController } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.controller';
 import { CreateMedicalAndSocialReportObjectionGeneratorAnalysisResultUseCase } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/use-case/create-medical-and-social-report-objection-generator-analysis-result.use-case';
 import { CreateMedicalAndSocialReportObjectionGeneratorAnalysisUseCase } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/use-case/create-medical-and-social-report-objection-generator-analysis.use-case';
@@ -29,6 +30,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     AnalysisActivityTrackerModule,
     AnalysisProcessorModule,
     ExportDocumentModule,
+    OrganizationCustomizationExportDocumentOptionsResolverModule,
   ],
   controllers: [MedicalAndSocialReportObjectionGeneratorAnalysisController],
   providers: [

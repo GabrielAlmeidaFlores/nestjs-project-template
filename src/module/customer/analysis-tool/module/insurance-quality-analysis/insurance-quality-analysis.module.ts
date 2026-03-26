@@ -7,6 +7,7 @@ import { AnalysisActivityTrackerModule } from '@module/customer/analysis-tool/li
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
+import { OrganizationCustomizationExportDocumentOptionsResolverModule } from '@module/customer/analysis-tool/lib/organization-customization-resolver/organization-customization-export-document-options-resolver.module';
 import { InsuranceQualityAnalysisController } from '@module/customer/analysis-tool/module/insurance-quality-analysis/insurance-quality-analysis.controller';
 import { CreateInsuranceQualityAnalysisResultUseCase } from '@module/customer/analysis-tool/module/insurance-quality-analysis/use-case/create-insurance-quality-analysis-result.use-case';
 import { CreateInsuranceQualityAnalysisUseCase } from '@module/customer/analysis-tool/module/insurance-quality-analysis/use-case/create-insurance-quality-analysis.use-case';
@@ -33,6 +34,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     ExportDocumentModule,
     EventModule,
     GenerativeIaModule,
+    OrganizationCustomizationExportDocumentOptionsResolverModule,
   ],
   controllers: [InsuranceQualityAnalysisController],
   providers: [
