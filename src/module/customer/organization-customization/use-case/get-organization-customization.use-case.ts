@@ -29,13 +29,14 @@ export class GetOrganizationCustomizationUseCase {
       throw new OrganizationCustomizationNotFoundError();
     }
 
-    const organizationLogoSignedUrl = result.organizationLogo
-      ? (
-          await this.fileProcessorGateway.getOrganizationLogo(
-            result.organizationLogo,
-          )
-        ).toString()
-      : null;
+    const organizationLogoSignedUrl =
+      result.organizationLogo !== null
+        ? (
+            await this.fileProcessorGateway.getOrganizationLogo(
+              result.organizationLogo,
+            )
+          ).toString()
+        : null;
 
     return GetOrganizationCustomizationResponseDto.build({
       organizationCustomizationId: result.organizationCustomizationId,

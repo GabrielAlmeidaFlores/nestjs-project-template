@@ -32,6 +32,7 @@ export class OrganizationCustomizationTypeormQueryRepository
     const result = await this.findOne({
       where: { id: id.toString() },
       relations: {
+        organization: true,
         organizationCustomizationDocumentHeaderTemplate: true,
         organizationCustomizationDocumentFooterTemplate: true,
       },
@@ -54,6 +55,7 @@ export class OrganizationCustomizationTypeormQueryRepository
     const result = await this.findOne({
       where: { organization: { id: organizationId.toString() } },
       relations: {
+        organization: true,
         organizationCustomizationDocumentHeaderTemplate: true,
         organizationCustomizationDocumentFooterTemplate: true,
       },
