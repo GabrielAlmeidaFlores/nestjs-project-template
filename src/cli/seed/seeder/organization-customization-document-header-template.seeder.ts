@@ -16,9 +16,13 @@ export const ORGANIZATION_CUSTOMIZATION_DOCUMENT_HEADER_TEMPLATE_SEED_DATA: Orga
         '9ae34abf-a3df-4972-9885-67204fa64e41',
       ),
       type: OrganizationCustomizationDocumentHeaderTemplateTypeEnum.MODERN,
-      htmlContent: `<header style="display:flex;align-items:center;justify-content:space-between;padding:16px 32px;border-bottom:3px solid {{primaryColor}}">
-  <img src="{{logo}}" alt="Logo" style="height:48px;object-fit:contain" />
-  <span style="font-size:20px;font-weight:600;color:{{primaryColor}}">{{organizationName}}</span>
+      htmlContent: `<header style="display: flex; width: 100%; justify-content: center; padding: 40px 20px; font-family: sans-serif;">
+  <div style="display: flex; flex-direction: column; align-items: center; width: min-content;">
+    <img src="{{logo}}" alt="{{organizationName}}" style="width: 80%; max-width: 200px; height: auto; margin-bottom: 10px; display: block;">
+    <span style="font-size: 24px; font-weight: bold; white-space: nowrap; color: {{primaryColor}}">
+      {{organizationName}}
+    </span>
+  </div>
 </header>`,
     }),
     new OrganizationCustomizationDocumentHeaderTemplateEntity({
@@ -26,9 +30,13 @@ export const ORGANIZATION_CUSTOMIZATION_DOCUMENT_HEADER_TEMPLATE_SEED_DATA: Orga
         '255ef03e-34f2-4358-963e-b26c60a17c1b',
       ),
       type: OrganizationCustomizationDocumentHeaderTemplateTypeEnum.CLASSIC,
-      htmlContent: `<header style="display:flex;flex-direction:column;align-items:center;padding:16px 32px;border-bottom:1px solid {{secondaryColor}}">
-  <img src="{{logo}}" alt="Logo" style="height:56px;object-fit:contain;margin-bottom:8px" />
-  <h1 style="font-size:18px;font-weight:700;color:{{primaryColor}};margin:0">{{organizationName}}</h1>
+      htmlContent: `<header>
+  <div style="display: flex; width: 100%; justify-content: space-between; align-items: center; padding: 40px 00px; font-family: sans-serif; box-sizing: border-box; border-bottom: 4px solid {{primaryColor}};">
+    <img src="{{logo}}" alt="{{organizationName}}" style="width: 80%; max-width: 200px; height: auto; margin-bottom: 10px; display: block;">
+    <span style="font-size: 24px; font-weight: bold; white-space: nowrap; color: {{primaryColor}}">
+      {{organizationName}}
+    </span>
+  </div>
 </header>`,
     }),
     new OrganizationCustomizationDocumentHeaderTemplateEntity({
@@ -36,9 +44,13 @@ export const ORGANIZATION_CUSTOMIZATION_DOCUMENT_HEADER_TEMPLATE_SEED_DATA: Orga
         '2fdb0e7e-9c28-4180-a14f-be72447c0536',
       ),
       type: OrganizationCustomizationDocumentHeaderTemplateTypeEnum.STANDOUT_CLASSIC,
-      htmlContent: `<header style="display:flex;flex-direction:column;align-items:center;padding:20px 32px;background-color:{{primaryColor}}">
-  <img src="{{logo}}" alt="Logo" style="height:56px;object-fit:contain;margin-bottom:8px" />
-  <h1 style="font-size:18px;font-weight:700;color:{{secondaryColor}};margin:0">{{organizationName}}</h1>
+      htmlContent: `<header>
+  <div style="display: flex; width: 100%; justify-content: space-between; align-items: center; padding: 40px 00px; font-family: sans-serif; box-sizing: border-box; border-bottom: 4px solid {{secondaryColor}}; background-color: {{primaryColor}}">
+    <img src="{{logo}}" alt="{{organizationName}}" style="width: 80%; max-width: 200px; height: auto; margin-bottom: 10px; display: block;">
+    <span style="font-size: 24px; font-weight: bold; white-space: nowrap; color: {{secondaryColor}}">
+      {{organizationName}}
+    </span>
+  </div>
 </header>`,
     }),
     new OrganizationCustomizationDocumentHeaderTemplateEntity({
@@ -46,10 +58,13 @@ export const ORGANIZATION_CUSTOMIZATION_DOCUMENT_HEADER_TEMPLATE_SEED_DATA: Orga
         '7c6d980a-c548-4c8f-952c-15f7db49eb39',
       ),
       type: OrganizationCustomizationDocumentHeaderTemplateTypeEnum.MODERN_STANDOUT,
-      htmlContent: `<header style="display:flex;align-items:center;justify-content:space-between;padding:16px 32px;background-color:{{primaryColor}}">
-  <img src="{{logo}}" alt="Logo" style="height:48px;object-fit:contain" />
-  <span style="font-size:20px;font-weight:600;color:{{secondaryColor}}">{{organizationName}}</span>
-  <div style="width:8px;height:40px;background-color:{{tertiaryColor}};border-radius:4px"></div>
+      htmlContent: `<header style="display: flex; width: 100%; justify-content: center; padding: 40px 20px; font-family: sans-serif; background: {{primaryColor}};">
+  <div style="display: flex; flex-direction: column; align-items: center; width: min-content;">
+    <img src="{{logo}}" alt="{{organizationName}}" style="width: 80%; max-width: 200px; height: auto; margin-bottom: 10px; display: block;">
+    <span style="font-size: 24px; font-weight: bold; white-space: nowrap; color: {{secondaryColor}}">
+      {{organizationName}}
+    </span>
+  </div>
 </header>`,
     }),
   ];
@@ -79,6 +94,12 @@ export class OrganizationCustomizationDocumentHeaderTemplateSeeder implements Se
         );
 
       if (existing) {
+        transactions.push(
+          this.commandRepository.updateOrganizationCustomizationDocumentHeaderTemplate(
+            templateData.id,
+            templateData,
+          ),
+        );
         continue;
       }
 
