@@ -16,10 +16,10 @@ export const ORGANIZATION_CUSTOMIZATION_DOCUMENT_FOOTER_TEMPLATE_SEED_DATA: Orga
         '7bc43cdc-f2ee-4978-a03a-31e607e51fd6',
       ),
       type: OrganizationCustomizationDocumentFooterTemplateTypeEnum.MODERN,
-      htmlContent: `<footer style="display:flex;align-items:center;justify-content:space-between;padding:12px 32px;border-top:3px solid {{primaryColor}}">
-  <img src="{{logo}}" alt="Logo" style="height:32px;object-fit:contain" />
-  <span style="font-size:13px;font-weight:600;color:{{primaryColor}}">{{organizationName}}</span>
-  <span style="font-size:12px;color:{{secondaryColor}}">{{footerDescription}}</span>
+      htmlContent: `<footer style="display: flex; width: 100%; justify-content: center; align-items: center; padding: 20px 40px; font-family: sans-serif; box-sizing: border-box; border-top: 4px solid {{primaryColor}};">
+  <span style="font-size: 13px; color: #555; text-align: center;">
+    {{footerDescription}}
+  </span>
 </footer>`,
     }),
     new OrganizationCustomizationDocumentFooterTemplateEntity({
@@ -27,10 +27,10 @@ export const ORGANIZATION_CUSTOMIZATION_DOCUMENT_FOOTER_TEMPLATE_SEED_DATA: Orga
         '703c6208-9fc0-4cae-a6c5-438bfe79289b',
       ),
       type: OrganizationCustomizationDocumentFooterTemplateTypeEnum.CLASSIC,
-      htmlContent: `<footer style="display:flex;flex-direction:column;align-items:center;padding:12px 32px;border-top:1px solid {{secondaryColor}}">
-  <hr style="width:100%;border:none;border-top:1px solid {{tertiaryColor}};margin-bottom:8px" />
-  <img src="{{logo}}" alt="Logo" style="height:28px;object-fit:contain;margin-bottom:4px" />
-  <p style="font-size:12px;color:{{primaryColor}};margin:0">{{organizationName}} | {{footerDescription}}</p>
+      htmlContent: `<footer style="display: flex; width: 100%; justify-content: center; align-items: center; padding: 20px 40px; font-family: sans-serif; box-sizing: border-box; background-color: {{primaryColor}};">
+  <span style="font-size: 13px; color: #fff; text-align: center;">
+    {{footerDescription}}
+  </span>
 </footer>`,
     }),
   ];
@@ -60,6 +60,12 @@ export class OrganizationCustomizationDocumentFooterTemplateSeeder implements Se
         );
 
       if (existing) {
+        transactions.push(
+          this.commandRepository.updateOrganizationCustomizationDocumentFooterTemplate(
+            templateData.id,
+            templateData,
+          ),
+        );
         continue;
       }
 
