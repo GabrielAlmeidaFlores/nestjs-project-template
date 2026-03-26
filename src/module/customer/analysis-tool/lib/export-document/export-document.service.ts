@@ -197,7 +197,13 @@ export class ExportDocumentService implements ExportDocumentGateway {
       return `<div style="font-size:10px;line-height:1;"></div>`;
     }
 
-    return `<div style="width:100%;box-sizing:border-box;font-size:10px;line-height:1.2;">${safeFragment}</div>`;
+    return `
+      <div style="width:100%; height:50px; box-sizing:border-box; font-size:10px; line-height:1.2;">
+        <style>
+          body { margin: 0; }
+        </style>
+        ${safeFragment}
+      </div>`;
   }
 
   private async generatePdfFromHtml(
@@ -222,7 +228,7 @@ export class ExportDocumentService implements ExportDocumentGateway {
     const pdfUint8Array = await page.pdf({
       format: 'A4',
       printBackground: true,
-      margin: { top: '10mm', bottom: '20mm', left: '5mm', right: '10mm' },
+      margin: { top: hasHeader ? '60mm' : '10mm', bottom: '20mm', left: '5mm', right: '10mm' },
       displayHeaderFooter,
       headerTemplate: this._wrapPdfHeaderFooterFragment(headerHtml),
       footerTemplate: this._wrapPdfHeaderFooterFragment(footerHtml),
