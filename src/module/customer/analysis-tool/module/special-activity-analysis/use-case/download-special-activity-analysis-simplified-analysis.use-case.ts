@@ -8,6 +8,7 @@ import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/ana
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
+import { OrganizationCustomizationExportDocumentOptionsResolver } from '@module/customer/analysis-tool/lib/organization-customization-resolver/organization-customization-export-document-options.resolver';
 import { SpecialActivityAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis-result/command/special-activity-analysis-result.command.repository.gateway';
 import { SpecialActivityId } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/value-object/special-activity-id.value-object';
 import { SpecialActivityResultEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity-result/special-activity-result.entity';
@@ -45,6 +46,8 @@ export class DownloadSpecialActivityAnalysisSimplifiedAnalysisUseCase {
     private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
     @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
+    @Inject(OrganizationCustomizationExportDocumentOptionsResolver)
+    private readonly organizationCustomizationExportDocumentOptionsResolver: OrganizationCustomizationExportDocumentOptionsResolver,
   ) {}
 
   public async execute(
@@ -89,6 +92,11 @@ export class DownloadSpecialActivityAnalysisSimplifiedAnalysisUseCase {
     if (specialActivityQueryResult === null) {
       throw new SpecialActivityAnalysisNotFoundError();
     }
+
+    const exportOptions =
+      await this.organizationCustomizationExportDocumentOptionsResolver.execute(
+        organizationSessionData.organizationId,
+      );
 
     if (
       specialActivityQueryResult.specialActivityResult
@@ -291,6 +299,7 @@ export class DownloadSpecialActivityAnalysisSimplifiedAnalysisUseCase {
         responseAi,
         format,
         'analise_simplificada_atividade_especial',
+        exportOptions,
       );
     }
     const currentResult = specialActivityQueryResult.specialActivityResult;
@@ -398,6 +407,7 @@ export class DownloadSpecialActivityAnalysisSimplifiedAnalysisUseCase {
       responseAi,
       format,
       'analise_simplificada_atividade_especial',
+      exportOptions,
     );
   }
 }

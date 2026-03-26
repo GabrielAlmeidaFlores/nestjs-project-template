@@ -102,6 +102,11 @@ export class DownloadSpeechGeneratorSimplifiedContentUseCase {
 
     const currentResult = speechGeneratorQueryResult.speechGeneratorResult;
 
+    const exportOptions =
+      await this.organizationCustomizationExportDocumentOptionsResolver.execute(
+        organizationSessionData.organizationId,
+      );
+
     if (currentResult.speechGeneratorSimplifiedContent === null) {
       if (currentResult.speechGeneratorCompleteContent === null) {
         throw new SpeechGeneratorDoesNotContainCompleteContentError();
@@ -144,11 +149,6 @@ export class DownloadSpeechGeneratorSimplifiedContentUseCase {
       ]);
       await transaction.commit();
 
-      const exportOptions =
-        await this.organizationCustomizationExportDocumentOptionsResolver.execute(
-          organizationSessionData.organizationId,
-        );
-
       return await this.exportDocumentGateway.downloadFileAsStreamable(
         speechGeneratorSimplifiedContentMarkdown,
         format,
@@ -156,11 +156,6 @@ export class DownloadSpeechGeneratorSimplifiedContentUseCase {
         exportOptions,
       );
     }
-
-    const exportOptions =
-      await this.organizationCustomizationExportDocumentOptionsResolver.execute(
-        organizationSessionData.organizationId,
-      );
 
     return await this.exportDocumentGateway.downloadFileAsStreamable(
       currentResult.speechGeneratorSimplifiedContent,
