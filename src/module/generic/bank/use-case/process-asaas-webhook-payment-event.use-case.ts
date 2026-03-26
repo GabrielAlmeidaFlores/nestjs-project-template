@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
@@ -47,7 +47,6 @@ type ResolvedPaymentType =
 @Injectable()
 export class ProcessAsaasWebhookPaymentEventUseCase {
   protected readonly _type = ProcessAsaasWebhookPaymentEventUseCase.name;
-  private readonly logger: Logger;
 
   public constructor(
     @Inject(BankPaymentQueryRepositoryGateway)
@@ -70,9 +69,7 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
     private readonly organizationCreditPackPurchaseQueryRepository: OrganizationCreditPackPurchaseQueryRepositoryGateway,
     @Inject(ProcessAffiliateTransferGateway)
     private readonly processAffiliateTransferGateway: ProcessAffiliateTransferGateway,
-  ) {
-    this.logger = new Logger(ProcessAsaasWebhookPaymentEventUseCase.name);
-  }
+  ) {}
 
   public async execute(
     dto: AsaasWebhookPaymentEventRequestDto,
@@ -263,6 +260,14 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
       return;
     }
 
+    if (bankPayment.status === PaymentStatusEnum.CONFIRMED) {
+      await this.processAffiliateTransferGateway.process(
+        bankPayment.id,
+        organizationPaymentPlan.id,
+        bankPayment.amount,
+      );
+    }
+
     const alreadyCredited =
       await this.organizationCreditPurchaseQueryRepository.findOneOrganizationCreditPurchaseByBankPaymentId(
         bankPayment.id,
@@ -312,6 +317,18 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
     }
 
     await this.grantTwelveMonthsOfCredits(organizationPaymentPlan, bankPayment);
+
+    const isFirstInstallment =
+      bankPayment.installmentNumber === null ||
+      bankPayment.installmentNumber === 1;
+
+    if (isFirstInstallment) {
+      await this.processAffiliateTransferGateway.process(
+        bankPayment.id,
+        organizationPaymentPlan.id,
+        organizationPaymentPlan.price,
+      );
+    }
   }
 
   private async handleMonthlyPlanPayment(
@@ -334,6 +351,12 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
     if (!organizationPaymentPlan) {
       return;
     }
+
+    await this.processAffiliateTransferGateway.process(
+      bankPayment.id,
+      organizationPaymentPlan.id,
+      bankPayment.amount,
+    );
 
     const alreadyCredited =
       await this.organizationCreditPurchaseQueryRepository.findOneOrganizationCreditPurchaseByBankPaymentId(
@@ -600,11 +623,5 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
       ),
     ]);
     await transaction.commit();
-
-    this.processAffiliateTransferGateway
-      .process(newPayment.id, organizationPaymentPlan.id, newPayment.amount)
-      .catch((err) =>
-        this.logger.error('Failed to process affiliate transfer', err),
-      );
   }
 }

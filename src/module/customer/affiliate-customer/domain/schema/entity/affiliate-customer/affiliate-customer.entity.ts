@@ -4,6 +4,8 @@ import { AffiliateCustomerEntityPropsInterface } from '@module/customer/affiliat
 import { PixAddressKeyTypeEnum } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/enum/pix-address-key-type.enum';
 import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
 import { PixAddressKey } from '@module/customer/affiliate-customer/domain/schema/value-object/pix-address-key/pix-address-key.value-object';
+import { InvalidPaymentCommissionPercentageError } from '@module/customer/affiliate-customer/error/invalid-payment-commission-percentage.error';
+import { InvalidPaymentPlanDiscountPercentageError } from '@module/customer/affiliate-customer/error/invalid-payment-plan-discount-percentage.error';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 export class AffiliateCustomerEntity extends BaseEntity<AffiliateCustomerId> {
@@ -33,8 +35,24 @@ export class AffiliateCustomerEntity extends BaseEntity<AffiliateCustomerId> {
 
   protected readonly _type = AffiliateCustomerEntity.name;
 
+  private readonly maximumPercentage: number;
+
   public constructor(props: AffiliateCustomerEntityPropsInterface) {
     super(AffiliateCustomerId, props);
+
+    this.maximumPercentage = 90;
+
+    if (props.paymentCommissionPercentage > this.maximumPercentage) {
+      throw new InvalidPaymentCommissionPercentageError({
+        maxPercentage: this.maximumPercentage,
+      });
+    }
+
+    if (props.paymentPlanDiscountPercentage > this.maximumPercentage) {
+      throw new InvalidPaymentPlanDiscountPercentageError({
+        maxPercentage: this.maximumPercentage,
+      });
+    }
 
     this.customerId = props.customerId;
     this.pixAddressKey = props.pixAddressKey ?? null;
