@@ -1,6 +1,10 @@
 export enum MimeTypeEnum {
   IMAGE_JPEG = 'image/jpeg',
   IMAGE_PNG = 'image/png',
+  IMAGE_GIF = 'image/gif',
+  IMAGE_WEBP = 'image/webp',
+  IMAGE_SVG_XML = 'image/svg+xml',
+  IMAGE_BMP = 'image/bmp',
   APPLICATION_PDF = 'application/pdf',
   AUDIO_MPEG = 'audio/mpeg',
   AUDIO_WAV = 'audio/wav',

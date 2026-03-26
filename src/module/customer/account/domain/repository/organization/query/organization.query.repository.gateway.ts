@@ -14,5 +14,9 @@ export abstract class OrganizationQueryRepositoryGateway {
     listData: ListDataInputModel,
   ): Promise<ListDataOutputModel<GetOrganizationQueryResult>>;
 
+  public abstract listAllPaginated(
+    listData: ListDataInputModel,
+  ): Promise<ListDataOutputModel<GetOrganizationQueryResult>>;
+
   public abstract listAll(): Promise<Array<GetOrganizationQueryResult>>;
 }

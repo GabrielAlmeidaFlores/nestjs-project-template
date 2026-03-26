@@ -305,7 +305,6 @@ export class OrganizationMemberTypeormQueryRepository
 
     const searchTerm = (param.search ?? '').trim();
     const baseWhere: FindOptionsWhere<OrganizationMemberTypeormEntity> = {
-      owner: false,
       deletedAt: IsNull(),
     };
 
@@ -385,6 +384,33 @@ export class OrganizationMemberTypeormQueryRepository
     );
   }
 
+  public async findOneOrganizationMemberByCustomerIdWithDeleted(
+    customerId: CustomerId,
+  ): Promise<GetOrganizationMemberQueryResult | null> {
+    const data = await this.findOne({
+      where: {
+        customer: {
+          id: customerId.toString(),
+        },
+        owner: false,
+      },
+      withDeleted: true,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+
+    if (data === null) {
+      return null;
+    }
+
+    return this.mapperGateway.map(
+      data,
+      OrganizationMemberTypeormEntity,
+      GetOrganizationMemberQueryResult,
+    );
+  }
+
   private async countRowsByCreatedByMemberId(
     entityClass:
       | typeof LegalPleadingTypeormEntity
@@ -411,31 +437,5 @@ export class OrganizationMemberTypeormQueryRepository
     );
 
     return new Map(pairs);
-  }
-  public async findOneOrganizationMemberByCustomerIdWithDeleted(
-    customerId: CustomerId,
-  ): Promise<GetOrganizationMemberQueryResult | null> {
-    const data = await this.findOne({
-      where: {
-        customer: {
-          id: customerId.toString(),
-        },
-        owner: false,
-      },
-      withDeleted: true,
-      order: {
-        createdAt: 'DESC',
-      },
-    });
-
-    if (data === null) {
-      return null;
-    }
-
-    return this.mapperGateway.map(
-      data,
-      OrganizationMemberTypeormEntity,
-      GetOrganizationMemberQueryResult,
-    );
   }
 }
