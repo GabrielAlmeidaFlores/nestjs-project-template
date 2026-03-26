@@ -5,7 +5,7 @@ export class InvalidColorValueError extends InvalidInputError {
 
   public constructor() {
     super(
-      'Invalid color value. Accepted formats: #RGB, #RRGGBB, rgb(r,g,b), rgba(r,g,b,a).',
+      'Valor de cor inválido. Formatos aceitos: #RGB, #RRGGBB, rgb(r,g,b), rgba(r,g,b,a).',
     );
   }
 }

@@ -228,7 +228,12 @@ export class ExportDocumentService implements ExportDocumentGateway {
     const pdfUint8Array = await page.pdf({
       format: 'A4',
       printBackground: true,
-      margin: { top: hasHeader ? '60mm' : '10mm', bottom: '20mm', left: '5mm', right: '10mm' },
+      margin: {
+        top: hasHeader ? '60mm' : '10mm',
+        bottom: '20mm',
+        left: '5mm',
+        right: '10mm',
+      },
       displayHeaderFooter,
       headerTemplate: this._wrapPdfHeaderFooterFragment(headerHtml),
       footerTemplate: this._wrapPdfHeaderFooterFragment(footerHtml),
