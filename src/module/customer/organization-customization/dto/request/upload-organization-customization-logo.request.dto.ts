@@ -7,7 +7,14 @@ import { FileModel } from '@shared/system/model/generic/file.model';
 @RequestDto()
 export class UploadOrganizationCustomizationLogoRequestDto extends BaseBuildableDtoObject {
   @RequestDtoFileProperty({
-    allowedMimeType: [MimeTypeEnum.IMAGE_JPEG, MimeTypeEnum.IMAGE_PNG],
+    allowedMimeType: [
+      MimeTypeEnum.IMAGE_JPEG,
+      MimeTypeEnum.IMAGE_PNG,
+      MimeTypeEnum.IMAGE_GIF,
+      MimeTypeEnum.IMAGE_WEBP,
+      MimeTypeEnum.IMAGE_SVG_XML,
+      MimeTypeEnum.IMAGE_BMP,
+    ],
   })
   public organizationLogo: FileModel;
 
