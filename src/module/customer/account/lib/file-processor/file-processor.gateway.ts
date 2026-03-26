@@ -20,4 +20,5 @@ export abstract class FileProcessorGateway {
     organizationLogo: Base64FileRequestDto,
     organizationLogoLocation?: string,
   ): Promise<string>;
+  public abstract getOriginalFileName(fileLocation: string): Promise<string>;
 }
