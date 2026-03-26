@@ -35,6 +35,7 @@ export class OrganizationPaymentPlanAffiliateCommissionTypeormQueryRepository
     const entity = await this.findOne({
       where: { organizationPaymentPlan: { id: id.toString() } },
       relations: ['organizationPaymentPlan', 'affiliateCustomer'],
+      withDeleted: true,
     });
 
     if (entity === null) {
@@ -54,6 +55,7 @@ export class OrganizationPaymentPlanAffiliateCommissionTypeormQueryRepository
     const entities = await this.find({
       where: { affiliateCustomer: { id: affiliateCustomerId.toString() } },
       relations: ['organizationPaymentPlan', 'affiliateCustomer'],
+      withDeleted: true,
     });
 
     return this.mapperGateway.mapArray(
@@ -93,7 +95,7 @@ export class OrganizationPaymentPlanAffiliateCommissionTypeormQueryRepository
       );
     }
 
-    let entities = await this.find({ where, relations });
+    let entities = await this.find({ where, relations, withDeleted: true });
 
     if (filters.searchBy !== null) {
       const search = filters.searchBy.toLowerCase();
