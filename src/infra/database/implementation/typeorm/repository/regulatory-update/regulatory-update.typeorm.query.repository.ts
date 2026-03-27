@@ -84,6 +84,19 @@ export class RegulatoryUpdateTypeormQueryRepository
     }));
   }
 
+  public async countAllRegulatoryUpdates(): Promise<number> {
+    return this.repository.count();
+  }
+
+  public async findLastVerifiedAt(): Promise<Date | null> {
+    const results = await this.repository.find({
+      order: { updatedAt: 'DESC' },
+      select: { updatedAt: true },
+      take: 1,
+    });
+    return results[0]?.updatedAt ?? null;
+  }
+
   private buildWhereConditions(
     param: ListRegulatoryUpdatesQueryParam,
   ):

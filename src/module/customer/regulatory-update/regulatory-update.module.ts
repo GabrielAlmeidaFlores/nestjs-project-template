@@ -12,6 +12,8 @@ import { DeleteRegulatoryUpdateMonitoredSourceUseCase } from '@module/customer/r
 import { FetchAndSaveRegulatoryUpdatesUseCase } from '@module/customer/regulatory-update/use-case/fetch-and-save-regulatory-updates.use-case';
 import { GetRegulatoryUpdateEmailPreferenceUseCase } from '@module/customer/regulatory-update/use-case/get-regulatory-update-email-preference.use-case';
 import { GetRegulatoryUpdateUseCase } from '@module/customer/regulatory-update/use-case/get-regulatory-update.use-case';
+import { GetRegulatoryUpdateStatsUseCase } from '@module/customer/regulatory-update/use-case/get-regulatory-update-stats.use-case';
+import { ListCustomerMonitoredSourcesUseCase } from '@module/customer/regulatory-update/use-case/list-customer-monitored-sources.use-case';
 import { ListRegulatoryUpdateMonitoredSourcesUseCase } from '@module/customer/regulatory-update/use-case/list-regulatory-update-monitored-sources.use-case';
 import { ListRegulatoryUpdatesUseCase } from '@module/customer/regulatory-update/use-case/list-regulatory-updates.use-case';
 import { SendRegulatoryUpdateEmailsUseCase } from '@module/customer/regulatory-update/use-case/send-regulatory-update-emails.use-case';
@@ -45,6 +47,8 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     UpdateRegulatoryUpdateMonitoredSourceUseCase,
     DeleteRegulatoryUpdateMonitoredSourceUseCase,
     ListRegulatoryUpdateMonitoredSourcesUseCase,
+    GetRegulatoryUpdateStatsUseCase,
+    ListCustomerMonitoredSourcesUseCase,
   ],
 })
 export class RegulatoryUpdateModule {
