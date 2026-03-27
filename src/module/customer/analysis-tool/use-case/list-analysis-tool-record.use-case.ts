@@ -87,6 +87,7 @@ export class ListAnalysisToolRecordUseCase {
             analysisToolRecord.cnisFastAnalysis ??
             analysisToolRecord.retirementPlanningRpps ??
             analysisToolRecord.retirementPlanningRgps ??
+            analysisToolRecord.disabilityRetirementPlanningGrant ??
             analysisToolRecord.generalUrbanRetirementGrant ??
             analysisToolRecord.generalUrbanRetirementAnalysis ??
             analysisToolRecord.judicialCaseAnalysis ??

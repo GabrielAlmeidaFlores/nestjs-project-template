@@ -7,6 +7,14 @@ import { ResponseConfigInputModel } from '@infra/generative-ia/model/input/respo
 import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway';
 import { CnisModel } from '@lib/cnis-processor/model/generic/cnis.model';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
+import { DisabilityRetirementPlanningGrantCategoryEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant/enum/disability-retirement-planning-grant-category.enum';
+import { DisabilityRetirementPlanningGrantDisabilityDegreeEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-disability-period/enum/disability-retirement-planning-grant-disability-degree.enum';
+import { DisabilityRetirementPlanningGrantPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-period/enum/disability-retirement-planning-grant-period-consideration.enum';
+import { DisabilityRetirementPlanningGrantPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-period/enum/disability-retirement-planning-grant-period-pendency-reason.enum';
+import { DisabilityRetirementPlanningGrantTimeAcceleratorRecognitionInssEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-time-accelerator/enum/disability-retirement-planning-grant-time-accelerator-recognition-inss.enum';
+import { DisabilityRetirementPlanningGrantTimeAcceleratorRecognitionJudicialEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-time-accelerator/enum/disability-retirement-planning-grant-time-accelerator-recognition-judicial.enum';
+import { DisabilityRetirementPlanningGrantViabilityEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-time-accelerator/enum/disability-retirement-planning-grant-viability.enum';
+
 @Injectable()
 export class AnalysisProcessorService implements AnalysisProcessorGateway {
   protected readonly _type = AnalysisProcessorService.name;
@@ -703,6 +711,108 @@ Análise processada do CNIS:
     );
   }
 
+  public async getDisabilityRetirementPlanningGrantFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson = true,
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON;
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize calculos como valores saláriais, use estritamente os fornecidos.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Para cada item de \`periods\`, use prioritariamente os dados estruturados já enviados nos arquivos do prompt; não invente valores.
+- O campo \`contributionAverage\` representa a média das remunerações do período já informada nos dados estruturados; quando esse valor estiver disponível, reutilize exatamente esse valor e não retorne \`0\`.
+- O campo \`contributionAverage\` não é uma lista de contribuições e não deve ser calculado como soma zerada por ausência de detalhamento mensal.
+- Quando o valor de \`contributionAverage\` não estiver presente nos dados estruturados do período, omita esse campo em vez de retornar \`0\`.
+- O campo \`belowMinimumContributions\` deve conter somente as competências cujos valores ficaram abaixo do mínimo.
+- Não liste em \`belowMinimumContributions\` contribuições que não estejam abaixo do mínimo.
+- Quando não houver competências abaixo do mínimo, retorne \`belowMinimumContributions: []\`.
+- O campo \`competenceBelowTheMinimum\` deve ser \`true\` somente quando houver ao menos um item em \`belowMinimumContributions\`; caso contrário, deve ser \`false\`.
+- O campo \`isPendency\` deve indicar se o período possui qualquer pendência relevante.
+- O campo \`reasonPendency\` só deve ser preenchido quando realmente existir pendência no período.
+- O campo \`statusPCD\` só deve ser preenchido nos períodos em que houve deficiência reconhecida no período; nos demais, omita o campo.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: asJson
+          ? ResponseConfigInputModel.build({
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema:
+                this.getDisabilityRetirementPlanningGrantFirstAnalysisJsonSchema(),
+            })
+          : null,
+      }),
+    );
+  }
+
+  public async getDisabilityRetirementPlanningGrantResultAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON;
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize calculos como valores saláriais, use estritamente os fornecidos.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getDisabilityRetirementPlanningGrantResultAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getDisabilityRetirementPlanningGrantTimeAcceleratorAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Use exclusivamente os valores de enum fornecidos no schema para os campos de reconhecimento e viabilidade.
+- Cada item de \`timeAccelerators\` deve ser compatível com a criação de um período de acelerador de tempo.
+- Preencha \`technicalNote\`, \`startDate\`, \`endDate\` e \`institution\` quando essas informações estiverem disponíveis nos documentos analisados.
+- Não incluir tag <br> na resposta.
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getDisabilityRetirementPlanningGrantTimeAcceleratorAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
   public async getGeneralUrbanRetirementAdministrativeRequestDeniedAnalysis(
     systemInstruction: string,
     files: Buffer[],
@@ -886,6 +996,45 @@ Análise processada do CNIS:
             },
           },
         }),
+      }),
+    );
+  }
+
+  public async getDisabilityRetirementPlanningGrantPppAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Use exclusivamente os valores de enum fornecidos no schema para os campos de categoria, grau de deficiência, motivo de pendência e consideração do período.
+- Cada item do array \`periods\` deve ser compatível com a criação de um período na análise de concessão de aposentadoria da pessoa com deficiência.
+- Preencha \`endDate\`, \`pendencyReason\`, \`typeOfContribution\`, \`contributionAverage\`, \`disabilityStatus\` e \`periodConsideration\` somente quando essas informações estiverem disponíveis nos documentos analisados.
+- Não incluir tag <br> na resposta.
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getDisabilityRetirementPlanningGrantPppAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getDisabilityRetirementPlanningGrantSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
       }),
     );
   }
@@ -1127,6 +1276,503 @@ Análise processada do CNIS:
         'publicServiceStartDate',
         'disabilityAnalysis',
       ],
+    };
+  }
+
+  private getDisabilityRetirementPlanningGrantFirstAnalysisJsonSchema(): object {
+    const disabilityAnalysisSchema = {
+      type: 'object',
+      description: 'Análise da deficiência com base nos documentos médicos',
+      properties: {
+        predominantDisabilityDegree: {
+          type: 'string',
+          description: 'Grau preponderante da deficiência. Ex: Grave: 75%',
+        },
+        lightDisabilityPercentage: {
+          type: 'number',
+          description: 'Percentual de tempo com deficiência leve. Ex: 15',
+        },
+        moderateDisabilityPercentage: {
+          type: 'number',
+          description: 'Percentual de tempo com deficiência moderada. Ex: 15',
+        },
+        severeDisabilityPercentage: {
+          type: 'number',
+          description: 'Percentual de tempo com deficiência grave. Ex: 75',
+        },
+        documents: {
+          type: 'array',
+          description: 'Lista de documentos médicos analisados',
+          items: {
+            type: 'object',
+            properties: {
+              documentName: {
+                type: 'string',
+                description: 'Nome ou tipo do documento analisado',
+              },
+              viability: {
+                type: 'string',
+                enum: [
+                  'alta_viabilidade',
+                  'media_viabilidade',
+                  'baixa_viabilidade',
+                ],
+                description: 'Nível de viabilidade do documento',
+              },
+              cid: {
+                type: 'string',
+                description: 'Código e descrição do CID',
+              },
+              degree: {
+                type: 'string',
+                description: 'Grau da deficiência indicado no documento',
+              },
+              date: {
+                type: 'string',
+                format: 'date',
+                description: 'Data do documento no formato YYYY-MM-DD',
+              },
+              crm: {
+                type: 'string',
+                description: 'CRM do médico responsável',
+              },
+              observations: {
+                type: 'array',
+                items: { type: 'string' },
+                description: 'Observações sobre o documento',
+              },
+            },
+            required: [
+              'documentName',
+              'viability',
+              'cid',
+              'degree',
+              'date',
+              'crm',
+              'observations',
+            ],
+          },
+        },
+      },
+      required: [
+        'predominantDisabilityDegree',
+        'lightDisabilityPercentage',
+        'moderateDisabilityPercentage',
+        'severeDisabilityPercentage',
+        'documents',
+      ],
+    };
+
+    return {
+      type: 'object',
+      properties: {
+        periods: {
+          type: 'array',
+          description:
+            'Períodos analisados a partir do CNIS e dos dados do fluxo',
+          items: {
+            type: 'object',
+            properties: {
+              name: {
+                type: 'string',
+                description: 'Nome da instituição ou vínculo principal',
+              },
+              startDate: {
+                type: 'string',
+                format: 'date',
+                description: 'Data de início do período no formato YYYY-MM-DD',
+              },
+              endDate: {
+                type: 'string',
+                format: 'date',
+                description: 'Data de fim do período no formato YYYY-MM-DD',
+              },
+              category: {
+                type: 'string',
+                enum: Object.values(
+                  DisabilityRetirementPlanningGrantCategoryEnum,
+                ),
+                description: 'Categoria previdenciária do vínculo',
+              },
+              gracePeriod: {
+                type: 'number',
+                description: 'Quantidade de competências válidas no período',
+              },
+              statusPCD: {
+                type: 'string',
+                enum: Object.values(
+                  DisabilityRetirementPlanningGrantDisabilityDegreeEnum,
+                ),
+                description: 'Grau PCD considerado para o período',
+              },
+              status: {
+                type: 'boolean',
+                description: 'Indica se o período foi considerado válido',
+              },
+              isPendency: {
+                type: 'boolean',
+                description: 'Indica se existe alguma pendência no período',
+              },
+              competenceBelowTheMinimum: {
+                type: 'boolean',
+                description: 'Indica se existem competências abaixo do mínimo',
+              },
+              contributionAverage: {
+                type: 'string',
+                description:
+                  'Valor médio das remunerações consideradas naquele período',
+              },
+              belowMinimumContributions: {
+                type: 'array',
+                description:
+                  'Lista apenas das competências cujas contribuições ficaram abaixo do mínimo',
+                items: {
+                  type: 'object',
+                  properties: {
+                    contributionDate: {
+                      type: 'string',
+                      format: 'date',
+                      description: 'Data da contribuição no formato YYYY-MM-DD',
+                    },
+                    contributionValue: {
+                      type: 'number',
+                      description: 'Valor da contribuição abaixo do mínimo',
+                    },
+                  },
+                  required: ['contributionDate', 'contributionValue'],
+                },
+              },
+              reasonPendency: {
+                type: 'string',
+                enum: Object.values(
+                  DisabilityRetirementPlanningGrantPeriodPendencyReasonEnum,
+                ),
+                description: 'Motivo da pendência do período, quando houver',
+              },
+            },
+            required: [
+              'name',
+              'startDate',
+              'endDate',
+              'category',
+              'gracePeriod',
+              'status',
+              'isPendency',
+              'competenceBelowTheMinimum',
+              'belowMinimumContributions',
+            ],
+          },
+        },
+        disabilityAnalysis: disabilityAnalysisSchema,
+      },
+      required: ['periods', 'disabilityAnalysis'],
+    };
+  }
+
+  private getDisabilityRetirementPlanningGrantResultAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        retirementRules: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              retirementRuleName: {
+                type: 'string',
+                description: 'Nome da regra de aposentadoria',
+              },
+              isEligible: {
+                type: 'boolean',
+                description:
+                  'Indica se o segurado já atingiu o direito ou ainda está aguardando',
+              },
+              eligibilityAvailableAt: {
+                type: 'string',
+                format: 'date',
+                description: 'Data do direito no formato YYYY-MM-DD',
+              },
+              expectedMonthlyBenefit: {
+                type: 'number',
+                description: 'RMI prevista',
+              },
+              estimatedProcessValue: {
+                type: 'number',
+                description: 'Valor estimado da causa',
+              },
+              retirementAnalysis: {
+                type: 'string',
+                description:
+                  'Análise detalhada desta regra em formato markdown',
+              },
+            },
+            required: [
+              'retirementRuleName',
+              'isEligible',
+              'expectedMonthlyBenefit',
+              'estimatedProcessValue',
+              'retirementAnalysis',
+            ],
+          },
+        },
+        systemRecomendation: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              optionName: {
+                type: 'string',
+                description: 'Nome da opção recomendada pelo sistema',
+              },
+              retirementRuleName: {
+                type: 'string',
+                description: 'Nome da regra de aposentadoria relacionada',
+              },
+              dib: {
+                type: 'string',
+                format: 'date',
+                description:
+                  'Data de início do benefício no formato YYYY-MM-DD',
+              },
+              rmi: {
+                type: 'number',
+                description: 'Renda mensal inicial',
+              },
+              processValue: {
+                type: 'number',
+                description: 'Valor da causa',
+              },
+            },
+            required: [
+              'optionName',
+              'retirementRuleName',
+              'dib',
+              'rmi',
+              'processValue',
+            ],
+          },
+        },
+        processualStrategy: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              suggestionTitle: {
+                type: 'string',
+                description: 'Título da sugestão processual',
+              },
+              suggestionDescription: {
+                type: 'string',
+                description: 'Descrição da sugestão processual',
+              },
+              bulletPoints: {
+                type: 'array',
+                items: {
+                  type: 'string',
+                },
+                description: 'Lista de itens processuais relevantes',
+              },
+              successRatePercentageInSimilarCases: {
+                type: 'number',
+                description: 'Taxa de sucesso em casos similares',
+              },
+            },
+            required: ['suggestionTitle', 'suggestionDescription'],
+          },
+        },
+        benefitCompatibility: {
+          type: 'object',
+          properties: {
+            benefit: {
+              type: 'string',
+              description: 'Benefício analisado',
+            },
+            compatibility: {
+              type: 'boolean',
+              description: 'Indica a compatibilidade do benefício',
+            },
+            observations: {
+              type: 'string',
+              description: 'Observações sobre a compatibilidade',
+            },
+          },
+          required: ['benefit', 'compatibility', 'observations'],
+        },
+        analysisResult: {
+          type: 'string',
+          description:
+            'Análise extensa e detalhada do caso, abrangendo o histórico previdenciário do segurado, as condições incapacitantes apresentadas, os reflexos dos períodos contributivos, a aplicabilidade das regras de elegibilidade, as estratégias de reconhecimento de direitos e a conclusão fundamentada sobre a viabilidade da concessão da aposentadoria. O campo deve conter um texto longo, estruturado em parágrafos, em formato Markdown.',
+        },
+      },
+      required: [
+        'retirementRules',
+        'systemRecomendation',
+        'processualStrategy',
+        'benefitCompatibility',
+        'analysisResult',
+      ],
+    };
+  }
+
+  private getDisabilityRetirementPlanningGrantTimeAcceleratorAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        timeAccelerators: {
+          type: 'array',
+          description:
+            'Lista de períodos de acelerador de tempo identificados nos documentos analisados',
+          items: {
+            type: 'object',
+            properties: {
+              recognitionInss: {
+                type: 'string',
+                enum: Object.values(
+                  DisabilityRetirementPlanningGrantTimeAcceleratorRecognitionInssEnum,
+                ),
+                description: 'Probabilidade de reconhecimento no INSS',
+              },
+              recognitionJudicial: {
+                type: 'string',
+                enum: Object.values(
+                  DisabilityRetirementPlanningGrantTimeAcceleratorRecognitionJudicialEnum,
+                ),
+                description: 'Probabilidade de reconhecimento judicial',
+              },
+              viability: {
+                type: 'string',
+                enum: Object.values(
+                  DisabilityRetirementPlanningGrantViabilityEnum,
+                ),
+                description: 'Nível de viabilidade do período analisado',
+              },
+              technicalNote: {
+                type: 'string',
+                description: 'Nota técnica resumindo os fundamentos do período',
+              },
+              startDate: {
+                type: 'string',
+                format: 'date-time',
+                description: 'Data de início do período no formato ISO 8601',
+              },
+              endDate: {
+                type: 'string',
+                format: 'date-time',
+                description: 'Data de fim do período no formato ISO 8601',
+              },
+              institution: {
+                type: 'string',
+                description: 'Instituição ou empregador relacionado ao período',
+              },
+              affectsQualifyingPeriod: {
+                type: 'boolean',
+                description:
+                  'Indica se o período afeta carência ou tempo qualificável',
+              },
+            },
+            required: [
+              'recognitionInss',
+              'recognitionJudicial',
+              'viability',
+              'technicalNote',
+              'startDate',
+              'endDate',
+              'institution',
+              'affectsQualifyingPeriod',
+            ],
+          },
+        },
+      },
+      required: ['timeAccelerators'],
+    };
+  }
+
+  private getDisabilityRetirementPlanningGrantPppAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        periods: {
+          type: 'array',
+          description:
+            'Lista de períodos identificados nos documentos PPP analisados',
+          items: {
+            type: 'object',
+            properties: {
+              startDate: {
+                type: 'string',
+                format: 'date-time',
+                description: 'Data de início do período no formato ISO 8601',
+              },
+              endDate: {
+                type: 'string',
+                format: 'date-time',
+                description: 'Data de fim do período no formato ISO 8601',
+              },
+              category: {
+                type: 'string',
+                enum: Object.values(
+                  DisabilityRetirementPlanningGrantCategoryEnum,
+                ),
+                description: 'Categoria do período',
+              },
+              isPendency: {
+                type: 'boolean',
+                description: 'Indica se o período possui pendência',
+              },
+              competenceBelowTheMinimum: {
+                type: 'boolean',
+                description: 'Indica se a competência está abaixo do mínimo',
+              },
+              pendencyReason: {
+                type: 'string',
+                enum: Object.values(
+                  DisabilityRetirementPlanningGrantPeriodPendencyReasonEnum,
+                ),
+                description: 'Motivo da pendência, se houver',
+              },
+              typeOfContribution: {
+                type: 'string',
+                description: 'Tipo de contribuição, se aplicável',
+              },
+              status: {
+                type: 'boolean',
+                description: 'Status do período (ativo/inativo)',
+              },
+              contributionAverage: {
+                type: 'string',
+                description:
+                  'Média de contribuição como string decimal, se disponível',
+              },
+              disabilityStatus: {
+                type: 'string',
+                enum: Object.values(
+                  DisabilityRetirementPlanningGrantDisabilityDegreeEnum,
+                ),
+                description: 'Grau de deficiência no período, se aplicável',
+              },
+              periodConsideration: {
+                type: 'string',
+                enum: Object.values(
+                  DisabilityRetirementPlanningGrantPeriodConsiderationEnum,
+                ),
+                description: 'Consideração do período para o benefício',
+              },
+              bondOrigin: {
+                type: 'string',
+                description: 'Origem do vínculo empregatício, se identificada',
+              },
+            },
+            required: [
+              'startDate',
+              'category',
+              'isPendency',
+              'competenceBelowTheMinimum',
+              'status',
+            ],
+          },
+        },
+      },
+      required: ['periods'],
     };
   }
 

@@ -8,6 +8,7 @@ import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/
 import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis.entity';
+import { DisabilityRetirementPlanningGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-grant.typeorm.entity';
 import { DisabilityRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning.typeorm.entity';
 import { GeneralUrbanRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis.typeorm.entity';
 import { GeneralUrbanRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant.typeorm.entity';
@@ -34,6 +35,7 @@ import { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.entity';
 import { DisabilityRetirementPlanningEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/disability-retirement-planning.entity';
+import { DisabilityRetirementPlanningGrantEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant/disability-retirement-planning-grant.entity';
 import { GeneralUrbanRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/general-urban-retirement-analysis-entity';
 import { GeneralUrbanRetirementGrantEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/general-urban-retirement-grant.entity';
 import { InsuranceQualityAnalysisEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/insurance-quality-analysis.entity';
@@ -223,6 +225,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const disabilityRetirementPlanningGrant =
+        source.disabilityRetirementPlanningGrant !== null
+          ? this.mapper.map(
+              source.disabilityRetirementPlanningGrant,
+              DisabilityRetirementPlanningGrantTypeormEntity,
+              DisabilityRetirementPlanningGrantEntity,
+            )
+          : null;
+
       const specialCategoryRetirementAnalysis =
         source.specialCategoryRetirementAnalysis !== null
           ? this.mapper.map(
@@ -236,6 +247,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         ...source,
         id: new AnalysisToolRecordId(source.id),
         code: new AnalysisToolRecordCode(source.code),
+        disabilityRetirementPlanningGrant,
         cnisFastAnalysis,
         retirementPlanningRpps,
         retirementPlanningRgps,
@@ -425,6 +437,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const disabilityRetirementPlanningGrant =
+        source.disabilityRetirementPlanningGrant !== null
+          ? this.mapper.map(
+              source.disabilityRetirementPlanningGrant,
+              DisabilityRetirementPlanningGrantEntity,
+              DisabilityRetirementPlanningGrantTypeormEntity,
+            )
+          : null;
+
       const specialCategoryRetirementAnalysis =
         source.specialCategoryRetirementAnalysis !== null
           ? this.mapper.map(
@@ -446,6 +467,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         ...source,
         id: source.id.toString(),
         code: source.code.toString(),
+        disabilityRetirementPlanningGrant,
         audienceQuestionGenerator,
         cnisFastAnalysis,
         retirementPlanningRpps,
