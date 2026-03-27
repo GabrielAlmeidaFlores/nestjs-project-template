@@ -80,6 +80,9 @@ export class OrganizationCustomizationExportDocumentOptionsResolver {
     const footerHtmlContent = footerTemplate?.htmlContent.trim();
 
     const result: ExportDocumentDownloadOptionsInterface = {};
+    if (headerTemplate !== null) {
+      result.headerTemplateType = headerTemplate.type;
+    }
     if (headerHtmlContent !== undefined && headerHtmlContent !== '') {
       result.headerHtml = this.renderTemplatePlaceholders(
         headerHtmlContent,
