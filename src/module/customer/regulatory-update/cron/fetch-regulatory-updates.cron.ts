@@ -29,7 +29,7 @@ export class FetchRegulatoryUpdatesCron {
     } catch (error) {
       if (error instanceof Error) {
         this.logger.error(
-          `Erro ao buscar atualizações normativas: ${error.message}`,
+          `Failed to fetch regulatory updates: ${error.message}`,
           error.stack,
         );
       }
@@ -40,7 +40,7 @@ export class FetchRegulatoryUpdatesCron {
     } catch (error) {
       if (error instanceof Error) {
         this.logger.error(
-          `Erro ao enviar e-mails de atualizações normativas: ${error.message}`,
+          `Failed to send regulatory update emails: ${error.message}`,
           error.stack,
         );
       }
