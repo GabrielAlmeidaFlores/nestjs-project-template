@@ -23,8 +23,8 @@ import {
   DisabilityRetirementPlanningGrantFirstAnalysisModel,
   DisabilityRetirementPlanningGrantFirstAnalysisPeriodModel,
 } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/generic/disability-retirement-planning-grant-first-analysis.model';
-import { DisabilityRetirementPlanningGrantFirstAnalysisSourcePeriodInterface } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/disability-retirement-planning-grant-first-analysis-source-period.interface';
 import { DisabilityRetirementPlanningGrantFirstAnalysisInterface } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/disability-retirement-planning-grant-first-analysis.interface';
+import { DisabilityRetirementPlanningGrantFirstAnalysisSourcePeriodInterface } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/disability-retirement-planning-grant-first-analysis-source-period.interface';
 import { parseDisabilityRetirementPlanningGrantCompleteAnalysis } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/disability-retirement-planning-grant-result.interface';
 
 @Injectable()
@@ -70,9 +70,7 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
     return GetDisabilityRetirementPlanningGrantResponseDto.build({
       id: result.id,
       category: result.category,
-      ...(result.analysisName !== null && {
-        analysisName: result.analysisName,
-      }),
+      ...(result.analysisName !== null && { analysisName: result.analysisName }),
       longPrizeDisability: result.longPrizeDisability,
       ...(cnisDocument !== null && { cnisDocument }),
       createdAt: result.createdAt,
