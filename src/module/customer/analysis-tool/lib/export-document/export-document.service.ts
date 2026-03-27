@@ -13,8 +13,35 @@ import { unified } from 'unified';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { UnexpectedHtmlToDocxReturnTypeError } from '@module/customer/analysis-tool/lib/export-document/error/unexpected-html-to-docx-return-type.error';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
+import { OrganizationCustomizationDocumentHeaderTemplateTypeEnum } from '@module/customer/organization-customization/domain/schema/entity/organization-customization-document-header-template/enum/organization-customization-document-header-template-type.enum';
 
 import type { ExportDocumentDownloadOptionsInterface } from '@module/customer/analysis-tool/lib/export-document/export-document-download-options.interface';
+
+const A4_WIDTH_MM = 210;
+const MM_PER_INCH = 25.4;
+const CSS_PX_PER_INCH = 96;
+
+/** Largura ~A4 em CSS px, alinhada à área útil do header no PDF. */
+const PDF_HEADER_VIEWPORT_WIDTH_PX = Math.round(
+  (A4_WIDTH_MM / MM_PER_INCH) * CSS_PX_PER_INCH,
+);
+
+const HEADER_CAPTURE_VIEWPORT_HEIGHT_PX = 1200;
+const HEADER_CAPTURE_VIEWPORT_PADDING_PX = 32;
+const HEADER_CAPTURE_SET_CONTENT_TIMEOUT_MS = 20_000;
+const HEADER_IMAGE_LOAD_TIMEOUT_MS = 10_000;
+
+const PDF_MARGIN_TOP_MAX_MM = 120;
+const PDF_MARGIN_TOP_MIN_MM = 12;
+const PDF_MARGIN_TOP_EXTRA_MM = 4;
+const PDF_MARGIN_HEADER_FALLBACK_MM = 60;
+const PDF_MARGIN_BODY_TOP_MM = 10;
+
+const PDF_MARGIN_FOOTER_FALLBACK_MM = 20;
+
+function pxToMm(px: number): number {
+  return (px * MM_PER_INCH) / CSS_PX_PER_INCH;
+}
 
 function escapeTableCell(text: string): string {
   return text
@@ -198,12 +225,187 @@ export class ExportDocumentService implements ExportDocumentGateway {
     }
 
     return `
-      <div style="width:100%; height:50px; box-sizing:border-box; font-size:10px; line-height:1.2;">
+      <div style="width:100%; box-sizing:border-box; font-size:10px; line-height:1.2;">
         <style>
           body { margin: 0; }
         </style>
         ${safeFragment}
       </div>`;
+  }
+
+  /**
+   * Renderiza HTML isolado como PNG (com cores de fundo) para uso em header/footer do PDF/DOCX,
+   * onde o motor nativo ignora ou limita CSS em templates.
+   */
+  private async _htmlFragmentToPngDataUrl(
+    page: Puppeteer.Page,
+    fragmentHtml: string,
+  ): Promise<{ dataUrl: string; heightPx: number } | null> {
+    const trimmed = fragmentHtml.trim();
+    if (!trimmed) {
+      return null;
+    }
+
+    const doc = `<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      #export-fragment-root {
+        width: ${PDF_HEADER_VIEWPORT_WIDTH_PX}px;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="export-fragment-root">${trimmed}</div>
+  </body>
+</html>`;
+
+    await page.setViewport({
+      width: PDF_HEADER_VIEWPORT_WIDTH_PX,
+      height: HEADER_CAPTURE_VIEWPORT_HEIGHT_PX,
+    });
+
+    try {
+      await page.setContent(doc, {
+        waitUntil: 'networkidle2',
+        timeout: HEADER_CAPTURE_SET_CONTENT_TIMEOUT_MS,
+      });
+    } catch {
+      await page.setContent(doc, { waitUntil: 'load' });
+    }
+
+    await page.evaluate((timeoutMs: number) => {
+      const images = Array.from(document.images);
+      return Promise.all(
+        images.map(
+          (img: HTMLImageElement) =>
+            new Promise<void>((resolve) => {
+              if (img.complete === true) {
+                resolve();
+                return;
+              }
+              img.addEventListener('load', () => resolve());
+              img.addEventListener('error', () => resolve());
+              window.setTimeout(() => resolve(), timeoutMs);
+            }),
+        ),
+      );
+    }, HEADER_IMAGE_LOAD_TIMEOUT_MS);
+
+    const dims = await page.$eval('#export-fragment-root', (el) => {
+      const r = el.getBoundingClientRect();
+      return { width: r.width, height: r.height };
+    });
+
+    const heightPx = Math.max(1, Math.ceil(dims.height));
+    const widthPx = Math.max(1, Math.ceil(dims.width));
+
+    await page.setViewport({
+      width: PDF_HEADER_VIEWPORT_WIDTH_PX,
+      height: Math.max(
+        HEADER_CAPTURE_VIEWPORT_HEIGHT_PX,
+        heightPx + HEADER_CAPTURE_VIEWPORT_PADDING_PX,
+      ),
+    });
+
+    const png = await page.screenshot({
+      type: 'png',
+      clip: { x: 0, y: 0, width: widthPx, height: heightPx },
+      omitBackground: false,
+    });
+
+    const base64 = Buffer.from(png).toString('base64');
+    return {
+      dataUrl: `data:image/png;base64,${base64}`,
+      heightPx,
+    };
+  }
+
+  private async _captureHeaderFooterImages(
+    browser: Puppeteer.Browser,
+    options: ExportDocumentDownloadOptionsInterface | undefined,
+    flags: { captureHeader: boolean; captureFooter: boolean },
+  ): Promise<{
+    header: { dataUrl: string; heightPx: number } | null;
+    footer: { dataUrl: string; heightPx: number } | null;
+  }> {
+    const headerHtml = options?.headerHtml?.trim() ?? '';
+    const footerHtml = options?.footerHtml?.trim() ?? '';
+
+    const needCaptureHeader = flags.captureHeader && headerHtml.length > 0;
+    const needCaptureFooter = flags.captureFooter && footerHtml.length > 0;
+
+    if (!needCaptureHeader && !needCaptureFooter) {
+      return { header: null, footer: null };
+    }
+
+    const capturePage = await browser.newPage();
+    try {
+      let header: { dataUrl: string; heightPx: number } | null = null;
+      let footer: { dataUrl: string; heightPx: number } | null = null;
+
+      if (needCaptureHeader) {
+        try {
+          header = await this._htmlFragmentToPngDataUrl(
+            capturePage,
+            headerHtml,
+          );
+        } catch {
+          header = null;
+        }
+      }
+      if (needCaptureFooter) {
+        try {
+          footer = await this._htmlFragmentToPngDataUrl(
+            capturePage,
+            footerHtml,
+          );
+        } catch {
+          footer = null;
+        }
+      }
+
+      return { header, footer };
+    } finally {
+      await capturePage.close();
+    }
+  }
+
+  /**
+   * No PDF, só rasterizamos o cabeçalho para layouts standout (fundo/cores fiéis).
+   */
+  private _pdfHeaderShouldUseRasterImage(
+    options?: ExportDocumentDownloadOptionsInterface,
+  ): boolean {
+    if (
+      options?.headerTemplateType ===
+      OrganizationCustomizationDocumentHeaderTemplateTypeEnum.STANDOUT_CLASSIC
+    ) {
+      return true;
+    }
+    if (
+      options?.headerTemplateType ===
+      OrganizationCustomizationDocumentHeaderTemplateTypeEnum.MODERN_STANDOUT
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  private _wrapPdfMarginBoxAsImage(dataUrl: string): string {
+    return `
+      <div style="width:100%;margin:0;padding:0;font-size:0;line-height:0;">
+        <img src="${dataUrl}" style="width:100%;height:auto;display:block;" alt="" />
+      </div>`;
+  }
+
+  private _docxMarginFragmentFromImage(dataUrl: string): string {
+    return `<div style="margin:0;padding:0;"><img src="${dataUrl}" alt="" style="width:100%;height:auto;" /></div>`;
   }
 
   private async generatePdfFromHtml(
@@ -214,33 +416,75 @@ export class ExportDocumentService implements ExportDocumentGateway {
     const browser = await Puppeteer.launch({
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
-    const page = await browser.newPage();
 
-    await page.setContent(fullHtml);
+    try {
+      const headerHtml = options?.headerHtml?.trim() ?? '';
+      const footerHtml = options?.footerHtml?.trim() ?? '';
 
-    const headerHtml = options?.headerHtml?.trim() ?? '';
-    const footerHtml = options?.footerHtml?.trim() ?? '';
+      const hasHeader = headerHtml.length > 0;
+      const hasFooter = footerHtml.length > 0;
 
-    const hasHeader = headerHtml.length > 0;
-    const hasFooter = footerHtml.length > 0;
-    const displayHeaderFooter = hasHeader || hasFooter;
+      const pdfRasterHeader =
+        hasHeader && this._pdfHeaderShouldUseRasterImage(options);
 
-    const pdfUint8Array = await page.pdf({
-      format: 'A4',
-      printBackground: true,
-      margin: {
-        top: hasHeader ? '60mm' : '10mm',
-        bottom: '20mm',
-        left: '5mm',
-        right: '10mm',
-      },
-      displayHeaderFooter,
-      headerTemplate: this._wrapPdfHeaderFooterFragment(headerHtml),
-      footerTemplate: this._wrapPdfHeaderFooterFragment(footerHtml),
-    });
-    await browser.close();
+      const { header: headerImage } = await this._captureHeaderFooterImages(
+        browser,
+        options,
+        {
+          captureHeader: pdfRasterHeader,
+          captureFooter: false,
+        },
+      );
 
-    return Buffer.from(pdfUint8Array);
+      const page = await browser.newPage();
+      await page.setContent(fullHtml);
+
+      const displayHeaderFooter = hasHeader || hasFooter;
+
+      const headerTemplate = !hasHeader
+        ? this._wrapPdfHeaderFooterFragment('')
+        : headerImage
+          ? this._wrapPdfMarginBoxAsImage(headerImage.dataUrl)
+          : this._wrapPdfHeaderFooterFragment(headerHtml);
+
+      const footerTemplate = !hasFooter
+        ? this._wrapPdfHeaderFooterFragment('')
+        : this._wrapPdfHeaderFooterFragment(footerHtml);
+
+      const marginTopMm = hasHeader
+        ? headerImage
+          ? Math.min(
+              PDF_MARGIN_TOP_MAX_MM,
+              Math.max(
+                PDF_MARGIN_TOP_MIN_MM,
+                pxToMm(headerImage.heightPx) + PDF_MARGIN_TOP_EXTRA_MM,
+              ),
+            )
+          : PDF_MARGIN_HEADER_FALLBACK_MM
+        : PDF_MARGIN_BODY_TOP_MM;
+
+      const marginBottomMm = PDF_MARGIN_FOOTER_FALLBACK_MM;
+
+      const pdfUint8Array = await page.pdf({
+        format: 'A4',
+        printBackground: true,
+        margin: {
+          top: `${marginTopMm}mm`,
+          bottom: `${marginBottomMm}mm`,
+          left: '5mm',
+          right: '10mm',
+        },
+        displayHeaderFooter,
+        headerTemplate,
+        footerTemplate,
+      });
+
+      await page.close();
+
+      return Buffer.from(pdfUint8Array);
+    } finally {
+      await browser.close();
+    }
   }
 
   private async generateDocxFromHtml(
@@ -255,9 +499,46 @@ export class ExportDocumentService implements ExportDocumentGateway {
     const hasHeader = headerHtml.length > 0;
     const hasFooter = footerHtml.length > 0;
 
+    let headerImage: { dataUrl: string; heightPx: number } | null = null;
+    let footerImage: { dataUrl: string; heightPx: number } | null = null;
+
+    if (hasHeader || hasFooter) {
+      const browser = await Puppeteer.launch({
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      });
+      try {
+        const captured = await this._captureHeaderFooterImages(
+          browser,
+          options,
+          {
+            captureHeader: hasHeader,
+            captureFooter: hasFooter,
+          },
+        );
+        headerImage = captured.header;
+        footerImage = captured.footer;
+      } finally {
+        await browser.close();
+      }
+    }
+
+    const headerForDocx =
+      hasHeader && headerImage
+        ? this._docxMarginFragmentFromImage(headerImage.dataUrl)
+        : hasHeader
+          ? headerHtml
+          : null;
+
+    const footerForDocx =
+      hasFooter && footerImage
+        ? this._docxMarginFragmentFromImage(footerImage.dataUrl)
+        : hasFooter
+          ? footerHtml
+          : null;
+
     const docxResult = await HtmlToDocx(
       fullHtmlDocument,
-      hasHeader ? headerHtml : null,
+      headerForDocx,
       {
         orientation: 'portrait',
         table: { row: { cantSplit: true } },
@@ -265,7 +546,7 @@ export class ExportDocumentService implements ExportDocumentGateway {
         footer: hasFooter,
         pageNumber: false,
       },
-      hasFooter ? footerHtml : null,
+      footerForDocx,
     );
 
     let buffer: Buffer;
