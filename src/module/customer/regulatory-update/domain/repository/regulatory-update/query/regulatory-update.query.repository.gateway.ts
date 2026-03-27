@@ -15,4 +15,8 @@ export abstract class RegulatoryUpdateQueryRepositoryGateway {
   public abstract findAllTitlesAndDates(): Promise<
     Array<{ title: string; publishedAt: Date | null }>
   >;
+
+  public abstract countAllRegulatoryUpdates(): Promise<number>;
+
+  public abstract findLastVerifiedAt(): Promise<Date | null>;
 }

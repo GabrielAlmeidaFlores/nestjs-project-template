@@ -6,10 +6,14 @@ import { ListRegulatoryUpdatesRequestDto } from '@module/customer/regulatory-upd
 import { UpdateRegulatoryUpdateEmailPreferenceRequestDto } from '@module/customer/regulatory-update/dto/request/update-regulatory-update-email-preference.request.dto';
 import { GetRegulatoryUpdateEmailPreferenceResponseDto } from '@module/customer/regulatory-update/dto/response/get-regulatory-update-email-preference.response.dto';
 import { GetRegulatoryUpdateResponseDto } from '@module/customer/regulatory-update/dto/response/get-regulatory-update.response.dto';
+import { GetRegulatoryUpdateStatsResponseDto } from '@module/customer/regulatory-update/dto/response/get-regulatory-update-stats.response.dto';
+import { ListCustomerMonitoredSourcesResponseDto } from '@module/customer/regulatory-update/dto/response/list-customer-monitored-sources.response.dto';
 import { ListRegulatoryUpdatesResponseDto } from '@module/customer/regulatory-update/dto/response/list-regulatory-updates.response.dto';
 import { UpdateRegulatoryUpdateEmailPreferenceResponseDto } from '@module/customer/regulatory-update/dto/response/update-regulatory-update-email-preference.response.dto';
 import { GetRegulatoryUpdateEmailPreferenceUseCase } from '@module/customer/regulatory-update/use-case/get-regulatory-update-email-preference.use-case';
+import { GetRegulatoryUpdateStatsUseCase } from '@module/customer/regulatory-update/use-case/get-regulatory-update-stats.use-case';
 import { GetRegulatoryUpdateUseCase } from '@module/customer/regulatory-update/use-case/get-regulatory-update.use-case';
+import { ListCustomerMonitoredSourcesUseCase } from '@module/customer/regulatory-update/use-case/list-customer-monitored-sources.use-case';
 import { ListRegulatoryUpdatesUseCase } from '@module/customer/regulatory-update/use-case/list-regulatory-updates.use-case';
 import { UpdateRegulatoryUpdateEmailPreferenceUseCase } from '@module/customer/regulatory-update/use-case/update-regulatory-update-email-preference.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -32,6 +36,8 @@ export class RegulatoryUpdateController {
     private readonly getRegulatoryUpdateUseCase: GetRegulatoryUpdateUseCase,
     private readonly getRegulatoryUpdateEmailPreferenceUseCase: GetRegulatoryUpdateEmailPreferenceUseCase,
     private readonly updateRegulatoryUpdateEmailPreferenceUseCase: UpdateRegulatoryUpdateEmailPreferenceUseCase,
+    private readonly getRegulatoryUpdateStatsUseCase: GetRegulatoryUpdateStatsUseCase,
+    private readonly listCustomerMonitoredSourcesUseCase: ListCustomerMonitoredSourcesUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -58,6 +64,50 @@ export class RegulatoryUpdateController {
       organizationSessionData,
       new ListRegulatoryUpdatesQueryParam(dto),
     );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Obter estatísticas de atualizações normativas',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'stats',
+      method: RequestMethod.GET,
+    },
+    tag: ['atualizacoes-normativas'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Estatísticas de atualizações normativas retornadas com sucesso.',
+      type: GetRegulatoryUpdateStatsResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async getStats(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+  ): Promise<GetRegulatoryUpdateStatsResponseDto> {
+    return this.getRegulatoryUpdateStatsUseCase.execute(organizationSessionData);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Listar portais monitorados para clientes',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'monitored-sources',
+      method: RequestMethod.GET,
+    },
+    tag: ['atualizacoes-normativas'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Portais monitorados listados com sucesso.',
+      type: ListCustomerMonitoredSourcesResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async getMonitoredSources(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+  ): Promise<ListCustomerMonitoredSourcesResponseDto> {
+    return this.listCustomerMonitoredSourcesUseCase.execute(organizationSessionData);
   }
 
   @BuildEndpointSpecification({
