@@ -71,6 +71,10 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
     const existingTitlesAndDates =
       await this.regulatoryUpdateQueryRepository.findAllTitlesAndDates();
 
+    const existingTitlesLower = new Set(
+      existingTitlesAndDates.map((item) => item.title.trim().toLowerCase()),
+    );
+
     const prompt = this.buildPrompt(
       existingTitlesAndDates,
       activeSources.map((s) => ({ name: s.name, url: s.url })),
@@ -147,7 +151,8 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
       return [];
     }
 
-    const newUpdates = this.parseAiResponse(aiResponse);
+    const parsedUpdates = this.parseAiResponse(aiResponse);
+    const newUpdates = this.deduplicateAgainstExisting(parsedUpdates, existingTitlesLower);
 
     if (newUpdates.length === 0) {
       this.logger.log('No new regulatory updates found.');
@@ -216,6 +221,27 @@ ${existingJson}
 Retorne APENAS novas atualizações não listadas acima. Se não houver novas atualizações no período, retorne um array vazio.
 
 IMPORTANTE: O campo "fullText" deve conter o texto integral ou transcrição detalhada da norma, com no mínimo 400 caracteres. Inclua artigos, parágrafos e disposições relevantes da norma.`;
+  }
+
+  private deduplicateAgainstExisting(
+    updates: AiRegulatoryUpdateItemInterface[],
+    existingTitlesLower: Set<string>,
+  ): AiRegulatoryUpdateItemInterface[] {
+    const seen = new Set<string>();
+
+    return updates.filter((update) => {
+      const normalizedTitle = update.title.trim().toLowerCase();
+
+      if (existingTitlesLower.has(normalizedTitle) || seen.has(normalizedTitle)) {
+        this.logger.warn(
+          `Skipping duplicate regulatory update: "${update.title}"`,
+        );
+        return false;
+      }
+
+      seen.add(normalizedTitle);
+      return true;
+    });
   }
 
   private parseAiResponse(response: string): AiRegulatoryUpdateItemInterface[] {
