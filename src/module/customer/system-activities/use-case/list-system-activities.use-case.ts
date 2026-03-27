@@ -9,6 +9,7 @@ import { ListSystemActivitiesResponseDto } from '@module/customer/system-activit
 import { SystemActivityItemResponseDto } from '@module/customer/system-activities/dto/response/system-activity-item.response.dto';
 import { OrganizationMemberFilterRequiresOwnerError } from '@module/customer/system-activities/error/organization-member-filter-requires-owner.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 @Injectable()
 export class ListSystemActivitiesUseCase {
@@ -22,10 +23,11 @@ export class ListSystemActivitiesUseCase {
   ) {}
 
   public async execute(
+    sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
     dto: ListSystemActivitiesRequestDto,
   ): Promise<ListSystemActivitiesResponseDto> {
-    const organizationMemberIdFilter = dto.organizationMemberId ?? null;
+    let organizationMemberIdFilter = dto.organizationMemberId ?? null;
 
     if (organizationMemberIdFilter !== null) {
       if (organizationSessionData.owner === false) {
@@ -47,6 +49,20 @@ export class ListSystemActivitiesUseCase {
       ) {
         throw new OrganizationNotAvailableForCustomerError();
       }
+    }
+
+    if (organizationSessionData.owner === false) {
+      const member =
+        await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
+          sessionData.authIdentityId,
+          organizationSessionData.organizationId,
+        );
+
+      if (member === null) {
+        throw new OrganizationMemberNotFoundError();
+      }
+
+      organizationMemberIdFilter = member.id;
     }
 
     const { startDate, endDate } = this.normalizeDateRange(
