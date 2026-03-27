@@ -1,6 +1,9 @@
+import fs from 'node:fs';
+
 import { Inject, Injectable } from '@nestjs/common';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
+import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { OrganizationQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization/query/organization.query.repository.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { FileProcessorGateway } from '@module/customer/account/lib/file-processor/file-processor.gateway';
@@ -8,12 +11,17 @@ import { OrganizationCustomizationQueryRepositoryGateway } from '@module/custome
 import { OrganizationCustomizationDocumentHeaderTemplateQueryRepositoryGateway } from '@module/customer/organization-customization/domain/repository/organization-customization-document-header-template/query/organization-customization-document-header-template.query.repository.gateway';
 import { GetOrganizationCustomizationDocumentHeaderTemplateResponseDto } from '@module/customer/organization-customization/dto/response/get-organization-customization-document-header-template.response.dto';
 import { ListOrganizationCustomizationDocumentHeaderTemplatesResponseDto } from '@module/customer/organization-customization/dto/response/list-organization-customization-document-header-templates.response.dto';
-import { OrganizationCustomizationNotFoundError } from '@module/customer/organization-customization/error/organization-customization-not-found.error';
+import { ImageApplicationVariable } from '@shared/system/constant/application-variable/source/image.application-variable';
 
 @Injectable()
 export class ListOrganizationCustomizationDocumentHeaderTemplatesUseCase {
   protected readonly _type =
     ListOrganizationCustomizationDocumentHeaderTemplatesUseCase.name;
+
+  private readonly DEFAULT_PRIMARY_COLOR: string;
+  private readonly DEFAULT_SECONDARY_COLOR: string;
+  private readonly DEFAULT_TERTIARY_COLOR: string;
+  private _defaultLogoBase64DataUri: string | null;
 
   public constructor(
     @Inject(
@@ -26,7 +34,12 @@ export class ListOrganizationCustomizationDocumentHeaderTemplatesUseCase {
     private readonly organizationQueryRepository: OrganizationQueryRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
-  ) {}
+  ) {
+    this.DEFAULT_PRIMARY_COLOR = '#2D77B1';
+    this.DEFAULT_SECONDARY_COLOR = '#8DCBED';
+    this.DEFAULT_TERTIARY_COLOR = '#2D77B1';
+    this._defaultLogoBase64DataUri = null;
+  }
 
   public async execute(
     pagination: ListDataInputModel,
@@ -42,26 +55,21 @@ export class ListOrganizationCustomizationDocumentHeaderTemplatesUseCase {
       this.organizationQueryRepository.findOneByOrganizationId(organizationId),
     ]);
 
-    if (customization === null) {
-      throw new OrganizationCustomizationNotFoundError();
-    }
-
-    const logoSignedUrl =
-      customization.organizationLogo !== null
-        ? (
-            await this.fileProcessorGateway.getOrganizationLogo(
-              customization.organizationLogo,
-            )
-          ).toString()
-        : '';
+    const logoUrl = await this.resolveLogoUrl(customization);
+    const primaryColor =
+      customization?.primaryColor ?? this.DEFAULT_PRIMARY_COLOR;
+    const secondaryColor =
+      customization?.secondaryColor ?? this.DEFAULT_SECONDARY_COLOR;
+    const tertiaryColor =
+      customization?.tertiaryColor ?? this.DEFAULT_TERTIARY_COLOR;
 
     const resource = result.resource.map((item) => {
       const htmlContent = item.htmlContent
-        .replace(/\{\{logo\}\}/g, logoSignedUrl)
+        .replace(/\{\{logo\}\}/g, logoUrl)
         .replace(/\{\{organizationName\}\}/g, organization?.name ?? '')
-        .replace(/\{\{primaryColor\}\}/g, customization.primaryColor)
-        .replace(/\{\{secondaryColor\}\}/g, customization.secondaryColor)
-        .replace(/\{\{tertiaryColor\}\}/g, customization.tertiaryColor);
+        .replace(/\{\{primaryColor\}\}/g, primaryColor)
+        .replace(/\{\{secondaryColor\}\}/g, secondaryColor)
+        .replace(/\{\{tertiaryColor\}\}/g, tertiaryColor);
 
       return GetOrganizationCustomizationDocumentHeaderTemplateResponseDto.build(
         {
@@ -84,5 +92,38 @@ export class ListOrganizationCustomizationDocumentHeaderTemplatesUseCase {
         resource,
       },
     );
+  }
+
+  private async resolveLogoUrl(
+    customization: Awaited<
+      ReturnType<
+        typeof this.organizationCustomizationQueryRepository.findOneOrganizationCustomizationByOrganizationId
+      >
+    >,
+  ): Promise<string> {
+    if (customization === null) {
+      return this.getDefaultLogoBase64DataUri();
+    }
+
+    if (customization.organizationLogo === null) {
+      return '';
+    }
+
+    return (
+      await this.fileProcessorGateway.getOrganizationLogo(
+        customization.organizationLogo,
+      )
+    ).toString();
+  }
+
+  private getDefaultLogoBase64DataUri(): string {
+    if (this._defaultLogoBase64DataUri === null) {
+      const base64 = Base64.encodeBuffer(
+        fs.readFileSync(ImageApplicationVariable.IMAGE_AGILIZA_LOGO_PATH),
+      );
+      this._defaultLogoBase64DataUri = `data:image/svg+xml;base64,${base64.toString()}`;
+    }
+
+    return this._defaultLogoBase64DataUri;
   }
 }
