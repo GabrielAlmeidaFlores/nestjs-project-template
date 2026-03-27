@@ -8,6 +8,7 @@ import { EmailOrganizationInviteModule } from '@module/customer/account/lib/emai
 import { FileProcessorModule } from '@module/customer/account/lib/file-processor/file-processor.module';
 import { OrganizationSessionModule } from '@module/customer/account/lib/organization-session/organization-session.module';
 import { ConfirmCustomerTermsAcceptanceUseCase } from '@module/customer/account/use-case/confirm-customer-terms-acceptance.use-case';
+import { ConfirmInvitedMemberUseCase } from '@module/customer/account/use-case/confirm-invited-member.use-case';
 import { CustomerSignUpUseCase } from '@module/customer/account/use-case/customer-sign-up.use-case';
 import { DeleteOrganizationMemberUseCase } from '@module/customer/account/use-case/delete-organization-member.use-case';
 import { FirstAccessInvitedMemberUseCase } from '@module/customer/account/use-case/first-access-invited-member.use-case';
@@ -51,6 +52,7 @@ import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
     InviteOrganizationMemberUseCase,
     ValidateOrganizationInviteUseCase,
     FirstAccessInvitedMemberUseCase,
+    ConfirmInvitedMemberUseCase,
     ListOrganizationCollaboratorsUseCase,
     UpdateOrganizationMemberStatusUseCase,
     DeleteOrganizationMemberUseCase,
