@@ -9,6 +9,7 @@ import {
 import { FastifyReply } from 'fastify';
 
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
+import { ConfirmInvitedMemberRequestDto } from '@module/customer/account/dto/request/confirm-invited-member.request.dto';
 import { CustomerSignUpRequestDto } from '@module/customer/account/dto/request/customer-sign-up.request.dto';
 import { FirstAccessInvitedMemberRequestDto } from '@module/customer/account/dto/request/first-access-invited-member.request.dto';
 import { InviteOrganizationMemberRequestDto } from '@module/customer/account/dto/request/invite-organization-member.request.dto';
@@ -30,6 +31,7 @@ import { UpdateCustomerResponseDto } from '@module/customer/account/dto/response
 import { UpdateOrganizationMemberStatusResponseDto } from '@module/customer/account/dto/response/update-organization-member-status.response.dto';
 import { ValidateOrganizationInviteResponseDto } from '@module/customer/account/dto/response/validate-organization-invite.response.dto';
 import { ConfirmCustomerTermsAcceptanceUseCase } from '@module/customer/account/use-case/confirm-customer-terms-acceptance.use-case';
+import { ConfirmInvitedMemberUseCase } from '@module/customer/account/use-case/confirm-invited-member.use-case';
 import { CustomerSignUpUseCase } from '@module/customer/account/use-case/customer-sign-up.use-case';
 import { DeleteOrganizationMemberUseCase } from '@module/customer/account/use-case/delete-organization-member.use-case';
 import { FirstAccessInvitedMemberUseCase } from '@module/customer/account/use-case/first-access-invited-member.use-case';
@@ -72,6 +74,7 @@ export class AccountController {
     private readonly inviteOrganizationMemberUseCase: InviteOrganizationMemberUseCase,
     private readonly validateOrganizationInviteUseCase: ValidateOrganizationInviteUseCase,
     private readonly firstAccessInvitedMemberUseCase: FirstAccessInvitedMemberUseCase,
+    private readonly confirmInvitedMemberUseCase: ConfirmInvitedMemberUseCase,
     private readonly listOrganizationCollaboratorsUseCase: ListOrganizationCollaboratorsUseCase,
     private readonly updateOrganizationMemberStatusUseCase: UpdateOrganizationMemberStatusUseCase,
     private readonly deleteOrganizationMemberUseCase: DeleteOrganizationMemberUseCase,
@@ -351,6 +354,33 @@ export class AccountController {
     @Body() dto: FirstAccessInvitedMemberRequestDto,
   ): Promise<FirstAccessInvitedMemberResponseDto> {
     return await this.firstAccessInvitedMemberUseCase.execute(reply, dto);
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Aceitar convite e ingressar na organização (usuário já cadastrado)',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'organization/invite/accept',
+      method: RequestMethod.POST,
+      type: ConfirmInvitedMemberRequestDto,
+    },
+    tag: ['colaboradores'],
+    successResponse: {
+      statusCode: HttpStatus.NO_CONTENT,
+      description:
+        'Convite aceito e vínculo com a organização criado com sucesso.',
+    },
+    throttle: {
+      limit: 100,
+      ttlInMinutes: 5,
+    },
+  })
+  public async confirmInvitedMember(
+    @Res({ passthrough: true }) reply: FastifyReply,
+    @Body() dto: ConfirmInvitedMemberRequestDto,
+  ): Promise<void> {
+    await this.confirmInvitedMemberUseCase.execute(reply, dto);
   }
 
   @BuildEndpointSpecification({
