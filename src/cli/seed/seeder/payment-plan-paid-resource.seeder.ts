@@ -740,6 +740,126 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise de documentos de processo administrativo para planejamento de aposentadoria da pessoa com deficiência com IA. Examina documentos PDF do processo administrativo do INSS, identifica informações relevantes sobre o requerimento, avalia fundamentos e inconsistências, e gera um relatório em markdown com análise técnica detalhada e orientações estratégicas.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a4d9f8b7-3c21-4e6a-9f5d-0b2c7e1a8d34'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_GRANT_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title:
+        'APOSENTADORIA DA PESSOA COM DEFICIÊNCIA (CONCESSÃO) - ANÁLISE COMPLETA',
+      description:
+        'Análise completa de concessão de aposentadoria da pessoa com deficiência com IA. Consolida os períodos contributivos, períodos de deficiência, benefícios, processos judiciais e aceleradores de tempo, gerando parecer técnico detalhado sobre enquadramento legal, viabilidade do benefício, cenários de concessão e estratégia recomendada.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b5e0a9c8-4d32-4f7b-8a6e-1c3d8f2b9e45'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_GRANT_SIMPLIFIED_ANALYSIS,
+      creditCost: 3,
+      title:
+        'APOSENTADORIA DA PESSOA COM DEFICIÊNCIA (CONCESSÃO) - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada de concessão de aposentadoria da pessoa com deficiência com IA. Resume os principais períodos reconhecíveis, o grau e a duração da deficiência, os pontos críticos do caso e a viabilidade geral do benefício, com orientação objetiva para tomada de decisão rápida.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c6f1b0d9-5e43-409c-9b7f-2d4e9a3c0f56'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_GRANT_FIRST_ANALYSIS,
+      creditCost: 5,
+      title:
+        'APOSENTADORIA DA PESSOA COM DEFICIÊNCIA (CONCESSÃO) - PRIMEIRO STEP',
+      description:
+        'Primeira análise da concessão de aposentadoria da pessoa com deficiência com IA, combinando os dados estruturados do caso com a leitura e interpretação do CNIS. Gera parecer inicial técnico sobre tempo de contribuição, carência, períodos relevantes e viabilidade preliminar do benefício.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e7b3d2c1-7a65-42be-9da1-4f6071c2b001'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_GRANT_RURAL_TIME_ANALYSIS,
+      creditCost: 4,
+      title:
+        'APOSENTADORIA DA PESSOA COM DEFICIÊNCIA (CONCESSÃO) - ANÁLISE DE TEMPO RURAL',
+      description:
+        'Análise de períodos de atividade rural com IA para reconhecimento previdenciário na concessão de aposentadoria da pessoa com deficiência. Examina documentos comprobatórios, valida início de prova material, calcula tempo rural computável e orienta sobre reconhecimento administrativo ou judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e7b3d2c1-7a65-42be-9da1-4f6071c2b002'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_GRANT_MILITARY_SERVICE_ANALYSIS,
+      creditCost: 4,
+      title:
+        'APOSENTADORIA DA PESSOA COM DEFICIÊNCIA (CONCESSÃO) - ANÁLISE DE SERVIÇO MILITAR',
+      description:
+        'Análise de tempo de serviço militar obrigatório com IA para cômputo previdenciário na concessão de aposentadoria da pessoa com deficiência. Valida certificados e certidões, calcula o período computável, verifica sobreposição com outros vínculos e orienta sobre averbação.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e7b3d2c1-7a65-42be-9da1-4f6071c2b003'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_GRANT_PUBLIC_SERVICE_ANALYSIS,
+      creditCost: 5,
+      title:
+        'APOSENTADORIA DA PESSOA COM DEFICIÊNCIA (CONCESSÃO) - ANÁLISE DE SERVIÇO PÚBLICO',
+      description:
+        'Análise de tempo de serviço público com IA para averbação no RGPS na concessão de aposentadoria da pessoa com deficiência. Examina CTC, valida períodos computáveis, identifica riscos de contagem em duplicidade e orienta sobre averbação administrativa ou judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e7b3d2c1-7a65-42be-9da1-4f6071c2b004'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_GRANT_CTPS_OUTSIDE_CNIS_ANALYSIS,
+      creditCost: 4,
+      title:
+        'APOSENTADORIA DA PESSOA COM DEFICIÊNCIA (CONCESSÃO) - ANÁLISE DE CTPS FORA DO CNIS',
+      description:
+        'Análise de vínculos anotados na CTPS mas ausentes no CNIS usando IA para concessão de aposentadoria da pessoa com deficiência. Identifica períodos omissos, avalia a força probatória dos documentos e orienta sobre regularização no INSS.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e7b3d2c1-7a65-42be-9da1-4f6071c2b005'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_GRANT_STUDENT_APPRENTICE_ANALYSIS,
+      creditCost: 3,
+      title:
+        'APOSENTADORIA DA PESSOA COM DEFICIÊNCIA (CONCESSÃO) - ANÁLISE DE ESTUDANTE APRENDIZ',
+      description:
+        'Análise de tempo como estudante aprendiz com IA para reconhecimento previdenciário na concessão de aposentadoria da pessoa com deficiência. Valida documentos escolares, contraprestação e elementos probatórios necessários ao cômputo do período.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e7b3d2c1-7a65-42be-9da1-4f6071c2b006'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_GRANT_WORK_ABROAD_ANALYSIS,
+      creditCost: 5,
+      title:
+        'APOSENTADORIA DA PESSOA COM DEFICIÊNCIA (CONCESSÃO) - ANÁLISE DE TRABALHO NO EXTERIOR',
+      description:
+        'Análise de períodos de trabalho no exterior com IA para reconhecimento no RGPS na concessão de aposentadoria da pessoa com deficiência. Examina acordos internacionais, valida documentação estrangeira e orienta sobre totalização e formalidades documentais.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e7b3d2c1-7a65-42be-9da1-4f6071c2b007'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_GRANT_INFORMAL_WORK_ANALYSIS,
+      creditCost: 4,
+      title:
+        'APOSENTADORIA DA PESSOA COM DEFICIÊNCIA (CONCESSÃO) - ANÁLISE DE TRABALHO INFORMAL',
+      description:
+        'Análise de períodos de trabalho informal com IA para concessão de aposentadoria da pessoa com deficiência. Examina provas da atividade, recolhimentos existentes, necessidade de indenização e impacto do período no tempo de contribuição e na carência.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e7b3d2c1-7a65-42be-9da1-4f6071c2b008'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_GRANT_LABOR_COURT_DECISION_ANALYSIS,
+      creditCost: 6,
+      title:
+        'APOSENTADORIA DA PESSOA COM DEFICIÊNCIA (CONCESSÃO) - ANÁLISE DE DECISÃO TRABALHISTA',
+      description:
+        'Análise de sentenças e acordos trabalhistas com IA para reconhecimento previdenciário na concessão de aposentadoria da pessoa com deficiência. Examina robustez da decisão, períodos reconhecidos, remunerações e a melhor estratégia de aproveitamento perante o INSS.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e7b3d2c1-7a65-42be-9da1-4f6071c2b009'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_GRANT_PPP_ANALYSIS,
+      creditCost: 4,
+      title:
+        'APOSENTADORIA DA PESSOA COM DEFICIÊNCIA (CONCESSÃO) - ANÁLISE DE PPP',
+      description:
+        'Análise do Perfil Profissiográfico Previdenciário (PPP) com IA para identificação e estruturação de períodos contributivos na concessão de aposentadoria da pessoa com deficiência. Extrai e organiza os dados do PPP em períodos prontos para inserção na análise, com categoria, status de deficiência, média de contribuição e origem do vínculo.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4890-abcd-ef1234567890'),
       resource:
         PaymentPlanPaidResourceTypeEnum.SPECIAL_CATEGORY_RETIREMENT_COMPLETE_ANALYSIS,
