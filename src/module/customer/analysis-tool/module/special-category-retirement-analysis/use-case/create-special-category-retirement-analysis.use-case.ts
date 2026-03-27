@@ -1,6 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
+import { MarkdownConverterGateway } from '@lib/markdown-converter/markdown-converter.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
@@ -13,7 +15,9 @@ import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/sc
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { SpecialCategoryRetirementAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis/command/special-category-retirement-analysis.command.repository.gateway';
+import { SpecialCategoryRetirementAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-result/command/special-category-retirement-analysis-result.command.repository.gateway';
 import { SpecialCategoryRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/special-category-retirement-analysis.entity';
+import { SpecialCategoryRetirementAnalysisResultEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-result/special-category-retirement-analysis-result.entity';
 import { CreateSpecialCategoryRetirementAnalysisRequestDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/request/create-special-category-retirement-analysis.request.dto';
 import { CreateSpecialCategoryRetirementAnalysisResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/create-special-category-retirement-analysis.response.dto';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -35,6 +39,10 @@ export class CreateSpecialCategoryRetirementAnalysisUseCase {
     private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
     @Inject(SpecialCategoryRetirementAnalysisCommandRepositoryGateway)
     private readonly specialCategoryRetirementAnalysisCommandRepositoryGateway: SpecialCategoryRetirementAnalysisCommandRepositoryGateway,
+    @Inject(SpecialCategoryRetirementAnalysisResultCommandRepositoryGateway)
+    private readonly specialCategoryRetirementAnalysisResultCommandRepositoryGateway: SpecialCategoryRetirementAnalysisResultCommandRepositoryGateway,
+    @Inject(MarkdownConverterGateway)
+    private readonly markdownConverterGateway: MarkdownConverterGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
   ) {}
@@ -111,14 +119,37 @@ export class CreateSpecialCategoryRetirementAnalysisUseCase {
       specialCategoryRetirementAnalysis,
     });
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute([
+    const transactionItems: TransactionType[] = [
       this.specialCategoryRetirementAnalysisCommandRepositoryGateway.createSpecialCategoryRetirementAnalysis(
         specialCategoryRetirementAnalysis,
       ),
       this.analysisToolRecordCommandRepositoryGateway.createAnalysisToolRecord(
         analysisToolRecord,
       ),
-    ]);
+    ];
+
+    if (dto.administrativeProcedureAnalysis !== undefined) {
+      const htmlAnalysis = await this.markdownConverterGateway.convertToHtml(
+        dto.administrativeProcedureAnalysis,
+      );
+
+      const resultEntity = new SpecialCategoryRetirementAnalysisResultEntity({
+        specialCategoryRetirementAnalysisId:
+          specialCategoryRetirementAnalysis.id,
+        administrativeProcedureAnalysis: htmlAnalysis,
+        simplifiedAnalysisSummaryText: null,
+        fullAnalysisConclusionText: null,
+      });
+
+      transactionItems.push(
+        this.specialCategoryRetirementAnalysisResultCommandRepositoryGateway.createSpecialCategoryRetirementAnalysisResult(
+          resultEntity,
+        ),
+      );
+    }
+
+    const transaction =
+      await this.baseTransactionRepositoryGateway.execute(transactionItems);
 
     await transaction.commit();
 

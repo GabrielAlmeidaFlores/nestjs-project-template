@@ -29,6 +29,9 @@ export class CreateSpecialCategoryRetirementAnalysisRequestDto extends BaseBuild
   @RequestDtoBooleanProperty({ required: false })
   public hasConfirmedExposureToHarmfulAgents?: boolean;
 
+  @RequestDtoStringProperty({ required: false })
+  public administrativeProcedureAnalysis?: string;
+
   protected override readonly _type =
     CreateSpecialCategoryRetirementAnalysisRequestDto.name;
 }

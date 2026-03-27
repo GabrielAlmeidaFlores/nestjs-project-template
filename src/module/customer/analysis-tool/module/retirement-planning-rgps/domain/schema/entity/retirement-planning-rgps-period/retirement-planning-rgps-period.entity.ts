@@ -3,6 +3,7 @@ import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.v
 import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import { ReasonPendencyEnum } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps-period/enum/reason-pendency.enum';
 import { RetirementPlanningRgpsPeriodEntityPropsInterface } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps-period/retirement-planning-rgps-period.entity.props.interface';
+import { ValidContributionTimeEntity } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps-period/valid-contribution-time/valid-contribution-time.entity';
 import { RetirementPlanningRgpsPeriodId } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps-period/value-object/retirement-planning-rgps-period-id.value-object';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
@@ -46,6 +47,9 @@ export class RetirementPlanningRgpsPeriodEntity extends BaseEntity<RetirementPla
   @Description('Razão da pendência no período de contribuição RGPS.')
   public readonly reasonPendency: ReasonPendencyEnum | null;
 
+  @Description('Tempo de contribuição válido no período de contribuição RGPS.')
+  public readonly validContributionTime: ValidContributionTimeEntity | null;
+
   protected readonly _type = RetirementPlanningRgpsPeriodEntity.name;
 
   public constructor(props: RetirementPlanningRgpsPeriodEntityPropsInterface) {
@@ -62,5 +66,6 @@ export class RetirementPlanningRgpsPeriodEntity extends BaseEntity<RetirementPla
     this.retirementPlanningRgps = props.retirementPlanningRgps ?? null;
     this.status = props.status ?? null;
     this.reasonPendency = props.reasonPendency ?? null;
+    this.validContributionTime = props.validContributionTime ?? null;
   }
 }
