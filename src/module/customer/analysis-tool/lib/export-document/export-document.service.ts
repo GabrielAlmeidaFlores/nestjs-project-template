@@ -2,6 +2,7 @@ import { Injectable, StreamableFile } from '@nestjs/common';
 import HtmlToDocx from '@turbodocx/html-to-docx';
 import moment from 'moment';
 import * as Puppeteer from 'puppeteer';
+import rehypeRaw from 'rehype-raw';
 import rehypeStringify from 'rehype-stringify';
 import remarkGfm from 'remark-gfm';
 import remarkParse from 'remark-parse';
@@ -13,9 +14,6 @@ import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/exp
 import { UnexpectedHtmlToDocxReturnTypeError } from '@module/customer/analysis-tool/lib/export-document/error/unexpected-html-to-docx-return-type.error';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 
-/**
- * Escapa conteúdo de célula para Markdown (pipes e quebras de linha).
- */
 function escapeTableCell(text: string): string {
   return text
     .trim()
@@ -24,9 +22,6 @@ function escapeTableCell(text: string): string {
     .replace(/\s+/g, ' ');
 }
 
-/**
- * Converte qualquer <table> em tabela GFM (ida e volta).
- */
 function addTableRule(service: TurndownService): void {
   service.addRule('cnisTable', {
     filter: (node) => node.nodeName === 'TABLE',
@@ -93,7 +88,8 @@ export class ExportDocumentService implements ExportDocumentGateway {
     const file = await unified()
       .use(remarkParse)
       .use(remarkGfm)
-      .use(remarkRehype)
+      .use(remarkRehype, { allowDangerousHtml: true })
+      .use(rehypeRaw)
       .use(rehypeStringify)
       .process(markdown);
 

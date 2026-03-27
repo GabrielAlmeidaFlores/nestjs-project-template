@@ -88,6 +88,8 @@ export class ListAnalysisToolRecordUseCase {
             analysisToolRecord.retirementPlanningRpps ??
             analysisToolRecord.retirementPlanningRgps ??
             analysisToolRecord.teacherRetirementPlanning ??
+            analysisToolRecord.generalUrbanRetirementGrant ??
+            analysisToolRecord.generalUrbanRetirementAnalysis ??
             analysisToolRecord.judicialCaseAnalysis ??
             analysisToolRecord.administrativeProcedureInssAnalysis ??
             analysisToolRecord.medicalAndSocialReportObjectionGeneratorAnalysis ??
@@ -98,6 +100,7 @@ export class ListAnalysisToolRecordUseCase {
             analysisToolRecord.medicalQuestionGenerator ??
             analysisToolRecord.perCapitaIncomeForBpcAnalysis ??
             analysisToolRecord.insuranceQualityAnalysis ??
+            analysisToolRecord.disabilityRetirementPlanning ??
             analysisToolRecord.audienceQuestionGenerator;
 
           if (analysis === null) {

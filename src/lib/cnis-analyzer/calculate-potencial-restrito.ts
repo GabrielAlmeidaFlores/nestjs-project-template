@@ -1,3 +1,5 @@
+import { TetoInssData } from '@lib/cnis-analyzer/data/teto.inss';
+
 import type { CnisModel } from '@lib/cnis-processor/model/generic/cnis.model';
 
 const REFORMA_YEAR = 2019;
@@ -22,6 +24,7 @@ interface CompetenciaItemInterface {
  */
 interface BondInterface {
   id: string;
+  seq: number;
   tipoRegistro: 'beneficio' | 'vinculo';
   tipo: string;
   dataInicio: Date | null;
@@ -379,12 +382,13 @@ function getLastDate(items: CompetenciaItemInterface[]): Date | null {
 }
 
 /**
- * Valida uma competência e determina se é válida para tempo e carência
+ * Valida uma competência e determina se é válida para tempo e carência.
  */
 function validateCompetencia(
   earning: {
     competencia?: Date | string;
     indicadores?: string;
+    remuneracao?: string;
   },
   indicadoresHeader: string | null,
 ): {
@@ -440,10 +444,25 @@ function validateCompetencia(
     return invalidatingIndicators.some((block) => indUpper.includes(block));
   });
 
-  // Verifica abaixo do mínimo
-  const temAbaixoMinimo = allIndicators.some(
+  // Abaixo do mínimo: por indicadores CNIS
+  const temAbaixoMinimoIndicador = allIndicators.some(
     (ind) => ind.includes('PREC-MENOR') || ind.includes('PSC-MEN-SM'),
   );
+
+  // Abaixo do mínimo: por valor (Art. 209 – remuneração < salário mínimo do ano)
+  const rawRemuneracao = earning.remuneracao ?? '';
+  const remuneracaoNum = Number(
+    rawRemuneracao.replace(/\./g, '').replace(',', '.'),
+  );
+  const tetoAno = TetoInssData.find((t) => t.ano === ano);
+  const salarioMinimo = tetoAno?.salarioMinimo;
+  const temAbaixoMinimoValor =
+    typeof salarioMinimo === 'number' &&
+    !Number.isNaN(remuneracaoNum) &&
+    remuneracaoNum > 0 &&
+    remuneracaoNum < salarioMinimo;
+
+  const temAbaixoMinimo = temAbaixoMinimoIndicador || temAbaixoMinimoValor;
 
   // Validação básica: inválida se tem bloqueador ou abaixo do mínimo
   const validaParaTempo = blockingIndicator === undefined && !temAbaixoMinimo;
@@ -592,8 +611,10 @@ function groupResultsByBond(data: CnisModel): BondInterface[] {
       dFim = null;
     }
 
+    const seq = relation.socialSecurityAffiliationInfo.seq ?? index;
     bonds.push({
       id: `bond-${index}-${Date.now()}`,
+      seq,
       tipoRegistro,
       tipo: tipoVinculo,
       dataInicio: dInicio,

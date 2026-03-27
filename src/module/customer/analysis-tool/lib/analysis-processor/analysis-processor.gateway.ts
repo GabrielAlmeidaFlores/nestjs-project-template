@@ -153,12 +153,53 @@ export abstract class AnalysisProcessorGateway {
     files: Buffer[],
   ): Promise<string | null>;
 
+  public abstract getDisabilityRetirementPlanningCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+    asJson?: boolean,
+  ): Promise<string | null>;
+
+  public abstract getDisabilityRetirementPlanningSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getDisabilityRetirementPlanningAdministrativeProcessAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getGeneralUrbanRetirementCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getGeneralUrbanRetirementSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getGeneralUrbanRetirementAdministrativeRequestDeniedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getGeneralUrbanRetirementBenefitAwardLetterAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
   public abstract getSpecialCategoryRetirementConversionAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null>;
 
   public abstract getSpecialCategoryRetirementRulesAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getSpecialCategoryRetirementAdministrativeProcedureAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null>;

@@ -89,6 +89,8 @@ export class GenerateSpecialCategoryRetirementAnalysisFullTextUseCase {
         simplifiedAnalysisSummaryText:
           existingResult.simplifiedAnalysisSummaryText,
         fullAnalysisConclusionText: null,
+        administrativeProcedureAnalysis:
+          existingResult.administrativeProcedureAnalysis,
         createdAt: existingResult.createdAt,
         updatedAt: new Date(),
       });
@@ -148,6 +150,8 @@ export class GenerateSpecialCategoryRetirementAnalysisFullTextUseCase {
         simplifiedAnalysisSummaryText:
           resultEntity.simplifiedAnalysisSummaryText,
         fullAnalysisConclusionText: analysisText,
+        administrativeProcedureAnalysis:
+          resultEntity.administrativeProcedureAnalysis,
         createdAt: resultEntity.createdAt,
         updatedAt: new Date(),
       });

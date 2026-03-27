@@ -113,6 +113,8 @@ export class GenerateSpecialCategoryRetirementAnalysisConversionUseCase {
       simplifiedAnalysisSummaryText:
         existingResult.simplifiedAnalysisSummaryText,
       fullAnalysisConclusionText: existingResult.fullAnalysisConclusionText,
+      administrativeProcedureAnalysis:
+        existingResult.administrativeProcedureAnalysis,
       createdAt: existingResult.createdAt,
       updatedAt: new Date(),
     });
