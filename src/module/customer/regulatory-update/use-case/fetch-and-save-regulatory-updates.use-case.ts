@@ -112,8 +112,9 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
                   },
                   fullText: {
                     type: 'string',
+                    minLength: 400,
                     description:
-                      'Texto integral ou transcição relevante da norma',
+                      'Texto integral ou transcrição relevante da norma. OBRIGATÓRIO ter no mínimo 400 caracteres. Inclua o conteúdo completo da norma, artigos, parágrafos e disposições relevantes.',
                   },
                   sourceUrl: {
                     type: 'string',
@@ -212,7 +213,9 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
 Atualizações já registradas no sistema (NÃO repetir estas):
 ${existingJson}
 
-Retorne APENAS novas atualizações não listadas acima. Se não houver novas atualizações no período, retorne um array vazio.`;
+Retorne APENAS novas atualizações não listadas acima. Se não houver novas atualizações no período, retorne um array vazio.
+
+IMPORTANTE: O campo "fullText" deve conter o texto integral ou transcrição detalhada da norma, com no mínimo 400 caracteres. Inclua artigos, parágrafos e disposições relevantes da norma.`;
   }
 
   private parseAiResponse(response: string): AiRegulatoryUpdateItemInterface[] {
