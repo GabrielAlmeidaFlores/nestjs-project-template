@@ -4,9 +4,11 @@ import { ListRegulatoryUpdatesQueryParam } from '@module/customer/regulatory-upd
 import { RegulatoryUpdateId } from '@module/customer/regulatory-update/domain/schema/entity/regulatory-update/value-object/regulatory-update-id/regulatory-update-id.value-object';
 import { ListRegulatoryUpdatesRequestDto } from '@module/customer/regulatory-update/dto/request/list-regulatory-updates.request.dto';
 import { UpdateRegulatoryUpdateEmailPreferenceRequestDto } from '@module/customer/regulatory-update/dto/request/update-regulatory-update-email-preference.request.dto';
+import { GetRegulatoryUpdateEmailPreferenceResponseDto } from '@module/customer/regulatory-update/dto/response/get-regulatory-update-email-preference.response.dto';
 import { GetRegulatoryUpdateResponseDto } from '@module/customer/regulatory-update/dto/response/get-regulatory-update.response.dto';
 import { ListRegulatoryUpdatesResponseDto } from '@module/customer/regulatory-update/dto/response/list-regulatory-updates.response.dto';
 import { UpdateRegulatoryUpdateEmailPreferenceResponseDto } from '@module/customer/regulatory-update/dto/response/update-regulatory-update-email-preference.response.dto';
+import { GetRegulatoryUpdateEmailPreferenceUseCase } from '@module/customer/regulatory-update/use-case/get-regulatory-update-email-preference.use-case';
 import { GetRegulatoryUpdateUseCase } from '@module/customer/regulatory-update/use-case/get-regulatory-update.use-case';
 import { ListRegulatoryUpdatesUseCase } from '@module/customer/regulatory-update/use-case/list-regulatory-updates.use-case';
 import { UpdateRegulatoryUpdateEmailPreferenceUseCase } from '@module/customer/regulatory-update/use-case/update-regulatory-update-email-preference.use-case';
@@ -21,13 +23,14 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
-@CustomerControllerRoute('regulatory-updates')
+@CustomerControllerRoute('regulatory-update')
 export class RegulatoryUpdateController {
   protected readonly _type = RegulatoryUpdateController.name;
 
   public constructor(
     private readonly listRegulatoryUpdatesUseCase: ListRegulatoryUpdatesUseCase,
     private readonly getRegulatoryUpdateUseCase: GetRegulatoryUpdateUseCase,
+    private readonly getRegulatoryUpdateEmailPreferenceUseCase: GetRegulatoryUpdateEmailPreferenceUseCase,
     private readonly updateRegulatoryUpdateEmailPreferenceUseCase: UpdateRegulatoryUpdateEmailPreferenceUseCase,
   ) {}
 
@@ -82,6 +85,27 @@ export class RegulatoryUpdateController {
       organizationSessionData,
       regulatoryUpdateId,
     );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Obter preferência de e-mail de atualizações normativas',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'email-preference',
+      method: RequestMethod.GET,
+    },
+    tag: ['atualizacoes-normativas'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Preferência de e-mail retornada com sucesso.',
+      type: GetRegulatoryUpdateEmailPreferenceResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async getEmailPreference(
+    @GetSessionData() sessionData: SessionDataModel,
+  ): Promise<GetRegulatoryUpdateEmailPreferenceResponseDto> {
+    return this.getRegulatoryUpdateEmailPreferenceUseCase.execute(sessionData);
   }
 
   @BuildEndpointSpecification({
