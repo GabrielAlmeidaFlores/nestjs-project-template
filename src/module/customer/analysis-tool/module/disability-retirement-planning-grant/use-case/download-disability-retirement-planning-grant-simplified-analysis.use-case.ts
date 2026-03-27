@@ -119,8 +119,7 @@ export class DownloadDisabilityRetirementPlanningGrantSimplifiedAnalysisUseCase 
       const updatedResultEntity =
         new DisabilityRetirementPlanningGrantResultEntity({
           ...disabilityRetirementPlanningGrantResult,
-          disabilityRetirementPlanningGrantSimplifiedAnalysis:
-            simplifiedAnalysis,
+          disabilityRetirementPlanningGrantSimplifiedAnalysis: simplifiedAnalysis,
         });
 
       const updateResultTransaction =
