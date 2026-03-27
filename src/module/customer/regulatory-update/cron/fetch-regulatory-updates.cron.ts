@@ -20,8 +20,12 @@ export class FetchRegulatoryUpdatesCron {
 
   @Cron(CronExpression.EVERY_WEEK)
   public async execute(): Promise<void> {
+    let newUpdates: Awaited<
+      ReturnType<typeof this.fetchAndSaveRegulatoryUpdatesUseCase.execute>
+    > = [];
+
     try {
-      await this.fetchAndSaveRegulatoryUpdatesUseCase.execute();
+      newUpdates = await this.fetchAndSaveRegulatoryUpdatesUseCase.execute();
     } catch (error) {
       if (error instanceof Error) {
         this.logger.error(
@@ -32,7 +36,7 @@ export class FetchRegulatoryUpdatesCron {
     }
 
     try {
-      await this.sendRegulatoryUpdateEmailsUseCase.execute();
+      await this.sendRegulatoryUpdateEmailsUseCase.execute(newUpdates);
     } catch (error) {
       if (error instanceof Error) {
         this.logger.error(

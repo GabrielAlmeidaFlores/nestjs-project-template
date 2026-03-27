@@ -48,14 +48,14 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
     this.logger = new Logger(FetchAndSaveRegulatoryUpdatesUseCase.name);
   }
 
-  public async execute(): Promise<void> {
+  public async execute(): Promise<RegulatoryUpdateEntity[]> {
     const systemInstruction = await this.fetchSystemInstruction();
 
     if (systemInstruction === null) {
       this.logger.warn(
         'Nenhuma instrução de sistema encontrada para REGULATORY_UPDATES. Abortando.',
       );
-      return;
+      return [];
     }
 
     const activeSources =
@@ -65,7 +65,7 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
       this.logger.warn(
         'Nenhuma fonte monitorada ativa encontrada. Abortando busca de atualizações normativas.',
       );
-      return;
+      return [];
     }
 
     const existingTitlesAndDates =
@@ -83,6 +83,58 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
           prompt,
           responseConfig: ResponseConfigInputModel.build({
             responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+            jsonSchema: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  title: {
+                    type: 'string',
+                    description: 'Título da norma ou atualização normativa',
+                  },
+                  summary: {
+                    type: 'string',
+                    description: 'Resumo objetivo da atualização normativa',
+                  },
+                  mainChanges: {
+                    type: 'array',
+                    items: { type: 'string' },
+                    description: 'Lista das principais alterações introduzidas',
+                  },
+                  implementationStatus: {
+                    type: 'string',
+                    description:
+                      'Status de implementação da norma (ex: em vigor, aguardando regulamentação)',
+                  },
+                  beneficiaryImpact: {
+                    type: 'string',
+                    description: 'Impacto para os beneficiários do RGPS/RPPS',
+                  },
+                  fullText: {
+                    type: 'string',
+                    description:
+                      'Texto integral ou transcição relevante da norma',
+                  },
+                  sourceUrl: {
+                    type: 'string',
+                    description: 'URL da fonte original da norma (ou null)',
+                  },
+                  publishedAt: {
+                    type: 'string',
+                    description:
+                      'Data de publicação no formato YYYY-MM-DD (ou null se desconhecida)',
+                  },
+                },
+                required: [
+                  'title',
+                  'summary',
+                  'mainChanges',
+                  'implementationStatus',
+                  'beneficiaryImpact',
+                  'fullText',
+                ],
+              },
+            },
           }),
         }),
       );
@@ -91,21 +143,23 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
       this.logger.warn(
         'IA não retornou resposta para atualizações normativas.',
       );
-      return;
+      return [];
     }
 
     const newUpdates = this.parseAiResponse(aiResponse);
 
     if (newUpdates.length === 0) {
       this.logger.log('Nenhuma nova atualização normativa encontrada.');
-      return;
+      return [];
     }
 
-    await this.saveNewUpdates(newUpdates);
+    const savedEntities = await this.saveNewUpdates(newUpdates);
 
     this.logger.log(
-      `${newUpdates.length} nova(s) atualização(ões) normativa(s) salva(s).`,
+      `${savedEntities.length} nova(s) atualização(ões) normativa(s) salva(s).`,
     );
+
+    return savedEntities;
   }
 
   private async fetchSystemInstruction(): Promise<string | null> {
@@ -131,14 +185,15 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
     monitoredSources: Array<{ name: string; url: string }>,
   ): string {
     const now = new Date();
-    const oneMonthAgo = new Date(now);
-    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+    const monthsAgo = new Date(now);
+    const numberOfMonths = 6;
+    monthsAgo.setMonth(monthsAgo.getMonth() - numberOfMonths);
 
     const formatDate = (date: Date): string =>
       date.toISOString().split('T')[0] ?? '';
 
     const currentDate = formatDate(now);
-    const startDate = formatDate(oneMonthAgo);
+    const startDate = formatDate(monthsAgo);
 
     const existingJson = JSON.stringify(
       existingTitlesAndDates.map((item) => ({
@@ -183,7 +238,7 @@ Retorne APENAS novas atualizações não listadas acima. Se não houver novas at
 
   private async saveNewUpdates(
     updates: AiRegulatoryUpdateItemInterface[],
-  ): Promise<void> {
+  ): Promise<RegulatoryUpdateEntity[]> {
     const entities = updates.map(
       (update) =>
         new RegulatoryUpdateEntity({
@@ -208,5 +263,7 @@ Retorne APENAS novas atualizações não listadas acima. Se não houver novas at
     );
 
     await transaction.commit();
+
+    return entities;
   }
 }
