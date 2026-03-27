@@ -204,6 +204,9 @@ import { GetPerCapitaIncomeForBpcAnalysisLegalProceedingQueryResultAutoMapperPro
 import { PerCapitaIncomeForBpcAnalysisLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/per-capita-income-for-bpc-analysis-legal-proceeding/per-capita-income-for-bpc-analysis-legal-proceeding-entity.auto-mapper.profile';
 import { GetPerCapitaIncomeForBpcAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/per-capita-income-for-bpc-analysis-result/get-per-capita-income-for-bpc-analysis-result-query-result.auto-mapper.profile';
 import { PerCapitaIncomeForBpcAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/per-capita-income-for-bpc-analysis-result/per-capita-income-for-bpc-analysis-result-entity.auto-mapper.profile';
+import { RegulatoryUpdateEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/regulatory-update/regulatory-update-entity.auto-mapper.profile';
+import { RegulatoryUpdateEmailPreferenceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/regulatory-update-email-preference/regulatory-update-email-preference-entity.auto-mapper.profile';
+import { RegulatoryUpdateMonitoredSourceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/regulatory-update-monitored-source/regulatory-update-monitored-source-entity.auto-mapper.profile';
 import { GetRetirementPlanningRgpsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps/get-retirement-planning-rgps-query-result.auto-mapper.profile';
 import { GetRetirementPlanningRgpsWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps/get-retirement-planning-rgps-with-relations-query-result.auto-mapper.profile';
 import { RetirementPlanningRgpsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps/retirement-planning-rgps-entity.auto-mapper.profile';
@@ -598,6 +601,9 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetOrganizationCustomizationDocumentHeaderTemplateQueryResultAutoMapperProfile,
     OrganizationCustomizationDocumentFooterTemplateEntityAutoMapperProfile,
     GetOrganizationCustomizationDocumentFooterTemplateQueryResultAutoMapperProfile,
+    RegulatoryUpdateEntityAutoMapperProfile,
+    RegulatoryUpdateEmailPreferenceEntityAutoMapperProfile,
+    RegulatoryUpdateMonitoredSourceEntityAutoMapperProfile,
   ],
   exports: [AutoMapperService],
 })
