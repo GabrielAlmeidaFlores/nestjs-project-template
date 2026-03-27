@@ -32,7 +32,7 @@ export class ListRegulatoryUpdatesUseCase {
     const result =
       await this.regulatoryUpdateQueryRepository.listRegulatoryUpdates(param);
 
-    const items = result.resource.map((item) =>
+    const resource = result.resource.map((item) =>
       RegulatoryUpdateItemResponseDto.build({
         regulatoryUpdateId: item.id,
         title: item.title,
@@ -43,11 +43,12 @@ export class ListRegulatoryUpdatesUseCase {
     );
 
     return ListRegulatoryUpdatesResponseDto.build({
-      items,
+      resource,
       page: result.page,
       limit: result.limit,
       totalItems: result.totalItems,
       totalPages: result.totalPages,
+      amountItemsCurrentPage: result.amountItemsCurrentPage,
     });
   }
 

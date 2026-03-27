@@ -27,6 +27,26 @@ export class OrganizationTypeormQueryRepository
     super(repository);
   }
 
+  public async listAllOrganizationsByCustomerId(
+    customerId: CustomerId,
+  ): Promise<Array<GetOrganizationQueryResult>> {
+    const data = await this.find({
+      where: {
+        organizationMember: {
+          customer: {
+            id: customerId.toString(),
+          },
+        },
+      },
+    });
+
+    return this.mapperGateway.mapArray(
+      data,
+      OrganizationTypeormEntity,
+      GetOrganizationQueryResult,
+    );
+  }
+
   public async listOrganizationsByCustomerId(
     customerId: CustomerId,
     listData: ListDataInputModel,

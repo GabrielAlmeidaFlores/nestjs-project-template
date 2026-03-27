@@ -2468,6 +2468,24 @@ yarn migration:revert     # Revert last migration
 - Be specific and actionable
 - Example: `'Análise não encontrada'` instead of `'Not found'`
 
+### Logging
+
+- ✅ ALL log messages (`this.logger.log`, `.warn`, `.error`, `.debug`, `.verbose`) MUST be in **English**
+- ✅ Error messages thrown to the user are in Portuguese; log messages written to the server console are in English
+- ❌ NO Portuguese in logger calls
+
+**Example**:
+
+```typescript
+// ❌ WRONG - Portuguese in logger
+this.logger.log('Nenhuma atualização encontrada.');
+this.logger.error('Falha ao enviar e-mail.');
+
+// ✅ CORRECT - English in logger
+this.logger.log('No updates found.');
+this.logger.error('Failed to send email.');
+```
+
 ### Comments
 
 - ❌ **NO comments in code** - Code should be self-documenting through clear naming and structure

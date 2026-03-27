@@ -53,7 +53,7 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
 
     if (systemInstruction === null) {
       this.logger.warn(
-        'Nenhuma instrução de sistema encontrada para REGULATORY_UPDATES. Abortando.',
+        'No system instruction found for REGULATORY_UPDATES. Aborting.',
       );
       return [];
     }
@@ -63,7 +63,7 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
 
     if (activeSources.length === 0) {
       this.logger.warn(
-        'Nenhuma fonte monitorada ativa encontrada. Abortando busca de atualizações normativas.',
+        'No active monitored source found. Aborting regulatory updates fetch.',
       );
       return [];
     }
@@ -141,7 +141,7 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
 
     if (aiResponse === null) {
       this.logger.warn(
-        'IA não retornou resposta para atualizações normativas.',
+        'AI returned no response for regulatory updates.',
       );
       return [];
     }
@@ -149,14 +149,14 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
     const newUpdates = this.parseAiResponse(aiResponse);
 
     if (newUpdates.length === 0) {
-      this.logger.log('Nenhuma nova atualização normativa encontrada.');
+      this.logger.log('No new regulatory updates found.');
       return [];
     }
 
     const savedEntities = await this.saveNewUpdates(newUpdates);
 
     this.logger.log(
-      `${savedEntities.length} nova(s) atualização(ões) normativa(s) salva(s).`,
+      `${savedEntities.length} new regulatory update(s) saved.`,
     );
 
     return savedEntities;
@@ -231,7 +231,7 @@ Retorne APENAS novas atualizações não listadas acima. Se não houver novas at
           typeof (item as AiRegulatoryUpdateItemInterface).summary === 'string',
       );
     } catch {
-      this.logger.error('Falha ao parsear resposta da IA para JSON.');
+      this.logger.error('Failed to parse AI response as JSON.');
       return [];
     }
   }

@@ -2,6 +2,10 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 
 import { EmailGateway } from '@infra/email/email.gateway';
 import { SendHTMLEmailInputModel } from '@infra/email/model/input/send-html-email.input.model';
+import { OrganizationQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization/query/organization.query.repository.gateway';
+import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
+import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
+import { ValidateOrganizationPaymentPlanStatusUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/validate-organization-payment-plan-status.use-case-gateway';
 import { RegulatoryUpdateEmailPreferenceQueryRepositoryGateway } from '@module/customer/regulatory-update/domain/repository/regulatory-update-email-preference/query/regulatory-update-email-preference.query.repository.gateway';
 import { RegulatoryUpdateEntity } from '@module/customer/regulatory-update/domain/schema/entity/regulatory-update/regulatory-update.entity';
 
@@ -13,6 +17,10 @@ export class SendRegulatoryUpdateEmailsUseCase {
   public constructor(
     @Inject(RegulatoryUpdateEmailPreferenceQueryRepositoryGateway)
     private readonly emailPreferenceQueryRepository: RegulatoryUpdateEmailPreferenceQueryRepositoryGateway,
+    @Inject(OrganizationQueryRepositoryGateway)
+    private readonly organizationQueryRepository: OrganizationQueryRepositoryGateway,
+    @Inject(ValidateOrganizationPaymentPlanStatusUseCaseGateway)
+    private readonly validateOrganizationPaymentPlanStatusUseCase: ValidateOrganizationPaymentPlanStatusUseCaseGateway,
     @Inject(EmailGateway)
     private readonly emailGateway: EmailGateway,
   ) {
@@ -34,12 +42,53 @@ export class SendRegulatoryUpdateEmailsUseCase {
     const updatesSummary = newUpdates.map((u) => `<li>${u.title}</li>`).join('');
 
     for (const preference of preferences) {
+      const hasAccess = await this.customerHasRegulatoryUpdatesAccess(
+        preference.customerId,
+      );
+
+      if (!hasAccess) {
+        continue;
+      }
+
       await this.sendEmailToCustomer(preference.customerEmail, updatesSummary);
     }
 
     this.logger.log(
-      `E-mails de atualizações normativas enviados para ${preferences.length} cliente(s).`,
+      `Regulatory update emails sent to ${preferences.length} eligible customer(s).`,
     );
+  }
+
+  private async customerHasRegulatoryUpdatesAccess(
+    customerId: CustomerId,
+  ): Promise<boolean> {
+    try {
+      const organizations =
+        await this.organizationQueryRepository.listAllOrganizationsByCustomerId(
+          customerId,
+        );
+
+      for (const organization of organizations) {
+        const planStatus =
+          await this.validateOrganizationPaymentPlanStatusUseCase.execute(
+            organization.id,
+          );
+
+        const isActive = planStatus.isActive;
+        const hasFeature = planStatus.enabledPaidResources.some(
+          (resource) =>
+            resource.resource ===
+            PaymentPlanPaidResourceTypeEnum.REGULATORY_UPDATES,
+        );
+
+        if (isActive && hasFeature) {
+          return true;
+        }
+      }
+
+      return false;
+    } catch {
+      return false;
+    }
   }
 
   private async sendEmailToCustomer(
@@ -59,7 +108,7 @@ export class SendRegulatoryUpdateEmailsUseCase {
       );
     } catch (error) {
       this.logger.error(
-        `Falha ao enviar e-mail de atualização normativa para ${email}`,
+        `Failed to send regulatory update email to ${email}`,
         error,
       );
     }
