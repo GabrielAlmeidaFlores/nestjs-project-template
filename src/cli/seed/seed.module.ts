@@ -10,6 +10,7 @@ import { OrganizationCustomizationDocumentHeaderTemplateSeeder } from '@cli/seed
 import { PaymentPlanPaidResourceIaConfigSeeder } from '@cli/seed/seeder/payment-plan-paid-resource-ia-config.seeder';
 import { PaymentPlanPaidResourceSeeder } from '@cli/seed/seeder/payment-plan-paid-resource.seeder';
 import { PaymentPlanSeeder } from '@cli/seed/seeder/payment-plan.seeder';
+import { RegulatoryUpdateMonitoredSourceSeeder } from '@cli/seed/seeder/regulatory-update-monitored-source.seeder';
 import { DatabaseModule } from '@infra/database/database.module';
 
 @Module({
@@ -25,6 +26,7 @@ import { DatabaseModule } from '@infra/database/database.module';
     PaymentPlanSeeder,
     OrganizationCustomizationDocumentHeaderTemplateSeeder,
     OrganizationCustomizationDocumentFooterTemplateSeeder,
+    RegulatoryUpdateMonitoredSourceSeeder,
     Logger,
   ],
 })
