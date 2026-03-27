@@ -10,6 +10,7 @@ import { RegulatoryUpdateController } from '@module/customer/regulatory-update/r
 import { CreateRegulatoryUpdateMonitoredSourceUseCase } from '@module/customer/regulatory-update/use-case/create-regulatory-update-monitored-source.use-case';
 import { DeleteRegulatoryUpdateMonitoredSourceUseCase } from '@module/customer/regulatory-update/use-case/delete-regulatory-update-monitored-source.use-case';
 import { FetchAndSaveRegulatoryUpdatesUseCase } from '@module/customer/regulatory-update/use-case/fetch-and-save-regulatory-updates.use-case';
+import { GetRegulatoryUpdateEmailPreferenceUseCase } from '@module/customer/regulatory-update/use-case/get-regulatory-update-email-preference.use-case';
 import { GetRegulatoryUpdateUseCase } from '@module/customer/regulatory-update/use-case/get-regulatory-update.use-case';
 import { ListRegulatoryUpdateMonitoredSourcesUseCase } from '@module/customer/regulatory-update/use-case/list-regulatory-update-monitored-sources.use-case';
 import { ListRegulatoryUpdatesUseCase } from '@module/customer/regulatory-update/use-case/list-regulatory-updates.use-case';
@@ -36,6 +37,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     FetchRegulatoryUpdatesCron,
     FetchAndSaveRegulatoryUpdatesUseCase,
     GetRegulatoryUpdateUseCase,
+    GetRegulatoryUpdateEmailPreferenceUseCase,
     ListRegulatoryUpdatesUseCase,
     SendRegulatoryUpdateEmailsUseCase,
     UpdateRegulatoryUpdateEmailPreferenceUseCase,
