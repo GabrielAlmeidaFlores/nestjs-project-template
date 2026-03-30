@@ -13,6 +13,7 @@ import { unified } from 'unified';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { UnexpectedHtmlToDocxReturnTypeError } from '@module/customer/analysis-tool/lib/export-document/error/unexpected-html-to-docx-return-type.error';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
+import { OrganizationCustomizationDocumentFooterTemplateTypeEnum } from '@module/customer/organization-customization/domain/schema/entity/organization-customization-document-footer-template/enum/organization-customization-document-footer-template-type.enum';
 import { OrganizationCustomizationDocumentHeaderTemplateTypeEnum } from '@module/customer/organization-customization/domain/schema/entity/organization-customization-document-header-template/enum/organization-customization-document-header-template-type.enum';
 
 import type { ExportDocumentDownloadOptionsInterface } from '@module/customer/analysis-tool/lib/export-document/export-document-download-options.interface';
@@ -38,6 +39,9 @@ const PDF_MARGIN_HEADER_FALLBACK_MM = 60;
 const PDF_MARGIN_BODY_TOP_MM = 10;
 
 const PDF_MARGIN_FOOTER_FALLBACK_MM = 20;
+const PDF_MARGIN_FOOTER_MIN_MM = 10;
+const PDF_MARGIN_FOOTER_MAX_MM = 40;
+const PDF_MARGIN_FOOTER_EXTRA_MM = 2;
 
 function pxToMm(px: number): number {
   return (px * MM_PER_INCH) / CSS_PX_PER_INCH;
@@ -397,6 +401,21 @@ export class ExportDocumentService implements ExportDocumentGateway {
     return false;
   }
 
+  /**
+   * No PDF, alguns templates precisam virar imagem para preservar estilos/cores.
+   * Para o footer, o comportamento desejado é:
+   * - `CLASSIC`: rasterizar para PNG
+   * - `MODERN`: manter o HTML padrão
+   */
+  private _pdfFooterShouldUseRasterImage(
+    options?: ExportDocumentDownloadOptionsInterface,
+  ): boolean {
+    return (
+      options?.footerTemplateType ===
+      OrganizationCustomizationDocumentFooterTemplateTypeEnum.CLASSIC
+    );
+  }
+
   private _wrapPdfMarginBoxAsImage(dataUrl: string): string {
     return `
       <div style="width:100%;margin:0;padding:0;font-size:0;line-height:0;">
@@ -427,14 +446,14 @@ export class ExportDocumentService implements ExportDocumentGateway {
       const pdfRasterHeader =
         hasHeader && this._pdfHeaderShouldUseRasterImage(options);
 
-      const { header: headerImage } = await this._captureHeaderFooterImages(
-        browser,
-        options,
-        {
+      const pdfRasterFooter =
+        hasFooter && this._pdfFooterShouldUseRasterImage(options);
+
+      const { header: headerImage, footer: footerImage } =
+        await this._captureHeaderFooterImages(browser, options, {
           captureHeader: pdfRasterHeader,
-          captureFooter: false,
-        },
-      );
+          captureFooter: pdfRasterFooter,
+        });
 
       const page = await browser.newPage();
       await page.setContent(fullHtml);
@@ -449,7 +468,9 @@ export class ExportDocumentService implements ExportDocumentGateway {
 
       const footerTemplate = !hasFooter
         ? this._wrapPdfHeaderFooterFragment('')
-        : this._wrapPdfHeaderFooterFragment(footerHtml);
+        : footerImage
+          ? this._wrapPdfMarginBoxAsImage(footerImage.dataUrl)
+          : this._wrapPdfHeaderFooterFragment(footerHtml);
 
       const marginTopMm = hasHeader
         ? headerImage
@@ -463,7 +484,15 @@ export class ExportDocumentService implements ExportDocumentGateway {
           : PDF_MARGIN_HEADER_FALLBACK_MM
         : PDF_MARGIN_BODY_TOP_MM;
 
-      const marginBottomMm = PDF_MARGIN_FOOTER_FALLBACK_MM;
+      const marginBottomMm = footerImage
+        ? Math.min(
+            PDF_MARGIN_FOOTER_MAX_MM,
+            Math.max(
+              PDF_MARGIN_FOOTER_MIN_MM,
+              pxToMm(footerImage.heightPx) + PDF_MARGIN_FOOTER_EXTRA_MM,
+            ),
+          )
+        : PDF_MARGIN_FOOTER_FALLBACK_MM;
 
       const pdfUint8Array = await page.pdf({
         format: 'A4',
@@ -512,7 +541,10 @@ export class ExportDocumentService implements ExportDocumentGateway {
           options,
           {
             captureHeader: hasHeader,
-            captureFooter: hasFooter,
+            captureFooter:
+              hasFooter &&
+              options?.footerTemplateType ===
+                OrganizationCustomizationDocumentFooterTemplateTypeEnum.CLASSIC,
           },
         );
         headerImage = captured.header;
