@@ -73,9 +73,25 @@ export class CreateTeacherRetirementPlanningFlow1772200000001
     await queryRunner.query(
       `ALTER TABLE \`teacher_retirement_planning_period_item_document\` ADD CONSTRAINT \`FK_teacher_retirement_planning_period_item_document\` FOREIGN KEY (\`teacher_retirement_planning_period_item_id\`) REFERENCES \`teacher_retirement_planning_period_item\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );
+
+    await queryRunner.query(
+      `CREATE UNIQUE INDEX \`REL_de48ccd1c2a2087b6f247f298d\` ON \`analysis_tool_record\` (\`teacher_retirement_planning_id\`)`,
+    );
+
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_record\` ADD CONSTRAINT \`FK_de48ccd1c2a2087b6f247f298d0\` FOREIGN KEY (\`teacher_retirement_planning_id\`) REFERENCES \`teacher_retirement_planning\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_record\` DROP FOREIGN KEY \`FK_de48ccd1c2a2087b6f247f298d0\``,
+    );
+
+    await queryRunner.query(
+      `DROP INDEX \`REL_de48ccd1c2a2087b6f247f298d\` ON \`analysis_tool_record\``,
+    );
+
     await queryRunner.query(
       `ALTER TABLE \`teacher_retirement_planning_period_item_document\` DROP FOREIGN KEY \`FK_teacher_retirement_planning_period_item_document\``,
     );
