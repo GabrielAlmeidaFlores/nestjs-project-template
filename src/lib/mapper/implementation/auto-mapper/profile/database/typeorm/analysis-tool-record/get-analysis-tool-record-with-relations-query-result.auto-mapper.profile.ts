@@ -24,6 +24,7 @@ import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementati
 import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
 import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
 import { MiniAdvisorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/mini-advisor.typeorm.entity';
+import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning.typeorm.entity';
 import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
 import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
 import { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-relations.query.result';
@@ -53,6 +54,7 @@ import { GetRuralTimelineAnalysisWithRelationsQueryResult } from '@module/custom
 import { GetSpecialActivityAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis/query/result/get-special-activity-analysis-with-relations.query.result';
 import { GetSpeechGeneratorQueryResult } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/query/result/get-speech-generator.query.result';
 import { GetMiniAdvisorWithRelationsQueryResult } from '@module/customer/analysis-tool/module/mini-advisor/domain/repository/mini-advisor/query/result/get-mini-advisor-with-relations.query.result';
+import { GetTeacherRetirementPlanningWithRelationsQueryResult } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/query/result/get-teacher-retirement-planning-with-relations.query.result';
 
 @Injectable()
 export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
@@ -185,6 +187,12 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         GetInsuranceQualityAnalysisWithRelationsQueryResult,
       );
 
+      const teacherRetirementPlanning = this.mapper.map(
+        source.teacherRetirementPlanning,
+        TeacherRetirementPlanningTypeormEntity,
+        GetTeacherRetirementPlanningWithRelationsQueryResult,
+      );
+
       const disabilityRetirementPlanning = this.mapper.map(
         source.disabilityRetirementPlanning,
         DisabilityRetirementPlanningTypeormEntity,
@@ -277,9 +285,13 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         : null;
 
       return GetAnalysisToolRecordWithRelationsQueryResult.build({
-        ...source,
         id: new AnalysisToolRecordId(source.id),
         code: new AnalysisToolRecordCode(source.code),
+        type: source.type,
+        status: source.status,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
         cnisFastAnalysis,
         retirementPlanningRpps,
         retirementPlanningRgps,
@@ -294,6 +306,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         perCapitaIncomeForBpcAnalysis,
         ruralTimelineAnalysis,
         insuranceQualityAnalysis,
+        teacherRetirementPlanning,
         disabilityRetirementPlanning,
         generalUrbanRetirementGrant,
         generalUrbanRetirementAnalysis,
@@ -498,9 +511,13 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
           : null;
 
       return AnalysisToolRecordTypeormEntity.build({
-        ...source,
         id: source.id.toString(),
         code: source.code.toString(),
+        type: source.type,
+        status: source.status,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
         cnisFastAnalysis,
         retirementPlanningRpps,
         retirementPlanningRgps,
