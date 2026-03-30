@@ -22,14 +22,20 @@ export class RegulatoryUpdateEntityAutoMapperProfile {
     this.mapOrmToQueryResult();
   }
 
-  private toStringArray(mainChanges: RegulatoryUpdateMainChangeTypeormEntity[]): string[] {
-    if (!mainChanges || mainChanges.length === 0) return [];
+  private toStringArray(
+    mainChanges: RegulatoryUpdateMainChangeTypeormEntity[] | undefined,
+  ): string[] {
+    if (mainChanges === undefined || mainChanges.length === 0) {
+      return [];
+    }
     return [...mainChanges]
       .sort((a, b) => a.order - b.order)
       .map((mc) => mc.description);
   }
 
-  private toMainChangeEntities(descriptions: string[]): RegulatoryUpdateMainChangeTypeormEntity[] {
+  private toMainChangeEntities(
+    descriptions: string[],
+  ): RegulatoryUpdateMainChangeTypeormEntity[] {
     return descriptions.map((description, index) => {
       const entity = new RegulatoryUpdateMainChangeTypeormEntity();
       entity.description = description;

@@ -39,7 +39,9 @@ export class SendRegulatoryUpdateEmailsUseCase {
       return;
     }
 
-    const updatesSummary = newUpdates.map((u) => `<li>${u.title}</li>`).join('');
+    const updatesSummary = newUpdates
+      .map((u) => `<li>${u.title}</li>`)
+      .join('');
 
     for (const preference of preferences) {
       const hasAccess = await this.customerHasRegulatoryUpdatesAccess(
