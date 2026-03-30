@@ -22,6 +22,7 @@ import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementat
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
 import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
 import { SpecialCategoryRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis.typeorm.entity';
+import { SpecialRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant.typeorm.entity';
 import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
 import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
@@ -47,6 +48,7 @@ import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/mod
 import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
 import { SpecialActivityEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/special-activity-entity';
 import { SpecialCategoryRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/special-category-retirement-analysis.entity';
+import { SpecialRetirementGrantEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/special-retirement-grant.entity';
 import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
 
 @Injectable()
@@ -233,6 +235,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const specialRetirementGrant =
+        source.specialRetirementGrant !== undefined
+          ? this.mapper.map(
+              source.specialRetirementGrant,
+              SpecialRetirementGrantTypeormEntity,
+              SpecialRetirementGrantEntity,
+            )
+          : null;
+
       return new AnalysisToolRecordEntity({
         id: new AnalysisToolRecordId(source.id),
         code: new AnalysisToolRecordCode(source.code),
@@ -262,6 +273,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         disabilityRetirementPlanning,
         generalUrbanRetirementAnalysis,
         specialCategoryRetirementAnalysis,
+        specialRetirementGrant,
       });
     };
 
@@ -418,7 +430,6 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
           } as TeacherRetirementPlanningTypeormEntity)
         : null;
 
-
       const disabilityRetirementPlanning =
         source.disabilityRetirementPlanning !== null
           ? this.mapper.map(
@@ -443,6 +454,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
               source.specialCategoryRetirementAnalysis,
               SpecialCategoryRetirementAnalysisEntity,
               SpecialCategoryRetirementAnalysisTypeormEntity,
+            )
+          : null;
+
+      const specialRetirementGrant =
+        source.specialRetirementGrant !== null
+          ? this.mapper.map(
+              source.specialRetirementGrant,
+              SpecialRetirementGrantEntity,
+              SpecialRetirementGrantTypeormEntity,
             )
           : null;
 
@@ -481,6 +501,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         disabilityRetirementPlanning,
         generalUrbanRetirementAnalysis,
         specialCategoryRetirementAnalysis,
+        specialRetirementGrant,
         analysisToolClient,
         createdBy,
         updatedBy,

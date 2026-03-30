@@ -22,6 +22,7 @@ import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementat
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
 import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
+import { SpecialRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant.typeorm.entity';
 import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
 import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning.typeorm.entity';
 import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
@@ -51,6 +52,7 @@ import { GetRetirementPlanningRgpsWithRelationsQueryResult } from '@module/custo
 import { GetRetirementPlanningRppsQueryResult } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps/query/result/get-retirement-planning-rpps.query.resut';
 import { GetRuralTimelineAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
 import { GetSpecialActivityAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis/query/result/get-special-activity-analysis-with-relations.query.result';
+import { GetSpecialRetirementGrantQueryResult } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant/query/result/get-special-retirement-grant.query.result';
 import { GetSpeechGeneratorQueryResult } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/query/result/get-speech-generator.query.result';
 import { GetTeacherRetirementPlanningWithRelationsQueryResult } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/query/result/get-teacher-retirement-planning-with-relations.query.result';
 
@@ -274,6 +276,12 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
             })()
           : null;
 
+      const specialRetirementGrant = this.mapper.map(
+        source.specialRetirementGrant,
+        SpecialRetirementGrantTypeormEntity,
+        GetSpecialRetirementGrantQueryResult,
+      );
+
       return GetAnalysisToolRecordWithRelationsQueryResult.build({
         id: new AnalysisToolRecordId(source.id),
         code: new AnalysisToolRecordCode(source.code),
@@ -300,6 +308,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         disabilityRetirementPlanning,
         generalUrbanRetirementGrant,
         generalUrbanRetirementAnalysis,
+        specialRetirementGrant,
         analysisToolClient,
         createdBy,
         updatedBy,
@@ -499,6 +508,12 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
             } as unknown as GeneralUrbanRetirementAnalysisTypeormEntity)
           : null;
 
+      const specialRetirementGrant = this.mapper.map(
+        source.specialRetirementGrant,
+        GetSpecialRetirementGrantQueryResult,
+        SpecialRetirementGrantTypeormEntity,
+      );
+
       return AnalysisToolRecordTypeormEntity.build({
         id: source.id.toString(),
         code: source.code.toString(),
@@ -523,6 +538,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         disabilityRetirementPlanning,
         generalUrbanRetirementGrant,
         generalUrbanRetirementAnalysis,
+        specialRetirementGrant,
         analysisToolClient,
         specialActivity,
         createdBy,

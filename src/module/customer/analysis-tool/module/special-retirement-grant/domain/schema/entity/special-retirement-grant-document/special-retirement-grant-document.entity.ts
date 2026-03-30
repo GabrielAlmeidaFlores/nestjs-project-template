@@ -1,4 +1,5 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { SpecialRetirementGrantEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/special-retirement-grant.entity';
 import { SpecialRetirementGrantDocumentTypeEnum } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-document/enum/special-retirement-grant-document-type.enum';
 import { SpecialRetirementGrantDocumentEntityPropsInterface } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-document/special-retirement-grant-document.entity.props.interface';
 import { SpecialRetirementGrantDocumentId } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-document/value-object/special-retirement-grant-document-id/special-retirement-grant-document-id.value-object';
@@ -11,6 +12,9 @@ export class SpecialRetirementGrantDocumentEntity extends BaseEntity<SpecialReti
   @Description('Tipo do documento.')
   public readonly type: SpecialRetirementGrantDocumentTypeEnum;
 
+  @Description('Concessão de aposentadoria especial associada ao documento.')
+  public readonly specialRetirementGrant: SpecialRetirementGrantEntity;
+
   protected readonly _type = SpecialRetirementGrantDocumentEntity.name;
 
   public constructor(
@@ -19,5 +23,6 @@ export class SpecialRetirementGrantDocumentEntity extends BaseEntity<SpecialReti
     super(SpecialRetirementGrantDocumentId, props);
     this.document = props.document;
     this.type = props.type;
+    this.specialRetirementGrant = props.specialRetirementGrant;
   }
 }
