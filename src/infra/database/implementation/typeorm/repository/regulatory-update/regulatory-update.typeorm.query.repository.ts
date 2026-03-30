@@ -60,7 +60,6 @@ export class RegulatoryUpdateTypeormQueryRepository
 
     const [data, totalItems] = await this.repository.findAndCount({
       where: this.buildWhereConditions(param),
-      relations: ['mainChanges'],
       order: { [fieldName]: sortDirection },
       skip,
       take: limit,
