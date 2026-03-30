@@ -33,7 +33,7 @@ export class InviteOrganizationMemberUseCase {
     organizationSessionData: OrganizationSessionDataModel,
     dto: InviteOrganizationMemberRequestDto,
   ): Promise<void> {
-    await this.validateEmailNotInUse(dto);
+    await this.validateEmailNotInUse(dto, organizationSessionData);
     await this.validateMemberLimit(organizationSessionData);
 
     const organization = await this.findOrganizationOrThrow(
@@ -50,10 +50,12 @@ export class InviteOrganizationMemberUseCase {
 
   private async validateEmailNotInUse(
     dto: InviteOrganizationMemberRequestDto,
+    organizationSessionData: OrganizationSessionDataModel,
   ): Promise<void> {
     const existing =
-      await this.authIdentityQueryRepositoryGateway.findOneAuthIdentityByEmailOrFederalDocument(
+      await this.authIdentityQueryRepositoryGateway.findOneAuthIdentityByEmailOrFederalDocumentByOrganization(
         dto.email,
+        organizationSessionData.organizationId,
       );
 
     if (existing) {

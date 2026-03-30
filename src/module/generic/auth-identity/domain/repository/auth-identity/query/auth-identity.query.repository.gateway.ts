@@ -1,6 +1,7 @@
 import type { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import type { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import type { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
+import type { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import type { GetAuthIdentityWithRelationsQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity-with-relations.query.result';
 import type { GetAuthIdentityQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity.query.result';
 import type { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
@@ -12,6 +13,11 @@ export abstract class AuthIdentityQueryRepositoryGateway {
 
   public abstract findOneAuthIdentityByEmailOrFederalDocument(
     value: FederalDocument | Email,
+  ): Promise<GetAuthIdentityQueryResult | null>;
+
+  public abstract findOneAuthIdentityByEmailOrFederalDocumentByOrganization(
+    value: FederalDocument | Email,
+    organizationId: OrganizationId,
   ): Promise<GetAuthIdentityQueryResult | null>;
 
   public abstract findOneAuthIdentityByEmailOrFederalDocumentWithRelations(

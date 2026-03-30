@@ -12,6 +12,8 @@ import { CustomerControllerRoute } from '@shared/api/util/decorator/class/contro
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
 import { GetOrganizationSessionData } from '@shared/api/util/decorator/property/get-organization-session-data/get-organization-session-data.decorator';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
+import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 @CustomerControllerRoute('system-activities')
@@ -66,11 +68,13 @@ export class SystemActivitiesController {
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async list(
+    @GetSessionData() sessionData: SessionDataModel,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Query() dto: ListSystemActivitiesRequestDto,
   ): Promise<ListSystemActivitiesResponseDto> {
     return this.listSystemActivitiesUseCase.execute(
+      sessionData,
       organizationSessionData,
       dto,
     );
