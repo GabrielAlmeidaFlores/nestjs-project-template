@@ -74,7 +74,8 @@ export class ListOrganizationCustomizationDocumentFooterTemplatesUseCase {
           /\{\{footerDescription\}\}/g,
           customization?.organizationCustomizationDocumentFooterDescription ??
             '',
-        );
+        )
+        .replaceAll('\n', '<br>');
 
       return GetOrganizationCustomizationDocumentFooterTemplateResponseDto.build(
         {
