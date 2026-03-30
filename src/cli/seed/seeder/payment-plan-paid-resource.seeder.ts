@@ -66,6 +66,24 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Planejamento completo de aposentadoria no Regime Próprio de Previdência Social (RPPS) com IA. Calcula tempo de contribuição, simula regras de transição, estima valores de benefício e identifica melhor momento para aposentação de servidor público.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a77f0e13-2a67-497a-bc4b-7f2215b31f6f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_COMPLETE_ANALYSIS,
+      creditCost: 8,
+      title: 'PLANEJAMENTO PREVIDENCIÁRIO DE PROFESSOR - ANÁLISE COMPLETA',
+      description:
+        'Planejamento completo de aposentadoria para professor com IA. Analisa períodos de magistério, vínculos por instituição, remunerações, benefícios e processos para estimar cenários e estratégia previdenciária mais vantajosa.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('7b2d3112-f0f1-46f4-9d35-e7ebf4cc2705'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_SIMPLIFIED_ANALYSIS,
+      creditCost: 5,
+      title: 'PLANEJAMENTO PREVIDENCIÁRIO DE PROFESSOR - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada do planejamento previdenciário de professor com IA, apresentando diagnóstico objetivo de elegibilidade, pontos de atenção e próximos passos recomendados.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('c32c6734-bb4a-405f-8c84-5199848b1dcb'),
       resource: PaymentPlanPaidResourceTypeEnum.LEGAL_PROCEEDING_MONITORING,
       creditCost: 0,
@@ -709,6 +727,17 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'ANÁLISE DE LINHA DO TEMPO RURAL - SIMULAÇÃO DE AJUSTE DE PERÍODO DE CONTRIBUIÇÃO',
       description:
         'Simulação de ajuste de período de contribuição CNIS com geração de observação técnica previdenciária por IA. Compara o período original registrado no CNIS com o período convencional proposto, calcula o tempo de contribuição ganho com o ajuste e gera fundamentação técnica formal indicando a justificativa previdenciária e o impacto no cômputo do tempo de contribuição rural.',
+    }),
+
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('36bcef4c-889f-4493-93d8-ba3457398caa'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEACHER_ADMINISTRATIVE_PROCESS_ANALYSIS,
+      creditCost: 1,
+      title:
+        'PLANEJAMENTO DE APOSENTADORIA PARA PROFESSORES - ANÁLISE DE PROCESSO ADMINISTRATIVO',
+      description:
+        'Análise de processos administrativos relacionados à aposentadoria de professores com IA. Examina requerimentos administrativos, recursos, decisões do INSS, identificando fundamentos utilizados, requisitos legais aplicados, prazos e estratégias para otimização do processo administrativo visando reconhecimento da aposentadoria especial para professores.',
     }),
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('e8f9a0b1-c2d3-4e5f-ba5b-8c9d0e1f2a3b'),

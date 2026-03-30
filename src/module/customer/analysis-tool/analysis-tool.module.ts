@@ -29,6 +29,7 @@ import { RuralTimelineAnalysisModule } from '@module/customer/analysis-tool/modu
 import { SpecialActivityAnalysisModule } from '@module/customer/analysis-tool/module/special-activity-analysis/special-activity-analysis.module';
 import { SpecialCategoryRetirementAnalysisModule } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/special-category-retirement-analysis.module';
 import { SpeechGeneratorModule } from '@module/customer/analysis-tool/module/speech-generator/speech-generator.module';
+import { TeacherRetirementPlanningModule } from '@module/customer/analysis-tool/module/teacher-retirement-planning/teacher-retirement-planning.module';
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
 import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
 import { DeleteAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-record.use-case';
@@ -78,6 +79,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     RuralTimelineAnalysisModule,
     RetirementPlanningRgpsModule,
     RetirementPlanningRppsModule,
+    TeacherRetirementPlanningModule,
     DisabilityRetirementPlanningModule,
     GeneralUrbanRetirementGrantModule,
     GeneralUrbanRetirementModule,
