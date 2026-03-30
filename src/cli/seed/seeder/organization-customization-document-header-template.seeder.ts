@@ -31,7 +31,7 @@ export class OrganizationCustomizationDocumentHeaderTemplateSeeder implements Se
           '9ae34abf-a3df-4972-9885-67204fa64e41',
         ),
         type: OrganizationCustomizationDocumentHeaderTemplateTypeEnum.MODERN,
-        htmlContent: `<header><table style="width: 100%;font-family: sans-serif;"><tr><td style="padding: 40px 20px; text-align: center;"><p align="center"><img src="{{logo}}"alt="{{organizationName}}"style="width: 200px;height: 90px;margin-bottom: 10px;"/></p><div style="font-size: 24px;font-weight: bold;color: {{secondaryColor}};">{{organizationName}}</div></td></tr></table></header>`,
+        htmlContent: `<header><table style="width: 100%;font-family: sans-serif;"><tr><td style="text-align: center;"><p align="center" style="margin-top: 10px;"><img src="{{logo}}"alt="{{organizationName}}"style="height: auto; width: 140px;margin-bottom: 10px;"/></p><div style="font-size: 20px;font-weight: bold;color: {{secondaryColor}}; margin: 0;">{{organizationName}}</div></td></tr></table></header>`,
       }),
       new OrganizationCustomizationDocumentHeaderTemplateEntity({
         id: new OrganizationCustomizationDocumentHeaderTemplateId(
@@ -87,17 +87,17 @@ export class OrganizationCustomizationDocumentHeaderTemplateSeeder implements Se
     <table style="width: 100%; font-family: sans-serif">
       <tr>
         <td
-          style="padding: 40px 20px; text-align: center;"
+          style="text-align: center;"
         >
-          <p align="center">
+          <p align="center" style="margin-top: 10px;">
             <img
               src="{{logo}}"
               alt="{{organizationName}}"
-              style="width: 200px; height: 90px; margin-bottom: 10px"
+              style="height: auto; width: 140px; margin-bottom: 10px"
             />
           </p>
           <div
-            style="font-size: 24px;font-weight: bold;color: {{secondaryColor}};"
+            style="font-size: 20px;font-weight: bold;color: {{secondaryColor}}; margin: 0;"
           >
             {{organizationName}}
           </div>
