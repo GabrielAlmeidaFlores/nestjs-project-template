@@ -29,7 +29,10 @@ export class RegulatoryUpdateTypeormQueryRepository
   public async findOneRegulatoryUpdateById(
     id: RegulatoryUpdateId,
   ): Promise<GetRegulatoryUpdateQueryResult | null> {
-    const data = await this.findOne({ where: { id: id.toString() } });
+    const data = await this.findOne({
+      where: { id: id.toString() },
+      relations: ['mainChanges'],
+    });
 
     if (!data) {
       return null;
@@ -57,6 +60,7 @@ export class RegulatoryUpdateTypeormQueryRepository
 
     const [data, totalItems] = await this.repository.findAndCount({
       where: this.buildWhereConditions(param),
+      relations: ['mainChanges'],
       order: { [fieldName]: sortDirection },
       skip,
       take: limit,
@@ -94,6 +98,7 @@ export class RegulatoryUpdateTypeormQueryRepository
       select: { updatedAt: true },
       take: 1,
     });
+
     return results[0]?.updatedAt ?? null;
   }
 

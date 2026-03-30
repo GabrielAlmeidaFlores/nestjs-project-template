@@ -317,9 +317,10 @@ DIRETRIZES DE QUALIDADE — OBRIGATÓRIO SEGUIR:
 
       return valid;
     } catch {
+      const previewLength = 500;
       this.logger.error(
         'Failed to parse AI response as JSON. Raw response (first 500 chars): ' +
-          response.substring(0, 500),
+          response.substring(0, previewLength),
       );
       return [];
     }

@@ -9,7 +9,12 @@ export class RegulatoryUpdateTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'title', type: 'varchar', length: 255 })
   public title: string;
 
-  @Column({ name: 'legal_identifier', type: 'varchar', length: 100, nullable: true })
+  @Column({
+    name: 'legal_identifier',
+    type: 'varchar',
+    length: 100,
+    nullable: true,
+  })
   public legalIdentifier: string | null;
 
   @Column({ name: 'summary', type: 'text' })
@@ -18,7 +23,6 @@ export class RegulatoryUpdateTypeormEntity extends BaseTypeormEntity {
   @OneToMany(
     () => RegulatoryUpdateMainChangeTypeormEntity,
     (mc) => mc.regulatoryUpdate,
-    { cascade: true, eager: true },
   )
   public mainChanges: RegulatoryUpdateMainChangeTypeormEntity[];
 

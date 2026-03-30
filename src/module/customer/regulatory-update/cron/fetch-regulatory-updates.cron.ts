@@ -1,21 +1,22 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 
+import { RegulatoryUpdateQueryRepositoryGateway } from '@module/customer/regulatory-update/domain/repository/regulatory-update/query/regulatory-update.query.repository.gateway';
 import { FetchAndSaveRegulatoryUpdatesUseCase } from '@module/customer/regulatory-update/use-case/fetch-and-save-regulatory-updates.use-case';
 import { SendRegulatoryUpdateEmailsUseCase } from '@module/customer/regulatory-update/use-case/send-regulatory-update-emails.use-case';
 
 @Injectable()
-export class FetchRegulatoryUpdatesCron {
+export class FetchRegulatoryUpdatesCron implements OnModuleInit {
   protected readonly _type = FetchRegulatoryUpdatesCron.name;
   private readonly logger: Logger;
 
   public constructor(
     private readonly fetchAndSaveRegulatoryUpdatesUseCase: FetchAndSaveRegulatoryUpdatesUseCase,
     private readonly sendRegulatoryUpdateEmailsUseCase: SendRegulatoryUpdateEmailsUseCase,
+    @Inject(RegulatoryUpdateQueryRepositoryGateway)
+    private readonly regulatoryUpdateQueryRepository: RegulatoryUpdateQueryRepositoryGateway,
   ) {
     this.logger = new Logger(FetchRegulatoryUpdatesCron.name);
-
-    void this.execute();
   }
 
   @Cron(CronExpression.EVERY_WEEK)
@@ -44,6 +45,16 @@ export class FetchRegulatoryUpdatesCron {
           error.stack,
         );
       }
+    }
+  }
+
+  public async onModuleInit(): Promise<void> {
+    const existingTitlesAndDates =
+      await this.regulatoryUpdateQueryRepository.findAllTitlesAndDates();
+
+    if (existingTitlesAndDates.length === 0) {
+      this.logger.log('No existing updates found. Running initial fetch...');
+      await this.execute();
     }
   }
 }

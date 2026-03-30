@@ -45,7 +45,9 @@ export class GetRegulatoryUpdateUseCase {
       beneficiaryImpact: result.beneficiaryImpact,
       fullText: result.fullText,
       updatedAt: result.updatedAt,
-      ...(result.legalIdentifier !== null && { legalIdentifier: result.legalIdentifier }),
+      ...(result.legalIdentifier !== null && {
+        legalIdentifier: result.legalIdentifier,
+      }),
       ...(result.sourceUrl !== null && { sourceUrl: result.sourceUrl }),
       ...(result.publishedAt !== null && { publishedAt: result.publishedAt }),
     });
