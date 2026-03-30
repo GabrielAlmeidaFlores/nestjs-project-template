@@ -22,6 +22,7 @@ import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/modu
 import { SpecialActivityEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/special-activity-entity';
 import { SpecialCategoryRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/special-category-retirement-analysis.entity';
 import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
+import { TeacherRetirementPlanningEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { AnalysisToolRecordEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity.props.interface';
@@ -109,6 +110,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly insuranceQualityAnalysis: InsuranceQualityAnalysisEntity | null;
 
   @Description(
+    'Planejamento de aposentadoria de professor associado ao registro da ferramenta de análise',
+  )
+  public readonly teacherRetirementPlanning: TeacherRetirementPlanningEntity | null;
+
+  @Description(
     'Planejamento de aposentadoria por invalidez associado ao registro da ferramenta de análise',
   )
   public readonly disabilityRetirementPlanning: DisabilityRetirementPlanningEntity | null;
@@ -173,6 +179,7 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
       props.perCapitaIncomeForBpcAnalysis ?? null;
     this.ruralTimelineAnalysis = props.ruralTimelineAnalysis ?? null;
     this.insuranceQualityAnalysis = props.insuranceQualityAnalysis ?? null;
+    this.teacherRetirementPlanning = props.teacherRetirementPlanning ?? null;
     this.disabilityRetirementPlanning =
       props.disabilityRetirementPlanning ?? null;
     this.generalUrbanRetirementGrant =
