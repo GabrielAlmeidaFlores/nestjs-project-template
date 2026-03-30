@@ -187,6 +187,12 @@ import { SpecialCategoryRetirementAnalysisResultRuleItemTypeormCommandRepository
 import { SpecialCategoryRetirementAnalysisResultRuleItemTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-result-rule-item/special-category-retirement-analysis-result-rule-item.typeorm.query.repository';
 import { SpecialCategoryRetirementAnalysisWorkPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-work-period/special-category-retirement-analysis-work-period.typeorm.command.repository';
 import { SpecialCategoryRetirementAnalysisWorkPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-work-period/special-category-retirement-analysis-work-period.typeorm.query.repository';
+import { SpecialRetirementGrantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant/special-retirement-grant.typeorm.command.repository';
+import { SpecialRetirementGrantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant/special-retirement-grant.typeorm.query.repository';
+import { SpecialRetirementGrantBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-benefit/special-retirement-grant-benefit.typeorm.command.repository';
+import { SpecialRetirementGrantDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-document/special-retirement-grant-document.typeorm.command.repository';
+import { SpecialRetirementGrantLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-legal-proceeding/special-retirement-grant-legal-proceeding.typeorm.command.repository';
+import { SpecialRetirementGrantResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-result/special-retirement-grant-result.typeorm.command.repository';
 import { SpeechGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator/speech-generator.typeorm.command.repository';
 import { SpeechGeneratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/speech-generator/speech-generator.typeorm.query.repository';
 import { SpeechGeneratorBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-benefit/speech-generator-benefit.typeorm.command.repository';
@@ -361,6 +367,11 @@ import { SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity } from '@i
 import { SpecialCategoryRetirementAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-result.typeorm.entity';
 import { SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-work-period.typeorm.entity';
 import { SpecialCategoryRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis.typeorm.entity';
+import { SpecialRetirementGrantBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-benefit.entity';
+import { SpecialRetirementGrantDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-document.typeorm.entity';
+import { SpecialRetirementGrantLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-legal-proceeding.entity';
+import { SpecialRetirementGrantResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-result.typeorm.entity';
+import { SpecialRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant.typeorm.entity';
 import { SpeechGeneratorBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-benefit.typeorm.entity';
 import { SpeechGeneratorDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-document.typeorm.entity';
 import { SpeechGeneratorLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-legal-proceeding.typeorm.entity';
@@ -555,6 +566,11 @@ export class TypeormIndex {
     DisabilityRetirementPlanningInssBenefitTypeormEntity,
     DisabilityRetirementPlanningLegalProceedingTypeormEntity,
     DisabilityRetirementPlanningDocumentTypeormEntity,
+    SpecialRetirementGrantTypeormEntity,
+    SpecialRetirementGrantResultTypeormEntity,
+    SpecialRetirementGrantDocumentTypeormEntity,
+    SpecialRetirementGrantBenefitTypeormEntity,
+    SpecialRetirementGrantLegalProceedingTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [
@@ -763,6 +779,12 @@ export class TypeormIndex {
     DisabilityRetirementPlanningInssBenefitTypeormCommandRepository,
     DisabilityRetirementPlanningLegalProceedingTypeormCommandRepository,
     DisabilityRetirementPlanningDocumentTypeormCommandRepository,
+    SpecialRetirementGrantTypeormCommandRepository,
+    SpecialRetirementGrantTypeormQueryRepository,
+    SpecialRetirementGrantBenefitTypeormCommandRepository,
+    SpecialRetirementGrantLegalProceedingTypeormCommandRepository,
+    SpecialRetirementGrantDocumentTypeormCommandRepository,
+    SpecialRetirementGrantResultTypeormCommandRepository,
   ];
 
   public static readonly dynamicModule = TypeOrmModule.forFeature(
