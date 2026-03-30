@@ -8667,6 +8667,30 @@ E terminar com a assinatura.
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_GRANT_COMPLETE_ANALYSIS,
+      ),
+      prompt: `Você é um especialista em Direito Previdenciário brasileiro e concessão de aposentadoria especial.
+
+Gere uma ANÁLISE COMPLETA, em formato de TEXTO CORRIDO EM MARKDOWN (NÃO JSON), usando os documentos fornecidos (CNIS e PPPs) e os dados do cliente.
+
+Inclua:
+1) Resumo executivo
+2) Linha do tempo integrada (vínculos, remunerações e pendências)
+3) Pontos críticos (PEXT, competências abaixo do mínimo, vínculos sem data fim)
+4) Recomendação estratégica (administrativa/judicial, documentos faltantes e próximos passos)`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_GRANT_SIMPLIFIED_ANALYSIS,
+      ),
+      prompt: `Você é um especialista em Direito Previdenciário brasileiro.
+
+Gere uma ANÁLISE SIMPLIFICADA, em linguagem acessível, com no máximo 4 parágrafos, baseada nos documentos fornecidos (CNIS e PPPs) e dados do cliente.
+
+Destaque: status geral, principais pendências e próximos passos.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
         PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_SIMPLIFIED_ANALYSIS,
       ),
       prompt: `# PROMPT PARA GERAÇÃO DE MENSAGEM WHATSAPP - ANÁLISE DE TEMPO ESPECIAL

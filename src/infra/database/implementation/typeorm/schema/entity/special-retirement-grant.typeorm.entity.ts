@@ -13,6 +13,7 @@ import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/
 import { SpecialRetirementGrantBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-benefit.entity';
 import { SpecialRetirementGrantDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-document.typeorm.entity';
 import { SpecialRetirementGrantLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-legal-proceeding.entity';
+import { SpecialRetirementGrantPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-period.typeorm.entity';
 import { SpecialRetirementGrantResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-result.typeorm.entity';
 
 @Entity({ name: 'special_retirement_grant' })
@@ -78,6 +79,14 @@ export class SpecialRetirementGrantTypeormEntity extends BaseTypeormEntity {
     { nullable: true },
   )
   public analysisToolRecord?: AnalysisToolRecordTypeormEntity | undefined;
+
+  @OneToMany(
+    () => SpecialRetirementGrantPeriodTypeormEntity,
+    (entity) => entity.specialRetirementGrant,
+  )
+  public specialRetirementGrantPeriod?:
+    | SpecialRetirementGrantPeriodTypeormEntity[]
+    | undefined;
 
   @ManyToOne(() => OrganizationMemberTypeormEntity)
   @JoinColumn({ name: 'created_by_id' })
