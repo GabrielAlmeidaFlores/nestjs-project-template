@@ -83,6 +83,20 @@ import { DisabilityRetirementPlanningEntityAutoMapperProfile } from '@lib/mapper
 import { GetDisabilityRetirementPlanningWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning/get-disability-retirement-planning-with-relations-query-result.auto-mapper.profile';
 import { DisabilityRetirementPlanningDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-document/disability-retirement-planning-document-entity.auto-mapper.profile';
 import { GetDisabilityRetirementPlanningDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-document/get-disability-retirement-planning-document-query-result.auto-mapper.profile';
+import { DisabilityRetirementPlanningGrantEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-grant/disability-retirement-planning-grant-entity.auto-mapper.profile';
+import { GetDisabilityRetirementPlanningGrantWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-grant/get-disability-retirement-planning-grant-with-relations-query-result.auto-mapper.profile';
+import { DisabilityRetirementPlanningGrantDisabilityPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-grant-disability-period/disability-retirement-planning-grant-disability-period-entity.auto-mapper.profile';
+import { GetDisabilityRetirementPlanningGrantDisabilityPeriodQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-grant-disability-period/get-disability-retirement-planning-grant-disability-period-query-result.auto-mapper.profile';
+import { DisabilityRetirementPlanningGrantDisabilityPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-grant-disability-period-document/disability-retirement-planning-grant-disability-period-document-entity.auto-mapper.profile';
+import { DisabilityRetirementPlanningGrantDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-grant-document/disability-retirement-planning-grant-document-entity.auto-mapper.profile';
+import { DisabilityRetirementPlanningGrantInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-grant-inss-benefit/disability-retirement-planning-grant-inss-benefit-entity.auto-mapper.profile';
+import { DisabilityRetirementPlanningGrantLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-grant-legal-proceeding/disability-retirement-planning-grant-legal-proceeding-entity.auto-mapper.profile';
+import { DisabilityRetirementPlanningGrantPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-grant-period/disability-retirement-planning-grant-period-entity.auto-mapper.profile';
+import { GetDisabilityRetirementPlanningGrantPeriodQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-grant-period/get-disability-retirement-planning-grant-period-query-result.auto-mapper.profile';
+import { DisabilityRetirementPlanningGrantPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-grant-period-document/disability-retirement-planning-grant-period-document-entity.auto-mapper.profile';
+import { DisabilityRetirementPlanningGrantResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-grant-result/disability-retirement-planning-grant-result-entity.auto-mapper.profile';
+import { DisabilityRetirementPlanningGrantTimeAcceleratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-grant-time-accelerator/disability-retirement-planning-grant-time-accelerator-entity.auto-mapper.profile';
+import { GetDisabilityRetirementPlanningGrantTimeAcceleratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-grant-time-accelerator/get-disability-retirement-planning-grant-time-accelerator-query-result.auto-mapper.profile';
 import { DisabilityRetirementPlanningInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-inss-benefit/disability-retirement-planning-inss-benefit-entity.auto-mapper.profile';
 import { GetDisabilityRetirementPlanningInssBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-inss-benefit/get-disability-retirement-planning-inss-benefit-query-result.auto-mapper.profile';
 import { DisabilityRetirementPlanningLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-legal-proceeding/disability-retirement-planning-legal-proceeding-entity.auto-mapper.profile';
@@ -551,6 +565,20 @@ import { GetTeacherRetirementPlanningWithRelationsQueryResultAutoMapperProfile }
     GetGeneralUrbanRetirementGrantTimeAcceleratorQueryResultAutoMapperProfile,
     GetGeneralUrbanRetirementGrantWithRelationsQueryResultAutoMapperProfile,
     GeneralUrbanRetirementGrantEntityAutoMapperProfile,
+    DisabilityRetirementPlanningGrantResultEntityAutoMapperProfile,
+    DisabilityRetirementPlanningGrantInssBenefitEntityAutoMapperProfile,
+    DisabilityRetirementPlanningGrantLegalProceedingEntityAutoMapperProfile,
+    DisabilityRetirementPlanningGrantPeriodEntityAutoMapperProfile,
+    GetDisabilityRetirementPlanningGrantPeriodQueryResultAutoMapperProfile,
+    DisabilityRetirementPlanningGrantPeriodDocumentEntityAutoMapperProfile,
+    DisabilityRetirementPlanningGrantDocumentEntityAutoMapperProfile,
+    DisabilityRetirementPlanningGrantDisabilityPeriodEntityAutoMapperProfile,
+    GetDisabilityRetirementPlanningGrantDisabilityPeriodQueryResultAutoMapperProfile,
+    DisabilityRetirementPlanningGrantDisabilityPeriodDocumentEntityAutoMapperProfile,
+    DisabilityRetirementPlanningGrantTimeAcceleratorEntityAutoMapperProfile,
+    GetDisabilityRetirementPlanningGrantTimeAcceleratorQueryResultAutoMapperProfile,
+    GetDisabilityRetirementPlanningGrantWithRelationsQueryResultAutoMapperProfile,
+    DisabilityRetirementPlanningGrantEntityAutoMapperProfile,
     GeneralUrbanRetirementAnalysisEntityAutoMapperProfile,
     GetGeneralUrbanRetirementAnalysisDocumentQueryResultAutoMapperProfile,
     GetGeneralUrbanRetirementAnalysisLegalProceedingQueryResultAutoMapperProfile,
