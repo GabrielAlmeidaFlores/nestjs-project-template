@@ -5,6 +5,7 @@ import type { RegulatoryUpdateEntityPropsInterface } from '@module/customer/regu
 
 export class RegulatoryUpdateEntity extends BaseEntity<RegulatoryUpdateId> {
   public readonly title: string;
+  public readonly legalIdentifier: string | null;
   public readonly summary: string;
   public readonly mainChanges: string[];
   public readonly implementationStatus: string;
@@ -18,6 +19,7 @@ export class RegulatoryUpdateEntity extends BaseEntity<RegulatoryUpdateId> {
   public constructor(props: RegulatoryUpdateEntityPropsInterface) {
     super(RegulatoryUpdateId, props);
     this.title = props.title;
+    this.legalIdentifier = props.legalIdentifier ?? null;
     this.summary = props.summary;
     this.mainChanges = props.mainChanges;
     this.implementationStatus = props.implementationStatus;

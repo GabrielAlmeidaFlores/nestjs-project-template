@@ -3,6 +3,7 @@ import type { RegulatoryUpdateId } from '@module/customer/regulatory-update/doma
 
 export interface RegulatoryUpdateEntityPropsInterface extends BaseEntityPropsInterface<RegulatoryUpdateId> {
   title: string;
+  legalIdentifier: string | null;
   summary: string;
   mainChanges: string[];
   implementationStatus: string;

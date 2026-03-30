@@ -15,6 +15,7 @@ import { RegulatoryUpdateEntity } from '@module/customer/regulatory-update/domai
 
 interface AiRegulatoryUpdateItemInterface {
   title: string;
+  legalIdentifier?: string | null;
   summary: string;
   mainChanges?: string[];
   implementationStatus?: string;
@@ -109,6 +110,11 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
                   title: {
                     type: 'string',
                     description: 'Título da norma ou atualização normativa',
+                  },
+                  legalIdentifier: {
+                    type: 'string',
+                    description:
+                      'Número de identificação da norma no formato padrão brasileiro. Exemplos: "Lei nº 14.698/2023", "Portaria PRES/INSS nº 1.660/2026", "Resolução CNPS nº 1.369/2023", "Decreto nº 11.936/2024". Inclua o tipo da norma, número e ano.',
                   },
                   summary: {
                     type: 'string',
@@ -326,6 +332,7 @@ DIRETRIZES DE QUALIDADE — OBRIGATÓRIO SEGUIR:
       (update) =>
         new RegulatoryUpdateEntity({
           title: update.title,
+          legalIdentifier: update.legalIdentifier ?? null,
           summary: update.summary,
           mainChanges: update.mainChanges ?? [],
           implementationStatus: update.implementationStatus ?? '',

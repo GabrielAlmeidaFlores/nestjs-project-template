@@ -9,6 +9,9 @@ export class RegulatoryUpdateTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'title', type: 'varchar', length: 255 })
   public title: string;
 
+  @Column({ name: 'legal_identifier', type: 'varchar', length: 100, nullable: true })
+  public legalIdentifier: string | null;
+
   @Column({ name: 'summary', type: 'text' })
   public summary: string;
 
