@@ -262,6 +262,7 @@ import { PerCapitaIncomeForBpcAnalysisLegalProceedingTypeormEntity } from '@infr
 import { PerCapitaIncomeForBpcAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis-result.typeorm.entity';
 import { PerCapitaIncomeForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis.typeorm.entity';
 import { RegulatoryUpdateEmailPreferenceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/regulatory-update-email-preference.typeorm.entity';
+import { RegulatoryUpdateMainChangeTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/regulatory-update-main-change.typeorm.entity';
 import { RegulatoryUpdateMonitoredSourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/regulatory-update-monitored-source.typeorm.entity';
 import { RegulatoryUpdateTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/regulatory-update.typeorm.entity';
 import { RetirementPlanningRgpsAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-analysis-result.typeorm.entity';
@@ -462,6 +463,7 @@ export class TypeormIndex {
     RegulatoryUpdateTypeormEntity,
     RegulatoryUpdateEmailPreferenceTypeormEntity,
     RegulatoryUpdateMonitoredSourceTypeormEntity,
+    RegulatoryUpdateMainChangeTypeormEntity,
     CreditPackTypeormEntity,
     OrganizationCreditPackPurchaseTypeormEntity,
     OrganizationCustomizationTypeormEntity,

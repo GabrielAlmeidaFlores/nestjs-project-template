@@ -1,6 +1,7 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { RegulatoryUpdateMainChangeTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/regulatory-update-main-change.typeorm.entity';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 
 @Entity({ name: 'regulatory_update' })
@@ -11,8 +12,8 @@ export class RegulatoryUpdateTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'summary', type: 'text' })
   public summary: string;
 
-  @Column({ name: 'main_changes', type: 'text' })
-  public mainChanges: string;
+  @OneToMany(() => RegulatoryUpdateMainChangeTypeormEntity, (mc) => mc.regulatoryUpdate, { cascade: true, eager: true })
+  public mainChanges: RegulatoryUpdateMainChangeTypeormEntity[];
 
   @Column({ name: 'implementation_status', type: 'text' })
   public implementationStatus: string;
