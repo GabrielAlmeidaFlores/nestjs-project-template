@@ -49,6 +49,8 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
   }
 
   public async execute(): Promise<RegulatoryUpdateEntity[]> {
+    this.logger.log('Starting regulatory updates fetch...');
+
     const systemInstruction = await this.fetchSystemInstruction();
 
     if (systemInstruction === null) {
@@ -57,6 +59,8 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
       );
       return [];
     }
+
+    this.logger.log('System instruction loaded.');
 
     const activeSources =
       await this.monitoredSourceQueryRepository.listActiveMonitoredSources();
@@ -68,8 +72,16 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
       return [];
     }
 
+    this.logger.log(
+      `Found ${activeSources.length} active source(s): ${activeSources.map((s) => s.name).join(', ')}`,
+    );
+
     const existingTitlesAndDates =
       await this.regulatoryUpdateQueryRepository.findAllTitlesAndDates();
+
+    this.logger.log(
+      `Found ${existingTitlesAndDates.length} existing regulatory update(s) in the database.`,
+    );
 
     const existingTitlesLower = new Set(
       existingTitlesAndDates.map((item) => item.title.trim().toLowerCase()),
@@ -79,6 +91,8 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
       existingTitlesAndDates,
       activeSources.map((s) => ({ name: s.name, url: s.url })),
     );
+
+    this.logger.log('Sending prompt to AI. Waiting for response...');
 
     const aiResponse =
       await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
@@ -152,20 +166,35 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
       return [];
     }
 
+    this.logger.log(
+      `AI response received (${aiResponse.length} chars). Parsing...`,
+    );
+
     const parsedUpdates = this.parseAiResponse(aiResponse);
+
+    this.logger.log(
+      `Parsed ${parsedUpdates.length} update(s) from AI response.`,
+    );
+
     const newUpdates = this.deduplicateAgainstExisting(
       parsedUpdates,
       existingTitlesLower,
     );
 
     if (newUpdates.length === 0) {
-      this.logger.log('No new regulatory updates found.');
+      this.logger.log('No new regulatory updates found after deduplication.');
       return [];
     }
 
+    this.logger.log(
+      `Saving ${newUpdates.length} new update(s): ${newUpdates.map((u) => `"${u.title}"`).join(', ')}`,
+    );
+
     const savedEntities = await this.saveNewUpdates(newUpdates);
 
-    this.logger.log(`${savedEntities.length} new regulatory update(s) saved.`);
+    this.logger.log(
+      `✓ ${savedEntities.length} regulatory update(s) saved successfully.`,
+    );
 
     return savedEntities;
   }
@@ -259,18 +288,33 @@ DIRETRIZES DE QUALIDADE — OBRIGATÓRIO SEGUIR:
       const parsed = JSON.parse(response) as unknown;
 
       if (!Array.isArray(parsed)) {
+        this.logger.warn(
+          `AI response is not an array. Received type: ${typeof parsed}`,
+        );
         return [];
       }
 
-      return parsed.filter(
+      const valid = parsed.filter(
         (item): item is AiRegulatoryUpdateItemInterface =>
           typeof item === 'object' &&
           item !== null &&
           typeof (item as AiRegulatoryUpdateItemInterface).title === 'string' &&
           typeof (item as AiRegulatoryUpdateItemInterface).summary === 'string',
       );
+
+      const invalid = parsed.length - valid.length;
+      if (invalid > 0) {
+        this.logger.warn(
+          `Discarded ${invalid} item(s) from AI response due to missing required fields.`,
+        );
+      }
+
+      return valid;
     } catch {
-      this.logger.error('Failed to parse AI response as JSON.');
+      this.logger.error(
+        'Failed to parse AI response as JSON. Raw response (first 500 chars): ' +
+          response.substring(0, 500),
+      );
       return [];
     }
   }
@@ -295,14 +339,21 @@ DIRETRIZES DE QUALIDADE — OBRIGATÓRIO SEGUIR:
         }),
     );
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute(
-      entities.map((entity) =>
-        this.regulatoryUpdateCommandRepository.createRegulatoryUpdate(entity),
-      ),
-    );
+    try {
+      const transaction = await this.baseTransactionRepositoryGateway.execute(
+        entities.map((entity) =>
+          this.regulatoryUpdateCommandRepository.createRegulatoryUpdate(entity),
+        ),
+      );
 
-    await transaction.commit();
+      await transaction.commit();
 
-    return entities;
+      return entities;
+    } catch (error) {
+      this.logger.error(
+        `Failed to save regulatory updates to database: ${String(error)}`,
+      );
+      throw error;
+    }
   }
 }
