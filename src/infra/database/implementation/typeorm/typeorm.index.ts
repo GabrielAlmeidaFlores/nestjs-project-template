@@ -193,6 +193,17 @@ import { SpeechGeneratorBenefitTypeormCommandRepository } from '@infra/database/
 import { SpeechGeneratorDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-document/speech-generator-document.typeorm.command.repository';
 import { SpeechGeneratorLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-legal-proceeding/speech-generator-legal-proceeding.typeorm.command.repository';
 import { SpeechGeneratorResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-result/speech-generator-result.typeorm.command.repository';
+import { TeacherRetirementPlanningTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning/teacher-retirement-planning.typeorm.command.repository';
+import { TeacherRetirementPlanningTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning/teacher-retirement-planning.typeorm.query.repository';
+import { TeacherRetirementPlanningDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-document/teacher-retirement-planning-document.typeorm.command.repository';
+import { TeacherRetirementPlanningInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-inss-benefit/teacher-retirement-planning-inss-benefit.typeorm.command.repository';
+import { TeacherRetirementPlanningLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-legal-proceeding/teacher-retirement-planning-legal-proceeding.typeorm.command.repository';
+import { TeacherRetirementPlanningPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-period/teacher-retirement-planning-period.typeorm.command.repository';
+import { TeacherRetirementPlanningPeriodItemTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-period-item/teacher-retirement-planning-period-item.typeorm.command.repository';
+import { TeacherRetirementPlanningPeriodItemDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-period-item-document/teacher-retirement-planning-period-item-document.typeorm.command.repository';
+import { TeacherRetirementPlanningRemunerationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-remuneration/teacher-retirement-planning-remuneration.typeorm.command.repository';
+import { TeacherRetirementPlanningRemunerationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-remuneration/teacher-retirement-planning-remuneration.typeorm.query.repository';
+import { TeacherRetirementPlanningResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-result/teacher-retirement-planning-result.typeorm.command.repository';
 import { AdminTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/admin.typeorm.entity';
 import { AdministrativeProcedureInssAnalysisBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis-benefit.entity';
 import { AdministrativeProcedureInssAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis-document.entity';
@@ -355,6 +366,15 @@ import { SpeechGeneratorDocumentTypeormEntity } from '@infra/database/implementa
 import { SpeechGeneratorLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-legal-proceeding.typeorm.entity';
 import { SpeechGeneratorResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-result.typeorm.entity';
 import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
+import { TeacherRetirementPlanningDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-document.typeorm.entity';
+import { TeacherRetirementPlanningInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-inss-benefit.typeorm.entity';
+import { TeacherRetirementPlanningLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-legal-proceeding.typeorm.entity';
+import { TeacherRetirementPlanningPeriodItemDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-period-item-document.typeorm.entity';
+import { TeacherRetirementPlanningPeriodItemTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-period-item.typeorm.entity';
+import { TeacherRetirementPlanningPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-period.typeorm.entity';
+import { TeacherRetirementPlanningRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-remuneration.typeorm.entity';
+import { TeacherRetirementPlanningResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-result.typeorm.entity';
+import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning.typeorm.entity';
 import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/source/database.application-variable';
 
 import type { Provider } from '@nestjs/common';
@@ -417,6 +437,15 @@ export class TypeormIndex {
     RetirementPlanningRppsPeriodDocumentTypeormEntity,
     RetirementPlanningRppsInssBenefitTypeormEntity,
     RetirementPlanningRppsLegalProceedingTypeormEntity,
+    TeacherRetirementPlanningTypeormEntity,
+    TeacherRetirementPlanningDocumentTypeormEntity,
+    TeacherRetirementPlanningInssBenefitTypeormEntity,
+    TeacherRetirementPlanningLegalProceedingTypeormEntity,
+    TeacherRetirementPlanningPeriodTypeormEntity,
+    TeacherRetirementPlanningPeriodItemTypeormEntity,
+    TeacherRetirementPlanningPeriodItemDocumentTypeormEntity,
+    TeacherRetirementPlanningRemunerationTypeormEntity,
+    TeacherRetirementPlanningResultTypeormEntity,
     GeneralUrbanRetirementAnalysisTypeormEntity,
     GeneralUrbanRetirementAnalysisResultTypeormEntity,
     GeneralUrbanRetirementAnalysisDocumentTypeormEntity,
@@ -639,6 +668,17 @@ export class TypeormIndex {
     GeneralUrbanRetirementGrantPeriodDocumentTypeormQueryRepository,
     RetirementPlanningRppsInssBenefitTypeormCommandRepository,
     RetirementPlanningRppsLegalProceedingTypeormCommandRepository,
+    TeacherRetirementPlanningTypeormCommandRepository,
+    TeacherRetirementPlanningTypeormQueryRepository,
+    TeacherRetirementPlanningDocumentTypeormCommandRepository,
+    TeacherRetirementPlanningInssBenefitTypeormCommandRepository,
+    TeacherRetirementPlanningLegalProceedingTypeormCommandRepository,
+    TeacherRetirementPlanningPeriodTypeormCommandRepository,
+    TeacherRetirementPlanningPeriodItemTypeormCommandRepository,
+    TeacherRetirementPlanningPeriodItemDocumentTypeormCommandRepository,
+    TeacherRetirementPlanningRemunerationTypeormCommandRepository,
+    TeacherRetirementPlanningRemunerationTypeormQueryRepository,
+    TeacherRetirementPlanningResultTypeormCommandRepository,
     RetirementPlanningRgpsAnalysisResultTypeormCommandRepository,
     RetirementPlanningRgpsAnalysisResultTypeormQueryRepository,
     RetirementPlanningRgpsEarningsHistoryTypeormCommandRepository,

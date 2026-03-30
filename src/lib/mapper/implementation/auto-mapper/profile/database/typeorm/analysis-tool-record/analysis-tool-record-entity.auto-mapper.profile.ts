@@ -23,6 +23,7 @@ import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementati
 import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
 import { SpecialCategoryRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis.typeorm.entity';
 import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
+import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
@@ -233,9 +234,13 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
           : null;
 
       return new AnalysisToolRecordEntity({
-        ...source,
         id: new AnalysisToolRecordId(source.id),
         code: new AnalysisToolRecordCode(source.code),
+        type: source.type,
+        status: source.status,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
         cnisFastAnalysis,
         retirementPlanningRpps,
         retirementPlanningRgps,
@@ -407,6 +412,13 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const teacherRetirementPlanning = source.teacherRetirementPlanning
+        ? ({
+            id: source.teacherRetirementPlanning.id.toString(),
+          } as TeacherRetirementPlanningTypeormEntity)
+        : null;
+
+
       const disabilityRetirementPlanning =
         source.disabilityRetirementPlanning !== null
           ? this.mapper.map(
@@ -443,9 +455,13 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
       } as OrganizationMemberTypeormEntity;
 
       return AnalysisToolRecordTypeormEntity.build({
-        ...source,
         id: source.id.toString(),
         code: source.code.toString(),
+        type: source.type,
+        status: source.status,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
         audienceQuestionGenerator,
         cnisFastAnalysis,
         retirementPlanningRpps,
@@ -461,6 +477,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         perCapitaIncomeForBpcAnalysis,
         ruralTimeline,
         insuranceQualityAnalysis,
+        teacherRetirementPlanning,
         disabilityRetirementPlanning,
         generalUrbanRetirementAnalysis,
         specialCategoryRetirementAnalysis,
