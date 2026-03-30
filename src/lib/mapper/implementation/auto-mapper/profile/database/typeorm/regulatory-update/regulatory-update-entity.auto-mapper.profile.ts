@@ -51,6 +51,7 @@ export class RegulatoryUpdateEntityAutoMapperProfile {
       return new RegulatoryUpdateEntity({
         id: new RegulatoryUpdateId(source.id),
         title: source.title,
+        legalIdentifier: source.legalIdentifier,
         summary: source.summary,
         mainChanges: this.toStringArray(source.mainChanges),
         implementationStatus: source.implementationStatus,
@@ -79,6 +80,7 @@ export class RegulatoryUpdateEntityAutoMapperProfile {
       return RegulatoryUpdateTypeormEntity.build({
         id: source.id.toString(),
         title: source.title,
+        legalIdentifier: source.legalIdentifier,
         summary: source.summary,
         mainChanges: this.toMainChangeEntities(source.mainChanges),
         implementationStatus: source.implementationStatus,
@@ -107,6 +109,7 @@ export class RegulatoryUpdateEntityAutoMapperProfile {
       return GetRegulatoryUpdateQueryResult.build({
         id: new RegulatoryUpdateId(source.id),
         title: source.title,
+        legalIdentifier: source.legalIdentifier,
         summary: source.summary,
         mainChanges: this.toStringArray(source.mainChanges),
         implementationStatus: source.implementationStatus,

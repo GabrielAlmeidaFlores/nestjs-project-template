@@ -5,6 +5,7 @@ import type { RegulatoryUpdateId } from '@module/customer/regulatory-update/doma
 export class GetRegulatoryUpdateQueryResult extends BaseBuildableObject {
   public readonly id: RegulatoryUpdateId;
   public readonly title: string;
+  public readonly legalIdentifier: string | null;
   public readonly summary: string;
   public readonly mainChanges: string[];
   public readonly implementationStatus: string;

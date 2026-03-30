@@ -16,6 +16,9 @@ export class GetRegulatoryUpdateResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
   public title: string;
 
+  @ResponseDtoStringProperty({ required: false })
+  public legalIdentifier?: string;
+
   @ResponseDtoStringProperty()
   public summary: string;
 
