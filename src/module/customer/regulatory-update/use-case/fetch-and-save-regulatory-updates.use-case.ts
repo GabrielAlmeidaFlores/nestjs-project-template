@@ -98,27 +98,27 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
                   },
                   summary: {
                     type: 'string',
-                    description: 'Resumo objetivo da atualização normativa',
+                    description: 'Resumo detalhado da atualização normativa com no mínimo 3 parágrafos. Explique o contexto da norma, o problema que ela resolve, o que ela determina e quais são suas implicações práticas para advogados previdenciários e beneficiários do INSS.',
                   },
                   mainChanges: {
                     type: 'array',
                     items: { type: 'string' },
-                    description: 'Lista das principais alterações introduzidas',
+                    description: 'Lista das principais alterações introduzidas. Cada item deve ser uma frase completa e detalhada (mínimo 30 palavras) descrevendo: o que mudou, como era antes, como ficou agora e qual o impacto prático da mudança. Inclua no mínimo 5 itens.',
                   },
                   implementationStatus: {
                     type: 'string',
                     description:
-                      'Status de implementação da norma (ex: em vigor, aguardando regulamentação)',
+                      'Descrição detalhada do status de implementação da norma. Inclua: se já está em vigor ou aguardando regulamentação, a data de entrada em vigor, prazos de adaptação se houver, e possíveis pendências regulatórias ou infralegais necessárias para plena aplicação.',
                   },
                   beneficiaryImpact: {
                     type: 'string',
-                    description: 'Impacto para os beneficiários do RGPS/RPPS',
+                    description: 'Análise detalhada do impacto para os beneficiários do RGPS/RPPS, com no mínimo 3 parágrafos. Aborde: quais beneficiários são afetados (aposentados, pensionistas, segurados em atividade, BPC/LOAS etc.), quais direitos ou obrigações mudam na prática, exemplos concretos de como a norma afeta o dia a dia do segurado, e orientações práticas para advogados previdenciários.',
                   },
                   fullText: {
                     type: 'string',
-                    minLength: 400,
+                    minLength: 800,
                     description:
-                      'Texto integral ou transcrição relevante da norma. OBRIGATÓRIO ter no mínimo 400 caracteres. Inclua o conteúdo completo da norma, artigos, parágrafos e disposições relevantes.',
+                      'Texto integral ou transcrição completa e fiel da norma. OBRIGATÓRIO ter no mínimo 800 caracteres. Inclua todos os artigos, parágrafos, incisos, alíneas e disposições finais. Se a norma for extensa, inclua ao menos os dispositivos mais relevantes na íntegra, sem resumir ou parafrasear.',
                   },
                   sourceUrl: {
                     type: 'string',
@@ -213,14 +213,19 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
         ? `\nFontes a consultar obrigatoriamente:\n${monitoredSources.map((s) => `- ${s.name}: ${s.url}`).join('\n')}\n`
         : '';
 
-    return `Hoje é ${currentDate}. Busque as atualizações normativas previdenciárias brasileiras publicadas entre ${startDate} e ${currentDate}.${sourcesSection}
+    return `Hoje é ${currentDate}. Você é um especialista em direito previdenciário brasileiro. Busque as atualizações normativas previdenciárias brasileiras publicadas entre ${startDate} e ${currentDate}.${sourcesSection}
 
 Atualizações já registradas no sistema (NÃO repetir estas):
 ${existingJson}
 
 Retorne APENAS novas atualizações não listadas acima. Se não houver novas atualizações no período, retorne um array vazio.
 
-IMPORTANTE: O campo "fullText" deve conter o texto integral ou transcrição detalhada da norma, com no mínimo 400 caracteres. Inclua artigos, parágrafos e disposições relevantes da norma.`;
+DIRETRIZES DE QUALIDADE — OBRIGATÓRIO SEGUIR:
+1. "summary": mínimo 3 parágrafos, contextualize a norma, explique o problema que ela resolve e suas implicações práticas.
+2. "mainChanges": mínimo 5 itens, cada um com frase completa e detalhada (≥ 30 palavras) indicando o que mudou, como era antes e como ficou.
+3. "implementationStatus": descreva data de vigência, prazos de adaptação e pendências regulatórias — não use apenas "Em vigor".
+4. "beneficiaryImpact": mínimo 3 parágrafos com análise de quais beneficiários são afetados, exemplos concretos e orientações práticas para advogados previdenciários.
+5. "fullText": mínimo 800 caracteres, transcreva fielmente todos os artigos, parágrafos, incisos e alíneas da norma sem resumir.`;
   }
 
   private deduplicateAgainstExisting(
