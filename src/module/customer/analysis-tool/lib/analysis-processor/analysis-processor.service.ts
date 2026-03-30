@@ -890,6 +890,56 @@ Análise processada do CNIS:
     );
   }
 
+  public async getMiniAdvisorCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: {
+            type: 'object',
+            properties: {
+              chosenAnalysis: {
+                type: 'string',
+                description:
+                  'Tipo de análise mais recomendada para o perfil do cliente',
+              },
+              benefitDescription: {
+                type: 'string',
+                description:
+                  'Descrição do benefício previdenciário mais indicado',
+                nullable: true,
+              },
+              attentionNote: {
+                type: 'string',
+                description:
+                  'Observação de atenção ou alerta importante para o caso',
+                nullable: true,
+              },
+            },
+            required: ['chosenAnalysis'],
+          },
+        }),
+      }),
+    );
+  }
+
+  public async getMiniAdvisorSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
   private getDisabilityRetirementPlanningCompleteAnalysisJsonSchema(): object {
     const disabilityAnalysisSchema = {
       type: 'object',
