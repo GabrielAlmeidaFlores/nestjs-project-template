@@ -47,6 +47,7 @@ import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/module/
 import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { SpecialActivityId } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/value-object/special-activity-id.value-object';
+import { SpecialRetirementGrantId } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/value-object/special-retirement-grant-id/special-retirement-grant-id.value-object';
 import { SpeechGeneratorId } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/value-object/speech-generator-id/speech-generator-id.value-object';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { ConstructorType } from '@shared/system/type/constructor.type';
@@ -103,6 +104,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { medicalQuestionGenerator: Not(IsNull()) },
         { perCapitaIncomeForBpcAnalysis: Not(IsNull()) },
         { specialActivity: Not(IsNull()) },
+        { specialRetirementGrant: Not(IsNull()) },
         { insuranceQualityAnalysis: Not(IsNull()) },
         { ruralTimeline: Not(IsNull()) },
         { audienceQuestionGenerator: Not(IsNull()) },
@@ -795,6 +797,78 @@ export class AnalysisToolRecordTypeormQueryRepository
             specialActivityDocuments: true,
             specialActivityInssBenefit: true,
             specialActivityLegalProceeding: true,
+          },
+          createdBy: {
+            customer: true,
+            organization: {
+              organizationMember: true,
+            },
+          },
+          updatedBy: {
+            customer: true,
+            organization: {
+              organizationMember: true,
+            },
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
+  public async findWithRelationsBySpecialRetirementGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    specialRetirementGrantId: SpecialRetirementGrantId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          specialRetirementGrant: {
+            id: specialRetirementGrantId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: {
+                organizationMember: true,
+              },
+            },
+            updatedBy: {
+              customer: true,
+              organization: {
+                organizationMember: true,
+              },
+            },
+          },
+          specialRetirementGrant: {
+            specialRetirementGrantBenefit: true,
+            specialRetirementGrantLegalProceeding: true,
+            specialRetirementGrantDocument: true,
+            specialRetirementGrantResult: true,
           },
           createdBy: {
             customer: true,
@@ -1908,6 +1982,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       'retirementPlanningRgps',
       'teacherRetirementPlanning',
       'specialActivity',
+      'specialRetirementGrant',
       'administrativeProcedureInssAnalysis',
       'judicialCaseAnalysis',
       'generalUrbanRetirementGrant',
