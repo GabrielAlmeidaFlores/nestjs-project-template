@@ -50,6 +50,20 @@ import { MiniAdvisorTypeormCommandRepository } from '@infra/database/implementat
 import { MiniAdvisorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/mini-advisor/mini-advisor.typeorm.query.repository';
 import { MiniAdvisorResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/mini-advisor-result/mini-advisor-result.typeorm.command.repository';
 import { MiniAdvisorResultTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/mini-advisor-result/mini-advisor-result.typeorm.query.repository';
+import { DisabilityRetirementPlanningGrantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-grant/disability-retirement-planning-grant.typeorm.command.repository';
+import { DisabilityRetirementPlanningGrantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-grant/disability-retirement-planning-grant.typeorm.query.repository';
+import { DisabilityRetirementPlanningGrantDisabilityPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-grant-disability-period/disability-retirement-planning-grant-disability-period.typeorm.command.repository';
+import { DisabilityRetirementPlanningGrantDisabilityPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-grant-disability-period/disability-retirement-planning-grant-disability-period.typeorm.query.repository';
+import { DisabilityRetirementPlanningGrantDisabilityPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-grant-disability-period-document/disability-retirement-planning-grant-disability-period-document.typeorm.command.repository';
+import { DisabilityRetirementPlanningGrantDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-grant-document/disability-retirement-planning-grant-document.typeorm.command.repository';
+import { DisabilityRetirementPlanningGrantInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-grant-inss-benefit/disability-retirement-planning-grant-inss-benefit.typeorm.command.repository';
+import { DisabilityRetirementPlanningGrantLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-grant-legal-proceeding/disability-retirement-planning-grant-legal-proceeding.typeorm.command.repository';
+import { DisabilityRetirementPlanningGrantPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-grant-period/disability-retirement-planning-grant-period.typeorm.command.repository';
+import { DisabilityRetirementPlanningGrantPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-grant-period/disability-retirement-planning-grant-period.typeorm.query.repository';
+import { DisabilityRetirementPlanningGrantPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-grant-period-document/disability-retirement-planning-grant-period-document.typeorm.command.repository';
+import { DisabilityRetirementPlanningGrantResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-grant-result/disability-retirement-planning-grant-result.typeorm.command.repository';
+import { DisabilityRetirementPlanningGrantTimeAcceleratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-grant-time-accelerator/disability-retirement-planning-grant-time-accelerator.typeorm.command.repository';
+import { DisabilityRetirementPlanningGrantTimeAcceleratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-grant-time-accelerator/disability-retirement-planning-grant-time-accelerator.typeorm.query.repository';
 import { DisabilityRetirementPlanningInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-inss-benefit/disability-retirement-planning-inss-benefit.typeorm.command.repository';
 import { DisabilityRetirementPlanningLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-legal-proceeding/disability-retirement-planning-legal-proceeding.typeorm.command.repository';
 import { DisabilityRetirementPlanningPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-period/disability-retirement-planning-period.typeorm.command.repository';
@@ -243,6 +257,16 @@ import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database
 import { DisabilityRetirementPlanningDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-document.typeorm.entity';
 import { MiniAdvisorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/mini-advisor.typeorm.entity';
 import { MiniAdvisorResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/mini-advisor-result.typeorm.entity';
+import { DisabilityRetirementPlanningGrantDisabilityPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-grant-disability-period-document.typeorm.entity';
+import { DisabilityRetirementPlanningGrantDisabilityPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-grant-disability-period.typeorm.entity';
+import { DisabilityRetirementPlanningGrantDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-grant-document.typeorm.entity';
+import { DisabilityRetirementPlanningGrantInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-grant-inss-benefit.typeorm.entity';
+import { DisabilityRetirementPlanningGrantLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-grant-legal-proceeding.typeorm.entity';
+import { DisabilityRetirementPlanningGrantPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-grant-period-document.typeorm.entity';
+import { DisabilityRetirementPlanningGrantPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-grant-period.typeorm.entity';
+import { DisabilityRetirementPlanningGrantResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-grant-result.typeorm.entity';
+import { DisabilityRetirementPlanningGrantTimeAcceleratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-grant-time-accelerator.typeorm.entity';
+import { DisabilityRetirementPlanningGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-grant.typeorm.entity';
 import { DisabilityRetirementPlanningInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-inss-benefit.typeorm.entity';
 import { DisabilityRetirementPlanningLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-legal-proceeding.typeorm.entity';
 import { DisabilityRetirementPlanningPeriodDisabilityDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period-disability-document.typeorm.entity';
@@ -462,6 +486,16 @@ export class TypeormIndex {
     GeneralUrbanRetirementAnalysisRemunerationTypeormEntity,
     GeneralUrbanRetirementAnalysisLegalProceedingTypeormEntity,
     CidTenTypeormEntity,
+    DisabilityRetirementPlanningGrantTypeormEntity,
+    DisabilityRetirementPlanningGrantResultTypeormEntity,
+    DisabilityRetirementPlanningGrantDocumentTypeormEntity,
+    DisabilityRetirementPlanningGrantInssBenefitTypeormEntity,
+    DisabilityRetirementPlanningGrantLegalProceedingTypeormEntity,
+    DisabilityRetirementPlanningGrantPeriodTypeormEntity,
+    DisabilityRetirementPlanningGrantPeriodDocumentTypeormEntity,
+    DisabilityRetirementPlanningGrantDisabilityPeriodTypeormEntity,
+    DisabilityRetirementPlanningGrantDisabilityPeriodDocumentTypeormEntity,
+    DisabilityRetirementPlanningGrantTimeAcceleratorTypeormEntity,
     GeneralUrbanRetirementGrantTypeormEntity,
     GeneralUrbanRetirementGrantResultTypeormEntity,
     GeneralUrbanRetirementGrantInssBenefitTypeormEntity,
@@ -656,6 +690,20 @@ export class TypeormIndex {
     GeneralUrbanRetirementAnalysisDocumentTypeormCommandRepository,
     GeneralUrbanRetirementAnalysisRemunerationTypeormCommandRepository,
     GeneralUrbanRetirementAnalysisRemunerationTypeormQueryRepository,
+    DisabilityRetirementPlanningGrantTypeormCommandRepository,
+    DisabilityRetirementPlanningGrantTypeormQueryRepository,
+    DisabilityRetirementPlanningGrantDocumentTypeormCommandRepository,
+    DisabilityRetirementPlanningGrantResultTypeormCommandRepository,
+    DisabilityRetirementPlanningGrantInssBenefitTypeormCommandRepository,
+    DisabilityRetirementPlanningGrantLegalProceedingTypeormCommandRepository,
+    DisabilityRetirementPlanningGrantPeriodTypeormCommandRepository,
+    DisabilityRetirementPlanningGrantPeriodTypeormQueryRepository,
+    DisabilityRetirementPlanningGrantPeriodDocumentTypeormCommandRepository,
+    DisabilityRetirementPlanningGrantDisabilityPeriodTypeormCommandRepository,
+    DisabilityRetirementPlanningGrantDisabilityPeriodTypeormQueryRepository,
+    DisabilityRetirementPlanningGrantDisabilityPeriodDocumentTypeormCommandRepository,
+    DisabilityRetirementPlanningGrantTimeAcceleratorTypeormCommandRepository,
+    DisabilityRetirementPlanningGrantTimeAcceleratorTypeormQueryRepository,
     GeneralUrbanRetirementGrantTypeormCommandRepository,
     GeneralUrbanRetirementGrantTypeormQueryRepository,
     GeneralUrbanRetirementGrantResultTypeormCommandRepository,
