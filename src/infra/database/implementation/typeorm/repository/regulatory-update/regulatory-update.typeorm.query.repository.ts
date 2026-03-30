@@ -121,6 +121,7 @@ export class RegulatoryUpdateTypeormQueryRepository
     return [
       { title: Like(searchTerm), ...dateFilter },
       { summary: Like(searchTerm), ...dateFilter },
+      { legalIdentifier: Like(searchTerm), ...dateFilter },
     ];
   }
 }
