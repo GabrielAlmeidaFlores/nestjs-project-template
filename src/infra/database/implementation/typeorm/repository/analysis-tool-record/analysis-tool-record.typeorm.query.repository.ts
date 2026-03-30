@@ -2044,6 +2044,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       'insuranceQualityAnalysis',
       'audienceQuestionGenerator',
       'disabilityRetirementPlanning',
+      'miniAdvisor',
       'disabilityRetirementPlanningGrant',
     ];
   }
