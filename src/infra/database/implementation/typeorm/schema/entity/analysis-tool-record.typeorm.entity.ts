@@ -20,6 +20,7 @@ import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementat
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
 import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
 import { SpecialCategoryRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis.typeorm.entity';
+import { SpecialRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant.typeorm.entity';
 import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
 import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning.typeorm.entity';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
@@ -96,7 +97,6 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   )
   @JoinColumn({ name: 'teacher_retirement_planning_id' })
   public teacherRetirementPlanning?: TeacherRetirementPlanningTypeormEntity | null;
-
 
   @OneToOne(
     () => SpecialCategoryRetirementAnalysisTypeormEntity,
@@ -222,6 +222,16 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   )
   @JoinColumn({ name: 'general_urban_retirement_analysis_id' })
   public generalUrbanRetirementAnalysis?: GeneralUrbanRetirementAnalysisTypeormEntity | null;
+
+  @OneToOne(
+    () => SpecialRetirementGrantTypeormEntity,
+    (entity) => entity.analysisToolRecord,
+    {
+      nullable: true,
+    },
+  )
+  @JoinColumn({ name: 'special_retirement_grant_id' })
+  public specialRetirementGrant?: SpecialRetirementGrantTypeormEntity | null;
 
   @ManyToOne(
     () => AnalysisToolClientTypeormEntity,
