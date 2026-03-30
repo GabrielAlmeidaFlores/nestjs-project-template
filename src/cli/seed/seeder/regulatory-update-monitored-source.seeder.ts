@@ -29,7 +29,8 @@ export class RegulatoryUpdateMonitoredSourceSeeder implements SeederInterface {
   ) {}
 
   public async execute(): Promise<Array<TransactionType>> {
-    const existing = await this.monitoredSourceQueryRepository.listAllMonitoredSources();
+    const existing =
+      await this.monitoredSourceQueryRepository.listAllMonitoredSources();
     const existingUrls = new Set(existing.map((s) => s.url));
 
     const transactions: Array<TransactionType> = [];

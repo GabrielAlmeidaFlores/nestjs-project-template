@@ -12,7 +12,11 @@ export class RegulatoryUpdateTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'summary', type: 'text' })
   public summary: string;
 
-  @OneToMany(() => RegulatoryUpdateMainChangeTypeormEntity, (mc) => mc.regulatoryUpdate, { cascade: true, eager: true })
+  @OneToMany(
+    () => RegulatoryUpdateMainChangeTypeormEntity,
+    (mc) => mc.regulatoryUpdate,
+    { cascade: true, eager: true },
+  )
   public mainChanges: RegulatoryUpdateMainChangeTypeormEntity[];
 
   @Column({ name: 'implementation_status', type: 'text' })

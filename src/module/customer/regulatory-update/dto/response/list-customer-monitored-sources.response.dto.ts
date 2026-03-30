@@ -15,7 +15,8 @@ export class CustomerMonitoredSourceItemResponseDto extends BaseBuildableDtoObje
   @ResponseDtoBooleanProperty()
   public active: boolean;
 
-  protected override readonly _type = CustomerMonitoredSourceItemResponseDto.name;
+  protected override readonly _type =
+    CustomerMonitoredSourceItemResponseDto.name;
 }
 
 @ResponseDto()

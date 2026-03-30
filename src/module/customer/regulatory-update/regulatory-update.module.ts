@@ -10,8 +10,8 @@ import { CreateRegulatoryUpdateMonitoredSourceUseCase } from '@module/customer/r
 import { DeleteRegulatoryUpdateMonitoredSourceUseCase } from '@module/customer/regulatory-update/use-case/delete-regulatory-update-monitored-source.use-case';
 import { FetchAndSaveRegulatoryUpdatesUseCase } from '@module/customer/regulatory-update/use-case/fetch-and-save-regulatory-updates.use-case';
 import { GetRegulatoryUpdateEmailPreferenceUseCase } from '@module/customer/regulatory-update/use-case/get-regulatory-update-email-preference.use-case';
-import { GetRegulatoryUpdateUseCase } from '@module/customer/regulatory-update/use-case/get-regulatory-update.use-case';
 import { GetRegulatoryUpdateStatsUseCase } from '@module/customer/regulatory-update/use-case/get-regulatory-update-stats.use-case';
+import { GetRegulatoryUpdateUseCase } from '@module/customer/regulatory-update/use-case/get-regulatory-update.use-case';
 import { ListCustomerMonitoredSourcesUseCase } from '@module/customer/regulatory-update/use-case/list-customer-monitored-sources.use-case';
 import { ListRegulatoryUpdateMonitoredSourcesUseCase } from '@module/customer/regulatory-update/use-case/list-regulatory-update-monitored-sources.use-case';
 import { ListRegulatoryUpdatesUseCase } from '@module/customer/regulatory-update/use-case/list-regulatory-updates.use-case';

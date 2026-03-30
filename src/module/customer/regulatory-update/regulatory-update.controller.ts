@@ -5,8 +5,8 @@ import { RegulatoryUpdateId } from '@module/customer/regulatory-update/domain/sc
 import { ListRegulatoryUpdatesRequestDto } from '@module/customer/regulatory-update/dto/request/list-regulatory-updates.request.dto';
 import { UpdateRegulatoryUpdateEmailPreferenceRequestDto } from '@module/customer/regulatory-update/dto/request/update-regulatory-update-email-preference.request.dto';
 import { GetRegulatoryUpdateEmailPreferenceResponseDto } from '@module/customer/regulatory-update/dto/response/get-regulatory-update-email-preference.response.dto';
-import { GetRegulatoryUpdateResponseDto } from '@module/customer/regulatory-update/dto/response/get-regulatory-update.response.dto';
 import { GetRegulatoryUpdateStatsResponseDto } from '@module/customer/regulatory-update/dto/response/get-regulatory-update-stats.response.dto';
+import { GetRegulatoryUpdateResponseDto } from '@module/customer/regulatory-update/dto/response/get-regulatory-update.response.dto';
 import { ListCustomerMonitoredSourcesResponseDto } from '@module/customer/regulatory-update/dto/response/list-customer-monitored-sources.response.dto';
 import { ListRegulatoryUpdatesResponseDto } from '@module/customer/regulatory-update/dto/response/list-regulatory-updates.response.dto';
 import { UpdateRegulatoryUpdateEmailPreferenceResponseDto } from '@module/customer/regulatory-update/dto/response/update-regulatory-update-email-preference.response.dto';
@@ -76,7 +76,8 @@ export class RegulatoryUpdateController {
     tag: ['atualizacoes-normativas'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Estatísticas de atualizações normativas retornadas com sucesso.',
+      description:
+        'Estatísticas de atualizações normativas retornadas com sucesso.',
       type: GetRegulatoryUpdateStatsResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -85,7 +86,9 @@ export class RegulatoryUpdateController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
   ): Promise<GetRegulatoryUpdateStatsResponseDto> {
-    return this.getRegulatoryUpdateStatsUseCase.execute(organizationSessionData);
+    return this.getRegulatoryUpdateStatsUseCase.execute(
+      organizationSessionData,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -107,7 +110,9 @@ export class RegulatoryUpdateController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
   ): Promise<ListCustomerMonitoredSourcesResponseDto> {
-    return this.listCustomerMonitoredSourcesUseCase.execute(organizationSessionData);
+    return this.listCustomerMonitoredSourcesUseCase.execute(
+      organizationSessionData,
+    );
   }
 
   @BuildEndpointSpecification({

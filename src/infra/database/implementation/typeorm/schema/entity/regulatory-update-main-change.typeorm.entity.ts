@@ -11,9 +11,12 @@ export class RegulatoryUpdateMainChangeTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'order', type: 'int', default: 0 })
   public order: number;
 
-  @ManyToOne(() => RegulatoryUpdateTypeormEntity, (ru) => ru.mainChanges, { onDelete: 'CASCADE' })
+  @ManyToOne(() => RegulatoryUpdateTypeormEntity, (ru) => ru.mainChanges, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'regulatory_update_id' })
   public regulatoryUpdate: RegulatoryUpdateTypeormEntity;
 
-  protected override readonly _type = RegulatoryUpdateMainChangeTypeormEntity.name;
+  protected override readonly _type =
+    RegulatoryUpdateMainChangeTypeormEntity.name;
 }
