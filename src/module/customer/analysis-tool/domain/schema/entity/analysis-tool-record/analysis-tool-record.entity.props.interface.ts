@@ -24,6 +24,7 @@ import type { SpecialActivityEntity } from '@module/customer/analysis-tool/modul
 import type { MiniAdvisorEntity } from '@module/customer/analysis-tool/module/mini-advisor/domain/schema/entity/mini-advisor/mini-advisor.entity';
 import type { SpecialCategoryRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/special-category-retirement-analysis.entity';
 import type { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
+import type { TeacherRetirementPlanningEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
 
 export interface AnalysisToolRecordEntityPropsInterface extends BaseEntityPropsInterface<AnalysisToolRecordId> {
   code: AnalysisToolRecordCode;
@@ -42,6 +43,7 @@ export interface AnalysisToolRecordEntityPropsInterface extends BaseEntityPropsI
   perCapitaIncomeForBpcAnalysis?: PerCapitaIncomeForBpcAnalysisEntity | null;
   ruralTimelineAnalysis?: RuralTimelineAnalysisEntity | null;
   insuranceQualityAnalysis?: InsuranceQualityAnalysisEntity | null;
+  teacherRetirementPlanning?: TeacherRetirementPlanningEntity | null;
   disabilityRetirementPlanning?: DisabilityRetirementPlanningEntity | null;
   generalUrbanRetirementGrant?: GeneralUrbanRetirementGrantEntity | null;
   generalUrbanRetirementAnalysis?: GeneralUrbanRetirementAnalysisEntity | null;

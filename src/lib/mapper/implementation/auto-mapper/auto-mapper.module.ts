@@ -332,6 +332,7 @@ import { MiniAdvisorEntityAutoMapperProfile } from '@lib/mapper/implementation/a
 import { GetMiniAdvisorWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/mini-advisor/get-mini-advisor-with-relations-query-result.auto-mapper.profile';
 import { MiniAdvisorResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/mini-advisor-result/mini-advisor-result-entity.auto-mapper.profile';
 import { GetMiniAdvisorResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/mini-advisor-result/get-mini-advisor-result-query-result.auto-mapper.profile';
+import { GetTeacherRetirementPlanningWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/teacher-retirement-planning/get-teacher-retirement-planning-with-relations-query-result.auto-mapper.profile';
 
 @Module({
   imports: [
@@ -387,6 +388,7 @@ import { GetMiniAdvisorResultQueryResultAutoMapperProfile } from '@lib/mapper/im
     SpeechGeneratorEntityAutoMapperProfile,
     GetSpeechGeneratorQueryResultAutoMapperProfile,
     GetSpeechGeneratorWithRelationsQueryResultAutoMapperProfile,
+    GetTeacherRetirementPlanningWithRelationsQueryResultAutoMapperProfile,
     GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile,
     GetCnisFastAnalysisInssBenefitQueryResultAutoMapperProfile,
     GetCnisFastAnalysisLegalProceedingQueryResultAutoMapperProfile,
