@@ -38,6 +38,9 @@ export class ListRegulatoryUpdatesUseCase {
         title: item.title,
         summary: item.summary,
         updatedAt: item.updatedAt,
+        ...(item.legalIdentifier !== null && {
+          legalIdentifier: item.legalIdentifier,
+        }),
         ...(item.publishedAt !== null && { publishedAt: item.publishedAt }),
       }),
     );
