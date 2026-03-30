@@ -98,12 +98,14 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
                   },
                   summary: {
                     type: 'string',
-                    description: 'Resumo detalhado da atualização normativa com no mínimo 3 parágrafos. Explique o contexto da norma, o problema que ela resolve, o que ela determina e quais são suas implicações práticas para advogados previdenciários e beneficiários do INSS.',
+                    description:
+                      'Resumo detalhado da atualização normativa com no mínimo 3 parágrafos. Explique o contexto da norma, o problema que ela resolve, o que ela determina e quais são suas implicações práticas para advogados previdenciários e beneficiários do INSS.',
                   },
                   mainChanges: {
                     type: 'array',
                     items: { type: 'string' },
-                    description: 'Lista das principais alterações introduzidas. Cada item deve ser uma frase completa e detalhada (mínimo 30 palavras) descrevendo: o que mudou, como era antes, como ficou agora e qual o impacto prático da mudança. Inclua no mínimo 5 itens.',
+                    description:
+                      'Lista das principais alterações introduzidas. Cada item deve ser uma frase completa e detalhada (mínimo 30 palavras) descrevendo: o que mudou, como era antes, como ficou agora e qual o impacto prático da mudança. Inclua no mínimo 5 itens.',
                   },
                   implementationStatus: {
                     type: 'string',
@@ -112,7 +114,8 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
                   },
                   beneficiaryImpact: {
                     type: 'string',
-                    description: 'Análise detalhada do impacto para os beneficiários do RGPS/RPPS, com no mínimo 3 parágrafos. Aborde: quais beneficiários são afetados (aposentados, pensionistas, segurados em atividade, BPC/LOAS etc.), quais direitos ou obrigações mudam na prática, exemplos concretos de como a norma afeta o dia a dia do segurado, e orientações práticas para advogados previdenciários.',
+                    description:
+                      'Análise detalhada do impacto para os beneficiários do RGPS/RPPS, com no mínimo 3 parágrafos. Aborde: quais beneficiários são afetados (aposentados, pensionistas, segurados em atividade, BPC/LOAS etc.), quais direitos ou obrigações mudam na prática, exemplos concretos de como a norma afeta o dia a dia do segurado, e orientações práticas para advogados previdenciários.',
                   },
                   fullText: {
                     type: 'string',
@@ -145,14 +148,15 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
       );
 
     if (aiResponse === null) {
-      this.logger.warn(
-        'AI returned no response for regulatory updates.',
-      );
+      this.logger.warn('AI returned no response for regulatory updates.');
       return [];
     }
 
     const parsedUpdates = this.parseAiResponse(aiResponse);
-    const newUpdates = this.deduplicateAgainstExisting(parsedUpdates, existingTitlesLower);
+    const newUpdates = this.deduplicateAgainstExisting(
+      parsedUpdates,
+      existingTitlesLower,
+    );
 
     if (newUpdates.length === 0) {
       this.logger.log('No new regulatory updates found.');
@@ -161,9 +165,7 @@ export class FetchAndSaveRegulatoryUpdatesUseCase {
 
     const savedEntities = await this.saveNewUpdates(newUpdates);
 
-    this.logger.log(
-      `${savedEntities.length} new regulatory update(s) saved.`,
-    );
+    this.logger.log(`${savedEntities.length} new regulatory update(s) saved.`);
 
     return savedEntities;
   }
@@ -237,7 +239,10 @@ DIRETRIZES DE QUALIDADE — OBRIGATÓRIO SEGUIR:
     return updates.filter((update) => {
       const normalizedTitle = update.title.trim().toLowerCase();
 
-      if (existingTitlesLower.has(normalizedTitle) || seen.has(normalizedTitle)) {
+      if (
+        existingTitlesLower.has(normalizedTitle) ||
+        seen.has(normalizedTitle)
+      ) {
         this.logger.warn(
           `Skipping duplicate regulatory update: "${update.title}"`,
         );

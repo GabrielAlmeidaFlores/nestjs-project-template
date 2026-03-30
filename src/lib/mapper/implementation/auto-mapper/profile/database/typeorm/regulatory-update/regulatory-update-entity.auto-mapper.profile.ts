@@ -2,6 +2,7 @@ import { constructUsing, createMap, Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { RegulatoryUpdateMainChangeTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/regulatory-update-main-change.typeorm.entity';
 import { RegulatoryUpdateTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/regulatory-update.typeorm.entity';
 import { GetRegulatoryUpdateQueryResult } from '@module/customer/regulatory-update/domain/repository/regulatory-update/query/result/get-regulatory-update.query.result';
 import { RegulatoryUpdateEntity } from '@module/customer/regulatory-update/domain/schema/entity/regulatory-update/regulatory-update.entity';
@@ -10,10 +11,8 @@ import { RegulatoryUpdateId } from '@module/customer/regulatory-update/domain/sc
 @Injectable()
 export class RegulatoryUpdateEntityAutoMapperProfile {
   protected readonly _type = RegulatoryUpdateEntityAutoMapperProfile.name;
-  private readonly mainChangesSeparator: string;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
-    this.mainChangesSeparator = '\n';
     this.createMappings();
   }
 
@@ -23,17 +22,20 @@ export class RegulatoryUpdateEntityAutoMapperProfile {
     this.mapOrmToQueryResult();
   }
 
-  private parseMainChanges(raw: string): string[] {
-    if (raw === '') {
-      return [];
-    }
-    return raw
-      .split(this.mainChangesSeparator)
-      .filter((item) => item.trim() !== '');
+  private toStringArray(mainChanges: RegulatoryUpdateMainChangeTypeormEntity[]): string[] {
+    if (!mainChanges || mainChanges.length === 0) return [];
+    return [...mainChanges]
+      .sort((a, b) => a.order - b.order)
+      .map((mc) => mc.description);
   }
 
-  private serializeMainChanges(items: string[]): string {
-    return items.join(this.mainChangesSeparator);
+  private toMainChangeEntities(descriptions: string[]): RegulatoryUpdateMainChangeTypeormEntity[] {
+    return descriptions.map((description, index) => {
+      const entity = new RegulatoryUpdateMainChangeTypeormEntity();
+      entity.description = description;
+      entity.order = index;
+      return entity;
+    });
   }
 
   private mapOrmToDomain(): void {
@@ -44,7 +46,7 @@ export class RegulatoryUpdateEntityAutoMapperProfile {
         id: new RegulatoryUpdateId(source.id),
         title: source.title,
         summary: source.summary,
-        mainChanges: this.parseMainChanges(source.mainChanges),
+        mainChanges: this.toStringArray(source.mainChanges),
         implementationStatus: source.implementationStatus,
         beneficiaryImpact: source.beneficiaryImpact,
         fullText: source.fullText,
@@ -72,7 +74,7 @@ export class RegulatoryUpdateEntityAutoMapperProfile {
         id: source.id.toString(),
         title: source.title,
         summary: source.summary,
-        mainChanges: this.serializeMainChanges(source.mainChanges),
+        mainChanges: this.toMainChangeEntities(source.mainChanges),
         implementationStatus: source.implementationStatus,
         beneficiaryImpact: source.beneficiaryImpact,
         fullText: source.fullText,
@@ -100,7 +102,7 @@ export class RegulatoryUpdateEntityAutoMapperProfile {
         id: new RegulatoryUpdateId(source.id),
         title: source.title,
         summary: source.summary,
-        mainChanges: this.parseMainChanges(source.mainChanges),
+        mainChanges: this.toStringArray(source.mainChanges),
         implementationStatus: source.implementationStatus,
         beneficiaryImpact: source.beneficiaryImpact,
         fullText: source.fullText,

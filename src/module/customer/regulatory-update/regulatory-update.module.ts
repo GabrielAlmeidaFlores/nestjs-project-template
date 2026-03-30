@@ -5,7 +5,6 @@ import { EmailModule } from '@infra/email/email.module';
 import { GenerativeIaModule } from '@infra/generative-ia/generative-ia.module';
 import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
 import { FetchRegulatoryUpdatesCron } from '@module/customer/regulatory-update/cron/fetch-regulatory-updates.cron';
-import { RegulatoryUpdateMonitoredSourceController } from '@module/customer/regulatory-update/regulatory-update-monitored-source.controller';
 import { RegulatoryUpdateController } from '@module/customer/regulatory-update/regulatory-update.controller';
 import { CreateRegulatoryUpdateMonitoredSourceUseCase } from '@module/customer/regulatory-update/use-case/create-regulatory-update-monitored-source.use-case';
 import { DeleteRegulatoryUpdateMonitoredSourceUseCase } from '@module/customer/regulatory-update/use-case/delete-regulatory-update-monitored-source.use-case';
@@ -31,10 +30,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     OrganizationSessionModule,
     PaymentPlanModule,
   ],
-  controllers: [
-    RegulatoryUpdateController,
-    RegulatoryUpdateMonitoredSourceController,
-  ],
+  controllers: [RegulatoryUpdateController],
   providers: [
     FetchRegulatoryUpdatesCron,
     FetchAndSaveRegulatoryUpdatesUseCase,
