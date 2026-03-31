@@ -9,6 +9,7 @@ import { DocumentsSentByEmailModule } from '@module/customer/documents-sent-by-e
 import { DocumentsToBeGeneratedModule } from '@module/customer/documents-to-be-generated/documents-to-be-generated.module';
 import { LegalProceedingModule } from '@module/customer/legal-proceeding/legal-proceeding.module';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
+import { OrganizationCustomizationModule } from '@module/customer/organization-customization/organization-customization.module';
 import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
 import { ServiceDeskModule } from '@module/customer/service-desk/service-desk.module';
 import { SystemActivitiesModule } from '@module/customer/system-activities/system-activities.module';
@@ -31,6 +32,7 @@ import { CustomerTutorialModule } from '@module/customer/tutorial/tutorial.modul
     SystemActivitiesModule,
     CustomerTutorialModule,
     ServiceDeskModule,
+    OrganizationCustomizationModule,
   ],
   controllers: [],
   providers: [],

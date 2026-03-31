@@ -92,15 +92,6 @@ export class GetAuthenticatedCustomerDataUseCase {
       response.customer.profilePicture = customerProfilePicture.toString();
     }
 
-    if (organizationMember.organization.organizationLogo !== null) {
-      const organizationLogo =
-        await this.fileProcessorGateway.getOrganizationLogo(
-          organizationMember.organization.organizationLogo,
-        );
-
-      response.organization.organizationLogo = organizationLogo.toString();
-    }
-
     return response;
   }
 }
