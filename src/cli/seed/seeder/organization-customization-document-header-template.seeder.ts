@@ -31,7 +31,7 @@ export class OrganizationCustomizationDocumentHeaderTemplateSeeder implements Se
           '9ae34abf-a3df-4972-9885-67204fa64e41',
         ),
         type: OrganizationCustomizationDocumentHeaderTemplateTypeEnum.MODERN,
-        htmlContent: `<header><table style="width: 100%;font-family: sans-serif;"><tr><td style="text-align: center;"><p align="center"><img src="{{logo}}"alt="{{organizationName}}"style="height: auto; width: 130px;"/></p><div style="font-size: 20px;font-weight: bold;color: {{secondaryColor}}; margin: 0;">{{organizationName}}</div></td></tr></table></header>`,
+        htmlContent: `<header><table style="width: 100%;font-family: sans-serif;"><tr><td style="text-align: center;"><p align="center"><img src="{{logo}}"alt="{{organizationName}}"style="height: auto; width: 130px;"/></p><div style="font-size: 20px;font-weight: 300;color: {{secondaryColor}}; margin: 0;">{{organizationName}}</div></td></tr></table></header>`,
       }),
       new OrganizationCustomizationDocumentHeaderTemplateEntity({
         id: new OrganizationCustomizationDocumentHeaderTemplateId(
@@ -58,7 +58,7 @@ export class OrganizationCustomizationDocumentHeaderTemplateSeeder implements Se
                   padding: 0px 20px;"
               >
                 <span
-                  style="font-size: 20px; font-weight: bold; color: {{primaryColor}}"
+                  style="font-size: 20px; font-weight: 300; color: {{primaryColor}}"
                   >{{organizationName}}</span
                 >
               </td>
@@ -95,7 +95,7 @@ export class OrganizationCustomizationDocumentHeaderTemplateSeeder implements Se
           "
         >
           <span
-            style="font-size: 20px; font-weight: bold; color: {{primaryColor}}"
+            style="font-size: 20px; font-weight: 300; color: {{primaryColor}}"
             >{{organizationName}}</span
           >
         </td>
@@ -126,7 +126,7 @@ export class OrganizationCustomizationDocumentHeaderTemplateSeeder implements Se
             />
           </p>
           <div
-            style="font-size: 20px;font-weight: bold;color: {{secondaryColor}}; margin: 0;"
+            style="font-size: 20px;font-weight: 300;color: {{secondaryColor}}; margin: 0;"
           >
             {{organizationName}}
           </div>
