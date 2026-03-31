@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
+import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
 import { AffiliateBankTransferQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-bank-transfer/query/affiliate-bank-transfer.query.repository.gateway';
@@ -109,6 +110,17 @@ export class ListMyAffiliateTransfersUseCase {
       ];
     });
 
-    return ListMyAffiliateTransfersResponseDto.build({ transfers });
+    const totalItems = transfers.length;
+    const skip = (filters.page - 1) * filters.limit;
+    const paginatedTransfers = transfers.slice(skip, skip + filters.limit);
+
+    const output = new ListDataOutputModel({
+      page: filters.page,
+      limit: filters.limit,
+      totalItems,
+      resource: paginatedTransfers,
+    });
+
+    return ListMyAffiliateTransfersResponseDto.build(output);
   }
 }
