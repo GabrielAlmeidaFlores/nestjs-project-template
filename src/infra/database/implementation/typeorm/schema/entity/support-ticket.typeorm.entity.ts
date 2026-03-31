@@ -13,6 +13,7 @@ import { OrganizationTypeormEntity } from '@infra/database/implementation/typeor
 import { SupportAttendantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-attendant.typeorm.entity';
 import { SupportTicketAttachmentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-ticket-attachment.typeorm.entity';
 import { SupportTicketMessageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-ticket-message.typeorm.entity';
+import { SupportTicketStatusEnum } from '@module/support/service-desk/domain/schema/entity/support-ticket/enum/support-ticket-status.enum';
 import { SupportTypeEnum } from '@shared/system/enum/support-type.enum';
 
 @Entity({ name: 'support_ticket' })
@@ -53,8 +54,12 @@ export class SupportTicketTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'description', type: 'longtext' })
   public description: string;
 
-  @Column({ name: 'status', type: 'varchar', length: 50 })
-  public status: string;
+  @Column({
+    name: 'status',
+    type: 'enum',
+    enum: SupportTicketStatusEnum,
+  })
+  public status: SupportTicketStatusEnum;
 
   @ManyToOne(
     () => SupportAttendantTypeormEntity,
