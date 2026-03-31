@@ -6,6 +6,7 @@ import { CnisProcessorModule } from '@lib/cnis-processor/cnis-processor.module';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
+import { OrganizationCustomizationExportDocumentOptionsResolverModule } from '@module/customer/analysis-tool/lib/organization-customization-resolver/organization-customization-export-document-options-resolver.module';
 import { CnisFastAnalysisTemplateService } from '@module/customer/analysis-tool/module/cnis-fast-analysis/service/cnis-fast-analysis-template.service';
 import { LegalPleadingController } from '@module/customer/analysis-tool/module/legal-pleading/legal-pleading.controller';
 import { CreateLegalPleadingDocumentAnalysisUseCase } from '@module/customer/analysis-tool/module/legal-pleading/use-case/create-legal-pleading-document-analysis.use-case';
@@ -38,6 +39,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     OrganizationCreditModule,
     OrganizationSessionModule,
     PaymentPlanModule,
+    OrganizationCustomizationExportDocumentOptionsResolverModule,
   ],
   controllers: [LegalPleadingController],
   providers: [

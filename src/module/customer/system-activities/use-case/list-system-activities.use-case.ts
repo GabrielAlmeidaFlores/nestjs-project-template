@@ -9,6 +9,7 @@ import { ListSystemActivitiesResponseDto } from '@module/customer/system-activit
 import { SystemActivityItemResponseDto } from '@module/customer/system-activities/dto/response/system-activity-item.response.dto';
 import { OrganizationMemberFilterRequiresOwnerError } from '@module/customer/system-activities/error/organization-member-filter-requires-owner.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 @Injectable()
 export class ListSystemActivitiesUseCase {
@@ -22,10 +23,11 @@ export class ListSystemActivitiesUseCase {
   ) {}
 
   public async execute(
+    sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
     dto: ListSystemActivitiesRequestDto,
   ): Promise<ListSystemActivitiesResponseDto> {
-    const organizationMemberIdFilter = dto.organizationMemberId ?? null;
+    let organizationMemberIdFilter = dto.organizationMemberId ?? null;
 
     if (organizationMemberIdFilter !== null) {
       if (organizationSessionData.owner === false) {
@@ -47,6 +49,20 @@ export class ListSystemActivitiesUseCase {
       ) {
         throw new OrganizationNotAvailableForCustomerError();
       }
+    }
+
+    if (organizationSessionData.owner === false) {
+      const member =
+        await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
+          sessionData.authIdentityId,
+          organizationSessionData.organizationId,
+        );
+
+      if (member === null) {
+        throw new OrganizationMemberNotFoundError();
+      }
+
+      organizationMemberIdFilter = member.id;
     }
 
     const { startDate, endDate } = this.normalizeDateRange(
@@ -95,27 +111,17 @@ export class ListSystemActivitiesUseCase {
     start?: Date,
     end?: Date,
   ): { startDate: Date | null; endDate: Date | null } {
-    const HOURS_IN_DAY = 23;
-    const MINUTES_IN_HOUR = 59;
-    const SECONDS_IN_MINUTE = 59;
-    const MILLISECONDS_IN_SECOND = 999;
-
     let startDate: Date | null = null;
     let endDate: Date | null = null;
 
     if (start instanceof Date && !Number.isNaN(start.getTime())) {
-      startDate = new Date(start);
-      startDate.setHours(0, 0, 0, 0);
+      startDate = new Date(
+        start.toISOString().split('T')[0] + 'T00:00:00.000Z',
+      );
     }
 
     if (end instanceof Date && !Number.isNaN(end.getTime())) {
-      endDate = new Date(end);
-      endDate.setHours(
-        HOURS_IN_DAY,
-        MINUTES_IN_HOUR,
-        SECONDS_IN_MINUTE,
-        MILLISECONDS_IN_SECOND,
-      );
+      endDate = new Date(end.toISOString().split('T')[0] + 'T23:59:59.999Z');
     }
 
     return { startDate, endDate };

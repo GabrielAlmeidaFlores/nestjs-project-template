@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { SystemActivitiesCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/system-activities/command/system-activities.command.repository.gateway';
+import { SystemActivityEntity } from '@module/customer/analysis-tool/domain/schema/entity/system-activity/system-activity.entity';
 import { AnalysisActivityMessageFactory } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-message.factory';
 import {
   AnalysisActivityTrackerGateway,
@@ -25,7 +26,7 @@ export class AnalysisActivityTrackerService implements AnalysisActivityTrackerGa
       params.analysisType,
       params.action,
     );
-    const createSystemActivityParams = {
+    const createSystemActivityEntity = new SystemActivityEntity({
       title: message.title,
       description: message.description,
       ...(params.organizationMemberId !== undefined && {
@@ -37,11 +38,14 @@ export class AnalysisActivityTrackerService implements AnalysisActivityTrackerGa
       ...(params.analysisToolRecordId !== undefined && {
         analysisToolRecordId: params.analysisToolRecordId,
       }),
-    };
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    });
 
     const createActivityTransaction =
       this.systemActivitiesCommandRepositoryGateway.createSystemActivity(
-        createSystemActivityParams,
+        createSystemActivityEntity,
       );
 
     return [...params.transactions, createActivityTransaction];

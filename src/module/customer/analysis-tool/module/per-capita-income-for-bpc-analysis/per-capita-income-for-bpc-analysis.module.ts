@@ -5,6 +5,7 @@ import { AnalysisActivityTrackerModule } from '@module/customer/analysis-tool/li
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
+import { OrganizationCustomizationExportDocumentOptionsResolverModule } from '@module/customer/analysis-tool/lib/organization-customization-resolver/organization-customization-export-document-options-resolver.module';
 import { PerCapitaIncomeForBpcAnalysisController } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.controller';
 import { CreatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/use-case/create-per-capita-income-for-bpc-analysis-family-member.use-case';
 import { CreatePerCapitaIncomeForBpcAnalysisResultUseCase } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/use-case/create-per-capita-income-for-bpc-analysis-result.use-case';
@@ -31,6 +32,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     AnalysisActivityTrackerModule,
     AnalysisProcessorModule,
     ExportDocumentModule,
+    OrganizationCustomizationExportDocumentOptionsResolverModule,
   ],
   controllers: [PerCapitaIncomeForBpcAnalysisController],
   providers: [

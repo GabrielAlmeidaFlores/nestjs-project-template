@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Brackets, Repository } from 'typeorm';
+import { FindOptionsWhere, Like, Repository } from 'typeorm';
 
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
@@ -83,32 +83,6 @@ export class AffiliateCustomerTypeormQueryRepository
   public async listWithPagination(
     param: ListAffiliateCustomersQueryParam,
   ): Promise<ListDataOutputModel<GetAffiliateCustomerQueryResult>> {
-    const queryBuilder = this.repository
-      .createQueryBuilder('affiliateCustomer')
-      .leftJoinAndSelect('affiliateCustomer.customer', 'customer')
-      .leftJoinAndSelect('customer.authIdentity', 'authIdentity');
-
-    if (param.searchBy !== null && param.searchBy.trim() !== '') {
-      const searchTerm = `%${param.searchBy.trim().toLowerCase()}%`;
-      const encryptedSearchTerm = CryptographyTransformer.to(
-        param.searchBy.trim(),
-      );
-
-      queryBuilder.andWhere(
-        new Brackets((qb) => {
-          qb.where('LOWER(authIdentity.email) LIKE :searchTerm', {
-            searchTerm,
-          });
-
-          if (encryptedSearchTerm !== undefined) {
-            qb.orWhere('authIdentity.federal_document = :encryptedSearchTerm', {
-              encryptedSearchTerm,
-            });
-          }
-        }),
-      );
-    }
-
     const maxItemsPerQuery = 100;
     const limit = Math.min(Math.max(param.limit, 1), maxItemsPerQuery);
     const page = Math.max(param.page, 1);
@@ -119,12 +93,13 @@ export class AffiliateCustomerTypeormQueryRepository
     const fieldName = isDescending ? sortField.substring(1) : sortField;
     const sortDirection = isDescending ? ('DESC' as const) : ('ASC' as const);
 
-    queryBuilder
-      .orderBy(`affiliateCustomer.${fieldName}`, sortDirection)
-      .skip(skip)
-      .take(limit);
-
-    const [data, totalItems] = await queryBuilder.getManyAndCount();
+    const [data, totalItems] = await this.repository.findAndCount({
+      where: this.buildWhereConditions(param.searchBy),
+      relations: { customer: { authIdentity: true } },
+      order: { [fieldName]: sortDirection },
+      skip,
+      take: limit,
+    });
 
     const resource = this.mapperGateway.mapArray(
       data,
@@ -138,5 +113,31 @@ export class AffiliateCustomerTypeormQueryRepository
       totalItems,
       resource,
     });
+  }
+
+  private buildWhereConditions(
+    searchBy: string | null,
+  ):
+    | FindOptionsWhere<AffiliateCustomerTypeormEntity>
+    | FindOptionsWhere<AffiliateCustomerTypeormEntity>[] {
+    if (searchBy === null || searchBy.trim() === '') {
+      return {};
+    }
+
+    const searchTerm = `%${searchBy.trim().toLowerCase()}%`;
+    const encryptedSearchTerm = CryptographyTransformer.to(searchBy.trim());
+
+    const conditions: FindOptionsWhere<AffiliateCustomerTypeormEntity>[] = [
+      { customer: { authIdentity: { email: Like(searchTerm) } } },
+      { customer: { name: Like(searchTerm) } },
+    ];
+
+    if (encryptedSearchTerm !== undefined) {
+      conditions.push({
+        customer: { authIdentity: { federalDocument: encryptedSearchTerm } },
+      });
+    }
+
+    return conditions;
   }
 }

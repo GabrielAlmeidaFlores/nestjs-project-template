@@ -174,7 +174,7 @@ export class PaymentPlanController {
         'Status do plano de pagamento da organização retornado com sucesso.',
       type: ValidateOrganizationPaymentPlanStatusResponseDto,
     },
-    guard: [AuthGuard, OrganizationSessionGuard, OrganizationOwnerGuard],
+    guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async getStatus(
     @GetOrganizationSessionData()

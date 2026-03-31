@@ -1,8 +1,8 @@
-import { classes } from '@automapper/classes';
 import { AutomapperModule } from '@automapper/nestjs';
 import { Module } from '@nestjs/common';
 
 import { AutoMapperService } from '@lib/mapper/implementation/auto-mapper/auto-mapper.service';
+import { noopStrategy } from '@lib/mapper/implementation/auto-mapper/noop-strategy';
 import { AdminEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/admin/admin-entity.auto-mapper.profile';
 import { GetAdminQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/admin/get-admin-query-result.auto-mapper.profile';
 import { AdministrativeProcedureInssAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis-entity.auto-mapper.profile';
@@ -163,6 +163,12 @@ import { GetOrganizationCreditPurchaseQueryResultAutoMapperProfile } from '@lib/
 import { GetOrganizationCreditUsageQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-credit/get-organization-credit-usage-query-result.auto-mapper.profile';
 import { OrganizationCreditPurchaseEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-credit/organization-credit-purchase-entity.auto-mapper.profile';
 import { OrganizationCreditUsageEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-credit/organization-credit-usage-entity.auto-mapper.profile';
+import { GetOrganizationCustomizationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-customization/get-organization-customization-query-result.auto-mapper.profile';
+import { OrganizationCustomizationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-customization/organization-customization-entity.auto-mapper.profile';
+import { GetOrganizationCustomizationDocumentFooterTemplateQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-customization-document-footer-template/get-organization-customization-document-footer-template-query-result.auto-mapper.profile';
+import { OrganizationCustomizationDocumentFooterTemplateEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-customization-document-footer-template/organization-customization-document-footer-template-entity.auto-mapper.profile';
+import { GetOrganizationCustomizationDocumentHeaderTemplateQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-customization-document-header-template/get-organization-customization-document-header-template-query-result.auto-mapper.profile';
+import { OrganizationCustomizationDocumentHeaderTemplateEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-customization-document-header-template/organization-customization-document-header-template-entity.auto-mapper.profile';
 import { GetOrganizationMemberCollaboratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-member/get-organization-member-collaborator-query-result.auto-mapper.profile';
 import { GetOrganizationMemberQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-member/get-organization-member-query-result.auto-mapper.profile';
 import { GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-member/get-organization-member-with-customer-and-organization-relations-query-result.auto-mapper.profile';
@@ -291,13 +297,14 @@ import { GetSpeechGeneratorLegalProceedingQueryResultAutoMapperProfile } from '@
 import { SpeechGeneratorLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-legal-proceeding/speech-generator-legal-proceeding-entity.auto-mapper.profile';
 import { GetSpeechGeneratorResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-result/get-speech-generator-result-query-result.auto-mapper.profile';
 import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-result/speech-generator-result-entity.auto-mapper.profile';
+import { SystemActivityEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/system-activity/system-activity-entity.auto-mapper.profile';
 import { GetTutorialQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/tutorial/get-tutorial-query-result.auto-mapper.profile';
 import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/tutorial/tutorial-entity.auto-mapper.profile';
 
 @Module({
   imports: [
     AutomapperModule.forRoot({
-      strategyInitializer: classes(),
+      strategyInitializer: noopStrategy(),
     }),
   ],
   providers: [
@@ -585,6 +592,7 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetRuralTimelineAnalysisWithRelationsQueryResultAutoMapperProfile,
     CustomerEmailSentEntityAutoMapperProfile,
     CustomerEmailSentAttachmentEntityAutoMapperProfile,
+    SystemActivityEntityAutoMapperProfile,
     TutorialEntityAutoMapperProfile,
     GetTutorialQueryResultAutoMapperProfile,
     CreditPackEntityAutoMapperProfile,
@@ -592,6 +600,12 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     SupportTicketEntityAutoMapperProfile,
     SupportTicketAttachmentEntityAutoMapperProfile,
     SupportTicketMessageEntityAutoMapperProfile,
+    OrganizationCustomizationEntityAutoMapperProfile,
+    GetOrganizationCustomizationQueryResultAutoMapperProfile,
+    OrganizationCustomizationDocumentHeaderTemplateEntityAutoMapperProfile,
+    GetOrganizationCustomizationDocumentHeaderTemplateQueryResultAutoMapperProfile,
+    OrganizationCustomizationDocumentFooterTemplateEntityAutoMapperProfile,
+    GetOrganizationCustomizationDocumentFooterTemplateQueryResultAutoMapperProfile,
   ],
   exports: [AutoMapperService],
 })
