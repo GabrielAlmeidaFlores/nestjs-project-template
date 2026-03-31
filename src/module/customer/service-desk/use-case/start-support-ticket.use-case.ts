@@ -11,6 +11,7 @@ import { SupportTicketId } from '@module/customer/service-desk/domain/schema/ent
 import { StartSupportTicketResponseDto } from '@module/customer/service-desk/dto/response/start-support-ticket.response.dto';
 import { SupportAttendantNotFoundError } from '@module/customer/service-desk/error/support-attendant-not-found.error';
 import { SupportTicketAlreadyAssignedError } from '@module/customer/service-desk/error/support-ticket-already-assigned.error';
+import { SupportTicketInvalidStatusError } from '@module/customer/service-desk/error/support-ticket-invalid-status.error';
 import { SupportTicketInvalidSupportTypeError } from '@module/customer/service-desk/error/support-ticket-invalid-support-type.error';
 import { SupportTicketNotFoundError } from '@module/customer/service-desk/error/support-ticket-not-found.error';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -45,6 +46,7 @@ export class StartSupportTicketUseCase {
 
     const ticket = await this.fetchTicketOrThrow(supportTicketId);
 
+    this.assertTicketCanBeStarted(ticket);
     this.assertTicketHasNoAssignedAttendant(ticket);
     this.assertSupportTypeMatch(ticket, attendant.supportType);
 
@@ -78,6 +80,13 @@ export class StartSupportTicketUseCase {
     return ticket;
   }
 
+  private assertTicketCanBeStarted(
+    ticket: GetSupportTicketDetailQueryResult,
+  ): void {
+    if (ticket.status !== SupportTicketStatusEnum.WAITING) {
+      throw new SupportTicketInvalidStatusError();
+    }
+  }
 
   private assertTicketHasNoAssignedAttendant(
     ticket: GetSupportTicketDetailQueryResult,

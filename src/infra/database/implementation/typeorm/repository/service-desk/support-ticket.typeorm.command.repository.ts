@@ -12,6 +12,7 @@ import { SupportAttendantId } from '@module/customer/service-desk/domain/schema/
 import { SupportTicketStatusEnum } from '@module/customer/service-desk/domain/schema/entity/support-ticket/enum/support-ticket-status.enum';
 import { SupportTicketEntity } from '@module/customer/service-desk/domain/schema/entity/support-ticket/support-ticket.entity';
 import { SupportTicketId } from '@module/customer/service-desk/domain/schema/entity/support-ticket/value-object/support-ticket-id/support-ticket-id.value-object';
+import { SupportTicketAlreadyAssignedError } from '@module/customer/service-desk/error/support-ticket-already-assigned.error';
 
 @Injectable()
 export class SupportTicketTypeormCommandRepository
@@ -50,12 +51,27 @@ export class SupportTicketTypeormCommandRepository
     status: SupportTicketStatusEnum,
     assignedAttendantId: SupportAttendantId,
   ): TransactionType {
-    return this.update(supportTicketId.toString(), {
-      status,
-      assignedAttendant: {
-        id: assignedAttendantId.toString(),
-      } as SupportAttendantTypeormEntity,
-    });
+    return async (executor: unknown) => {
+      const manager = executor as {
+        query: (
+          sql: string,
+          params: unknown[],
+        ) => Promise<{ affectedRows: number }>;
+      };
+
+      const result = await manager.query(
+        `UPDATE support_ticket
+         SET status = ?, assigned_attendant_id = ?
+         WHERE id = ?
+           AND assigned_attendant_id IS NULL
+           AND deleted_at IS NULL`,
+        [status, assignedAttendantId.toString(), supportTicketId.toString()],
+      );
+
+      if (result.affectedRows === 0) {
+        throw new SupportTicketAlreadyAssignedError();
+      }
+    };
   }
 
   public resolveSupportTicket(

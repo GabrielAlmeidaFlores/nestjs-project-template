@@ -7,6 +7,7 @@ import { GetSupportTicketDetailQueryResult } from '@module/customer/service-desk
 import { SupportTicketQueryRepositoryGateway } from '@module/customer/service-desk/domain/repository/support-ticket/query/support-ticket.query.repository.gateway';
 import { SupportTicketMessageCommandRepositoryGateway } from '@module/customer/service-desk/domain/repository/support-ticket-message/command/support-ticket-message.command.repository.gateway';
 import { SupportTypeEnum } from '@module/customer/service-desk/domain/schema/entity/support-attendant/enum/support-type.enum';
+import { SupportAttendantId } from '@module/customer/service-desk/domain/schema/entity/support-attendant/value-object/support-attendant-id/support-attendant-id.value-object';
 import { SupportTicketStatusEnum } from '@module/customer/service-desk/domain/schema/entity/support-ticket/enum/support-ticket-status.enum';
 import { SupportTicketId } from '@module/customer/service-desk/domain/schema/entity/support-ticket/value-object/support-ticket-id/support-ticket-id.value-object';
 import { TicketMessageSenderTypeEnum } from '@module/customer/service-desk/domain/schema/entity/support-ticket-message/enum/ticket-message-sender-type.enum';
@@ -14,6 +15,7 @@ import { SupportTicketMessageEntity } from '@module/customer/service-desk/domain
 import { SendTicketMessageRequestDto } from '@module/customer/service-desk/dto/request/send-ticket-message.request.dto';
 import { SendSupportTicketMessageResponseDto } from '@module/customer/service-desk/dto/response/send-support-ticket-message.response.dto';
 import { SupportAttendantNotFoundError } from '@module/customer/service-desk/error/support-attendant-not-found.error';
+import { SupportTicketAccessDeniedError } from '@module/customer/service-desk/error/support-ticket-access-denied.error';
 import { SupportTicketInvalidStatusError } from '@module/customer/service-desk/error/support-ticket-invalid-status.error';
 import { SupportTicketInvalidSupportTypeError } from '@module/customer/service-desk/error/support-ticket-invalid-support-type.error';
 import { SupportTicketNotFoundError } from '@module/customer/service-desk/error/support-ticket-not-found.error';
@@ -54,6 +56,7 @@ export class SendTicketMessageAttendantUseCase {
 
     this.assertTicketNotResolved(ticket);
     this.assertSupportTypeMatch(ticket.supportType, attendant.supportType);
+    this.assertAttendantCanMessage(ticket, attendant.id);
 
     const message = new SupportTicketMessageEntity({
       supportTicketId: ticket.id,
@@ -109,6 +112,18 @@ export class SendTicketMessageAttendantUseCase {
   ): void {
     if (ticketSupportType !== attendantSupportType) {
       throw new SupportTicketInvalidSupportTypeError();
+    }
+  }
+
+  private assertAttendantCanMessage(
+    ticket: GetSupportTicketDetailQueryResult,
+    attendantId: SupportAttendantId,
+  ): void {
+    if (
+      ticket.assignedAttendantId === null ||
+      ticket.assignedAttendantId.toString() !== attendantId.toString()
+    ) {
+      throw new SupportTicketAccessDeniedError();
     }
   }
 }

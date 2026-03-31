@@ -66,7 +66,11 @@ export class ServiceDeskController {
       to: dto.to ?? null,
     });
 
-    return this.listSupportTicketsUseCase.execute(sessionData, orgSession, param);
+    return this.listSupportTicketsUseCase.execute(
+      sessionData,
+      orgSession,
+      param,
+    );
   }
 
   @BuildEndpointSpecification({

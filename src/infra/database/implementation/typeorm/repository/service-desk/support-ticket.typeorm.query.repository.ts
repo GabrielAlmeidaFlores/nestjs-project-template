@@ -90,6 +90,7 @@ export class SupportTicketTypeormQueryRepository
   ): Promise<number> {
     return this.count({
       where: { organizationId: organizationId.toString() },
+      withDeleted: true,
     });
   }
 

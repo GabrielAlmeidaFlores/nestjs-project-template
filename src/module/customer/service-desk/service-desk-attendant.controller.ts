@@ -3,12 +3,12 @@ import { Body, HttpStatus, Param, Query, RequestMethod } from '@nestjs/common';
 import { SupportTicketId } from '@module/customer/service-desk/domain/schema/entity/support-ticket/value-object/support-ticket-id/support-ticket-id.value-object';
 import { ListSupportTicketsRequestDto } from '@module/customer/service-desk/dto/request/list-support-tickets.request.dto';
 import { SendTicketMessageRequestDto } from '@module/customer/service-desk/dto/request/send-ticket-message.request.dto';
+import { GetSupportAttendantProfileResponseDto } from '@module/customer/service-desk/dto/response/get-support-attendant-profile.response.dto';
 import { GetSupportTicketDetailResponseDto } from '@module/customer/service-desk/dto/response/get-support-ticket-detail.response.dto';
 import { ListSupportTicketsResponseDto } from '@module/customer/service-desk/dto/response/list-support-tickets.response.dto';
 import { ResolveSupportTicketResponseDto } from '@module/customer/service-desk/dto/response/resolve-support-ticket.response.dto';
 import { SendSupportTicketMessageResponseDto } from '@module/customer/service-desk/dto/response/send-support-ticket-message.response.dto';
 import { StartSupportTicketResponseDto } from '@module/customer/service-desk/dto/response/start-support-ticket.response.dto';
-import { GetSupportAttendantProfileResponseDto } from '@module/customer/service-desk/dto/response/get-support-attendant-profile.response.dto';
 import { GetSupportAttendantProfileUseCase } from '@module/customer/service-desk/use-case/get-support-attendant-profile.use-case';
 import { GetSupportTicketDetailUseCase } from '@module/customer/service-desk/use-case/get-support-ticket-detail.use-case';
 import { ListSupportTicketsAttendantUseCase } from '@module/customer/service-desk/use-case/list-support-tickets-attendant.use-case';
@@ -55,10 +55,7 @@ export class ServiceDeskAttendantController {
     @GetSessionData() sessionData: SessionDataModel,
     @Query() dto: ListSupportTicketsRequestDto,
   ): Promise<ListSupportTicketsResponseDto> {
-    return this.listSupportTicketsAttendantUseCase.execute(
-      sessionData,
-      dto,
-    );
+    return this.listSupportTicketsAttendantUseCase.execute(sessionData, dto);
   }
 
   @BuildEndpointSpecification({
@@ -108,10 +105,7 @@ export class ServiceDeskAttendantController {
     @Param('supportTicketId', new ParseValueObjectPipe(SupportTicketId))
     supportTicketId: SupportTicketId,
   ): Promise<StartSupportTicketResponseDto> {
-    return this.startSupportTicketUseCase.execute(
-      sessionData,
-      supportTicketId,
-    );
+    return this.startSupportTicketUseCase.execute(sessionData, supportTicketId);
   }
 
   @BuildEndpointSpecification({
