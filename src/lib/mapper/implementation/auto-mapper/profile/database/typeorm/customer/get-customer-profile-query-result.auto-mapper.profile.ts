@@ -47,7 +47,7 @@ export class GetCustomerProfileQueryResultAutoMapperProfile {
         name: source.name,
         email: new Email(source.authIdentity.email.toString()),
         federalDocument: new FederalDocument(
-          source.authIdentity.federalDocument.toString(),
+          source.authIdentity.federalDocument?.toString() ?? '',
         ),
         phoneNumber: new PhoneNumber(source.phoneNumber),
         customerIsActive: source.authIdentity.isActive,

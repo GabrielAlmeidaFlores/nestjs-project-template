@@ -105,7 +105,9 @@ export class AuthIdentitySignInUseCase {
 
     const userLevel = authIdentity.admin
       ? UserLevelEnum.ADMIN
-      : UserLevelEnum.CUSTOMER;
+      : authIdentity.supportAttendant
+        ? UserLevelEnum.SUPPORT
+        : UserLevelEnum.CUSTOMER;
 
     await this.setAuthTokenCookieUseCaseGateway.execute(
       reply,
@@ -115,6 +117,9 @@ export class AuthIdentitySignInUseCase {
 
     return AuthIdentitySignInResponseDto.build({
       userLevel,
+      ...(authIdentity.mustChangePassword && {
+        mustChangePassword: authIdentity.mustChangePassword,
+      }),
     });
   }
 
