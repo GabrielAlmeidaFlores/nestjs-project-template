@@ -1,9 +1,11 @@
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
+import type { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
 import type { RetirementPlanningRgpsTimeAcceleratorId } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps-time-accelerator/value-object/retirement-planning-rgps-time-accelerator-id.value-object';
 
 export class GetRetirementPlanningRgpsTimeAcceleratorQueryResult extends BaseBuildableObject {
   public readonly id: RetirementPlanningRgpsTimeAcceleratorId;
+  public readonly retirementPlanningRgpsId: RetirementPlanningRgpsId | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

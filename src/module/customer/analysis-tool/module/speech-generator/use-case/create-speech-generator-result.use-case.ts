@@ -2,14 +2,17 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
+import { MarkdownConverterGateway } from '@lib/markdown-converter/markdown-converter.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
-import { MarkdownConverterGateway } from '@module/customer/ai-conversation/lib/markdown-converter/markdown-converter.gateway';
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
+import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { AnalysisActivityTrackerGateway } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.gateway';
+import { AnalysisActivityActionEnum } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/enum/analysis-activity-action.enum';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { SpeechGeneratorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/command/speech-generator.command.repository.gateway';
@@ -57,6 +60,8 @@ export class CreateSpeechGeneratorResultUseCase {
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
     @Inject(MarkdownConverterGateway)
     private readonly markdownConverterGateway: MarkdownConverterGateway,
+    @Inject(AnalysisActivityTrackerGateway)
+    private readonly analysisActivityTrackerGateway: AnalysisActivityTrackerGateway,
   ) {}
 
   public async execute(
@@ -224,20 +229,33 @@ export class CreateSpeechGeneratorResultUseCase {
       medicalAndSocialReportObjectionGeneratorAnalysis: null,
     });
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute([
-      consumeCreditTransaction,
-      this.speechGeneratorResultCommandRepositoryGateway.createSpeechGeneratorResult(
-        speechGeneratorResult,
-      ),
-      this.speechGeneratorCommandRepositoryGateway.updateSpeechGenerator(
-        speechGenerator.id,
-        speechGenerator,
-      ),
-      this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecord(
-        analysisToolRecord.id,
-        analysisToolRecord,
-      ),
-    ]);
+    const transactionsWithActivity =
+      this.analysisActivityTrackerGateway.appendActivityTransaction({
+        action: AnalysisActivityActionEnum.RESULT_ADDED,
+        analysisType: AnalysisToolRecordTypeEnum.SPEECH_GENERATOR,
+        organizationMemberId: organizationMember.id,
+        analysisToolClientId: analysisToolClient.id,
+        analysisToolRecordId: analysisToolRecord.id,
+        transactions: [
+          consumeCreditTransaction,
+          this.speechGeneratorResultCommandRepositoryGateway.createSpeechGeneratorResult(
+            speechGeneratorResult,
+          ),
+          this.speechGeneratorCommandRepositoryGateway.updateSpeechGenerator(
+            speechGenerator.id,
+            speechGenerator,
+          ),
+          this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecord(
+            analysisToolRecord.id,
+            analysisToolRecord,
+          ),
+        ],
+      });
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute(
+      transactionsWithActivity,
+    );
+
     await transaction.commit();
 
     const completeContentMarkdown =

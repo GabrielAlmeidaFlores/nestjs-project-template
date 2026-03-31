@@ -4,9 +4,12 @@ import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/
 import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-boolean-property/response-dto-boolean-property.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoNumberProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-number-property/response-dto-number-property.decorator';
+import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
+
+import type { ValidContributionTimeEntity } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps-period/valid-contribution-time/valid-contribution-time.entity';
 
 @ResponseDto()
 export class GetRetirementPlanningRgpsPeriodResponseDto extends BaseBuildableDtoObject {
@@ -48,6 +51,9 @@ export class GetRetirementPlanningRgpsPeriodResponseDto extends BaseBuildableDto
 
   @ResponseDtoStringProperty({ required: false })
   public reasonPendency?: string;
+
+  @ResponseDtoObjectProperty(() => Object, { required: false })
+  public validContributionTime?: ValidContributionTimeEntity;
 
   protected override readonly _type =
     GetRetirementPlanningRgpsPeriodResponseDto.name;
