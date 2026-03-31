@@ -31,7 +31,7 @@ export class OrganizationCustomizationDocumentHeaderTemplateSeeder implements Se
           '9ae34abf-a3df-4972-9885-67204fa64e41',
         ),
         type: OrganizationCustomizationDocumentHeaderTemplateTypeEnum.MODERN,
-        htmlContent: `<header><table style="width: 100%;font-family: sans-serif;"><tr><td style="text-align: center;"><p align="center" style="margin-top: 10px;"><img src="{{logo}}"alt="{{organizationName}}"style="height: auto; width: 140px;margin-bottom: 10px;"/></p><div style="font-size: 20px;font-weight: bold;color: {{secondaryColor}}; margin: 0;">{{organizationName}}</div></td></tr></table></header>`,
+        htmlContent: `<header><table style="width: 100%;font-family: sans-serif;"><tr><td style="text-align: center;"><p align="center"><img src="{{logo}}"alt="{{organizationName}}"style="height: auto; width: 130px;"/></p><div style="font-size: 20px;font-weight: 300;color: {{secondaryColor}}; margin: 0;">{{organizationName}}</div></td></tr></table></header>`,
       }),
       new OrganizationCustomizationDocumentHeaderTemplateEntity({
         id: new OrganizationCustomizationDocumentHeaderTemplateId(
@@ -39,41 +39,70 @@ export class OrganizationCustomizationDocumentHeaderTemplateSeeder implements Se
         ),
         type: OrganizationCustomizationDocumentHeaderTemplateTypeEnum.CLASSIC,
         htmlContent: `<header>
-  <table
-    style="width: 100%;border-bottom: 4px solid {{primaryColor}};font-family: sans-serif;"
-  >
-    <tr>
-      <td style="width: 50%; text-align: left; padding: 20px">
-        <img
-          src="{{logo}}"
-          alt="{{organizationName}}"
-          style="height: 120px; width: auto"
-        />
-      </td>
-      <td
-        style="
-          width: 50%;
-          text-align: right;
-          vertical-align: middle;
-          padding: 20px;
-        "
-      >
-        <span
-          style="font-size: 24px; font-weight: bold; color: {{primaryColor}}"
-          >{{organizationName}}</span
-        >
-      </td>
-    </tr>
-  </table>
-</header>
-`,
+          <table
+            style="width: 100%;border-bottom: 4px solid {{primaryColor}};font-family: sans-serif;"
+          >
+            <tr>
+              <td style="width: 50%; text-align: left;">
+                <img
+                  src="{{logo}}"
+                  alt="{{organizationName}}"
+                  style="height: auto; width: 140px; padding: 0px 20px;"
+                />
+              </td>
+              <td
+                style="
+                  width: 50%;
+                  text-align: right;
+                  vertical-align: middle;
+                  padding: 0px 20px;"
+              >
+                <span
+                  style="font-size: 20px; font-weight: 300; color: {{primaryColor}}"
+                  >{{organizationName}}</span
+                >
+              </td>
+            </tr>
+          </table>
+        </header>`,
       }),
       new OrganizationCustomizationDocumentHeaderTemplateEntity({
         id: new OrganizationCustomizationDocumentHeaderTemplateId(
           '2fdb0e7e-9c28-4180-a14f-be72447c0536',
         ),
         type: OrganizationCustomizationDocumentHeaderTemplateTypeEnum.STANDOUT_CLASSIC,
-        htmlContent: `<div style="width:100%; box-sizing:border-box; font-size:10px; line-height:1.2; background-color: {{secondaryColor}}; -webkit-print-color-adjust: exact;"><header><table style="width: 100%;border-bottom: 4px solid {{primaryColor}};font-family: sans-serif;padding: 20px 0px;"><tr><td style="width: 50%; text-align: left; padding: 20px"><img src="{{logo}}" alt="{{organizationName}}" style="height: 120px; width: auto"/></td><td style="width: 50%;text-align: right;vertical-align: middle;padding: 20px;"><span style="font-size: 24px; font-weight: bold; color: {{primaryColor}}">{{organizationName}}</span></td></tr></table></header></div>`,
+        htmlContent: `<div
+  style="width:100%; box-sizing:border-box; font-size:10px; line-height:1.2; background-color: {{secondaryColor}}; -webkit-print-color-adjust: exact;"
+>
+  <header>
+    <table
+      style="width: 100%;border-bottom: 4px solid {{primaryColor}};font-family: sans-serif;"
+    >
+      <tr>
+        <td style="width: 50%; text-align: left;">
+          <img
+            src="{{logo}}"
+            alt="{{organizationName}}"
+            style="height: auto; width: 180px; padding: 0px 20px;"
+          />
+        </td>
+        <td
+          style="
+            width: 50%;
+            text-align: right;
+            vertical-align: middle;
+            padding: 0px 20px;
+          "
+        >
+          <span
+            style="font-size: 20px; font-weight: 300; color: {{primaryColor}}"
+            >{{organizationName}}</span
+          >
+        </td>
+      </tr>
+    </table>
+  </header>
+</div>`,
       }),
       new OrganizationCustomizationDocumentHeaderTemplateEntity({
         id: new OrganizationCustomizationDocumentHeaderTemplateId(
@@ -89,15 +118,15 @@ export class OrganizationCustomizationDocumentHeaderTemplateSeeder implements Se
         <td
           style="text-align: center;"
         >
-          <p align="center" style="margin-top: 10px;">
+          <p align="center">
             <img
               src="{{logo}}"
               alt="{{organizationName}}"
-              style="height: auto; width: 140px; margin-bottom: 10px"
+              style="height: auto; width: 130px;"
             />
           </p>
           <div
-            style="font-size: 20px;font-weight: bold;color: {{secondaryColor}}; margin: 0;"
+            style="font-size: 20px;font-weight: 300;color: {{secondaryColor}}; margin: 0;"
           >
             {{organizationName}}
           </div>
@@ -105,8 +134,7 @@ export class OrganizationCustomizationDocumentHeaderTemplateSeeder implements Se
       </tr>
     </table>
   </header>
-</div>
-`,
+</div>`,
       }),
     ];
   }
