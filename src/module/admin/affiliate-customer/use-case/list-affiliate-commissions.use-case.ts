@@ -113,7 +113,8 @@ export class ListAffiliateCommissionsUseCase {
     });
 
     return ListAffiliateCommissionsResponseDto.build({
-      commissions: commissionItems,
+      ...commissionsResult,
+      resource: commissionItems,
     });
   }
 }

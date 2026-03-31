@@ -3,10 +3,10 @@ import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/r
 import { RequestDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-date-property/request-dto-date-property.decorator';
 import { RequestDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-string-property/request-dto-string-property.decorator';
 import { RequestDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-value-object-property/request-dto-value-object-property.decorator';
-import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
+import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 
 @RequestDto()
-export class ListAffiliateCommissionsRequestDto extends BaseBuildableDtoObject {
+export class ListAffiliateCommissionsRequestDto extends ListDataRequestDto {
   @RequestDtoDateProperty({ required: false })
   public startDate?: Date;
 
