@@ -75,10 +75,8 @@ export class UpdateAdminUseCase {
     await transaction.commit();
 
     const response = UpdateAdminResponseDto.build({
-      name: admin.name,
-      ...(authIdentity.federalDocument !== null && {
-        federalDocument: authIdentity.federalDocument,
-      }),
+      ...authIdentity,
+      ...admin,
     });
 
     return response;

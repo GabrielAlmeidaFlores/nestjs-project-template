@@ -78,20 +78,6 @@ export class EmailApplicationVariable {
       'convite-organizacao.html',
     );
 
-  public static readonly EMAIL_SUPPORT_INVITE_TEMPLATE =
-    EmailApplicationVariable.source.getValueOrDefault<string>(
-      'EMAIL_SUPPORT_INVITE_TEMPLATE',
-      String,
-      'convite-suporte.html',
-    );
-
-  public static readonly EMAIL_SUPPORT_INVITE_SUBJECT =
-    EmailApplicationVariable.source.getValueOrDefault<string>(
-      'EMAIL_SUPPORT_INVITE_SUBJECT',
-      String,
-      'Agiliza Previ - Convite para Equipe de Suporte',
-    );
-
   public static readonly EMAIL_ORGANIZATION_INVITE_SUBJECT =
     EmailApplicationVariable.source.getValueOrDefault<string>(
       'EMAIL_ORGANIZATION_INVITE_SUBJECT',
