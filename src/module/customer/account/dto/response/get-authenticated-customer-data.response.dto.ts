@@ -51,8 +51,8 @@ export class GetCustomerDataResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(Email)
   public email: Email;
 
-  @ResponseDtoValueObjectProperty(FederalDocument, { required: false })
-  public federalDocument?: FederalDocument;
+  @ResponseDtoValueObjectProperty(FederalDocument)
+  public federalDocument: FederalDocument;
 
   @ResponseDtoStringProperty({ required: false })
   public profilePicture?: string;

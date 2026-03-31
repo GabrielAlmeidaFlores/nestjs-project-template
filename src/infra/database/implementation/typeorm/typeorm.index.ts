@@ -145,12 +145,6 @@ import { RuralTimelineAnalysisPeriodPropertyTypeormCommandRepository } from '@in
 import { RuralTimelineAnalysisPeriodResidenceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-period-residence/rural-timeline-analysis-period-residence.typeorm.command.repository';
 import { RuralTimelineCnisContributionPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-cnis-contribution-period-document/rural-timeline-cnis-contribution-period-document.typeorm.command.repository';
 import { RuralTimelineCnisContributionPeriodDocumentTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-cnis-contribution-period-document/rural-timeline-cnis-contribution-period-document.typeorm.query.repository';
-import { SupportAttendantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-attendant.typeorm.command.repository';
-import { SupportAttendantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-attendant.typeorm.query.repository';
-import { SupportTicketAttachmentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-ticket-attachment.typeorm.command.repository';
-import { SupportTicketMessageTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-ticket-message.typeorm.command.repository';
-import { SupportTicketTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-ticket.typeorm.command.repository';
-import { SupportTicketTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-ticket.typeorm.query.repository';
 import { SpecialActivityTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-activity/special-activity.typeorm.command.repository';
 import { SpecialActivityTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-activity/special-activity.typeorm.query.repository';
 import { SpecialActivityDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-activity-document/special-activity-document.typeorm.command.repository';
@@ -307,10 +301,6 @@ import { SpeechGeneratorDocumentTypeormEntity } from '@infra/database/implementa
 import { SpeechGeneratorLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-legal-proceeding.typeorm.entity';
 import { SpeechGeneratorResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-result.typeorm.entity';
 import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
-import { SupportAttendantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-attendant.typeorm.entity';
-import { SupportTicketAttachmentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-ticket-attachment.typeorm.entity';
-import { SupportTicketMessageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-ticket-message.typeorm.entity';
-import { SupportTicketTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-ticket.typeorm.entity';
 import { SystemActivitiesTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/system-activities.typeorm.entity';
 import { SystemLogTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/system-log.typeorm.entity';
 import { TutorialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/tutorial.typeorm.entity';
@@ -462,10 +452,6 @@ export class TypeormIndex {
     TutorialTypeormEntity,
     CreditPackTypeormEntity,
     OrganizationCreditPackPurchaseTypeormEntity,
-    SupportAttendantTypeormEntity,
-    SupportTicketTypeormEntity,
-    SupportTicketAttachmentTypeormEntity,
-    SupportTicketMessageTypeormEntity,
     OrganizationCustomizationTypeormEntity,
     OrganizationCustomizationDocumentHeaderTemplateTypeormEntity,
     OrganizationCustomizationDocumentFooterTemplateTypeormEntity,
@@ -629,12 +615,6 @@ export class TypeormIndex {
     CreditPackTypeormCommandRepository,
     OrganizationCreditPackPurchaseTypeormQueryRepository,
     OrganizationCreditPackPurchaseTypeormCommandRepository,
-    SupportAttendantTypeormCommandRepository,
-    SupportAttendantTypeormQueryRepository,
-    SupportTicketTypeormCommandRepository,
-    SupportTicketTypeormQueryRepository,
-    SupportTicketAttachmentTypeormCommandRepository,
-    SupportTicketMessageTypeormCommandRepository,
     OrganizationCustomizationTypeormCommandRepository,
     OrganizationCustomizationTypeormQueryRepository,
     OrganizationCustomizationDocumentHeaderTemplateTypeormCommandRepository,

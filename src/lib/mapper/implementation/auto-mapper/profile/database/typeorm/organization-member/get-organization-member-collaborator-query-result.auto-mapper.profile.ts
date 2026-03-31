@@ -38,7 +38,7 @@ export class GetOrganizationMemberCollaboratorQueryResultAutoMapperProfile {
         name: source.customer.name,
         email: new Email(source.customer.authIdentity.email),
         federalDocument: new FederalDocument(
-          source.customer.authIdentity.federalDocument ?? '',
+          source.customer.authIdentity.federalDocument,
         ),
         registrationDate: source.createdAt,
         isActive: Boolean(source.isActive),
