@@ -84,6 +84,7 @@ export class ToggleCustomerActiveStatusUseCase {
       customer: authIdentity.customer?.id ?? null,
       admin: authIdentity.admin?.id ?? null,
       isActive,
+      mustChangePassword: authIdentity.mustChangePassword,
       createdAt: authIdentity.createdAt,
       updatedAt: new Date(),
     });

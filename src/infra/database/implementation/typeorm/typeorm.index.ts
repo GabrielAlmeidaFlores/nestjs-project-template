@@ -293,8 +293,18 @@ import { SpeechGeneratorLegalProceedingTypeormEntity } from '@infra/database/imp
 import { SpeechGeneratorResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-result.typeorm.entity';
 import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
 import { SystemActivitiesTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/system-activities.typeorm.entity';
+import { SupportAttendantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-attendant.typeorm.entity';
+import { SupportTicketTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-ticket.typeorm.entity';
+import { SupportTicketAttachmentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-ticket-attachment.typeorm.entity';
+import { SupportTicketMessageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-ticket-message.typeorm.entity';
 import { SystemLogTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/system-log.typeorm.entity';
 import { TutorialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/tutorial.typeorm.entity';
+import { SupportAttendantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-attendant.typeorm.command.repository';
+import { SupportAttendantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-attendant.typeorm.query.repository';
+import { SupportTicketTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-ticket.typeorm.command.repository';
+import { SupportTicketTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-ticket.typeorm.query.repository';
+import { SupportTicketAttachmentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-ticket-attachment.typeorm.command.repository';
+import { SupportTicketMessageTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-ticket-message.typeorm.command.repository';
 import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/source/database.application-variable';
 
 import type { Provider } from '@nestjs/common';
@@ -443,6 +453,10 @@ export class TypeormIndex {
     TutorialTypeormEntity,
     CreditPackTypeormEntity,
     OrganizationCreditPackPurchaseTypeormEntity,
+    SupportAttendantTypeormEntity,
+    SupportTicketTypeormEntity,
+    SupportTicketAttachmentTypeormEntity,
+    SupportTicketMessageTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [
@@ -603,6 +617,12 @@ export class TypeormIndex {
     CreditPackTypeormCommandRepository,
     OrganizationCreditPackPurchaseTypeormQueryRepository,
     OrganizationCreditPackPurchaseTypeormCommandRepository,
+    SupportAttendantTypeormCommandRepository,
+    SupportAttendantTypeormQueryRepository,
+    SupportTicketTypeormCommandRepository,
+    SupportTicketTypeormQueryRepository,
+    SupportTicketAttachmentTypeormCommandRepository,
+    SupportTicketMessageTypeormCommandRepository,
   ];
 
   public static readonly dynamicModule = TypeOrmModule.forFeature(
