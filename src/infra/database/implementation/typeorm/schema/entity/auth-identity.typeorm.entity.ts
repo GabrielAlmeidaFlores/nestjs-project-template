@@ -3,7 +3,6 @@ import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { AdminTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/admin.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
-import { SupportAttendantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-attendant.typeorm.entity';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 import { HashTransformer } from '@infra/database/implementation/typeorm/schema/transformer/hash.transformer';
 
@@ -16,10 +15,10 @@ export class AuthIdentityTypeormEntity extends BaseTypeormEntity {
     name: 'federal_document',
     type: 'varchar',
     length: 50,
-    nullable: true,
     transformer: CryptographyTransformer,
+    unique: true,
   })
-  public federalDocument: string | null;
+  public federalDocument: string;
 
   @Column({
     name: 'password',
@@ -41,9 +40,6 @@ export class AuthIdentityTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'is_active', type: 'boolean', default: true })
   public isActive: boolean;
 
-  @Column({ name: 'must_change_password', type: 'boolean', default: false })
-  public mustChangePassword: boolean;
-
   @OneToOne(() => CustomerTypeormEntity, (entity) => entity.authIdentity, {
     nullable: true,
   })
@@ -59,14 +55,6 @@ export class AuthIdentityTypeormEntity extends BaseTypeormEntity {
     name: 'admin_id',
   })
   public admin?: AdminTypeormEntity | undefined;
-
-  @OneToOne(
-    () => SupportAttendantTypeormEntity,
-    (entity) => entity.authIdentity,
-    { nullable: true },
-  )
-  @JoinColumn({ name: 'support_attendant_id' })
-  public supportAttendant?: SupportAttendantTypeormEntity | undefined;
 
   protected override readonly _type = AuthIdentityTypeormEntity.name;
 }
