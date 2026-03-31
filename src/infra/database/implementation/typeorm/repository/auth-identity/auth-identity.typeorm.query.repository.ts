@@ -116,7 +116,6 @@ export class AuthIdentityTypeormQueryRepository
       relations: {
         admin: true,
         customer: true,
-        supportAttendant: true,
       },
     });
 
@@ -171,7 +170,6 @@ export class AuthIdentityTypeormQueryRepository
       relations: {
         admin: true,
         customer: true,
-        supportAttendant: true,
       },
     });
 

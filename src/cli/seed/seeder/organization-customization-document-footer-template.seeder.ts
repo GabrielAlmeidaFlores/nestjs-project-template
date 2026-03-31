@@ -32,7 +32,7 @@ export class OrganizationCustomizationDocumentFooterTemplateSeeder implements Se
         ),
         type: OrganizationCustomizationDocumentFooterTemplateTypeEnum.MODERN,
         htmlContent: `<footer style="display: flex; width: 100%; justify-content: center; align-items: center; padding: 8px 0px; font-family: sans-serif; box-sizing: border-box; background-color: {{primaryColor}};">
-  <span style="font-size: 10px; color: #fff; text-align: center;">
+  <span style="font-size: 13px; color: #fff; text-align: center;">
     {{footerDescription}}
   </span>
 </footer>`,
@@ -43,7 +43,7 @@ export class OrganizationCustomizationDocumentFooterTemplateSeeder implements Se
         ),
         type: OrganizationCustomizationDocumentFooterTemplateTypeEnum.CLASSIC,
         htmlContent: `<footer style="display: flex; width: 100%; justify-content: center; align-items: center; padding: 8px 0px; font-family: sans-serif; box-sizing: border-box; border-top: 4px solid {{primaryColor}};">
-  <span style="font-size: 10px; color: #555; text-align: center;">
+  <span style="font-size: 13px; color: #555; text-align: center;">
     {{footerDescription}}
   </span>
 </footer>`,
