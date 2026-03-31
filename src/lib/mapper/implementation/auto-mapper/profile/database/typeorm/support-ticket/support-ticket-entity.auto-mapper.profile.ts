@@ -11,6 +11,7 @@ import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/enti
 import { SupportAttendantId } from '@module/support/account/domain/schema/entity/support-attendant/value-object/support-attendant-id/support-attendant-id.value-object';
 import { SupportTicketEntity } from '@module/support/service-desk/domain/schema/entity/support-ticket/support-ticket.entity';
 import { SupportTicketId } from '@module/support/service-desk/domain/schema/entity/support-ticket/value-object/support-ticket-id/support-ticket-id.value-object';
+import { SupportTicketNumber } from '@module/support/service-desk/domain/schema/entity/support-ticket/value-object/support-ticket-number/support-ticket-number.value-object';
 
 @Injectable()
 export class SupportTicketEntityAutoMapperProfile {
@@ -32,6 +33,7 @@ export class SupportTicketEntityAutoMapperProfile {
       new SupportTicketEntity({
         ...source,
         id: new SupportTicketId(source.id),
+        ticketNumber: new SupportTicketNumber(source.ticketNumber),
         organizationId: new OrganizationId(source.organization.id),
         requesterAuthIdentityId: new AuthIdentityId(
           source.requesterAuthIdentity.id,
@@ -70,6 +72,7 @@ export class SupportTicketEntityAutoMapperProfile {
       return SupportTicketTypeormEntity.build({
         ...source,
         id: source.id.toString(),
+        ticketNumber: source.ticketNumber.toString(),
         organization,
         requesterAuthIdentity,
         assignedAttendant,
