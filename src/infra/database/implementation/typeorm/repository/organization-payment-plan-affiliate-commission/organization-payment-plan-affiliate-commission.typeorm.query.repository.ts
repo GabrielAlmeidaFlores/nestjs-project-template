@@ -125,6 +125,15 @@ export class OrganizationPaymentPlanAffiliateCommissionTypeormQueryRepository
     );
   }
 
+  public async countByAffiliateCustomerId(
+    affiliateCustomerId: AffiliateCustomerId,
+  ): Promise<number> {
+    return this.repository.count({
+      where: { affiliateCustomer: { id: affiliateCustomerId.toString() } },
+      withDeleted: true,
+    });
+  }
+
   private hasConfirmedPayment(
     entity: OrganizationPaymentPlanAffiliateCommissionTypeormEntity,
   ): boolean {

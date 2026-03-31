@@ -16,4 +16,8 @@ export abstract class OrganizationPaymentPlanAffiliateCommissionQueryRepositoryG
     affiliateCustomerId: AffiliateCustomerId,
     filters: ListAffiliateCommissionsQueryParam,
   ): Promise<GetOrganizationPaymentPlanAffiliateCommissionQueryResult[]>;
+
+  public abstract countByAffiliateCustomerId(
+    affiliateCustomerId: AffiliateCustomerId,
+  ): Promise<number>;
 }

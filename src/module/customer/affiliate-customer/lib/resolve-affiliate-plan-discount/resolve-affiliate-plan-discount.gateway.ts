@@ -1,21 +1,9 @@
-import type { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
+import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import type { AffiliateBillingPriceResultInterface } from '@module/customer/affiliate-customer/lib/resolve-affiliate-plan-discount/interface/affiliate-billing-price-result.interface';
+import type { AffiliateDiscountContextInterface } from '@module/customer/affiliate-customer/lib/resolve-affiliate-plan-discount/interface/affiliate-discount-context.interface';
+import type { AffiliateDiscountResultInterface } from '@module/customer/affiliate-customer/lib/resolve-affiliate-plan-discount/interface/affiliate-discount-result.interface';
+import type { AffiliatePriceResultInterface } from '@module/customer/affiliate-customer/lib/resolve-affiliate-plan-discount/interface/affiliate-price-result.interface';
 import type { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
-
-export interface AffiliateDiscountResultInterface {
-  percentage: number;
-  commissionPercentage: number;
-  affiliateCustomerId: AffiliateCustomerId;
-}
-
-export interface AffiliateDiscountContextInterface {
-  percentage: number;
-  linkedPlanIds: Set<string>;
-}
-
-export interface AffiliatePriceResultInterface {
-  affiliatePrice: number;
-  affiliateDiscount: number;
-}
 
 export abstract class ResolveAffiliatePlanDiscountGateway {
   public abstract resolveDiscount(
@@ -32,4 +20,10 @@ export abstract class ResolveAffiliatePlanDiscountGateway {
     originalPrice: number,
     context: AffiliateDiscountContextInterface | null,
   ): AffiliatePriceResultInterface | null;
+
+  public abstract resolveBillingPrice(
+    affiliateCustomerIdStr: string | null | undefined,
+    paymentPlanId: PaymentPlanId,
+    originalPrice: DecimalValue,
+  ): Promise<AffiliateBillingPriceResultInterface>;
 }
