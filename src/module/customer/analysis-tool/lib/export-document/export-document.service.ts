@@ -31,11 +31,10 @@ const HEADER_CAPTURE_VIEWPORT_HEIGHT_PX = 1200;
 const HEADER_CAPTURE_VIEWPORT_PADDING_PX = 32;
 const HEADER_CAPTURE_SET_CONTENT_TIMEOUT_MS = 20_000;
 const HEADER_IMAGE_LOAD_TIMEOUT_MS = 10_000;
+const HEADER_CAPTURE_DEVICE_SCALE_FACTOR = 2;
 
-const PDF_MARGIN_TOP_MAX_MM = 120;
-const PDF_MARGIN_TOP_MIN_MM = 12;
-const PDF_MARGIN_TOP_EXTRA_MM = 4;
-const PDF_MARGIN_HEADER_FALLBACK_MM = 60;
+const PDF_MARGIN_HEADER_IMAGE_FALLBACK_MM = 45;
+const PDF_MARGIN_HEADER_FALLBACK_MM = 40;
 const PDF_MARGIN_BODY_TOP_MM = 10;
 
 const PDF_MARGIN_FOOTER_FALLBACK_MM = 20;
@@ -272,6 +271,7 @@ export class ExportDocumentService implements ExportDocumentGateway {
     await page.setViewport({
       width: PDF_HEADER_VIEWPORT_WIDTH_PX,
       height: HEADER_CAPTURE_VIEWPORT_HEIGHT_PX,
+      deviceScaleFactor: HEADER_CAPTURE_DEVICE_SCALE_FACTOR,
     });
 
     try {
@@ -315,6 +315,7 @@ export class ExportDocumentService implements ExportDocumentGateway {
         HEADER_CAPTURE_VIEWPORT_HEIGHT_PX,
         heightPx + HEADER_CAPTURE_VIEWPORT_PADDING_PX,
       ),
+      deviceScaleFactor: HEADER_CAPTURE_DEVICE_SCALE_FACTOR,
     });
 
     const png = await page.screenshot({
@@ -404,15 +405,15 @@ export class ExportDocumentService implements ExportDocumentGateway {
   /**
    * No PDF, alguns templates precisam virar imagem para preservar estilos/cores.
    * Para o footer, o comportamento desejado é:
-   * - `CLASSIC`: rasterizar para PNG
-   * - `MODERN`: manter o HTML padrão
+   * - `CLASSIC`: manter o HTML padrão
+   * - `MODERN`: rasterizar para PNG
    */
   private _pdfFooterShouldUseRasterImage(
     options?: ExportDocumentDownloadOptionsInterface,
   ): boolean {
     return (
       options?.footerTemplateType ===
-      OrganizationCustomizationDocumentFooterTemplateTypeEnum.CLASSIC
+      OrganizationCustomizationDocumentFooterTemplateTypeEnum.MODERN
     );
   }
 
@@ -474,13 +475,7 @@ export class ExportDocumentService implements ExportDocumentGateway {
 
       const marginTopMm = hasHeader
         ? headerImage
-          ? Math.min(
-              PDF_MARGIN_TOP_MAX_MM,
-              Math.max(
-                PDF_MARGIN_TOP_MIN_MM,
-                pxToMm(headerImage.heightPx) + PDF_MARGIN_TOP_EXTRA_MM,
-              ),
-            )
+          ? PDF_MARGIN_HEADER_IMAGE_FALLBACK_MM
           : PDF_MARGIN_HEADER_FALLBACK_MM
         : PDF_MARGIN_BODY_TOP_MM;
 
@@ -544,7 +539,7 @@ export class ExportDocumentService implements ExportDocumentGateway {
             captureFooter:
               hasFooter &&
               options?.footerTemplateType ===
-                OrganizationCustomizationDocumentFooterTemplateTypeEnum.CLASSIC,
+                OrganizationCustomizationDocumentFooterTemplateTypeEnum.MODERN,
           },
         );
         headerImage = captured.header;
