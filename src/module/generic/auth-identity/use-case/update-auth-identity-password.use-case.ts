@@ -53,7 +53,6 @@ export class UpdateAuthIdentityPasswordUseCase {
     const authEntity = new AuthIdentityEntity({
       ...authIdentity,
       password: dto.newPassword,
-      mustChangePassword: false,
     });
 
     const updateAuthIdentity =
