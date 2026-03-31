@@ -7,6 +7,7 @@ import { AffiliateCustomerPaymentPlanQueryRepositoryGateway } from '@module/cust
 import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
 import { GetPublicAffiliateCustomerResponseDto } from '@module/customer/affiliate-customer/dto/response/get-public-affiliate-customer.response.dto';
 import { AffiliateCustomerNotFoundError } from '@module/customer/affiliate-customer/error/affiliate-customer-not-found.error';
+import { OrganizationPaymentPlanAffiliateCommissionQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-affiliate-commission/query/organization-payment-plan-affiliate-commission.query.repository.gateway';
 import { ApiCookieEnum } from '@shared/api/enum/api-cookie.enum';
 import { FrameworkApplicationVariable } from '@shared/system/constant/application-variable/source/framework.application-variable';
 
@@ -21,6 +22,8 @@ export class GetPublicAffiliateCustomerUseCase {
     private readonly affiliateCustomerPaymentPlanQueryRepository: AffiliateCustomerPaymentPlanQueryRepositoryGateway,
     @Inject(CustomerQueryRepositoryGateway)
     private readonly customerQueryRepository: CustomerQueryRepositoryGateway,
+    @Inject(OrganizationPaymentPlanAffiliateCommissionQueryRepositoryGateway)
+    private readonly affiliateCommissionQueryRepository: OrganizationPaymentPlanAffiliateCommissionQueryRepositoryGateway,
   ) {}
 
   public async execute(
@@ -36,27 +39,46 @@ export class GetPublicAffiliateCustomerUseCase {
       throw new AffiliateCustomerNotFoundError();
     }
 
-    const [linkedPlans, customer] = await Promise.all([
-      this.affiliateCustomerPaymentPlanQueryRepository.findManyByAffiliateCustomerId(
+    const redemptionCount =
+      await this.affiliateCommissionQueryRepository.countByAffiliateCustomerId(
         affiliate.id,
-      ),
+      );
+
+    const isDiscountValid =
+      affiliate.isActive &&
+      redemptionCount < affiliate.paymentPlanDiscountRedemptionLimit &&
+      new Date(affiliate.paymentPlanDiscountValidUntil) >= new Date();
+
+    const [linkedPlans, customer] = await Promise.all([
+      isDiscountValid
+        ? this.affiliateCustomerPaymentPlanQueryRepository.findManyByAffiliateCustomerId(
+            affiliate.id,
+          )
+        : Promise.resolve([]),
       this.customerQueryRepository.findOneByCustomerId(affiliate.customerId),
     ]);
 
-    reply.setCookie(ApiCookieEnum.AFFILIATE, affiliate.id.toString(), {
-      httpOnly: FrameworkApplicationVariable.FRAMEWORK_COOKIES_CONFIG_HTTP_ONLY,
-      secure: FrameworkApplicationVariable.FRAMEWORK_COOKIES_CONFIG_SECURE,
-      sameSite: FrameworkApplicationVariable.FRAMEWORK_COOKIES_CONFIG_SAME_SITE,
-      maxAge: FrameworkApplicationVariable.FRAMEWORK_COOKIES_CONFIG_MAX_AGE,
-      path: '/',
-    });
+    if (isDiscountValid) {
+      reply.setCookie(ApiCookieEnum.AFFILIATE, affiliate.id.toString(), {
+        httpOnly:
+          FrameworkApplicationVariable.FRAMEWORK_COOKIES_CONFIG_HTTP_ONLY,
+        secure: FrameworkApplicationVariable.FRAMEWORK_COOKIES_CONFIG_SECURE,
+        sameSite:
+          FrameworkApplicationVariable.FRAMEWORK_COOKIES_CONFIG_SAME_SITE,
+        maxAge: FrameworkApplicationVariable.FRAMEWORK_COOKIES_CONFIG_MAX_AGE,
+        path: '/',
+      });
+    }
 
     const response = GetPublicAffiliateCustomerResponseDto.build({
       id: affiliate.id,
-      paymentPlanDiscountPercentage: affiliate.paymentPlanDiscountPercentage,
+      paymentPlanDiscountPercentage: isDiscountValid
+        ? affiliate.paymentPlanDiscountPercentage
+        : 0,
       paymentPlanDiscountValidUntil: affiliate.paymentPlanDiscountValidUntil,
-      paymentPlanDiscountRedemptionLimit:
-        affiliate.paymentPlanDiscountRedemptionLimit,
+      paymentPlanDiscountRedemptionLimit: isDiscountValid
+        ? affiliate.paymentPlanDiscountRedemptionLimit
+        : 0,
       paymentPlanIds: linkedPlans.map((p) => p.paymentPlanId),
     });
 
