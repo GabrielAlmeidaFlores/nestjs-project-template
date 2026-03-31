@@ -3,15 +3,11 @@ import { FastifyReply } from 'fastify';
 import moment from 'moment';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { CreateBillingInputModel } from '@infra/payment-gateway/model/input/create-billing.input.model';
 import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
-import { AffiliateCustomerCommandRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-customer/command/affiliate-customer.command.repository.gateway';
-import { AffiliateCustomerQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-customer/query/affiliate-customer.query.repository.gateway';
-import { AffiliateCustomerEntity } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/affiliate-customer.entity';
 import { ResolveAffiliatePlanDiscountGateway } from '@module/customer/affiliate-customer/lib/resolve-affiliate-plan-discount/resolve-affiliate-plan-discount.gateway';
 import { OrganizationPaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/command/organization-payment-plan.command.repository.gateway';
 import { OrganizationPaymentPlanAffiliateCommissionCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-affiliate-commission/command/organization-payment-plan-affiliate-commission.command.repository.gateway';
@@ -62,10 +58,6 @@ export class GenerateYearlyPaymentBillingUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(CustomerQueryRepositoryGateway)
     private readonly customerQueryRepository: CustomerQueryRepositoryGateway,
-    @Inject(AffiliateCustomerQueryRepositoryGateway)
-    private readonly affiliateCustomerQueryRepository: AffiliateCustomerQueryRepositoryGateway,
-    @Inject(AffiliateCustomerCommandRepositoryGateway)
-    private readonly affiliateCustomerCommandRepository: AffiliateCustomerCommandRepositoryGateway,
     @Inject(ResolveAffiliatePlanDiscountGateway)
     private readonly resolveAffiliatePlanDiscountService: ResolveAffiliatePlanDiscountGateway,
     @Inject(OrganizationPaymentPlanAffiliateCommissionCommandRepositoryGateway)
@@ -102,29 +94,12 @@ export class GenerateYearlyPaymentBillingUseCase {
       .startOf('day')
       .toDate();
 
-    const discountResult =
-      await this.resolveAffiliatePlanDiscountService.resolveDiscount(
+    const { billingPrice: billingValue, discountResult } =
+      await this.resolveAffiliatePlanDiscountService.resolveBillingPrice(
         reply.request.cookies[ApiCookieEnum.AFFILIATE],
         paymentPlan.id,
+        paymentPlan.price,
       );
-
-    const MINIMUM_BILLING_VALUE = 5;
-    const billingValue =
-      discountResult !== null
-        ? new DecimalValue(
-            Math.max(
-              this.resolveAffiliatePlanDiscountService.applyDiscount(
-                paymentPlan.id.toString(),
-                paymentPlan.price.toNumber(),
-                {
-                  percentage: discountResult.percentage,
-                  linkedPlanIds: new Set([paymentPlan.id.toString()]),
-                },
-              )?.affiliatePrice ?? paymentPlan.price.toNumber(),
-              MINIMUM_BILLING_VALUE,
-            ).toFixed(2),
-          )
-        : paymentPlan.price;
 
     const organizationPaymentPlanId = new OrganizationPaymentPlanId();
 
@@ -201,7 +176,6 @@ export class GenerateYearlyPaymentBillingUseCase {
       const now = new Date();
 
       let organizationPaymentPlanAffiliateCommissionTransaction = null;
-      let affiliateRedemptionLimitUpdateTransaction = null;
       if (discountResult !== null) {
         const commission = new OrganizationPaymentPlanAffiliateCommissionEntity(
           {
@@ -216,26 +190,6 @@ export class GenerateYearlyPaymentBillingUseCase {
           this.organizationPaymentPlanAffiliateCommissionCommandRepository.createOrganizationPaymentPlanAffiliateCommission(
             commission,
           );
-
-        const affiliate =
-          await this.affiliateCustomerQueryRepository.findOneById(
-            discountResult.affiliateCustomerId,
-          );
-        if (affiliate !== null) {
-          const updatedAffiliate = new AffiliateCustomerEntity({
-            ...affiliate,
-            paymentPlanDiscountRedemptionLimit: Math.max(
-              0,
-              affiliate.paymentPlanDiscountRedemptionLimit - 1,
-            ),
-            updatedAt: new Date(),
-          });
-          affiliateRedemptionLimitUpdateTransaction =
-            this.affiliateCustomerCommandRepository.updateAffiliateCustomer(
-              discountResult.affiliateCustomerId,
-              updatedAffiliate,
-            );
-        }
       }
 
       const transaction = await this.baseTransactionRepositoryGateway.execute([
@@ -249,9 +203,6 @@ export class GenerateYearlyPaymentBillingUseCase {
         ...organizationPaymentPlanEnabledPaidResourceTransactions,
         ...(organizationPaymentPlanAffiliateCommissionTransaction !== null
           ? [organizationPaymentPlanAffiliateCommissionTransaction]
-          : []),
-        ...(affiliateRedemptionLimitUpdateTransaction !== null
-          ? [affiliateRedemptionLimitUpdateTransaction]
           : []),
       ]);
 
