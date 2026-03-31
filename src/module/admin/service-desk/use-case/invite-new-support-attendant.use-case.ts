@@ -1,7 +1,7 @@
 import { randomBytes, randomInt } from 'node:crypto';
 
-import bcrypt from 'bcrypt';
 import { Inject, Injectable } from '@nestjs/common';
+import bcrypt from 'bcrypt';
 
 import { CacheStorageGateway } from '@infra/cache-storage/cache-storage.gateway';
 import { EmailGateway } from '@infra/email/email.gateway';
@@ -25,21 +25,17 @@ interface InviteDataInterface {
 export class InviteNewSupportAttendantUseCase {
   protected readonly _type = InviteNewSupportAttendantUseCase.name;
 
-  private readonly INVITE_TTL_SECONDS = 172800;
+  private readonly INVITE_TTL_SECONDS: number;
 
-  private readonly RESEND_COOLDOWN_SECONDS = 60;
+  private readonly RESEND_COOLDOWN_SECONDS: number;
 
-  private readonly TEMP_PASSWORD_CHARSET =
-    'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+  private readonly TEMP_PASSWORD_CHARSET: string;
 
-  private readonly TEMP_PASSWORD_LENGTH = 12;
+  private readonly TEMP_PASSWORD_LENGTH: number;
 
-  private readonly BCRYPT_ROUNDS = 10;
+  private readonly BCRYPT_ROUNDS: number;
 
-  private readonly SUPPORT_TYPE_LABEL: Record<SupportTypeEnum, string> = {
-    [SupportTypeEnum.TECHNICAL]: 'técnico',
-    [SupportTypeEnum.LEGAL]: 'jurídico',
-  };
+  private readonly SUPPORT_TYPE_LABEL: Record<SupportTypeEnum, string>;
 
   public constructor(
     @Inject(SupportAttendantQueryRepositoryGateway)
@@ -48,7 +44,18 @@ export class InviteNewSupportAttendantUseCase {
     private readonly cacheStorageGateway: CacheStorageGateway,
     @Inject(EmailGateway)
     private readonly emailGateway: EmailGateway,
-  ) {}
+  ) {
+    this.INVITE_TTL_SECONDS = 172800;
+    this.RESEND_COOLDOWN_SECONDS = 60;
+    this.TEMP_PASSWORD_CHARSET =
+      'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+    this.TEMP_PASSWORD_LENGTH = 12;
+    this.BCRYPT_ROUNDS = 10;
+    this.SUPPORT_TYPE_LABEL = {
+      [SupportTypeEnum.TECHNICAL]: 'técnico',
+      [SupportTypeEnum.LEGAL]: 'jurídico',
+    };
+  }
 
   public async execute(
     dto: InviteSupportAttendantRequestDto,
@@ -178,7 +185,9 @@ export class InviteNewSupportAttendantUseCase {
   }
 
   private generateCode(): string {
-    return randomBytes(32).toString('hex');
+    const codeByteLength = 32;
+
+    return randomBytes(codeByteLength).toString('hex');
   }
 
   private buildInviteDataKey(code: string): string {

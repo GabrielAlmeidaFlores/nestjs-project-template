@@ -51,9 +51,10 @@ export class AuthIdentityEntityAutoMapperProfile {
       return new AuthIdentityEntity({
         id: new AuthIdentityId(source.id),
         email: new Email(source.email),
-        federalDocument: source.federalDocument
-          ? new FederalDocument(source.federalDocument)
-          : null,
+        federalDocument:
+          source.federalDocument !== null
+            ? new FederalDocument(source.federalDocument)
+            : null,
         password: new HashedPassword(source.password),
         authenticatorAppSecret: source.authenticatorAppSecret,
         isActive: source.isActive,

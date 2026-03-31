@@ -79,7 +79,7 @@ export class SupportAttendantTypeormQueryRepository
       .where('sa.id = :id', { id: id.toString() })
       .getRawOne<{ authIdentityId: string } | undefined>();
 
-    if (!raw?.authIdentityId) {
+    if (raw === undefined) {
       return null;
     }
 
@@ -112,10 +112,9 @@ export class SupportAttendantTypeormQueryRepository
     }
 
     if (param.search !== null) {
-      queryBuilder.andWhere(
-        '(sa.name LIKE :search OR sa.email LIKE :search)',
-        { search: `%${param.search}%` },
-      );
+      queryBuilder.andWhere('(sa.name LIKE :search OR sa.email LIKE :search)', {
+        search: `%${param.search}%`,
+      });
     }
 
     const maxItemsPerQuery = 100;
