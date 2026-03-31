@@ -3,6 +3,7 @@ import { Inject, Injectable, StreamableFile } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
+import { OrganizationCustomizationExportDocumentOptionsResolver } from '@module/customer/analysis-tool/lib/organization-customization-resolver/organization-customization-export-document-options.resolver';
 import { DocumentGeneratorProcessorGateway } from '@module/customer/documents-to-be-generated/lib/document-generator-processor/document-generator-processor.gateway';
 import { FullOpinionGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/full-opinion/domain/repository/full-opinion-generator-analysis-result/command/full-opinion-generator.command.repository.gateway';
 import { FullOpinionGeneratorQueryRepositoryGateway } from '@module/customer/documents-to-be-generated/module/full-opinion/domain/repository/full-opinion-generator-analysis-result/query/full-opinion-generator.query.repository.gateway';
@@ -13,6 +14,7 @@ import { FullOpinionGeneratorDoesNotContainSimplifiedAnalysisError } from '@modu
 import { FullOpinionGeneratorNotFoundError } from '@module/customer/documents-to-be-generated/module/full-opinion/error/full-opinion-generator-not-found.error';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
+import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 
 @Injectable()
 export class DownloadFullOpinionGeneratorSimplifiedAnalysisUseCase {
@@ -32,9 +34,12 @@ export class DownloadFullOpinionGeneratorSimplifiedAnalysisUseCase {
     private readonly documentGeneratorProcessorGateway: DocumentGeneratorProcessorGateway,
     @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
+    @Inject(OrganizationCustomizationExportDocumentOptionsResolver)
+    private readonly organizationCustomizationExportDocumentOptionsResolver: OrganizationCustomizationExportDocumentOptionsResolver,
   ) {}
 
   public async execute(
+    organizationSessionData: OrganizationSessionDataModel,
     fullOpinionGeneratorId: FullOpinionGeneratorId,
     format: ExportDocumentFormatEnum,
   ): Promise<StreamableFile> {
@@ -91,10 +96,16 @@ export class DownloadFullOpinionGeneratorSimplifiedAnalysisUseCase {
       throw new FullOpinionGeneratorDoesNotContainSimplifiedAnalysisError();
     }
 
+    const exportOptions =
+      await this.organizationCustomizationExportDocumentOptionsResolver.execute(
+        organizationSessionData.organizationId,
+      );
+
     return this.exportDocumentGateway.downloadFileAsStreamable(
       responseAi,
       format,
       'analise_simplificada_gerador_parecer_completo',
+      exportOptions,
     );
   }
 }

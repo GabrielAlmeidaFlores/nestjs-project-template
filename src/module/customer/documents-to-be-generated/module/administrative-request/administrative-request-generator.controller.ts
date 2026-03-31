@@ -18,8 +18,11 @@ import { CreateAdministrativeRequestGeneratorUseCase } from '@module/customer/do
 import { DownloadAdministrativeRequestGeneratorCompleteAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/administrative-request/use-case/download-administrative-request-generator-complete-analysis.use-case';
 import { DownloadAdministrativeRequestGeneratorSimplifiedAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/administrative-request/use-case/download-administrative-request-generator-simplified-analysis.use-case';
 import { UpdateAdministrativeRequestGeneratorCompleteAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/administrative-request/use-case/update-administrative-request-generator-complete-analysis.use-case';
+import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
+import { GetOrganizationSessionData } from '@shared/api/util/decorator/property/get-organization-session-data/get-organization-session-data.decorator';
+import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
@@ -75,9 +78,11 @@ export class AdministrativeRequestGeneratorController {
         'Arquivo da análise simplificada do gerador de requerimento administrativo retornado para download.',
       type: Buffer,
     },
-    guard: [],
+    guard: [OrganizationSessionGuard],
   })
   public async downloadAdministrativeRequestGeneratorSimplifiedAnalysisById(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Param(
       'administrativeRequestGeneratorId',
       new ParseValueObjectPipe(AdministrativeRequestGeneratorId),
@@ -87,6 +92,7 @@ export class AdministrativeRequestGeneratorController {
     format: ExportDocumentFormatEnum = ExportDocumentFormatEnum.PDF,
   ): Promise<StreamableFile> {
     return await this.downloadAdministrativeRequestGeneratorSimplifiedAnalysisUseCase.execute(
+      organizationSessionData,
       administrativeRequestGeneratorId,
       format,
     );
@@ -107,9 +113,11 @@ export class AdministrativeRequestGeneratorController {
         'Arquivo da análise completa do gerador de requerimento administrativo retornado para download.',
       type: Buffer,
     },
-    guard: [],
+    guard: [OrganizationSessionGuard],
   })
   public async downloadAdministrativeRequestGeneratorCompleteAnalysisById(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Param(
       'administrativeRequestGeneratorId',
       new ParseValueObjectPipe(AdministrativeRequestGeneratorId),
@@ -119,6 +127,7 @@ export class AdministrativeRequestGeneratorController {
     format: ExportDocumentFormatEnum = ExportDocumentFormatEnum.PDF,
   ): Promise<StreamableFile> {
     return await this.downloadAdministrativeRequestGeneratorCompleteAnalysisUseCase.execute(
+      organizationSessionData,
       administrativeRequestGeneratorId,
       format,
     );

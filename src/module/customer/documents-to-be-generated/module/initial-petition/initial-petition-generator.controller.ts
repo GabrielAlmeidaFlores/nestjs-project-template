@@ -18,8 +18,11 @@ import { CreateInitialPetitionGeneratorUseCase } from '@module/customer/document
 import { DownloadInitialPetitionGeneratorCompleteAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/initial-petition/use-case/download-initial-petition-generator-complete-analysis.use-case';
 import { DownloadInitialPetitionGeneratorSimplifiedAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/initial-petition/use-case/download-initial-petition-generator-simplified-analysis.use-case';
 import { UpdateInitialPetitionGeneratorCompleteAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/initial-petition/use-case/update-initial-petition-generator-complete-analysis.use-case';
+import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
+import { GetOrganizationSessionData } from '@shared/api/util/decorator/property/get-organization-session-data/get-organization-session-data.decorator';
+import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
@@ -71,9 +74,11 @@ export class InitialPetitionGeneratorController {
         'Arquivo da análise simplificada do gerador de petição inicial retornado para download.',
       type: Buffer,
     },
-    guard: [],
+    guard: [OrganizationSessionGuard],
   })
   public async downloadInitialPetitionGeneratorSimplifiedAnalysisById(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Param(
       'initialPetitionGeneratorId',
       new ParseValueObjectPipe(InitialPetitionGeneratorId),
@@ -83,6 +88,7 @@ export class InitialPetitionGeneratorController {
     format: ExportDocumentFormatEnum = ExportDocumentFormatEnum.PDF,
   ): Promise<StreamableFile> {
     return await this.downloadInitialPetitionGeneratorSimplifiedAnalysisUseCase.execute(
+      organizationSessionData,
       initialPetitionGeneratorId,
       format,
     );
@@ -102,9 +108,11 @@ export class InitialPetitionGeneratorController {
         'Arquivo da análise completa do gerador de petição inicial retornado para download.',
       type: Buffer,
     },
-    guard: [],
+    guard: [OrganizationSessionGuard],
   })
   public async downloadInitialPetitionGeneratorCompleteAnalysisById(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Param(
       'initialPetitionGeneratorId',
       new ParseValueObjectPipe(InitialPetitionGeneratorId),
@@ -114,6 +122,7 @@ export class InitialPetitionGeneratorController {
     format: ExportDocumentFormatEnum = ExportDocumentFormatEnum.PDF,
   ): Promise<StreamableFile> {
     return await this.downloadInitialPetitionGeneratorCompleteAnalysisUseCase.execute(
+      organizationSessionData,
       initialPetitionGeneratorId,
       format,
     );

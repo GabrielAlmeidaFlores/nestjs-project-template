@@ -31,8 +31,8 @@ export class OrganizationCustomizationDocumentFooterTemplateSeeder implements Se
           '7bc43cdc-f2ee-4978-a03a-31e607e51fd6',
         ),
         type: OrganizationCustomizationDocumentFooterTemplateTypeEnum.MODERN,
-        htmlContent: `<footer style="display: flex; width: 100%; justify-content: center; align-items: center; padding: 20px 40px; font-family: sans-serif; box-sizing: border-box; border-top: 4px solid {{primaryColor}};">
-  <span style="font-size: 13px; color: #555; text-align: center;">
+        htmlContent: `<footer style="display: flex; width: 100%; justify-content: center; align-items: center; padding: 8px 0px; font-family: sans-serif; box-sizing: border-box; background-color: {{primaryColor}};">
+  <span style="font-size: 13px; color: #fff; text-align: center;">
     {{footerDescription}}
   </span>
 </footer>`,
@@ -42,8 +42,8 @@ export class OrganizationCustomizationDocumentFooterTemplateSeeder implements Se
           '703c6208-9fc0-4cae-a6c5-438bfe79289b',
         ),
         type: OrganizationCustomizationDocumentFooterTemplateTypeEnum.CLASSIC,
-        htmlContent: `<footer style="display: flex; width: 100%; justify-content: center; align-items: center; padding: 20px 40px; font-family: sans-serif; box-sizing: border-box; background-color: {{primaryColor}};">
-  <span style="font-size: 13px; color: #fff; text-align: center;">
+        htmlContent: `<footer style="display: flex; width: 100%; justify-content: center; align-items: center; padding: 8px 0px; font-family: sans-serif; box-sizing: border-box; border-top: 4px solid {{primaryColor}};">
+  <span style="font-size: 13px; color: #555; text-align: center;">
     {{footerDescription}}
   </span>
 </footer>`,
