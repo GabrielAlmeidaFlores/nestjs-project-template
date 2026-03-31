@@ -13,8 +13,8 @@ export class GetAuthenticatedAdminDataResponseDto extends BaseBuildableDtoObject
   @ResponseDtoValueObjectProperty(Email)
   public email: Email;
 
-  @ResponseDtoValueObjectProperty(FederalDocument)
-  public federalDocument: FederalDocument;
+  @ResponseDtoValueObjectProperty(FederalDocument, { required: false })
+  public federalDocument?: FederalDocument;
 
   protected override readonly _type = GetAuthenticatedAdminDataResponseDto.name;
 }
