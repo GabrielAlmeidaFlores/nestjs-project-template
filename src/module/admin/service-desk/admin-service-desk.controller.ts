@@ -15,6 +15,8 @@ import { ListAdminSupportTicketsUseCase } from '@module/admin/service-desk/use-c
 import { ListSupportAttendantsUseCase } from '@module/admin/service-desk/use-case/list-support-attendants.use-case';
 import { ToggleSupportAttendantStatusUseCase } from '@module/admin/service-desk/use-case/toggle-support-attendant-status.use-case';
 import { UpdateSupportAttendantUseCase } from '@module/admin/service-desk/use-case/update-support-attendant.use-case';
+import { ListSupportAttendantsQueryParam } from '@module/customer/service-desk/domain/repository/support-attendant/query/param/list-support-attendants.query.param';
+import { ListAdminSupportTicketsQueryParam } from '@module/customer/service-desk/domain/repository/support-ticket/query/param/list-admin-support-tickets.query.param';
 import { SupportAttendantId } from '@module/customer/service-desk/domain/schema/entity/support-attendant/value-object/support-attendant-id/support-attendant-id.value-object';
 import { SupportTicketId } from '@module/customer/service-desk/domain/schema/entity/support-ticket/value-object/support-ticket-id/support-ticket-id.value-object';
 import { GetSupportTicketDetailResponseDto } from '@module/customer/service-desk/dto/response/get-support-ticket-detail.response.dto';
@@ -23,9 +25,9 @@ import { GetSupportTicketDetailUseCase } from '@module/customer/service-desk/use
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { AdminControllerRoute } from '@shared/api/util/decorator/class/controller-route/admin-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
-import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
 import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 @AdminControllerRoute('service-desk')
@@ -82,7 +84,15 @@ export class AdminServiceDeskController {
   public async listAttendants(
     @Query() dto: ListSupportAttendantsRequestDto,
   ): Promise<ListSupportAttendantsResponseDto> {
-    return this.listSupportAttendantsUseCase.execute(dto);
+    const param = new ListSupportAttendantsQueryParam({
+      page: dto.page,
+      limit: dto.limit,
+      sortField: dto.sortField ?? null,
+      supportType: dto.supportType ?? null,
+      search: dto.search ?? null,
+    });
+
+    return this.listSupportAttendantsUseCase.execute(param);
   }
 
   @BuildEndpointSpecification({
@@ -103,7 +113,19 @@ export class AdminServiceDeskController {
   public async listTickets(
     @Query() dto: ListAdminSupportTicketsRequestDto,
   ): Promise<ListSupportTicketsResponseDto> {
-    return this.listAdminSupportTicketsUseCase.execute(dto);
+    const param = new ListAdminSupportTicketsQueryParam({
+      page: dto.page,
+      limit: dto.limit,
+      sortField: dto.sortField ?? null,
+      status: dto.status ?? null,
+      supportType: dto.supportType ?? null,
+      ticketNumber: dto.ticketNumber ?? null,
+      search: dto.search ?? null,
+      from: dto.from ?? null,
+      to: dto.to ?? null,
+    });
+
+    return this.listAdminSupportTicketsUseCase.execute(param);
   }
 
   @BuildEndpointSpecification({
@@ -126,7 +148,11 @@ export class AdminServiceDeskController {
     @Param('supportTicketId', new ParseValueObjectPipe(SupportTicketId))
     supportTicketId: SupportTicketId,
   ): Promise<GetSupportTicketDetailResponseDto> {
-    return this.getSupportTicketDetailUseCase.execute(sessionData, null, supportTicketId);
+    return this.getSupportTicketDetailUseCase.execute(
+      sessionData,
+      null,
+      supportTicketId,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -149,9 +175,22 @@ export class AdminServiceDeskController {
     supportAttendantId: SupportAttendantId,
     @Query() dto: ListAdminSupportTicketsRequestDto,
   ): Promise<ListSupportTicketsResponseDto> {
+    const param = new ListAdminSupportTicketsQueryParam({
+      page: dto.page,
+      limit: dto.limit,
+      sortField: dto.sortField ?? null,
+      status: dto.status ?? null,
+      supportType: dto.supportType ?? null,
+      ticketNumber: dto.ticketNumber ?? null,
+      search: dto.search ?? null,
+      from: dto.from ?? null,
+      to: dto.to ?? null,
+      assignedAttendantId: supportAttendantId,
+    });
+
     return this.listAdminSupportTicketsByAttendantUseCase.execute(
       supportAttendantId,
-      dto,
+      param,
     );
   }
 

@@ -1,5 +1,6 @@
 import { Body, HttpStatus, Param, Query, RequestMethod } from '@nestjs/common';
 
+import { ListSupportTicketsQueryParam } from '@module/customer/service-desk/domain/repository/support-ticket/query/param/list-support-tickets.query.param';
 import { SupportTicketId } from '@module/customer/service-desk/domain/schema/entity/support-ticket/value-object/support-ticket-id/support-ticket-id.value-object';
 import { CreateSupportTicketRequestDto } from '@module/customer/service-desk/dto/request/create-support-ticket.request.dto';
 import { ListSupportTicketsRequestDto } from '@module/customer/service-desk/dto/request/list-support-tickets.request.dto';
@@ -54,7 +55,18 @@ export class ServiceDeskController {
     @GetOrganizationSessionData() orgSession: OrganizationSessionDataModel,
     @Query() dto: ListSupportTicketsRequestDto,
   ): Promise<ListSupportTicketsResponseDto> {
-    return this.listSupportTicketsUseCase.execute(sessionData, orgSession, dto);
+    const param = new ListSupportTicketsQueryParam({
+      page: dto.page,
+      limit: dto.limit,
+      sortField: dto.sortField ?? null,
+      status: dto.status ?? null,
+      supportType: dto.supportType ?? null,
+      ticketNumber: dto.ticketNumber ?? null,
+      from: dto.from ?? null,
+      to: dto.to ?? null,
+    });
+
+    return this.listSupportTicketsUseCase.execute(sessionData, orgSession, param);
   }
 
   @BuildEndpointSpecification({

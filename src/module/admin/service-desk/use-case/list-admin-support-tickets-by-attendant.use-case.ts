@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { ListAdminSupportTicketsRequestDto } from '@module/admin/service-desk/dto/request/list-admin-support-tickets.request.dto';
 import { SupportAttendantQueryRepositoryGateway } from '@module/customer/service-desk/domain/repository/support-attendant/query/support-attendant.query.repository.gateway';
 import { ListAdminSupportTicketsQueryParam } from '@module/customer/service-desk/domain/repository/support-ticket/query/param/list-admin-support-tickets.query.param';
 import { SupportTicketQueryRepositoryGateway } from '@module/customer/service-desk/domain/repository/support-ticket/query/support-ticket.query.repository.gateway';
@@ -22,7 +21,7 @@ export class ListAdminSupportTicketsByAttendantUseCase {
 
   public async execute(
     supportAttendantId: SupportAttendantId,
-    requestDto: ListAdminSupportTicketsRequestDto,
+    param: ListAdminSupportTicketsQueryParam,
   ): Promise<ListSupportTicketsResponseDto> {
     const attendant =
       await this.supportAttendantQueryRepositoryGateway.findOneSupportAttendantById(
@@ -32,19 +31,6 @@ export class ListAdminSupportTicketsByAttendantUseCase {
     if (!attendant) {
       throw new SupportAttendantNotFoundError();
     }
-
-    const param = new ListAdminSupportTicketsQueryParam({
-      page: requestDto.page,
-      limit: requestDto.limit,
-      sortField: requestDto.sortField ?? null,
-      status: requestDto.status ?? null,
-      supportType: requestDto.supportType ?? null,
-      ticketNumber: requestDto.ticketNumber ?? null,
-      search: requestDto.search ?? null,
-      from: requestDto.from ?? null,
-      to: requestDto.to ?? null,
-      assignedAttendantId: supportAttendantId,
-    });
 
     const result =
       await this.supportTicketQueryRepositoryGateway.listSupportTicketsForAdmin(
