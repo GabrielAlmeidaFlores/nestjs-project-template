@@ -29,7 +29,10 @@ export class GetAuthIdentityQueryResultAutoMapperProfile {
       return GetAuthIdentityQueryResult.build({
         ...source,
         id: new AuthIdentityId(source.id),
-        federalDocument: new FederalDocument(source.federalDocument),
+        federalDocument:
+          source.federalDocument !== null
+            ? new FederalDocument(source.federalDocument)
+            : null,
         email: new Email(source.email),
         password: new HashedPassword(source.password),
       });
@@ -53,7 +56,9 @@ export class GetAuthIdentityQueryResultAutoMapperProfile {
         ...source,
         id: source.id.toString(),
         email: source.email.toString(),
-        federalDocument: source.federalDocument.toString(),
+        federalDocument: source.federalDocument
+          ? source.federalDocument.toString()
+          : null,
         password: source.password.toString(),
       });
     };

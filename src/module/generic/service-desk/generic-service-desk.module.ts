@@ -1,0 +1,16 @@
+import { Module } from '@nestjs/common';
+
+import { CacheStorageModule } from '@infra/cache-storage/cache-storage.module';
+import { DatabaseModule } from '@infra/database/database.module';
+import { GenericServiceDeskController } from '@module/generic/service-desk/generic-service-desk.controller';
+import { RegisterSupportAttendantUseCase } from '@module/generic/service-desk/use-case/register-support-attendant.use-case';
+import { AuthIdentityModule } from '@module/generic/auth-identity/auth-identity.module';
+
+@Module({
+  imports: [DatabaseModule, CacheStorageModule, AuthIdentityModule],
+  controllers: [GenericServiceDeskController],
+  providers: [RegisterSupportAttendantUseCase],
+})
+export class GenericServiceDeskModule {
+  protected readonly _type = GenericServiceDeskModule.name;
+}
