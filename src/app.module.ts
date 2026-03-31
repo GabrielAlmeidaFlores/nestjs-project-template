@@ -10,6 +10,7 @@ import { DatabaseModule } from '@infra/database/database.module';
 import { AdminModule } from '@module/admin/admin.module';
 import { CustomerModule } from '@module/customer/customer.module';
 import { GenericModule } from '@module/generic/generic.module';
+import { SupportModule } from '@module/support/support.module';
 import { SystemLogInterceptor } from '@shared/api/gateway/interceptor/system-log/system-log.interceptor';
 import { CacheStorageApplicationVariable } from '@shared/system/constant/application-variable/source/cache-storage.application-variable';
 import { FrameworkApplicationVariable } from '@shared/system/constant/application-variable/source/framework.application-variable';
@@ -23,6 +24,7 @@ import { ObservabilityModule } from '@shared/system/observability/observability.
     AdminModule,
     GenericModule,
     CustomerModule,
+    SupportModule,
     AdminModule,
     NestjsFormDataModule.config({
       isGlobal: true,

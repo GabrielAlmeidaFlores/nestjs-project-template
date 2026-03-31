@@ -105,7 +105,15 @@ export class AuthIdentitySignInUseCase {
 
     const userLevel = authIdentity.admin
       ? UserLevelEnum.ADMIN
-      : UserLevelEnum.CUSTOMER;
+      : authIdentity.customer
+        ? UserLevelEnum.CUSTOMER
+        : authIdentity.supportAttendant
+          ? UserLevelEnum.SUPPORT
+          : null;
+
+    if (userLevel === null) {
+      throw new WrongSignInCredentialsError();
+    }
 
     await this.setAuthTokenCookieUseCaseGateway.execute(
       reply,
