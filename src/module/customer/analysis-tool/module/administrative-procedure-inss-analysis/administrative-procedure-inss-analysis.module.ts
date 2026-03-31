@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 
 import { DatabaseModule } from '@infra/database/database.module';
+import { AnalysisActivityTrackerModule } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.module';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
+import { OrganizationCustomizationExportDocumentOptionsResolverModule } from '@module/customer/analysis-tool/lib/organization-customization-resolver/organization-customization-export-document-options-resolver.module';
 import { AdministrativeProcedureInssAnalysisController } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.controller';
 import { CreateAdministrativeProcedureInssAnalysisResultUseCase } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/use-case/create-administrative-procedure-inss-analysis-result.use-case';
 import { CreateAdministrativeProcedureInssAnalysisUseCase } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/use-case/create-administrative-procedure-inss-analysis.use-case';
@@ -25,8 +27,10 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     OrganizationCreditModule,
     PaymentPlanModule,
     FileProcessorModule,
+    AnalysisActivityTrackerModule,
     AnalysisProcessorModule,
     ExportDocumentModule,
+    OrganizationCustomizationExportDocumentOptionsResolverModule,
   ],
   controllers: [AdministrativeProcedureInssAnalysisController],
   providers: [

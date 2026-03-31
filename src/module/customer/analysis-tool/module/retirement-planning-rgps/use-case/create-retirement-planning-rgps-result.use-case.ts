@@ -12,6 +12,8 @@ import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { AnalysisActivityTrackerGateway } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.gateway';
+import { AnalysisActivityActionEnum } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/enum/analysis-activity-action.enum';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
@@ -56,6 +58,8 @@ export class CreateRetirementPlanningRgpsResultUseCase {
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
     @Inject(AnalysisToolRecordCommandRepositoryGateway)
     private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
+    @Inject(AnalysisActivityTrackerGateway)
+    private readonly analysisActivityTrackerGateway: AnalysisActivityTrackerGateway,
   ) {}
 
   public async execute(
@@ -190,8 +194,15 @@ export class CreateRetirementPlanningRgpsResultUseCase {
                   },
                   detalhes: {
                     type: 'string',
-                    description:
-                      'Detalhes adicionais relevantes sobre essa aposentadoria, como vantagens, desvantagens, tempo de espera, etc. Ex.  Requisitos analisados:Tempo mínimo: 35 anos ➔ Idade mínima: 65 anos ➔ Carência mínima: 180 contribuições ➔ Cálculo da RMI:Média salarial: R$3.500,00 Coeficiente: 85% RMI estimada: R$ 2.980,00 Valor da causa: DIB: 15/12/2023 DER: 10/06/2024 Atrasados: 6 meses Valor da causa: R$ 17.880,00 (Estes detalhes devem ser sempre entregue em formato markdown)',
+                    description: `
+forneça uma análise técnica detalhada em formato markdown. é obrigatório realizar o batimento de requisitos, comparando o que a regra exige com o que o segurado possui (ex: idade necessária vs. idade atual). se um requisito não foi atingido, explique detalhadamente o porquê.
+
+estruture a resposta incluindo:
+- requisitos analisados: tabela comparativa de tempo de contribuição, idade e carência (alcançado vs. necessário).
+- cálculo da rmi: média salarial, coeficiente aplicado e rmi estimada.
+- valor da causa: dib, der, meses de atrasados e valor total.
+- estudo de elegibilidade: vantagens, desvantagens e a explicação específica de impedimentos.
+`,
                   },
                 },
                 required: [
@@ -257,11 +268,25 @@ export class CreateRetirementPlanningRgpsResultUseCase {
         retirementPlanningRgpsResult,
       );
 
-    const transactions = await this.baseTransactionRepositoryGateway.execute([
+    const transactionList = [
       transaction,
       consumeCreditTransaction,
       updateAnalysisRecordTransaction,
-    ]);
+    ];
+
+    const transactionsWithActivity =
+      this.analysisActivityTrackerGateway.appendActivityTransaction({
+        action: AnalysisActivityActionEnum.RESULT_ADDED,
+        analysisType: analysisRecord.type,
+        organizationMemberId: organizationMember.id,
+        analysisToolClientId: analysisRecord.analysisToolClient.id,
+        analysisToolRecordId: analysisRecord.id,
+        transactions: transactionList,
+      });
+
+    const transactions = await this.baseTransactionRepositoryGateway.execute(
+      transactionsWithActivity,
+    );
 
     await transactions.commit();
 

@@ -316,6 +316,9 @@ export class RetirementPlanningRgpsController {
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async updateRetirementPlanningRgpsResult(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Param(
       'retirementPlanningRgpsId',
       new ParseValueObjectPipe(RetirementPlanningRgpsId),
@@ -326,6 +329,8 @@ export class RetirementPlanningRgpsController {
     return await this.updateRetirementPlanningRgpsResultUseCase.execute(
       retirementPlanningRgpsId,
       dto,
+      sessionData,
+      organizationSessionData,
     );
   }
 

@@ -5,6 +5,7 @@ import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone
 import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
+import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-boolean-property/response-dto-boolean-property.decorator';
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
@@ -50,8 +51,8 @@ export class GetCustomerDataResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(Email)
   public email: Email;
 
-  @ResponseDtoValueObjectProperty(FederalDocument)
-  public federalDocument: FederalDocument;
+  @ResponseDtoValueObjectProperty(FederalDocument, { required: false })
+  public federalDocument?: FederalDocument;
 
   @ResponseDtoStringProperty({ required: false })
   public profilePicture?: string;
@@ -70,9 +71,6 @@ export class GetOrganizationDataResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
   public organizationName: string;
 
-  @ResponseDtoStringProperty({ required: false })
-  public organizationLogo?: string;
-
   @ResponseDtoBooleanProperty()
   public organizationOwner: boolean;
 
@@ -86,6 +84,9 @@ export class GetAuthenticatedCustomerDataResponseDto extends BaseBuildableDtoObj
 
   @ResponseDtoObjectProperty(() => GetOrganizationDataResponseDto)
   public organization: GetOrganizationDataResponseDto;
+
+  @ResponseDtoValueObjectProperty(AffiliateCustomerId, { required: false })
+  public affiliateCustomerId?: AffiliateCustomerId;
 
   protected override readonly _type =
     GetAuthenticatedCustomerDataResponseDto.name;

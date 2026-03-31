@@ -63,8 +63,11 @@ src/
 │   │       ├── domain/           # Domain layer
 │   │       │   ├── schema/
 │   │       │   │   ├── entity/  # Domain entities
+│   │       │   │   │   └── {entity-name}/
+│   │       │   │   │       ├── enum/  # Enums specific to this entity only
+│   │       │   │   │       └── value-object/  # IDs and VOs specific to this entity
 │   │       │   │   ├── value-object/  # Domain value objects
-│   │       │   │   └── enum/    # Domain enums
+│   │       │   │   └── enum/    # Domain enums shared across multiple entities
 │   │       │   └── repository/  # Repository gateways (interfaces)
 │   │       │       ├── query/   # Query gateways (read operations)
 │   │       │       └── command/ # Command gateways (write operations)
@@ -132,6 +135,7 @@ src/
 - ✅ Immutable properties (`readonly`)
 - ✅ Keep entities lightweight - store only primitive data and value objects
 - ✅ Use arrays of primitives (strings, numbers) instead of bidirectional entity references
+- ✅ **Enums specific to a single entity** must be placed inside the entity folder under `enum/` (e.g., `domain/schema/entity/{entity-name}/enum/{enum-name}.enum.ts`). Only enums shared across multiple unrelated entities go in the module-level `domain/schema/enum/` folder.
 - ❌ NO database concerns (no TypeORM decorators)
 - ❌ NO infrastructure dependencies
 - ❌ NO DTOs or external service calls
@@ -1853,6 +1857,81 @@ Use Case executes with domain model
 - ✅ For custom query parameters, create a custom Request DTO extending `BaseBuildableDtoObject`
 - ❌ NO direct binding of domain models to `@Query()` decorator (will not validate or document)
 - ❌ NO skipping the DTO layer for query parameters
+- ❌ NO plain interfaces for filter/query domain models — always use a `QueryParam` class
+
+#### ⚠️ CRITICAL: QueryParam Class Pattern (Repository Domain Model)
+
+**RULE**: When a repository method accepts filters/query parameters beyond a simple ID, the domain model passed to the repository **must** be a `QueryParam` class, never a plain interface or object literal.
+
+**Why?**:
+- Consistent with how all filtering domain models are handled in the codebase
+- Provides a constructor with default values (`?? null`) for optional fields
+- Discoverable location: always in `domain/repository/<entity>/query/param/`
+- Extends `ListDataInputModel` for uniformity (even when pagination is not used)
+
+**Naming and location**:
+- File: `domain/repository/<entity>/query/param/list-<entity>.query.param.ts`
+- Class name: `List<Entity>QueryParam`
+- Always extends `ListDataInputModel`
+
+**✅ CORRECT — QueryParam class:**
+
+```typescript
+// domain/repository/analysis-tool-record/query/param/list-analysis-tool-record.query.param.ts
+import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
+
+export class ListAffiliateCommissionsQueryParam extends ListDataInputModel {
+  public readonly from: Date | null;
+  public readonly to: Date | null;
+  public readonly plan: OrganizationPaymentPlanId | null;
+  public readonly searchBy: string | null;
+
+  protected override readonly _type = ListAffiliateCommissionsQueryParam.name;
+
+  public constructor(props: Partial<ListAffiliateCommissionsQueryParam> = {}) {
+    super(props);
+    this.from = props.from ?? null;
+    this.to = props.to ?? null;
+    this.plan = props.plan ?? null;
+    this.searchBy = props.searchBy ?? null;
+  }
+}
+```
+
+**❌ WRONG — plain interface:**
+
+```typescript
+// ❌ WRONG: Never use an interface or object literal as a filter domain model
+export interface ListAffiliateCommissionsFiltersInputModel {
+  from?: Date;
+  to?: Date;
+  plan?: OrganizationPaymentPlanId;
+  searchBy?: string;
+}
+```
+
+**Full pattern flow**:
+
+```
+HTTP Request
+    ↓
+@Query() dto: ListAffiliateCommissionsRequestDto   (DTO — HTTP layer)
+    ↓
+new ListAffiliateCommissionsQueryParam(dto)         (QueryParam — domain layer)
+    ↓
+use-case.execute(affiliateCustomerId, queryParam)
+    ↓
+repository.findManyByAffiliateCustomerIdWithFilters(id, queryParam)
+```
+
+**Rules**:
+- ✅ QueryParam classes live in `domain/repository/<entity>/query/param/`
+- ✅ Always extend `ListDataInputModel`
+- ✅ All optional fields default to `null` (never `undefined`)
+- ✅ Controller instantiates `new QueryParam(dto)` and passes it to the use-case
+- ✅ Use-case accepts `QueryParam` and passes it to the repository
+- ❌ NO plain interfaces as filter models in repository gateways or use-cases
+- ❌ NO `Partial<>` passed directly from controller to use-case/repository
 
 ### 8. Value Object Patterns
 

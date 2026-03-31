@@ -36,6 +36,14 @@ export class OrganizationPaymentPlanTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'canceled', type: 'boolean', default: false })
   public canceled: boolean;
 
+  @Column({
+    name: 'affiliate_customer_id',
+    type: 'varchar',
+    length: 36,
+    nullable: true,
+  })
+  public affiliateCustomerId: string | null;
+
   @ManyToOne(
     () => PaymentPlanTypeormEntity,
     (entity) => entity.organizationPaymentPlan,

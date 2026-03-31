@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
@@ -11,6 +11,7 @@ import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { PaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/query/payment-plan.query.repository.gateway';
 import { GetPaymentPlanQueryResult } from '@module/customer/payment-plan/domain/repository/payment-plan/query/result/get-payment-plan.query.result';
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
+import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 import { ConstructorType } from '@shared/system/type/constructor.type';
 
 @Injectable()
@@ -30,10 +31,12 @@ export class PaymentPlanTypeormQueryRepository
 
   public async listActivePaymentPlan(
     listData: ListDataInputModel,
+    cycles?: PaymentPlanCycleEnum[],
   ): Promise<ListDataOutputModel<GetPaymentPlanQueryResult>> {
     const data = await this.list(listData, {
       where: {
         active: true,
+        ...(cycles !== undefined && cycles.length > 0 && { cycle: In(cycles) }),
       },
       relations: [
         'paymentPlanEnabledPaidResource',

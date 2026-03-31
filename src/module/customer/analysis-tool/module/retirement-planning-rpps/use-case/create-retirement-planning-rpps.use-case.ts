@@ -16,6 +16,8 @@ import { CidTenEntity } from '@module/customer/analysis-tool/domain/schema/entit
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { CidTenNotFoundError } from '@module/customer/analysis-tool/error/cid-ten-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { AnalysisActivityTrackerGateway } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.gateway';
+import { AnalysisActivityActionEnum } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/enum/analysis-activity-action.enum';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { RetirementPlanningRppsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps/command/retirement-planning-rpps.command.repository.gateway';
 import { RetirementPlanningRppsInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps-inss-benefit/command/retirement-planning-rpps-inss-benefit.command.repository.gateway';
@@ -66,6 +68,8 @@ export class CreateRetirementPlanningRppsUseCase {
     private readonly retirementPlanningRppsPeriodDisabilityCommandRepositoryGateway: RetirementPlanningRppsPeriodDisabilityCommandRepositoryGateway,
     @Inject(AnalysisToolRecordCommandRepositoryGateway)
     private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
+    @Inject(AnalysisActivityTrackerGateway)
+    private readonly analysisActivityTrackerGateway: AnalysisActivityTrackerGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(RetirementPlanningRppsPeriodSpecialTimeCommandRepositoryGateway)
@@ -371,8 +375,18 @@ export class CreateRetirementPlanningRppsUseCase {
       ),
     );
 
+    const transactionsWithActivity =
+      this.analysisActivityTrackerGateway.appendActivityTransaction({
+        action: AnalysisActivityActionEnum.CREATED,
+        analysisType: AnalysisToolRecordTypeEnum.RETIREMENT_PLANNING_RPPS,
+        organizationMemberId: analysisToolRecord.createdBy,
+        analysisToolClientId: analysisToolRecord.analysisToolClient.id,
+        analysisToolRecordId: analysisToolRecord.id,
+        transactions: transactionOperations,
+      });
+
     const transaction = await this.baseTransactionRepositoryGateway.execute(
-      transactionOperations,
+      transactionsWithActivity,
     );
 
     await transaction.commit();

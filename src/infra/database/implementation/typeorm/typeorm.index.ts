@@ -8,6 +8,12 @@ import { AdministrativeProcedureInssAnalysisBenefitTypeormCommandRepository } fr
 import { AdministrativeProcedureInssAnalysisDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/administrative-procedure-inss-analysis-document/administrative-procedure-inss-analysis-document.typeorm.command.repository';
 import { AdministrativeProcedureInssAnalysisLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/administrative-procedure-inss-analysis-legal-proceeding/administrative-procedure-inss-analysis-legal-proceeding.typeorm.command.repository';
 import { AdministrativeProcedureInssAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/administrative-procedure-inss-analysis-result/administrative-procedure-inss-analysis-result.typeorm.command.repository';
+import { AffiliateBankTransferTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/affiliate-bank-transfer/affiliate-bank-transfer.typeorm.command.repository';
+import { AffiliateBankTransferTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/affiliate-bank-transfer/affiliate-bank-transfer.typeorm.query.repository';
+import { AffiliateCustomerTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/affiliate-customer/affiliate-customer.typeorm.command.repository';
+import { AffiliateCustomerTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/affiliate-customer/affiliate-customer.typeorm.query.repository';
+import { AffiliateCustomerPaymentPlanTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/affiliate-customer-payment-plan/affiliate-customer-payment-plan.typeorm.command.repository';
+import { AffiliateCustomerPaymentPlanTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/affiliate-customer-payment-plan/affiliate-customer-payment-plan.typeorm.query.repository';
 import { AnalysisToolClientTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client/analysis-tool-client.typeorm.command.repository';
 import { AnalysisToolClientTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client/analysis-tool-client.typeorm.query.repository';
 import { AnalysisToolClientInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client-inss-benefit/analysis-tool-client-inss-benefit.typeorm.command.repository';
@@ -24,12 +30,16 @@ import { AuthIdentityTypeormCommandRepository } from '@infra/database/implementa
 import { AuthIdentityTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/auth-identity/auth-identity.typeorm.query.repository';
 import { BankPaymentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bank-payment/bank-payment.typeorm.command.repository';
 import { BankPaymentTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/bank-payment/bank-payment.typeorm.query.repository';
+import { BankTransferTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bank-transfer/bank-transfer.typeorm.command.repository';
+import { BankTransferTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/bank-transfer/bank-transfer.typeorm.query.repository';
 import { BaseTypeormTransactionRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.transaction.repository';
 import { CnisFastAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis/cnis-fast-analysis.typeorm.command.repository';
 import { CnisFastAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis/cnis-fast-analysis.typeorm.query.repository';
 import { CnisFastAnalysisInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-inss-benefit/cnis-fast-analysis-inss-benefit.typeorm.command.repository';
 import { CnisFastAnalysisLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-legal-proceeding/cnis-fast-analysis-legal-proceeding.typeorm.command.repository';
 import { CnisFastAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-result/cnis-fast-analysis-result.typeorm.command.repository';
+import { CreditPackTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/credit-pack/credit-pack.typeorm.command.repository';
+import { CreditPackTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/credit-pack/credit-pack.typeorm.query.repository';
 import { CustomerTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer/customer.typeorm.command.repository';
 import { CustomerTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/customer/customer.typeorm.query.repository';
 import { CustomerAddressTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer-address/customer-address.typeorm.command.repository';
@@ -85,9 +95,19 @@ import { OrganizationCreditPurchaseTypeormCommandRepository } from '@infra/datab
 import { OrganizationCreditPurchaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-credit/organization-credit-purchase.typeorm.query.repository';
 import { OrganizationCreditUsageTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-credit/organization-credit-usage.typeorm.command.repository';
 import { OrganizationCreditUsageTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-credit/organization-credit-usage.typeorm.query.repository';
+import { OrganizationCreditPackPurchaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-credit-pack-purchase/organization-credit-pack-purchase.typeorm.command.repository';
+import { OrganizationCreditPackPurchaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-credit-pack-purchase/organization-credit-pack-purchase.typeorm.query.repository';
+import { OrganizationCustomizationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-customization/organization-customization.typeorm.command.repository';
+import { OrganizationCustomizationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-customization/organization-customization.typeorm.query.repository';
+import { OrganizationCustomizationDocumentFooterTemplateTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-customization-document-footer-template/organization-customization-document-footer-template.typeorm.command.repository';
+import { OrganizationCustomizationDocumentFooterTemplateTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-customization-document-footer-template/organization-customization-document-footer-template.typeorm.query.repository';
+import { OrganizationCustomizationDocumentHeaderTemplateTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-customization-document-header-template/organization-customization-document-header-template.typeorm.command.repository';
+import { OrganizationCustomizationDocumentHeaderTemplateTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-customization-document-header-template/organization-customization-document-header-template.typeorm.query.repository';
 import { OrganizationMemberTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-member/organization-member.typeorm.command.repository';
 import { OrganizationMemberTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-member/organization-member.typeorm.query.repository';
 import { OrganizationPaymentPlanTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-payment-plan/organization-payment-plan.typeorm.command.repository';
+import { OrganizationPaymentPlanAffiliateCommissionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-payment-plan-affiliate-commission/organization-payment-plan-affiliate-commission.typeorm.command.repository';
+import { OrganizationPaymentPlanAffiliateCommissionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-payment-plan-affiliate-commission/organization-payment-plan-affiliate-commission.typeorm.query.repository';
 import { OrganizationPaymentPlanBankPaymentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-payment-plan-bank-payment/organization-payment-plan-bank-payment.typeorm.command.repository';
 import { OrganizationPaymentPlanBankPaymentTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-payment-plan-bank-payment/organization-payment-plan-bank-payment.typeorm.query.repository';
 import { OrganizationPaymentPlanEnabledPaidResourceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-payment-plan-enabled-paid-resource/organization-payment-plan-enabled-paid-resource.typeorm.command.repository';
@@ -125,6 +145,12 @@ import { RuralTimelineAnalysisPeriodPropertyTypeormCommandRepository } from '@in
 import { RuralTimelineAnalysisPeriodResidenceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-period-residence/rural-timeline-analysis-period-residence.typeorm.command.repository';
 import { RuralTimelineCnisContributionPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-cnis-contribution-period-document/rural-timeline-cnis-contribution-period-document.typeorm.command.repository';
 import { RuralTimelineCnisContributionPeriodDocumentTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-cnis-contribution-period-document/rural-timeline-cnis-contribution-period-document.typeorm.query.repository';
+import { SupportAttendantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-attendant.typeorm.command.repository';
+import { SupportAttendantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-attendant.typeorm.query.repository';
+import { SupportTicketAttachmentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-ticket-attachment.typeorm.command.repository';
+import { SupportTicketMessageTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-ticket-message.typeorm.command.repository';
+import { SupportTicketTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-ticket.typeorm.command.repository';
+import { SupportTicketTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-ticket.typeorm.query.repository';
 import { SpecialActivityTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-activity/special-activity.typeorm.command.repository';
 import { SpecialActivityTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-activity/special-activity.typeorm.query.repository';
 import { SpecialActivityDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-activity-document/special-activity-document.typeorm.command.repository';
@@ -137,6 +163,11 @@ import { SpeechGeneratorBenefitTypeormCommandRepository } from '@infra/database/
 import { SpeechGeneratorDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-document/speech-generator-document.typeorm.command.repository';
 import { SpeechGeneratorLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-legal-proceeding/speech-generator-legal-proceeding.typeorm.command.repository';
 import { SpeechGeneratorResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-result/speech-generator-result.typeorm.command.repository';
+import { SystemActivitiesTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/system-activities/system-activities.typeorm.command.repository';
+import { SystemActivitiesTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/system-activities/system-activities.typeorm.query.repository';
+import { SystemLogTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/system-log/system-log.typeorm.command.repository';
+import { TutorialTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/tutorial/tutorial.typeorm.command.repository';
+import { TutorialTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/tutorial/tutorial.typeorm.query.repository';
 import { AdminTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/admin.typeorm.entity';
 import { AdministrativeProcedureInssAnalysisBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis-benefit.entity';
 import { AdministrativeProcedureInssAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis-document.entity';
@@ -144,6 +175,10 @@ import { AdministrativeProcedureInssAnalysisLegalProceedingTypeormEntity } from 
 import { AdministrativeProcedureInssAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis-result.entity';
 import { AdministrativeProcedureInssAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis.entity';
 import { AdministrativeRequestGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-request-generator.typeorm.entity';
+import { AffiliateBankTransferTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-bank-transfer.typeorm.entity';
+import { AffiliateCustomerConfigTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer-config.typeorm.entity';
+import { AffiliateCustomerPaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer-payment-plan.typeorm.entity';
+import { AffiliateCustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer.typeorm.entity';
 import { AnalysisToolClientInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client-inss-benefit.typeorm.entity';
 import { AnalysisToolClientLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client-legal-proceeding.typeorm.entity';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
@@ -155,12 +190,16 @@ import { AudienceQuestionGeneratorResultTypeormEntity } from '@infra/database/im
 import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator.typeorm.entity';
 import { AuthIdentityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/auth-identity.typeorm.entity';
 import { BankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-payment.typeorm.entity';
+import { BankTransferTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-transfer.typeorm.entity';
 import { CidTenTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cid-ten.typeorm.entity';
 import { CnisFastAnalysisInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-inss-benefit.typeorm.entity';
 import { CnisFastAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-legal-proceeding.typeorm.entity';
 import { CnisFastAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-result.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
+import { CreditPackTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/credit-pack.typeorm.entity';
 import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-address.typeorm.entity';
+import { CustomerEmailSentAttachmentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-email-sent-attachment.typeorm.entity';
+import { CustomerEmailSentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-email-sent.typeorm.entity';
 import { CustomerTermsAcceptanceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-terms-acceptance.typeorm.entity';
 import { CustomerTermsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-terms.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
@@ -169,6 +208,7 @@ import { DisabilityAssessmentForBpcAnalysisDocumentTypeormEntity } from '@infra/
 import { DisabilityAssessmentForBpcAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis-legal-proceeding.entity';
 import { DisabilityAssessmentForBpcAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis-result.entity';
 import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis.entity';
+import { EmailTemplateTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/email-template.typeorm.entity';
 import { FullOpinionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/full-opinion-generator.typeorm.entity';
 import { InitialPetitionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/initial-petition-generator.typeorm.entity';
 import { InsuranceQualityAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis-document.typeorm.entity';
@@ -198,9 +238,14 @@ import { MedicalQuestionGeneratorInssBenefitTypeormEntity } from '@infra/databas
 import { MedicalQuestionGeneratorLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator-legal-proceeding.typeorm.entity';
 import { MedicalQuestionGeneratorResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator-result.typeorm.entity';
 import { MedicalQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator.typeorm.entity';
+import { OrganizationCreditPackPurchaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-pack-purchase.typeorm.entity';
 import { OrganizationCreditPurchaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-purchase.typeorm.entity';
 import { OrganizationCreditUsageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-usage.typeorm.entity';
+import { OrganizationCustomizationDocumentFooterTemplateTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-customization-document-footer-template.typeorm.entity';
+import { OrganizationCustomizationDocumentHeaderTemplateTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-customization-document-header-template.typeorm.entity';
+import { OrganizationCustomizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-customization.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
+import { OrganizationPaymentPlanAffiliateCommissionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan-affiliate-commission.typeorm.entity';
 import { OrganizationPaymentPlanBankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan-bank-payment.typeorm.entity';
 import { OrganizationPaymentPlanEnabledPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan-enabled-paid-resource.typeorm.entity';
 import { OrganizationPaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan.typeorm.entity';
@@ -262,6 +307,13 @@ import { SpeechGeneratorDocumentTypeormEntity } from '@infra/database/implementa
 import { SpeechGeneratorLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-legal-proceeding.typeorm.entity';
 import { SpeechGeneratorResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-result.typeorm.entity';
 import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
+import { SupportAttendantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-attendant.typeorm.entity';
+import { SupportTicketAttachmentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-ticket-attachment.typeorm.entity';
+import { SupportTicketMessageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-ticket-message.typeorm.entity';
+import { SupportTicketTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-ticket.typeorm.entity';
+import { SystemActivitiesTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/system-activities.typeorm.entity';
+import { SystemLogTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/system-log.typeorm.entity';
+import { TutorialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/tutorial.typeorm.entity';
 import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/source/database.application-variable';
 
 import type { Provider } from '@nestjs/common';
@@ -276,7 +328,14 @@ export class TypeormIndex {
     AdministrativeProcedureInssAnalysisTypeormEntity,
     AdministrativeProcedureInssAnalysisDocumentTypeormEntity,
     AuthIdentityTypeormEntity,
+    AffiliateCustomerTypeormEntity,
+    AffiliateBankTransferTypeormEntity,
+    AffiliateCustomerConfigTypeormEntity,
+    AffiliateCustomerPaymentPlanTypeormEntity,
+    EmailTemplateTypeormEntity,
     CustomerAddressTypeormEntity,
+    CustomerEmailSentTypeormEntity,
+    CustomerEmailSentAttachmentTypeormEntity,
     CustomerTypeormEntity,
     OrganizationCreditPurchaseTypeormEntity,
     OrganizationCreditUsageTypeormEntity,
@@ -313,7 +372,9 @@ export class TypeormIndex {
     OrganizationPaymentPlanEnabledPaidResourceTypeormEntity,
     PaymentPlanPaidResourceIaConfigTypeormEntity,
     BankPaymentTypeormEntity,
+    BankTransferTypeormEntity,
     OrganizationPaymentPlanBankPaymentTypeormEntity,
+    OrganizationPaymentPlanAffiliateCommissionTypeormEntity,
     RetirementPlanningRppsTypeormEntity,
     RetirementPlanningRppsRemunerationTypeormEntity,
     RetirementPlanningRppsRemunerationCalculationTypeormEntity,
@@ -384,6 +445,7 @@ export class TypeormIndex {
     SpeechGeneratorLegalProceedingTypeormEntity,
     SpeechGeneratorResultTypeormEntity,
     SpeechGeneratorTypeormEntity,
+    SystemLogTypeormEntity,
     DisabilityAssessmentForBpcAnalysisBenefitTypeormEntity,
     DisabilityAssessmentForBpcAnalysisDocumentTypeormEntity,
     DisabilityAssessmentForBpcAnalysisLegalProceedingTypeormEntity,
@@ -396,6 +458,17 @@ export class TypeormIndex {
     PerCapitaIncomeForBpcAnalysisLegalProceedingTypeormEntity,
     PerCapitaIncomeForBpcAnalysisFamilyMemberTypeormEntity,
     PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentTypeormEntity,
+    SystemActivitiesTypeormEntity,
+    TutorialTypeormEntity,
+    CreditPackTypeormEntity,
+    OrganizationCreditPackPurchaseTypeormEntity,
+    SupportAttendantTypeormEntity,
+    SupportTicketTypeormEntity,
+    SupportTicketAttachmentTypeormEntity,
+    SupportTicketMessageTypeormEntity,
+    OrganizationCustomizationTypeormEntity,
+    OrganizationCustomizationDocumentHeaderTemplateTypeormEntity,
+    OrganizationCustomizationDocumentFooterTemplateTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [
@@ -426,6 +499,12 @@ export class TypeormIndex {
     MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormCommandRepository,
     MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingTypeormCommandRepository,
     MedicalAndSocialReportObjectionGeneratorAnalysisResultTypeormCommandRepository,
+    AffiliateCustomerTypeormCommandRepository,
+    AffiliateCustomerTypeormQueryRepository,
+    AffiliateBankTransferTypeormCommandRepository,
+    AffiliateBankTransferTypeormQueryRepository,
+    AffiliateCustomerPaymentPlanTypeormCommandRepository,
+    AffiliateCustomerPaymentPlanTypeormQueryRepository,
     CustomerTypeormQueryRepository,
     CustomerTypeormCommandRepository,
     CustomerAddressTypeormCommandRepository,
@@ -476,8 +555,12 @@ export class TypeormIndex {
     OrganizationPaymentPlanEnabledPaidResourceTypeormCommandRepository,
     BankPaymentTypeormCommandRepository,
     BankPaymentTypeormQueryRepository,
+    BankTransferTypeormCommandRepository,
+    BankTransferTypeormQueryRepository,
     OrganizationPaymentPlanBankPaymentTypeormCommandRepository,
     OrganizationPaymentPlanBankPaymentTypeormQueryRepository,
+    OrganizationPaymentPlanAffiliateCommissionTypeormCommandRepository,
+    OrganizationPaymentPlanAffiliateCommissionTypeormQueryRepository,
     RetirementPlanningRppsInssBenefitTypeormCommandRepository,
     RetirementPlanningRppsLegalProceedingTypeormCommandRepository,
     RetirementPlanningRgpsAnalysisResultTypeormCommandRepository,
@@ -537,6 +620,27 @@ export class TypeormIndex {
     MedicalQuestionGeneratorInssBenefitTypeormCommandRepository,
     MedicalQuestionGeneratorLegalProceedingTypeormCommandRepository,
     MedicalQuestionGeneratorResultTypeormCommandRepository,
+    SystemActivitiesTypeormCommandRepository,
+    SystemActivitiesTypeormQueryRepository,
+    TutorialTypeormCommandRepository,
+    TutorialTypeormQueryRepository,
+    SystemLogTypeormCommandRepository,
+    CreditPackTypeormQueryRepository,
+    CreditPackTypeormCommandRepository,
+    OrganizationCreditPackPurchaseTypeormQueryRepository,
+    OrganizationCreditPackPurchaseTypeormCommandRepository,
+    SupportAttendantTypeormCommandRepository,
+    SupportAttendantTypeormQueryRepository,
+    SupportTicketTypeormCommandRepository,
+    SupportTicketTypeormQueryRepository,
+    SupportTicketAttachmentTypeormCommandRepository,
+    SupportTicketMessageTypeormCommandRepository,
+    OrganizationCustomizationTypeormCommandRepository,
+    OrganizationCustomizationTypeormQueryRepository,
+    OrganizationCustomizationDocumentHeaderTemplateTypeormCommandRepository,
+    OrganizationCustomizationDocumentHeaderTemplateTypeormQueryRepository,
+    OrganizationCustomizationDocumentFooterTemplateTypeormCommandRepository,
+    OrganizationCustomizationDocumentFooterTemplateTypeormQueryRepository,
   ];
 
   public static readonly dynamicModule = TypeOrmModule.forFeature(
