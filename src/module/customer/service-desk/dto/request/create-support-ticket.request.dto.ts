@@ -9,9 +9,6 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @RequestDto()
 export class CreateSupportTicketRequestDto extends BaseBuildableDtoObject {
   @RequestDtoStringProperty()
-  public requesterEmail: string;
-
-  @RequestDtoStringProperty()
   public subject: string;
 
   @RequestDtoEnumProperty(SupportTypeEnum)

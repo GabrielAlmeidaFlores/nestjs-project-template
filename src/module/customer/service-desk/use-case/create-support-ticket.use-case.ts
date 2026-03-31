@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { BucketGateway } from '@infra/bucket/bucket.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
@@ -29,6 +30,7 @@ export class CreateSupportTicketUseCase {
 
   private readonly ticketNumberLength: number;
   private readonly ticketNumberPadChar: string;
+  private readonly maxTicketNumberRetries: number;
 
   public constructor(
     @Inject(SupportTicketQueryRepositoryGateway)
@@ -48,6 +50,7 @@ export class CreateSupportTicketUseCase {
   ) {
     this.ticketNumberLength = 8;
     this.ticketNumberPadChar = '0';
+    this.maxTicketNumberRetries = 5;
   }
 
   public async execute(
@@ -55,39 +58,71 @@ export class CreateSupportTicketUseCase {
     orgSession: OrganizationSessionDataModel,
     dto: CreateSupportTicketRequestDto,
   ): Promise<CreateSupportTicketResponseDto> {
-    const [requesterData, ticketNumber, bucketKeys] = await Promise.all([
+    const [requesterData, bucketKeys] = await Promise.all([
       this.fetchRequesterData(sessionData.authIdentityId),
-      this.generateTicketNumber(orgSession),
       this.uploadAttachments(dto),
     ]);
 
-    const ticket = new SupportTicketEntity({
-      organizationId: orgSession.organizationId,
-      requesterAuthIdentityId: new AuthIdentityId(
-        sessionData.authIdentityId.toString(),
-      ),
-      requesterEmail: dto.requesterEmail,
-      requesterName: requesterData.name,
-      ticketNumber,
-      supportType: dto.supportType,
-      subject: dto.subject,
-      problem: dto.problem,
-      description: dto.description,
-      status: SupportTicketStatusEnum.WAITING,
-    });
+    try {
+      return await this.createTicketWithRetry(
+        sessionData,
+        orgSession,
+        dto,
+        requesterData,
+        bucketKeys,
+      );
+    } catch (error) {
+      await this.compensateBucketUploads(bucketKeys);
+      throw error;
+    }
+  }
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute(
-      this.supportTicketCommandRepositoryGateway.createSupportTicket(ticket),
+  private async createTicketWithRetry(
+    sessionData: SessionDataModel,
+    orgSession: OrganizationSessionDataModel,
+    dto: CreateSupportTicketRequestDto,
+    requesterData: RequesterDataInterface,
+    bucketKeys: string[],
+  ): Promise<CreateSupportTicketResponseDto> {
+    for (let attempt = 0; attempt < this.maxTicketNumberRetries; attempt++) {
+      const ticketNumber = await this.generateTicketNumber(orgSession);
+
+      const ticket = new SupportTicketEntity({
+        organizationId: orgSession.organizationId,
+        requesterAuthIdentityId: new AuthIdentityId(
+          sessionData.authIdentityId.toString(),
+        ),
+        requesterEmail: requesterData.email,
+        requesterName: requesterData.name,
+        ticketNumber,
+        supportType: dto.supportType,
+        subject: dto.subject,
+        problem: dto.problem,
+        description: dto.description,
+        status: SupportTicketStatusEnum.WAITING,
+      });
+
+      try {
+        await this.persistTicketAndAttachments(ticket, dto, bucketKeys);
+
+        return CreateSupportTicketResponseDto.build({
+          supportTicketId: ticket.id,
+          ticketNumber,
+        });
+      } catch (error) {
+        if (
+          this.isDuplicateTicketNumberError(error) &&
+          attempt < this.maxTicketNumberRetries - 1
+        ) {
+          continue;
+        }
+        throw error;
+      }
+    }
+
+    throw new Error(
+      'Failed to generate a unique ticket number after maximum retries',
     );
-
-    await transaction.commit();
-
-    await this.persistAttachments(ticket, dto, bucketKeys);
-
-    return CreateSupportTicketResponseDto.build({
-      supportTicketId: ticket.id,
-      ticketNumber,
-    });
   }
 
   private async fetchRequesterData(
@@ -146,31 +181,49 @@ export class CreateSupportTicketUseCase {
     );
   }
 
-  private async persistAttachments(
+  private async persistTicketAndAttachments(
     ticket: SupportTicketEntity,
     dto: CreateSupportTicketRequestDto,
     bucketKeys: string[],
   ): Promise<void> {
-    if (!dto.files || dto.files.length === 0) {
-      return;
-    }
+    const operations: TransactionType[] = [
+      this.supportTicketCommandRepositoryGateway.createSupportTicket(ticket),
+    ];
 
-    const attachmentTransactions = dto.files.map((fileDto, index) => {
-      const attachment = new SupportTicketAttachmentEntity({
-        supportTicketId: ticket.id,
-        bucketKey: bucketKeys[index] ?? '',
-        originalFileName: fileDto.originalFileName,
+    if (dto.files && dto.files.length > 0) {
+      const attachmentOperations = dto.files.map((fileDto, index) => {
+        const attachment = new SupportTicketAttachmentEntity({
+          supportTicketId: ticket.id,
+          bucketKey: bucketKeys[index] ?? '',
+          originalFileName: fileDto.originalFileName,
+        });
+
+        return this.supportTicketAttachmentCommandRepositoryGateway.createSupportTicketAttachment(
+          attachment,
+        );
       });
 
-      return this.supportTicketAttachmentCommandRepositoryGateway.createSupportTicketAttachment(
-        attachment,
-      );
-    });
+      operations.push(...attachmentOperations);
+    }
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute(
-      attachmentTransactions,
-    );
+    const transaction =
+      await this.baseTransactionRepositoryGateway.execute(operations);
 
     await transaction.commit();
+  }
+
+  private async compensateBucketUploads(bucketKeys: string[]): Promise<void> {
+    await Promise.allSettled(
+      bucketKeys.map((key) => this.bucketGateway.delete(key)),
+    );
+  }
+
+  private isDuplicateTicketNumberError(error: unknown): boolean {
+    const message = error instanceof Error ? error.message : '';
+
+    return (
+      message.includes('UQ_support_ticket_org_number') ||
+      message.includes('Duplicate entry')
+    );
   }
 }

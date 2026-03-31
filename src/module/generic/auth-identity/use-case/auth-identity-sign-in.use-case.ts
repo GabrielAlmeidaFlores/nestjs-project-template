@@ -117,7 +117,9 @@ export class AuthIdentitySignInUseCase {
 
     return AuthIdentitySignInResponseDto.build({
       userLevel,
-      ...(authIdentity.mustChangePassword && { mustChangePassword: authIdentity.mustChangePassword }),
+      ...(authIdentity.mustChangePassword && {
+        mustChangePassword: authIdentity.mustChangePassword,
+      }),
     });
   }
 

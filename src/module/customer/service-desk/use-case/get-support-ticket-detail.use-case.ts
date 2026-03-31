@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BucketGateway } from '@infra/bucket/bucket.gateway';
+import { SupportAttendantQueryRepositoryGateway } from '@module/customer/service-desk/domain/repository/support-attendant/query/support-attendant.query.repository.gateway';
 import { GetSupportTicketDetailAttachmentQueryResult } from '@module/customer/service-desk/domain/repository/support-ticket/query/result/get-support-ticket-detail-attachment.query.result';
 import { GetSupportTicketDetailMessageQueryResult } from '@module/customer/service-desk/domain/repository/support-ticket/query/result/get-support-ticket-detail-message.query.result';
 import { GetSupportTicketDetailQueryResult } from '@module/customer/service-desk/domain/repository/support-ticket/query/result/get-support-ticket-detail.query.result';
@@ -23,6 +24,8 @@ export class GetSupportTicketDetailUseCase {
     private readonly supportTicketQueryRepositoryGateway: SupportTicketQueryRepositoryGateway,
     @Inject(BucketGateway)
     private readonly bucketGateway: BucketGateway,
+    @Inject(SupportAttendantQueryRepositoryGateway)
+    private readonly supportAttendantQueryRepositoryGateway: SupportAttendantQueryRepositoryGateway,
   ) {}
 
   public async execute(
@@ -39,7 +42,7 @@ export class GetSupportTicketDetailUseCase {
       throw new SupportTicketNotFoundError();
     }
 
-    this.assertAccess(ticket, sessionData, orgSession);
+    await this.assertAccess(ticket, sessionData, orgSession);
 
     const attachments = await this.buildAttachmentResponses(ticket.attachments);
     const messages = this.buildMessageResponses(ticket.messages);
@@ -63,12 +66,25 @@ export class GetSupportTicketDetailUseCase {
     });
   }
 
-  private assertAccess(
+  private async assertAccess(
     ticket: GetSupportTicketDetailQueryResult,
     sessionData: SessionDataModel,
     orgSession: OrganizationSessionDataModel | null,
-  ): void {
+  ): Promise<void> {
     if (orgSession === null) {
+      const attendant =
+        await this.supportAttendantQueryRepositoryGateway.findOneSupportAttendantByAuthIdentityId(
+          sessionData.authIdentityId,
+        );
+
+      if (
+        !attendant ||
+        !attendant.isActive ||
+        attendant.supportType !== ticket.supportType
+      ) {
+        throw new SupportTicketAccessDeniedError();
+      }
+
       return;
     }
 

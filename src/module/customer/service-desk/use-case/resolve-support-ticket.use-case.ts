@@ -77,7 +77,6 @@ export class ResolveSupportTicketUseCase {
     return ticket;
   }
 
-
   private assertTicketNotAlreadyResolved(
     ticket: GetSupportTicketDetailQueryResult,
   ): void {

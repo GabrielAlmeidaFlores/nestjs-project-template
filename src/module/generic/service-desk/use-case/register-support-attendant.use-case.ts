@@ -1,6 +1,5 @@
-import bcrypt from 'bcrypt';
 import { Inject, Injectable } from '@nestjs/common';
-import type { FastifyReply } from 'fastify';
+import bcrypt from 'bcrypt';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
@@ -17,6 +16,8 @@ import { SetAuthTokenCookieUseCaseGateway } from '@module/generic/auth-identity/
 import { RegisterSupportAttendantRequestDto } from '@module/generic/service-desk/dto/request/register-support-attendant.request.dto';
 import { RegisterSupportAttendantResponseDto } from '@module/generic/service-desk/dto/response/register-support-attendant.response.dto';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
+
+import type { FastifyReply } from 'fastify';
 
 interface InviteDataInterface {
   name: string;
@@ -134,7 +135,9 @@ export class RegisterSupportAttendantUseCase {
       this.supportAttendantCommandRepositoryGateway.createSupportAttendant(
         supportAttendant,
       ),
-      this.authIdentityCommandRepositoryGateway.createAuthIdentity(authIdentity),
+      this.authIdentityCommandRepositoryGateway.createAuthIdentity(
+        authIdentity,
+      ),
     ]);
 
     await transaction.commit();

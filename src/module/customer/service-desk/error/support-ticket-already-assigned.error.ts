@@ -4,8 +4,6 @@ export class SupportTicketAlreadyAssignedError extends ConflictError {
   protected override readonly _type = SupportTicketAlreadyAssignedError.name;
 
   public constructor() {
-    super(
-      'Este chamado já possui um atendente responsável.',
-    );
+    super('Este chamado já possui um atendente responsável.');
   }
 }
