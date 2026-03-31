@@ -205,6 +205,12 @@ import { RuralTimelineCnisContributionPeriodDocumentTypeormCommandRepository } f
 import { RuralTimelineCnisContributionPeriodDocumentTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-cnis-contribution-period-document/rural-timeline-cnis-contribution-period-document.typeorm.query.repository';
 import { RuralTimelineCnisContributionPeriodOverdueContributionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-cnis-contribution-period-overdue-contribution/rural-timeline-cnis-contribution-period-overdue-contribution.typeorm.command.repository';
 import { RuralTimelineCnisContributionPeriodOverdueContributionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-cnis-contribution-period-overdue-contribution/rural-timeline-cnis-contribution-period-overdue-contribution.typeorm.query.repository';
+import { SupportAttendantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-attendant.typeorm.command.repository';
+import { SupportAttendantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-attendant.typeorm.query.repository';
+import { SupportTicketAttachmentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-ticket-attachment.typeorm.command.repository';
+import { SupportTicketMessageTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-ticket-message.typeorm.command.repository';
+import { SupportTicketTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-ticket.typeorm.command.repository';
+import { SupportTicketTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-ticket.typeorm.query.repository';
 import { SpecialActivityTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-activity/special-activity.typeorm.command.repository';
 import { SpecialActivityTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-activity/special-activity.typeorm.query.repository';
 import { SpecialActivityDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-activity-document/special-activity-document.typeorm.command.repository';
@@ -437,6 +443,12 @@ import { PaymentPlanPaidResourceCommandRepositoryGateway } from '@module/custome
 import { PaymentPlanPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/payment-plan-paid-resource.query.repository.gateway';
 import { PaymentPlanPaidResourceIaConfigCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource-ia-config/command/payment-plan-paid-resource-ia-config.command.repository.gateway';
 import { PaymentPlanPaidResourceIaConfigQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource-ia-config/query/payment-plan-paid-resource-ia-config.query.repository.gateway';
+import { SupportAttendantCommandRepositoryGateway } from '@module/customer/service-desk/domain/repository/support-attendant/command/support-attendant.command.repository.gateway';
+import { SupportAttendantQueryRepositoryGateway } from '@module/customer/service-desk/domain/repository/support-attendant/query/support-attendant.query.repository.gateway';
+import { SupportTicketCommandRepositoryGateway } from '@module/customer/service-desk/domain/repository/support-ticket/command/support-ticket.command.repository.gateway';
+import { SupportTicketQueryRepositoryGateway } from '@module/customer/service-desk/domain/repository/support-ticket/query/support-ticket.query.repository.gateway';
+import { SupportTicketAttachmentCommandRepositoryGateway } from '@module/customer/service-desk/domain/repository/support-ticket-attachment/command/support-ticket-attachment.command.repository.gateway';
+import { SupportTicketMessageCommandRepositoryGateway } from '@module/customer/service-desk/domain/repository/support-ticket-message/command/support-ticket-message.command.repository.gateway';
 import { TutorialCommandRepositoryGateway } from '@module/customer/tutorial/domain/repository/tutorial/command/tutorial.command.repository.gateway';
 import { TutorialQueryRepositoryGateway } from '@module/customer/tutorial/domain/repository/tutorial/query/tutorial.query.repository.gateway';
 import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
@@ -1373,6 +1385,30 @@ const classProvider: ClassProvider[] = [
   {
     provide: OrganizationCreditPackPurchaseCommandRepositoryGateway,
     useClass: OrganizationCreditPackPurchaseTypeormCommandRepository,
+  },
+  {
+    provide: SupportAttendantCommandRepositoryGateway,
+    useClass: SupportAttendantTypeormCommandRepository,
+  },
+  {
+    provide: SupportAttendantQueryRepositoryGateway,
+    useClass: SupportAttendantTypeormQueryRepository,
+  },
+  {
+    provide: SupportTicketCommandRepositoryGateway,
+    useClass: SupportTicketTypeormCommandRepository,
+  },
+  {
+    provide: SupportTicketQueryRepositoryGateway,
+    useClass: SupportTicketTypeormQueryRepository,
+  },
+  {
+    provide: SupportTicketAttachmentCommandRepositoryGateway,
+    useClass: SupportTicketAttachmentTypeormCommandRepository,
+  },
+  {
+    provide: SupportTicketMessageCommandRepositoryGateway,
+    useClass: SupportTicketMessageTypeormCommandRepository,
   },
   {
     provide: OrganizationCustomizationCommandRepositoryGateway,

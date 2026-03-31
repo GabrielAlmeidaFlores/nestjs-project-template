@@ -56,7 +56,7 @@ export class GetAffiliateCustomerQueryResultAutoMapperProfile {
         customerName: source.customer.name,
         customerEmail: new Email(source.customer.authIdentity.email),
         customerFederalDocument: new FederalDocument(
-          source.customer.authIdentity.federalDocument,
+          source.customer.authIdentity.federalDocument ?? '',
         ),
         customerPhoneNumber: new PhoneNumber(source.customer.phoneNumber),
         pixAddressKey,
