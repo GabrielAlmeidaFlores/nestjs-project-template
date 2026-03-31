@@ -1,31 +1,32 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { BucketGateway } from '@infra/bucket/bucket.gateway';
 import { SupportAttendantQueryRepositoryGateway } from '@module/support/account/domain/repository/support-attendant/query/support-attendant.query.repository.gateway';
 import { SupportAccountNotFoundError } from '@module/support/account/error/support-account-not-found.error';
+import { SupportTicketCommandRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket/command/support-ticket.command.repository.gateway';
 import { SupportTicketQueryRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket/query/support-ticket.query.repository.gateway';
+import { SupportTicketStatusEnum } from '@module/support/service-desk/domain/schema/entity/support-ticket/enum/support-ticket-status.enum';
 import { SupportTicketId } from '@module/support/service-desk/domain/schema/entity/support-ticket/value-object/support-ticket-id/support-ticket-id.value-object';
-import { GetSupportTicketDetailsResponseDto } from '@module/support/service-desk/dto/response/get-support-ticket-details.response.dto';
-import { SupportTicketAttachmentDetailResponseDto } from '@module/support/service-desk/dto/response/support-ticket-attachment-detail.response.dto';
+import { ResolveSupportTicketResponseDto } from '@module/support/service-desk/dto/response/resolve-support-ticket.response.dto';
 import { SupportTicketNotFoundError } from '@module/support/service-desk/error/support-ticket-not-found.error';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 @Injectable()
-export class GetSupportTicketDetailsUseCase {
-  protected readonly _type = GetSupportTicketDetailsUseCase.name;
+export class ResolveSupportTicketUseCase {
+  protected readonly _type = ResolveSupportTicketUseCase.name;
 
   public constructor(
     @Inject(SupportAttendantQueryRepositoryGateway)
     private readonly supportAttendantQueryRepositoryGateway: SupportAttendantQueryRepositoryGateway,
     @Inject(SupportTicketQueryRepositoryGateway)
     private readonly supportTicketQueryRepositoryGateway: SupportTicketQueryRepositoryGateway,
-    private readonly bucketGateway: BucketGateway,
+    @Inject(SupportTicketCommandRepositoryGateway)
+    private readonly supportTicketCommandRepositoryGateway: SupportTicketCommandRepositoryGateway,
   ) {}
 
   public async execute(
     sessionData: SessionDataModel,
     supportTicketId: SupportTicketId,
-  ): Promise<GetSupportTicketDetailsResponseDto> {
+  ): Promise<ResolveSupportTicketResponseDto> {
     const supportAttendant =
       await this.supportAttendantQueryRepositoryGateway.findOneByAuthIdentityId(
         sessionData.authIdentityId,
@@ -36,7 +37,7 @@ export class GetSupportTicketDetailsUseCase {
     }
 
     const supportTicket =
-      await this.supportTicketQueryRepositoryGateway.findOneByIdAndSupportTypeWithAttachments(
+      await this.supportTicketQueryRepositoryGateway.findOneByIdAndSupportType(
         supportTicketId,
         supportAttendant.supportType,
       );
@@ -45,31 +46,20 @@ export class GetSupportTicketDetailsUseCase {
       throw new SupportTicketNotFoundError();
     }
 
-    const attachments = await Promise.all(
-      (supportTicket.attachments ?? []).map(async (attachment) => {
-        const [documentUrl, documentBuffer] = await Promise.all([
-          this.bucketGateway.getSignedUrl(attachment.bucketKey),
-          this.bucketGateway.getBuffer(attachment.bucketKey),
-        ]);
+    const updatedSupportTicket =
+      await this.supportTicketCommandRepositoryGateway.updateStatusById(
+        supportTicket.id,
+        SupportTicketStatusEnum.RESOLVED,
+      );
 
-        return SupportTicketAttachmentDetailResponseDto.build({
-          documentName: attachment.originalFileName,
-          documentSize: documentBuffer.byteLength,
-          documentUrl: documentUrl.toString(),
-        });
-      }),
-    );
+    if (!updatedSupportTicket) {
+      throw new SupportTicketNotFoundError();
+    }
 
-    return GetSupportTicketDetailsResponseDto.build({
-      ticketNumber: supportTicket.ticketNumber,
-      supportType: supportTicket.supportType,
-      openedAt: supportTicket.createdAt,
-      analysisType: supportTicket.problem,
-      requesterName: supportTicket.requesterName,
-      requesterEmail: supportTicket.requesterEmail,
-      subject: supportTicket.subject,
-      problemDescription: supportTicket.description,
-      attachments,
+    return ResolveSupportTicketResponseDto.build({
+      ticketNumber: updatedSupportTicket.ticketNumber,
+      status: updatedSupportTicket.status,
+      resolvedAt: updatedSupportTicket.updatedAt,
     });
   }
 }
