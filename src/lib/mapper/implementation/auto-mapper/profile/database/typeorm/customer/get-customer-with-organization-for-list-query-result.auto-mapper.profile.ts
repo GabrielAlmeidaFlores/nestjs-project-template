@@ -48,7 +48,7 @@ export class GetCustomerWithOrganizationForListQueryResultAutoMapperProfile {
         customerPhoneNumber: new PhoneNumber(source.phoneNumber),
         customerEmail: new Email(source.authIdentity.email),
         customerDocument: new FederalDocument(
-          source.authIdentity.federalDocument ?? '',
+          source.authIdentity.federalDocument,
         ),
         customerCreatedAt: source.createdAt,
         customerDeletedAt: source.authIdentity.deletedAt,

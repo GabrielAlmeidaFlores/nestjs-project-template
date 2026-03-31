@@ -9,8 +9,8 @@ export class UpdateAdminResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
   public name: string;
 
-  @ResponseDtoValueObjectProperty(FederalDocument, { required: false })
-  public federalDocument?: FederalDocument;
+  @ResponseDtoValueObjectProperty(FederalDocument)
+  public federalDocument: FederalDocument;
 
   protected override readonly _type = UpdateAdminResponseDto.name;
 }

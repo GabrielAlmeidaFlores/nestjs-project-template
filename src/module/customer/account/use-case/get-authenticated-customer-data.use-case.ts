@@ -64,11 +64,8 @@ export class GetAuthenticatedCustomerDataUseCase {
       customer: GetCustomerDataResponseDto.build({
         customerId: organizationMember.customer.id,
         email: organizationMember.customer.authIdentity.email,
-        ...(organizationMember.customer.authIdentity.federalDocument !==
-          null && {
-          federalDocument:
-            organizationMember.customer.authIdentity.federalDocument,
-        }),
+        federalDocument:
+          organizationMember.customer.authIdentity.federalDocument,
         name: organizationMember.customer.name,
         phoneNumber: organizationMember.customer.phoneNumber,
         customerAddress: GetCustomerAddressResponseDto.build({

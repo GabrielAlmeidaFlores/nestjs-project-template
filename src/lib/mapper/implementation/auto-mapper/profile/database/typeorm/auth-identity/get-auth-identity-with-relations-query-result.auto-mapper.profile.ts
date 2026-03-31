@@ -9,8 +9,6 @@ import { AuthIdentityTypeormEntity } from '@infra/database/implementation/typeor
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { GetAdminQueryResult } from '@module/admin/account/domain/repository/admin/query/result/get-admin.query.result';
 import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
-import { GetSupportAttendantQueryResult } from '@module/customer/service-desk/domain/repository/support-attendant/query/result/get-support-attendant.query.result';
-import { SupportAttendantId } from '@module/customer/service-desk/domain/schema/entity/support-attendant/value-object/support-attendant-id/support-attendant-id.value-object';
 import { GetAuthIdentityWithRelationsQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity-with-relations.query.result';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { HashedPassword } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/hashed-password/hashed-password.value-object';
@@ -45,32 +43,14 @@ export class GetAuthIdentityWithRelationsQueryResultAutoMapperProfile {
         GetAdminQueryResult,
       );
 
-      let supportAttendant: GetSupportAttendantQueryResult | null = null;
-
-      if (source.supportAttendant?.id !== undefined) {
-        supportAttendant = GetSupportAttendantQueryResult.build({
-          id: new SupportAttendantId(source.supportAttendant.id),
-          name: source.supportAttendant.name,
-        });
-      }
-
       return GetAuthIdentityWithRelationsQueryResult.build({
+        ...source,
         id: new AuthIdentityId(source.id),
-        federalDocument:
-          source.federalDocument !== null
-            ? new FederalDocument(source.federalDocument)
-            : null,
+        federalDocument: new FederalDocument(source.federalDocument),
         email: new Email(source.email),
         password: new HashedPassword(source.password),
-        authenticatorAppSecret: source.authenticatorAppSecret,
-        isActive: source.isActive,
-        mustChangePassword: source.mustChangePassword,
-        createdAt: source.createdAt,
-        updatedAt: source.updatedAt,
-        deletedAt: source.deletedAt,
         customer,
         admin,
-        supportAttendant,
       });
     };
 
@@ -103,13 +83,10 @@ export class GetAuthIdentityWithRelationsQueryResultAutoMapperProfile {
       return AuthIdentityTypeormEntity.build({
         id: source.id.toString(),
         email: source.email.toString(),
-        federalDocument: source.federalDocument
-          ? source.federalDocument.toString()
-          : null,
+        federalDocument: source.federalDocument.toString(),
         password: source.password.toString(),
         authenticatorAppSecret: source.authenticatorAppSecret,
         isActive: source.isActive,
-        mustChangePassword: source.mustChangePassword,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
