@@ -8,6 +8,7 @@ import { ListSystemActivitiesRequestDto } from '@module/customer/system-activiti
 import { ListSystemActivitiesResponseDto } from '@module/customer/system-activities/dto/response/list-system-activities.response.dto';
 import { SystemActivityItemResponseDto } from '@module/customer/system-activities/dto/response/system-activity-item.response.dto';
 import { OrganizationMemberFilterRequiresOwnerError } from '@module/customer/system-activities/error/organization-member-filter-requires-owner.error';
+import { normalizeDateRange } from '@shared/system/util/date/normalize-date-range.util';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -65,7 +66,7 @@ export class ListSystemActivitiesUseCase {
       organizationMemberIdFilter = member.id;
     }
 
-    const { startDate, endDate } = this.normalizeDateRange(
+    const { startDate, endDate } = normalizeDateRange(
       dto.startDate,
       dto.endDate,
     );
@@ -105,25 +106,5 @@ export class ListSystemActivitiesUseCase {
       amountItemsCurrentPage: listResult.amountItemsCurrentPage,
       resource,
     });
-  }
-
-  private normalizeDateRange(
-    start?: Date,
-    end?: Date,
-  ): { startDate: Date | null; endDate: Date | null } {
-    let startDate: Date | null = null;
-    let endDate: Date | null = null;
-
-    if (start instanceof Date && !Number.isNaN(start.getTime())) {
-      startDate = new Date(
-        start.toISOString().split('T')[0] + 'T00:00:00.000Z',
-      );
-    }
-
-    if (end instanceof Date && !Number.isNaN(end.getTime())) {
-      endDate = new Date(end.toISOString().split('T')[0] + 'T23:59:59.999Z');
-    }
-
-    return { startDate, endDate };
   }
 }
