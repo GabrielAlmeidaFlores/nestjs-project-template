@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { ListSupportTicketsQueryParam } from '@module/customer/service-desk/domain/repository/support-ticket/query/param/list-support-tickets.query.param';
 import { SupportTicketQueryRepositoryGateway } from '@module/customer/service-desk/domain/repository/support-ticket/query/support-ticket.query.repository.gateway';
-import { ListSupportTicketsRequestDto } from '@module/customer/service-desk/dto/request/list-support-tickets.request.dto';
 import { ListSupportTicketsResponseDto } from '@module/customer/service-desk/dto/response/list-support-tickets.response.dto';
 import { SupportTicketListItemResponseDto } from '@module/customer/service-desk/dto/response/support-ticket-list-item.response.dto';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -20,19 +19,8 @@ export class ListSupportTicketsUseCase {
   public async execute(
     sessionData: SessionDataModel,
     orgSession: OrganizationSessionDataModel,
-    requestDto: ListSupportTicketsRequestDto,
+    param: ListSupportTicketsQueryParam,
   ): Promise<ListSupportTicketsResponseDto> {
-    const param = new ListSupportTicketsQueryParam({
-      page: requestDto.page,
-      limit: requestDto.limit,
-      sortField: requestDto.sortField ?? null,
-      status: requestDto.status ?? null,
-      supportType: requestDto.supportType ?? null,
-      ticketNumber: requestDto.ticketNumber ?? null,
-      from: requestDto.from ?? null,
-      to: requestDto.to ?? null,
-    });
-
     const result = orgSession.owner
       ? await this.supportTicketQueryRepositoryGateway.listSupportTicketsByOrganizationId(
           orgSession.organizationId,

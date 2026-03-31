@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { ListSupportAttendantsRequestDto } from '@module/admin/service-desk/dto/request/list-support-attendants.request.dto';
 import { ListSupportAttendantsResponseDto } from '@module/admin/service-desk/dto/response/list-support-attendants.response.dto';
 import { SupportAttendantListItemResponseDto } from '@module/admin/service-desk/dto/response/support-attendant-list-item.response.dto';
 import { ListSupportAttendantsQueryParam } from '@module/customer/service-desk/domain/repository/support-attendant/query/param/list-support-attendants.query.param';
@@ -16,16 +15,8 @@ export class ListSupportAttendantsUseCase {
   ) {}
 
   public async execute(
-    requestDto: ListSupportAttendantsRequestDto,
+    param: ListSupportAttendantsQueryParam,
   ): Promise<ListSupportAttendantsResponseDto> {
-    const param = new ListSupportAttendantsQueryParam({
-      page: requestDto.page,
-      limit: requestDto.limit,
-      sortField: requestDto.sortField ?? null,
-      supportType: requestDto.supportType ?? null,
-      search: requestDto.search ?? null,
-    });
-
     const result =
       await this.supportAttendantQueryRepositoryGateway.listAllSupportAttendants(
         param,
