@@ -2593,6 +2593,82 @@ export class ClientTypeormEntity {
 
 **Solution**: Domain entities should be pure TypeScript classes with no external dependencies
 
+### 7. Paginated Request DTO — ALWAYS extend `ListDataRequestDto`
+
+**Problem**: Manually declaring `page` and `limit` fields in request DTOs instead of extending the base class.
+
+**Solution**: All paginated list request DTOs **must** extend `ListDataRequestDto`:
+
+```typescript
+import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
+import { RequestDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-string-property/request-dto-string-property.decorator';
+import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
+
+@RequestDto()
+export class ListMyResourceRequestDto extends ListDataRequestDto {
+  @RequestDtoStringProperty({ required: false })
+  public searchBy?: string;
+
+  protected override readonly _type = ListMyResourceRequestDto.name;
+}
+```
+
+`ListDataRequestDto` already provides `page` (default 1), `limit` (default 10), `sortField`, `field`, and `search` — all **optional** with defaults so the client can omit them.
+
+### 8. Paginated Response DTO — ALWAYS extend `ListDataResponseDto<T>`
+
+**Problem**: Manually declaring `page`, `limit`, `totalItems`, etc. in response DTOs or wrapping results in a plain array field (e.g. `commissions: []`).
+
+**Solution**: All paginated list response DTOs **must** extend `ListDataResponseDto<T>` and override `resource`:
+
+```typescript
+import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
+import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
+import { ListDataResponseDto } from '@shared/api/util/dto/response/list-data.response.dto';
+
+@ResponseDto()
+export class ListMyResourceResponseDto extends ListDataResponseDto<MyItemResponseDto> {
+  @ResponseDtoObjectProperty(() => MyItemResponseDto, { isArray: true })
+  public override resource: MyItemResponseDto[];
+
+  protected override readonly _type = ListMyResourceResponseDto.name;
+}
+```
+
+In the use case, build the response by spreading the `ListDataOutputModel`:
+
+```typescript
+const result = await this.repository.findManyWithPagination(filters);
+const resource = result.resource.map((item) => MyItemResponseDto.build({ ...item }));
+return ListMyResourceResponseDto.build({ ...result, resource });
+```
+
+### 9. `ListDataInputModel` — `page` and `limit` default to 1 and 10
+
+`ListDataInputModel` guards against `0` or negative values — `page=0` becomes `1` and `limit=0` becomes `10`. This prevents `totalPages = Infinity` (division by zero) which causes response DTO validation failures.
+
+### 10. Service Desk — Security invariants
+
+- **requesterEmail**: NEVER use the value from the request DTO. Always read the email from `fetchRequesterData()` (the authenticated user's identity).
+- **ticketNumber generation**: Use a retry loop (up to 5 attempts) catching `UQ_support_ticket_org_number` unique constraint violations to handle concurrent requests safely.
+- **Transaction consistency**: Ticket creation (DB metadata + attachments) must be in a single transaction. If bucket upload succeeds but DB commit fails, call `compensateBucketUploads()` to clean up orphaned files.
+- **Attendant access control**: `assertAccess()` must validate `isActive` and `supportType` when `orgSession === null` — any `SUPPORT` user must not bypass scope.
+- **Attendant message ownership**: An attendant can only send messages on tickets assigned to them (`assignedAttendantId === attendant.id`).
+
+### 11. Affiliate — `paymentPlanDiscountRedemptionLimit` is a cap, not a counter
+
+`paymentPlanDiscountRedemptionLimit` is a **maximum number of redemptions allowed** and never decreases. The current usage count is tracked separately (`usedCount`). The correct validity check is:
+
+```typescript
+// WRONG
+affiliate.paymentPlanDiscountRedemptionLimit > 0
+
+// CORRECT
+usedCount < affiliate.paymentPlanDiscountRedemptionLimit
+```
+
+When a discount is expired or the limit is reached, return an empty/zero-discount response — do **not** throw 404. Keep the same response DTO shape and do **not** set the affiliate cookie.
+
 ---
 
 ## Testing Guidelines

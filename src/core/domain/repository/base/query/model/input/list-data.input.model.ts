@@ -11,8 +11,8 @@ export class ListDataInputModel {
     const defaultPage = 1;
     const defaultLimit = 10;
 
-    this.page = props.page ?? defaultPage;
-    this.limit = props.limit ?? defaultLimit;
+    this.page = props.page && props.page > 0 ? props.page : defaultPage;
+    this.limit = props.limit && props.limit > 0 ? props.limit : defaultLimit;
     this.sortField = props.sortField ?? null;
     this.field = props.field ?? null;
     this.search = props.search ?? null;
