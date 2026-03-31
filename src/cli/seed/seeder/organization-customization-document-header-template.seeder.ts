@@ -31,7 +31,7 @@ export class OrganizationCustomizationDocumentHeaderTemplateSeeder implements Se
           '9ae34abf-a3df-4972-9885-67204fa64e41',
         ),
         type: OrganizationCustomizationDocumentHeaderTemplateTypeEnum.MODERN,
-        htmlContent: `<header><table style="width: 100%;font-family: sans-serif;"><tr><td style="text-align: center;"><p align="center"><img src="{{logo}}"alt="{{organizationName}}"style="height: auto; width: 130px;"/></p><div style="font-size: 20px;font-weight: 300;color: {{secondaryColor}}; margin: 0;">{{organizationName}}</div></td></tr></table></header>`,
+        htmlContent: `<header><table style="width: 100%;font-family: sans-serif;"><tr><td style="text-align: center;"><p align="center"><img src="{{logo}}"alt="{{organizationName}}" style="height: 60px; width: auto;"/></p><div style="font-size: 16px;font-weight: 300;color: {{secondaryColor}}; margin: 0;">{{organizationName}}</div></td></tr></table></header>`,
       }),
       new OrganizationCustomizationDocumentHeaderTemplateEntity({
         id: new OrganizationCustomizationDocumentHeaderTemplateId(
@@ -47,7 +47,7 @@ export class OrganizationCustomizationDocumentHeaderTemplateSeeder implements Se
                 <img
                   src="{{logo}}"
                   alt="{{organizationName}}"
-                  style="height: auto; width: 140px; padding: 0px 20px;"
+                  style="height: 60px; width: auto; padding: 8px 20px;"
                 />
               </td>
               <td
@@ -55,10 +55,10 @@ export class OrganizationCustomizationDocumentHeaderTemplateSeeder implements Se
                   width: 50%;
                   text-align: right;
                   vertical-align: middle;
-                  padding: 0px 20px;"
+                  padding: 8px 20px;"
               >
                 <span
-                  style="font-size: 20px; font-weight: 300; color: {{primaryColor}}"
+                  style="font-size: 16px; font-weight: 300; color: {{primaryColor}}"
                   >{{organizationName}}</span
                 >
               </td>
@@ -83,7 +83,7 @@ export class OrganizationCustomizationDocumentHeaderTemplateSeeder implements Se
           <img
             src="{{logo}}"
             alt="{{organizationName}}"
-            style="height: auto; width: 180px; padding: 0px 20px;"
+            style="height: 60px; width: auto; padding: 8px 20px;"
           />
         </td>
         <td
@@ -91,11 +91,11 @@ export class OrganizationCustomizationDocumentHeaderTemplateSeeder implements Se
             width: 50%;
             text-align: right;
             vertical-align: middle;
-            padding: 0px 20px;
+            padding: 8px 20px;
           "
         >
           <span
-            style="font-size: 20px; font-weight: 300; color: {{primaryColor}}"
+            style="font-size: 16px; font-weight: 300; color: {{primaryColor}}"
             >{{organizationName}}</span
           >
         </td>
@@ -122,11 +122,15 @@ export class OrganizationCustomizationDocumentHeaderTemplateSeeder implements Se
             <img
               src="{{logo}}"
               alt="{{organizationName}}"
-              style="height: auto; width: 130px;"
+              style="height: 60px; width: auto;
             />
           </p>
+        </td>
+        <td
+          style="text-align: center;"
+        >
           <div
-            style="font-size: 20px;font-weight: 300;color: {{secondaryColor}}; margin: 0;"
+            style="font-size: 16px;font-weight: 300;color: {{secondaryColor}}; margin: 0;"
           >
             {{organizationName}}
           </div>
