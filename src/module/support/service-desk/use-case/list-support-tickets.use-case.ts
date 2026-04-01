@@ -2,12 +2,12 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { SupportAttendantQueryRepositoryGateway } from '@module/support/account/domain/repository/support-attendant/query/support-attendant.query.repository.gateway';
 import { SupportAccountNotFoundError } from '@module/support/account/error/support-account-not-found.error';
+import { ListSupportTicketsQueryParam } from '@module/support/service-desk/domain/repository/support-ticket/query/param/list-support-tickets.query.param';
 import { SupportTicketQueryRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket/query/support-ticket.query.repository.gateway';
 import { ListSupportTicketsRequestDto } from '@module/support/service-desk/dto/request/list-support-tickets.request.dto';
 import { ListSupportTicketsResponseDto } from '@module/support/service-desk/dto/response/list-support-tickets.response.dto';
 import { SupportTicketItemResponseDto } from '@module/support/service-desk/dto/response/support-ticket-item.response.dto';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
-import { normalizeDateRange } from '@shared/system/util/date/normalize-date-range.util';
 
 @Injectable()
 export class ListSupportTicketsUseCase {
@@ -24,7 +24,7 @@ export class ListSupportTicketsUseCase {
     sessionData: SessionDataModel,
     dto: ListSupportTicketsRequestDto,
   ): Promise<ListSupportTicketsResponseDto> {
-    const { startDate, endDate } = normalizeDateRange(
+    const { startDate, endDate } = this.normalizeDateRange(
       dto.startDate,
       dto.endDate,
     );
@@ -38,15 +38,18 @@ export class ListSupportTicketsUseCase {
     }
 
     const listResult =
-      await this.supportTicketQueryRepositoryGateway.listPaginated({
-        page: dto.page,
-        limit: dto.limit,
-        supportType: supportAttendant.supportType,
-        status: dto.status ?? null,
-        search: dto.search?.trim() ?? null,
-        startDate: startDate ?? null,
-        endDate: endDate ?? null,
-      });
+      await this.supportTicketQueryRepositoryGateway.listPaginated(
+        new ListSupportTicketsQueryParam({
+          page: dto.page,
+          limit: dto.limit,
+          supportType: supportAttendant.supportType,
+          status: dto.status ?? null,
+          search: dto.search?.trim() ?? null,
+          startDate: startDate ?? null,
+          endDate: endDate ?? null,
+          assignedAttendantId: null,
+        }),
+      );
 
     const resource = listResult.resource.map((ticket) =>
       SupportTicketItemResponseDto.build({
@@ -68,5 +71,25 @@ export class ListSupportTicketsUseCase {
       amountItemsCurrentPage: listResult.amountItemsCurrentPage,
       resource,
     });
+  }
+
+  private normalizeDateRange(
+    start?: Date,
+    end?: Date,
+  ): { startDate: Date | null; endDate: Date | null } {
+    let startDate: Date | null = null;
+    let endDate: Date | null = null;
+
+    if (start instanceof Date && !Number.isNaN(start.getTime())) {
+      startDate = new Date(
+        start.toISOString().split('T')[0] + 'T00:00:00.000Z',
+      );
+    }
+
+    if (end instanceof Date && !Number.isNaN(end.getTime())) {
+      endDate = new Date(end.toISOString().split('T')[0] + 'T23:59:59.999Z');
+    }
+
+    return { startDate, endDate };
   }
 }

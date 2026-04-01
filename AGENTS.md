@@ -2207,15 +2207,116 @@ export class AnalysisEntityAutoMapperProfile {
 **Rules**:
 
 - ✅ Create bidirectional mappings (ORM ↔ Domain)
-- ✅ Use `constructUsing` for complex transformations
-- ✅ Convert IDs: `new ValueObjectId(source.id)` → Domain
-- ✅ Convert IDs: `source.id.toString()` → ORM
-- ✅ Use `.build()` for ORM entities
-- ✅ Use `new` constructor for Domain entities
+### 13. Computed/Aggregated Fields — Standard for Query Results
+
+**Principle**: Query results should be as similar as possible to domain entities — containing only fields that map directly to stored columns. This is the **standard and preferred** approach.
+
+**However**, for specific cases where it makes sense to return a computed value directly alongside the result (for example, a COUNT that is a fundamental part of the main query), it is allowed to add computed fields to the query result, **as long as it is done in a standardized way**.
 
 ---
 
-## Code Organization Guidelines
+**Standard approach — specialized query in the use case (preferred):**
+
+Use when the computed value belongs to a different entity, involves a separate repository, or when the query result is reused in multiple contexts.
+
+```typescript
+// 1. Specialized method in the relevant query gateway
+export abstract class SupportTicketQueryRepositoryGateway {
+  public abstract countResolvedTicketsByAttendantIds(
+    attendantIds: SupportAttendantId[],
+  ): Promise<Map<SupportAttendantId, number>>; // single query, no N+1
+}
+
+// 2. Use case fetches and combines
+const list = await this.attendantRepo.listSupportAttendants(pagination);
+
+const resolvedCountMap =
+  await this.ticketRepo.countResolvedTicketsByAttendantIds(
+    list.resource.map((a) => a.id),
+  );
+
+const resource = list.resource.map((attendant) =>
+  GetSupportAttendantResponseDto.build({
+    supportAttendantId: attendant.id,
+    name: attendant.name,
+    resolvedTicketsCount: resolvedCountMap.get(attendant.id) ?? 0, // ✅ only in DTO
+  }),
+);
+```
+
+---
+
+**Alternative approach — computed field in the query result (specific cases):**
+
+Use when the calculation is an intrinsic part of the query (e.g., COUNT via JOIN/subquery on the same table) and the field would never make sense without that context. Must be standardized:
+
+- The field must be declared with a clear name indicating it is computed (e.g., `resolvedTicketsCount`, not `count`)
+- The TypeORM repository query is responsible for populating it (via `getRawAndEntities()` or subquery)
+- The query result documents (via field name) that the value is computed
+
+```typescript
+// query result — explicitly named computed field
+export class GetSupportAttendantQueryResult extends BaseBuildableObject {
+  public readonly id: SupportAttendantId;
+  public readonly name: string;
+  public readonly resolvedTicketsCount: number; // ✅ allowed if part of the main query
+}
+
+// typeorm repo — computes via subquery
+const { entities, raw } = await this.repository
+  .createQueryBuilder('attendant')
+  .addSelect(
+    (sub) => sub.select('COUNT(t.id)').from('support_ticket', 't')
+      .where('t.assigned_attendant_id = attendant.id')
+      .andWhere('t.status = :s'),
+    'resolvedCount',
+  )
+  .setParameter('s', SupportTicketStatusEnum.RESOLVED)
+  .getRawAndEntities();
+
+const resource = entities.map((attendant, i) =>
+  GetSupportAttendantQueryResult.build({
+    id: new SupportAttendantId(attendant.id),
+    name: attendant.name,
+    resolvedTicketsCount: Number(raw[i]?.resolvedCount ?? 0),
+  }),
+);
+```
+
+---
+
+**Rules:**
+
+- ✅ **Standard**: query results mirror entity fields — only stored data
+- ✅ **Prefer** specialized query + use case to combine data from different repositories
+- ✅ When computed fields are added to the query result, name them explicitly (no abbreviations)
+- ✅ Specialized ticket repository method is batch-aware (accepts array of IDs, returns `Map`) to avoid N+1
+- ✅ Naming: `count{Entity}By{Criteria}` for counting methods, returning `Map<ValueObjectId, number>`
+- ✅ The use case is responsible for fetching and combining data from multiple repositories
+- ❌ NO N+1 (one query per item): always use batch IDs with `IN (...) GROUP BY`
+- ❌ NO primitive types (`string`, `number`) as Map keys when a Value Object exists for the concept — always use the Value Object
+
+**⚠️ IMPORTANT — `Map` keys and Value Object identity:**
+
+JavaScript `Map` uses **reference equality** for object keys. When using a Value Object as a Map key, the implementation must use the **same VO instances** received as input — never create new instances for the keys.
+
+```typescript
+// ✅ CORRECT implementation pattern — reuse input VO instances as keys
+const countByIdString = new Map(rows.map((r) => [r.attendantId, Number(r.count)]));
+const result = new Map<SupportAttendantId, number>();
+for (const id of attendantIds) {
+  result.set(id, countByIdString.get(id.toString()) ?? 0); // id = same reference passed in
+}
+
+// ✅ CORRECT use case lookup — same reference used in both the input and the lookup
+const ids = list.resource.map((a) => a.id);
+const countMap = await repo.countByIds(ids);
+list.resource.map((a) => countMap.get(a.id) ?? 0); // a.id is the same reference as ids[i]
+
+// ❌ WRONG — creating a new VO for lookup (different reference → Map.get returns undefined)
+countMap.get(new SupportAttendantId(attendant.id.toString())) // ❌ always misses
+```
+
 
 ### Query Result Files ⚠️ MANDATORY
 
@@ -2448,7 +2549,7 @@ yarn migration:revert     # Revert last migration
   - Trailing commas: all
   - Line width: Default (80)
 - **ESLint**: TypeScript strict rules + import sorting
-- **Proibido usar comentários `// eslint-disable` ou `// eslint-disable-next-line`** para suprimir warnings. Corrija o código para eliminar o warning.
+- **It is forbidden to use `// eslint-disable` or `// eslint-disable-next-line` comments** to suppress warnings. Fix the code to eliminate the warning.
 
 ### Naming Conventions
 
