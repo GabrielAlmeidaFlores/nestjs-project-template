@@ -60,6 +60,7 @@ export class SupportTicketMessageTypeormCommandRepository implements SupportTick
     );
 
     return GetSupportTicketMessageQueryResult.build({
+      senderAuthIdentityId: param.senderAuthIdentityId,
       senderName: createdMessage.senderName,
       content: createdMessage.content,
       createdAt: createdMessage.createdAt,

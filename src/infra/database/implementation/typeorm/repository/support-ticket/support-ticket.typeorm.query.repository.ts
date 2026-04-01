@@ -14,11 +14,13 @@ import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeo
 import { SupportTicketTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-ticket.typeorm.entity';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
+import { SupportAttendantId } from '@module/support/account/domain/schema/entity/support-attendant/value-object/support-attendant-id/support-attendant-id.value-object';
+import { ListSupportTicketsQueryParam } from '@module/support/service-desk/domain/repository/support-ticket/query/param/list-support-tickets.query.param';
 import { GetSupportTicketAttachmentQueryResult } from '@module/support/service-desk/domain/repository/support-ticket/query/result/get-support-ticket-attachment.query.result';
 import { GetSupportTicketQueryResult } from '@module/support/service-desk/domain/repository/support-ticket/query/result/get-support-ticket.query.result';
 import { SupportTicketQueryRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket/query/support-ticket.query.repository.gateway';
 import { ListSupportTicketsByOrganizationQueryParamType } from '@module/support/service-desk/domain/repository/support-ticket/query/type/input/list-support-tickets-by-organization.query.param';
-import { ListSupportTicketsQueryParamType } from '@module/support/service-desk/domain/repository/support-ticket/query/type/input/list-support-tickets.query.param';
+import { SupportTicketStatusEnum } from '@module/support/service-desk/domain/schema/entity/support-ticket/enum/support-ticket-status.enum';
 import { SupportTicketId } from '@module/support/service-desk/domain/schema/entity/support-ticket/value-object/support-ticket-id/support-ticket-id.value-object';
 import { SupportTicketNumber } from '@module/support/service-desk/domain/schema/entity/support-ticket/value-object/support-ticket-number/support-ticket-number.value-object';
 import { SupportTypeEnum } from '@shared/system/enum/support-type.enum';
@@ -38,11 +40,19 @@ export class SupportTicketTypeormQueryRepository
   }
 
   public async listPaginated(
-    param: ListSupportTicketsQueryParamType,
+    param: ListSupportTicketsQueryParam,
   ): Promise<ListDataOutputModel<GetSupportTicketQueryResult>> {
-    const baseWhere: FindOptionsWhere<SupportTicketTypeormEntity> = {
-      supportType: param.supportType,
-    };
+    const baseWhere: FindOptionsWhere<SupportTicketTypeormEntity> = {};
+
+    if (param.supportType !== null) {
+      baseWhere.supportType = param.supportType;
+    }
+
+    if (param.assignedAttendantId !== null) {
+      baseWhere.assignedAttendant = {
+        id: param.assignedAttendantId.toString(),
+      };
+    }
 
     return this.listPaginatedByBaseFilters({
       page: param.page,
@@ -202,6 +212,38 @@ export class SupportTicketTypeormQueryRepository
     return this.mapToQueryResult(supportTicket);
   }
 
+  public async countResolvedTicketsByAttendantIds(
+    attendantIds: SupportAttendantId[],
+  ): Promise<Map<SupportAttendantId, number>> {
+    if (attendantIds.length === 0) {
+      return new Map();
+    }
+
+    const rows = await this.repository
+      .createQueryBuilder('ticket')
+      .innerJoin('ticket.assignedAttendant', 'attendant')
+      .select('attendant.id', 'attendantId')
+      .addSelect('COUNT(ticket.id)', 'count')
+      .where('attendant.id IN (:...ids)', {
+        ids: attendantIds.map((id) => id.toString()),
+      })
+      .andWhere('ticket.status = :status', {
+        status: SupportTicketStatusEnum.RESOLVED,
+      })
+      .groupBy('attendant.id')
+      .getRawMany<{ attendantId: string; count: string }>();
+
+    const countByIdString = new Map(
+      rows.map((row) => [row.attendantId, Number(row.count)]),
+    );
+
+    const result = new Map<SupportAttendantId, number>();
+    for (const id of attendantIds) {
+      result.set(id, countByIdString.get(id.toString()) ?? 0);
+    }
+    return result;
+  }
+
   private mapToQueryResult(
     supportTicket: SupportTicketTypeormEntity,
   ): GetSupportTicketQueryResult {
@@ -230,7 +272,7 @@ export class SupportTicketTypeormQueryRepository
   private async listPaginatedByBaseFilters(param: {
     page: number;
     limit: number;
-    status: ListSupportTicketsQueryParamType['status'];
+    status: SupportTicketStatusEnum | null;
     search: string | null;
     startDate: Date | null;
     endDate: Date | null;

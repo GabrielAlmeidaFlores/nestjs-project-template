@@ -1,57 +1,40 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
-import { OrganizationMemberNotFoundError } from '@module/customer/account/error/organization-member-not-found.error';
-import { ListCustomerSupportTicketsRequestDto } from '@module/customer/service-desk/dto/request/list-customer-support-tickets.request.dto';
+import { ListTicketsAdminRequestDto } from '@module/admin/support-attendant/dto/request/list-tickets-admin.request.dto';
+import { ListSupportTicketsQueryParam } from '@module/support/service-desk/domain/repository/support-ticket/query/param/list-support-tickets.query.param';
 import { SupportTicketQueryRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket/query/support-ticket.query.repository.gateway';
 import { ListSupportTicketsResponseDto } from '@module/support/service-desk/dto/response/list-support-tickets.response.dto';
 import { SupportTicketItemResponseDto } from '@module/support/service-desk/dto/response/support-ticket-item.response.dto';
-import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
-import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 @Injectable()
-export class ListCustomerSupportTicketsUseCase {
-  protected readonly _type = ListCustomerSupportTicketsUseCase.name;
+export class ListTicketsAdminUseCase {
+  protected readonly _type = ListTicketsAdminUseCase.name;
 
   public constructor(
-    @Inject(OrganizationMemberQueryRepositoryGateway)
-    private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(SupportTicketQueryRepositoryGateway)
     private readonly supportTicketQueryRepositoryGateway: SupportTicketQueryRepositoryGateway,
   ) {}
 
   public async execute(
-    sessionData: SessionDataModel,
-    organizationSessionData: OrganizationSessionDataModel,
-    dto: ListCustomerSupportTicketsRequestDto,
+    dto: ListTicketsAdminRequestDto,
   ): Promise<ListSupportTicketsResponseDto> {
-    const member =
-      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
-        sessionData.authIdentityId,
-        organizationSessionData.organizationId,
-      );
-
-    if (member === null) {
-      throw new OrganizationMemberNotFoundError();
-    }
-
     const { startDate, endDate } = this.normalizeDateRange(
       dto.startDate,
       dto.endDate,
     );
 
     const listResult =
-      await this.supportTicketQueryRepositoryGateway.listPaginatedByOrganization(
-        {
+      await this.supportTicketQueryRepositoryGateway.listPaginated(
+        new ListSupportTicketsQueryParam({
           page: dto.page,
           limit: dto.limit,
-          organizationId: organizationSessionData.organizationId,
-          requesterAuthIdentityIdFilter: sessionData.authIdentityId,
+          supportType: dto.supportType ?? null,
           status: dto.status ?? null,
           search: dto.search?.trim() ?? null,
           startDate: startDate ?? null,
           endDate: endDate ?? null,
-        },
+          assignedAttendantId: dto.supportAttendantId ?? null,
+        }),
       );
 
     const resource = listResult.resource.map((ticket) =>
