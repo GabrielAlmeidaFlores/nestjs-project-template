@@ -9,6 +9,7 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 
 @RequestDto()
 export class CreateMiniAdvisorRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoEnumProperty(ClientSituationEnum)
   public clientSituation: ClientSituationEnum;
 
   @RequestDtoNumberProperty()

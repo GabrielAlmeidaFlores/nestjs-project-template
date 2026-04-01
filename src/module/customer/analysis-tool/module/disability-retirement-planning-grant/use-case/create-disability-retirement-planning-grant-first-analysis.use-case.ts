@@ -27,15 +27,14 @@ import {
   DisabilityRetirementPlanningGrantFirstAnalysisModel,
   DisabilityRetirementPlanningGrantFirstAnalysisPeriodModel,
 } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/generic/disability-retirement-planning-grant-first-analysis.model';
+import { DisabilityRetirementPlanningGrantFirstAnalysisSourcePeriodInterface } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/disability-retirement-planning-grant-first-analysis-source-period.interface';
 import { DisabilityRetirementPlanningGrantFirstAnalysisInterface } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/disability-retirement-planning-grant-first-analysis.interface';
+import { ParsedDisabilityRetirementPlanningGrantFirstAnalysisInterface } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/parsed-disability-retirement-planning-grant-first-analysis.interface';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
-import { ParsedDisabilityRetirementPlanningGrantFirstAnalysisInterface } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/parsed-disability-retirement-planning-grant-first-analysis.interface';
-import { DisabilityRetirementPlanningGrantFirstAnalysisSourcePeriodInterface } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/disability-retirement-planning-grant-first-analysis-source-period.interface';
-
 
 @Injectable()
 export class CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase {

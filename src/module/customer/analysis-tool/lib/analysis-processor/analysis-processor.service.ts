@@ -1182,9 +1182,7 @@ An�lise processada do CNIS:
             properties: {
               chosenAnalysis: {
                 type: 'string',
-                enum: Object.values(
-                  MiniAdvisorAnalysisTypeEnum,
-                ),
+                enum: Object.values(MiniAdvisorAnalysisTypeEnum),
                 description:
                   'Tipo de análise mais recomendada para o perfil do cliente com base nas informa��es recebidas',
               },

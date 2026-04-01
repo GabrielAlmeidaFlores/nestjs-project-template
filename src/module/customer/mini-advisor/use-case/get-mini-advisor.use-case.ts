@@ -4,7 +4,10 @@ import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/accou
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { MiniAdvisorQueryRepositoryGateway } from '@module/customer/mini-advisor/domain/repository/mini-advisor/query/mini-advisor.query.repository.gateway';
 import { MiniAdvisorId } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor/value-object/mini-advisor-id.value-object';
-import { GetMiniAdvisorResponseDto, GetMiniAdvisorResultResponseDto } from '@module/customer/mini-advisor/dto/response/get-mini-advisor.response.dto';
+import {
+  GetMiniAdvisorResponseDto,
+  GetMiniAdvisorResultResponseDto,
+} from '@module/customer/mini-advisor/dto/response/get-mini-advisor.response.dto';
 import { MiniAdvisorNotFoundError } from '@module/customer/mini-advisor/error/mini-advisor-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';

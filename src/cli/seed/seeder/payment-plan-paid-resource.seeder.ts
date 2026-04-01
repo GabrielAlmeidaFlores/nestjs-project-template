@@ -936,8 +936,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
     }),
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('f6a7b8c9-d0e1-4345-9abc-456789012345'),
-      resource:
-        PaymentPlanPaidResourceTypeEnum.MINI_ADVISOR_COMPLETE_ANALYSIS,
+      resource: PaymentPlanPaidResourceTypeEnum.MINI_ADVISOR_COMPLETE_ANALYSIS,
       creditCost: 3,
       title: 'MINI ASSESSOR PREVIDENCIÁRIO',
       description:
