@@ -18,6 +18,7 @@ import { SpecialRetirementGrantResultEntity } from '@module/customer/analysis-to
 import { CreateSpecialRetirementGrantResultResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/create-special-retirement-grant-result.response.dto';
 import { InvalidSpecialRetirementGrantCompleteAnalysisJsonError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/invalid-special-retirement-grant-complete-analysis-json.error';
 import { SpecialRetirementGrantNotFoundError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-not-found.error';
+import { SpecialRetirementGrantResultAlreadyExistsError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-result-already-exists.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
@@ -66,6 +67,21 @@ export class CreateSpecialRetirementGrantResultUseCase {
       throw new OrganizationMemberNotFoundError();
     }
 
+    const analysisToolRecordQueryResult =
+      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsBySpecialRetirementGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        specialRetirementGrantId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+        SpecialRetirementGrantNotFoundError,
+      );
+
+    if (
+      analysisToolRecordQueryResult.specialRetirementGrant
+        ?.specialRetirementGrantResult !== null
+    ) {
+      throw new SpecialRetirementGrantResultAlreadyExistsError();
+    }
+
     const promptResponse =
       await this.getPaymentPlanPaidResourcePromptUseCase.execute(
         PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_GRANT_COMPLETE_ANALYSIS,
@@ -76,14 +92,6 @@ export class CreateSpecialRetirementGrantResultUseCase {
         organizationSessionData.organizationId,
         PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_GRANT_COMPLETE_ANALYSIS,
         organizationMember.id,
-      );
-
-    const analysisToolRecordQueryResult =
-      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsBySpecialRetirementGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
-        specialRetirementGrantId,
-        organizationSessionData.organizationId,
-        sessionData.authIdentityId,
-        SpecialRetirementGrantNotFoundError,
       );
 
     const specialRetirementGrantQueryResult =
@@ -103,7 +111,8 @@ export class CreateSpecialRetirementGrantResultUseCase {
 
     const docBuffers = await Promise.all(
       specialRetirementGrantQueryResult.specialRetirementGrantDocument.map(
-        async (doc) => await this.fileProcessorGateway.getFileBuffer(doc.document),
+        async (doc) =>
+          await this.fileProcessorGateway.getFileBuffer(doc.document),
       ),
     );
 
@@ -125,10 +134,12 @@ export class CreateSpecialRetirementGrantResultUseCase {
       throw new InvalidSpecialRetirementGrantCompleteAnalysisJsonError();
     }
 
-    const specialRetirementGrantResult = new SpecialRetirementGrantResultEntity({
-      specialRetirementGrantCompleteAnalysis: completeAnalysisJson,
-      specialRetirementGrantSimplifiedAnalysis: null,
-    });
+    const specialRetirementGrantResult = new SpecialRetirementGrantResultEntity(
+      {
+        specialRetirementGrantCompleteAnalysis: completeAnalysisJson,
+        specialRetirementGrantSimplifiedAnalysis: null,
+      },
+    );
 
     const specialRetirementGrant = new SpecialRetirementGrantEntity({
       ...specialRetirementGrantQueryResult,
@@ -202,8 +213,9 @@ export class CreateSpecialRetirementGrantResultUseCase {
     await transaction.commit();
 
     return CreateSpecialRetirementGrantResultResponseDto.build({
-      specialRetirementGrantCompleteAnalysis: JSON.parse(completeAnalysisJson) as object,
+      specialRetirementGrantCompleteAnalysis: JSON.parse(
+        completeAnalysisJson,
+      ) as object,
     });
   }
 }
-
