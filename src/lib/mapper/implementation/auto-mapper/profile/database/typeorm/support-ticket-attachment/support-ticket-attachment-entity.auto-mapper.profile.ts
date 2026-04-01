@@ -25,12 +25,17 @@ export class SupportTicketAttachmentEntityAutoMapperProfile {
   private mapOrmEntityToDomainEntity(): void {
     const convertOrmEntityToDomainEntity = (
       source: SupportTicketAttachmentTypeormEntity,
-    ): SupportTicketAttachmentEntity =>
-      new SupportTicketAttachmentEntity({
-        ...source,
+    ): SupportTicketAttachmentEntity => {
+      return new SupportTicketAttachmentEntity({
         id: new SupportTicketAttachmentId(source.id),
         supportTicketId: new SupportTicketId(source.supportTicket.id),
+        bucketKey: source.bucketKey,
+        originalFileName: source.originalFileName,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
+    };
 
     createMap(
       this.mapper,
@@ -49,9 +54,13 @@ export class SupportTicketAttachmentEntityAutoMapperProfile {
       } as SupportTicketTypeormEntity;
 
       return SupportTicketAttachmentTypeormEntity.build({
-        ...source,
         id: source.id.toString(),
         supportTicket,
+        bucketKey: source.bucketKey,
+        originalFileName: source.originalFileName,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
     };
 

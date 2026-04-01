@@ -15,11 +15,11 @@ import { SupportTicketTypeormEntity } from '@infra/database/implementation/typeo
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { SupportAttendantId } from '@module/support/account/domain/schema/entity/support-attendant/value-object/support-attendant-id/support-attendant-id.value-object';
+import { ListSupportTicketsByOrganizationQueryParam } from '@module/support/service-desk/domain/repository/support-ticket/query/param/list-support-tickets-by-organization.query.param';
 import { ListSupportTicketsQueryParam } from '@module/support/service-desk/domain/repository/support-ticket/query/param/list-support-tickets.query.param';
 import { GetSupportTicketAttachmentQueryResult } from '@module/support/service-desk/domain/repository/support-ticket/query/result/get-support-ticket-attachment.query.result';
 import { GetSupportTicketQueryResult } from '@module/support/service-desk/domain/repository/support-ticket/query/result/get-support-ticket.query.result';
 import { SupportTicketQueryRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket/query/support-ticket.query.repository.gateway';
-import { ListSupportTicketsByOrganizationQueryParamType } from '@module/support/service-desk/domain/repository/support-ticket/query/type/input/list-support-tickets-by-organization.query.param';
 import { SupportTicketStatusEnum } from '@module/support/service-desk/domain/schema/entity/support-ticket/enum/support-ticket-status.enum';
 import { SupportTicketId } from '@module/support/service-desk/domain/schema/entity/support-ticket/value-object/support-ticket-id/support-ticket-id.value-object';
 import { SupportTicketNumber } from '@module/support/service-desk/domain/schema/entity/support-ticket/value-object/support-ticket-number/support-ticket-number.value-object';
@@ -66,7 +66,7 @@ export class SupportTicketTypeormQueryRepository
   }
 
   public async listPaginatedByOrganization(
-    param: ListSupportTicketsByOrganizationQueryParamType,
+    param: ListSupportTicketsByOrganizationQueryParam,
   ): Promise<ListDataOutputModel<GetSupportTicketQueryResult>> {
     const baseWhere: FindOptionsWhere<SupportTicketTypeormEntity> = {
       organization: {

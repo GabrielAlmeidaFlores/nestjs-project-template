@@ -26,11 +26,17 @@ export class SupportAttendantEntityAutoMapperProfile {
       source: SupportAttendantTypeormEntity,
     ): SupportAttendantEntity =>
       new SupportAttendantEntity({
-        ...source,
         id: new SupportAttendantId(source.id),
+        name: source.name,
+        email: source.email,
+        supportType: source.supportType,
+        isActive: source.isActive,
         authIdentityId: source.authIdentity
           ? new AuthIdentityId(source.authIdentity.id)
           : null,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
 
     createMap(
@@ -52,9 +58,15 @@ export class SupportAttendantEntityAutoMapperProfile {
         : undefined;
 
       return SupportAttendantTypeormEntity.build({
-        ...source,
         id: source.id.toString(),
+        name: source.name,
+        email: source.email,
+        supportType: source.supportType,
+        isActive: source.isActive,
         authIdentity,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
     };
 

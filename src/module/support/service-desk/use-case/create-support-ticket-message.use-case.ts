@@ -62,8 +62,8 @@ export class CreateSupportTicketMessageUseCase {
 
     const supportTicketMessage = new SupportTicketMessageEntity({
       supportTicketId,
-      senderAuthIdentityId: dto.senderAuthIdentityId,
-      senderName: dto.senderName,
+      senderAuthIdentityId: sessionData.authIdentityId,
+      senderName: supportAttendant.name,
       content: dto.messageText,
     });
 

@@ -20,6 +20,7 @@ import { SupportTypeEnum } from '@shared/system/enum/support-type.enum';
 @Injectable()
 export class CreateSupportAttendantUseCase {
   protected readonly _type = CreateSupportAttendantUseCase.name;
+  private readonly _sortRandomOffset = 0.5;
 
   public constructor(
     @Inject(SupportAttendantCommandRepositoryGateway)
@@ -127,7 +128,8 @@ export class CreateSupportAttendantUseCase {
     const required = [pick(upper), pick(lower), pick(digits), pick(special)];
     const remaining = Array.from({ length: 8 }, () => pick(all));
 
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-    return [...required, ...remaining].sort(() => Math.random() - 0.5).join('');
+    return [...required, ...remaining]
+      .sort(() => Math.random() - this._sortRandomOffset)
+      .join('');
   }
 }
