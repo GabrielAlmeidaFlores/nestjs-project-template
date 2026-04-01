@@ -6,6 +6,9 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @ResponseDto()
 export class SupportTicketMessageItemResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
+  public senderAuthIdentityId: string;
+
+  @ResponseDtoStringProperty()
   public senderName: string;
 
   @ResponseDtoStringProperty()

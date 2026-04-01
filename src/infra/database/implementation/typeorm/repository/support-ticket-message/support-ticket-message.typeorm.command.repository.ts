@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 
+import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { AuthIdentityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/auth-identity.typeorm.entity';
 import { SupportTicketMessageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-ticket-message.typeorm.entity';
 import { SupportTicketTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-ticket.typeorm.entity';
@@ -18,6 +19,30 @@ export class SupportTicketMessageTypeormCommandRepository implements SupportTick
     private readonly repository: Repository<SupportTicketMessageTypeormEntity>,
   ) {}
 
+  public createTransaction(
+    param: CreateSupportTicketMessageCommandParamType,
+  ): TransactionType {
+    return async (executor: unknown) => {
+      const manager = executor as EntityManager;
+      const repository = manager.getRepository(
+        SupportTicketMessageTypeormEntity,
+      );
+
+      await repository.save(
+        repository.create({
+          supportTicket: {
+            id: param.supportTicketId.toString(),
+          } as SupportTicketTypeormEntity,
+          senderAuthIdentity: {
+            id: param.senderAuthIdentityId.toString(),
+          } as AuthIdentityTypeormEntity,
+          senderName: param.senderName,
+          content: param.content,
+        }),
+      );
+    };
+  }
+
   public async create(
     param: CreateSupportTicketMessageCommandParamType,
   ): Promise<GetSupportTicketMessageQueryResult> {
@@ -30,7 +55,6 @@ export class SupportTicketMessageTypeormCommandRepository implements SupportTick
           id: param.senderAuthIdentityId.toString(),
         } as AuthIdentityTypeormEntity,
         senderName: param.senderName,
-        senderType: param.senderType,
         content: param.content,
       }),
     );

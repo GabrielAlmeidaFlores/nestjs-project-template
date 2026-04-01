@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { SupportTicketMessageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-ticket-message.typeorm.entity';
+import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { GetSupportTicketMessageQueryResult } from '@module/support/service-desk/domain/repository/support-ticket-message/query/result/get-support-ticket-message.query.result';
 import { SupportTicketMessageQueryRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket-message/query/support-ticket-message.query.repository.gateway';
 import { ListSupportTicketMessagesQueryParamType } from '@module/support/service-desk/domain/repository/support-ticket-message/query/type/input/list-support-ticket-messages.query.param';
@@ -40,6 +41,9 @@ export class SupportTicketMessageTypeormQueryRepository
       order: {
         createdAt: 'ASC',
       },
+      relations: {
+        senderAuthIdentity: true,
+      },
       skip,
       take: limit,
     });
@@ -50,6 +54,9 @@ export class SupportTicketMessageTypeormQueryRepository
       totalItems,
       resource: messages.map((message) =>
         GetSupportTicketMessageQueryResult.build({
+          senderAuthIdentityId: new AuthIdentityId(
+            message.senderAuthIdentity.id,
+          ),
           senderName: message.senderName,
           content: message.content,
           createdAt: message.createdAt,

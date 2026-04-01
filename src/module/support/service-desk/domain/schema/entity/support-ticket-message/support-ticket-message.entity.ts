@@ -9,7 +9,6 @@ export class SupportTicketMessageEntity extends BaseEntity<SupportTicketMessageI
   public readonly supportTicketId: SupportTicketId;
   public readonly senderAuthIdentityId: AuthIdentityId;
   public readonly senderName: string;
-  public readonly senderType: string;
   public readonly content: string;
 
   protected readonly _type = SupportTicketMessageEntity.name;
@@ -20,7 +19,6 @@ export class SupportTicketMessageEntity extends BaseEntity<SupportTicketMessageI
     this.supportTicketId = props.supportTicketId;
     this.senderAuthIdentityId = props.senderAuthIdentityId;
     this.senderName = props.senderName;
-    this.senderType = props.senderType;
     this.content = props.content;
   }
 }

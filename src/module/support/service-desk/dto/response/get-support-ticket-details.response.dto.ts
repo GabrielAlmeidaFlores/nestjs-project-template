@@ -10,6 +10,9 @@ import { SupportTypeEnum } from '@shared/system/enum/support-type.enum';
 @ResponseDto()
 export class GetSupportTicketDetailsResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
+  public id: string;
+
+  @ResponseDtoStringProperty()
   public ticketNumber: string;
 
   @ResponseDtoEnumProperty(SupportTypeEnum)

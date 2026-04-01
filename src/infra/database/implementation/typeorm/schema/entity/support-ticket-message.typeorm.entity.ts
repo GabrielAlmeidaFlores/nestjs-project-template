@@ -19,9 +19,6 @@ export class SupportTicketMessageTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'sender_name', type: 'varchar', length: 255 })
   public senderName: string;
 
-  @Column({ name: 'sender_type', type: 'varchar', length: 50 })
-  public senderType: string;
-
   @Column({ name: 'content', type: 'longtext' })
   public content: string;
 
