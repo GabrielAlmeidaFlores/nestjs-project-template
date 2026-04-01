@@ -222,6 +222,7 @@ import { SupportTicketTypeormCommandRepository } from '@infra/database/implement
 import { SupportTicketTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/support-ticket/support-ticket.typeorm.query.repository';
 import { SupportTicketMessageTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/support-ticket-message/support-ticket-message.typeorm.command.repository';
 import { SupportTicketMessageTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/support-ticket-message/support-ticket-message.typeorm.query.repository';
+import { SupportAttendantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/support-attendant/support-attendant.typeorm.command.repository';
 import { SystemActivitiesTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/system-activities/system-activities.typeorm.command.repository';
 import { SystemActivitiesTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/system-activities/system-activities.typeorm.query.repository';
 import { SystemLogTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/system-log/system-log.typeorm.command.repository';
@@ -455,6 +456,7 @@ import { SupportTicketCommandRepositoryGateway } from '@module/support/service-d
 import { SupportTicketQueryRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket/query/support-ticket.query.repository.gateway';
 import { SupportTicketMessageCommandRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket-message/command/support-ticket-message.command.repository.gateway';
 import { SupportTicketMessageQueryRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket-message/query/support-ticket-message.query.repository.gateway';
+import { SupportAttendantCommandRepositoryGateway } from '@module/support/account/domain/repository/support-attendant/command/support-attendant.command.repository.gateway';
 import { SystemLogCommandGateway } from '@shared/system/system-log/system-log.command.gateway';
 
 const classProvider: ClassProvider[] = [
@@ -1435,6 +1437,10 @@ const classProvider: ClassProvider[] = [
       OrganizationCustomizationDocumentFooterTemplateQueryRepositoryGateway,
     useClass:
       OrganizationCustomizationDocumentFooterTemplateTypeormQueryRepository,
+  },
+  {
+    provide: SupportAttendantCommandRepositoryGateway,
+    useClass: SupportAttendantTypeormCommandRepository,
   },
 ];
 

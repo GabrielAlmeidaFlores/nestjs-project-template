@@ -7,6 +7,7 @@ import { CustomerManagementModule } from '@module/admin/customer-management/cust
 import { DashboardMetricsModule } from '@module/admin/dashboard-metrics/dashboard-metrics.module';
 import { OrganizationsAdminModule } from '@module/admin/organizations/organizations.module';
 import { PaymentPlanModule } from '@module/admin/payment-plan/payment-plan.module';
+import { SupportAttendantAdminModule } from '@module/admin/support-attendant/support-attendant.module';
 import { SystemActivitiesAdminModule } from '@module/admin/system-activities/system-activities.module';
 import { SystemLogsModule } from '@module/admin/system-logs/system-logs.module';
 import { AdminTutorialModule } from '@module/admin/tutorial/tutorial.module';
@@ -23,6 +24,7 @@ import { AdminTutorialModule } from '@module/admin/tutorial/tutorial.module';
     OrganizationsAdminModule,
     SystemActivitiesAdminModule,
     SystemLogsModule,
+    SupportAttendantAdminModule,
   ],
 })
 export class AdminModule {
