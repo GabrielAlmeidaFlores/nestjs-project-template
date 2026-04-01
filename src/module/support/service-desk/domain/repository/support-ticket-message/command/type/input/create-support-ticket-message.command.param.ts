@@ -5,6 +5,5 @@ export type CreateSupportTicketMessageCommandParamType = {
   supportTicketId: SupportTicketId;
   senderAuthIdentityId: AuthIdentityId;
   senderName: string;
-  senderType: string;
   content: string;
 };

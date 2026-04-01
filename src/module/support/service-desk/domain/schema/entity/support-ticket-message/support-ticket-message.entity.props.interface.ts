@@ -7,6 +7,5 @@ export interface SupportTicketMessageEntityPropsInterface extends BaseEntityProp
   supportTicketId: SupportTicketId;
   senderAuthIdentityId: AuthIdentityId;
   senderName: string;
-  senderType: string;
   content: string;
 }

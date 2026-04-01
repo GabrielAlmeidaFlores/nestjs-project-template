@@ -1,12 +1,19 @@
 import type { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
+import type { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
+import type { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import type { GetSupportTicketQueryResult } from '@module/support/service-desk/domain/repository/support-ticket/query/result/get-support-ticket.query.result';
+import type { ListSupportTicketsByOrganizationQueryParamType } from '@module/support/service-desk/domain/repository/support-ticket/query/type/input/list-support-tickets-by-organization.query.param';
 import type { ListSupportTicketsQueryParamType } from '@module/support/service-desk/domain/repository/support-ticket/query/type/input/list-support-tickets.query.param';
 import type { SupportTicketId } from '@module/support/service-desk/domain/schema/entity/support-ticket/value-object/support-ticket-id/support-ticket-id.value-object';
+import type { SupportTicketNumber } from '@module/support/service-desk/domain/schema/entity/support-ticket/value-object/support-ticket-number/support-ticket-number.value-object';
 import type { SupportTypeEnum } from '@shared/system/enum/support-type.enum';
 
 export abstract class SupportTicketQueryRepositoryGateway {
   public abstract listPaginated(
     param: ListSupportTicketsQueryParamType,
+  ): Promise<ListDataOutputModel<GetSupportTicketQueryResult>>;
+  public abstract listPaginatedByOrganization(
+    param: ListSupportTicketsByOrganizationQueryParamType,
   ): Promise<ListDataOutputModel<GetSupportTicketQueryResult>>;
 
   public abstract findOneByIdAndSupportType(
@@ -18,4 +25,20 @@ export abstract class SupportTicketQueryRepositoryGateway {
     supportTicketId: SupportTicketId,
     supportType: SupportTypeEnum,
   ): Promise<GetSupportTicketQueryResult | null>;
+
+  public abstract findOneByIdAndOrganization(
+    supportTicketId: SupportTicketId,
+    organizationId: OrganizationId,
+    requesterAuthIdentityIdFilter: AuthIdentityId | null,
+  ): Promise<GetSupportTicketQueryResult | null>;
+
+  public abstract findOneByIdAndOrganizationWithAttachments(
+    supportTicketId: SupportTicketId,
+    organizationId: OrganizationId,
+    requesterAuthIdentityIdFilter: AuthIdentityId | null,
+  ): Promise<GetSupportTicketQueryResult | null>;
+
+  public abstract findLastTicketNumberByOrganizationId(
+    organizationId: OrganizationId,
+  ): Promise<SupportTicketNumber | null>;
 }

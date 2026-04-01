@@ -6,27 +6,19 @@ import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/d
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
-export class SupportTicketItemResponseDto extends BaseBuildableDtoObject {
+export class CreateCustomerSupportTicketResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
   public id: string;
 
   @ResponseDtoStringProperty()
   public ticketNumber: string;
 
-  @ResponseDtoStringProperty()
-  public requesterName: string;
-
-  @ResponseDtoStringProperty()
-  public requesterEmail: string;
-
-  @ResponseDtoStringProperty()
-  public subject: string;
-
-  @ResponseDtoDateProperty()
-  public requestDate: Date;
-
   @ResponseDtoEnumProperty(SupportTicketStatusEnum)
   public status: SupportTicketStatusEnum;
 
-  protected override readonly _type = SupportTicketItemResponseDto.name;
+  @ResponseDtoDateProperty()
+  public openedAt: Date;
+
+  protected override readonly _type =
+    CreateCustomerSupportTicketResponseDto.name;
 }
