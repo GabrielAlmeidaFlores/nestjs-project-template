@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
 import { TetoInssData } from '@lib/cnis-analyzer/data/teto.inss';
@@ -85,14 +86,26 @@ export class CreateSpecialRetirementGrantCnisUseCase {
         SpecialRetirementGrantNotFoundError,
       );
 
+    if (analysisToolRecord.specialRetirementGrant === null) {
+      throw new SpecialRetirementGrantNotFoundError();
+    }
+
     const specialRetirementGrantQueryResult =
       analysisToolRecord.specialRetirementGrant;
-    if (specialRetirementGrantQueryResult === null) {
+    if (
+      specialRetirementGrantQueryResult.specialRetirementGrantResult === null
+    ) {
       throw new SpecialRetirementGrantNotFoundError();
     }
 
     const specialRetirementGrant = new SpecialRetirementGrantEntity({
-      ...specialRetirementGrantQueryResult,
+      id: specialRetirementGrantQueryResult.id,
+      name: specialRetirementGrantQueryResult.name,
+      specialActivity: specialRetirementGrantQueryResult.specialActivity,
+      cnisDocument: specialRetirementGrantQueryResult.cnisDocument,
+      createdAt: specialRetirementGrantQueryResult.createdAt,
+      updatedAt: specialRetirementGrantQueryResult.updatedAt,
+      deletedAt: specialRetirementGrantQueryResult.deletedAt,
       specialRetirementGrantResult: null,
       specialRetirementGrantBenefit: null,
       specialRetirementGrantLegalProceeding: null,
@@ -124,15 +137,14 @@ export class CreateSpecialRetirementGrantCnisUseCase {
         specialRetirementGrantId,
       );
 
+    const transactions: TransactionType[] = [];
     if (existingPeriodIds.length > 0) {
       const deleteTransactions = existingPeriodIds.map((id) =>
         this.specialRetirementGrantPeriodCommandRepositoryGateway.deleteSpecialRetirementGrantPeriod(
           id,
         ),
       );
-      const t =
-        await this.baseTransactionRepositoryGateway.execute(deleteTransactions);
-      await t.commit();
+      transactions.push(...deleteTransactions);
     }
 
     const indicadorPendencia = ['PEXT'];
@@ -144,8 +156,6 @@ export class CreateSpecialRetirementGrantCnisUseCase {
     const batchSize = 10;
     for (let i = 0; i < contributionPeriods.length; i += batchSize) {
       const batch = contributionPeriods.slice(i, i + batchSize);
-      const ops = [];
-
       for (const contributionPeriod of batch) {
         const relation =
           cnisData.socialSecurityRelations?.find(
@@ -163,7 +173,10 @@ export class CreateSpecialRetirementGrantCnisUseCase {
 
         const delayPayment =
           relation?.socialSecurityAffiliationEarningsHistory.some((earning) => {
-            if (!earning.indicadores) {
+            if (
+              earning.indicadores === undefined ||
+              earning.indicadores === ''
+            ) {
               return false;
             }
             return indicadorPendencia.includes(earning.indicadores);
@@ -186,7 +199,7 @@ export class CreateSpecialRetirementGrantCnisUseCase {
         }
 
         const periodEntity = new SpecialRetirementGrantPeriodEntity({
-          sequencial: contributionPeriod.seq ?? null,
+          sequencial: contributionPeriod.seq,
           employmentRelationshipSource:
             contributionPeriod.origemDoVinculo ?? null,
           startDate: contributionPeriod.dados?.data?.dataInicio ?? null,
@@ -203,7 +216,7 @@ export class CreateSpecialRetirementGrantCnisUseCase {
           specialRetirementGrant,
         });
 
-        ops.push(
+        transactions.push(
           this.specialRetirementGrantPeriodCommandRepositoryGateway.createSpecialRetirementGrantPeriod(
             periodEntity,
           ),
@@ -220,9 +233,10 @@ export class CreateSpecialRetirementGrantCnisUseCase {
           const year = earning.competencia.getFullYear();
           const tetoData = TetoInssData.find((t) => t.ano === year);
           const salarioMinimo = tetoData?.salarioMinimo ?? 0;
-          const amount = earning.remuneracao
-            ? Number(earning.remuneracao.replace(/\./g, '').replace(',', '.'))
-            : NaN;
+          const amount =
+            earning.remuneracao !== undefined && earning.remuneracao !== ''
+              ? Number(earning.remuneracao.replace(/\./g, '').replace(',', '.'))
+              : NaN;
 
           const belowMinimum =
             salarioMinimo > 0 &&
@@ -240,14 +254,14 @@ export class CreateSpecialRetirementGrantCnisUseCase {
               specialRetirementGrantPeriod: periodEntity,
             });
 
-          ops.push(
+          transactions.push(
             this.specialRetirementGrantEarningsHistoryCommandRepositoryGateway.createSpecialRetirementGrantEarningsHistory(
               earningsEntity,
             ),
           );
 
           if (belowMinimum) {
-            ops.push(
+            transactions.push(
               this.specialRetirementGrantPeriodUnderMinimumCommandRepositoryGateway.createSpecialRetirementGrantPeriodUnderMinimum(
                 new SpecialRetirementGrantPeriodUnderMinimumEntity({
                   contributionDate: earning.competencia,
@@ -262,7 +276,7 @@ export class CreateSpecialRetirementGrantCnisUseCase {
             earning.indicadores !== undefined &&
             indicadorPendencia.includes(earning.indicadores)
           ) {
-            ops.push(
+            transactions.push(
               this.specialRetirementGrantPeriodOverdueContributionCommandRepositoryGateway.createSpecialRetirementGrantPeriodOverdueContribution(
                 new SpecialRetirementGrantPeriodOverdueContributionEntity({
                   overdueDate: earning.competencia,
@@ -280,12 +294,13 @@ export class CreateSpecialRetirementGrantCnisUseCase {
               if (earning.competencia === undefined) {
                 continue;
               }
-              const amount = earning.remuneracao
-                ? Number(
-                    earning.remuneracao.replace(/\./g, '').replace(',', '.'),
-                  )
-                : 0;
-              ops.push(
+              const amount =
+                earning.remuneracao !== undefined && earning.remuneracao !== ''
+                  ? Number(
+                      earning.remuneracao.replace(/\./g, '').replace(',', '.'),
+                    )
+                  : NaN;
+              transactions.push(
                 this.specialRetirementGrantPeriodPendingExitDateCommandRepositoryGateway.createSpecialRetirementGrantPeriodPendingExitDate(
                   new SpecialRetirementGrantPeriodPendingExitDateEntity({
                     pendingDate: earning.competencia,
@@ -296,11 +311,11 @@ export class CreateSpecialRetirementGrantCnisUseCase {
               );
             }
           } else {
-            ops.push(
+            transactions.push(
               this.specialRetirementGrantPeriodPendingExitDateCommandRepositoryGateway.createSpecialRetirementGrantPeriodPendingExitDate(
                 new SpecialRetirementGrantPeriodPendingExitDateEntity({
                   pendingDate:
-                    relation?.socialSecurityAffiliationInfo.dataInicio ??
+                    relation.socialSecurityAffiliationInfo.dataInicio ??
                     new Date(),
                   pendingAmount: new DecimalValue(0),
                   specialRetirementGrantPeriod: periodEntity,
@@ -311,8 +326,9 @@ export class CreateSpecialRetirementGrantCnisUseCase {
         }
       }
 
-      const t = await this.baseTransactionRepositoryGateway.execute(ops);
-      await t.commit();
+      const transactionsToCommit =
+        await this.baseTransactionRepositoryGateway.execute(transactions);
+      await transactionsToCommit.commit();
     }
 
     return CreateSpecialRetirementGrantCnisResponseDto.build({
