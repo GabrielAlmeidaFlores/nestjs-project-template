@@ -52,7 +52,8 @@ export class MiniAdvisorEntityAutoMapperProfile {
         clientGender: source.clientGender,
         clientWorkHistory: source.clientWorkHistory,
         hasContributedWithInss: source.hasContributedWithInss,
-        clientHasDisabilityOrLimitations: source.clientHasDisabilityOrLimitations,
+        clientHasDisabilityOrLimitations:
+          source.clientHasDisabilityOrLimitations,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
@@ -87,13 +88,18 @@ export class MiniAdvisorEntityAutoMapperProfile {
         clientGender: source.clientGender,
         clientWorkHistory: source.clientWorkHistory,
         hasContributedWithInss: source.hasContributedWithInss,
-        clientHasDisabilityOrLimitations: source.clientHasDisabilityOrLimitations,
+        clientHasDisabilityOrLimitations:
+          source.clientHasDisabilityOrLimitations,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
         miniAdvisorResult,
-        createdBy: { id: source.createdBy.toString() } as OrganizationMemberTypeormEntity,
-        updatedBy: { id: source.updatedBy.toString() } as OrganizationMemberTypeormEntity,
+        createdBy: {
+          id: source.createdBy.toString(),
+        } as OrganizationMemberTypeormEntity,
+        updatedBy: {
+          id: source.updatedBy.toString(),
+        } as OrganizationMemberTypeormEntity,
       });
     };
 
@@ -105,4 +111,3 @@ export class MiniAdvisorEntityAutoMapperProfile {
     );
   }
 }
-

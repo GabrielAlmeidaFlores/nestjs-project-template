@@ -430,7 +430,6 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
           } as TeacherRetirementPlanningTypeormEntity)
         : null;
 
-
       const disabilityRetirementPlanning =
         source.disabilityRetirementPlanning !== null
           ? this.mapper.map(
@@ -496,8 +495,12 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         generalUrbanRetirementAnalysis,
         specialCategoryRetirementAnalysis,
         analysisToolClient,
-        createdBy: { id: source.createdBy.toString() } as OrganizationMemberTypeormEntity,
-        updatedBy: { id: source.updatedBy.toString() } as OrganizationMemberTypeormEntity,
+        createdBy: {
+          id: source.createdBy.toString(),
+        } as OrganizationMemberTypeormEntity,
+        updatedBy: {
+          id: source.updatedBy.toString(),
+        } as OrganizationMemberTypeormEntity,
       });
     };
 

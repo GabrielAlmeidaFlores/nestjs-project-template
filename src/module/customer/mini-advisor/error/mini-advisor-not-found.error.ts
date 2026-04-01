@@ -4,6 +4,8 @@ export class MiniAdvisorNotFoundError extends NotFoundError {
   protected override readonly _type = MiniAdvisorNotFoundError.name;
 
   public constructor() {
-    super('Mini orientador não encontrado. Por favor, verifique o ID informado.');
+    super(
+      'Mini orientador não encontrado. Por favor, verifique o ID informado.',
+    );
   }
 }

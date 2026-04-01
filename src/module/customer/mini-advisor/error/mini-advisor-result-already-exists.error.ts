@@ -4,8 +4,6 @@ export class MiniAdvisorResultAlreadyExistsError extends ConflictError {
   protected override readonly _type = MiniAdvisorResultAlreadyExistsError.name;
 
   public constructor() {
-    super(
-      'O resultado do Mini orientador já foi gerado para esta análise.',
-    );
+    super('O resultado do Mini orientador já foi gerado para esta análise.');
   }
 }

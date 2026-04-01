@@ -5,10 +5,10 @@ import { Injectable } from '@nestjs/common';
 import { MiniAdvisorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/mini-advisor.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
+import { GetMiniAdvisorWithRelationsQueryResult } from '@module/customer/mini-advisor/domain/repository/mini-advisor/query/result/get-mini-advisor-with-relations.query.result';
+import { GetMiniAdvisorResultQueryResult } from '@module/customer/mini-advisor/domain/repository/mini-advisor-result/query/result/get-mini-advisor-result.query.result';
 import { MiniAdvisorId } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor/value-object/mini-advisor-id.value-object';
 import { MiniAdvisorResultId } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor-result/value-object/mini-advisor-result-id.value-object';
-import { GetMiniAdvisorResultQueryResult } from '@module/customer/mini-advisor/domain/repository/mini-advisor-result/query/result/get-mini-advisor-result.query.result';
-import { GetMiniAdvisorWithRelationsQueryResult } from '@module/customer/mini-advisor/domain/repository/mini-advisor/query/result/get-mini-advisor-with-relations.query.result';
 
 @Injectable()
 export class GetMiniAdvisorWithRelationsQueryResultAutoMapperProfile {
@@ -55,7 +55,8 @@ export class GetMiniAdvisorWithRelationsQueryResultAutoMapperProfile {
         clientGender: source.clientGender,
         clientWorkHistory: source.clientWorkHistory,
         hasContributedWithInss: source.hasContributedWithInss,
-        clientHasDisabilityOrLimitations: source.clientHasDisabilityOrLimitations,
+        clientHasDisabilityOrLimitations:
+          source.clientHasDisabilityOrLimitations,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         miniAdvisorResult,
