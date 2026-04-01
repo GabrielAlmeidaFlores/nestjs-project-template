@@ -61,6 +61,7 @@ export class GetSupportTicketDetailsUseCase {
     );
 
     return GetSupportTicketDetailsResponseDto.build({
+      id: supportTicket.id.toString(),
       ticketNumber: supportTicket.ticketNumber,
       supportType: supportTicket.supportType,
       openedAt: supportTicket.createdAt,

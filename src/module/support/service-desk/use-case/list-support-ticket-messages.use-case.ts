@@ -59,6 +59,7 @@ export class ListSupportTicketMessagesUseCase {
 
     const resource = listResult.resource.map((message) =>
       SupportTicketMessageItemResponseDto.build({
+        senderAuthIdentityId: message.senderAuthIdentityId.toString(),
         senderName: message.senderName,
         messageText: message.content,
         messageDateTime: message.createdAt,
