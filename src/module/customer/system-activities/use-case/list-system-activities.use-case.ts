@@ -8,9 +8,9 @@ import { ListSystemActivitiesRequestDto } from '@module/customer/system-activiti
 import { ListSystemActivitiesResponseDto } from '@module/customer/system-activities/dto/response/list-system-activities.response.dto';
 import { SystemActivityItemResponseDto } from '@module/customer/system-activities/dto/response/system-activity-item.response.dto';
 import { OrganizationMemberFilterRequiresOwnerError } from '@module/customer/system-activities/error/organization-member-filter-requires-owner.error';
-import { normalizeDateRange } from '@shared/system/util/date/normalize-date-range.util';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { normalizeDateRange } from '@shared/system/util/date/normalize-date-range.util';
 
 @Injectable()
 export class ListSystemActivitiesUseCase {
