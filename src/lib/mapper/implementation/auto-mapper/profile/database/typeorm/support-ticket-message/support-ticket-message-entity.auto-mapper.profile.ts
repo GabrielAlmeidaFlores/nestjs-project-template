@@ -26,13 +26,18 @@ export class SupportTicketMessageEntityAutoMapperProfile {
   private mapOrmEntityToDomainEntity(): void {
     const convertOrmEntityToDomainEntity = (
       source: SupportTicketMessageTypeormEntity,
-    ): SupportTicketMessageEntity =>
-      new SupportTicketMessageEntity({
-        ...source,
+    ): SupportTicketMessageEntity => {
+      return new SupportTicketMessageEntity({
         id: new SupportTicketMessageId(source.id),
         supportTicketId: new SupportTicketId(source.supportTicket.id),
         senderAuthIdentityId: new AuthIdentityId(source.senderAuthIdentity.id),
+        senderName: source.senderName,
+        content: source.content,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
+    };
 
     createMap(
       this.mapper,
@@ -55,10 +60,14 @@ export class SupportTicketMessageEntityAutoMapperProfile {
       } as AuthIdentityTypeormEntity;
 
       return SupportTicketMessageTypeormEntity.build({
-        ...source,
         id: source.id.toString(),
         supportTicket,
         senderAuthIdentity,
+        senderName: source.senderName,
+        content: source.content,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
     };
 

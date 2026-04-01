@@ -4,6 +4,7 @@ import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/accou
 import { OrganizationMemberNotFoundError } from '@module/customer/account/error/organization-member-not-found.error';
 import { ListCustomerSupportTicketMessagesRequestDto } from '@module/customer/service-desk/dto/request/list-customer-support-ticket-messages.request.dto';
 import { SupportTicketQueryRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket/query/support-ticket.query.repository.gateway';
+import { ListSupportTicketMessagesQueryParam } from '@module/support/service-desk/domain/repository/support-ticket-message/query/param/list-support-ticket-messages.query.param';
 import { SupportTicketMessageQueryRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket-message/query/support-ticket-message.query.repository.gateway';
 import { SupportTicketId } from '@module/support/service-desk/domain/schema/entity/support-ticket/value-object/support-ticket-id/support-ticket-id.value-object';
 import { ListSupportTicketMessagesResponseDto } from '@module/support/service-desk/dto/response/list-support-ticket-messages.response.dto';
@@ -54,11 +55,11 @@ export class ListCustomerSupportTicketMessagesUseCase {
 
     const listResult =
       await this.supportTicketMessageQueryRepositoryGateway.listPaginatedBySupportTicketId(
-        {
+        new ListSupportTicketMessagesQueryParam({
           page: dto.page,
           limit: dto.limit,
           supportTicketId: supportTicket.id,
-        },
+        }),
       );
 
     const resource = listResult.resource.map((message) =>

@@ -6,9 +6,9 @@ import { ListDataOutputModel } from '@core/domain/repository/base/query/model/ou
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { SupportTicketMessageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-ticket-message.typeorm.entity';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
+import { ListSupportTicketMessagesQueryParam } from '@module/support/service-desk/domain/repository/support-ticket-message/query/param/list-support-ticket-messages.query.param';
 import { GetSupportTicketMessageQueryResult } from '@module/support/service-desk/domain/repository/support-ticket-message/query/result/get-support-ticket-message.query.result';
 import { SupportTicketMessageQueryRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket-message/query/support-ticket-message.query.repository.gateway';
-import { ListSupportTicketMessagesQueryParamType } from '@module/support/service-desk/domain/repository/support-ticket-message/query/type/input/list-support-ticket-messages.query.param';
 
 @Injectable()
 export class SupportTicketMessageTypeormQueryRepository
@@ -25,7 +25,7 @@ export class SupportTicketMessageTypeormQueryRepository
   }
 
   public async listPaginatedBySupportTicketId(
-    param: ListSupportTicketMessagesQueryParamType,
+    param: ListSupportTicketMessagesQueryParam,
   ): Promise<ListDataOutputModel<GetSupportTicketMessageQueryResult>> {
     const maxItemsPerQuery = 100;
     const limit = Math.min(Math.max(param.limit, 1), maxItemsPerQuery);

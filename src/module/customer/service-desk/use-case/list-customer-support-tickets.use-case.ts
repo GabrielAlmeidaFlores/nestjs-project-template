@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/account/error/organization-member-not-found.error';
 import { ListCustomerSupportTicketsRequestDto } from '@module/customer/service-desk/dto/request/list-customer-support-tickets.request.dto';
+import { ListSupportTicketsByOrganizationQueryParam } from '@module/support/service-desk/domain/repository/support-ticket/query/param/list-support-tickets-by-organization.query.param';
 import { SupportTicketQueryRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket/query/support-ticket.query.repository.gateway';
 import { ListSupportTicketsResponseDto } from '@module/support/service-desk/dto/response/list-support-tickets.response.dto';
 import { SupportTicketItemResponseDto } from '@module/support/service-desk/dto/response/support-ticket-item.response.dto';
@@ -42,7 +43,7 @@ export class ListCustomerSupportTicketsUseCase {
 
     const listResult =
       await this.supportTicketQueryRepositoryGateway.listPaginatedByOrganization(
-        {
+        new ListSupportTicketsByOrganizationQueryParam({
           page: dto.page,
           limit: dto.limit,
           organizationId: organizationSessionData.organizationId,
@@ -51,7 +52,7 @@ export class ListCustomerSupportTicketsUseCase {
           search: dto.search?.trim() ?? null,
           startDate: startDate ?? null,
           endDate: endDate ?? null,
-        },
+        }),
       );
 
     const resource = listResult.resource.map((ticket) =>
