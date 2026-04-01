@@ -22,8 +22,6 @@ import { OrganizationSessionDataModel } from '@shared/api/util/decorator/propert
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { IMiniAdvisorAiResult } from '@module/customer/mini-advisor/models/mini-advisor-result-interface';
 
-
-
 @Injectable()
 export class CreateMiniAdvisorResultUseCase {
   protected readonly _type = CreateMiniAdvisorResultUseCase.name;
