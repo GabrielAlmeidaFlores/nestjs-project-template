@@ -1,11 +1,10 @@
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 
-import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
-import { ClientGenderEnum } from '@module/customer/analysis-tool/module/mini-advisor/domain/schema/entity/mini-advisor/enum/client-gender.enum';
-import { ClientSituationEnum } from '@module/customer/analysis-tool/module/mini-advisor/domain/schema/entity/mini-advisor/enum/client-situation.enum';
-import { ClientWorkHistoryTypeEnum } from '@module/customer/analysis-tool/module/mini-advisor/domain/schema/entity/mini-advisor/enum/client-work-history-type.enum';
-import { HasContributedWithInssEnum } from '@module/customer/analysis-tool/module/mini-advisor/domain/schema/entity/mini-advisor/enum/has-contributed-with-inss.enum';
+import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
+import { ClientGenderEnum } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor/enum/client-gender.enum';
+import { ClientSituationEnum } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor/enum/client-situation.enum';
+import { ClientWorkHistoryTypeEnum } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor/enum/client-work-history-type.enum';
 import { MiniAdvisorResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/mini-advisor-result.typeorm.entity';
 
 @Entity({ name: 'mini_advisor' })
@@ -38,10 +37,9 @@ export class MiniAdvisorTypeormEntity extends BaseTypeormEntity {
 
   @Column({
     name: 'has_contributed_with_inss',
-    type: 'simple-enum',
-    enum: HasContributedWithInssEnum,
+    type: 'boolean',
   })
-  public hasContributedWithInss: HasContributedWithInssEnum;
+  public hasContributedWithInss: boolean;
 
   @Column({
     name: 'client_has_disability_or_limitations',
@@ -57,12 +55,13 @@ export class MiniAdvisorTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({ name: 'mini_advisor_result_id' })
   public miniAdvisorResult?: MiniAdvisorResultTypeormEntity | undefined;
 
-  @OneToOne(
-    () => AnalysisToolRecordTypeormEntity,
-    (entity) => entity.miniAdvisor,
-    { nullable: true },
-  )
-  public analysisToolRecord?: AnalysisToolRecordTypeormEntity | undefined;
+  @ManyToOne(() => OrganizationMemberTypeormEntity)
+  @JoinColumn({ name: 'created_by_id' })
+  public createdBy?: OrganizationMemberTypeormEntity | undefined;
+
+  @ManyToOne(() => OrganizationMemberTypeormEntity)
+  @JoinColumn({ name: 'updated_by_id' })
+  public updatedBy?: OrganizationMemberTypeormEntity | undefined;
 
   protected override readonly _type = MiniAdvisorTypeormEntity.name;
 }

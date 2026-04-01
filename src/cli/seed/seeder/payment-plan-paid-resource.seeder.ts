@@ -934,6 +934,15 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise de processo administrativo de aposentadoria por categoria especial via IA. Examina os documentos do processo administrativo do INSS, identifica inconsistências, avalia fundamentos do indeferimento ou pendências, e emite parecer técnico detalhado sobre a viabilidade de contestação administrativa ou judicial.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f6a7b8c9-d0e1-4345-9abc-456789012345'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.MINI_ADVISOR_COMPLETE_ANALYSIS,
+      creditCost: 3,
+      title: 'MINI ASSESSOR PREVIDENCIÁRIO',
+      description:
+        'Análise inicial rápida com IA que identifica o tipo de benefício previdenciário mais adequado para o cliente com base em sua situação, idade, gênero, histórico de trabalho e condições de saúde. Retorna o tipo de análise recomendado com descrição do benefício e pontos de atenção.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {

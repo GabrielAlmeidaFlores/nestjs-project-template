@@ -27,7 +27,6 @@ import type { RetirementPlanningRppsId } from '@module/customer/analysis-tool/mo
 import type { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import type { SpecialActivityId } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/value-object/special-activity-id.value-object';
 import type { SpeechGeneratorId } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/value-object/speech-generator-id/speech-generator-id.value-object';
-import type { MiniAdvisorId } from '@module/customer/analysis-tool/module/mini-advisor/domain/schema/entity/mini-advisor/value-object/mini-advisor-id.value-object';
 import type { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import type { ConstructorType } from '@shared/system/type/constructor.type';
 
@@ -197,13 +196,6 @@ export abstract class AnalysisToolRecordQueryRepositoryGateway {
 
   public abstract findWithRelationsByGeneralUrbanRetirementAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
     generalUrbanRetirementAnalysisId: GeneralUrbanRetirementAnalysisId,
-    organizationId: OrganizationId,
-    authIdentityId: AuthIdentityId,
-    err: ConstructorType<NotFoundError>,
-  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult>;
-
-  public abstract findWithRelationsByMiniAdvisorIdAndOrganizationIdAndAuthIdentityIdOrFail(
-    miniAdvisorId: MiniAdvisorId,
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
     err: ConstructorType<NotFoundError>,

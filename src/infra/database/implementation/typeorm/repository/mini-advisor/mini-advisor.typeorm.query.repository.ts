@@ -7,9 +7,9 @@ import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeo
 import { MiniAdvisorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/mini-advisor.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
-import { MiniAdvisorQueryRepositoryGateway } from '@module/customer/analysis-tool/module/mini-advisor/domain/repository/mini-advisor/query/mini-advisor.query.repository.gateway';
-import { GetMiniAdvisorWithRelationsQueryResult } from '@module/customer/analysis-tool/module/mini-advisor/domain/repository/mini-advisor/query/result/get-mini-advisor-with-relations.query.result';
-import { MiniAdvisorId } from '@module/customer/analysis-tool/module/mini-advisor/domain/schema/entity/mini-advisor/value-object/mini-advisor-id.value-object';
+import { MiniAdvisorQueryRepositoryGateway } from '@module/customer/mini-advisor/domain/repository/mini-advisor/query/mini-advisor.query.repository.gateway';
+import { GetMiniAdvisorWithRelationsQueryResult } from '@module/customer/mini-advisor/domain/repository/mini-advisor/query/result/get-mini-advisor-with-relations.query.result';
+import { MiniAdvisorId } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor/value-object/mini-advisor-id.value-object';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { ConstructorType } from '@shared/system/type/constructor.type';
 
@@ -38,32 +38,16 @@ export class MiniAdvisorTypeormQueryRepository
       {
         where: {
           id: id.toString(),
-          analysisToolRecord: {
-            createdBy: {
-              organization: {
-                id: organizationId.toString(),
-              },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
             },
           },
         },
         relations: {
           miniAdvisorResult: true,
-          analysisToolRecord: {
-            analysisToolClient: {
-              createdBy: {
-                customer: true,
-              },
-              updatedBy: {
-                customer: true,
-              },
-            },
-            createdBy: {
-              customer: true,
-            },
-            updatedBy: {
-              customer: true,
-            },
-          },
+          createdBy: true,
+          updatedBy: true,
         },
       },
       err,

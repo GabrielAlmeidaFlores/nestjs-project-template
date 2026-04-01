@@ -4,11 +4,12 @@ import { Injectable } from '@nestjs/common';
 
 import { MiniAdvisorResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/mini-advisor-result.typeorm.entity';
 import { MiniAdvisorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/mini-advisor.typeorm.entity';
+import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
-import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
-import { MiniAdvisorEntity } from '@module/customer/analysis-tool/module/mini-advisor/domain/schema/entity/mini-advisor/mini-advisor.entity';
-import { MiniAdvisorId } from '@module/customer/analysis-tool/module/mini-advisor/domain/schema/entity/mini-advisor/value-object/mini-advisor-id.value-object';
-import { MiniAdvisorResultEntity } from '@module/customer/analysis-tool/module/mini-advisor/domain/schema/entity/mini-advisor-result/mini-advisor-result.entity';
+import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
+import { MiniAdvisorEntity } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor/mini-advisor.entity';
+import { MiniAdvisorId } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor/value-object/mini-advisor-id.value-object';
+import { MiniAdvisorResultEntity } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor-result/mini-advisor-result.entity';
 
 @Injectable()
 export class MiniAdvisorEntityAutoMapperProfile {
@@ -27,7 +28,7 @@ export class MiniAdvisorEntityAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: MiniAdvisorTypeormEntity,
     ): MiniAdvisorEntity => {
-      if (!source.analysisToolRecord?.analysisToolClient) {
+      if (!source.createdBy || !source.updatedBy) {
         throw new IncompleteSourceDataForMappingError({
           destinationClass: MiniAdvisorEntity.name,
           sourceClass: MiniAdvisorTypeormEntity.name,
@@ -44,9 +45,8 @@ export class MiniAdvisorEntityAutoMapperProfile {
 
       return new MiniAdvisorEntity({
         id: new MiniAdvisorId(source.id),
-        analysisToolClientId: new AnalysisToolClientId(
-          source.analysisToolRecord.analysisToolClient.id,
-        ),
+        createdBy: new OrganizationMemberId(source.createdBy.id),
+        updatedBy: new OrganizationMemberId(source.updatedBy.id),
         clientSituation: source.clientSituation,
         clientAge: source.clientAge,
         clientGender: source.clientGender,
@@ -92,6 +92,8 @@ export class MiniAdvisorEntityAutoMapperProfile {
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
         miniAdvisorResult,
+        createdBy: { id: source.createdBy.toString() } as OrganizationMemberTypeormEntity,
+        updatedBy: { id: source.updatedBy.toString() } as OrganizationMemberTypeormEntity,
       });
     };
 
@@ -103,3 +105,4 @@ export class MiniAdvisorEntityAutoMapperProfile {
     );
   }
 }
+

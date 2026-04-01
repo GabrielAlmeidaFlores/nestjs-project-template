@@ -102,8 +102,7 @@ export class ListAnalysisToolRecordUseCase {
             analysisToolRecord.perCapitaIncomeForBpcAnalysis ??
             analysisToolRecord.insuranceQualityAnalysis ??
             analysisToolRecord.disabilityRetirementPlanning ??
-            analysisToolRecord.audienceQuestionGenerator ??
-            analysisToolRecord.miniAdvisor;
+            analysisToolRecord.audienceQuestionGenerator;
 
           if (analysis === null) {
             return null;
