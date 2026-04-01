@@ -90,6 +90,8 @@ export class CreateSupportTicketMessageUseCase {
     await transaction.commit();
 
     return SupportTicketMessageItemResponseDto.build({
+      senderAuthIdentityId:
+        supportTicketMessage.senderAuthIdentityId.toString(),
       senderName: supportTicketMessage.senderName,
       messageText: supportTicketMessage.content,
       messageDateTime: supportTicketMessage.createdAt,

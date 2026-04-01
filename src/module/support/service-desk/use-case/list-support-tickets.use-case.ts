@@ -50,6 +50,7 @@ export class ListSupportTicketsUseCase {
 
     const resource = listResult.resource.map((ticket) =>
       SupportTicketItemResponseDto.build({
+        id: ticket.id.toString(),
         ticketNumber: ticket.ticketNumber,
         requesterName: ticket.requesterName,
         requesterEmail: ticket.requesterEmail,
