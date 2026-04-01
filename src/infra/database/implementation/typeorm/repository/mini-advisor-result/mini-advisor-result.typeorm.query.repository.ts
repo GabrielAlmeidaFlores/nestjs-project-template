@@ -7,9 +7,9 @@ import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeo
 import { MiniAdvisorResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/mini-advisor-result.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
-import { MiniAdvisorResultQueryRepositoryGateway } from '@module/customer/analysis-tool/module/mini-advisor/domain/repository/mini-advisor-result/query/mini-advisor-result.query.repository.gateway';
-import { GetMiniAdvisorResultQueryResult } from '@module/customer/analysis-tool/module/mini-advisor/domain/repository/mini-advisor-result/query/result/get-mini-advisor-result.query.result';
-import { MiniAdvisorResultId } from '@module/customer/analysis-tool/module/mini-advisor/domain/schema/entity/mini-advisor-result/value-object/mini-advisor-result-id.value-object';
+import { MiniAdvisorResultQueryRepositoryGateway } from '@module/customer/mini-advisor/domain/repository/mini-advisor-result/query/mini-advisor-result.query.repository.gateway';
+import { GetMiniAdvisorResultQueryResult } from '@module/customer/mini-advisor/domain/repository/mini-advisor-result/query/result/get-mini-advisor-result.query.result';
+import { MiniAdvisorResultId } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor-result/value-object/mini-advisor-result-id.value-object';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { ConstructorType } from '@shared/system/type/constructor.type';
 
@@ -39,11 +39,9 @@ export class MiniAdvisorResultTypeormQueryRepository
         where: {
           id: id.toString(),
           miniAdvisor: {
-            analysisToolRecord: {
-              createdBy: {
-                organization: {
-                  id: organizationId.toString(),
-                },
+            createdBy: {
+              organization: {
+                id: organizationId.toString(),
               },
             },
           },

@@ -20,7 +20,6 @@ import { PerCapitaIncomeForBpcAnalysisEntity } from '@module/customer/analysis-t
 import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
 import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
 import { SpecialActivityEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/special-activity-entity';
-import { MiniAdvisorEntity } from '@module/customer/analysis-tool/module/mini-advisor/domain/schema/entity/mini-advisor/mini-advisor.entity';
 import { SpecialCategoryRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/special-category-retirement-analysis.entity';
 import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
 import { TeacherRetirementPlanningEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
@@ -141,11 +140,6 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly specialCategoryRetirementAnalysis: SpecialCategoryRetirementAnalysisEntity | null;
 
   @Description(
-    'Mini Advisor associado ao registro da ferramenta de análise',
-  )
-  public readonly miniAdvisor: MiniAdvisorEntity | null;
-
-  @Description(
     'Cliente da ferramenta de análise associado ao registro da ferramenta de análise',
   )
   public readonly analysisToolClient: AnalysisToolClientEntity;
@@ -196,7 +190,6 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
       props.disabilityRetirementPlanningGrant ?? null;
     this.specialCategoryRetirementAnalysis =
       props.specialCategoryRetirementAnalysis ?? null;
-    this.miniAdvisor = props.miniAdvisor ?? null;
     this.status = props.status;
     this.analysisToolClient = props.analysisToolClient;
     this.createdBy = props.createdBy;

@@ -5,6 +5,7 @@ import { AiConversationModule } from '@module/customer/ai-conversation/ai-conver
 import { AnalysisToolModule } from '@module/customer/analysis-tool/analysis-tool.module';
 import { DocumentsToBeGeneratedModule } from '@module/customer/documents-to-be-generated/documents-to-be-generated.module';
 import { LegalProceedingModule } from '@module/customer/legal-proceeding/legal-proceeding.module';
+import { MiniAdvisorModule } from '@module/customer/mini-advisor/mini-advisor.module';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
 import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
 import { TranscriptionModule } from '@module/customer/transcription/transcription.module';
@@ -19,6 +20,7 @@ import { TranscriptionModule } from '@module/customer/transcription/transcriptio
     OrganizationCreditModule,
     AiConversationModule,
     DocumentsToBeGeneratedModule,
+    MiniAdvisorModule,
   ],
   controllers: [],
   providers: [],

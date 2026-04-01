@@ -2,20 +2,20 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
-import { MiniAdvisorResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/mini-advisor-result.typeorm.entity';
 import { MiniAdvisorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/mini-advisor.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
-import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
-import { MiniAdvisorId } from '@module/customer/analysis-tool/module/mini-advisor/domain/schema/entity/mini-advisor/value-object/mini-advisor-id.value-object';
-import { GetMiniAdvisorResultQueryResult } from '@module/customer/analysis-tool/module/mini-advisor/domain/repository/mini-advisor-result/query/result/get-mini-advisor-result.query.result';
-import { GetMiniAdvisorWithRelationsQueryResult } from '@module/customer/analysis-tool/module/mini-advisor/domain/repository/mini-advisor/query/result/get-mini-advisor-with-relations.query.result';
+import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
+import { MiniAdvisorId } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor/value-object/mini-advisor-id.value-object';
+import { MiniAdvisorResultId } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor-result/value-object/mini-advisor-result-id.value-object';
+import { GetMiniAdvisorResultQueryResult } from '@module/customer/mini-advisor/domain/repository/mini-advisor-result/query/result/get-mini-advisor-result.query.result';
+import { GetMiniAdvisorWithRelationsQueryResult } from '@module/customer/mini-advisor/domain/repository/mini-advisor/query/result/get-mini-advisor-with-relations.query.result';
 
 @Injectable()
 export class GetMiniAdvisorWithRelationsQueryResultAutoMapperProfile {
   protected readonly _type =
     GetMiniAdvisorWithRelationsQueryResultAutoMapperProfile.name;
 
-  public constructor(@InjectMapper() private readonly mapper: Mapper) {
+  public constructor(@InjectMapper() private readonly _mapper: Mapper) {
     this.createMappings();
   }
 
@@ -27,7 +27,7 @@ export class GetMiniAdvisorWithRelationsQueryResultAutoMapperProfile {
     const convertOrmEntityToQueryResult = (
       source: MiniAdvisorTypeormEntity,
     ): GetMiniAdvisorWithRelationsQueryResult => {
-      if (!source.analysisToolRecord?.analysisToolClient) {
+      if (!source.createdBy || !source.updatedBy) {
         throw new IncompleteSourceDataForMappingError({
           destinationClass: GetMiniAdvisorWithRelationsQueryResult.name,
           sourceClass: MiniAdvisorTypeormEntity.name,
@@ -35,18 +35,21 @@ export class GetMiniAdvisorWithRelationsQueryResultAutoMapperProfile {
       }
 
       const miniAdvisorResult = source.miniAdvisorResult
-        ? (this.mapper.map(
-            source.miniAdvisorResult,
-            MiniAdvisorResultTypeormEntity,
-            GetMiniAdvisorResultQueryResult,
-          ) as unknown as GetMiniAdvisorResultQueryResult)
+        ? GetMiniAdvisorResultQueryResult.build({
+            id: new MiniAdvisorResultId(source.miniAdvisorResult.id),
+            miniAdvisorId: new MiniAdvisorId(source.id),
+            chosenAnalysis: source.miniAdvisorResult.chosenAnalysis,
+            benefitDescription: source.miniAdvisorResult.benefitDescription,
+            attentionNote: source.miniAdvisorResult.attentionNote,
+            createdAt: source.miniAdvisorResult.createdAt,
+            updatedAt: source.miniAdvisorResult.updatedAt,
+          })
         : null;
 
       return GetMiniAdvisorWithRelationsQueryResult.build({
         id: new MiniAdvisorId(source.id),
-        analysisToolClientId: new AnalysisToolClientId(
-          source.analysisToolRecord.analysisToolClient.id,
-        ),
+        createdById: new OrganizationMemberId(source.createdBy.id),
+        updatedById: new OrganizationMemberId(source.updatedBy.id),
         clientSituation: source.clientSituation,
         clientAge: source.clientAge,
         clientGender: source.clientGender,
@@ -60,7 +63,7 @@ export class GetMiniAdvisorWithRelationsQueryResultAutoMapperProfile {
     };
 
     createMap(
-      this.mapper,
+      this._mapper,
       MiniAdvisorTypeormEntity,
       GetMiniAdvisorWithRelationsQueryResult,
       constructUsing(convertOrmEntityToQueryResult),

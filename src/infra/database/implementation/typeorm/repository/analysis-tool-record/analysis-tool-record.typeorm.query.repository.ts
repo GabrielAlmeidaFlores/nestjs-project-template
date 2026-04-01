@@ -49,7 +49,6 @@ import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/module/
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { SpecialActivityId } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/value-object/special-activity-id.value-object';
 import { SpeechGeneratorId } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/value-object/speech-generator-id/speech-generator-id.value-object';
-import { MiniAdvisorId } from '@module/customer/analysis-tool/module/mini-advisor/domain/schema/entity/mini-advisor/value-object/mini-advisor-id.value-object';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { ConstructorType } from '@shared/system/type/constructor.type';
 
@@ -113,7 +112,6 @@ export class AnalysisToolRecordTypeormQueryRepository
         { disabilityRetirementPlanningGrant: Not(IsNull()) },
         { generalUrbanRetirementGrant: Not(IsNull()) },
         { generalUrbanRetirementAnalysis: Not(IsNull()) },
-        { miniAdvisor: Not(IsNull()) },
       ];
 
     const withUpdatedBy = {
@@ -1657,7 +1655,6 @@ export class AnalysisToolRecordTypeormQueryRepository
         { ruralTimeline: Not(IsNull()) },
         { audienceQuestionGenerator: Not(IsNull()) },
         { disabilityRetirementPlanning: Not(IsNull()) },
-        { miniAdvisor: Not(IsNull()) },
       ];
 
     for (const relationalClause of atLeastOneRelationNotNull) {
@@ -1928,67 +1925,6 @@ export class AnalysisToolRecordTypeormQueryRepository
     return mappedData;
   }
 
-  public async findWithRelationsByMiniAdvisorIdAndOrganizationIdAndAuthIdentityIdOrFail(
-    miniAdvisorId: MiniAdvisorId,
-    organizationId: OrganizationId,
-    authIdentityId: AuthIdentityId,
-    err: ConstructorType<NotFoundError>,
-  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
-    const data = await this.findOneOrFail(
-      {
-        where: {
-          miniAdvisor: {
-            id: miniAdvisorId.toString(),
-          },
-          createdBy: {
-            organization: {
-              id: organizationId.toString(),
-            },
-            customer: {
-              authIdentity: {
-                id: authIdentityId.toString(),
-              },
-            },
-          },
-        },
-        relations: {
-          analysisToolClient: {
-            analysisToolClientInssBenefit: true,
-            analysisToolClientLegalProceeding: true,
-            createdBy: {
-              customer: true,
-              organization: true,
-            },
-            updatedBy: {
-              customer: true,
-              organization: true,
-            },
-          },
-          miniAdvisor: {
-            miniAdvisorResult: true,
-          },
-          createdBy: {
-            customer: true,
-            organization: true,
-          },
-          updatedBy: {
-            customer: true,
-            organization: true,
-          },
-        },
-      },
-      err,
-    );
-
-    const mappedData = this.mapperGateway.map(
-      data,
-      AnalysisToolRecordTypeormEntity,
-      GetAnalysisToolRecordWithRelationsQueryResult,
-    );
-
-    return mappedData;
-  }
-
   private getRelationsClauseOperation(): FindOptionsRelations<AnalysisToolRecordTypeormEntity> {
     const relationsClause: FindOptionsRelations<AnalysisToolRecordTypeormEntity> =
       {
@@ -2044,7 +1980,6 @@ export class AnalysisToolRecordTypeormQueryRepository
       'insuranceQualityAnalysis',
       'audienceQuestionGenerator',
       'disabilityRetirementPlanning',
-      'miniAdvisor',
       'disabilityRetirementPlanningGrant',
     ];
   }

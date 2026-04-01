@@ -6,9 +6,9 @@ import { TransactionType } from '@core/domain/repository/base/transaction/type/t
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
 import { MiniAdvisorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/mini-advisor.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { MiniAdvisorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/mini-advisor/domain/repository/mini-advisor/command/mini-advisor.command.repository.gateway';
-import { MiniAdvisorEntity } from '@module/customer/analysis-tool/module/mini-advisor/domain/schema/entity/mini-advisor/mini-advisor.entity';
-import { MiniAdvisorId } from '@module/customer/analysis-tool/module/mini-advisor/domain/schema/entity/mini-advisor/value-object/mini-advisor-id.value-object';
+import { MiniAdvisorCommandRepositoryGateway } from '@module/customer/mini-advisor/domain/repository/mini-advisor/command/mini-advisor.command.repository.gateway';
+import { MiniAdvisorEntity } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor/mini-advisor.entity';
+import { MiniAdvisorId } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor/value-object/mini-advisor-id.value-object';
 
 @Injectable()
 export class MiniAdvisorTypeormCommandRepository

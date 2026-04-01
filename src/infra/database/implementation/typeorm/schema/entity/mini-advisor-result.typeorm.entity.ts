@@ -2,16 +2,16 @@ import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { MiniAdvisorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/mini-advisor.typeorm.entity';
-import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
+import { MiniAdvisorAnalysisTypeEnum } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor-result/enum/mini-advisor-analysis-type.enum';
 
 @Entity({ name: 'mini_advisor_result' })
 export class MiniAdvisorResultTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'chosen_analysis',
     type: 'simple-enum',
-    enum: AnalysisToolRecordTypeEnum,
+    enum: MiniAdvisorAnalysisTypeEnum,
   })
-  public chosenAnalysis: AnalysisToolRecordTypeEnum;
+  public chosenAnalysis: MiniAdvisorAnalysisTypeEnum;
 
   @Column({
     name: 'benefit_description',
