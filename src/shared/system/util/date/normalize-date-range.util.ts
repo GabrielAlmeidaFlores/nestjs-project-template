@@ -1,7 +1,4 @@
-export interface NormalizedDateRangeInterface {
-  startDate: Date | null;
-  endDate: Date | null;
-}
+import type { NormalizedDateRangeInterface } from '@shared/system/util/date/interface/normalized-date-range.interface';
 
 export function normalizeDateRange(
   start?: Date,
