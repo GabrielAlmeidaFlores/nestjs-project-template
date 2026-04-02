@@ -90,11 +90,10 @@ export class CreateCustomerSupportTicketUseCase {
           encoding: 'base64',
         });
 
-        const bucketKey = await this.bucketGateway.create(file);
+        const fileName = await this.bucketGateway.create(file);
         return new SupportTicketAttachmentEntity({
           supportTicketId: supportTicket.id,
-          bucketKey,
-          originalFileName: attachment.originalFileName,
+          fileName,
         });
       }),
     );

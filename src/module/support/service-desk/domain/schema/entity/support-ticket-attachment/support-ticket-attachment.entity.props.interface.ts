@@ -4,6 +4,5 @@ import type { SupportTicketAttachmentId } from '@module/support/service-desk/dom
 
 export interface SupportTicketAttachmentEntityPropsInterface extends BaseEntityPropsInterface<SupportTicketAttachmentId> {
   supportTicketId: SupportTicketId;
-  bucketKey: string;
-  originalFileName: string;
+  fileName: string;
 }

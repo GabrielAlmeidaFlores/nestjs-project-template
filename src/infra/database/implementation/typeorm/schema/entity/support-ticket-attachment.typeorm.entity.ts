@@ -11,11 +11,8 @@ export class SupportTicketAttachmentTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({ name: 'support_ticket_id' })
   public supportTicket: SupportTicketTypeormEntity;
 
-  @Column({ name: 'bucket_key', type: 'varchar', length: 500 })
-  public bucketKey: string;
-
-  @Column({ name: 'original_file_name', type: 'varchar', length: 255 })
-  public originalFileName: string;
+  @Column({ name: 'file_name', type: 'varchar', length: 500 })
+  public fileName: string;
 
   protected override readonly _type = SupportTicketAttachmentTypeormEntity.name;
 }

@@ -281,8 +281,7 @@ export class SupportTicketTypeormQueryRepository
       attachments:
         supportTicket.attachments?.map((attachment) =>
           GetSupportTicketAttachmentQueryResult.build({
-            bucketKey: attachment.bucketKey,
-            originalFileName: attachment.originalFileName,
+            fileName: attachment.fileName,
           }),
         ) ?? null,
     });

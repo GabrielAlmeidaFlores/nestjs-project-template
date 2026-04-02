@@ -35,8 +35,7 @@ export class SupportTicketAttachmentTypeormCommandRepository implements SupportT
           supportTicket: {
             id: supportTicketAttachment.supportTicketId.toString(),
           } as SupportTicketTypeormEntity,
-          bucketKey: supportTicketAttachment.bucketKey,
-          originalFileName: supportTicketAttachment.originalFileName,
+          fileName: supportTicketAttachment.fileName,
         })),
       );
 
@@ -56,8 +55,7 @@ export class SupportTicketAttachmentTypeormCommandRepository implements SupportT
         supportTicket: {
           id: supportTicketAttachment.supportTicketId.toString(),
         } as SupportTicketTypeormEntity,
-        bucketKey: supportTicketAttachment.bucketKey,
-        originalFileName: supportTicketAttachment.originalFileName,
+        fileName: supportTicketAttachment.fileName,
       })),
     );
 
