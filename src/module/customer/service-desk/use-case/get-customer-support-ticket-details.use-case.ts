@@ -51,13 +51,14 @@ export class GetCustomerSupportTicketDetailsUseCase {
 
     const attachments = await Promise.all(
       (supportTicket.attachments ?? []).map(async (attachment) => {
-        const [documentUrl, documentBuffer] = await Promise.all([
-          this.bucketGateway.getSignedUrl(attachment.bucketKey),
-          this.bucketGateway.getBuffer(attachment.bucketKey),
+        const [documentUrl, documentBuffer, documentName] = await Promise.all([
+          this.bucketGateway.getSignedUrl(attachment.fileName),
+          this.bucketGateway.getBuffer(attachment.fileName),
+          this.bucketGateway.getOriginalFileName(attachment.fileName),
         ]);
 
         return SupportTicketAttachmentDetailResponseDto.build({
-          documentName: attachment.originalFileName,
+          documentName,
           documentSize: documentBuffer.byteLength,
           documentUrl: documentUrl.toString(),
         });

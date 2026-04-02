@@ -1284,7 +1284,99 @@ If you find existing DTOs using `@RequestDtoFileProperty` with `FileModel[]`:
 4. Use `@RequestDtoObjectProperty(() => Base64FileRequestDto)` instead
 5. Remove unused imports: `FileModel`, `MimeTypeEnum`, `RequestDtoFileProperty`
 
-### 5. Repository Method Naming Patterns
+### 5. Original Filename — NEVER Store in Database ⚠️ CRITICAL
+
+**RULE**: Do NOT add an `originalFileName` column to any database entity for uploaded files.
+
+`BucketGateway.create()` already stores the original filename as S3 object metadata (`original-filename` key) at upload time. At read time, call `BucketGateway.getOriginalFileName(fileName)` to retrieve it.
+
+**❌ WRONG — storing originalFileName in DB:**
+
+```typescript
+// TypeORM entity
+@Column({ name: 'original_file_name', type: 'varchar', length: 255 })
+public originalFileName: string;
+
+// Domain entity
+export class AttachmentEntity extends BaseEntity<AttachmentId> {
+  public readonly originalFileName: string;
+}
+```
+
+**✅ CORRECT — retrieving from S3 at read time:**
+
+```typescript
+// Use case — fetch in parallel with other bucket calls
+const [signedUrl, buffer, originalFileName] = await Promise.all([
+  this.bucketGateway.getSignedUrl(attachment.fileName),
+  this.bucketGateway.getBuffer(attachment.fileName),
+  this.bucketGateway.getOriginalFileName(attachment.fileName),
+]);
+
+return GetAttachmentQueryResult.build({
+  signedUrl,
+  buffer,
+  originalFileName,
+});
+```
+
+**Why This Matters:**
+
+1. **Single source of truth**: S3 metadata already holds the filename — no duplication
+2. **Simpler schema**: One less column, one less migration per file entity
+3. **Automatic consistency**: Can never be out of sync with the actual uploaded file
+4. **Parallel reads**: `getOriginalFileName` is a cheap HEAD request; run with `Promise.all`
+
+**Rules:**
+
+- ✅ Call `getOriginalFileName(fileName)` in parallel with other bucket calls using `Promise.all`
+- ✅ Include `originalFileName` in query result classes (read model) — it just doesn't come from the DB
+- ❌ NO `originalFileName` column in TypeORM entities for file attachments
+- ❌ NO `originalFileName` field in domain entity props interfaces
+- ❌ NO passing `originalFileName` to command repository methods
+
+### 6. Technology-Agnostic Field Naming ⚠️ CRITICAL
+
+**RULE**: Domain entity and database column names must NOT leak infrastructure technology names. Use business/domain terms instead.
+
+**❌ WRONG — technology-coupled names:**
+
+```typescript
+// Domain entity
+public readonly bucketKey: string;    // ❌ "bucket" is S3 terminology
+public readonly s3Path: string;       // ❌ "s3" is vendor-specific
+public readonly azureBlob: string;    // ❌ "azure" is vendor-specific
+
+// TypeORM entity
+@Column({ name: 'bucket_key' })       // ❌ leaks storage technology into DB schema
+public bucketKey: string;
+```
+
+**✅ CORRECT — domain-agnostic names:**
+
+```typescript
+// Domain entity
+public readonly fileName: string;     // ✅ describes what it is, not where it lives
+
+// TypeORM entity
+@Column({ name: 'file_name' })        // ✅ agnostic to storage provider
+public fileName: string;
+```
+
+**Why This Matters:**
+
+1. **Decoupling**: Switching from S3 to GCS or Azure Blob requires no domain or DB changes
+2. **Readability**: `fileName` is universally understood; `bucketKey` requires S3 knowledge
+3. **Clean Architecture**: Domain layer must not know about infrastructure technology
+4. **Future-proof**: Column names in production databases are expensive to rename
+
+**Rules:**
+
+- ✅ Use `fileName` for the stored reference to an uploaded file
+- ❌ NO `bucketKey`, `s3Key`, `blobName`, `gcsObject`, or any vendor-specific terms in domain entities or DB columns
+- ❌ NO infrastructure technology names (S3, Azure, GCS, bucket) in domain or TypeORM entity fields
+
+### 6. Repository Method Naming Patterns
 
 #### Query Repository (Read Operations)
 
@@ -1359,7 +1451,7 @@ export type TransactionType = (executor: unknown) => Promise<void>;
 | Update          | `update{Entity}` or `update{Entity}{Field}` | `TransactionType`                      |
 | Delete          | `delete{Entity}`                            | `TransactionType`                      |
 
-### 6. TypeORM Entity Patterns
+### 7. TypeORM Entity Patterns
 
 #### Column Naming and Transformers
 

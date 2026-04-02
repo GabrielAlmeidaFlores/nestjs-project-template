@@ -6,8 +6,7 @@ import type { SupportTicketAttachmentEntityPropsInterface } from '@module/suppor
 
 export class SupportTicketAttachmentEntity extends BaseEntity<SupportTicketAttachmentId> {
   public readonly supportTicketId: SupportTicketId;
-  public readonly bucketKey: string;
-  public readonly originalFileName: string;
+  public readonly fileName: string;
 
   protected readonly _type = SupportTicketAttachmentEntity.name;
 
@@ -15,7 +14,6 @@ export class SupportTicketAttachmentEntity extends BaseEntity<SupportTicketAttac
     super(SupportTicketAttachmentId, props);
 
     this.supportTicketId = props.supportTicketId;
-    this.bucketKey = props.bucketKey;
-    this.originalFileName = props.originalFileName;
+    this.fileName = props.fileName;
   }
 }

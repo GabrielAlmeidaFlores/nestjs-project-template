@@ -29,8 +29,7 @@ export class SupportTicketAttachmentEntityAutoMapperProfile {
       return new SupportTicketAttachmentEntity({
         id: new SupportTicketAttachmentId(source.id),
         supportTicketId: new SupportTicketId(source.supportTicket.id),
-        bucketKey: source.bucketKey,
-        originalFileName: source.originalFileName,
+        fileName: source.fileName,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
@@ -56,8 +55,7 @@ export class SupportTicketAttachmentEntityAutoMapperProfile {
       return SupportTicketAttachmentTypeormEntity.build({
         id: source.id.toString(),
         supportTicket,
-        bucketKey: source.bucketKey,
-        originalFileName: source.originalFileName,
+        fileName: source.fileName,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
