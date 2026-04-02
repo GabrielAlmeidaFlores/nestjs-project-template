@@ -17,6 +17,10 @@ export abstract class SupportTicketQueryRepositoryGateway {
     param: ListSupportTicketsByOrganizationQueryParam,
   ): Promise<ListDataOutputModel<GetSupportTicketQueryResult>>;
 
+  public abstract findOneByIdWithAttachments(
+    supportTicketId: SupportTicketId,
+  ): Promise<GetSupportTicketQueryResult | null>;
+
   public abstract findOneByIdAndSupportType(
     supportTicketId: SupportTicketId,
     supportType: SupportTypeEnum,

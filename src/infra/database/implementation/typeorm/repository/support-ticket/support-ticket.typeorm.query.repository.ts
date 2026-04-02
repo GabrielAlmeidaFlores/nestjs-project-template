@@ -173,6 +173,25 @@ export class SupportTicketTypeormQueryRepository
     return new SupportTicketNumber(supportTicket.ticketNumber);
   }
 
+  public async findOneByIdWithAttachments(
+    supportTicketId: SupportTicketId,
+  ): Promise<GetSupportTicketQueryResult | null> {
+    const supportTicket = await this.findOne({
+      where: {
+        id: supportTicketId.toString(),
+      },
+      relations: {
+        attachments: true,
+      },
+    });
+
+    if (supportTicket === null) {
+      return null;
+    }
+
+    return this.mapToQueryResult(supportTicket);
+  }
+
   public async findOneByIdAndSupportType(
     supportTicketId: SupportTicketId,
     supportType: SupportTypeEnum,
