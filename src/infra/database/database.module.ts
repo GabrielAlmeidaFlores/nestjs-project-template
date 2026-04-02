@@ -217,6 +217,13 @@ import { SpeechGeneratorBenefitTypeormCommandRepository } from '@infra/database/
 import { SpeechGeneratorDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-document/speech-generator-document.typeorm.command.repository';
 import { SpeechGeneratorLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-legal-proceeding/speech-generator-legal-proceeding.typeorm.command.repository';
 import { SpeechGeneratorResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-result/speech-generator-result.typeorm.command.repository';
+import { SupportAttendantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/support-attendant/support-attendant.typeorm.command.repository';
+import { SupportAttendantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/support-attendant/support-attendant.typeorm.query.repository';
+import { SupportTicketTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/support-ticket/support-ticket.typeorm.command.repository';
+import { SupportTicketTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/support-ticket/support-ticket.typeorm.query.repository';
+import { SupportTicketAttachmentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/support-ticket-attachment/support-ticket-attachment.typeorm.command.repository';
+import { SupportTicketMessageTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/support-ticket-message/support-ticket-message.typeorm.command.repository';
+import { SupportTicketMessageTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/support-ticket-message/support-ticket-message.typeorm.query.repository';
 import { SystemActivitiesTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/system-activities/system-activities.typeorm.command.repository';
 import { SystemActivitiesTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/system-activities/system-activities.typeorm.query.repository';
 import { SystemLogTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/system-log/system-log.typeorm.command.repository';
@@ -445,6 +452,13 @@ import { BankPaymentCommandRepositoryGateway } from '@module/generic/bank/domain
 import { BankPaymentQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/query/bank-payment.query.repository.gateway';
 import { BankTransferCommandRepositoryGateway } from '@module/generic/bank/domain/repository/bank-transfer/command/bank-transfer.command.repository.gateway';
 import { BankTransferQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-transfer/query/bank-transfer.query.repository.gateway';
+import { SupportAttendantCommandRepositoryGateway } from '@module/support/account/domain/repository/support-attendant/command/support-attendant.command.repository.gateway';
+import { SupportAttendantQueryRepositoryGateway } from '@module/support/account/domain/repository/support-attendant/query/support-attendant.query.repository.gateway';
+import { SupportTicketCommandRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket/command/support-ticket.command.repository.gateway';
+import { SupportTicketQueryRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket/query/support-ticket.query.repository.gateway';
+import { SupportTicketAttachmentCommandRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket-attachment/command/support-ticket-attachment.command.repository.gateway';
+import { SupportTicketMessageCommandRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket-message/command/support-ticket-message.command.repository.gateway';
+import { SupportTicketMessageQueryRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket-message/query/support-ticket-message.query.repository.gateway';
 import { SystemLogCommandGateway } from '@shared/system/system-log/system-log.command.gateway';
 
 const classProvider: ClassProvider[] = [
@@ -877,6 +891,30 @@ const classProvider: ClassProvider[] = [
   {
     provide: SystemActivitiesQueryRepositoryGateway,
     useClass: SystemActivitiesTypeormQueryRepository,
+  },
+  {
+    provide: SupportAttendantQueryRepositoryGateway,
+    useClass: SupportAttendantTypeormQueryRepository,
+  },
+  {
+    provide: SupportTicketQueryRepositoryGateway,
+    useClass: SupportTicketTypeormQueryRepository,
+  },
+  {
+    provide: SupportTicketCommandRepositoryGateway,
+    useClass: SupportTicketTypeormCommandRepository,
+  },
+  {
+    provide: SupportTicketAttachmentCommandRepositoryGateway,
+    useClass: SupportTicketAttachmentTypeormCommandRepository,
+  },
+  {
+    provide: SupportTicketMessageQueryRepositoryGateway,
+    useClass: SupportTicketMessageTypeormQueryRepository,
+  },
+  {
+    provide: SupportTicketMessageCommandRepositoryGateway,
+    useClass: SupportTicketMessageTypeormCommandRepository,
   },
   {
     provide: CustomerTermsQueryRepositoryGateway,
@@ -1405,6 +1443,10 @@ const classProvider: ClassProvider[] = [
       OrganizationCustomizationDocumentFooterTemplateQueryRepositoryGateway,
     useClass:
       OrganizationCustomizationDocumentFooterTemplateTypeormQueryRepository,
+  },
+  {
+    provide: SupportAttendantCommandRepositoryGateway,
+    useClass: SupportAttendantTypeormCommandRepository,
   },
 ];
 
