@@ -1,20 +1,23 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { FastifyReply } from 'fastify';
 import moment from 'moment';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { CreateBillingInputModel } from '@infra/payment-gateway/model/input/create-billing.input.model';
 import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
+import { ResolveAffiliatePlanDiscountGateway } from '@module/customer/affiliate-customer/lib/resolve-affiliate-plan-discount/resolve-affiliate-plan-discount.gateway';
 import { OrganizationPaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/command/organization-payment-plan.command.repository.gateway';
+import { OrganizationPaymentPlanAffiliateCommissionCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-affiliate-commission/command/organization-payment-plan-affiliate-commission.command.repository.gateway';
 import { OrganizationPaymentPlanBankPaymentCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-bank-payment/command/organization-payment-plan-bank-payment.command.repository.gateway';
 import { OrganizationPaymentPlanEnabledPaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-enabled-paid-resource/command/organization-payment-plan-enabled-paid-resource.repository.gateway';
-import { PaymentPlanNotFoundError } from '@module/customer/payment-plan/domain/repository/payment-plan/query/error/payment-plan-not-found.error';
 import { PaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/query/payment-plan.query.repository.gateway';
 import { PaymentPlanEnabledPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-enabled-paid-resource/query/payment-plan-enabled-paid-resource.query.repository.gateway';
 import { OrganizationPaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/organization-payment-plan.entity';
+import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
+import { OrganizationPaymentPlanAffiliateCommissionEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan-affiliate-commission/organization-payment-plan-affiliate-commission.entity';
 import { OrganizationPaymentPlanBankPaymentEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan-bank-payment/organization-payment-plan-bank-payment.entity';
 import { OrganizationPaymentPlanEnabledPaidResourceEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan-enabled-paid-resource/organization-payment-plan-enabled-paid-resource.entity';
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
@@ -23,10 +26,12 @@ import { GenerateYearlyPaymentBillingRequestDto } from '@module/customer/payment
 import { GenerateYearlyPaymentBillingResponseDto } from '@module/customer/payment-plan/dto/response/generate-yearly-payment-billing.response.dto';
 import { InvalidPaymentPlanCycleError } from '@module/customer/payment-plan/error/invalid-payment-plan-cycle.error';
 import { MissingInstallmentInfoError } from '@module/customer/payment-plan/error/missing-installment-info.error';
+import { PaymentPlanNotFoundError } from '@module/customer/payment-plan/error/payment-plan-not-found.error';
 import { BankPaymentCommandRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/command/bank-payment.command.repository.gateway';
 import { BankPaymentEntity } from '@module/generic/bank/domain/schema/entity/bank-payment/bank-payment.entity';
 import { PaymentMethodEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-method.enum';
 import { PaymentStatusEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-status.enum';
+import { ApiCookieEnum } from '@shared/api/enum/api-cookie.enum';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -53,12 +58,17 @@ export class GenerateYearlyPaymentBillingUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(CustomerQueryRepositoryGateway)
     private readonly customerQueryRepository: CustomerQueryRepositoryGateway,
+    @Inject(ResolveAffiliatePlanDiscountGateway)
+    private readonly resolveAffiliatePlanDiscountService: ResolveAffiliatePlanDiscountGateway,
+    @Inject(OrganizationPaymentPlanAffiliateCommissionCommandRepositoryGateway)
+    private readonly organizationPaymentPlanAffiliateCommissionCommandRepository: OrganizationPaymentPlanAffiliateCommissionCommandRepositoryGateway,
   ) {}
 
   public async execute(
     organizationSessionData: OrganizationSessionDataModel,
     sessionData: SessionDataModel,
     dto: GenerateYearlyPaymentBillingRequestDto,
+    reply: FastifyReply,
   ): Promise<GenerateYearlyPaymentBillingResponseDto> {
     const organizationId = organizationSessionData.organizationId.toString();
 
@@ -67,20 +77,6 @@ export class GenerateYearlyPaymentBillingUseCase {
         new PaymentPlanId(dto.paymentPlanId),
         PaymentPlanNotFoundError,
       );
-
-    let organizationPaymentPlan = new OrganizationPaymentPlanEntity({
-      bankExternalId: Guid.toString(),
-      name: paymentPlan.name,
-      description: `Cobrança - ${paymentPlan.name}`,
-      price: paymentPlan.price,
-      maxMemberCount: paymentPlan.maxMemberCount,
-      monthlyCreditAmount: paymentPlan.monthlyCreditAmount,
-      cycle: paymentPlan.cycle,
-      organization: new OrganizationId(organizationId),
-      paymentPlan: paymentPlan.id,
-      totalInstallments: dto.installments,
-      canceled: false,
-    });
 
     if (paymentPlan.cycle !== PaymentPlanCycleEnum.YEARLY) {
       throw new InvalidPaymentPlanCycleError();
@@ -98,13 +94,22 @@ export class GenerateYearlyPaymentBillingUseCase {
       .startOf('day')
       .toDate();
 
+    const { billingPrice: billingValue, discountResult } =
+      await this.resolveAffiliatePlanDiscountService.resolveBillingPrice(
+        reply.request.cookies[ApiCookieEnum.AFFILIATE],
+        paymentPlan.id,
+        paymentPlan.price,
+      );
+
+    const organizationPaymentPlanId = new OrganizationPaymentPlanId();
+
     const createBillingResult = await this.paymentGateway.createBilling(
       CreateBillingInputModel.build({
         customerId: customer.bankExternalId,
-        value: paymentPlan.price,
+        value: billingValue,
         dueDate,
         description: paymentPlan.name,
-        externalReference: organizationPaymentPlan.id.toString(),
+        externalReference: organizationPaymentPlanId.toString(),
         installmentCount: dto.installments,
       }),
     );
@@ -113,9 +118,20 @@ export class GenerateYearlyPaymentBillingUseCase {
       throw new MissingInstallmentInfoError();
     }
     {
-      organizationPaymentPlan = new OrganizationPaymentPlanEntity({
-        ...organizationPaymentPlan,
+      const organizationPaymentPlan = new OrganizationPaymentPlanEntity({
+        id: organizationPaymentPlanId,
         bankExternalId: createBillingResult.installment,
+        name: paymentPlan.name,
+        description: `Cobrança - ${paymentPlan.name}`,
+        price: paymentPlan.price,
+        maxMemberCount: paymentPlan.maxMemberCount,
+        monthlyCreditAmount: paymentPlan.monthlyCreditAmount,
+        cycle: paymentPlan.cycle,
+        organization: new OrganizationId(organizationId),
+        paymentPlan: paymentPlan.id,
+        totalInstallments: dto.installments,
+        canceled: false,
+        affiliateCustomerId: discountResult?.affiliateCustomerId ?? null,
       });
 
       const bankPayment = new BankPaymentEntity({
@@ -157,6 +173,25 @@ export class GenerateYearlyPaymentBillingUseCase {
           );
         });
 
+      const now = new Date();
+
+      let organizationPaymentPlanAffiliateCommissionTransaction = null;
+      if (discountResult !== null) {
+        const commission = new OrganizationPaymentPlanAffiliateCommissionEntity(
+          {
+            organizationPaymentPlan: organizationPaymentPlan.id,
+            affiliateCustomer: discountResult.affiliateCustomerId,
+            commissionPercentage: discountResult.commissionPercentage,
+            createdAt: now,
+            updatedAt: now,
+          },
+        );
+        organizationPaymentPlanAffiliateCommissionTransaction =
+          this.organizationPaymentPlanAffiliateCommissionCommandRepository.createOrganizationPaymentPlanAffiliateCommission(
+            commission,
+          );
+      }
+
       const transaction = await this.baseTransactionRepositoryGateway.execute([
         this.bankPaymentCommandRepository.createBankPayment(bankPayment),
         this.organizationPaymentPlanCommandRepository.createOrganizationPaymentPlan(
@@ -166,6 +201,9 @@ export class GenerateYearlyPaymentBillingUseCase {
           organizationPaymentPlanBankPayment,
         ),
         ...organizationPaymentPlanEnabledPaidResourceTransactions,
+        ...(organizationPaymentPlanAffiliateCommissionTransaction !== null
+          ? [organizationPaymentPlanAffiliateCommissionTransaction]
+          : []),
       ]);
 
       await transaction.commit();

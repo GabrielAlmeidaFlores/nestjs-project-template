@@ -8,11 +8,14 @@ import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-pr
 import { DisabilityRetirementPlanningGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/repository/disability-retirement-planning-grant/query/disability-retirement-planning-grant.query.repository.gateway';
 import { DisabilityRetirementPlanningGrantPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/repository/disability-retirement-planning-grant-period/command/disability-retirement-planning-grant-period.command.repository.gateway';
 import { DisabilityRetirementPlanningGrantPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/repository/disability-retirement-planning-grant-period-document/command/disability-retirement-planning-grant-period-document.command.repository.gateway';
+import { DisabilityRetirementPlanningGrantPeriodEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/repository/disability-retirement-planning-grant-period-earnings-history/command/disability-retirement-planning-grant-period-earnings-history.command.repository.gateway';
 import { DisabilityRetirementPlanningGrantId } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant/value-object/disability-retirement-planning-grant-id.value-object';
 import { DisabilityRetirementPlanningGrantPeriodEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-period/disability-retirement-planning-grant-period.entity';
 import { DisabilityRetirementPlanningGrantPeriodId } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-period/value-object/disability-retirement-planning-grant-period-id.value-object';
 import { DisabilityRetirementPlanningGrantPeriodDocumentEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-period-document/disability-retirement-planning-grant-period-document.entity';
 import { DisabilityRetirementPlanningGrantPeriodDocumentId } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-period-document/value-object/disability-retirement-planning-grant-period-document-id.value-object';
+import { DisabilityRetirementPlanningGrantPeriodEarningsHistoryEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-period-earnings-history/disability-retirement-planning-grant-period-earnings-history.entity';
+import { DisabilityRetirementPlanningGrantPeriodEarningsHistoryId } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-period-earnings-history/value-object/disability-retirement-planning-grant-period-earnings-history-id.value-object';
 import { UpdateDisabilityRetirementPlanningGrantPeriodRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/dto/request/update-disability-retirement-planning-grant-period.request.dto';
 import { UpdateDisabilityRetirementPlanningGrantPeriodResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/dto/response/update-disability-retirement-planning-grant-period.response.dto';
 import { DisabilityRetirementPlanningGrantNotFoundError } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/error/disability-retirement-planning-grant-not-found.error';
@@ -36,6 +39,10 @@ export class UpdateDisabilityRetirementPlanningGrantPeriodUseCase {
       DisabilityRetirementPlanningGrantPeriodDocumentCommandRepositoryGateway,
     )
     private readonly disabilityRetirementPlanningGrantPeriodDocumentCommandRepositoryGateway: DisabilityRetirementPlanningGrantPeriodDocumentCommandRepositoryGateway,
+    @Inject(
+      DisabilityRetirementPlanningGrantPeriodEarningsHistoryCommandRepositoryGateway,
+    )
+    private readonly disabilityRetirementPlanningGrantPeriodEarningsHistoryCommandRepositoryGateway: DisabilityRetirementPlanningGrantPeriodEarningsHistoryCommandRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -71,6 +78,9 @@ export class UpdateDisabilityRetirementPlanningGrantPeriodUseCase {
 
     for (const existingPeriod of existingPeriods) {
       transactions.push(
+        this.disabilityRetirementPlanningGrantPeriodEarningsHistoryCommandRepositoryGateway.deleteAllByDisabilityRetirementPlanningGrantPeriodId(
+          existingPeriod.id,
+        ),
         this.disabilityRetirementPlanningGrantPeriodDocumentCommandRepositoryGateway.deleteAllByDisabilityRetirementPlanningGrantPeriodId(
           existingPeriod.id,
         ),
@@ -148,6 +158,43 @@ export class UpdateDisabilityRetirementPlanningGrantPeriodUseCase {
         );
 
         transactions.push(...documentTransactions);
+      }
+
+      if (periodDto.earningsHistory && periodDto.earningsHistory.length > 0) {
+        for (const item of periodDto.earningsHistory) {
+          transactions.push(
+            this.disabilityRetirementPlanningGrantPeriodEarningsHistoryCommandRepositoryGateway.createDisabilityRetirementPlanningGrantPeriodEarningsHistory(
+              new DisabilityRetirementPlanningGrantPeriodEarningsHistoryEntity({
+                id: new DisabilityRetirementPlanningGrantPeriodEarningsHistoryId(),
+                disabilityRetirementPlanningGrantPeriodId: periodId,
+                ...(item.competence !== undefined && {
+                  competence: item.competence,
+                }),
+                ...(item.remuneration !== undefined && {
+                  remuneration: item.remuneration,
+                }),
+                ...(item.indicators !== undefined && {
+                  indicators: item.indicators,
+                }),
+                ...(item.paymentDate !== undefined && {
+                  paymentDate: item.paymentDate,
+                }),
+                ...(item.contribution !== undefined && {
+                  contribution: item.contribution,
+                }),
+                ...(item.contributionSalary !== undefined && {
+                  contributionSalary: item.contributionSalary,
+                }),
+                ...(item.analysis !== undefined && {
+                  analysis: item.analysis,
+                }),
+                ...(item.competenceBelowTheMinimum !== undefined && {
+                  competenceBelowTheMinimum: item.competenceBelowTheMinimum,
+                }),
+              }),
+            ),
+          );
+        }
       }
     }
 

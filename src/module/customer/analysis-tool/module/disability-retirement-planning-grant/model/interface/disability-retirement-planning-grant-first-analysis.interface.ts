@@ -7,6 +7,17 @@ export interface DisabilityRetirementPlanningGrantFirstAnalysisBelowMinimumContr
   contributionValue: number | string;
 }
 
+export interface DisabilityRetirementPlanningGrantFirstAnalysisEarningsHistoryItemInterface {
+  competence: string | null;
+  remuneration: string | null;
+  indicators: string | null;
+  paymentDate: string | null;
+  contribution: string | null;
+  contributionSalary: string | null;
+  analysis: string | null;
+  competenceBelowTheMinimum: boolean | null;
+}
+
 export interface DisabilityRetirementPlanningGrantFirstAnalysisPeriodInterface {
   name: string;
   startDate: string;
@@ -19,6 +30,7 @@ export interface DisabilityRetirementPlanningGrantFirstAnalysisPeriodInterface {
   competenceBelowTheMinimum: boolean;
   contributionAverage?: number | string;
   belowMinimumContributions: DisabilityRetirementPlanningGrantFirstAnalysisBelowMinimumContributionItemInterface[];
+  earningsHistory: DisabilityRetirementPlanningGrantFirstAnalysisEarningsHistoryItemInterface[];
   reasonPendency?: DisabilityRetirementPlanningGrantPeriodPendencyReasonEnum;
   bondOrigin?: string | null;
 }

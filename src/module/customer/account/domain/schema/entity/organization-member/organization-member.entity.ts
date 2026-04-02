@@ -16,6 +16,9 @@ export class OrganizationMemberEntity extends BaseEntity<OrganizationMemberId> {
   @Description('Indica se o membro é o proprietário da organização.')
   public readonly owner: boolean;
 
+  @Description('Indica se o membro está ativo na organização.')
+  public readonly isActive: boolean;
+
   protected readonly _type = OrganizationMemberEntity.name;
 
   public constructor(props: OrganizationMemberEntityPropsInterface) {
@@ -24,5 +27,6 @@ export class OrganizationMemberEntity extends BaseEntity<OrganizationMemberId> {
     this.organization = props.organization;
     this.customer = props.customer;
     this.owner = props.owner;
+    this.isActive = props.isActive ?? true;
   }
 }

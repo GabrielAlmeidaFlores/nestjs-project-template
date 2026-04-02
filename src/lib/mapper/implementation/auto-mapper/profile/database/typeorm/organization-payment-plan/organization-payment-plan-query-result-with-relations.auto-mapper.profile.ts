@@ -8,6 +8,7 @@ import { OrganizationTypeormEntity } from '@infra/database/implementation/typeor
 import { PaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { GetOrganizationQueryResult } from '@module/customer/account/domain/repository/organization/query/result/get-organization.query.result';
+import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
 import { GetOrganizationPaymentPlanWithRelationsQueryResult } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/result/get-organization-payment-plan-with-relations.query.result';
 import { GetPaymentPlanQueryResult } from '@module/customer/payment-plan/domain/repository/payment-plan/query/result/get-payment-plan.query.result';
 import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
@@ -65,6 +66,10 @@ export class OrganizationPaymentPlanQueryResultWithRelationsAutoMapperProfile {
         organization,
         paymentPlan,
         canceled: source.canceled,
+        affiliateCustomerId:
+          source.affiliateCustomerId !== null
+            ? new AffiliateCustomerId(source.affiliateCustomerId)
+            : null,
       });
     };
 
@@ -112,6 +117,7 @@ export class OrganizationPaymentPlanQueryResultWithRelationsAutoMapperProfile {
         organization,
         paymentPlan,
         canceled: source.canceled,
+        affiliateCustomerId: source.affiliateCustomerId?.toString() ?? null,
       });
     };
 

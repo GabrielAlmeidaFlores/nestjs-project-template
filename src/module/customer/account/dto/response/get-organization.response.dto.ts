@@ -12,8 +12,5 @@ export class GetOrganizationResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
   public organizationName: string;
 
-  @ResponseDtoStringProperty({ required: false })
-  public organizationLogo?: string;
-
   protected override readonly _type = GetOrganizationResponseDto.name;
 }

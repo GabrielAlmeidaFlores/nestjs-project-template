@@ -14,5 +14,13 @@ export abstract class OrganizationQueryRepositoryGateway {
     listData: ListDataInputModel,
   ): Promise<ListDataOutputModel<GetOrganizationQueryResult>>;
 
+  public abstract listAllOrganizationsByCustomerId(
+    customerId: CustomerId,
+  ): Promise<Array<GetOrganizationQueryResult>>;
+
+  public abstract listAllPaginated(
+    listData: ListDataInputModel,
+  ): Promise<ListDataOutputModel<GetOrganizationQueryResult>>;
+
   public abstract listAll(): Promise<Array<GetOrganizationQueryResult>>;
 }
