@@ -1615,6 +1615,56 @@ Análise processada do CNIS:
                 ),
                 description: 'Motivo da pendência do período, quando houver',
               },
+              earningsHistory: {
+                type: 'array',
+                description:
+                  'Histórico de remunerações do período extraído do CNIS',
+                items: {
+                  type: 'object',
+                  properties: {
+                    competence: {
+                      type: 'string',
+                      format: 'date',
+                      description: 'Competência no formato YYYY-MM-DD',
+                    },
+                    remuneration: {
+                      type: 'string',
+                      description: 'Valor ou descrição da remuneração',
+                    },
+                    indicators: {
+                      type: 'string',
+                      description: 'Indicadores da remuneração',
+                    },
+                    paymentDate: {
+                      type: 'string',
+                      format: 'date',
+                      description: 'Data de pagamento no formato YYYY-MM-DD',
+                    },
+                    contribution: {
+                      type: 'string',
+                      description: 'Informações de contribuição',
+                    },
+                    contributionSalary: {
+                      type: 'string',
+                      description: 'Salário de contribuição',
+                    },
+                    analysis: {
+                      type: 'string',
+                      description: 'Análise da competência',
+                    },
+                    competenceBelowTheMinimum: {
+                      type: 'boolean',
+                      description:
+                        'Indica se a competência está abaixo do mínimo',
+                    },
+                  },
+                  required: [
+                    'competence',
+                    'remuneration',
+                    'competenceBelowTheMinimum',
+                  ],
+                },
+              },
             },
             required: [
               'name',
@@ -1626,6 +1676,7 @@ Análise processada do CNIS:
               'isPendency',
               'competenceBelowTheMinimum',
               'belowMinimumContributions',
+              'earningsHistory',
             ],
           },
         },

@@ -430,7 +430,6 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
           } as TeacherRetirementPlanningTypeormEntity)
         : null;
 
-
       const disabilityRetirementPlanning =
         source.disabilityRetirementPlanning !== null
           ? this.mapper.map(

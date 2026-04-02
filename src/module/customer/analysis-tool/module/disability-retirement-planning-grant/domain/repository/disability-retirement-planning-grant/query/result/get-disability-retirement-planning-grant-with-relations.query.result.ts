@@ -9,6 +9,7 @@ import type { DisabilityRetirementPlanningGrantInssBenefitEntity } from '@module
 import type { DisabilityRetirementPlanningGrantLegalProceedingEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-legal-proceeding/disability-retirement-planning-grant-legal-proceeding.entity';
 import type { DisabilityRetirementPlanningGrantPeriodEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-period/disability-retirement-planning-grant-period.entity';
 import type { DisabilityRetirementPlanningGrantPeriodDocumentEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-period-document/disability-retirement-planning-grant-period-document.entity';
+import type { DisabilityRetirementPlanningGrantPeriodEarningsHistoryEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-period-earnings-history/disability-retirement-planning-grant-period-earnings-history.entity';
 import type { DisabilityRetirementPlanningGrantResultEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-result/disability-retirement-planning-grant-result.entity';
 import type { DisabilityRetirementPlanningGrantTimeAcceleratorEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-time-accelerator/disability-retirement-planning-grant-time-accelerator.entity';
 
@@ -36,6 +37,9 @@ export class GetDisabilityRetirementPlanningGrantWithRelationsQueryResult extend
     | null;
   public readonly disabilityRetirementPlanningGrantPeriodDocument:
     | DisabilityRetirementPlanningGrantPeriodDocumentEntity[]
+    | null;
+  public readonly disabilityRetirementPlanningGrantPeriodEarningsHistory:
+    | DisabilityRetirementPlanningGrantPeriodEarningsHistoryEntity[]
     | null;
   public readonly disabilityRetirementPlanningGrantDisabilityPeriod:
     | DisabilityRetirementPlanningGrantDisabilityPeriodEntity[]

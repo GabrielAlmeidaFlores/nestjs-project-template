@@ -75,6 +75,36 @@ export class DisabilityRetirementPlanningGrantPeriodItemRequestDto extends BaseB
 }
 
 @RequestDto()
+export class DisabilityRetirementPlanningGrantPeriodEarningsHistoryItemRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoDateProperty({ required: false })
+  public competence?: Date;
+
+  @RequestDtoStringProperty({ required: false })
+  public remuneration?: string;
+
+  @RequestDtoStringProperty({ required: false })
+  public indicators?: string;
+
+  @RequestDtoDateProperty({ required: false })
+  public paymentDate?: Date;
+
+  @RequestDtoStringProperty({ required: false })
+  public contribution?: string;
+
+  @RequestDtoStringProperty({ required: false })
+  public contributionSalary?: string;
+
+  @RequestDtoStringProperty({ required: false })
+  public analysis?: string;
+
+  @RequestDtoBooleanProperty({ required: false })
+  public competenceBelowTheMinimum?: boolean;
+
+  protected override readonly _type =
+    DisabilityRetirementPlanningGrantPeriodEarningsHistoryItemRequestDto.name;
+}
+
+@RequestDto()
 export class FileDocumentDisabilityRetirementPlanningGrantPeriodRequestDto extends BaseBuildableDtoObject {
   @RequestDtoObjectProperty(() => Base64FileRequestDto)
   public file: Base64FileRequestDto;
@@ -90,6 +120,12 @@ export class DisabilityRetirementPlanningGrantPeriodItemWithDocumentsRequestDto 
     { required: false, isArray: true },
   )
   public documents?: FileDocumentDisabilityRetirementPlanningGrantPeriodRequestDto[];
+
+  @RequestDtoObjectProperty(
+    () => DisabilityRetirementPlanningGrantPeriodEarningsHistoryItemRequestDto,
+    { required: false, isArray: true },
+  )
+  public earningsHistory?: DisabilityRetirementPlanningGrantPeriodEarningsHistoryItemRequestDto[];
 
   protected override readonly _type =
     DisabilityRetirementPlanningGrantPeriodItemWithDocumentsRequestDto.name;

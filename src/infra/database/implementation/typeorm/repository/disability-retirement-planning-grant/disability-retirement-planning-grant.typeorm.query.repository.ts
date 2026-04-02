@@ -41,6 +41,7 @@ export class DisabilityRetirementPlanningGrantTypeormQueryRepository
           disabilityRetirementPlanningGrantLegalProceeding: true,
           disabilityRetirementPlanningGrantPeriod: {
             disabilityRetirementPlanningGrantPeriodDocument: true,
+            disabilityRetirementPlanningGrantPeriodEarningsHistory: true,
           },
           disabilityRetirementPlanningGrantDisabilityPeriod: {
             disabilityRetirementPlanningGrantDisabilityPeriodDocument: true,
