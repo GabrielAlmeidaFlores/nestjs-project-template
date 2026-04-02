@@ -147,6 +147,10 @@ import { MedicalQuestionGeneratorDocumentTypeormCommandRepository } from '@infra
 import { MedicalQuestionGeneratorInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/medical-question-generator-inss-benefit/medical-question-generator-inss-benefit.typeorm.command.repository';
 import { MedicalQuestionGeneratorLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/medical-question-generator-legal-proceeding/medical-question-generator-legal-proceeding.typeorm.command.repository';
 import { MedicalQuestionGeneratorResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/medical-question-generator-result/medical-question-generator-result.typeorm.command.repository';
+import { MiniAdvisorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/mini-advisor/mini-advisor.typeorm.command.repository';
+import { MiniAdvisorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/mini-advisor/mini-advisor.typeorm.query.repository';
+import { MiniAdvisorResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/mini-advisor-result/mini-advisor-result.typeorm.command.repository';
+import { MiniAdvisorResultTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/mini-advisor-result/mini-advisor-result.typeorm.query.repository';
 import { OrganizationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization/organization.typeorm.command.repository';
 import { OrganizationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization/organization.typeorm.query.repository';
 import { OrganizationCreditPurchaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-credit/organization-credit-purchase.typeorm.command.repository';
@@ -362,6 +366,8 @@ import { MedicalQuestionGeneratorInssBenefitTypeormEntity } from '@infra/databas
 import { MedicalQuestionGeneratorLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator-legal-proceeding.typeorm.entity';
 import { MedicalQuestionGeneratorResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator-result.typeorm.entity';
 import { MedicalQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator.typeorm.entity';
+import { MiniAdvisorResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/mini-advisor-result.typeorm.entity';
+import { MiniAdvisorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/mini-advisor.typeorm.entity';
 import { OrganizationCreditPackPurchaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-pack-purchase.typeorm.entity';
 import { OrganizationCreditPurchaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-purchase.typeorm.entity';
 import { OrganizationCreditUsageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-usage.typeorm.entity';
@@ -659,6 +665,8 @@ export class TypeormIndex {
     DisabilityRetirementPlanningInssBenefitTypeormEntity,
     DisabilityRetirementPlanningLegalProceedingTypeormEntity,
     DisabilityRetirementPlanningDocumentTypeormEntity,
+    MiniAdvisorTypeormEntity,
+    MiniAdvisorResultTypeormEntity,
     SystemActivitiesTypeormEntity,
     TutorialTypeormEntity,
     RegulatoryUpdateTypeormEntity,
@@ -908,6 +916,10 @@ export class TypeormIndex {
     DisabilityRetirementPlanningInssBenefitTypeormCommandRepository,
     DisabilityRetirementPlanningLegalProceedingTypeormCommandRepository,
     DisabilityRetirementPlanningDocumentTypeormCommandRepository,
+    MiniAdvisorTypeormCommandRepository,
+    MiniAdvisorTypeormQueryRepository,
+    MiniAdvisorResultTypeormCommandRepository,
+    MiniAdvisorResultTypeormQueryRepository,
     SystemActivitiesTypeormCommandRepository,
     SystemActivitiesTypeormQueryRepository,
     TutorialTypeormCommandRepository,
