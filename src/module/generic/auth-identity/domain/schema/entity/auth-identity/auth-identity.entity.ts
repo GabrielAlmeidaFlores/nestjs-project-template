@@ -3,6 +3,7 @@ import { AdminId } from '@module/admin/account/domain/schema/entity/admin/value-
 import { InvalidPasswordError } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/error/invalid-customer-name.error';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { HashedPassword } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/hashed-password/hashed-password.value-object';
+import { SupportAttendantId } from '@module/support/account/domain/schema/entity/support-attendant/value-object/support-attendant-id/support-attendant-id.value-object';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { Email } from '@core/domain/schema/value-object/email/email.value-object';
@@ -29,6 +30,9 @@ export class AuthIdentityEntity extends BaseEntity<AuthIdentityId> {
   @Description('Administrador associado à identidade de autenticação.')
   public readonly admin: AdminId | null;
 
+  @Description('Atendente de suporte associado à identidade de autenticação.')
+  public readonly supportAttendant: SupportAttendantId | null;
+
   @Description('Indica se a identidade de autenticação está ativa.')
   public readonly isActive: boolean;
 
@@ -45,6 +49,7 @@ export class AuthIdentityEntity extends BaseEntity<AuthIdentityId> {
     this.authenticatorAppSecret = props.authenticatorAppSecret ?? null;
     this.customer = props.customer ?? null;
     this.admin = props.admin ?? null;
+    this.supportAttendant = props.supportAttendant ?? null;
     this.isActive = props.isActive ?? true;
   }
 
