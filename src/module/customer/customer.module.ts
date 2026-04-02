@@ -12,6 +12,7 @@ import { OrganizationCreditModule } from '@module/customer/organization-credit/o
 import { OrganizationCustomizationModule } from '@module/customer/organization-customization/organization-customization.module';
 import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
 import { RegulatoryUpdateModule } from '@module/customer/regulatory-update/regulatory-update.module';
+import { ServiceDeskModule } from '@module/customer/service-desk/service-desk.module';
 import { SystemActivitiesModule } from '@module/customer/system-activities/system-activities.module';
 import { TranscriptionModule } from '@module/customer/transcription/transcription.module';
 import { CustomerTutorialModule } from '@module/customer/tutorial/tutorial.module';
@@ -30,6 +31,7 @@ import { CustomerTutorialModule } from '@module/customer/tutorial/tutorial.modul
     CreditPackModule,
     DocumentsToBeGeneratedModule,
     DocumentsSentByEmailModule,
+    ServiceDeskModule,
     SystemActivitiesModule,
     CustomerTutorialModule,
     OrganizationCustomizationModule,

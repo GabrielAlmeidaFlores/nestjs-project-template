@@ -80,6 +80,12 @@ export class OrganizationCustomizationExportDocumentOptionsResolver {
     const footerHtmlContent = footerTemplate?.htmlContent.trim();
 
     const result: ExportDocumentDownloadOptionsInterface = {};
+    if (headerTemplate !== null) {
+      result.headerTemplateType = headerTemplate.type;
+    }
+    if (footerTemplate !== null) {
+      result.footerTemplateType = footerTemplate.type;
+    }
     if (headerHtmlContent !== undefined && headerHtmlContent !== '') {
       result.headerHtml = this.renderTemplatePlaceholders(
         headerHtmlContent,
@@ -119,6 +125,7 @@ export class OrganizationCustomizationExportDocumentOptionsResolver {
       .replaceAll('<', '&lt;')
       .replaceAll('>', '&gt;')
       .replaceAll('"', '&quot;')
-      .replaceAll("'", '&#39;');
+      .replaceAll("'", '&#39;')
+      .replaceAll('\n', '<br>');
   }
 }
