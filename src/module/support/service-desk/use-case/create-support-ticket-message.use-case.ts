@@ -76,7 +76,7 @@ export class CreateSupportTicketMessageUseCase {
       }),
     ];
 
-    if (supportTicket.status === SupportTicketStatusEnum.WAITING_RESPONSE) {
+    if (supportTicket.status === SupportTicketStatusEnum.AWAITING_RESPONSE) {
       transactionEvents.push(
         this.supportTicketCommandRepositoryGateway.updateStatusByIdTransaction(
           supportTicket.id,

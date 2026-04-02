@@ -1,5 +1,5 @@
 export enum SupportTicketStatusEnum {
-  IN_PROGRESS = 'Andamento',
-  RESOLVED = 'Resolvido',
-  WAITING_RESPONSE = 'Aguardando resposta',
+  AWAITING_RESPONSE = 'awaiting_response',
+  IN_PROGRESS = 'in_progress',
+  RESOLVED = 'resolved',
 }
