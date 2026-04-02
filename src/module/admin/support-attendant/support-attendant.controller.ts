@@ -1,6 +1,5 @@
 import { Body, HttpStatus, Param, Query, RequestMethod } from '@nestjs/common';
 
-import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { CreateSupportAttendantRequestDto } from '@module/admin/support-attendant/dto/request/create-support-attendant.request.dto';
 import { ListSupportAttendantsRequestDto } from '@module/admin/support-attendant/dto/request/list-support-attendants.request.dto';
 import { ListTicketsAdminRequestDto } from '@module/admin/support-attendant/dto/request/list-tickets-admin.request.dto';
@@ -14,6 +13,7 @@ import { GetSupportAttendantDetailsUseCase } from '@module/admin/support-attenda
 import { ListSupportAttendantsUseCase } from '@module/admin/support-attendant/use-case/list-support-attendants.use-case';
 import { ListTicketsAdminUseCase } from '@module/admin/support-attendant/use-case/list-tickets-admin.use-case';
 import { UpdateSupportAttendantUseCase } from '@module/admin/support-attendant/use-case/update-support-attendant.use-case';
+import { ListSupportAttendantsQueryParam } from '@module/support/account/domain/repository/support-attendant/query/param/list-support-attendants.query.param';
 import { SupportAttendantId } from '@module/support/account/domain/schema/entity/support-attendant/value-object/support-attendant-id/support-attendant-id.value-object';
 import { ListSupportTicketsResponseDto } from '@module/support/service-desk/dto/response/list-support-tickets.response.dto';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -76,7 +76,7 @@ export class SupportAttendantController {
     @Query() dto: ListSupportAttendantsRequestDto,
   ): Promise<ListSupportAttendantsResponseDto> {
     return this.listSupportAttendantsUseCase.execute(
-      new ListDataInputModel(dto),
+      new ListSupportAttendantsQueryParam(dto),
     );
   }
 

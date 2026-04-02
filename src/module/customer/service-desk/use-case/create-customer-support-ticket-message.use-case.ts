@@ -94,7 +94,7 @@ export class CreateCustomerSupportTicketMessageUseCase {
       transactionEvents.push(
         this.supportTicketCommandRepositoryGateway.updateStatusByIdTransaction(
           supportTicket.id,
-          SupportTicketStatusEnum.WAITING_RESPONSE,
+          SupportTicketStatusEnum.AWAITING_RESPONSE,
         ),
       );
     }

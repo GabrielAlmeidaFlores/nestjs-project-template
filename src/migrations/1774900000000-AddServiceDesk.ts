@@ -37,7 +37,7 @@ export class AddServiceDesk1774900000000 implements MigrationInterface {
         \`subject\` varchar(255) NOT NULL,
         \`problem\` varchar(100) NOT NULL,
         \`description\` longtext NOT NULL,
-        \`status\` enum ('Andamento', 'Resolvido', 'Aguardando resposta') NOT NULL,
+        \`status\` enum ('awaiting_response', 'in_progress', 'resolved') NOT NULL,
         \`assigned_attendant_id\` varchar(36) NULL,
         PRIMARY KEY (\`id\`),
         UNIQUE KEY \`UQ_support_ticket_org_number\` (\`organization_id\`, \`ticket_number\`)

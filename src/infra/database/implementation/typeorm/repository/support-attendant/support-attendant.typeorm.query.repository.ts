@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
+import type { FindOptionsWhere } from 'typeorm';
 
+import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
@@ -11,8 +13,9 @@ import { GetSupportAttendantByAuthIdentityIdQueryResult } from '@module/support/
 import { GetSupportAttendantQueryResult } from '@module/support/account/domain/repository/support-attendant/query/result/get-support-attendant.query.result';
 import { SupportAttendantQueryRepositoryGateway } from '@module/support/account/domain/repository/support-attendant/query/support-attendant.query.repository.gateway';
 import { SupportAttendantId } from '@module/support/account/domain/schema/entity/support-attendant/value-object/support-attendant-id/support-attendant-id.value-object';
+import type { SupportTypeEnum } from '@shared/system/enum/support-type.enum';
 
-import type { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
+import type { ListSupportAttendantsQueryParam } from '@module/support/account/domain/repository/support-attendant/query/param/list-support-attendants.query.param';
 
 @Injectable()
 export class SupportAttendantTypeormQueryRepository
@@ -72,9 +75,20 @@ export class SupportAttendantTypeormQueryRepository
   }
 
   public async listSupportAttendants(
-    pagination: ListDataInputModel,
+    queryParam: ListSupportAttendantsQueryParam,
   ): Promise<ListDataOutputModel<GetSupportAttendantQueryResult>> {
-    const data = await this.list(pagination);
+    const whereConditions = this.buildListWhere(queryParam.search, queryParam.supportType);
+
+    const paginationParam = new ListDataInputModel({
+      page: queryParam.page,
+      limit: queryParam.limit,
+      sortField: queryParam.sortField,
+    });
+
+    const data = await this.list(
+      paginationParam,
+      whereConditions !== null ? { where: whereConditions } : undefined,
+    );
 
     const resource = data.resource.map((attendant) =>
       GetSupportAttendantQueryResult.build({
@@ -92,5 +106,33 @@ export class SupportAttendantTypeormQueryRepository
       ...data,
       resource,
     });
+  }
+
+  private buildListWhere(
+    search: string | null,
+    supportType: SupportTypeEnum | null,
+  ): FindOptionsWhere<SupportAttendantTypeormEntity>[] | FindOptionsWhere<SupportAttendantTypeormEntity> | null {
+    const hasSearch = search !== null;
+    const hasSupportType = supportType !== null;
+
+    if (hasSearch && hasSupportType) {
+      return [
+        { name: Like(`%${search}%`), supportType },
+        { email: Like(`%${search}%`), supportType },
+      ];
+    }
+
+    if (hasSearch) {
+      return [
+        { name: Like(`%${search}%`) },
+        { email: Like(`%${search}%`) },
+      ];
+    }
+
+    if (hasSupportType) {
+      return { supportType };
+    }
+
+    return null;
   }
 }

@@ -76,7 +76,7 @@ export class CreateCustomerSupportTicketUseCase {
       subject: dto.subject,
       problem: dto.problem,
       description: dto.description,
-      status: SupportTicketStatusEnum.WAITING_RESPONSE,
+      status: SupportTicketStatusEnum.AWAITING_RESPONSE,
     });
 
     const attachments = dto.attachments ?? [];
