@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { OrganizationPaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan.typeorm.entity';
+import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
 import { GetOrganizationPaymentPlanQueryResult } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/result/get-organization-payment-plan.query.result';
 import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
 
@@ -39,6 +40,10 @@ export class OrganizationPaymentPlanQueryResultAutoMapperProfile {
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
         canceled: source.canceled,
+        affiliateCustomerId:
+          source.affiliateCustomerId !== null
+            ? new AffiliateCustomerId(source.affiliateCustomerId)
+            : null,
       });
     };
 
@@ -72,6 +77,7 @@ export class OrganizationPaymentPlanQueryResultAutoMapperProfile {
         organization: undefined,
         paymentPlan: undefined,
         canceled: source.canceled,
+        affiliateCustomerId: source.affiliateCustomerId?.toString() ?? null,
       });
     };
 

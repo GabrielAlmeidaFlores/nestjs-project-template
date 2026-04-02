@@ -60,10 +60,17 @@ export class GetRetirementPlanningRgpsDetailsUseCase {
 
     const periods = retirementPlanningRgps.retirementPlanningRgpsPeriod;
 
-    const periodWithoutPendencies =
+    const nonBenefitPeriods =
       periods && Array.isArray(periods)
-        ? periods.filter((period) => period.isPendency === false)
+        ? periods.filter((p) => {
+            const cat = (p.category ?? '').toString().trim();
+            return cat.length === 0 || !/benef/i.test(cat);
+          })
         : [];
+
+    const periodWithoutPendencies = nonBenefitPeriods.filter(
+      (period) => period.isPendency === false,
+    );
 
     const {
       years: periodWithoutPendenciesYears,
@@ -77,7 +84,7 @@ export class GetRetirementPlanningRgpsDetailsUseCase {
       years: periodTotalYears,
       months: periodTotalMonths,
       days: periodTotalDays,
-    } = this.totalWorkPeriod(periods);
+    } = this.totalWorkPeriod(nonBenefitPeriods);
 
     const periodTotalString = `${periodTotalYears} anos, ${periodTotalMonths} meses e ${periodTotalDays} dias`;
 
@@ -123,7 +130,7 @@ export class GetRetirementPlanningRgpsDetailsUseCase {
     const carenciaTimeWithoutPendencyMonthsString = `${carenciaTimeWithoutPendencyMonths} contribuições`;
 
     const carenciaTimeWithPendencyMonths = this.calculateCarenciaTotal(
-      (periods ?? []).map((period) => ({
+      nonBenefitPeriods.map((period) => ({
         dataInicio: period.periodStart,
         dataFim: period.periodEnd,
       })),
@@ -140,14 +147,7 @@ export class GetRetirementPlanningRgpsDetailsUseCase {
 
     const totalCarenciaTimeWithAccelerationMonthsString = `${carenciaTimeWithAccelerationMonths + carenciaTimeWithPendencyMonths} contribuições`;
 
-    const searchPeriodo = periods;
-
     let category: string | null = '';
-
-    const nonBenefitPeriods = (searchPeriodo ?? []).filter((p) => {
-      const cat = (p.category ?? '').toString().trim();
-      return cat.length > 0 && !/benef/i.test(cat);
-    });
 
     if (nonBenefitPeriods.length > 0) {
       const lastNonBenefit = nonBenefitPeriods.reduce((prev, cur) => {

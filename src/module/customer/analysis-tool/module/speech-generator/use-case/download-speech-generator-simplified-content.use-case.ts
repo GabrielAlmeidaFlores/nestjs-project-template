@@ -7,6 +7,7 @@ import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
+import { OrganizationCustomizationExportDocumentOptionsResolver } from '@module/customer/analysis-tool/lib/organization-customization-resolver/organization-customization-export-document-options.resolver';
 import { SpeechGeneratorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/command/speech-generator.command.repository.gateway';
 import { SpeechGeneratorQueryRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/query/speech-generator.query.repository.gateway';
 import { SpeechGeneratorResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator-result/command/speech-generator-result.command.repository.gateway';
@@ -48,6 +49,8 @@ export class DownloadSpeechGeneratorSimplifiedContentUseCase {
     private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
     @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
+    @Inject(OrganizationCustomizationExportDocumentOptionsResolver)
+    private readonly organizationCustomizationExportDocumentOptionsResolver: OrganizationCustomizationExportDocumentOptionsResolver,
   ) {}
 
   public async execute(
@@ -99,6 +102,11 @@ export class DownloadSpeechGeneratorSimplifiedContentUseCase {
 
     const currentResult = speechGeneratorQueryResult.speechGeneratorResult;
 
+    const exportOptions =
+      await this.organizationCustomizationExportDocumentOptionsResolver.execute(
+        organizationSessionData.organizationId,
+      );
+
     if (currentResult.speechGeneratorSimplifiedContent === null) {
       if (currentResult.speechGeneratorCompleteContent === null) {
         throw new SpeechGeneratorDoesNotContainCompleteContentError();
@@ -145,6 +153,7 @@ export class DownloadSpeechGeneratorSimplifiedContentUseCase {
         speechGeneratorSimplifiedContentMarkdown,
         format,
         'discurso_simplificado_gerador_discurso',
+        exportOptions,
       );
     }
 
@@ -152,6 +161,7 @@ export class DownloadSpeechGeneratorSimplifiedContentUseCase {
       currentResult.speechGeneratorSimplifiedContent,
       format,
       'discurso_simplificado_gerador_discurso',
+      exportOptions,
     );
   }
 }
