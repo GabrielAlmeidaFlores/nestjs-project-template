@@ -17,7 +17,7 @@ const typeormDataSource = new DataSource({
   extra: {
     trustServerCertificate: true,
   },
-  migrations: [__dirname + '/../../../../migrations/*'],
+  migrations: [__dirname + '/migration/*'],
   migrationsTableName: 'tb_migration',
   entities: TypeormIndex.entities,
 });
