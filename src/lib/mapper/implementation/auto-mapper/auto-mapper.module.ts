@@ -106,6 +106,7 @@ import { DisabilityRetirementPlanningGrantLegalProceedingEntityAutoMapperProfile
 import { DisabilityRetirementPlanningGrantPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-grant-period/disability-retirement-planning-grant-period-entity.auto-mapper.profile';
 import { GetDisabilityRetirementPlanningGrantPeriodQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-grant-period/get-disability-retirement-planning-grant-period-query-result.auto-mapper.profile';
 import { DisabilityRetirementPlanningGrantPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-grant-period-document/disability-retirement-planning-grant-period-document-entity.auto-mapper.profile';
+import { DisabilityRetirementPlanningGrantPeriodEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-grant-period-earnings-history/disability-retirement-planning-grant-period-earnings-history-entity.auto-mapper.profile';
 import { DisabilityRetirementPlanningGrantResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-grant-result/disability-retirement-planning-grant-result-entity.auto-mapper.profile';
 import { DisabilityRetirementPlanningGrantTimeAcceleratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-grant-time-accelerator/disability-retirement-planning-grant-time-accelerator-entity.auto-mapper.profile';
 import { GetDisabilityRetirementPlanningGrantTimeAcceleratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-grant-time-accelerator/get-disability-retirement-planning-grant-time-accelerator-query-result.auto-mapper.profile';
@@ -614,6 +615,7 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     DisabilityRetirementPlanningGrantPeriodEntityAutoMapperProfile,
     GetDisabilityRetirementPlanningGrantPeriodQueryResultAutoMapperProfile,
     DisabilityRetirementPlanningGrantPeriodDocumentEntityAutoMapperProfile,
+    DisabilityRetirementPlanningGrantPeriodEarningsHistoryEntityAutoMapperProfile,
     DisabilityRetirementPlanningGrantDocumentEntityAutoMapperProfile,
     DisabilityRetirementPlanningGrantDisabilityPeriodEntityAutoMapperProfile,
     GetDisabilityRetirementPlanningGrantDisabilityPeriodQueryResultAutoMapperProfile,
