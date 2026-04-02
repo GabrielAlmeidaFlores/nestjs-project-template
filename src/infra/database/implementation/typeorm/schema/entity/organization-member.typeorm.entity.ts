@@ -9,6 +9,9 @@ export class OrganizationMemberTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'owner', type: 'boolean' })
   public owner: boolean;
 
+  @Column({ name: 'is_active', type: 'boolean', default: true })
+  public isActive: boolean;
+
   @ManyToOne(
     () => OrganizationTypeormEntity,
     (entity) => entity.organizationMember,

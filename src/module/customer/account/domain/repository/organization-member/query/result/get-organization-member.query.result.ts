@@ -5,6 +5,7 @@ import type { OrganizationMemberId } from '@module/customer/account/domain/schem
 export class GetOrganizationMemberQueryResult extends BaseBuildableObject {
   public readonly id: OrganizationMemberId;
   public readonly owner: boolean;
+  public readonly isActive: boolean;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

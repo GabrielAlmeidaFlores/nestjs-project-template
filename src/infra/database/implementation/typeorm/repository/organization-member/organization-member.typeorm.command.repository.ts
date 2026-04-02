@@ -8,6 +8,9 @@ import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { OrganizationMemberCommandRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/command/organization-member.command.repository.gateway';
 import { OrganizationMemberEntity } from '@module/customer/account/domain/schema/entity/organization-member/organization-member.entity';
+import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
+
+import type { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 @Injectable()
 export class OrganizationMemberTypeormCommandRepository
@@ -34,5 +37,18 @@ export class OrganizationMemberTypeormCommandRepository
     );
 
     return this.create(mappedData);
+  }
+
+  public updateOrganizationMemberStatus(
+    id: OrganizationMemberId,
+    isActive: boolean,
+  ): TransactionType {
+    return this.update(id.toString(), {
+      isActive,
+    } as QueryDeepPartialEntity<OrganizationMemberTypeormEntity>);
+  }
+
+  public deleteOrganizationMember(id: OrganizationMemberId): TransactionType {
+    return this.delete(id.toString());
   }
 }

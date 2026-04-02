@@ -6,6 +6,7 @@ import type { GetAdminQueryResult } from '@module/admin/account/domain/repositor
 import type { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
 import type { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import type { HashedPassword } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/hashed-password/hashed-password.value-object';
+import type { GetSupportAttendantQueryResult } from '@module/support/account/domain/repository/support-attendant/query/result/get-support-attendant.query.result';
 
 export class GetAuthIdentityWithRelationsQueryResult extends BaseBuildableObject {
   public readonly id: AuthIdentityId;
@@ -16,6 +17,7 @@ export class GetAuthIdentityWithRelationsQueryResult extends BaseBuildableObject
   public readonly isActive: boolean;
   public readonly customer: GetCustomerQueryResult | null;
   public readonly admin: GetAdminQueryResult | null;
+  public readonly supportAttendant: GetSupportAttendantQueryResult | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

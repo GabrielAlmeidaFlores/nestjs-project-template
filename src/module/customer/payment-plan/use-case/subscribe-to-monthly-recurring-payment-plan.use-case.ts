@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { FastifyReply } from 'fastify';
 import moment from 'moment';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
@@ -11,19 +12,23 @@ import { CreditCardInfoInputModel } from '@infra/payment-gateway/model/input/cre
 import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
+import { ResolveAffiliatePlanDiscountGateway } from '@module/customer/affiliate-customer/lib/resolve-affiliate-plan-discount/resolve-affiliate-plan-discount.gateway';
 import { OrganizationPaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/command/organization-payment-plan.command.repository.gateway';
+import { OrganizationPaymentPlanAffiliateCommissionCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-affiliate-commission/command/organization-payment-plan-affiliate-commission.command.repository.gateway';
 import { OrganizationPaymentPlanEnabledPaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-enabled-paid-resource/command/organization-payment-plan-enabled-paid-resource.repository.gateway';
-import { PaymentPlanNotFoundError } from '@module/customer/payment-plan/domain/repository/payment-plan/query/error/payment-plan-not-found.error';
 import { PaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/query/payment-plan.query.repository.gateway';
 import { PaymentPlanEnabledPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-enabled-paid-resource/query/payment-plan-enabled-paid-resource.query.repository.gateway';
 import { OrganizationPaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/organization-payment-plan.entity';
+import { OrganizationPaymentPlanAffiliateCommissionEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan-affiliate-commission/organization-payment-plan-affiliate-commission.entity';
 import { OrganizationPaymentPlanEnabledPaidResourceEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan-enabled-paid-resource/organization-payment-plan-enabled-paid-resource.entity';
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
 import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 import { SubscribeToMonthlyRecurringPaymentPlanRequestDto } from '@module/customer/payment-plan/dto/request/subscribe-to-monthly-recurring-payment-plan.request.dto';
 import { SubscribeToMonthlyRecurringPaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/subscribe-to-monthly-recurring-payment-plan.response.dto';
 import { InvalidPaymentPlanCycleError } from '@module/customer/payment-plan/error/invalid-payment-plan-cycle.error';
+import { PaymentPlanNotFoundError } from '@module/customer/payment-plan/error/payment-plan-not-found.error';
 import { DeleteOrganizationPaymentPlanUseCase } from '@module/customer/payment-plan/use-case/delete-organization-payment-plan.use-case';
+import { ApiCookieEnum } from '@shared/api/enum/api-cookie.enum';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { EmailApplicationVariable } from '@shared/system/constant/application-variable/source/email.application-variable';
@@ -50,12 +55,17 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
     private readonly deleteOrganizationPaymentPlanUseCase: DeleteOrganizationPaymentPlanUseCase,
     @Inject(EmailGateway)
     private readonly emailGateway: EmailGateway,
+    @Inject(ResolveAffiliatePlanDiscountGateway)
+    private readonly resolveAffiliatePlanDiscountService: ResolveAffiliatePlanDiscountGateway,
+    @Inject(OrganizationPaymentPlanAffiliateCommissionCommandRepositoryGateway)
+    private readonly organizationPaymentPlanAffiliateCommissionCommandRepository: OrganizationPaymentPlanAffiliateCommissionCommandRepositoryGateway,
   ) {}
 
   public async execute(
     organizationSessionData: OrganizationSessionDataModel,
     sessionData: SessionDataModel,
     dto: SubscribeToMonthlyRecurringPaymentPlanRequestDto,
+    reply: FastifyReply,
   ): Promise<SubscribeToMonthlyRecurringPaymentPlanResponseDto> {
     const paymentPlan =
       await this.paymentPlanQueryRepository.findOnePaymentPlanByIdOrFail(
@@ -79,6 +89,13 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
 
     const nextDueDate = moment().startOf('day').toDate();
 
+    const { billingPrice: subscriptionValue, discountResult } =
+      await this.resolveAffiliatePlanDiscountService.resolveBillingPrice(
+        reply.request.cookies[ApiCookieEnum.AFFILIATE],
+        paymentPlan.id,
+        paymentPlan.price,
+      );
+
     const creditCardInfo = CreditCardInfoInputModel.build({
       holderName: dto.creditCardInfo.holderName,
       number: dto.creditCardInfo.number,
@@ -98,7 +115,7 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
 
     const subscriptionInput = CreateSubscriptionInputModel.build({
       customerId: customer.bankExternalId,
-      value: paymentPlan.price,
+      value: subscriptionValue,
       nextDueDate,
       cycle: SubscriptionCycleEnum.MONTHLY_RECURRING,
       description: paymentPlan.name,
@@ -126,6 +143,7 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
       organization: organizationSessionData.organizationId,
       paymentPlan: paymentPlan.id,
       canceled: false,
+      affiliateCustomerId: discountResult?.affiliateCustomerId ?? null,
     });
 
     const organizationPaymentPlanTransaction =
@@ -146,12 +164,34 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
         );
       });
 
+    const now = new Date();
+
+    let organizationPaymentPlanAffiliateCommissionTransaction = null;
+    if (discountResult !== null) {
+      const commission = new OrganizationPaymentPlanAffiliateCommissionEntity({
+        organizationPaymentPlan: organizationPaymentPlan.id,
+        affiliateCustomer: discountResult.affiliateCustomerId,
+        commissionPercentage: discountResult.commissionPercentage,
+        createdAt: now,
+        updatedAt: now,
+      });
+      organizationPaymentPlanAffiliateCommissionTransaction =
+        this.organizationPaymentPlanAffiliateCommissionCommandRepository.createOrganizationPaymentPlanAffiliateCommission(
+          commission,
+        );
+    }
+
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       organizationPaymentPlanTransaction,
       ...organizationPaymentPlanEnabledPaidResourceTransactions,
+      ...(organizationPaymentPlanAffiliateCommissionTransaction !== null
+        ? [organizationPaymentPlanAffiliateCommissionTransaction]
+        : []),
     ]);
 
     await transaction.commit();
+
+    reply.clearCookie(ApiCookieEnum.AFFILIATE);
 
     const response = SubscribeToMonthlyRecurringPaymentPlanResponseDto.build({
       organizationPaymentPlanId: organizationPaymentPlan.id,
@@ -162,19 +202,23 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
       currency: 'BRL',
     }).format(organizationPaymentPlan.price.toNumber());
 
-    await this.emailGateway.sendHTMLEmail(
-      SendHTMLEmailInputModel.build({
-        to: creditCardHolderInfo.email.toString(),
-        subject: EmailApplicationVariable.EMAIL_PAYMENT_PLAN_PURCHASE_SUBJECT,
-        emailTemplateName:
-          EmailApplicationVariable.EMAIL_PAYMENT_PLAN_PURCHASE_TEMPLATE,
-        emailTemplateParameters: {
-          name: creditCardHolderInfo.name,
-          planName: organizationPaymentPlan.name,
-          amount,
-        },
-      }),
-    );
+    this.emailGateway
+      .sendHTMLEmail(
+        SendHTMLEmailInputModel.build({
+          to: creditCardHolderInfo.email.toString(),
+          subject: EmailApplicationVariable.EMAIL_PAYMENT_PLAN_PURCHASE_SUBJECT,
+          emailTemplateName:
+            EmailApplicationVariable.EMAIL_PAYMENT_PLAN_PURCHASE_TEMPLATE,
+          emailTemplateParameters: {
+            name: creditCardHolderInfo.name,
+            planName: organizationPaymentPlan.name,
+            amount,
+          },
+        }),
+      )
+      .catch(() => undefined);
+
+    // Affiliate transfer for recurring subscription is processed via webhook on first payment confirmation
 
     return response;
   }
