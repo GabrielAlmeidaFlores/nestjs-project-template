@@ -203,9 +203,7 @@ export class GetDisabilityRetirementPlanningGrantWithRelationsQueryResultAutoMap
       const disabilityRetirementPlanningGrantPeriodEarningsHistory = (
         source.disabilityRetirementPlanningGrantPeriod ?? []
       ).flatMap((period) =>
-        (
-          period.disabilityRetirementPlanningGrantPeriodEarningsHistory ?? []
-        ).map(
+        (period.disabilityRetirementPlanningGrantPeriodEarningsHistory ?? []).map(
           (item) =>
             new DisabilityRetirementPlanningGrantPeriodEarningsHistoryEntity({
               id: new DisabilityRetirementPlanningGrantPeriodEarningsHistoryId(

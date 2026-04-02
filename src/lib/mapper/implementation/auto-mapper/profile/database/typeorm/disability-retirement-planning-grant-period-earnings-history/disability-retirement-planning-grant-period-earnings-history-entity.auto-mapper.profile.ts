@@ -70,26 +70,24 @@ export class DisabilityRetirementPlanningGrantPeriodEarningsHistoryEntityAutoMap
     const convertDomainToOrm = (
       source: DisabilityRetirementPlanningGrantPeriodEarningsHistoryEntity,
     ): DisabilityRetirementPlanningGrantPeriodEarningsHistoryTypeormEntity =>
-      DisabilityRetirementPlanningGrantPeriodEarningsHistoryTypeormEntity.build(
-        {
-          id: source.id.toString(),
-          competence: source.competence,
-          remuneration: source.remuneration,
-          indicators: source.indicators,
-          paymentDate: source.paymentDate,
-          contribution: source.contribution,
-          contributionSalary: source.contributionSalary,
-          analysis: source.analysis,
-          competenceBelowTheMinimum: source.competenceBelowTheMinimum,
-          disabilityRetirementPlanningGrantPeriod:
-            DisabilityRetirementPlanningGrantPeriodTypeormEntity.build({
-              id: source.disabilityRetirementPlanningGrantPeriodId.toString(),
-            } as DisabilityRetirementPlanningGrantPeriodTypeormEntity),
-          createdAt: source.createdAt,
-          updatedAt: source.updatedAt,
-          deletedAt: source.deletedAt,
-        },
-      );
+      DisabilityRetirementPlanningGrantPeriodEarningsHistoryTypeormEntity.build({
+        id: source.id.toString(),
+        competence: source.competence,
+        remuneration: source.remuneration,
+        indicators: source.indicators,
+        paymentDate: source.paymentDate,
+        contribution: source.contribution,
+        contributionSalary: source.contributionSalary,
+        analysis: source.analysis,
+        competenceBelowTheMinimum: source.competenceBelowTheMinimum,
+        disabilityRetirementPlanningGrantPeriod:
+          DisabilityRetirementPlanningGrantPeriodTypeormEntity.build({
+            id: source.disabilityRetirementPlanningGrantPeriodId.toString(),
+          } as DisabilityRetirementPlanningGrantPeriodTypeormEntity),
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
+      });
 
     createMap(
       this.mapper,

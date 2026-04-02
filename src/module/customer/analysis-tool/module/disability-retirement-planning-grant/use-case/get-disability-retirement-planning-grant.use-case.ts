@@ -25,8 +25,8 @@ import {
   DisabilityRetirementPlanningGrantFirstAnalysisModel,
   DisabilityRetirementPlanningGrantFirstAnalysisPeriodModel,
 } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/generic/disability-retirement-planning-grant-first-analysis.model';
-import { DisabilityRetirementPlanningGrantFirstAnalysisSourcePeriodInterface } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/disability-retirement-planning-grant-first-analysis-source-period.interface';
 import { DisabilityRetirementPlanningGrantFirstAnalysisInterface } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/disability-retirement-planning-grant-first-analysis.interface';
+import { DisabilityRetirementPlanningGrantFirstAnalysisSourcePeriodInterface } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/disability-retirement-planning-grant-first-analysis-source-period.interface';
 import { parseDisabilityRetirementPlanningGrantCompleteAnalysis } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/disability-retirement-planning-grant-result.interface';
 
 @Injectable()
@@ -72,9 +72,7 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
     return GetDisabilityRetirementPlanningGrantResponseDto.build({
       id: result.id,
       category: result.category,
-      ...(result.analysisName !== null && {
-        analysisName: result.analysisName,
-      }),
+      ...(result.analysisName !== null && { analysisName: result.analysisName }),
       longPrizeDisability: result.longPrizeDisability,
       ...(cnisDocument !== null && { cnisDocument }),
       createdAt: result.createdAt,
@@ -130,71 +128,67 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
         disabilityRetirementPlanningGrantPeriod:
           result.disabilityRetirementPlanningGrantPeriod.map((p) => {
             const periodEarningsHistory = (
-              result.disabilityRetirementPlanningGrantPeriodEarningsHistory ??
-              []
+              result.disabilityRetirementPlanningGrantPeriodEarningsHistory ?? []
             ).filter(
               (eh) =>
                 eh.disabilityRetirementPlanningGrantPeriodId.toString() ===
                 p.id.toString(),
             );
 
-            return GetDisabilityRetirementPlanningGrantPeriodInGrantResponseDto.build(
-              {
-                startDate: p.startDate,
-                ...(p.endDate !== null && { endDate: p.endDate }),
-                category: p.category,
-                isPendency: p.isPendency,
-                competenceBelowTheMinimum: p.competenceBelowTheMinimum,
-                ...(p.pendencyReason !== null && {
-                  pendencyReason: p.pendencyReason,
-                }),
-                ...(p.typeOfContribution !== null && {
-                  typeOfContribution: p.typeOfContribution,
-                }),
-                status: p.status,
-                ...(p.disabilityStatus !== null && {
-                  disabilityStatus: p.disabilityStatus,
-                }),
-                ...(p.periodConsideration !== null && {
-                  periodConsideration: p.periodConsideration,
-                }),
-                ...(p.contributionAverage !== null && {
-                  contributionAverage: p.contributionAverage,
-                }),
-                ...(p.bondOrigin !== null && { bondOrigin: p.bondOrigin }),
-                ...(periodEarningsHistory.length > 0 && {
-                  earningsHistory: periodEarningsHistory.map((eh) =>
-                    GetDisabilityRetirementPlanningGrantPeriodEarningsHistoryResponseDto.build(
-                      {
-                        ...(eh.competence !== null && {
-                          competence: eh.competence,
-                        }),
-                        ...(eh.remuneration !== null && {
-                          remuneration: eh.remuneration,
-                        }),
-                        ...(eh.indicators !== null && {
-                          indicators: eh.indicators,
-                        }),
-                        ...(eh.paymentDate !== null && {
-                          paymentDate: eh.paymentDate,
-                        }),
-                        ...(eh.contribution !== null && {
-                          contribution: eh.contribution,
-                        }),
-                        ...(eh.contributionSalary !== null && {
-                          contributionSalary: eh.contributionSalary,
-                        }),
-                        ...(eh.analysis !== null && { analysis: eh.analysis }),
-                        ...(eh.competenceBelowTheMinimum !== null && {
-                          competenceBelowTheMinimum:
-                            eh.competenceBelowTheMinimum,
-                        }),
-                      },
-                    ),
+            return GetDisabilityRetirementPlanningGrantPeriodInGrantResponseDto.build({
+              startDate: p.startDate,
+              ...(p.endDate !== null && { endDate: p.endDate }),
+              category: p.category,
+              isPendency: p.isPendency,
+              competenceBelowTheMinimum: p.competenceBelowTheMinimum,
+              ...(p.pendencyReason !== null && {
+                pendencyReason: p.pendencyReason,
+              }),
+              ...(p.typeOfContribution !== null && {
+                typeOfContribution: p.typeOfContribution,
+              }),
+              status: p.status,
+              ...(p.disabilityStatus !== null && {
+                disabilityStatus: p.disabilityStatus,
+              }),
+              ...(p.periodConsideration !== null && {
+                periodConsideration: p.periodConsideration,
+              }),
+              ...(p.contributionAverage !== null && {
+                contributionAverage: p.contributionAverage,
+              }),
+              ...(p.bondOrigin !== null && { bondOrigin: p.bondOrigin }),
+              ...(periodEarningsHistory.length > 0 && {
+                earningsHistory: periodEarningsHistory.map((eh) =>
+                  GetDisabilityRetirementPlanningGrantPeriodEarningsHistoryResponseDto.build(
+                    {
+                      ...(eh.competence !== null && {
+                        competence: eh.competence,
+                      }),
+                      ...(eh.remuneration !== null && {
+                        remuneration: eh.remuneration,
+                      }),
+                      ...(eh.indicators !== null && {
+                        indicators: eh.indicators,
+                      }),
+                      ...(eh.paymentDate !== null && {
+                        paymentDate: eh.paymentDate,
+                      }),
+                      ...(eh.contribution !== null && {
+                        contribution: eh.contribution,
+                      }),
+                      ...(eh.contributionSalary !== null && {
+                        contributionSalary: eh.contributionSalary,
+                      }),
+                      ...(eh.analysis !== null && { analysis: eh.analysis }),
+                      ...(eh.competenceBelowTheMinimum !== null && {
+                        competenceBelowTheMinimum: eh.competenceBelowTheMinimum,
+                      }),
+                    },
                   ),
-                }),
-              },
-            );
+                ),
+              }),
+            });
           }),
       }),
       ...(result.disabilityRetirementPlanningGrantDisabilityPeriod !== null && {
@@ -293,35 +287,35 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
                 ),
             ),
             ...(period.earningsHistory.length > 0 && {
-              earningsHistory: period.earningsHistory.map((eh) =>
-                DisabilityRetirementPlanningGrantFirstAnalysisEarningsHistoryItemModel.build(
-                  {
-                    ...(eh.competence !== null && {
-                      competence: new Date(eh.competence),
-                    }),
-                    ...(eh.remuneration !== null && {
-                      remuneration: eh.remuneration,
-                    }),
-                    ...(eh.indicators !== null && {
-                      indicators: eh.indicators,
-                    }),
-                    ...(eh.paymentDate !== null && {
-                      paymentDate: new Date(eh.paymentDate),
-                    }),
-                    ...(eh.contribution !== null && {
-                      contribution: eh.contribution,
-                    }),
-                    ...(eh.contributionSalary !== null && {
-                      contributionSalary: eh.contributionSalary,
-                    }),
-                    ...(eh.analysis !== null && { analysis: eh.analysis }),
-                    ...(eh.competenceBelowTheMinimum !== null && {
-                      competenceBelowTheMinimum: eh.competenceBelowTheMinimum,
-                    }),
-                  },
+                earningsHistory: period.earningsHistory.map((eh) =>
+                  DisabilityRetirementPlanningGrantFirstAnalysisEarningsHistoryItemModel.build(
+                    {
+                      ...(eh.competence !== null && {
+                        competence: new Date(eh.competence),
+                      }),
+                      ...(eh.remuneration !== null && {
+                        remuneration: eh.remuneration,
+                      }),
+                      ...(eh.indicators !== null && {
+                        indicators: eh.indicators,
+                      }),
+                      ...(eh.paymentDate !== null && {
+                        paymentDate: new Date(eh.paymentDate),
+                      }),
+                      ...(eh.contribution !== null && {
+                        contribution: eh.contribution,
+                      }),
+                      ...(eh.contributionSalary !== null && {
+                        contributionSalary: eh.contributionSalary,
+                      }),
+                      ...(eh.analysis !== null && { analysis: eh.analysis }),
+                      ...(eh.competenceBelowTheMinimum !== null && {
+                        competenceBelowTheMinimum: eh.competenceBelowTheMinimum,
+                      }),
+                    },
+                  ),
                 ),
-              ),
-            }),
+              }),
             ...(period.reasonPendency !== undefined && {
               reasonPendency: period.reasonPendency,
             }),
