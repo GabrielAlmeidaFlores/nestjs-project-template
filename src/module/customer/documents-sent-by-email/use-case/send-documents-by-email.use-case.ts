@@ -449,8 +449,6 @@ export class SendDocumentsByEmailUseCase {
         const result =
           record.insuranceQualityAnalysis?.insuranceQualityAnalysisResult;
 
-        // O banco guarda apenas a análise “resumida” no mesmo campo que o completo
-        // para esta finalidade, então reaproveitamos.
         return result?.analysisSummary ?? null;
       }
       default:
