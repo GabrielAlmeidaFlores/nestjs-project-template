@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
-import type { FindOptionsWhere } from 'typeorm';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
@@ -13,9 +12,10 @@ import { GetSupportAttendantByAuthIdentityIdQueryResult } from '@module/support/
 import { GetSupportAttendantQueryResult } from '@module/support/account/domain/repository/support-attendant/query/result/get-support-attendant.query.result';
 import { SupportAttendantQueryRepositoryGateway } from '@module/support/account/domain/repository/support-attendant/query/support-attendant.query.repository.gateway';
 import { SupportAttendantId } from '@module/support/account/domain/schema/entity/support-attendant/value-object/support-attendant-id/support-attendant-id.value-object';
-import type { SupportTypeEnum } from '@shared/system/enum/support-type.enum';
 
 import type { ListSupportAttendantsQueryParam } from '@module/support/account/domain/repository/support-attendant/query/param/list-support-attendants.query.param';
+import type { SupportTypeEnum } from '@shared/system/enum/support-type.enum';
+import type { FindOptionsWhere } from 'typeorm';
 
 @Injectable()
 export class SupportAttendantTypeormQueryRepository
@@ -78,7 +78,10 @@ export class SupportAttendantTypeormQueryRepository
   public async listSupportAttendants(
     queryParam: ListSupportAttendantsQueryParam,
   ): Promise<ListDataOutputModel<GetSupportAttendantQueryResult>> {
-    const whereConditions = this.buildListWhere(queryParam.search, queryParam.supportType);
+    const whereConditions = this.buildListWhere(
+      queryParam.search,
+      queryParam.supportType,
+    );
 
     const paginationParam = new ListDataInputModel({
       page: queryParam.page,
@@ -112,7 +115,10 @@ export class SupportAttendantTypeormQueryRepository
   private buildListWhere(
     search: string | null,
     supportType: SupportTypeEnum | null,
-  ): FindOptionsWhere<SupportAttendantTypeormEntity>[] | FindOptionsWhere<SupportAttendantTypeormEntity> | null {
+  ):
+    | FindOptionsWhere<SupportAttendantTypeormEntity>[]
+    | FindOptionsWhere<SupportAttendantTypeormEntity>
+    | null {
     const hasSearch = search !== null;
     const hasSupportType = supportType !== null;
 
@@ -124,10 +130,7 @@ export class SupportAttendantTypeormQueryRepository
     }
 
     if (hasSearch) {
-      return [
-        { name: Like(`%${search}%`) },
-        { email: Like(`%${search}%`) },
-      ];
+      return [{ name: Like(`%${search}%`) }, { email: Like(`%${search}%`) }];
     }
 
     if (hasSupportType) {
