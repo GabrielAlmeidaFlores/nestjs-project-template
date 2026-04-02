@@ -9,8 +9,11 @@ import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analy
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
+import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { AnalysisActivityTrackerGateway } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.gateway';
+import { AnalysisActivityActionEnum } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/enum/analysis-activity-action.enum';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { CnisFastAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/repository/cnis-fast-analysis/command/cnis-fast-analysis.command.repository.gateway';
@@ -57,6 +60,8 @@ export class UpdateCnisFastAnalysisUseCase {
     private readonly analysisProcessorGateway: AnalysisProcessorGateway,
     @Inject(AnalysisToolRecordCommandRepositoryGateway)
     private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
+    @Inject(AnalysisActivityTrackerGateway)
+    private readonly analysisActivityTrackerGateway: AnalysisActivityTrackerGateway,
   ) {}
 
   public async execute(
@@ -187,8 +192,20 @@ export class UpdateCnisFastAnalysisUseCase {
       );
     transactions.push(analysisToolRecordTransaction);
 
+    const transactionsWithActivity =
+      this.analysisActivityTrackerGateway.appendActivityTransaction({
+        action: AnalysisActivityActionEnum.UPDATED,
+        analysisType: AnalysisToolRecordTypeEnum.CNIS_FAST_ANALYSIS,
+        organizationMemberId: organizationMember.id,
+        analysisToolClientId: analysisToolRecord.analysisToolClient.id,
+        analysisToolRecordId: analysisToolRecord.id,
+        transactions,
+      });
+
     const executeTransactions =
-      await this.baseTransactionRepositoryGateway.execute(transactions);
+      await this.baseTransactionRepositoryGateway.execute(
+        transactionsWithActivity,
+      );
     await executeTransactions.commit();
 
     return UpdateCnisFastAnalysisResponseDto.build({

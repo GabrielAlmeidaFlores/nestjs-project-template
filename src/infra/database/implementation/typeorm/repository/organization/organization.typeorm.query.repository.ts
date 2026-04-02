@@ -27,6 +27,26 @@ export class OrganizationTypeormQueryRepository
     super(repository);
   }
 
+  public async listAllOrganizationsByCustomerId(
+    customerId: CustomerId,
+  ): Promise<Array<GetOrganizationQueryResult>> {
+    const data = await this.find({
+      where: {
+        organizationMember: {
+          customer: {
+            id: customerId.toString(),
+          },
+        },
+      },
+    });
+
+    return this.mapperGateway.mapArray(
+      data,
+      OrganizationTypeormEntity,
+      GetOrganizationQueryResult,
+    );
+  }
+
   public async listOrganizationsByCustomerId(
     customerId: CustomerId,
     listData: ListDataInputModel,
@@ -87,5 +107,22 @@ export class OrganizationTypeormQueryRepository
     );
 
     return mappedData;
+  }
+
+  public async listAllPaginated(
+    listData: ListDataInputModel,
+  ): Promise<ListDataOutputModel<GetOrganizationQueryResult>> {
+    const data = await this.list(listData);
+
+    const mappedData = this.mapperGateway.mapArray(
+      data.resource,
+      OrganizationTypeormEntity,
+      GetOrganizationQueryResult,
+    );
+
+    return new ListDataOutputModel<GetOrganizationQueryResult>({
+      ...data,
+      resource: mappedData,
+    });
   }
 }

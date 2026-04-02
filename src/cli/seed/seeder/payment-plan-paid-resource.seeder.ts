@@ -934,6 +934,14 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise de processo administrativo de aposentadoria por categoria especial via IA. Examina os documentos do processo administrativo do INSS, identifica inconsistências, avalia fundamentos do indeferimento ou pendências, e emite parecer técnico detalhado sobre a viabilidade de contestação administrativa ou judicial.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4890-abcd-ef1234567890'),
+      resource: PaymentPlanPaidResourceTypeEnum.REGULATORY_UPDATES,
+      creditCost: 0,
+      title: 'ATUALIZAÇÕES NORMATIVAS',
+      description:
+        'Acompanhamento semanal automático de atualizações normativas previdenciárias brasileiras via IA. Exibe lista e detalhe de normas publicadas (portarias, instruções normativas, resoluções) com resumo, principais alterações, status de implementação e impacto para os beneficiários.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {

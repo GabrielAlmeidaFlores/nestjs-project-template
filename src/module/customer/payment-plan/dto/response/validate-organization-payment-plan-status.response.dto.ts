@@ -130,6 +130,11 @@ export class ValidateOrganizationPaymentPlanStatusResponseDto extends BaseBuilda
   })
   public canceled: boolean;
 
+  @ResponseDtoNumberProperty({
+    description: 'Quantidade atual de colaboradores ativos na organização.',
+  })
+  public activeMemberCount: number;
+
   protected override readonly _type =
     ValidateOrganizationPaymentPlanStatusResponseDto.name;
 }
