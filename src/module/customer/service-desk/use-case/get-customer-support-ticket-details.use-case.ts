@@ -68,6 +68,7 @@ export class GetCustomerSupportTicketDetailsUseCase {
       id: supportTicket.id.toString(),
       ticketNumber: supportTicket.ticketNumber,
       supportType: supportTicket.supportType,
+      status: supportTicket.status,
       openedAt: supportTicket.createdAt,
       analysisType: supportTicket.problem,
       requesterName: supportTicket.requesterName,
