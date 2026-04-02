@@ -1,11 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { SpecialRetirementGrantId } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/value-object/special-retirement-grant-id/special-retirement-grant-id.value-object';
-import { SpecialRetirementGrantDocumentId } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-document/value-object/special-retirement-grant-document-id/special-retirement-grant-document-id.value-object';
 import {
   GetSpecialRetirementGrantClientResponseDto,
   GetSpecialRetirementGrantDocumentResponseDto,
@@ -43,29 +41,37 @@ export class GetSpecialRetirementGrantUseCase {
         SpecialRetirementGrantNotFoundError,
       );
 
-    const specialRetirementGrant = analysisToolRecordQueryResult.specialRetirementGrant;
+    const specialRetirementGrant =
+      analysisToolRecordQueryResult.specialRetirementGrant;
 
     if (specialRetirementGrant === null) {
       throw new SpecialRetirementGrantNotFoundError();
     }
 
-    const cnisBuffer = await this.fileProcessorGateway.getFileBuffer(
-      specialRetirementGrant.cnisDocument,
-    );
-    const cnisOriginalName = await this.fileProcessorGateway.getOriginalFileName(
-      specialRetirementGrant.cnisDocument,
-    );
+    let cnisDocument: URL | null = null;
+    let cnisDocumentOriginalFileName: string | null = null;
+    if (specialRetirementGrant.cnisDocument !== null) {
+      cnisDocument = await this.fileProcessorGateway.getFileSignedUrl(
+        specialRetirementGrant.cnisDocument,
+      );
+
+      cnisDocumentOriginalFileName =
+        await this.fileProcessorGateway.getOriginalFileName(
+          specialRetirementGrant.cnisDocument,
+        );
+    }
 
     const documents = await Promise.all(
       specialRetirementGrant.specialRetirementGrantDocument.map(async (doc) => {
-        const buffer = await this.fileProcessorGateway.getFileBuffer(doc.document);
-        const originalFileName = await this.fileProcessorGateway.getOriginalFileName(
+        const document = await this.fileProcessorGateway.getFileSignedUrl(
           doc.document,
         );
+        const documentOriginalFileName =
+          await this.fileProcessorGateway.getOriginalFileName(doc.document);
         return GetSpecialRetirementGrantDocumentResponseDto.build({
-          id: new SpecialRetirementGrantDocumentId(doc.id.toString()),
-          document: Base64.encodeBuffer(buffer),
-          documentOriginalFileName: originalFileName,
+          id: doc.id.toString(),
+          document: document.toString(),
+          documentOriginalFileName: documentOriginalFileName.toString(),
           type: doc.type,
           createdAt: doc.createdAt,
           updatedAt: doc.updatedAt,
@@ -81,7 +87,7 @@ export class GetSpecialRetirementGrantUseCase {
         ?.specialRetirementGrantSimplifiedAnalysis ?? null;
 
     const parsedComplete: Record<string, unknown> | null =
-      completeRaw !== null && completeRaw !== undefined
+      completeRaw !== null
         ? (this.safeJsonParseOrThrow(completeRaw) as Record<string, unknown>)
         : null;
 
@@ -96,7 +102,7 @@ export class GetSpecialRetirementGrantUseCase {
     }
 
     const parsedSimplified: object | null =
-      simplifiedRaw !== null && simplifiedRaw !== undefined
+      simplifiedRaw !== null
         ? (this.safeJsonParseOrThrow(simplifiedRaw) as object)
         : null;
 
@@ -104,34 +110,41 @@ export class GetSpecialRetirementGrantUseCase {
       id: specialRetirementGrant.id,
       name: specialRetirementGrant.name,
       specialActivity: specialRetirementGrant.specialActivity,
-      cnisDocument: Base64.encodeBuffer(cnisBuffer),
-      cnisDocumentOriginalFileName: cnisOriginalName,
+      cnisDocument: cnisDocument?.toString() ?? '',
+      cnisDocumentOriginalFileName: cnisDocumentOriginalFileName ?? '',
       documents,
       status: analysisToolRecordQueryResult.status,
       analysisToolClient: GetSpecialRetirementGrantClientResponseDto.build({
         id: analysisToolRecordQueryResult.analysisToolClient.id,
         name: analysisToolRecordQueryResult.analysisToolClient.name,
-        federalDocument: analysisToolRecordQueryResult.analysisToolClient.federalDocument,
+        federalDocument:
+          analysisToolRecordQueryResult.analysisToolClient.federalDocument,
         email: analysisToolRecordQueryResult.analysisToolClient.email,
-        phoneNumber: analysisToolRecordQueryResult.analysisToolClient.phoneNumber,
+        phoneNumber:
+          analysisToolRecordQueryResult.analysisToolClient.phoneNumber,
         birthDate: analysisToolRecordQueryResult.analysisToolClient.birthDate,
         gender: analysisToolRecordQueryResult.analysisToolClient.gender,
         clientType: analysisToolRecordQueryResult.analysisToolClient.clientType,
       }),
-      legalProceedingNumber: specialRetirementGrant.specialRetirementGrantLegalProceeding.map(
-        (lp) => lp.legalProceedingNumber,
-      ),
-      inssBenefitNumber: specialRetirementGrant.specialRetirementGrantBenefit.map(
-        (b) => b.inssBenefitNumber,
-      ),
-      specialRetirementGrantResult: specialRetirementGrant.specialRetirementGrantResult
-        ? GetSpecialRetirementGrantResultResponseDto.build({
-            specialRetirementGrantCompleteAnalysis: parsedComplete,
-            specialRetirementGrantSimplifiedAnalysis: parsedSimplified,
-            createdAt: specialRetirementGrant.specialRetirementGrantResult.createdAt,
-            updatedAt: specialRetirementGrant.specialRetirementGrantResult.updatedAt,
-          })
-        : null,
+      legalProceedingNumber:
+        specialRetirementGrant.specialRetirementGrantLegalProceeding.map(
+          (lp) => lp.legalProceedingNumber,
+        ),
+      inssBenefitNumber:
+        specialRetirementGrant.specialRetirementGrantBenefit.map(
+          (b) => b.inssBenefitNumber,
+        ),
+      specialRetirementGrantResult:
+        specialRetirementGrant.specialRetirementGrantResult
+          ? GetSpecialRetirementGrantResultResponseDto.build({
+              specialRetirementGrantCompleteAnalysis: parsedComplete,
+              specialRetirementGrantSimplifiedAnalysis: parsedSimplified,
+              createdAt:
+                specialRetirementGrant.specialRetirementGrantResult.createdAt,
+              updatedAt:
+                specialRetirementGrant.specialRetirementGrantResult.updatedAt,
+            })
+          : null,
       createdAt: analysisToolRecordQueryResult.createdAt,
       updatedAt: analysisToolRecordQueryResult.updatedAt,
     });
@@ -145,4 +158,3 @@ export class GetSpecialRetirementGrantUseCase {
     }
   }
 }
-
