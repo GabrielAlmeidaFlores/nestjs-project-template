@@ -12,12 +12,12 @@ import { CreateDisabilityRetirementPlanningGrantDisabilityPeriodUseCase } from '
 import { CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/create-disability-retirement-planning-grant-first-analysis.use-case';
 import { CreateDisabilityRetirementPlanningGrantPeriodUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/create-disability-retirement-planning-grant-period.use-case';
 import { CreateDisabilityRetirementPlanningGrantResultUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/create-disability-retirement-planning-grant-result.use-case';
-import { DownloadDisabilityRetirementPlanningGrantCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/download-disability-retirement-planning-grant-complete-analysis.use-case';
-import { DownloadDisabilityRetirementPlanningGrantSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/download-disability-retirement-planning-grant-simplified-analysis.use-case';
 import { CreateDisabilityRetirementPlanningGrantUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/create-disability-retirement-planning-grant.use-case';
 import { DeleteDisabilityRetirementPlanningGrantDisabilityPeriodUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/delete-disability-retirement-planning-grant-disability-period.use-case';
 import { DeleteDisabilityRetirementPlanningGrantPeriodUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/delete-disability-retirement-planning-grant-period.use-case';
 import { DeleteDisabilityRetirementPlanningGrantTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/delete-disability-retirement-planning-grant-time-accelerator.use-case';
+import { DownloadDisabilityRetirementPlanningGrantCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/download-disability-retirement-planning-grant-complete-analysis.use-case';
+import { DownloadDisabilityRetirementPlanningGrantSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/download-disability-retirement-planning-grant-simplified-analysis.use-case';
 import { GetDisabilityRetirementPlanningGrantUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/get-disability-retirement-planning-grant.use-case';
 import { UpdateDisabilityRetirementPlanningGrantDisabilityPeriodUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/update-disability-retirement-planning-grant-disability-period.use-case';
 import { UpdateDisabilityRetirementPlanningGrantPeriodUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/update-disability-retirement-planning-grant-period.use-case';
@@ -47,8 +47,10 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateDisabilityRetirementPlanningGrantDisabilityPeriodUseCase,
     CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase,
     CreateDisabilityRetirementPlanningGrantPeriodUseCase,
-    CreateDisabilityRetirementPlanningGrantResultUseCase,    DownloadDisabilityRetirementPlanningGrantCompleteAnalysisUseCase,
-    DownloadDisabilityRetirementPlanningGrantSimplifiedAnalysisUseCase,    CreateDisabilityRetirementPlanningGrantUseCase,
+    CreateDisabilityRetirementPlanningGrantResultUseCase,
+    DownloadDisabilityRetirementPlanningGrantCompleteAnalysisUseCase,
+    DownloadDisabilityRetirementPlanningGrantSimplifiedAnalysisUseCase,
+    CreateDisabilityRetirementPlanningGrantUseCase,
     DeleteDisabilityRetirementPlanningGrantDisabilityPeriodUseCase,
     DeleteDisabilityRetirementPlanningGrantPeriodUseCase,
     DeleteDisabilityRetirementPlanningGrantTimeAcceleratorUseCase,

@@ -28,6 +28,8 @@ import { DisabilityRetirementPlanningGrantPeriodEntity } from '@module/customer/
 import { DisabilityRetirementPlanningGrantPeriodId } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-period/value-object/disability-retirement-planning-grant-period-id.value-object';
 import { DisabilityRetirementPlanningGrantPeriodDocumentEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-period-document/disability-retirement-planning-grant-period-document.entity';
 import { DisabilityRetirementPlanningGrantPeriodDocumentId } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-period-document/value-object/disability-retirement-planning-grant-period-document-id.value-object';
+import { DisabilityRetirementPlanningGrantPeriodEarningsHistoryEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-period-earnings-history/disability-retirement-planning-grant-period-earnings-history.entity';
+import { DisabilityRetirementPlanningGrantPeriodEarningsHistoryId } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-period-earnings-history/value-object/disability-retirement-planning-grant-period-earnings-history-id.value-object';
 import { DisabilityRetirementPlanningGrantResultEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-result/disability-retirement-planning-grant-result.entity';
 import { DisabilityRetirementPlanningGrantTimeAcceleratorEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-time-accelerator/disability-retirement-planning-grant-time-accelerator.entity';
 import { DisabilityRetirementPlanningGrantTimeAcceleratorId } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-time-accelerator/value-object/disability-retirement-planning-grant-time-accelerator-id.value-object';
@@ -198,6 +200,34 @@ export class GetDisabilityRetirementPlanningGrantWithRelationsQueryResultAutoMap
         ),
       );
 
+      const disabilityRetirementPlanningGrantPeriodEarningsHistory = (
+        source.disabilityRetirementPlanningGrantPeriod ?? []
+      ).flatMap((period) =>
+        (
+          period.disabilityRetirementPlanningGrantPeriodEarningsHistory ?? []
+        ).map(
+          (item) =>
+            new DisabilityRetirementPlanningGrantPeriodEarningsHistoryEntity({
+              id: new DisabilityRetirementPlanningGrantPeriodEarningsHistoryId(
+                item.id,
+              ),
+              competence: item.competence,
+              remuneration: item.remuneration,
+              indicators: item.indicators,
+              paymentDate: item.paymentDate,
+              contribution: item.contribution,
+              contributionSalary: item.contributionSalary,
+              analysis: item.analysis,
+              competenceBelowTheMinimum: item.competenceBelowTheMinimum,
+              disabilityRetirementPlanningGrantPeriodId:
+                new DisabilityRetirementPlanningGrantPeriodId(period.id),
+              createdAt: item.createdAt,
+              updatedAt: item.updatedAt,
+              deletedAt: item.deletedAt,
+            }),
+        ),
+      );
+
       const disabilityRetirementPlanningGrantDisabilityPeriodDocument = (
         source.disabilityRetirementPlanningGrantDisabilityPeriod ?? []
       ).flatMap((disabilityPeriod) =>
@@ -240,6 +270,7 @@ export class GetDisabilityRetirementPlanningGrantWithRelationsQueryResultAutoMap
           disabilityRetirementPlanningGrantLegalProceeding,
           disabilityRetirementPlanningGrantPeriod,
           disabilityRetirementPlanningGrantPeriodDocument,
+          disabilityRetirementPlanningGrantPeriodEarningsHistory,
           disabilityRetirementPlanningGrantDisabilityPeriod,
           disabilityRetirementPlanningGrantDisabilityPeriodDocument,
           disabilityRetirementPlanningGrantTimeAccelerator,

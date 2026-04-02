@@ -25,6 +25,36 @@ export class DisabilityRetirementPlanningGrantFirstAnalysisBelowMinimumContribut
 }
 
 @ResponseDto()
+export class DisabilityRetirementPlanningGrantFirstAnalysisEarningsHistoryItemModel extends BaseBuildableDtoObject {
+  @ResponseDtoDateProperty({ required: false })
+  public readonly competence?: Date;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly remuneration?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly indicators?: string;
+
+  @ResponseDtoDateProperty({ required: false })
+  public readonly paymentDate?: Date;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly contribution?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly contributionSalary?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly analysis?: string;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public readonly competenceBelowTheMinimum?: boolean;
+
+  protected override readonly _type =
+    DisabilityRetirementPlanningGrantFirstAnalysisEarningsHistoryItemModel.name;
+}
+
+@ResponseDto()
 export class DisabilityRetirementPlanningGrantFirstAnalysisPeriodModel extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
   public readonly name: string;
@@ -76,6 +106,13 @@ export class DisabilityRetirementPlanningGrantFirstAnalysisPeriodModel extends B
 
   @ResponseDtoStringProperty({ required: false })
   public readonly bondOrigin?: string;
+
+  @ResponseDtoObjectProperty(
+    () =>
+      DisabilityRetirementPlanningGrantFirstAnalysisEarningsHistoryItemModel,
+    { isArray: true, required: false },
+  )
+  public readonly earningsHistory?: DisabilityRetirementPlanningGrantFirstAnalysisEarningsHistoryItemModel[];
 
   protected override readonly _type =
     DisabilityRetirementPlanningGrantFirstAnalysisPeriodModel.name;

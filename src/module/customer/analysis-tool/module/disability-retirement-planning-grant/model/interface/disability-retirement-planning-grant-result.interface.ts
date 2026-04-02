@@ -28,12 +28,29 @@ export interface DisabilityRetirementPlanningGrantResultBenefitCompatibilityInte
   observations: string;
 }
 
+export interface DisabilityRetirementPlanningGrantResultPeriodEarningsHistoryInterface {
+  competence: string | null;
+  remuneration: string | null;
+  indicators: string | null;
+  paymentDate: string | null;
+  contribution: string | null;
+  contributionSalary: string | null;
+  analysis: string | null;
+  competenceBelowTheMinimum: boolean | null;
+}
+
+export interface DisabilityRetirementPlanningGrantResultPeriodInterface {
+  periodId: string;
+  earningsHistory: DisabilityRetirementPlanningGrantResultPeriodEarningsHistoryInterface[];
+}
+
 export interface DisabilityRetirementPlanningGrantResultInterface {
   retirementRules: DisabilityRetirementPlanningGrantResultRetirementRuleInterface[];
   systemRecomendation: DisabilityRetirementPlanningGrantResultSystemRecommendationInterface[];
   processualStrategy: DisabilityRetirementPlanningGrantResultProcessualStrategyInterface[];
   benefitCompatibility: DisabilityRetirementPlanningGrantResultBenefitCompatibilityInterface;
   analysisResult: string;
+  periods?: DisabilityRetirementPlanningGrantResultPeriodInterface[];
 }
 
 export function parseDisabilityRetirementPlanningGrantCompleteAnalysis(
