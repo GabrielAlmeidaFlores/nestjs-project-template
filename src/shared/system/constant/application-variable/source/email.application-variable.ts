@@ -85,6 +85,20 @@ export class EmailApplicationVariable {
       'Agiliza Previ - Convite para Organização',
     );
 
+  public static readonly EMAIL_SUPPORT_ATTENDANT_INVITE_TEMPLATE =
+    EmailApplicationVariable.source.getValueOrDefault<string>(
+      'EMAIL_SUPPORT_ATTENDANT_INVITE_TEMPLATE',
+      String,
+      'convite-suporte-tecnico.html',
+    );
+
+  public static readonly EMAIL_SUPPORT_ATTENDANT_INVITE_SUBJECT =
+    EmailApplicationVariable.source.getValueOrDefault<string>(
+      'EMAIL_SUPPORT_ATTENDANT_INVITE_SUBJECT',
+      String,
+      'Agiliza Previ - Convite de Suporte Técnico',
+    );
+
   public static readonly EMAIL_SEND_GRID_KEY =
     EmailApplicationVariable.source.getValueOrThrow<string>(
       'EMAIL_SEND_GRID_KEY',

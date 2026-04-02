@@ -293,6 +293,10 @@ import { GetSpeechGeneratorLegalProceedingQueryResultAutoMapperProfile } from '@
 import { SpeechGeneratorLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-legal-proceeding/speech-generator-legal-proceeding-entity.auto-mapper.profile';
 import { GetSpeechGeneratorResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-result/get-speech-generator-result-query-result.auto-mapper.profile';
 import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-result/speech-generator-result-entity.auto-mapper.profile';
+import { SupportAttendantEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/support-attendant/support-attendant-entity.auto-mapper.profile';
+import { SupportTicketEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/support-ticket/support-ticket-entity.auto-mapper.profile';
+import { SupportTicketAttachmentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/support-ticket-attachment/support-ticket-attachment-entity.auto-mapper.profile';
+import { SupportTicketMessageEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/support-ticket-message/support-ticket-message-entity.auto-mapper.profile';
 import { SystemActivityEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/system-activity/system-activity-entity.auto-mapper.profile';
 import { GetTutorialQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/tutorial/get-tutorial-query-result.auto-mapper.profile';
 import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/tutorial/tutorial-entity.auto-mapper.profile';
@@ -598,6 +602,10 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetOrganizationCustomizationDocumentHeaderTemplateQueryResultAutoMapperProfile,
     OrganizationCustomizationDocumentFooterTemplateEntityAutoMapperProfile,
     GetOrganizationCustomizationDocumentFooterTemplateQueryResultAutoMapperProfile,
+    SupportAttendantEntityAutoMapperProfile,
+    SupportTicketEntityAutoMapperProfile,
+    SupportTicketAttachmentEntityAutoMapperProfile,
+    SupportTicketMessageEntityAutoMapperProfile,
   ],
   exports: [AutoMapperService],
 })
