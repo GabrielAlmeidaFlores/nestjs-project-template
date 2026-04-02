@@ -76,6 +76,8 @@ import { DisabilityRetirementPlanningGrantLegalProceedingTypeormCommandRepositor
 import { DisabilityRetirementPlanningGrantPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-grant-period/disability-retirement-planning-grant-period.typeorm.command.repository';
 import { DisabilityRetirementPlanningGrantPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-grant-period/disability-retirement-planning-grant-period.typeorm.query.repository';
 import { DisabilityRetirementPlanningGrantPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-grant-period-document/disability-retirement-planning-grant-period-document.typeorm.command.repository';
+import { DisabilityRetirementPlanningGrantPeriodEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-grant-period-earnings-history/disability-retirement-planning-grant-period-earnings-history.typeorm.command.repository';
+import { DisabilityRetirementPlanningGrantPeriodEarningsHistoryTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-grant-period-earnings-history/disability-retirement-planning-grant-period-earnings-history.typeorm.query.repository';
 import { DisabilityRetirementPlanningGrantResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-grant-result/disability-retirement-planning-grant-result.typeorm.command.repository';
 import { DisabilityRetirementPlanningGrantTimeAcceleratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-grant-time-accelerator/disability-retirement-planning-grant-time-accelerator.typeorm.command.repository';
 import { DisabilityRetirementPlanningGrantTimeAcceleratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-grant-time-accelerator/disability-retirement-planning-grant-time-accelerator.typeorm.query.repository';
@@ -402,6 +404,8 @@ import { DisabilityRetirementPlanningGrantLegalProceedingCommandRepositoryGatewa
 import { DisabilityRetirementPlanningGrantPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/repository/disability-retirement-planning-grant-period/command/disability-retirement-planning-grant-period.command.repository.gateway';
 import { DisabilityRetirementPlanningGrantPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/repository/disability-retirement-planning-grant-period/query/disability-retirement-planning-grant-period.query.repository.gateway';
 import { DisabilityRetirementPlanningGrantPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/repository/disability-retirement-planning-grant-period-document/command/disability-retirement-planning-grant-period-document.command.repository.gateway';
+import { DisabilityRetirementPlanningGrantPeriodEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/repository/disability-retirement-planning-grant-period-earnings-history/command/disability-retirement-planning-grant-period-earnings-history.command.repository.gateway';
+import { DisabilityRetirementPlanningGrantPeriodEarningsHistoryQueryRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/repository/disability-retirement-planning-grant-period-earnings-history/query/disability-retirement-planning-grant-period-earnings-history.query.repository.gateway';
 import { DisabilityRetirementPlanningGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/repository/disability-retirement-planning-grant-result/command/disability-retirement-planning-grant-result.command.repository.gateway';
 import { DisabilityRetirementPlanningGrantTimeAcceleratorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/repository/disability-retirement-planning-grant-time-accelerator/command/disability-retirement-planning-grant-time-accelerator.command.repository.gateway';
 import { DisabilityRetirementPlanningGrantTimeAcceleratorQueryRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/repository/disability-retirement-planning-grant-time-accelerator/query/disability-retirement-planning-grant-time-accelerator.query.repository.gateway';
@@ -1632,6 +1636,18 @@ const classProvider: ClassProvider[] = [
       DisabilityRetirementPlanningGrantPeriodDocumentCommandRepositoryGateway,
     useClass:
       DisabilityRetirementPlanningGrantPeriodDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      DisabilityRetirementPlanningGrantPeriodEarningsHistoryCommandRepositoryGateway,
+    useClass:
+      DisabilityRetirementPlanningGrantPeriodEarningsHistoryTypeormCommandRepository,
+  },
+  {
+    provide:
+      DisabilityRetirementPlanningGrantPeriodEarningsHistoryQueryRepositoryGateway,
+    useClass:
+      DisabilityRetirementPlanningGrantPeriodEarningsHistoryTypeormQueryRepository,
   },
   {
     provide:
