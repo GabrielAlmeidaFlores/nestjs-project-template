@@ -1,5 +1,4 @@
 import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
-import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
@@ -51,10 +50,10 @@ export class GetSpecialRetirementGrantClientResponseDto extends BaseBuildableDto
 @ResponseDto()
 export class GetSpecialRetirementGrantDocumentResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(SpecialRetirementGrantDocumentId)
-  public id: SpecialRetirementGrantDocumentId;
+  public id: string;
 
-  @ResponseDtoValueObjectProperty(Base64, { description: 'Arquivo em Base64' })
-  public document: Base64;
+  @ResponseDtoStringProperty()
+  public document: string;
 
   @ResponseDtoStringProperty()
   public documentOriginalFileName: string;
@@ -101,10 +100,8 @@ export class GetSpecialRetirementGrantResponseDto extends BaseBuildableDtoObject
   @ResponseDtoBooleanProperty()
   public specialActivity: boolean;
 
-  @ResponseDtoValueObjectProperty(Base64, {
-    description: 'CNIS em Base64',
-  })
-  public cnisDocument: Base64;
+  @ResponseDtoStringProperty()
+  public cnisDocument: string;
 
   @ResponseDtoStringProperty()
   public cnisDocumentOriginalFileName: string;
