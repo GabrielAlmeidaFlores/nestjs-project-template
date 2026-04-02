@@ -7,11 +7,13 @@ import { FederalDocument } from '@core/domain/schema/value-object/federal-docume
 import { AdminTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/admin.typeorm.entity';
 import { AuthIdentityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/auth-identity.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
+import { SupportAttendantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-attendant.typeorm.entity';
 import { AdminId } from '@module/admin/account/domain/schema/entity/admin/value-object/admin-id/admin-id.value-object';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { AuthIdentityEntity } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/auth-identity.entity';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { HashedPassword } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/hashed-password/hashed-password.value-object';
+import { SupportAttendantId } from '@module/support/account/domain/schema/entity/support-attendant/value-object/support-attendant-id/support-attendant-id.value-object';
 
 @Injectable()
 export class AuthIdentityEntityAutoMapperProfile {
@@ -32,6 +34,7 @@ export class AuthIdentityEntityAutoMapperProfile {
     ): AuthIdentityEntity => {
       let customer: CustomerId | null = null;
       let admin: AdminId | null = null;
+      let supportAttendant: SupportAttendantId | null = null;
 
       if (source.customer?.id !== undefined) {
         customer = new CustomerId(source.customer.id);
@@ -39,6 +42,10 @@ export class AuthIdentityEntityAutoMapperProfile {
 
       if (source.admin?.id !== undefined) {
         admin = new AdminId(source.admin.id);
+      }
+
+      if (source.supportAttendant?.id !== undefined) {
+        supportAttendant = new SupportAttendantId(source.supportAttendant.id);
       }
 
       return new AuthIdentityEntity({
@@ -49,6 +56,7 @@ export class AuthIdentityEntityAutoMapperProfile {
         password: new HashedPassword(source.password),
         customer,
         admin,
+        supportAttendant,
       });
     };
 
@@ -68,6 +76,8 @@ export class AuthIdentityEntityAutoMapperProfile {
     ): AuthIdentityTypeormEntity => {
       let customer: CustomerTypeormEntity | undefined = undefined;
       let admin: AdminTypeormEntity | undefined = undefined;
+      let supportAttendant: SupportAttendantTypeormEntity | undefined =
+        undefined;
 
       if (source.customer) {
         customer = {
@@ -81,6 +91,12 @@ export class AuthIdentityEntityAutoMapperProfile {
         } as AdminTypeormEntity;
       }
 
+      if (source.supportAttendant) {
+        supportAttendant = {
+          id: source.supportAttendant.toString(),
+        } as SupportAttendantTypeormEntity;
+      }
+
       return AuthIdentityTypeormEntity.build({
         ...source,
         id: source.id.toString(),
@@ -89,6 +105,7 @@ export class AuthIdentityEntityAutoMapperProfile {
         password: source.password.toString(),
         customer,
         admin,
+        supportAttendant,
       });
     };
 

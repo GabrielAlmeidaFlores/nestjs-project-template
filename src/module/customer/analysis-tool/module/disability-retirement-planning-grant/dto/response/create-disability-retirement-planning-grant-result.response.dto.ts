@@ -7,6 +7,52 @@ import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/d
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
+export class CreateDisabilityRetirementPlanningGrantResultPeriodEarningsHistoryResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoDateProperty({ required: false })
+  public competence?: Date;
+
+  @ResponseDtoStringProperty({ required: false })
+  public remuneration?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public indicators?: string;
+
+  @ResponseDtoDateProperty({ required: false })
+  public paymentDate?: Date;
+
+  @ResponseDtoStringProperty({ required: false })
+  public contribution?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public contributionSalary?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public analysis?: string;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public competenceBelowTheMinimum?: boolean;
+
+  protected override readonly _type =
+    CreateDisabilityRetirementPlanningGrantResultPeriodEarningsHistoryResponseDto.name;
+}
+
+@ResponseDto()
+export class CreateDisabilityRetirementPlanningGrantResultPeriodResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty()
+  public periodId: string;
+
+  @ResponseDtoObjectProperty(
+    () =>
+      CreateDisabilityRetirementPlanningGrantResultPeriodEarningsHistoryResponseDto,
+    { isArray: true },
+  )
+  public earningsHistory: CreateDisabilityRetirementPlanningGrantResultPeriodEarningsHistoryResponseDto[];
+
+  protected override readonly _type =
+    CreateDisabilityRetirementPlanningGrantResultPeriodResponseDto.name;
+}
+
+@ResponseDto()
 export class CreateDisabilityRetirementPlanningGrantResultRetirementRuleResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
   public retirementRuleName: string;
@@ -115,6 +161,12 @@ export class CreateDisabilityRetirementPlanningGrantResultResponseDto extends Ba
 
   @ResponseDtoStringProperty()
   public analysisResult: string;
+
+  @ResponseDtoObjectProperty(
+    () => CreateDisabilityRetirementPlanningGrantResultPeriodResponseDto,
+    { isArray: true, required: false },
+  )
+  public periods?: CreateDisabilityRetirementPlanningGrantResultPeriodResponseDto[];
 
   protected override readonly _type =
     CreateDisabilityRetirementPlanningGrantResultResponseDto.name;

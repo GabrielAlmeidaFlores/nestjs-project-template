@@ -12,6 +12,7 @@ import {
   GetDisabilityRetirementPlanningGrantLegalProceedingResponseDto,
   GetDisabilityRetirementPlanningGrantResultResponseDto,
   GetDisabilityRetirementPlanningGrantPeriodInGrantResponseDto,
+  GetDisabilityRetirementPlanningGrantPeriodEarningsHistoryResponseDto,
   GetDisabilityRetirementPlanningGrantDisabilityPeriodInGrantResponseDto,
   GetDisabilityRetirementPlanningGrantTimeAcceleratorInGrantResponseDto,
 } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/dto/response/get-disability-retirement-planning-grant.response.dto';
@@ -20,6 +21,7 @@ import {
   DisabilityRetirementPlanningGrantFirstAnalysisBelowMinimumContributionItemModel,
   DisabilityRetirementPlanningGrantFirstAnalysisDisabilityAnalysisModel,
   DisabilityRetirementPlanningGrantFirstAnalysisDocumentModel,
+  DisabilityRetirementPlanningGrantFirstAnalysisEarningsHistoryItemModel,
   DisabilityRetirementPlanningGrantFirstAnalysisModel,
   DisabilityRetirementPlanningGrantFirstAnalysisPeriodModel,
 } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/generic/disability-retirement-planning-grant-first-analysis.model';
@@ -126,8 +128,16 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
       }),
       ...(result.disabilityRetirementPlanningGrantPeriod !== null && {
         disabilityRetirementPlanningGrantPeriod:
-          result.disabilityRetirementPlanningGrantPeriod.map((p) =>
-            GetDisabilityRetirementPlanningGrantPeriodInGrantResponseDto.build({
+          result.disabilityRetirementPlanningGrantPeriod.map((p) => {
+            const periodEarningsHistory = (
+              result.disabilityRetirementPlanningGrantPeriodEarningsHistory ?? []
+            ).filter(
+              (eh) =>
+                eh.disabilityRetirementPlanningGrantPeriodId.toString() ===
+                p.id.toString(),
+            );
+
+            return GetDisabilityRetirementPlanningGrantPeriodInGrantResponseDto.build({
               startDate: p.startDate,
               ...(p.endDate !== null && { endDate: p.endDate }),
               category: p.category,
@@ -150,8 +160,38 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
                 contributionAverage: p.contributionAverage,
               }),
               ...(p.bondOrigin !== null && { bondOrigin: p.bondOrigin }),
-            }),
-          ),
+              ...(periodEarningsHistory.length > 0 && {
+                earningsHistory: periodEarningsHistory.map((eh) =>
+                  GetDisabilityRetirementPlanningGrantPeriodEarningsHistoryResponseDto.build(
+                    {
+                      ...(eh.competence !== null && {
+                        competence: eh.competence,
+                      }),
+                      ...(eh.remuneration !== null && {
+                        remuneration: eh.remuneration,
+                      }),
+                      ...(eh.indicators !== null && {
+                        indicators: eh.indicators,
+                      }),
+                      ...(eh.paymentDate !== null && {
+                        paymentDate: eh.paymentDate,
+                      }),
+                      ...(eh.contribution !== null && {
+                        contribution: eh.contribution,
+                      }),
+                      ...(eh.contributionSalary !== null && {
+                        contributionSalary: eh.contributionSalary,
+                      }),
+                      ...(eh.analysis !== null && { analysis: eh.analysis }),
+                      ...(eh.competenceBelowTheMinimum !== null && {
+                        competenceBelowTheMinimum: eh.competenceBelowTheMinimum,
+                      }),
+                    },
+                  ),
+                ),
+              }),
+            });
+          }),
       }),
       ...(result.disabilityRetirementPlanningGrantDisabilityPeriod !== null && {
         disabilityRetirementPlanningGrantDisabilityPeriod:
@@ -248,6 +288,36 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
                   },
                 ),
             ),
+            ...(period.earningsHistory.length > 0 && {
+                earningsHistory: period.earningsHistory.map((eh) =>
+                  DisabilityRetirementPlanningGrantFirstAnalysisEarningsHistoryItemModel.build(
+                    {
+                      ...(eh.competence !== null && {
+                        competence: new Date(eh.competence),
+                      }),
+                      ...(eh.remuneration !== null && {
+                        remuneration: eh.remuneration,
+                      }),
+                      ...(eh.indicators !== null && {
+                        indicators: eh.indicators,
+                      }),
+                      ...(eh.paymentDate !== null && {
+                        paymentDate: new Date(eh.paymentDate),
+                      }),
+                      ...(eh.contribution !== null && {
+                        contribution: eh.contribution,
+                      }),
+                      ...(eh.contributionSalary !== null && {
+                        contributionSalary: eh.contributionSalary,
+                      }),
+                      ...(eh.analysis !== null && { analysis: eh.analysis }),
+                      ...(eh.competenceBelowTheMinimum !== null && {
+                        competenceBelowTheMinimum: eh.competenceBelowTheMinimum,
+                      }),
+                    },
+                  ),
+                ),
+              }),
             ...(period.reasonPendency !== undefined && {
               reasonPendency: period.reasonPendency,
             }),

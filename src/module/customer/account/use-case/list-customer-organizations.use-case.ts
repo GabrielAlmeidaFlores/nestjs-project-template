@@ -6,7 +6,6 @@ import { OrganizationQueryRepositoryGateway } from '@module/customer/account/dom
 import { GetOrganizationResponseDto } from '@module/customer/account/dto/response/get-organization.response.dto';
 import { ListCustomerOrganizationsResponseDto } from '@module/customer/account/dto/response/list-customer-organizations.response.dto';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
-import { FileProcessorGateway } from '@module/customer/account/lib/file-processor/file-processor.gateway';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 
@@ -19,8 +18,6 @@ export class ListCustomerOrganizationsUseCase {
     private readonly customerQueryRepositoryGateway: CustomerQueryRepositoryGateway,
     @Inject(OrganizationQueryRepositoryGateway)
     private readonly organizationQueryRepositoryGateway: OrganizationQueryRepositoryGateway,
-    @Inject(FileProcessorGateway)
-    private readonly fileProcessorGateway: FileProcessorGateway,
   ) {}
 
   public async execute(
@@ -39,25 +36,12 @@ export class ListCustomerOrganizationsUseCase {
         new ListDataInputModel(dto),
       );
 
-    const resourcePromise = organizations.resource.map(async (data) => {
-      const mappedData = GetOrganizationResponseDto.build({
+    const resource = organizations.resource.map((data) => {
+      return GetOrganizationResponseDto.build({
         organizationId: data.id,
         organizationName: data.name,
       });
-
-      if (data.organizationLogo !== null) {
-        const organizationLogoUrl =
-          await this.fileProcessorGateway.getOrganizationLogo(
-            data.organizationLogo,
-          );
-
-        mappedData.organizationLogo = organizationLogoUrl.toString();
-      }
-
-      return mappedData;
     });
-
-    const resource = await Promise.all(resourcePromise);
 
     return ListCustomerOrganizationsResponseDto.build({
       ...organizations,

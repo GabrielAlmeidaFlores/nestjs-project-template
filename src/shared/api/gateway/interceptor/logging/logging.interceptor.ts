@@ -18,6 +18,7 @@ export class LoggingInterceptor implements NestInterceptor {
   private static readonly MAX_RESPONSE_LOG_LENGTH = 1000;
   private static readonly MAX_STACK_LOG_LENGTH = 500;
   private static readonly MAX_ARRAY_DISPLAY_LENGTH = 10;
+  private static readonly MAX_STRING_LENGTH = 200;
   private static readonly HTTP_INTERNAL_SERVER_ERROR_STATUS = 500;
   private static readonly SENSITIVE_FIELDS = [
     'password',
@@ -186,6 +187,12 @@ export class LoggingInterceptor implements NestInterceptor {
 
   private sanitizeData(data: unknown): unknown {
     if (typeof data !== 'object' || data === null) {
+      if (
+        typeof data === 'string' &&
+        data.length > LoggingInterceptor.MAX_STRING_LENGTH
+      ) {
+        return `[truncated, originalLength: ${data.length}]`;
+      }
       return data;
     }
 
@@ -207,6 +214,11 @@ export class LoggingInterceptor implements NestInterceptor {
 
       if (isSensitive) {
         sanitized[key] = '***';
+      } else if (
+        typeof value === 'string' &&
+        value.length > LoggingInterceptor.MAX_STRING_LENGTH
+      ) {
+        sanitized[key] = `[truncated, originalLength: ${value.length}]`;
       } else if (typeof value === 'object' && value !== null) {
         sanitized[key] = this.sanitizeData(value);
       } else {

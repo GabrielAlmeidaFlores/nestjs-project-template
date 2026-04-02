@@ -942,6 +942,14 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise inicial rápida com IA que identifica o tipo de benefício previdenciário mais adequado para o cliente com base em sua situação, idade, gênero, histórico de trabalho e condições de saúde. Retorna o tipo de análise recomendado com descrição do benefício e pontos de atenção.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4890-abcd-ef1234567890'),
+      resource: PaymentPlanPaidResourceTypeEnum.REGULATORY_UPDATES,
+      creditCost: 0,
+      title: 'ATUALIZAÇÕES NORMATIVAS',
+      description:
+        'Acompanhamento semanal automático de atualizações normativas previdenciárias brasileiras via IA. Exibe lista e detalhe de normas publicadas (portarias, instruções normativas, resoluções) com resumo, principais alterações, status de implementação e impacto para os beneficiários.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {

@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { DisabilityRetirementPlanningGrantPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-grant-period-document.typeorm.entity';
+import { DisabilityRetirementPlanningGrantPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-grant-period-earnings-history.typeorm.entity';
 import { DisabilityRetirementPlanningGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-grant.typeorm.entity';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 import { DisabilityRetirementPlanningGrantCategoryEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant/enum/disability-retirement-planning-grant-category.enum';
@@ -114,6 +115,14 @@ export class DisabilityRetirementPlanningGrantPeriodTypeormEntity extends BaseTy
   )
   public disabilityRetirementPlanningGrantPeriodDocument?:
     | DisabilityRetirementPlanningGrantPeriodDocumentTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => DisabilityRetirementPlanningGrantPeriodEarningsHistoryTypeormEntity,
+    (entity) => entity.disabilityRetirementPlanningGrantPeriod,
+  )
+  public disabilityRetirementPlanningGrantPeriodEarningsHistory?:
+    | DisabilityRetirementPlanningGrantPeriodEarningsHistoryTypeormEntity[]
     | undefined;
 
   protected override readonly _type =

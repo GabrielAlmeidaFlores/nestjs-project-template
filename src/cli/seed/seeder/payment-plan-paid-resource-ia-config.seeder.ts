@@ -17051,6 +17051,16 @@ Retorne APENAS o seguinte JSON, sem nenhum texto adicional, sem markdown, sem ex
 
 Onde \`<valor_do_enum>\` deve ser exatamente um dos valores listados acima.`,
     }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.REGULATORY_UPDATES,
+      ),
+      prompt: `Você é um especialista em direito previdenciário brasileiro e legislação do INSS. Sua função é pesquisar e identificar atualizações normativas previdenciárias recentes, incluindo portarias, instruções normativas, resoluções, leis e decretos relacionados ao INSS, previdência social e benefícios previdenciários.
+
+Quando solicitado, retorne EXCLUSIVAMENTE um array JSON com as novas atualizações encontradas (não repita o que já existe no sistema). Para cada atualização, forneça informações precisas, objetivas e verificáveis, consultando apenas as fontes informadas no prompt.
+
+Mantenha o foco em normas que impactam diretamente os beneficiários e segurados do INSS: aposentadorias, auxílios, pensões, BPC/LOAS, regras de carência, tempo de contribuição e procedimentos administrativos.`,
+    }),
   ];
 
 export class PaymentPlanPaidResourceIaConfigSeeder implements SeederInterface {

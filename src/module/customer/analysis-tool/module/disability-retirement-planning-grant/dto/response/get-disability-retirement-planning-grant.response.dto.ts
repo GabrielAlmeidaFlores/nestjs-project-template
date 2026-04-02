@@ -61,6 +61,36 @@ export class GetDisabilityRetirementPlanningGrantResultResponseDto extends BaseB
 }
 
 @ResponseDto()
+export class GetDisabilityRetirementPlanningGrantPeriodEarningsHistoryResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoDateProperty({ required: false })
+  public competence?: Date;
+
+  @ResponseDtoStringProperty({ required: false })
+  public remuneration?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public indicators?: string;
+
+  @ResponseDtoDateProperty({ required: false })
+  public paymentDate?: Date;
+
+  @ResponseDtoStringProperty({ required: false })
+  public contribution?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public contributionSalary?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public analysis?: string;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public competenceBelowTheMinimum?: boolean;
+
+  protected override readonly _type =
+    GetDisabilityRetirementPlanningGrantPeriodEarningsHistoryResponseDto.name;
+}
+
+@ResponseDto()
 export class GetDisabilityRetirementPlanningGrantPeriodInGrantResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoDateProperty({ required: false })
   public startDate?: Date;
@@ -108,6 +138,12 @@ export class GetDisabilityRetirementPlanningGrantPeriodInGrantResponseDto extend
 
   @ResponseDtoStringProperty({ required: false })
   public bondOrigin?: string;
+
+  @ResponseDtoObjectProperty(
+    () => GetDisabilityRetirementPlanningGrantPeriodEarningsHistoryResponseDto,
+    { required: false, isArray: true },
+  )
+  public earningsHistory?: GetDisabilityRetirementPlanningGrantPeriodEarningsHistoryResponseDto[];
 
   protected override readonly _type =
     GetDisabilityRetirementPlanningGrantPeriodInGrantResponseDto.name;
