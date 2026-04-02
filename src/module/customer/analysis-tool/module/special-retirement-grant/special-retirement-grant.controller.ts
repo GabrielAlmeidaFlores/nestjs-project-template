@@ -15,13 +15,11 @@ import { UpdateSpecialRetirementGrantRequestDto } from '@module/customer/analysi
 import { CreateSpecialRetirementGrantCnisResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/create-special-retirement-grant-cnis.response.dto';
 import { CreateSpecialRetirementGrantResultResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/create-special-retirement-grant-result.response.dto';
 import { CreateSpecialRetirementGrantResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/create-special-retirement-grant.response.dto';
-import { DeleteSpecialRetirementGrantResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/delete-special-retirement-grant.response.dto';
 import { GetSpecialRetirementGrantResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/get-special-retirement-grant.response.dto';
 import { UpdateSpecialRetirementGrantResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/update-special-retirement-grant.response.dto';
 import { CreateSpecialRetirementGrantCnisUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/create-special-retirement-grant-cnis.use-case';
 import { CreateSpecialRetirementGrantResultUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/create-special-retirement-grant-result.use-case';
 import { CreateSpecialRetirementGrantUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/create-special-retirement-grant.use-case';
-import { DeleteSpecialRetirementGrantUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/delete-special-retirement-grant.use-case';
 import { DownloadSpecialRetirementGrantCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/download-special-retirement-grant-complete-analysis.use-case';
 import { DownloadSpecialRetirementGrantSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/download-special-retirement-grant-simplified-analysis.use-case';
 import { GetSpecialRetirementGrantUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/get-special-retirement-grant.use-case';
@@ -46,7 +44,6 @@ export class SpecialRetirementGrantController {
     private readonly createSpecialRetirementGrantCnisUseCase: CreateSpecialRetirementGrantCnisUseCase,
     private readonly getSpecialRetirementGrantUseCase: GetSpecialRetirementGrantUseCase,
     private readonly updateSpecialRetirementGrantUseCase: UpdateSpecialRetirementGrantUseCase,
-    private readonly deleteSpecialRetirementGrantUseCase: DeleteSpecialRetirementGrantUseCase,
     private readonly createSpecialRetirementGrantResultUseCase: CreateSpecialRetirementGrantResultUseCase,
     private readonly downloadSpecialRetirementGrantCompleteAnalysisUseCase: DownloadSpecialRetirementGrantCompleteAnalysisUseCase,
     private readonly downloadSpecialRetirementGrantSimplifiedAnalysisUseCase: DownloadSpecialRetirementGrantSimplifiedAnalysisUseCase,
@@ -180,38 +177,6 @@ export class SpecialRetirementGrantController {
       organizationSessionData,
       specialRetirementGrantId,
       dto,
-    );
-  }
-
-  @BuildEndpointSpecification({
-    summary: 'Deletar concessão de aposentadoria especial',
-    userLevel: [UserLevelEnum.CUSTOMER],
-    http: {
-      path: ':specialRetirementGrantId',
-      method: RequestMethod.DELETE,
-    },
-    tag: ['concessao-aposentadoria-especial'],
-    successResponse: {
-      statusCode: HttpStatus.OK,
-      description: 'Concessão de aposentadoria especial deletada com sucesso.',
-      type: DeleteSpecialRetirementGrantResponseDto,
-    },
-    guard: [AuthGuard, OrganizationSessionGuard],
-  })
-  public async deleteSpecialRetirementGrant(
-    @GetSessionData() sessionData: SessionDataModel,
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
-    @Param(
-      'specialRetirementGrantId',
-      new ParseValueObjectPipe(SpecialRetirementGrantId),
-    )
-    specialRetirementGrantId: SpecialRetirementGrantId,
-  ): Promise<DeleteSpecialRetirementGrantResponseDto> {
-    return await this.deleteSpecialRetirementGrantUseCase.execute(
-      sessionData,
-      organizationSessionData,
-      specialRetirementGrantId,
     );
   }
 

@@ -72,23 +72,22 @@ export class CreateSpecialRetirementGrantUseCase {
       throw new OrganizationMemberNotFoundError();
     }
 
-    if (!dto.cnisDocument?.base64) {
+    if (!dto.cnisDocument) {
       throw new SpecialRetirementGrantCnisRequiredError();
     }
 
-    const hasPpp =
-      dto.documents !== undefined &&
-      dto.documents.some(
-        (d) => d.type === SpecialRetirementGrantDocumentTypeEnum.PPP,
-      );
-    if (!hasPpp) {
+    const hasPpp = dto.json.documents?.some(
+      (d) => d.type === SpecialRetirementGrantDocumentTypeEnum.PPP,
+    );
+
+    if (hasPpp === false) {
       throw new SpecialRetirementGrantAtLeastOnePppRequiredError();
     }
 
-    const cnisBuffer = dto.cnisDocument.base64.decodeToBuffer();
+    const cnisBuffer = dto.cnisDocument.buffer;
     const cnisFileModel = FileModel.build({
       buffer: cnisBuffer,
-      originalName: dto.cnisDocument.originalFileName,
+      originalName: dto.cnisDocument.originalName,
       size: cnisBuffer.length,
       encoding: 'base64',
     });
@@ -97,7 +96,7 @@ export class CreateSpecialRetirementGrantUseCase {
 
     const analysisToolClientQueryResult =
       await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
-        dto.analysisToolClientId,
+        dto.json.analysisToolClientId,
         organizationSessionData.organizationId,
         AnalysisToolClientNotFoundError,
       );
@@ -109,15 +108,15 @@ export class CreateSpecialRetirementGrantUseCase {
     });
 
     const specialRetirementGrant = new SpecialRetirementGrantEntity({
-      name: dto.name,
-      specialActivity: dto.specialActivity,
+      name: dto.json.name,
+      specialActivity: dto.json.specialActivity,
       cnisDocument: cnisDocumentKey,
       createdBy: organizationMember.id,
       updatedBy: organizationMember.id,
     });
 
     const benefits =
-      dto.inssBenefitNumber?.map((value) => {
+      dto.json.inssBenefitNumber?.map((value) => {
         return new SpecialRetirementGrantBenefitEntity({
           inssBenefitNumber: value,
           specialRetirementGrant,
@@ -125,7 +124,7 @@ export class CreateSpecialRetirementGrantUseCase {
       }) ?? [];
 
     const legalProceedings =
-      dto.legalProceedingNumber?.map((value) => {
+      dto.json.legalProceedingNumber?.map((value) => {
         return new SpecialRetirementGrantLegalProceedingEntity({
           legalProceedingNumber: value,
           specialRetirementGrant,
@@ -133,9 +132,9 @@ export class CreateSpecialRetirementGrantUseCase {
       }) ?? [];
 
     const documents =
-      dto.documents !== undefined
+      dto.json.documents !== undefined
         ? await Promise.all(
-            dto.documents.map(async (docDto) => {
+            dto.json.documents.map(async (docDto) => {
               const buffer = docDto.document.base64.decodeToBuffer();
               const fileModel = FileModel.build({
                 buffer,
