@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 
+import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { OrganizationPaymentPlanAffiliateCommissionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan-affiliate-commission.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
@@ -81,7 +82,9 @@ export class OrganizationPaymentPlanAffiliateCommissionTypeormQueryRepository
   public async findManyByAffiliateCustomerIdWithFilters(
     affiliateCustomerId: AffiliateCustomerId,
     filters: ListAffiliateCommissionsQueryParam,
-  ): Promise<GetOrganizationPaymentPlanAffiliateCommissionQueryResult[]> {
+  ): Promise<
+    ListDataOutputModel<GetOrganizationPaymentPlanAffiliateCommissionQueryResult>
+  > {
     const where: FindOptionsWhere<OrganizationPaymentPlanAffiliateCommissionTypeormEntity> =
       { affiliateCustomer: { id: affiliateCustomerId.toString() } };
 
@@ -118,11 +121,31 @@ export class OrganizationPaymentPlanAffiliateCommissionTypeormQueryRepository
       });
     }
 
-    return this.mapperGateway.mapArray(
-      entities,
+    const totalItems = entities.length;
+    const skip = (filters.page - 1) * filters.limit;
+    const paginatedEntities = entities.slice(skip, skip + filters.limit);
+
+    const resource = this.mapperGateway.mapArray(
+      paginatedEntities,
       OrganizationPaymentPlanAffiliateCommissionTypeormEntity,
       GetOrganizationPaymentPlanAffiliateCommissionQueryResult,
     );
+
+    return new ListDataOutputModel({
+      page: filters.page,
+      limit: filters.limit,
+      totalItems,
+      resource,
+    });
+  }
+
+  public async countByAffiliateCustomerId(
+    affiliateCustomerId: AffiliateCustomerId,
+  ): Promise<number> {
+    return this.repository.count({
+      where: { affiliateCustomer: { id: affiliateCustomerId.toString() } },
+      withDeleted: true,
+    });
   }
 
   private hasConfirmedPayment(

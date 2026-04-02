@@ -39,7 +39,7 @@ export class ListAffiliateCommissionsUseCase {
       throw new AffiliateCustomerNotFoundError();
     }
 
-    const commissions =
+    const commissionsResult =
       await this.commissionQueryRepository.findManyByAffiliateCustomerIdWithFilters(
         affiliate.id,
         filters,
@@ -47,7 +47,7 @@ export class ListAffiliateCommissionsUseCase {
 
     const affiliateTransfers =
       await this.affiliateBankTransferQueryRepository.findManyByAffiliatePlanCommissionIds(
-        commissions.map((c) => c.id),
+        commissionsResult.resource.map((c) => c.id),
       );
 
     const transferByCommissionId = new Map(
@@ -65,7 +65,7 @@ export class ListAffiliateCommissionsUseCase {
       bankTransfers.map((bt) => [bt.id.toString(), bt]),
     );
 
-    const commissionItems = commissions.map((commission) => {
+    const commissionItems = commissionsResult.resource.map((commission) => {
       const affiliateTransfer = transferByCommissionId.get(
         commission.id.toString(),
       );
@@ -113,7 +113,8 @@ export class ListAffiliateCommissionsUseCase {
     });
 
     return ListAffiliateCommissionsResponseDto.build({
-      commissions: commissionItems,
+      ...commissionsResult,
+      resource: commissionItems,
     });
   }
 }

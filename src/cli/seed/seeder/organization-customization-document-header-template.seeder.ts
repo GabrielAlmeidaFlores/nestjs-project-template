@@ -31,14 +31,7 @@ export class OrganizationCustomizationDocumentHeaderTemplateSeeder implements Se
           '9ae34abf-a3df-4972-9885-67204fa64e41',
         ),
         type: OrganizationCustomizationDocumentHeaderTemplateTypeEnum.MODERN,
-        htmlContent: `<header style="display: flex; width: 100%; justify-content: center; padding: 40px 20px; font-family: sans-serif;">
-  <div style="display: flex; flex-direction: column; align-items: center; width: min-content;">
-    <img src="{{logo}}" alt="{{organizationName}}" style="width: 80%; max-width: 200px; height: auto; margin-bottom: 10px; display: block;">
-    <span style="font-size: 24px; font-weight: bold; white-space: nowrap; color: {{primaryColor}}">
-      {{organizationName}}
-    </span>
-  </div>
-</header>`,
+        htmlContent: `<header><table style="width: 100%;font-family: sans-serif;"><tr><td style="text-align: center;"><p align="center"><img src="{{logo}}"alt="{{organizationName}}" style="height: 60px; width: auto;"/></p><div style="font-size: 16px;font-weight: 300;color: {{secondaryColor}}; margin: 0;">{{organizationName}}</div></td></tr></table></header>`,
       }),
       new OrganizationCustomizationDocumentHeaderTemplateEntity({
         id: new OrganizationCustomizationDocumentHeaderTemplateId(
@@ -46,41 +39,106 @@ export class OrganizationCustomizationDocumentHeaderTemplateSeeder implements Se
         ),
         type: OrganizationCustomizationDocumentHeaderTemplateTypeEnum.CLASSIC,
         htmlContent: `<header>
-  <div style="display: flex; width: 100%; justify-content: space-between; align-items: center; padding: 40px 00px; font-family: sans-serif; box-sizing: border-box; border-bottom: 4px solid {{primaryColor}};">
-    <img src="{{logo}}" alt="{{organizationName}}" style="width: 80%; max-width: 200px; height: auto; margin-bottom: 10px; display: block;">
-    <span style="font-size: 24px; font-weight: bold; white-space: nowrap; color: {{primaryColor}}">
-      {{organizationName}}
-    </span>
-  </div>
-</header>`,
+          <table
+            style="width: 100%;border-bottom: 4px solid {{primaryColor}};font-family: sans-serif;"
+          >
+            <tr>
+              <td style="width: 50%; text-align: left;">
+                <img
+                  src="{{logo}}"
+                  alt="{{organizationName}}"
+                  style="height: 60px; width: auto; padding: 8px 20px;"
+                />
+              </td>
+              <td
+                style="
+                  width: 50%;
+                  text-align: right;
+                  vertical-align: middle;
+                  padding: 8px 20px;"
+              >
+                <span
+                  style="font-size: 16px; font-weight: 300; color: {{primaryColor}}"
+                  >{{organizationName}}</span
+                >
+              </td>
+            </tr>
+          </table>
+        </header>`,
       }),
       new OrganizationCustomizationDocumentHeaderTemplateEntity({
         id: new OrganizationCustomizationDocumentHeaderTemplateId(
           '2fdb0e7e-9c28-4180-a14f-be72447c0536',
         ),
         type: OrganizationCustomizationDocumentHeaderTemplateTypeEnum.STANDOUT_CLASSIC,
-        htmlContent: `<header>
-  <div style="display: flex; width: 100%; justify-content: space-between; align-items: center; padding: 40px 00px; font-family: sans-serif; box-sizing: border-box; border-bottom: 4px solid {{secondaryColor}}; background-color: {{primaryColor}}">
-    <img src="{{logo}}" alt="{{organizationName}}" style="width: 80%; max-width: 200px; height: auto; margin-bottom: 10px; display: block;">
-    <span style="font-size: 24px; font-weight: bold; white-space: nowrap; color: {{secondaryColor}}">
-      {{organizationName}}
-    </span>
-  </div>
-</header>`,
+        htmlContent: `<div
+  style="width:100%; box-sizing:border-box; font-size:10px; line-height:1.2; background-color: {{secondaryColor}}; -webkit-print-color-adjust: exact;"
+>
+  <header>
+    <table
+      style="width: 100%;border-bottom: 4px solid {{primaryColor}};font-family: sans-serif;"
+    >
+      <tr>
+        <td style="width: 50%; text-align: left;">
+          <img
+            src="{{logo}}"
+            alt="{{organizationName}}"
+            style="height: 60px; width: auto; padding: 8px 20px;"
+          />
+        </td>
+        <td
+          style="
+            width: 50%;
+            text-align: right;
+            vertical-align: middle;
+            padding: 8px 20px;
+          "
+        >
+          <span
+            style="font-size: 16px; font-weight: 300; color: {{primaryColor}}"
+            >{{organizationName}}</span
+          >
+        </td>
+      </tr>
+    </table>
+  </header>
+</div>`,
       }),
       new OrganizationCustomizationDocumentHeaderTemplateEntity({
         id: new OrganizationCustomizationDocumentHeaderTemplateId(
           '7c6d980a-c548-4c8f-952c-15f7db49eb39',
         ),
         type: OrganizationCustomizationDocumentHeaderTemplateTypeEnum.MODERN_STANDOUT,
-        htmlContent: `<header style="display: flex; width: 100%; justify-content: center; padding: 40px 20px; font-family: sans-serif; background: {{primaryColor}};">
-  <div style="display: flex; flex-direction: column; align-items: center; width: min-content;">
-    <img src="{{logo}}" alt="{{organizationName}}" style="width: 80%; max-width: 200px; height: auto; margin-bottom: 10px; display: block;">
-    <span style="font-size: 24px; font-weight: bold; white-space: nowrap; color: {{secondaryColor}}">
-      {{organizationName}}
-    </span>
-  </div>
-</header>`,
+        htmlContent: `<div
+  style="width:100%; box-sizing:border-box; font-size:10px; line-height:1.2; background-color: {{primaryColor}}; -webkit-print-color-adjust: exact;"
+>
+  <header>
+    <table style="width: 100%; font-family: sans-serif">
+      <tr>
+        <td
+          style="text-align: center;"
+        >
+          <p align="center">
+            <img
+              src="{{logo}}"
+              alt="{{organizationName}}"
+              style="height: 60px; width: auto;
+            />
+          </p>
+        </td>
+        <td
+          style="text-align: center;"
+        >
+          <div
+            style="font-size: 16px;font-weight: 300;color: {{secondaryColor}}; margin: 0;"
+          >
+            {{organizationName}}
+          </div>
+        </td>
+      </tr>
+    </table>
+  </header>
+</div>`,
       }),
     ];
   }

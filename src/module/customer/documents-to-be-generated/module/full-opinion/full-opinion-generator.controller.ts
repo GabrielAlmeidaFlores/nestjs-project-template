@@ -18,8 +18,11 @@ import { CreateFullOpinionGeneratorUseCase } from '@module/customer/documents-to
 import { DownloadFullOpinionGeneratorCompleteAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/full-opinion/use-case/download-full-opinion-generator-complete-analysis.use-case';
 import { DownloadFullOpinionGeneratorSimplifiedAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/full-opinion/use-case/download-full-opinion-generator-simplified-analysis.use-case';
 import { UpdateFullOpinionGeneratorCompleteAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/full-opinion/use-case/update-full-opinion-generator-complete-analysis.use-case';
+import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
+import { GetOrganizationSessionData } from '@shared/api/util/decorator/property/get-organization-session-data/get-organization-session-data.decorator';
+import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
@@ -71,9 +74,11 @@ export class FullOpinionGeneratorController {
         'Arquivo da análise simplificada do gerador de parecer completo retornado para download.',
       type: Buffer,
     },
-    guard: [],
+    guard: [OrganizationSessionGuard],
   })
   public async downloadFullOpinionGeneratorSimplifiedAnalysisById(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Param(
       'fullOpinionGeneratorId',
       new ParseValueObjectPipe(FullOpinionGeneratorId),
@@ -83,6 +88,7 @@ export class FullOpinionGeneratorController {
     format: ExportDocumentFormatEnum = ExportDocumentFormatEnum.PDF,
   ): Promise<StreamableFile> {
     return await this.downloadFullOpinionGeneratorSimplifiedAnalysisUseCase.execute(
+      organizationSessionData,
       fullOpinionGeneratorId,
       format,
     );
@@ -102,9 +108,11 @@ export class FullOpinionGeneratorController {
         'Arquivo da análise completa do gerador de parecer completo retornado para download.',
       type: Buffer,
     },
-    guard: [],
+    guard: [OrganizationSessionGuard],
   })
   public async downloadFullOpinionGeneratorCompleteAnalysisById(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Param(
       'fullOpinionGeneratorId',
       new ParseValueObjectPipe(FullOpinionGeneratorId),
@@ -114,6 +122,7 @@ export class FullOpinionGeneratorController {
     format: ExportDocumentFormatEnum = ExportDocumentFormatEnum.PDF,
   ): Promise<StreamableFile> {
     return await this.downloadFullOpinionGeneratorCompleteAnalysisUseCase.execute(
+      organizationSessionData,
       fullOpinionGeneratorId,
       format,
     );

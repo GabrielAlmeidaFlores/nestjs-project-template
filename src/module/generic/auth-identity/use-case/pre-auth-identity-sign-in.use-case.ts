@@ -69,7 +69,15 @@ export class PreAuthIdentitySignInUseCase {
 
     const userLevel = authIdentity.admin
       ? UserLevelEnum.ADMIN
-      : UserLevelEnum.CUSTOMER;
+      : authIdentity.customer
+        ? UserLevelEnum.CUSTOMER
+        : authIdentity.supportAttendant
+          ? UserLevelEnum.SUPPORT
+          : null;
+
+    if (userLevel === null) {
+      throw new WrongSignInCredentialsError();
+    }
 
     const isPasswordRight = bcrypt.compareSync(
       dto.password,
@@ -115,7 +123,9 @@ export class PreAuthIdentitySignInUseCase {
 
     if (dto.mfaOption === SignInMFAOptionEnum.EMAIL) {
       const authIdentityName =
-        authIdentity.customer?.name ?? authIdentity.admin?.name;
+        authIdentity.customer?.name ??
+        authIdentity.admin?.name ??
+        authIdentity.supportAttendant?.name;
 
       if (authIdentityName === undefined) {
         throw new WrongSignInCredentialsError();

@@ -68,7 +68,8 @@ export class PreviewOrganizationCustomizationDocumentFooterTemplateUseCase {
       .replace(
         /\{\{footerDescription\}\}/g,
         customization.organizationCustomizationDocumentFooterDescription ?? '',
-      );
+      )
+      .replaceAll('\n', '<br>');
 
     return PreviewOrganizationCustomizationDocumentFooterTemplateResponseDto.build(
       {
