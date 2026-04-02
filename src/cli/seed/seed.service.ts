@@ -10,6 +10,7 @@ import { OrganizationCustomizationDocumentHeaderTemplateSeeder } from '@cli/seed
 import { PaymentPlanPaidResourceIaConfigSeeder } from '@cli/seed/seeder/payment-plan-paid-resource-ia-config.seeder';
 import { PaymentPlanPaidResourceSeeder } from '@cli/seed/seeder/payment-plan-paid-resource.seeder';
 import { PaymentPlanSeeder } from '@cli/seed/seeder/payment-plan.seeder';
+import { RegulatoryUpdateMonitoredSourceSeeder } from '@cli/seed/seeder/regulatory-update-monitored-source.seeder';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 
@@ -30,6 +31,7 @@ export class SeedService {
     private readonly paymentPlanSeeder: PaymentPlanSeeder,
     private readonly organizationCustomizationDocumentHeaderTemplateSeeder: OrganizationCustomizationDocumentHeaderTemplateSeeder,
     private readonly organizationCustomizationDocumentFooterTemplateSeeder: OrganizationCustomizationDocumentFooterTemplateSeeder,
+    private readonly regulatoryUpdateMonitoredSourceSeeder: RegulatoryUpdateMonitoredSourceSeeder,
   ) {}
 
   public async seed(): Promise<void> {
@@ -43,6 +45,7 @@ export class SeedService {
       this.cidTenSeeder,
       this.organizationCustomizationDocumentHeaderTemplateSeeder,
       this.organizationCustomizationDocumentFooterTemplateSeeder,
+      this.regulatoryUpdateMonitoredSourceSeeder,
     ];
 
     const transactions: Array<TransactionType> = [];
