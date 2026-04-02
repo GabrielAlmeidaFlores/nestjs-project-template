@@ -98,7 +98,6 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({ name: 'teacher_retirement_planning_id' })
   public teacherRetirementPlanning?: TeacherRetirementPlanningTypeormEntity | null;
 
-
   @OneToOne(
     () => SpecialCategoryRetirementAnalysisTypeormEntity,
     (entity) => entity.analysisToolRecord,

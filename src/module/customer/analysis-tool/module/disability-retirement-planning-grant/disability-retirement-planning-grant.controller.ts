@@ -1,6 +1,14 @@
-import { Body, HttpStatus, Param, Query, RequestMethod, StreamableFile } from '@nestjs/common';
+import {
+  Body,
+  HttpStatus,
+  Param,
+  Query,
+  RequestMethod,
+  StreamableFile,
+} from '@nestjs/common';
 import { ParseEnumPipe } from '@nestjs/common/pipes';
 
+import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { DisabilityRetirementPlanningGrantId } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant/value-object/disability-retirement-planning-grant-id.value-object';
 import { DisabilityRetirementPlanningGrantDisabilityPeriodId } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-disability-period/value-object/disability-retirement-planning-grant-disability-period-id.value-object';
 import { DisabilityRetirementPlanningGrantPeriodId } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-period/value-object/disability-retirement-planning-grant-period-id.value-object';
@@ -14,13 +22,12 @@ import { UpdateDisabilityRetirementPlanningGrantDisabilityPeriodRequestDto } fro
 import { UpdateDisabilityRetirementPlanningGrantPeriodRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/dto/request/update-disability-retirement-planning-grant-period.request.dto';
 import { UpdateDisabilityRetirementPlanningGrantTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/dto/request/update-disability-retirement-planning-grant-time-accelerator.request.dto';
 import { UpdateDisabilityRetirementPlanningGrantRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/dto/request/update-disability-retirement-planning-grant.request.dto';
+import { AnalyzeDisabilityRetirementPlanningGrantPppResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/dto/response/analyze-disability-retirement-planning-grant-ppp.response.dto';
+import { AnalyzeDisabilityRetirementPlanningGrantTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/dto/response/analyze-disability-retirement-planning-grant-time-accelerator.response.dto';
 import { CreateDisabilityRetirementPlanningGrantDisabilityPeriodResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/dto/response/create-disability-retirement-planning-grant-disability-period.response.dto';
 import { CreateDisabilityRetirementPlanningGrantFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/dto/response/create-disability-retirement-planning-grant-first-analysis.response.dto';
 import { CreateDisabilityRetirementPlanningGrantPeriodResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/dto/response/create-disability-retirement-planning-grant-period.response.dto';
 import { CreateDisabilityRetirementPlanningGrantResultResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/dto/response/create-disability-retirement-planning-grant-result.response.dto';
-import { AnalyzeDisabilityRetirementPlanningGrantPppResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/dto/response/analyze-disability-retirement-planning-grant-ppp.response.dto';
-import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
-import { AnalyzeDisabilityRetirementPlanningGrantTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/dto/response/analyze-disability-retirement-planning-grant-time-accelerator.response.dto';
 import { CreateDisabilityRetirementPlanningGrantResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/dto/response/create-disability-retirement-planning-grant.response.dto';
 import { DeleteDisabilityRetirementPlanningGrantDisabilityPeriodResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/dto/response/delete-disability-retirement-planning-grant-disability-period.response.dto';
 import { DeleteDisabilityRetirementPlanningGrantPeriodResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/dto/response/delete-disability-retirement-planning-grant-period.response.dto';
@@ -36,12 +43,12 @@ import { CreateDisabilityRetirementPlanningGrantDisabilityPeriodUseCase } from '
 import { CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/create-disability-retirement-planning-grant-first-analysis.use-case';
 import { CreateDisabilityRetirementPlanningGrantPeriodUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/create-disability-retirement-planning-grant-period.use-case';
 import { CreateDisabilityRetirementPlanningGrantResultUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/create-disability-retirement-planning-grant-result.use-case';
-import { DownloadDisabilityRetirementPlanningGrantCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/download-disability-retirement-planning-grant-complete-analysis.use-case';
-import { DownloadDisabilityRetirementPlanningGrantSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/download-disability-retirement-planning-grant-simplified-analysis.use-case';
 import { CreateDisabilityRetirementPlanningGrantUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/create-disability-retirement-planning-grant.use-case';
 import { DeleteDisabilityRetirementPlanningGrantDisabilityPeriodUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/delete-disability-retirement-planning-grant-disability-period.use-case';
 import { DeleteDisabilityRetirementPlanningGrantPeriodUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/delete-disability-retirement-planning-grant-period.use-case';
 import { DeleteDisabilityRetirementPlanningGrantTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/delete-disability-retirement-planning-grant-time-accelerator.use-case';
+import { DownloadDisabilityRetirementPlanningGrantCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/download-disability-retirement-planning-grant-complete-analysis.use-case';
+import { DownloadDisabilityRetirementPlanningGrantSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/download-disability-retirement-planning-grant-simplified-analysis.use-case';
 import { GetDisabilityRetirementPlanningGrantUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/get-disability-retirement-planning-grant.use-case';
 import { UpdateDisabilityRetirementPlanningGrantDisabilityPeriodUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/update-disability-retirement-planning-grant-disability-period.use-case';
 import { UpdateDisabilityRetirementPlanningGrantPeriodUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/use-case/update-disability-retirement-planning-grant-period.use-case';
@@ -561,7 +568,8 @@ export class DisabilityRetirementPlanningGrantController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Baixar análise completa da concessão de aposentadoria da pessoa com deficiência',
+    summary:
+      'Baixar análise completa da concessão de aposentadoria da pessoa com deficiência',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':id/download/complete-version',
@@ -594,7 +602,8 @@ export class DisabilityRetirementPlanningGrantController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Baixar análise simplificada da concessão de aposentadoria da pessoa com deficiência',
+    summary:
+      'Baixar análise simplificada da concessão de aposentadoria da pessoa com deficiência',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':id/download/simplified-version',
