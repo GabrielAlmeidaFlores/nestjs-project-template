@@ -6,7 +6,10 @@ import { SupportTypeEnum } from '@shared/system/enum/support-type.enum';
 
 @RequestDto()
 export class ListSupportAttendantsRequestDto extends ListDataRequestDto {
-  @RequestDtoStringProperty({ required: false, description: 'Pesquisar por nome ou e-mail' })
+  @RequestDtoStringProperty({
+    required: false,
+    description: 'Pesquisar por nome ou e-mail',
+  })
   public override search?: string;
 
   @RequestDtoEnumProperty(SupportTypeEnum, { required: false })

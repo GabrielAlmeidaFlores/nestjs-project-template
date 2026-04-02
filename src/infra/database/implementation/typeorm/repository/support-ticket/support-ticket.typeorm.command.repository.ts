@@ -148,7 +148,9 @@ export class SupportTicketTypeormCommandRepository implements SupportTicketComma
       const repository = manager.getRepository(SupportTicketTypeormEntity);
 
       await repository.update(supportTicketId.toString(), {
-        assignedAttendant: { id: attendantId.toString() } as SupportAttendantTypeormEntity,
+        assignedAttendant: {
+          id: attendantId.toString(),
+        } as SupportAttendantTypeormEntity,
       });
     };
   }
