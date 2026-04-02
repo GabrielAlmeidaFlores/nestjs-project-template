@@ -20,9 +20,8 @@ export class UpdateSpecialRetirementGrantDocumentDto extends BaseBuildableDtoObj
   protected override readonly _type =
     UpdateSpecialRetirementGrantDocumentDto.name;
 }
-
 @RequestDto()
-export class UpdateSpecialRetirementGrantRequestDto extends BaseBuildableDtoObject {
+export class UpdateSpecialRetirementGrantJsonRequestDto extends BaseBuildableDtoObject {
   @RequestDtoStringProperty({ required: false })
   public name?: string;
 
@@ -43,6 +42,15 @@ export class UpdateSpecialRetirementGrantRequestDto extends BaseBuildableDtoObje
     required: false,
   })
   public documents?: UpdateSpecialRetirementGrantDocumentDto[];
+
+  protected override readonly _type =
+    UpdateSpecialRetirementGrantJsonRequestDto.name;
+}
+
+@RequestDto()
+export class UpdateSpecialRetirementGrantRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoObjectProperty(() => UpdateSpecialRetirementGrantJsonRequestDto)
+  public json: UpdateSpecialRetirementGrantJsonRequestDto;
 
   protected override readonly _type =
     UpdateSpecialRetirementGrantRequestDto.name;

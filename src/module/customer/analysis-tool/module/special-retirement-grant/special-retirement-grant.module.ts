@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 
 import { DatabaseModule } from '@infra/database/database.module';
+import { CnisAnalyzerModule } from '@lib/cnis-analyzer/cnis-analyzer.module';
+import { CnisProcessorModule } from '@lib/cnis-processor/cnis-processor.module';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
@@ -8,7 +10,6 @@ import { SpecialRetirementGrantController } from '@module/customer/analysis-tool
 import { CreateSpecialRetirementGrantCnisUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/create-special-retirement-grant-cnis.use-case';
 import { CreateSpecialRetirementGrantResultUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/create-special-retirement-grant-result.use-case';
 import { CreateSpecialRetirementGrantUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/create-special-retirement-grant.use-case';
-import { DeleteSpecialRetirementGrantUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/delete-special-retirement-grant.use-case';
 import { DownloadSpecialRetirementGrantCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/download-special-retirement-grant-complete-analysis.use-case';
 import { DownloadSpecialRetirementGrantSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/download-special-retirement-grant-simplified-analysis.use-case';
 import { GetSpecialRetirementGrantUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/get-special-retirement-grant.use-case';
@@ -28,6 +29,8 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     FileProcessorModule,
     AnalysisProcessorModule,
     ExportDocumentModule,
+    CnisAnalyzerModule,
+    CnisProcessorModule,
   ],
   controllers: [SpecialRetirementGrantController],
   providers: [
@@ -35,7 +38,6 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateSpecialRetirementGrantCnisUseCase,
     GetSpecialRetirementGrantUseCase,
     UpdateSpecialRetirementGrantUseCase,
-    DeleteSpecialRetirementGrantUseCase,
     CreateSpecialRetirementGrantResultUseCase,
     DownloadSpecialRetirementGrantCompleteAnalysisUseCase,
     DownloadSpecialRetirementGrantSimplifiedAnalysisUseCase,

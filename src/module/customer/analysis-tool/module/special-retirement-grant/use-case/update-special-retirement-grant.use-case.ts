@@ -26,7 +26,10 @@ import { SpecialRetirementGrantDocumentEntity } from '@module/customer/analysis-
 import { SpecialRetirementGrantDocumentId } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-document/value-object/special-retirement-grant-document-id/special-retirement-grant-document-id.value-object';
 import { SpecialRetirementGrantLegalProceedingEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-legal-proceeding/special-retirement-grant-legal-proceeding.entity';
 import { SpecialRetirementGrantLegalProceedingId } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-legal-proceeding/value-object/special-retirement-grant-legal-proceeding-id/special-retirement-grant-legal-proceeding-id.value-object';
-import { UpdateSpecialRetirementGrantRequestDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/request/update-special-retirement-grant.request.dto';
+import {
+  UpdateSpecialRetirementGrantJsonRequestDto,
+  UpdateSpecialRetirementGrantRequestDto,
+} from '@module/customer/analysis-tool/module/special-retirement-grant/dto/request/update-special-retirement-grant.request.dto';
 import { UpdateSpecialRetirementGrantResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/update-special-retirement-grant.response.dto';
 import { SpecialRetirementGrantAtLeastOnePppRequiredError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-at-least-one-ppp-required.error';
 import { SpecialRetirementGrantCnisRequiredError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-cnis-required.error';
@@ -95,8 +98,8 @@ export class UpdateSpecialRetirementGrantUseCase {
         (doc) => doc.type === SpecialRetirementGrantDocumentTypeEnum.PPP,
       );
 
-    if (dto.documents !== undefined) {
-      const hasPpp = dto.documents.some(
+    if (dto.json.documents !== undefined) {
+      const hasPpp = dto.json.documents.some(
         (doc) => doc.type === SpecialRetirementGrantDocumentTypeEnum.PPP,
       );
       if (!hasPpp) {
@@ -107,8 +110,8 @@ export class UpdateSpecialRetirementGrantUseCase {
     }
 
     const cnisKey =
-      dto.cnisDocument !== undefined
-        ? await this.uploadCnis(dto.cnisDocument)
+      dto.json.cnisDocument !== undefined
+        ? await this.uploadCnis(dto.json.cnisDocument)
         : specialRetirementGrantQueryResult.cnisDocument;
 
     if (!cnisKey) {
@@ -117,9 +120,9 @@ export class UpdateSpecialRetirementGrantUseCase {
 
     const specialRetirementGrant = new SpecialRetirementGrantEntity({
       ...specialRetirementGrantQueryResult,
-      name: dto.name ?? specialRetirementGrantQueryResult.name,
+      name: dto.json.name ?? specialRetirementGrantQueryResult.name,
       specialActivity:
-        dto.specialActivity ??
+        dto.json.specialActivity ??
         specialRetirementGrantQueryResult.specialActivity,
       cnisDocument: cnisKey,
       specialRetirementGrantResult: null,
@@ -171,29 +174,29 @@ export class UpdateSpecialRetirementGrantUseCase {
 
     const transactions: TransactionType[] = [];
 
-    if (dto.documents !== undefined) {
+    if (dto.json.documents !== undefined) {
       const docTransactions = await this.updateDocumentsOnDatabase(
         specialRetirementGrant,
         specialRetirementGrantQueryResult.specialRetirementGrantDocument,
-        dto.documents,
+        dto.json.documents,
       );
       transactions.push(...docTransactions);
     }
 
-    if (dto.inssBenefitNumber !== undefined) {
+    if (dto.json.inssBenefitNumber !== undefined) {
       const benefitTransactions = this.updateBenefitsOnDatabase(
         specialRetirementGrant,
         specialRetirementGrantQueryResult.specialRetirementGrantBenefit,
-        dto.inssBenefitNumber,
+        dto.json.inssBenefitNumber,
       );
       transactions.push(...benefitTransactions);
     }
 
-    if (dto.legalProceedingNumber !== undefined) {
+    if (dto.json.legalProceedingNumber !== undefined) {
       const legalProceedingTransactions = this.updateLegalProceedingsOnDatabase(
         specialRetirementGrant,
         specialRetirementGrantQueryResult.specialRetirementGrantLegalProceeding,
-        dto.legalProceedingNumber,
+        dto.json.legalProceedingNumber,
       );
       transactions.push(...legalProceedingTransactions);
     }
@@ -240,7 +243,7 @@ export class UpdateSpecialRetirementGrantUseCase {
   private async updateDocumentsOnDatabase(
     specialRetirementGrant: SpecialRetirementGrantEntity,
     existingDocuments: GetSpecialRetirementGrantDocumentQueryResult[],
-    newDocumentDtos: UpdateSpecialRetirementGrantRequestDto['documents'],
+    newDocumentDtos: UpdateSpecialRetirementGrantJsonRequestDto['documents'],
   ): Promise<TransactionType[]> {
     const transactions: TransactionType[] = [];
 
