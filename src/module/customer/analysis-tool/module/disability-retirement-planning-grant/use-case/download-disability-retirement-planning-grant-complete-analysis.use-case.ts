@@ -9,9 +9,10 @@ import { DisabilityRetirementPlanningGrantQueryRepositoryGateway } from '@module
 import { DisabilityRetirementPlanningGrantId } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant/value-object/disability-retirement-planning-grant-id.value-object';
 import { DisabilityRetirementPlanningGrantCompleteAnalysisDownloadNotFoundError } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/error/disability-retirement-planning-grant-complete-analysis-download-not-found.error';
 import { DisabilityRetirementPlanningGrantNotFoundError } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/error/disability-retirement-planning-grant-not-found.error';
-import type { DisabilityRetirementPlanningGrantResultInterface } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/disability-retirement-planning-grant-result.interface';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+
+import type { DisabilityRetirementPlanningGrantResultInterface } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/disability-retirement-planning-grant-result.interface';
 
 @Injectable()
 export class DownloadDisabilityRetirementPlanningGrantCompleteAnalysisUseCase {
@@ -90,8 +91,9 @@ export class DownloadDisabilityRetirementPlanningGrantCompleteAnalysisUseCase {
         cleanedJson = JSON.parse(cleanedJson) as string;
       }
 
-      const parsed =
-        JSON.parse(cleanedJson) as DisabilityRetirementPlanningGrantResultInterface;
+      const parsed = JSON.parse(
+        cleanedJson,
+      ) as DisabilityRetirementPlanningGrantResultInterface;
 
       return typeof parsed.analysisResult === 'string'
         ? parsed.analysisResult

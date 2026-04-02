@@ -121,6 +121,8 @@ export class AnalyzeDisabilityRetirementPlanningGrantPppUseCase {
       cleanedJson = JSON.parse(cleanedJson) as string;
     }
 
-    return JSON.parse(cleanedJson) as DisabilityRetirementPlanningGrantPppAnalysisResultInterface;
+    return JSON.parse(
+      cleanedJson,
+    ) as DisabilityRetirementPlanningGrantPppAnalysisResultInterface;
   }
 }
