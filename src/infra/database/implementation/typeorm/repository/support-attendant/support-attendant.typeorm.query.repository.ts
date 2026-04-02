@@ -47,6 +47,7 @@ export class SupportAttendantTypeormQueryRepository
     }
 
     return GetSupportAttendantByAuthIdentityIdQueryResult.build({
+      id: new SupportAttendantId(supportAttendant.id),
       name: supportAttendant.name,
       supportType: supportAttendant.supportType,
     });

@@ -5,7 +5,9 @@ import { EntityManager, Repository } from 'typeorm';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { AuthIdentityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/auth-identity.typeorm.entity';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
+import { SupportAttendantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-attendant.typeorm.entity';
 import { SupportTicketTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-ticket.typeorm.entity';
+import { SupportAttendantId } from '@module/support/account/domain/schema/entity/support-attendant/value-object/support-attendant-id/support-attendant-id.value-object';
 import { SupportTicketCommandRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket/command/support-ticket.command.repository.gateway';
 import { GetSupportTicketQueryResult } from '@module/support/service-desk/domain/repository/support-ticket/query/result/get-support-ticket.query.result';
 import { SupportTicketStatusEnum } from '@module/support/service-desk/domain/schema/entity/support-ticket/enum/support-ticket-status.enum';
@@ -135,5 +137,19 @@ export class SupportTicketTypeormCommandRepository implements SupportTicketComma
       updatedAt: updatedSupportTicket.updatedAt,
       attachments: null,
     });
+  }
+
+  public assignAttendantByIdTransaction(
+    supportTicketId: SupportTicketId,
+    attendantId: SupportAttendantId,
+  ): TransactionType {
+    return async (executor: unknown) => {
+      const manager = executor as EntityManager;
+      const repository = manager.getRepository(SupportTicketTypeormEntity);
+
+      await repository.update(supportTicketId.toString(), {
+        assignedAttendant: { id: attendantId.toString() } as SupportAttendantTypeormEntity,
+      });
+    };
   }
 }

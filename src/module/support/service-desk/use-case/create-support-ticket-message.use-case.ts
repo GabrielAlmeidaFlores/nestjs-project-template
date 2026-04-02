@@ -82,6 +82,10 @@ export class CreateSupportTicketMessageUseCase {
           supportTicket.id,
           SupportTicketStatusEnum.IN_PROGRESS,
         ),
+        this.supportTicketCommandRepositoryGateway.assignAttendantByIdTransaction(
+          supportTicket.id,
+          supportAttendant.id,
+        ),
       );
     }
 

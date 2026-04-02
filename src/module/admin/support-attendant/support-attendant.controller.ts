@@ -10,12 +10,18 @@ import { ListSupportAttendantsResponseDto } from '@module/admin/support-attendan
 import { UpdateSupportAttendantResponseDto } from '@module/admin/support-attendant/dto/response/update-support-attendant.response.dto';
 import { CreateSupportAttendantUseCase } from '@module/admin/support-attendant/use-case/create-support-attendant.use-case';
 import { GetSupportAttendantDetailsUseCase } from '@module/admin/support-attendant/use-case/get-support-attendant-details.use-case';
+import { GetSupportTicketDetailsAdminUseCase } from '@module/admin/support-attendant/use-case/get-support-ticket-details-admin.use-case';
 import { ListSupportAttendantsUseCase } from '@module/admin/support-attendant/use-case/list-support-attendants.use-case';
+import { ListSupportTicketMessagesAdminUseCase } from '@module/admin/support-attendant/use-case/list-support-ticket-messages-admin.use-case';
 import { ListTicketsAdminUseCase } from '@module/admin/support-attendant/use-case/list-tickets-admin.use-case';
 import { UpdateSupportAttendantUseCase } from '@module/admin/support-attendant/use-case/update-support-attendant.use-case';
 import { ListSupportAttendantsQueryParam } from '@module/support/account/domain/repository/support-attendant/query/param/list-support-attendants.query.param';
 import { SupportAttendantId } from '@module/support/account/domain/schema/entity/support-attendant/value-object/support-attendant-id/support-attendant-id.value-object';
+import { ListSupportTicketMessagesRequestDto } from '@module/support/service-desk/dto/request/list-support-ticket-messages.request.dto';
+import { GetSupportTicketDetailsResponseDto } from '@module/support/service-desk/dto/response/get-support-ticket-details.response.dto';
+import { ListSupportTicketMessagesResponseDto } from '@module/support/service-desk/dto/response/list-support-ticket-messages.response.dto';
 import { ListSupportTicketsResponseDto } from '@module/support/service-desk/dto/response/list-support-tickets.response.dto';
+import { SupportTicketId } from '@module/support/service-desk/domain/schema/entity/support-ticket/value-object/support-ticket-id/support-ticket-id.value-object';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { AdminControllerRoute } from '@shared/api/util/decorator/class/controller-route/admin-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
@@ -32,6 +38,8 @@ export class SupportAttendantController {
     private readonly getSupportAttendantDetailsUseCase: GetSupportAttendantDetailsUseCase,
     private readonly listTicketsAdminUseCase: ListTicketsAdminUseCase,
     private readonly updateSupportAttendantUseCase: UpdateSupportAttendantUseCase,
+    private readonly getSupportTicketDetailsAdminUseCase: GetSupportTicketDetailsAdminUseCase,
+    private readonly listSupportTicketMessagesAdminUseCase: ListSupportTicketMessagesAdminUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -145,5 +153,50 @@ export class SupportAttendantController {
     @Body() dto: UpdateSupportAttendantRequestDto,
   ): Promise<UpdateSupportAttendantResponseDto> {
     return this.updateSupportAttendantUseCase.execute(supportAttendantId, dto);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Obter detalhes de um chamado de suporte',
+    userLevel: [UserLevelEnum.ADMIN],
+    http: {
+      path: 'tickets/:supportTicketId',
+      method: RequestMethod.GET,
+    },
+    tag: ['support-attendant'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Detalhes do chamado retornados com sucesso.',
+      type: GetSupportTicketDetailsResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async getSupportTicketDetails(
+    @Param('supportTicketId', new ParseValueObjectPipe(SupportTicketId))
+    supportTicketId: SupportTicketId,
+  ): Promise<GetSupportTicketDetailsResponseDto> {
+    return this.getSupportTicketDetailsAdminUseCase.execute(supportTicketId);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Listar mensagens de um chamado de suporte',
+    userLevel: [UserLevelEnum.ADMIN],
+    http: {
+      path: 'tickets/:supportTicketId/messages',
+      method: RequestMethod.GET,
+    },
+    tag: ['support-attendant'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Mensagens do chamado retornadas com sucesso.',
+      type: ListSupportTicketMessagesResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async listSupportTicketMessages(
+    @Param('supportTicketId', new ParseValueObjectPipe(SupportTicketId))
+    supportTicketId: SupportTicketId,
+    @Query() dto: ListSupportTicketMessagesRequestDto,
+  ): Promise<ListSupportTicketMessagesResponseDto> {
+    return this.listSupportTicketMessagesAdminUseCase.execute(supportTicketId, dto);
   }
 }
