@@ -217,6 +217,10 @@ import { GetMedicalQuestionGeneratorLegalProceedingQueryResultAutoMapperProfile 
 import { MedicalQuestionGeneratorLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator-legal-proceeding/medical-question-generator-legal-proceeding-entity.auto-mapper.profile';
 import { GetMedicalQuestionGeneratorResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator-result/get-medical-question-generator-result-query-result.auto-mapper.profile';
 import { MedicalQuestionGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator-result/medical-question-generator-result-entity.auto-mapper.profile';
+import { GetMiniAdvisorWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/mini-advisor/get-mini-advisor-with-relations-query-result.auto-mapper.profile';
+import { MiniAdvisorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/mini-advisor/mini-advisor-entity.auto-mapper.profile';
+import { GetMiniAdvisorResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/mini-advisor-result/get-mini-advisor-result-query-result.auto-mapper.profile';
+import { MiniAdvisorResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/mini-advisor-result/mini-advisor-result-entity.auto-mapper.profile';
 import { GetOrganizationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization/get-organization-query-result.auto-mapper.profile';
 import { OrganizationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization/organization-entity.auto-mapper.profile';
 import { GetOrganizationCreditPurchaseQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-credit/get-organization-credit-purchase-query-result.auto-mapper.profile';
@@ -737,6 +741,10 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetDisabilityRetirementPlanningPeriodSpecialTimeQueryResultAutoMapperProfile,
     DisabilityRetirementPlanningPeriodSpecialTimeDocumentEntityAutoMapperProfile,
     GetDisabilityRetirementPlanningPeriodSpecialTimeDocumentQueryResultAutoMapperProfile,
+    MiniAdvisorEntityAutoMapperProfile,
+    GetMiniAdvisorWithRelationsQueryResultAutoMapperProfile,
+    MiniAdvisorResultEntityAutoMapperProfile,
+    GetMiniAdvisorResultQueryResultAutoMapperProfile,
     CustomerEmailSentEntityAutoMapperProfile,
     CustomerEmailSentAttachmentEntityAutoMapperProfile,
     SystemActivityEntityAutoMapperProfile,
