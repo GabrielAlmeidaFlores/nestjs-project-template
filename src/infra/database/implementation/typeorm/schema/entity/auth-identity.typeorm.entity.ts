@@ -3,6 +3,7 @@ import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { AdminTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/admin.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
+import { SupportAttendantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-attendant.typeorm.entity';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 import { HashTransformer } from '@infra/database/implementation/typeorm/schema/transformer/hash.transformer';
 
@@ -55,6 +56,18 @@ export class AuthIdentityTypeormEntity extends BaseTypeormEntity {
     name: 'admin_id',
   })
   public admin?: AdminTypeormEntity | undefined;
+
+  @OneToOne(
+    () => SupportAttendantTypeormEntity,
+    (entity) => entity.authIdentity,
+    {
+      nullable: true,
+    },
+  )
+  @JoinColumn({
+    name: 'support_attendant_id',
+  })
+  public supportAttendant?: SupportAttendantTypeormEntity | undefined;
 
   protected override readonly _type = AuthIdentityTypeormEntity.name;
 }
