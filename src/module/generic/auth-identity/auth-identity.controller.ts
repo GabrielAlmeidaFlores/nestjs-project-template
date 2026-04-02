@@ -157,7 +157,11 @@ export class AuthIdentityController {
 
   @BuildEndpointSpecification({
     summary: 'Atualizar senha do usuário autenticado',
-    userLevel: [UserLevelEnum.CUSTOMER, UserLevelEnum.ADMIN],
+    userLevel: [
+      UserLevelEnum.CUSTOMER,
+      UserLevelEnum.ADMIN,
+      UserLevelEnum.SUPPORT,
+    ],
     http: {
       path: 'password',
       method: RequestMethod.PATCH,
@@ -183,7 +187,11 @@ export class AuthIdentityController {
 
   @BuildEndpointSpecification({
     summary: 'Validar sessão do usuário autenticado',
-    userLevel: [UserLevelEnum.CUSTOMER, UserLevelEnum.ADMIN],
+    userLevel: [
+      UserLevelEnum.CUSTOMER,
+      UserLevelEnum.ADMIN,
+      UserLevelEnum.SUPPORT,
+    ],
     http: {
       path: 'sign-in/validate',
       method: RequestMethod.GET,
@@ -204,7 +212,11 @@ export class AuthIdentityController {
 
   @BuildEndpointSpecification({
     summary: 'Logout de usuário',
-    userLevel: [UserLevelEnum.CUSTOMER, UserLevelEnum.ADMIN],
+    userLevel: [
+      UserLevelEnum.CUSTOMER,
+      UserLevelEnum.ADMIN,
+      UserLevelEnum.SUPPORT,
+    ],
     http: {
       path: 'sign-out',
       method: RequestMethod.HEAD,

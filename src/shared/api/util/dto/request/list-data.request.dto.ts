@@ -6,10 +6,10 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @RequestDto()
 export class ListDataRequestDto extends BaseBuildableDtoObject {
   @RequestDtoNumberProperty({ example: 1 })
-  public page: number;
+  public page = 1;
 
   @RequestDtoNumberProperty({ example: 10 })
-  public limit: number;
+  public limit = 10;
 
   @RequestDtoStringProperty({ required: false, example: '-createdAt' })
   public sortField?: string;
