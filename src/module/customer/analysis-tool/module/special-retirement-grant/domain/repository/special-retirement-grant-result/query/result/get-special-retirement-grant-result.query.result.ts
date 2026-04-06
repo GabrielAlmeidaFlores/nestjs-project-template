@@ -5,7 +5,9 @@ import type { SpecialRetirementGrantResultId } from '@module/customer/analysis-t
 export class GetSpecialRetirementGrantResultQueryResult extends BaseBuildableObject {
   public readonly id: SpecialRetirementGrantResultId;
   public readonly specialRetirementGrantCompleteAnalysis: string | null;
+  public readonly specialRetirementGrantCompleteAnalysisDownload: string | null;
   public readonly specialRetirementGrantSimplifiedAnalysis: string | null;
+  public readonly specialRetirementGrantFirstAnalysis: string | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

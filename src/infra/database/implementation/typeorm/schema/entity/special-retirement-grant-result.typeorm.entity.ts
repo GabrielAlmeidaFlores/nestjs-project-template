@@ -13,11 +13,25 @@ export class SpecialRetirementGrantResultTypeormEntity extends BaseTypeormEntity
   public specialRetirementGrantCompleteAnalysis: string | null;
 
   @Column({
+    name: 'special_retirement_grant_complete_analysis_download',
+    type: 'longtext',
+    nullable: true,
+  })
+  public specialRetirementGrantCompleteAnalysisDownload: string | null;
+
+  @Column({
     name: 'special_retirement_grant_simplified_analysis',
     type: 'text',
     nullable: true,
   })
   public specialRetirementGrantSimplifiedAnalysis: string | null;
+
+  @Column({
+    name: 'special_retirement_grant_first_analysis',
+    type: 'longtext',
+    nullable: true,
+  })
+  public specialRetirementGrantFirstAnalysis: string | null;
 
   @OneToOne(
     () => SpecialRetirementGrantTypeormEntity,

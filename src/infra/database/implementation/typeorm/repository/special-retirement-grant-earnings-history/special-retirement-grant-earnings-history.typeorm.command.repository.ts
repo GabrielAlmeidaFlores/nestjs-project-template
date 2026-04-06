@@ -46,5 +46,24 @@ export class SpecialRetirementGrantEarningsHistoryTypeormCommandRepository
 
     return this.create(mapped);
   }
-}
 
+  public updateSpecialRetirementGrantEarningsHistory(
+    id: string,
+    props: SpecialRetirementGrantEarningsHistoryEntity,
+  ): TransactionType {
+    return this.update(id, {
+      updatedAt: new Date(),
+      competence: props.competence ?? null,
+      remuneration: props.remuneration ?? null,
+      indicators: props.indicators ?? null,
+      paymentDate: props.paymentDate ?? null,
+      competenceBelowTheMinimum: props.competenceBelowTheMinimum ?? null,
+    } as SpecialRetirementGrantEarningsHistoryTypeormEntity);
+  }
+
+  public deleteSpecialRetirementGrantEarningsHistory(
+    id: string,
+  ): TransactionType {
+    return this.delete(id);
+  }
+}

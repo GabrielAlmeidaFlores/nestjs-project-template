@@ -5,4 +5,13 @@ export abstract class SpecialRetirementGrantEarningsHistoryCommandRepositoryGate
   public abstract createSpecialRetirementGrantEarningsHistory(
     props: SpecialRetirementGrantEarningsHistoryEntity,
   ): TransactionType;
+
+  public abstract updateSpecialRetirementGrantEarningsHistory(
+    id: string,
+    props: SpecialRetirementGrantEarningsHistoryEntity,
+  ): TransactionType;
+
+  public abstract deleteSpecialRetirementGrantEarningsHistory(
+    id: string,
+  ): TransactionType;
 }
