@@ -16,10 +16,10 @@ export class AuthIdentityTypeormEntity extends BaseTypeormEntity {
     name: 'federal_document',
     type: 'varchar',
     length: 50,
-    nullable: true,
     transformer: CryptographyTransformer,
+    unique: true,
   })
-  public federalDocument: string | null;
+  public federalDocument: string;
 
   @Column({
     name: 'password',
@@ -41,9 +41,6 @@ export class AuthIdentityTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'is_active', type: 'boolean', default: true })
   public isActive: boolean;
 
-  @Column({ name: 'must_change_password', type: 'boolean', default: false })
-  public mustChangePassword: boolean;
-
   @OneToOne(() => CustomerTypeormEntity, (entity) => entity.authIdentity, {
     nullable: true,
   })
@@ -63,9 +60,13 @@ export class AuthIdentityTypeormEntity extends BaseTypeormEntity {
   @OneToOne(
     () => SupportAttendantTypeormEntity,
     (entity) => entity.authIdentity,
-    { nullable: true },
+    {
+      nullable: true,
+    },
   )
-  @JoinColumn({ name: 'support_attendant_id' })
+  @JoinColumn({
+    name: 'support_attendant_id',
+  })
   public supportAttendant?: SupportAttendantTypeormEntity | undefined;
 
   protected override readonly _type = AuthIdentityTypeormEntity.name;

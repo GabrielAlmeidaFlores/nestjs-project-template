@@ -1,3 +1,4 @@
+import type { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import type { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
 import type { ListAffiliateCommissionsQueryParam } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-affiliate-commission/query/param/list-affiliate-commissions.query.param';
 import type { GetOrganizationPaymentPlanAffiliateCommissionQueryResult } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-affiliate-commission/query/result/get-organization-payment-plan-affiliate-commission.query.result';
@@ -15,7 +16,9 @@ export abstract class OrganizationPaymentPlanAffiliateCommissionQueryRepositoryG
   public abstract findManyByAffiliateCustomerIdWithFilters(
     affiliateCustomerId: AffiliateCustomerId,
     filters: ListAffiliateCommissionsQueryParam,
-  ): Promise<GetOrganizationPaymentPlanAffiliateCommissionQueryResult[]>;
+  ): Promise<
+    ListDataOutputModel<GetOrganizationPaymentPlanAffiliateCommissionQueryResult>
+  >;
 
   public abstract countByAffiliateCustomerId(
     affiliateCustomerId: AffiliateCustomerId,

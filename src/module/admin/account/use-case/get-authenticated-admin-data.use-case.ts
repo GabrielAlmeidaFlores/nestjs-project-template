@@ -38,9 +38,7 @@ export class GetAuthenticatedAdminDataUseCase {
     const response = GetAuthenticatedAdminDataResponseDto.build({
       name: admin.name,
       email: authIdentity.email,
-      ...(authIdentity.federalDocument !== null && {
-        federalDocument: authIdentity.federalDocument,
-      }),
+      federalDocument: authIdentity.federalDocument,
     });
 
     return response;

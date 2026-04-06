@@ -105,9 +105,15 @@ export class AuthIdentitySignInUseCase {
 
     const userLevel = authIdentity.admin
       ? UserLevelEnum.ADMIN
-      : authIdentity.supportAttendant
-        ? UserLevelEnum.SUPPORT
-        : UserLevelEnum.CUSTOMER;
+      : authIdentity.customer
+        ? UserLevelEnum.CUSTOMER
+        : authIdentity.supportAttendant
+          ? UserLevelEnum.SUPPORT
+          : null;
+
+    if (userLevel === null) {
+      throw new WrongSignInCredentialsError();
+    }
 
     await this.setAuthTokenCookieUseCaseGateway.execute(
       reply,
@@ -117,9 +123,6 @@ export class AuthIdentitySignInUseCase {
 
     return AuthIdentitySignInResponseDto.build({
       userLevel,
-      ...(authIdentity.mustChangePassword && {
-        mustChangePassword: authIdentity.mustChangePassword,
-      }),
     });
   }
 

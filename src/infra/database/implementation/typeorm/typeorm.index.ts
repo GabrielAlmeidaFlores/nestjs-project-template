@@ -124,6 +124,12 @@ import { PerCapitaIncomeForBpcAnalysisFamilyMemberTypeormCommandRepository } fro
 import { PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/per-capita-income-for-bpc-analysis-family-member-document/per-capita-income-for-bpc-analysis-family-member-document.typeorm.command.repository';
 import { PerCapitaIncomeForBpcAnalysisLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/per-capita-income-for-bpc-analysis-legal-proceeding/per-capita-income-for-bpc-analysis-legal-proceeding.typeorm.command.repository';
 import { PerCapitaIncomeForBpcAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/per-capita-income-for-bpc-analysis-result/per-capita-income-for-bpc-analysis-result.typeorm.command.repository';
+import { RegulatoryUpdateTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/regulatory-update/regulatory-update.typeorm.command.repository';
+import { RegulatoryUpdateTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/regulatory-update/regulatory-update.typeorm.query.repository';
+import { RegulatoryUpdateEmailPreferenceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/regulatory-update-email-preference/regulatory-update-email-preference.typeorm.command.repository';
+import { RegulatoryUpdateEmailPreferenceTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/regulatory-update-email-preference/regulatory-update-email-preference.typeorm.query.repository';
+import { RegulatoryUpdateMonitoredSourceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/regulatory-update-monitored-source/regulatory-update-monitored-source.typeorm.command.repository';
+import { RegulatoryUpdateMonitoredSourceTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/regulatory-update-monitored-source/regulatory-update-monitored-source.typeorm.query.repository';
 import { RetirementPlanningRgpsAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-analysis-result/retirement-planning-rgps-analysis-result.typeorm.command.repository';
 import { RetirementPlanningRgpsAnalysisResultTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-analysis-result/retirement-planning-rgps.typeorm.query.repository';
 import { RetirementPlanningRgpsEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-earnings-history/retirement-planning-rgps-earnings-history.typeorm.command.repository';
@@ -145,12 +151,6 @@ import { RuralTimelineAnalysisPeriodPropertyTypeormCommandRepository } from '@in
 import { RuralTimelineAnalysisPeriodResidenceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-period-residence/rural-timeline-analysis-period-residence.typeorm.command.repository';
 import { RuralTimelineCnisContributionPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-cnis-contribution-period-document/rural-timeline-cnis-contribution-period-document.typeorm.command.repository';
 import { RuralTimelineCnisContributionPeriodDocumentTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-cnis-contribution-period-document/rural-timeline-cnis-contribution-period-document.typeorm.query.repository';
-import { SupportAttendantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-attendant.typeorm.command.repository';
-import { SupportAttendantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-attendant.typeorm.query.repository';
-import { SupportTicketAttachmentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-ticket-attachment.typeorm.command.repository';
-import { SupportTicketMessageTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-ticket-message.typeorm.command.repository';
-import { SupportTicketTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-ticket.typeorm.command.repository';
-import { SupportTicketTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-ticket.typeorm.query.repository';
 import { SpecialActivityTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-activity/special-activity.typeorm.command.repository';
 import { SpecialActivityTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-activity/special-activity.typeorm.query.repository';
 import { SpecialActivityDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-activity-document/special-activity-document.typeorm.command.repository';
@@ -261,6 +261,10 @@ import { PerCapitaIncomeForBpcAnalysisFamilyMemberTypeormEntity } from '@infra/d
 import { PerCapitaIncomeForBpcAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis-legal-proceeding.entity';
 import { PerCapitaIncomeForBpcAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis-result.typeorm.entity';
 import { PerCapitaIncomeForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis.typeorm.entity';
+import { RegulatoryUpdateEmailPreferenceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/regulatory-update-email-preference.typeorm.entity';
+import { RegulatoryUpdateMainChangeTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/regulatory-update-main-change.typeorm.entity';
+import { RegulatoryUpdateMonitoredSourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/regulatory-update-monitored-source.typeorm.entity';
+import { RegulatoryUpdateTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/regulatory-update.typeorm.entity';
 import { RetirementPlanningRgpsAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-analysis-result.typeorm.entity';
 import { RetirementPlanningRgpsEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-earnings-history.typeorm.entity';
 import { RetirementPlanningRgpsInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-inss-benefit.typeorm.entity';
@@ -460,15 +464,19 @@ export class TypeormIndex {
     PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentTypeormEntity,
     SystemActivitiesTypeormEntity,
     TutorialTypeormEntity,
+    RegulatoryUpdateTypeormEntity,
+    RegulatoryUpdateEmailPreferenceTypeormEntity,
+    RegulatoryUpdateMonitoredSourceTypeormEntity,
+    RegulatoryUpdateMainChangeTypeormEntity,
     CreditPackTypeormEntity,
     OrganizationCreditPackPurchaseTypeormEntity,
+    OrganizationCustomizationTypeormEntity,
+    OrganizationCustomizationDocumentHeaderTemplateTypeormEntity,
+    OrganizationCustomizationDocumentFooterTemplateTypeormEntity,
     SupportAttendantTypeormEntity,
     SupportTicketTypeormEntity,
     SupportTicketAttachmentTypeormEntity,
     SupportTicketMessageTypeormEntity,
-    OrganizationCustomizationTypeormEntity,
-    OrganizationCustomizationDocumentHeaderTemplateTypeormEntity,
-    OrganizationCustomizationDocumentFooterTemplateTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [
@@ -629,18 +637,18 @@ export class TypeormIndex {
     CreditPackTypeormCommandRepository,
     OrganizationCreditPackPurchaseTypeormQueryRepository,
     OrganizationCreditPackPurchaseTypeormCommandRepository,
-    SupportAttendantTypeormCommandRepository,
-    SupportAttendantTypeormQueryRepository,
-    SupportTicketTypeormCommandRepository,
-    SupportTicketTypeormQueryRepository,
-    SupportTicketAttachmentTypeormCommandRepository,
-    SupportTicketMessageTypeormCommandRepository,
     OrganizationCustomizationTypeormCommandRepository,
     OrganizationCustomizationTypeormQueryRepository,
     OrganizationCustomizationDocumentHeaderTemplateTypeormCommandRepository,
     OrganizationCustomizationDocumentHeaderTemplateTypeormQueryRepository,
     OrganizationCustomizationDocumentFooterTemplateTypeormCommandRepository,
     OrganizationCustomizationDocumentFooterTemplateTypeormQueryRepository,
+    RegulatoryUpdateTypeormQueryRepository,
+    RegulatoryUpdateTypeormCommandRepository,
+    RegulatoryUpdateEmailPreferenceTypeormQueryRepository,
+    RegulatoryUpdateEmailPreferenceTypeormCommandRepository,
+    RegulatoryUpdateMonitoredSourceTypeormQueryRepository,
+    RegulatoryUpdateMonitoredSourceTypeormCommandRepository,
   ];
 
   public static readonly dynamicModule = TypeOrmModule.forFeature(
