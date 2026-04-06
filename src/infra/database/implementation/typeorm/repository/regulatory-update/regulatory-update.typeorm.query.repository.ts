@@ -107,8 +107,8 @@ export class RegulatoryUpdateTypeormQueryRepository
     | FindOptionsWhere<RegulatoryUpdateTypeormEntity>
     | FindOptionsWhere<RegulatoryUpdateTypeormEntity>[] {
     const dateFilter =
-      param.dateFrom !== null && param.dateTo !== null
-        ? { publishedAt: Between(param.dateFrom, param.dateTo) }
+      param.dateStart !== null && param.dateEnd !== null
+        ? { publishedAt: Between(param.dateStart, param.dateEnd) }
         : {};
 
     if (param.searchBy === null || param.searchBy.trim() === '') {
