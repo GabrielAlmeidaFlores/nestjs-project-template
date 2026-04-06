@@ -69,9 +69,15 @@ export class PreAuthIdentitySignInUseCase {
 
     const userLevel = authIdentity.admin
       ? UserLevelEnum.ADMIN
-      : authIdentity.supportAttendant
-        ? UserLevelEnum.SUPPORT
-        : UserLevelEnum.CUSTOMER;
+      : authIdentity.customer
+        ? UserLevelEnum.CUSTOMER
+        : authIdentity.supportAttendant
+          ? UserLevelEnum.SUPPORT
+          : null;
+
+    if (userLevel === null) {
+      throw new WrongSignInCredentialsError();
+    }
 
     const isPasswordRight = bcrypt.compareSync(
       dto.password,

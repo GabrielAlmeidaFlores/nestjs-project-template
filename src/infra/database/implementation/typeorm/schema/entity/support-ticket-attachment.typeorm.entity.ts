@@ -5,15 +5,14 @@ import { SupportTicketTypeormEntity } from '@infra/database/implementation/typeo
 
 @Entity({ name: 'support_ticket_attachment' })
 export class SupportTicketAttachmentTypeormEntity extends BaseTypeormEntity {
-  @Column({ name: 'bucket_key', type: 'varchar', length: 500 })
-  public bucketKey: string;
-
-  @Column({ name: 'original_file_name', type: 'varchar', length: 255 })
-  public originalFileName: string;
-
-  @ManyToOne(() => SupportTicketTypeormEntity, (entity) => entity.attachments)
+  @ManyToOne(() => SupportTicketTypeormEntity, (entity) => entity.attachments, {
+    nullable: false,
+  })
   @JoinColumn({ name: 'support_ticket_id' })
-  public supportTicket?: SupportTicketTypeormEntity;
+  public supportTicket: SupportTicketTypeormEntity;
+
+  @Column({ name: 'file_name', type: 'varchar', length: 500 })
+  public fileName: string;
 
   protected override readonly _type = SupportTicketAttachmentTypeormEntity.name;
 }

@@ -3,12 +3,12 @@ import { AdminId } from '@module/admin/account/domain/schema/entity/admin/value-
 import { InvalidPasswordError } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/error/invalid-customer-name.error';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { HashedPassword } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/hashed-password/hashed-password.value-object';
+import { SupportAttendantId } from '@module/support/account/domain/schema/entity/support-attendant/value-object/support-attendant-id/support-attendant-id.value-object';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import type { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import type { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
-import type { SupportAttendantId } from '@module/customer/service-desk/domain/schema/entity/support-attendant/value-object/support-attendant-id/support-attendant-id.value-object';
 import type { AuthIdentityEntityPropsInterface } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/auth-identity.entity.props.interface';
 
 export class AuthIdentityEntity extends BaseEntity<AuthIdentityId> {
@@ -16,7 +16,7 @@ export class AuthIdentityEntity extends BaseEntity<AuthIdentityId> {
   public readonly email: Email;
 
   @Description('Documento federal do cliente.')
-  public readonly federalDocument: FederalDocument | null;
+  public readonly federalDocument: FederalDocument;
 
   @Description('Senha do cliente.')
   public readonly password: string | HashedPassword;
@@ -36,9 +36,6 @@ export class AuthIdentityEntity extends BaseEntity<AuthIdentityId> {
   @Description('Indica se a identidade de autenticação está ativa.')
   public readonly isActive: boolean;
 
-  @Description('Indica se o usuário deve alterar a senha no próximo login.')
-  public readonly mustChangePassword: boolean;
-
   protected readonly _type = AuthIdentityEntity.name;
 
   public constructor(props: AuthIdentityEntityPropsInterface) {
@@ -47,14 +44,13 @@ export class AuthIdentityEntity extends BaseEntity<AuthIdentityId> {
     super(AuthIdentityId, props);
 
     this.email = props.email;
-    this.federalDocument = props.federalDocument ?? null;
+    this.federalDocument = props.federalDocument;
     this.password = props.password;
     this.authenticatorAppSecret = props.authenticatorAppSecret ?? null;
     this.customer = props.customer ?? null;
     this.admin = props.admin ?? null;
     this.supportAttendant = props.supportAttendant ?? null;
     this.isActive = props.isActive ?? true;
-    this.mustChangePassword = props.mustChangePassword ?? false;
   }
 
   public static validatePassword(password: string | HashedPassword): void {

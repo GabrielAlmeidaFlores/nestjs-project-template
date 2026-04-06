@@ -1,20 +1,33 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 
+import { AuthIdentityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/auth-identity.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
 import { SupportAttendantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-attendant.typeorm.entity';
-import { SupportTypeEnum } from '@module/customer/service-desk/domain/schema/entity/support-attendant/enum/support-type.enum';
-import { SupportTicketStatusEnum } from '@module/customer/service-desk/domain/schema/entity/support-ticket/enum/support-ticket-status.enum';
-
-import type { SupportTicketAttachmentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-ticket-attachment.typeorm.entity';
-import type { SupportTicketMessageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-ticket-message.typeorm.entity';
+import { SupportTicketAttachmentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-ticket-attachment.typeorm.entity';
+import { SupportTicketMessageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-ticket-message.typeorm.entity';
+import { SupportTicketStatusEnum } from '@module/support/service-desk/domain/schema/entity/support-ticket/enum/support-ticket-status.enum';
+import { SupportTypeEnum } from '@shared/system/enum/support-type.enum';
 
 @Entity({ name: 'support_ticket' })
+@Index('UQ_support_ticket_org_number', ['organization', 'ticketNumber'], {
+  unique: true,
+})
 export class SupportTicketTypeormEntity extends BaseTypeormEntity {
-  @Column({ name: 'organization_id', type: 'varchar', length: 36 })
-  public organizationId: string;
+  @ManyToOne(() => OrganizationTypeormEntity, { nullable: false })
+  @JoinColumn({ name: 'organization_id' })
+  public organization: OrganizationTypeormEntity;
 
-  @Column({ name: 'requester_auth_identity_id', type: 'varchar', length: 36 })
-  public requesterAuthIdentityId: string;
+  @ManyToOne(() => AuthIdentityTypeormEntity, { nullable: false })
+  @JoinColumn({ name: 'requester_auth_identity_id' })
+  public requesterAuthIdentity: AuthIdentityTypeormEntity;
 
   @Column({ name: 'requester_email', type: 'varchar', length: 255 })
   public requesterEmail: string;
@@ -25,7 +38,11 @@ export class SupportTicketTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'ticket_number', type: 'varchar', length: 8 })
   public ticketNumber: string;
 
-  @Column({ name: 'support_type', type: 'varchar', length: 50 })
+  @Column({
+    name: 'support_type',
+    type: 'enum',
+    enum: SupportTypeEnum,
+  })
   public supportType: SupportTypeEnum;
 
   @Column({ name: 'subject', type: 'varchar', length: 255 })
@@ -37,27 +54,34 @@ export class SupportTicketTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'description', type: 'longtext' })
   public description: string;
 
-  @Column({ name: 'status', type: 'varchar', length: 50 })
+  @Column({
+    name: 'status',
+    type: 'enum',
+    enum: SupportTicketStatusEnum,
+  })
   public status: SupportTicketStatusEnum;
 
   @ManyToOne(
     () => SupportAttendantTypeormEntity,
     (entity) => entity.assignedTickets,
+    {
+      nullable: true,
+    },
   )
   @JoinColumn({ name: 'assigned_attendant_id' })
-  public assignedAttendant?: SupportAttendantTypeormEntity;
+  public assignedAttendant?: SupportAttendantTypeormEntity | undefined;
 
   @OneToMany(
-    'SupportTicketAttachmentTypeormEntity',
-    (entity: { ticket: SupportTicketTypeormEntity }) => entity.ticket,
+    () => SupportTicketAttachmentTypeormEntity,
+    (entity) => entity.supportTicket,
   )
-  public attachments?: SupportTicketAttachmentTypeormEntity[];
+  public attachments?: SupportTicketAttachmentTypeormEntity[] | undefined;
 
   @OneToMany(
-    'SupportTicketMessageTypeormEntity',
-    (entity: { ticket: SupportTicketTypeormEntity }) => entity.ticket,
+    () => SupportTicketMessageTypeormEntity,
+    (entity) => entity.supportTicket,
   )
-  public messages?: SupportTicketMessageTypeormEntity[];
+  public messages?: SupportTicketMessageTypeormEntity[] | undefined;
 
   protected override readonly _type = SupportTicketTypeormEntity.name;
 }

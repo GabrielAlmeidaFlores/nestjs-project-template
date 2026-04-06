@@ -8,11 +8,10 @@ import type { HashedPassword } from '@module/generic/auth-identity/domain/schema
 export class GetAuthIdentityQueryResult extends BaseBuildableObject {
   public readonly id: AuthIdentityId;
   public readonly email: Email;
-  public readonly federalDocument: FederalDocument | null;
+  public readonly federalDocument: FederalDocument;
   public readonly password: HashedPassword;
   public readonly authenticatorAppSecret: string | null;
   public readonly isActive: boolean;
-  public readonly mustChangePassword: boolean;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

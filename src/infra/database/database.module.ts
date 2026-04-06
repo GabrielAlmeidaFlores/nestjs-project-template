@@ -145,6 +145,12 @@ import { PerCapitaIncomeForBpcAnalysisFamilyMemberTypeormQueryRepository } from 
 import { PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/per-capita-income-for-bpc-analysis-family-member-document/per-capita-income-for-bpc-analysis-family-member-document.typeorm.command.repository';
 import { PerCapitaIncomeForBpcAnalysisLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/per-capita-income-for-bpc-analysis-legal-proceeding/per-capita-income-for-bpc-analysis-legal-proceeding.typeorm.command.repository';
 import { PerCapitaIncomeForBpcAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/per-capita-income-for-bpc-analysis-result/per-capita-income-for-bpc-analysis-result.typeorm.command.repository';
+import { RegulatoryUpdateTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/regulatory-update/regulatory-update.typeorm.command.repository';
+import { RegulatoryUpdateTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/regulatory-update/regulatory-update.typeorm.query.repository';
+import { RegulatoryUpdateEmailPreferenceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/regulatory-update-email-preference/regulatory-update-email-preference.typeorm.command.repository';
+import { RegulatoryUpdateEmailPreferenceTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/regulatory-update-email-preference/regulatory-update-email-preference.typeorm.query.repository';
+import { RegulatoryUpdateMonitoredSourceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/regulatory-update-monitored-source/regulatory-update-monitored-source.typeorm.command.repository';
+import { RegulatoryUpdateMonitoredSourceTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/regulatory-update-monitored-source/regulatory-update-monitored-source.typeorm.query.repository';
 import { RetirementPlanningRgpsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps/retirement-planning-rgps.typeorm.command.repository';
 import { RetirementPlanningRgpsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps/retirement-planning-rgps.typeorm.query.repository';
 import { RetirementPlanningRgpsAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-analysis-result/retirement-planning-rgps-analysis-result.typeorm.command.repository';
@@ -205,12 +211,6 @@ import { RuralTimelineCnisContributionPeriodDocumentTypeormCommandRepository } f
 import { RuralTimelineCnisContributionPeriodDocumentTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-cnis-contribution-period-document/rural-timeline-cnis-contribution-period-document.typeorm.query.repository';
 import { RuralTimelineCnisContributionPeriodOverdueContributionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-cnis-contribution-period-overdue-contribution/rural-timeline-cnis-contribution-period-overdue-contribution.typeorm.command.repository';
 import { RuralTimelineCnisContributionPeriodOverdueContributionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-cnis-contribution-period-overdue-contribution/rural-timeline-cnis-contribution-period-overdue-contribution.typeorm.query.repository';
-import { SupportAttendantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-attendant.typeorm.command.repository';
-import { SupportAttendantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-attendant.typeorm.query.repository';
-import { SupportTicketAttachmentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-ticket-attachment.typeorm.command.repository';
-import { SupportTicketMessageTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-ticket-message.typeorm.command.repository';
-import { SupportTicketTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-ticket.typeorm.command.repository';
-import { SupportTicketTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/service-desk/support-ticket.typeorm.query.repository';
 import { SpecialActivityTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-activity/special-activity.typeorm.command.repository';
 import { SpecialActivityTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-activity/special-activity.typeorm.query.repository';
 import { SpecialActivityDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-activity-document/special-activity-document.typeorm.command.repository';
@@ -223,6 +223,13 @@ import { SpeechGeneratorBenefitTypeormCommandRepository } from '@infra/database/
 import { SpeechGeneratorDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-document/speech-generator-document.typeorm.command.repository';
 import { SpeechGeneratorLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-legal-proceeding/speech-generator-legal-proceeding.typeorm.command.repository';
 import { SpeechGeneratorResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-result/speech-generator-result.typeorm.command.repository';
+import { SupportAttendantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/support-attendant/support-attendant.typeorm.command.repository';
+import { SupportAttendantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/support-attendant/support-attendant.typeorm.query.repository';
+import { SupportTicketTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/support-ticket/support-ticket.typeorm.command.repository';
+import { SupportTicketTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/support-ticket/support-ticket.typeorm.query.repository';
+import { SupportTicketAttachmentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/support-ticket-attachment/support-ticket-attachment.typeorm.command.repository';
+import { SupportTicketMessageTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/support-ticket-message/support-ticket-message.typeorm.command.repository';
+import { SupportTicketMessageTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/support-ticket-message/support-ticket-message.typeorm.query.repository';
 import { SystemActivitiesTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/system-activities/system-activities.typeorm.command.repository';
 import { SystemActivitiesTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/system-activities/system-activities.typeorm.query.repository';
 import { SystemLogTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/system-log/system-log.typeorm.command.repository';
@@ -443,12 +450,12 @@ import { PaymentPlanPaidResourceCommandRepositoryGateway } from '@module/custome
 import { PaymentPlanPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/payment-plan-paid-resource.query.repository.gateway';
 import { PaymentPlanPaidResourceIaConfigCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource-ia-config/command/payment-plan-paid-resource-ia-config.command.repository.gateway';
 import { PaymentPlanPaidResourceIaConfigQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource-ia-config/query/payment-plan-paid-resource-ia-config.query.repository.gateway';
-import { SupportAttendantCommandRepositoryGateway } from '@module/customer/service-desk/domain/repository/support-attendant/command/support-attendant.command.repository.gateway';
-import { SupportAttendantQueryRepositoryGateway } from '@module/customer/service-desk/domain/repository/support-attendant/query/support-attendant.query.repository.gateway';
-import { SupportTicketCommandRepositoryGateway } from '@module/customer/service-desk/domain/repository/support-ticket/command/support-ticket.command.repository.gateway';
-import { SupportTicketQueryRepositoryGateway } from '@module/customer/service-desk/domain/repository/support-ticket/query/support-ticket.query.repository.gateway';
-import { SupportTicketAttachmentCommandRepositoryGateway } from '@module/customer/service-desk/domain/repository/support-ticket-attachment/command/support-ticket-attachment.command.repository.gateway';
-import { SupportTicketMessageCommandRepositoryGateway } from '@module/customer/service-desk/domain/repository/support-ticket-message/command/support-ticket-message.command.repository.gateway';
+import { RegulatoryUpdateCommandRepositoryGateway } from '@module/customer/regulatory-update/domain/repository/regulatory-update/command/regulatory-update.command.repository.gateway';
+import { RegulatoryUpdateQueryRepositoryGateway } from '@module/customer/regulatory-update/domain/repository/regulatory-update/query/regulatory-update.query.repository.gateway';
+import { RegulatoryUpdateEmailPreferenceCommandRepositoryGateway } from '@module/customer/regulatory-update/domain/repository/regulatory-update-email-preference/command/regulatory-update-email-preference.command.repository.gateway';
+import { RegulatoryUpdateEmailPreferenceQueryRepositoryGateway } from '@module/customer/regulatory-update/domain/repository/regulatory-update-email-preference/query/regulatory-update-email-preference.query.repository.gateway';
+import { RegulatoryUpdateMonitoredSourceCommandRepositoryGateway } from '@module/customer/regulatory-update/domain/repository/regulatory-update-monitored-source/command/regulatory-update-monitored-source.command.repository.gateway';
+import { RegulatoryUpdateMonitoredSourceQueryRepositoryGateway } from '@module/customer/regulatory-update/domain/repository/regulatory-update-monitored-source/query/regulatory-update-monitored-source.query.repository.gateway';
 import { TutorialCommandRepositoryGateway } from '@module/customer/tutorial/domain/repository/tutorial/command/tutorial.command.repository.gateway';
 import { TutorialQueryRepositoryGateway } from '@module/customer/tutorial/domain/repository/tutorial/query/tutorial.query.repository.gateway';
 import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
@@ -457,6 +464,13 @@ import { BankPaymentCommandRepositoryGateway } from '@module/generic/bank/domain
 import { BankPaymentQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/query/bank-payment.query.repository.gateway';
 import { BankTransferCommandRepositoryGateway } from '@module/generic/bank/domain/repository/bank-transfer/command/bank-transfer.command.repository.gateway';
 import { BankTransferQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-transfer/query/bank-transfer.query.repository.gateway';
+import { SupportAttendantCommandRepositoryGateway } from '@module/support/account/domain/repository/support-attendant/command/support-attendant.command.repository.gateway';
+import { SupportAttendantQueryRepositoryGateway } from '@module/support/account/domain/repository/support-attendant/query/support-attendant.query.repository.gateway';
+import { SupportTicketCommandRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket/command/support-ticket.command.repository.gateway';
+import { SupportTicketQueryRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket/query/support-ticket.query.repository.gateway';
+import { SupportTicketAttachmentCommandRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket-attachment/command/support-ticket-attachment.command.repository.gateway';
+import { SupportTicketMessageCommandRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket-message/command/support-ticket-message.command.repository.gateway';
+import { SupportTicketMessageQueryRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket-message/query/support-ticket-message.query.repository.gateway';
 import { SystemLogCommandGateway } from '@shared/system/system-log/system-log.command.gateway';
 
 const classProvider: ClassProvider[] = [
@@ -889,6 +903,30 @@ const classProvider: ClassProvider[] = [
   {
     provide: SystemActivitiesQueryRepositoryGateway,
     useClass: SystemActivitiesTypeormQueryRepository,
+  },
+  {
+    provide: SupportAttendantQueryRepositoryGateway,
+    useClass: SupportAttendantTypeormQueryRepository,
+  },
+  {
+    provide: SupportTicketQueryRepositoryGateway,
+    useClass: SupportTicketTypeormQueryRepository,
+  },
+  {
+    provide: SupportTicketCommandRepositoryGateway,
+    useClass: SupportTicketTypeormCommandRepository,
+  },
+  {
+    provide: SupportTicketAttachmentCommandRepositoryGateway,
+    useClass: SupportTicketAttachmentTypeormCommandRepository,
+  },
+  {
+    provide: SupportTicketMessageQueryRepositoryGateway,
+    useClass: SupportTicketMessageTypeormQueryRepository,
+  },
+  {
+    provide: SupportTicketMessageCommandRepositoryGateway,
+    useClass: SupportTicketMessageTypeormCommandRepository,
   },
   {
     provide: CustomerTermsQueryRepositoryGateway,
@@ -1387,30 +1425,6 @@ const classProvider: ClassProvider[] = [
     useClass: OrganizationCreditPackPurchaseTypeormCommandRepository,
   },
   {
-    provide: SupportAttendantCommandRepositoryGateway,
-    useClass: SupportAttendantTypeormCommandRepository,
-  },
-  {
-    provide: SupportAttendantQueryRepositoryGateway,
-    useClass: SupportAttendantTypeormQueryRepository,
-  },
-  {
-    provide: SupportTicketCommandRepositoryGateway,
-    useClass: SupportTicketTypeormCommandRepository,
-  },
-  {
-    provide: SupportTicketQueryRepositoryGateway,
-    useClass: SupportTicketTypeormQueryRepository,
-  },
-  {
-    provide: SupportTicketAttachmentCommandRepositoryGateway,
-    useClass: SupportTicketAttachmentTypeormCommandRepository,
-  },
-  {
-    provide: SupportTicketMessageCommandRepositoryGateway,
-    useClass: SupportTicketMessageTypeormCommandRepository,
-  },
-  {
     provide: OrganizationCustomizationCommandRepositoryGateway,
     useClass: OrganizationCustomizationTypeormCommandRepository,
   },
@@ -1441,6 +1455,34 @@ const classProvider: ClassProvider[] = [
       OrganizationCustomizationDocumentFooterTemplateQueryRepositoryGateway,
     useClass:
       OrganizationCustomizationDocumentFooterTemplateTypeormQueryRepository,
+  },
+  {
+    provide: RegulatoryUpdateQueryRepositoryGateway,
+    useClass: RegulatoryUpdateTypeormQueryRepository,
+  },
+  {
+    provide: RegulatoryUpdateCommandRepositoryGateway,
+    useClass: RegulatoryUpdateTypeormCommandRepository,
+  },
+  {
+    provide: RegulatoryUpdateEmailPreferenceQueryRepositoryGateway,
+    useClass: RegulatoryUpdateEmailPreferenceTypeormQueryRepository,
+  },
+  {
+    provide: RegulatoryUpdateEmailPreferenceCommandRepositoryGateway,
+    useClass: RegulatoryUpdateEmailPreferenceTypeormCommandRepository,
+  },
+  {
+    provide: RegulatoryUpdateMonitoredSourceQueryRepositoryGateway,
+    useClass: RegulatoryUpdateMonitoredSourceTypeormQueryRepository,
+  },
+  {
+    provide: RegulatoryUpdateMonitoredSourceCommandRepositoryGateway,
+    useClass: RegulatoryUpdateMonitoredSourceTypeormCommandRepository,
+  },
+  {
+    provide: SupportAttendantCommandRepositoryGateway,
+    useClass: SupportAttendantTypeormCommandRepository,
   },
 ];
 

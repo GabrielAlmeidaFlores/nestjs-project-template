@@ -10,10 +10,10 @@ import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/sc
 import { SupportAttendantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-attendant.typeorm.entity';
 import { AdminId } from '@module/admin/account/domain/schema/entity/admin/value-object/admin-id/admin-id.value-object';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
-import { SupportAttendantId } from '@module/customer/service-desk/domain/schema/entity/support-attendant/value-object/support-attendant-id/support-attendant-id.value-object';
 import { AuthIdentityEntity } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/auth-identity.entity';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { HashedPassword } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/hashed-password/hashed-password.value-object';
+import { SupportAttendantId } from '@module/support/account/domain/schema/entity/support-attendant/value-object/support-attendant-id/support-attendant-id.value-object';
 
 @Injectable()
 export class AuthIdentityEntityAutoMapperProfile {
@@ -49,18 +49,11 @@ export class AuthIdentityEntityAutoMapperProfile {
       }
 
       return new AuthIdentityEntity({
+        ...source,
         id: new AuthIdentityId(source.id),
         email: new Email(source.email),
-        federalDocument:
-          source.federalDocument !== null
-            ? new FederalDocument(source.federalDocument)
-            : null,
+        federalDocument: new FederalDocument(source.federalDocument),
         password: new HashedPassword(source.password),
-        authenticatorAppSecret: source.authenticatorAppSecret,
-        isActive: source.isActive,
-        createdAt: source.createdAt,
-        updatedAt: source.updatedAt,
-        deletedAt: source.deletedAt,
         customer,
         admin,
         supportAttendant,
@@ -105,18 +98,11 @@ export class AuthIdentityEntityAutoMapperProfile {
       }
 
       return AuthIdentityTypeormEntity.build({
+        ...source,
         id: source.id.toString(),
         email: source.email.toString(),
-        federalDocument: source.federalDocument
-          ? source.federalDocument.toString()
-          : null,
+        federalDocument: source.federalDocument.toString(),
         password: source.password.toString(),
-        authenticatorAppSecret: source.authenticatorAppSecret,
-        isActive: source.isActive,
-        mustChangePassword: source.mustChangePassword,
-        createdAt: source.createdAt,
-        updatedAt: source.updatedAt,
-        deletedAt: source.deletedAt,
         customer,
         admin,
         supportAttendant,

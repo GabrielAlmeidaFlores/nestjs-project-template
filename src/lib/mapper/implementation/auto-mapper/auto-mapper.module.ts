@@ -204,6 +204,9 @@ import { GetPerCapitaIncomeForBpcAnalysisLegalProceedingQueryResultAutoMapperPro
 import { PerCapitaIncomeForBpcAnalysisLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/per-capita-income-for-bpc-analysis-legal-proceeding/per-capita-income-for-bpc-analysis-legal-proceeding-entity.auto-mapper.profile';
 import { GetPerCapitaIncomeForBpcAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/per-capita-income-for-bpc-analysis-result/get-per-capita-income-for-bpc-analysis-result-query-result.auto-mapper.profile';
 import { PerCapitaIncomeForBpcAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/per-capita-income-for-bpc-analysis-result/per-capita-income-for-bpc-analysis-result-entity.auto-mapper.profile';
+import { RegulatoryUpdateEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/regulatory-update/regulatory-update-entity.auto-mapper.profile';
+import { RegulatoryUpdateEmailPreferenceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/regulatory-update-email-preference/regulatory-update-email-preference-entity.auto-mapper.profile';
+import { RegulatoryUpdateMonitoredSourceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/regulatory-update-monitored-source/regulatory-update-monitored-source-entity.auto-mapper.profile';
 import { GetRetirementPlanningRgpsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps/get-retirement-planning-rgps-query-result.auto-mapper.profile';
 import { GetRetirementPlanningRgpsWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps/get-retirement-planning-rgps-with-relations-query-result.auto-mapper.profile';
 import { RetirementPlanningRgpsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps/retirement-planning-rgps-entity.auto-mapper.profile';
@@ -272,10 +275,6 @@ import { RuralTimelineAnalysisPeriodResidenceEntityAutoMapperProfile } from '@li
 import { RuralTimelineCnisContributionPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-cnis-contribution-period-document/rural-timeline-cnis-contribution-period-document-entity.auto-mapper.profile';
 import { GetRuralTimelineCnisContributionPeriodOverdueContributionQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-cnis-contribution-period-overdue-contribution/get-rural-timeline-cnis-contribution-period-overdue-contribution-query-result.auto-mapper.profile';
 import { RuralTimelineCnisContributionPeriodOverdueContributionEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-cnis-contribution-period-overdue-contribution/rural-timeline-cnis-contribution-period-overdue-contribution-entity.auto-mapper.profile';
-import { SupportAttendantEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/service-desk/support-attendant-entity.auto-mapper.profile';
-import { SupportTicketAttachmentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/service-desk/support-ticket-attachment-entity.auto-mapper.profile';
-import { SupportTicketEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/service-desk/support-ticket-entity.auto-mapper.profile';
-import { SupportTicketMessageEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/service-desk/support-ticket-message-entity.auto-mapper.profile';
 import { GetSpecialActivityAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity/get-special-activity-analysis-with-relations-query-result.auto-mapper.profile';
 import { SpecialActivityEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity/special-activity-entity.auto-mapper.profile';
 import { GetSpecialActivityAnalysisDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-document/get-special-activity-analysis-document-query-result.auto-mapper.profile';
@@ -297,6 +296,10 @@ import { GetSpeechGeneratorLegalProceedingQueryResultAutoMapperProfile } from '@
 import { SpeechGeneratorLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-legal-proceeding/speech-generator-legal-proceeding-entity.auto-mapper.profile';
 import { GetSpeechGeneratorResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-result/get-speech-generator-result-query-result.auto-mapper.profile';
 import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-result/speech-generator-result-entity.auto-mapper.profile';
+import { SupportAttendantEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/support-attendant/support-attendant-entity.auto-mapper.profile';
+import { SupportTicketEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/support-ticket/support-ticket-entity.auto-mapper.profile';
+import { SupportTicketAttachmentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/support-ticket-attachment/support-ticket-attachment-entity.auto-mapper.profile';
+import { SupportTicketMessageEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/support-ticket-message/support-ticket-message-entity.auto-mapper.profile';
 import { SystemActivityEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/system-activity/system-activity-entity.auto-mapper.profile';
 import { GetTutorialQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/tutorial/get-tutorial-query-result.auto-mapper.profile';
 import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/tutorial/tutorial-entity.auto-mapper.profile';
@@ -596,16 +599,19 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     TutorialEntityAutoMapperProfile,
     GetTutorialQueryResultAutoMapperProfile,
     CreditPackEntityAutoMapperProfile,
-    SupportAttendantEntityAutoMapperProfile,
-    SupportTicketEntityAutoMapperProfile,
-    SupportTicketAttachmentEntityAutoMapperProfile,
-    SupportTicketMessageEntityAutoMapperProfile,
     OrganizationCustomizationEntityAutoMapperProfile,
     GetOrganizationCustomizationQueryResultAutoMapperProfile,
     OrganizationCustomizationDocumentHeaderTemplateEntityAutoMapperProfile,
     GetOrganizationCustomizationDocumentHeaderTemplateQueryResultAutoMapperProfile,
     OrganizationCustomizationDocumentFooterTemplateEntityAutoMapperProfile,
     GetOrganizationCustomizationDocumentFooterTemplateQueryResultAutoMapperProfile,
+    RegulatoryUpdateEntityAutoMapperProfile,
+    RegulatoryUpdateEmailPreferenceEntityAutoMapperProfile,
+    RegulatoryUpdateMonitoredSourceEntityAutoMapperProfile,
+    SupportAttendantEntityAutoMapperProfile,
+    SupportTicketEntityAutoMapperProfile,
+    SupportTicketAttachmentEntityAutoMapperProfile,
+    SupportTicketMessageEntityAutoMapperProfile,
   ],
   exports: [AutoMapperService],
 })
