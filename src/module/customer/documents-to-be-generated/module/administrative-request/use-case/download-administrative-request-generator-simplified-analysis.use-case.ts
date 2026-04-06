@@ -3,6 +3,7 @@ import { Inject, Injectable, StreamableFile } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
+import { OrganizationCustomizationExportDocumentOptionsResolver } from '@module/customer/analysis-tool/lib/organization-customization-resolver/organization-customization-export-document-options.resolver';
 import { DocumentGeneratorProcessorGateway } from '@module/customer/documents-to-be-generated/lib/document-generator-processor/document-generator-processor.gateway';
 import { AdministrativeRequestGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/administrative-request/domain/repository/administrative-request-generator-analysis-result/command/administrative-request-generator.command.repository.gateway';
 import { AdministrativeRequestGeneratorQueryRepositoryGateway } from '@module/customer/documents-to-be-generated/module/administrative-request/domain/repository/administrative-request-generator-analysis-result/query/administrative-request-generator.query.repository.gateway';
@@ -13,6 +14,7 @@ import { AdministrativeRequestGeneratorDoesNotContainSimplifiedAnalysisError } f
 import { AdministrativeRequestGeneratorNotFoundError } from '@module/customer/documents-to-be-generated/module/administrative-request/error/administrative-request-generator-not-found.error';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
+import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 
 @Injectable()
 export class DownloadAdministrativeRequestGeneratorSimplifiedAnalysisUseCase {
@@ -32,9 +34,12 @@ export class DownloadAdministrativeRequestGeneratorSimplifiedAnalysisUseCase {
     private readonly documentGeneratorProcessorGateway: DocumentGeneratorProcessorGateway,
     @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
+    @Inject(OrganizationCustomizationExportDocumentOptionsResolver)
+    private readonly organizationCustomizationExportDocumentOptionsResolver: OrganizationCustomizationExportDocumentOptionsResolver,
   ) {}
 
   public async execute(
+    organizationSessionData: OrganizationSessionDataModel,
     administrativeRequestGeneratorId: AdministrativeRequestGeneratorId,
     format: ExportDocumentFormatEnum,
   ): Promise<StreamableFile> {
@@ -95,10 +100,16 @@ export class DownloadAdministrativeRequestGeneratorSimplifiedAnalysisUseCase {
       throw new AdministrativeRequestGeneratorDoesNotContainSimplifiedAnalysisError();
     }
 
+    const exportOptions =
+      await this.organizationCustomizationExportDocumentOptionsResolver.execute(
+        organizationSessionData.organizationId,
+      );
+
     return this.exportDocumentGateway.downloadFileAsStreamable(
       responseAi,
       format,
       'analise_simplificada_gerador_requerimento_administrativo',
+      exportOptions,
     );
   }
 }

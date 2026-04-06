@@ -4,6 +4,7 @@ import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/accou
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
+import { OrganizationCustomizationExportDocumentOptionsResolver } from '@module/customer/analysis-tool/lib/organization-customization-resolver/organization-customization-export-document-options.resolver';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/repository/medical-and-social-report-objection-generator-analysis/query/medical-and-social-report-objection-generator-analysis.query.repository.gateway';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisId } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/value-object/medical-and-social-report-objection-generator-analysis-id/medical-and-social-report-objection-generator-analysis-id.value-object';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisDoesNotContainCompleteAnalysisError } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/error/medical-and-social-report-objection-generator-analysis-does-not-contain-complete-analysis.error';
@@ -25,6 +26,8 @@ export class DownloadMedicalAndSocialReportObjectionGeneratorCompleteAnalysisUse
     private readonly medicalAndSocialReportObjectionGeneratorAnalysisQueryRepositoryGateway: MedicalAndSocialReportObjectionGeneratorAnalysisQueryRepositoryGateway,
     @Inject(ExportDocumentGateway)
     private readonly exportDocumentGateway: ExportDocumentGateway,
+    @Inject(OrganizationCustomizationExportDocumentOptionsResolver)
+    private readonly organizationCustomizationExportDocumentOptionsResolver: OrganizationCustomizationExportDocumentOptionsResolver,
   ) {}
 
   public async execute(
@@ -65,10 +68,16 @@ export class DownloadMedicalAndSocialReportObjectionGeneratorCompleteAnalysisUse
       throw new MedicalAndSocialReportObjectionGeneratorAnalysisDoesNotContainCompleteAnalysisError();
     }
 
+    const exportOptions =
+      await this.organizationCustomizationExportDocumentOptionsResolver.execute(
+        organizationSessionData.organizationId,
+      );
+
     return this.exportDocumentGateway.downloadFileAsStreamable(
       responseAi,
       format,
       'analise_completa_geradora_objeção_laudo_medico_social',
+      exportOptions,
     );
   }
 }

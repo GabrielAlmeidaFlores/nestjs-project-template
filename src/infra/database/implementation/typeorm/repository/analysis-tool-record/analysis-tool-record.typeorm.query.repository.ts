@@ -36,6 +36,7 @@ import { AudienceQuestionGeneratorId } from '@module/customer/analysis-tool/modu
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { DisabilityAssessmentForBpcAnalysisId } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/value-object/disability-assessment-for-bpc-analysis-id/disability-assessment-for-bpc-analysis-id.value-object';
 import { DisabilityRetirementPlanningId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
+import { DisabilityRetirementPlanningGrantId } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant/value-object/disability-retirement-planning-grant-id.value-object';
 import { GeneralUrbanRetirementAnalysisId } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/value-object/general-urban-retirement-analysis-id.value-object';
 import { GeneralUrbanRetirementGrantId } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/value-object/general-urban-retirement-grant-id.value-object';
 import { InsuranceQualityAnalysisId } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/value-object/insurance-quality-analysis-id/insurance-quality-analysis-id.value-object';
@@ -110,6 +111,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { audienceQuestionGenerator: Not(IsNull()) },
         { medicalQuestionGenerator: Not(IsNull()) },
         { disabilityRetirementPlanning: Not(IsNull()) },
+        { disabilityRetirementPlanningGrant: Not(IsNull()) },
         { generalUrbanRetirementGrant: Not(IsNull()) },
         { generalUrbanRetirementAnalysis: Not(IsNull()) },
       ];
@@ -1938,6 +1940,65 @@ export class AnalysisToolRecordTypeormQueryRepository
     return mappedData;
   }
 
+  public async findWithRelationsByDisabilityRetirementPlanningGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    disabilityRetirementPlanningGrantId: DisabilityRetirementPlanningGrantId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          disabilityRetirementPlanningGrant: {
+            id: disabilityRetirementPlanningGrantId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          disabilityRetirementPlanningGrant: true,
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
   private getRelationsClauseOperation(): FindOptionsRelations<AnalysisToolRecordTypeormEntity> {
     const relationsClause: FindOptionsRelations<AnalysisToolRecordTypeormEntity> =
       {
@@ -1994,6 +2055,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       'insuranceQualityAnalysis',
       'audienceQuestionGenerator',
       'disabilityRetirementPlanning',
+      'disabilityRetirementPlanningGrant',
     ];
   }
 }

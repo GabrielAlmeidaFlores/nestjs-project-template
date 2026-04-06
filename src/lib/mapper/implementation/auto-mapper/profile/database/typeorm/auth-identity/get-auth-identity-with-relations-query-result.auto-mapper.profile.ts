@@ -7,11 +7,14 @@ import { FederalDocument } from '@core/domain/schema/value-object/federal-docume
 import { AdminTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/admin.typeorm.entity';
 import { AuthIdentityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/auth-identity.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
+import { SupportAttendantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/support-attendant.typeorm.entity';
 import { GetAdminQueryResult } from '@module/admin/account/domain/repository/admin/query/result/get-admin.query.result';
 import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
 import { GetAuthIdentityWithRelationsQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity-with-relations.query.result';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { HashedPassword } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/hashed-password/hashed-password.value-object';
+import { GetSupportAttendantQueryResult } from '@module/support/account/domain/repository/support-attendant/query/result/get-support-attendant.query.result';
+import { SupportAttendantId } from '@module/support/account/domain/schema/entity/support-attendant/value-object/support-attendant-id/support-attendant-id.value-object';
 
 @Injectable()
 export class GetAuthIdentityWithRelationsQueryResultAutoMapperProfile {
@@ -43,6 +46,18 @@ export class GetAuthIdentityWithRelationsQueryResultAutoMapperProfile {
         GetAdminQueryResult,
       );
 
+      const supportAttendant = source.supportAttendant
+        ? GetSupportAttendantQueryResult.build({
+            id: new SupportAttendantId(source.supportAttendant.id),
+            name: source.supportAttendant.name,
+            email: new Email(source.supportAttendant.email),
+            supportType: source.supportAttendant.supportType,
+            isActive: source.supportAttendant.isActive,
+            createdAt: source.supportAttendant.createdAt,
+            updatedAt: source.supportAttendant.updatedAt,
+          })
+        : null;
+
       return GetAuthIdentityWithRelationsQueryResult.build({
         ...source,
         id: new AuthIdentityId(source.id),
@@ -51,6 +66,7 @@ export class GetAuthIdentityWithRelationsQueryResultAutoMapperProfile {
         password: new HashedPassword(source.password),
         customer,
         admin,
+        supportAttendant,
       });
     };
 
@@ -80,6 +96,19 @@ export class GetAuthIdentityWithRelationsQueryResultAutoMapperProfile {
         AdminTypeormEntity,
       );
 
+      const supportAttendant = source.supportAttendant
+        ? SupportAttendantTypeormEntity.build({
+            id: source.supportAttendant.id.toString(),
+            name: source.supportAttendant.name,
+            email: source.supportAttendant.email.toString(),
+            supportType: source.supportAttendant.supportType,
+            isActive: source.supportAttendant.isActive,
+            createdAt: source.supportAttendant.createdAt,
+            updatedAt: source.supportAttendant.updatedAt,
+            deletedAt: null,
+          })
+        : undefined;
+
       return AuthIdentityTypeormEntity.build({
         id: source.id.toString(),
         email: source.email.toString(),
@@ -92,6 +121,7 @@ export class GetAuthIdentityWithRelationsQueryResultAutoMapperProfile {
         deletedAt: source.deletedAt,
         customer,
         admin,
+        supportAttendant,
       });
     };
 

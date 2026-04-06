@@ -6,6 +6,7 @@ import { CnisAnalyzerModule } from '@lib/cnis-analyzer/cnis-analyzer.module';
 import { CnisProcessorModule } from '@lib/cnis-processor/cnis-processor.module';
 import { EventModule } from '@lib/event/event.module';
 import { AnalysisToolController } from '@module/customer/analysis-tool/analysis-tool.controller';
+import { AnalysisActivityTrackerModule } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.module';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
@@ -14,6 +15,10 @@ import { AdministrativeProcedureInssAnalysisModule } from '@module/customer/anal
 import { AudienceQuestionGeneratorModule } from '@module/customer/analysis-tool/module/audience-question-generator/audience-question-generator.module';
 import { CnisFastAnalysisModule } from '@module/customer/analysis-tool/module/cnis-fast-analysis/cnis-fast-analysis.module';
 import { DisabilityAssessmentForBpcAnalysisModule } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.module';
+import { DisabilityRetirementPlanningModule } from '@module/customer/analysis-tool/module/disability-retirement-planning/disability-retirement-planning.module';
+import { DisabilityRetirementPlanningGrantModule } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/disability-retirement-planning-grant.module';
+import { GeneralUrbanRetirementModule } from '@module/customer/analysis-tool/module/general-urban-retirement/general-urban-retirement.module';
+import { GeneralUrbanRetirementGrantModule } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/general-urban-retirement-grant.module';
 import { InsuranceQualityAnalysisModule } from '@module/customer/analysis-tool/module/insurance-quality-analysis/insurance-quality-analysis.module';
 import { JudicialCaseAnalysisModule } from '@module/customer/analysis-tool/module/judicial-case-analysis/judicial-case-analysis.module';
 import { LegalPleadingModule } from '@module/customer/analysis-tool/module/legal-pleading/legal-pleading.module';
@@ -50,6 +55,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     EventModule,
     AuthModule,
     DatabaseModule,
+    AnalysisActivityTrackerModule,
     OrganizationSessionModule,
     OrganizationCreditModule,
     PaymentPlanModule,
@@ -76,6 +82,12 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     RetirementPlanningRgpsModule,
     RetirementPlanningRppsModule,
     SpecialRetirementGrantModule,
+    TeacherRetirementPlanningModule,
+    DisabilityRetirementPlanningModule,
+    DisabilityRetirementPlanningGrantModule,
+    GeneralUrbanRetirementGrantModule,
+    GeneralUrbanRetirementModule,
+    SpecialCategoryRetirementAnalysisModule,
   ],
   controllers: [AnalysisToolController],
   providers: [

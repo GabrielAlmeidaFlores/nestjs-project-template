@@ -39,6 +39,9 @@ export class RetirementPlanningRgpsTimeAcceleratorTypeormQueryRepository
     const data = await this.findOneOrFail(
       {
         where: { id: id.toString(), deletedAt: IsNull() },
+        relations: {
+          retirementPlanningRgps: true,
+        },
       },
       err,
     );

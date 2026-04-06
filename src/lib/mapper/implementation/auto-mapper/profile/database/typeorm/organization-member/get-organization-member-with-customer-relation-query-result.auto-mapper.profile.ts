@@ -43,9 +43,12 @@ export class GetOrganizationMemberWithCustomerRelationQueryResultAutoMapperProfi
       );
 
       return GetOrganizationMemberWithCustomerRelationQueryResult.build({
-        ...source,
         id: new OrganizationMemberId(source.id),
+        owner: source.owner,
         organizationId: new OrganizationId(source.organization.id),
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
         customer,
       });
     };
@@ -71,8 +74,12 @@ export class GetOrganizationMemberWithCustomerRelationQueryResultAutoMapperProfi
       );
 
       return OrganizationMemberTypeormEntity.build({
-        ...source,
         id: source.id.toString(),
+        owner: source.owner,
+        isActive: true,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
         customer,
       });
     };
