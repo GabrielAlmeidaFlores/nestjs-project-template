@@ -74,7 +74,9 @@ export class DownloadSpecialRetirementGrantCompleteAnalysisUseCase {
     }
 
     const currentResult = specialRetirementGrant.specialRetirementGrantResult;
-    const analysis = currentResult.specialRetirementGrantCompleteAnalysis;
+    const analysis =
+      currentResult.specialRetirementGrantCompleteAnalysisDownload ??
+      currentResult.specialRetirementGrantCompleteAnalysis;
     if (analysis === null) {
       throw new SpecialRetirementGrantDoesNotContainCompleteAnalysisError();
     }

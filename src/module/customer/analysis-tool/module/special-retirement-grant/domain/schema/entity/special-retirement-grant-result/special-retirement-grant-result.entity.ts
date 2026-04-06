@@ -7,8 +7,16 @@ export class SpecialRetirementGrantResultEntity extends BaseEntity<SpecialRetire
   @Description('Texto completo da análise.')
   public readonly specialRetirementGrantCompleteAnalysis: string | null;
 
+  @Description('Markdown para download da análise completa.')
+  public readonly specialRetirementGrantCompleteAnalysisDownload: string | null;
+
   @Description('Texto simplificado da análise.')
   public readonly specialRetirementGrantSimplifiedAnalysis: string | null;
+
+  @Description(
+    'JSON da first analysis (linha do tempo + diagnóstico + resumo).',
+  )
+  public readonly specialRetirementGrantFirstAnalysis: string | null;
 
   protected readonly _type = SpecialRetirementGrantResultEntity.name;
 
@@ -16,7 +24,11 @@ export class SpecialRetirementGrantResultEntity extends BaseEntity<SpecialRetire
     super(SpecialRetirementGrantResultId, props);
     this.specialRetirementGrantCompleteAnalysis =
       props.specialRetirementGrantCompleteAnalysis ?? null;
+    this.specialRetirementGrantCompleteAnalysisDownload =
+      props.specialRetirementGrantCompleteAnalysisDownload ?? null;
     this.specialRetirementGrantSimplifiedAnalysis =
       props.specialRetirementGrantSimplifiedAnalysis ?? null;
+    this.specialRetirementGrantFirstAnalysis =
+      props.specialRetirementGrantFirstAnalysis ?? null;
   }
 }

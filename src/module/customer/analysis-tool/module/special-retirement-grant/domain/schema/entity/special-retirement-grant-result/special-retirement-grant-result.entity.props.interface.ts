@@ -3,5 +3,7 @@ import type { SpecialRetirementGrantResultId } from '@module/customer/analysis-t
 
 export interface SpecialRetirementGrantResultEntityPropsInterface extends BaseEntityPropsInterface<SpecialRetirementGrantResultId> {
   specialRetirementGrantCompleteAnalysis?: string | null;
+  specialRetirementGrantCompleteAnalysisDownload?: string | null;
   specialRetirementGrantSimplifiedAnalysis?: string | null;
+  specialRetirementGrantFirstAnalysis?: string | null;
 }

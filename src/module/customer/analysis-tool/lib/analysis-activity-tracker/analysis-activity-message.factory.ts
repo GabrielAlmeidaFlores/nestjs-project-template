@@ -48,6 +48,8 @@ export class AnalysisActivityMessageFactory {
       'Aposentadoria categoria especial',
     [AnalysisToolRecordTypeEnum.DISABILITY_RETIREMENT_PLANNING_GRANT]:
       'Concessão de aposentadoria para deficiente',
+    [AnalysisToolRecordTypeEnum.SPECIAL_RETIREMENT_GRANT]:
+      'Concessão de aposentadoria especial',
   };
 
   private static readonly actionLabelMap: Record<

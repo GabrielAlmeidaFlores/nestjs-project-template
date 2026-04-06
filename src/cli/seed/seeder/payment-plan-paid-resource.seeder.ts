@@ -352,6 +352,15 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise completa da concessão de aposentadoria especial com IA. Examina CNIS e PPPs, aponta pendências (PEXT, competências abaixo do mínimo, vínculos sem data fim) e entrega recomendações estratégicas para requerimento administrativo e/ou ação judicial.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b2c1a6f4-7d3e-4c2b-9a1e-0f3d4a9d8b2e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_GRANT_FIRST_ANALYSIS,
+      creditCost: 5,
+      title: 'CONCESSÃO APOSENTADORIA ESPECIAL - FIRST ANALYSIS',
+      description:
+        'First analysis da concessão de aposentadoria especial com IA. Gera resumo de tempo e carência, períodos com remunerações e agentes, diagnóstico técnico e linha do tempo integrada com base em CNIS e documentos anexados.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('6f4a2c1d-9b7e-4d1a-8c3f-1a2b3c4d5e6f'),
       resource:
         PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_GRANT_SIMPLIFIED_ANALYSIS,

@@ -487,14 +487,6 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
-      const createdBy = {
-        id: source.createdBy.toString(),
-      } as OrganizationMemberTypeormEntity;
-
-      const updatedBy = {
-        id: source.updatedBy.toString(),
-      } as OrganizationMemberTypeormEntity;
-
       return AnalysisToolRecordTypeormEntity.build({
         id: source.id.toString(),
         code: source.code.toString(),
