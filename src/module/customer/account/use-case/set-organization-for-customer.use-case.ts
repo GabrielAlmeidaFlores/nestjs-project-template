@@ -44,6 +44,10 @@ export class SetOrganizationForCustomerUseCase {
       throw new OrganizationNotAvailableForCustomerError();
     }
 
+    if (organizationMember.isActive === false) {
+      throw new OrganizationNotAvailableForCustomerError();
+    }
+
     this.setOrganizationCookieUseCaseGateway.execute(
       reply,
       dto.organizationId,

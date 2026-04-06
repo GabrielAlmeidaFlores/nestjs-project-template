@@ -9,9 +9,6 @@ export class OrganizationEntity extends BaseEntity<OrganizationId> {
   @Description('Nome da organização.')
   public readonly name: string;
 
-  @Description('Logo da organização.')
-  public readonly organizationLogo: string | null;
-
   protected readonly _type = OrganizationEntity.name;
 
   public constructor(props: OrganizationEntityPropsInterface) {
@@ -20,7 +17,6 @@ export class OrganizationEntity extends BaseEntity<OrganizationId> {
     super(OrganizationId, props);
 
     this.name = props.name;
-    this.organizationLogo = props.organizationLogo ?? null;
   }
 
   public static validateName(name: string): void {
