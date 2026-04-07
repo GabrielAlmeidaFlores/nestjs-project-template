@@ -9,10 +9,10 @@ export class ListRegulatoryUpdatesRequestDto extends ListDataRequestDto {
   public searchBy?: string;
 
   @RequestDtoDateProperty({ required: false })
-  public dateFrom?: Date;
+  public dateStart?: Date;
 
   @RequestDtoDateProperty({ required: false })
-  public dateTo?: Date;
+  public dateEnd?: Date;
 
   protected override readonly _type = ListRegulatoryUpdatesRequestDto.name;
 }
