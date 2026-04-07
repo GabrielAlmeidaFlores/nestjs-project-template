@@ -5,7 +5,7 @@ export class GetSystemLogQueryResult extends BaseBuildableObject {
 
   public readonly endpoint: string;
 
-  public readonly data: Date;
+  public readonly createdAt: Date;
 
   public readonly isError: boolean;
 
