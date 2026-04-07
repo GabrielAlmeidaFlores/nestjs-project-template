@@ -1,26 +1,14 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity } from 'typeorm';
 
-import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
-import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
+import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 
 @Entity({ name: 'system_logs' })
-export class SystemLogTypeormEntity extends BaseBuildableObject {
-  @PrimaryGeneratedColumn('uuid')
-  public id: string;
-
+export class SystemLogTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'code', type: 'int' })
   public code: number;
 
   @Column({ name: 'endpoint', type: 'varchar', length: 500 })
   public endpoint: string;
-
-  @CreateDateColumn({ name: 'data', transformer: DateTransformer })
-  public data: Date;
 
   @Column({ name: 'stack_trace', type: 'text', nullable: true })
   public stackTrace: string | null;
