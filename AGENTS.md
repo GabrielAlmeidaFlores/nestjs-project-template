@@ -3004,4 +3004,50 @@ When creating a new feature, follow this checklist:
 
 ---
 
+## Entity Inheritance Rules ⚠️
+
+**NEVER extend `BaseBuildableObject` directly in entities.** Always use the correct base class for the layer:
+
+### TypeORM Entities (`infra/database/implementation/typeorm/schema/entity/`)
+**Must extend `BaseTypeormEntity`**, which automatically provides:
+- `id` — `@PrimaryGeneratedColumn('uuid')`
+- `createdAt` — `@CreateDateColumn({ name: 'created_at' })`
+- `updatedAt` — `@UpdateDateColumn({ name: 'updated_at' })`
+- `deletedAt` — `@DeleteDateColumn({ name: 'deleted_at' })`
+
+```typescript
+// ✅ CORRECT
+@Entity({ name: 'my_table' })
+export class MyTypeormEntity extends BaseTypeormEntity {
+  @Column(...)
+  public myField: string;
+}
+
+// ❌ WRONG — never do this in a TypeORM entity
+export class MyTypeormEntity extends BaseBuildableObject {
+  @PrimaryGeneratedColumn('uuid')
+  public id: string;           // BaseTypeormEntity already provides this
+
+  @CreateDateColumn({ name: 'data', ... })
+  public data: Date;           // wrong name; use createdAt / created_at
+}
+```
+
+### Core Domain Entities (`core/domain/schema/entity/` or `module/**/domain/schema/entity/`)
+**Must extend `BaseEntity<YourId>`** from `@core/domain/schema/entity/base/base.entity`, which provides `id`, `createdAt`, `updatedAt`, `deletedAt`.
+
+### Column naming convention
+| Property     | DB column name  |
+|-------------|-----------------|
+| `createdAt`  | `created_at`    |
+| `updatedAt`  | `updated_at`    |
+| `deletedAt`  | `deleted_at`    |
+
+> **Rationale:** Using a non-standard column name (e.g. `data` instead of `created_at`) breaks the
+> project-wide convention and requires extra migrations and frontend changes later. The `data` column
+> bug in `system_logs` is a concrete example — it required a migration, backend refactor, and
+> frontend model update to fix.
+
+---
+
 **Remember**: Clean Architecture is about separation of concerns and dependency direction. The domain is the heart of your application, and everything else supports it.
