@@ -64,16 +64,16 @@ export class SystemLogTypeormQueryRepository extends SystemLogsQueryRepositoryGa
     const { dataFrom, dataTo } = this.resolveDataRangeBounds(filters);
 
     if (dataFrom !== undefined && dataTo !== undefined) {
-      where.data = Between(dataFrom, dataTo);
+      where.createdAt = Between(dataFrom, dataTo);
     } else if (dataFrom !== undefined) {
-      where.data = MoreThanOrEqual(dataFrom);
+      where.createdAt = MoreThanOrEqual(dataFrom);
     } else if (dataTo !== undefined) {
-      where.data = LessThanOrEqual(dataTo);
+      where.createdAt = LessThanOrEqual(dataTo);
     }
 
     const [rows, totalItems] = await this.repository.findAndCount({
       where,
-      order: { data: 'DESC' },
+      order: { createdAt: 'DESC' },
       take: limit,
       skip,
     });
@@ -82,7 +82,7 @@ export class SystemLogTypeormQueryRepository extends SystemLogsQueryRepositoryGa
       GetSystemLogQueryResult.build({
         code: row.code,
         endpoint: row.endpoint,
-        data: row.data,
+        createdAt: row.createdAt,
         isError: row.isError,
         stackTrace: row.stackTrace ?? null,
         requestBody: row.requestBody ?? null,
