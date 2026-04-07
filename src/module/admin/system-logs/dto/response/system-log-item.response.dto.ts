@@ -14,7 +14,7 @@ export class SystemLogItemResponseDto extends BaseBuildableDtoObject {
   public endpoint: string;
 
   @ResponseDtoDateProperty()
-  public data: Date;
+  public createdAt: Date;
 
   @ResponseDtoBooleanProperty()
   public isError: boolean;
