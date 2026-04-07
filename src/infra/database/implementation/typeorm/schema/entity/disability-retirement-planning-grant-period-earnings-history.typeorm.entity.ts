@@ -4,7 +4,9 @@ import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema
 import { DisabilityRetirementPlanningGrantPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-grant-period.typeorm.entity';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 
-@Entity({ name: 'disability_retirement_planning_grant_period_earnings_history' })
+@Entity({
+  name: 'disability_retirement_planning_grant_period_earnings_history',
+})
 export class DisabilityRetirementPlanningGrantPeriodEarningsHistoryTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'competence',

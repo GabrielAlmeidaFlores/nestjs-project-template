@@ -1257,6 +1257,153 @@ An�lise processada do CNIS:
     );
   }
 
+  public async getTemporaryDisabilityBenefitsGrantFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson = true,
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: asJson
+          ? ResponseConfigInputModel.build({
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema:
+                this.getTemporaryDisabilityBenefitsGrantFirstAnalysisJsonSchema(),
+            })
+          : null,
+      }),
+    );
+  }
+
+  public async getTemporaryDisabilityBenefitsGrantCompleteAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getTemporaryDisabilityBenefitsGrantCompleteAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getTemporaryDisabilityBenefitsGrantSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  private getTemporaryDisabilityBenefitsGrantFirstAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        gracePeriod: {
+          type: 'object',
+          properties: {
+            isMet: {
+              type: 'boolean',
+              description: 'Indica se a carência foi cumprida',
+            },
+            contributionCount: {
+              type: 'number',
+              description: 'Quantidade de contribuições para carência',
+            },
+            items: {
+              type: 'array',
+              description: 'Itens de carência analisados',
+              items: {
+                type: 'object',
+                properties: {
+                  startDate: {
+                    type: 'string',
+                    description: 'Data de início no formato YYYY-MM-DD',
+                  },
+                  endDate: {
+                    type: 'string',
+                    description: 'Data de término no formato YYYY-MM-DD',
+                  },
+                  contributionCount: {
+                    type: 'number',
+                    description: 'Quantidade de contribuições no período',
+                  },
+                },
+              },
+            },
+          },
+        },
+        finalAnalysis: {
+          type: 'string',
+          description: 'Análise final consolidada em formato markdown',
+        },
+      },
+    };
+  }
+
+  private getTemporaryDisabilityBenefitsGrantCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        gracePeriod: {
+          type: 'object',
+          properties: {
+            isMet: {
+              type: 'boolean',
+              description: 'Indica se a carência foi cumprida',
+            },
+            contributionCount: {
+              type: 'number',
+              description: 'Quantidade de contribuições para carência',
+            },
+          },
+        },
+        finalAnalysis: {
+          type: 'string',
+          description: 'Análise final consolidada em formato markdown',
+        },
+      },
+    };
+  }
+
   private getDisabilityRetirementPlanningCompleteAnalysisJsonSchema(): object {
     const disabilityAnalysisSchema = {
       type: 'object',

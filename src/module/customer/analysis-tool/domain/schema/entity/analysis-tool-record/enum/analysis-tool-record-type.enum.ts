@@ -19,4 +19,5 @@ export enum AnalysisToolRecordTypeEnum {
   GENERAL_URBAN_RETIREMENT_ANALYSIS = 'analise_aposentadoria_urbana_geral',
   SPECIAL_CATEGORY_RETIREMENT = 'aposentadoria_categoria_especial',
   DISABILITY_RETIREMENT_PLANNING_GRANT = 'concessao_aposentadoria_para_deficiente',
+  TEMPORARY_DISABILITY_BENEFITS_GRANT = 'concessao_auxilio_doenca',
 }
