@@ -255,7 +255,7 @@ An�lise processada do CNIS:
                         },
                         activityType: {
                           type: 'string',
-                          enum: ['Atividade como professor', 'Atividade comum'],
+                          enum: ['atividade_professor', 'atividade_comum', 'periodo_sem_atividade'],
                           description: 'Tipo de atividade exercida',
                         },
                         type: {
