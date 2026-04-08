@@ -9,18 +9,18 @@ import { MiniAdvisorQueryRepositoryGateway } from '@module/customer/mini-advisor
 import { MiniAdvisorResultCommandRepositoryGateway } from '@module/customer/mini-advisor/domain/repository/mini-advisor-result/command/mini-advisor-result.command.repository.gateway';
 import { MiniAdvisorEntity } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor/mini-advisor.entity';
 import { MiniAdvisorId } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor/value-object/mini-advisor-id.value-object';
-import { MiniAdvisorResultEntity } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor-result/mini-advisor-result.entity';
 import { MiniAdvisorAnalysisTypeEnum } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor-result/enum/mini-advisor-analysis-type.enum';
-import { miniAdvisorAnalysisPredefinedMessages } from '@module/customer/mini-advisor/models/mini-advisor-analysis-predefined-messages';
+import { MiniAdvisorResultEntity } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor-result/mini-advisor-result.entity';
 import { CreateMiniAdvisorResultResponseDto } from '@module/customer/mini-advisor/dto/response/create-mini-advisor-result.response.dto';
 import { MiniAdvisorNotFoundError } from '@module/customer/mini-advisor/error/mini-advisor-not-found.error';
 import { MiniAdvisorResultAlreadyExistsError } from '@module/customer/mini-advisor/error/mini-advisor-result-already-exists.error';
+import { miniAdvisorAnalysisPredefinedMessages } from '@module/customer/mini-advisor/models/mini-advisor-analysis-predefined-messages';
+import { MiniAdvisorAiResultInterface } from '@module/customer/mini-advisor/models/mini-advisor-result-interface';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
-import { MiniAdvisorAiResultInterface } from '@module/customer/mini-advisor/models/mini-advisor-result-interface';
 
 @Injectable()
 export class CreateMiniAdvisorResultUseCase {
