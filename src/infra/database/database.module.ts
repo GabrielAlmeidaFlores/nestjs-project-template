@@ -322,6 +322,21 @@ import { TeacherRetirementPlanningPeriodItemDocumentTypeormCommandRepository } f
 import { TeacherRetirementPlanningRemunerationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-remuneration/teacher-retirement-planning-remuneration.typeorm.command.repository';
 import { TeacherRetirementPlanningRemunerationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-remuneration/teacher-retirement-planning-remuneration.typeorm.query.repository';
 import { TeacherRetirementPlanningResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-result/teacher-retirement-planning-result.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant/temporary-disability-benefits-grant.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant/temporary-disability-benefits-grant.typeorm.query.repository';
+import { TemporaryDisabilityBenefitsGrantDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-document/temporary-disability-benefits-grant-document.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantInsuredStatusTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-insured-status/temporary-disability-benefits-grant-insured-status.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantInsuredStatusTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-insured-status/temporary-disability-benefits-grant-insured-status.typeorm.query.repository';
+import { TemporaryDisabilityBenefitsGrantInsuredStatusDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-insured-status-document/temporary-disability-benefits-grant-insured-status-document.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-period/temporary-disability-benefits-grant-period.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-period/temporary-disability-benefits-grant-period.typeorm.query.repository';
+import { TemporaryDisabilityBenefitsGrantPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-period-document/temporary-disability-benefits-grant-period-document.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantPreviousBenefitsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-previous-benefits/temporary-disability-benefits-grant-previous-benefits.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantPreviousBenefitsDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-previous-benefits-document/temporary-disability-benefits-grant-previous-benefits-document.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-result/temporary-disability-benefits-grant-result.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantWorkPeriodsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-work-periods/temporary-disability-benefits-grant-work-periods.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantWorkPeriodsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-work-periods/temporary-disability-benefits-grant-work-periods.typeorm.query.repository';
+import { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-work-periods-earnings-history/temporary-disability-benefits-grant-work-periods-earnings-history.typeorm.command.repository';
 import { TutorialTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/tutorial/tutorial.typeorm.command.repository';
 import { TutorialTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/tutorial/tutorial.typeorm.query.repository';
 import { TypeormModule } from '@infra/database/implementation/typeorm/typeorm.module';
@@ -584,6 +599,21 @@ import { TeacherRetirementPlanningPeriodItemDocumentCommandRepositoryGateway } f
 import { TeacherRetirementPlanningRemunerationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-remuneration/command/teacher-retirement-planning-remuneration.command.repository.gateway';
 import { TeacherRetirementPlanningRemunerationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-remuneration/query/teacher-retirement-planning-remuneration.query.repository.gateway';
 import { TeacherRetirementPlanningResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-result/command/teacher-retirement-planning-result.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant/command/temporary-disability-benefits-grant.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant/query/temporary-disability-benefits-grant.query.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-document/command/temporary-disability-benefits-grant-document.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantInsuredStatusCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-insured-status/command/temporary-disability-benefits-grant-insured-status.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantInsuredStatusQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-insured-status/query/temporary-disability-benefits-grant-insured-status.query.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantInsuredStatusDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-insured-status-document/command/temporary-disability-benefits-grant-insured-status-document.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-period/command/temporary-disability-benefits-grant-period.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-period/query/temporary-disability-benefits-grant-period.query.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-period-document/command/temporary-disability-benefits-grant-period-document.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantPreviousBenefitsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-previous-benefits/command/temporary-disability-benefits-grant-previous-benefits.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantPreviousBenefitsDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-previous-benefits-document/command/temporary-disability-benefits-grant-previous-benefits-document.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-result/command/temporary-disability-benefits-grant-result.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantWorkPeriodsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-work-periods/command/temporary-disability-benefits-grant-work-periods.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantWorkPeriodsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-work-periods/query/temporary-disability-benefits-grant-work-periods.query.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-work-periods-earnings-history/command/temporary-disability-benefits-grant-work-periods-earnings-history.command.repository.gateway';
 import { CreditPackCommandRepositoryGateway } from '@module/customer/credit-pack/domain/repository/credit-pack/command/credit-pack.command.repository.gateway';
 import { CreditPackQueryRepositoryGateway } from '@module/customer/credit-pack/domain/repository/credit-pack/query/credit-pack.query.repository.gateway';
 import { OrganizationCreditPackPurchaseCommandRepositoryGateway } from '@module/customer/credit-pack/domain/repository/organization-credit-pack-purchase/command/organization-credit-pack-purchase.command.repository.gateway';
@@ -1686,6 +1716,82 @@ const classProvider: ClassProvider[] = [
       DisabilityRetirementPlanningGrantTimeAcceleratorQueryRepositoryGateway,
     useClass:
       DisabilityRetirementPlanningGrantTimeAcceleratorTypeormQueryRepository,
+  },
+  {
+    provide: TemporaryDisabilityBenefitsGrantCommandRepositoryGateway,
+    useClass: TemporaryDisabilityBenefitsGrantTypeormCommandRepository,
+  },
+  {
+    provide: TemporaryDisabilityBenefitsGrantQueryRepositoryGateway,
+    useClass: TemporaryDisabilityBenefitsGrantTypeormQueryRepository,
+  },
+  {
+    provide: TemporaryDisabilityBenefitsGrantResultCommandRepositoryGateway,
+    useClass: TemporaryDisabilityBenefitsGrantResultTypeormCommandRepository,
+  },
+  {
+    provide: TemporaryDisabilityBenefitsGrantDocumentCommandRepositoryGateway,
+    useClass: TemporaryDisabilityBenefitsGrantDocumentTypeormCommandRepository,
+  },
+  {
+    provide: TemporaryDisabilityBenefitsGrantPeriodCommandRepositoryGateway,
+    useClass: TemporaryDisabilityBenefitsGrantPeriodTypeormCommandRepository,
+  },
+  {
+    provide: TemporaryDisabilityBenefitsGrantPeriodQueryRepositoryGateway,
+    useClass: TemporaryDisabilityBenefitsGrantPeriodTypeormQueryRepository,
+  },
+  {
+    provide:
+      TemporaryDisabilityBenefitsGrantPeriodDocumentCommandRepositoryGateway,
+    useClass:
+      TemporaryDisabilityBenefitsGrantPeriodDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryDisabilityBenefitsGrantPreviousBenefitsCommandRepositoryGateway,
+    useClass:
+      TemporaryDisabilityBenefitsGrantPreviousBenefitsTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryDisabilityBenefitsGrantPreviousBenefitsDocumentCommandRepositoryGateway,
+    useClass:
+      TemporaryDisabilityBenefitsGrantPreviousBenefitsDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryDisabilityBenefitsGrantInsuredStatusCommandRepositoryGateway,
+    useClass:
+      TemporaryDisabilityBenefitsGrantInsuredStatusTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryDisabilityBenefitsGrantInsuredStatusQueryRepositoryGateway,
+    useClass:
+      TemporaryDisabilityBenefitsGrantInsuredStatusTypeormQueryRepository,
+  },
+  {
+    provide:
+      TemporaryDisabilityBenefitsGrantInsuredStatusDocumentCommandRepositoryGateway,
+    useClass:
+      TemporaryDisabilityBenefitsGrantInsuredStatusDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryDisabilityBenefitsGrantWorkPeriodsCommandRepositoryGateway,
+    useClass:
+      TemporaryDisabilityBenefitsGrantWorkPeriodsTypeormCommandRepository,
+  },
+  {
+    provide: TemporaryDisabilityBenefitsGrantWorkPeriodsQueryRepositoryGateway,
+    useClass: TemporaryDisabilityBenefitsGrantWorkPeriodsTypeormQueryRepository,
+  },
+  {
+    provide:
+      TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryCommandRepositoryGateway,
+    useClass:
+      TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryTypeormCommandRepository,
   },
   {
     provide: RuralTimelineAnalysisCommandRepositoryGateway,
