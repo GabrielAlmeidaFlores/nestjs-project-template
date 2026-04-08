@@ -48,6 +48,7 @@ export class AnalysisActivityMessageFactory {
       'Aposentadoria categoria especial',
     [AnalysisToolRecordTypeEnum.DISABILITY_RETIREMENT_PLANNING_GRANT]:
       'Concessão de aposentadoria para deficiente',
+    [AnalysisToolRecordTypeEnum.DEATH_BENEFIT]: 'Pensão por morte',
   };
 
   private static readonly actionLabelMap: Record<
