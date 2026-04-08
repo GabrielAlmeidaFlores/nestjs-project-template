@@ -23,6 +23,7 @@ import { SpecialActivityEntity } from '@module/customer/analysis-tool/module/spe
 import { SpecialCategoryRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/special-category-retirement-analysis.entity';
 import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
 import { TeacherRetirementPlanningEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
+import { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/temporary-disability-benefits-grant.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { AnalysisToolRecordEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity.props.interface';
@@ -135,6 +136,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly disabilityRetirementPlanningGrant: DisabilityRetirementPlanningGrantEntity | null;
 
   @Description(
+    'Concessão de benefício por incapacidade temporária associada ao registro da ferramenta de análise',
+  )
+  public readonly temporaryDisabilityBenefitsGrant: TemporaryDisabilityBenefitsGrantEntity | null;
+
+  @Description(
     'Análise de aposentadoria por categoria especial associada ao registro da ferramenta de análise',
   )
   public readonly specialCategoryRetirementAnalysis: SpecialCategoryRetirementAnalysisEntity | null;
@@ -188,6 +194,8 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
       props.generalUrbanRetirementAnalysis ?? null;
     this.disabilityRetirementPlanningGrant =
       props.disabilityRetirementPlanningGrant ?? null;
+    this.temporaryDisabilityBenefitsGrant =
+      props.temporaryDisabilityBenefitsGrant ?? null;
     this.specialCategoryRetirementAnalysis =
       props.specialCategoryRetirementAnalysis ?? null;
     this.status = props.status;
