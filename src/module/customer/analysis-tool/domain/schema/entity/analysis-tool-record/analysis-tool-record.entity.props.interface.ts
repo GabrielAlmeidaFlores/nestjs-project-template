@@ -26,6 +26,7 @@ import type { SpecialCategoryRetirementAnalysisEntity } from '@module/customer/a
 import type { SpecialRetirementGrantEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/special-retirement-grant.entity';
 import type { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
 import type { TeacherRetirementPlanningEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
+import type { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/temporary-disability-benefits-grant.entity';
 
 export interface AnalysisToolRecordEntityPropsInterface extends BaseEntityPropsInterface<AnalysisToolRecordId> {
   code: AnalysisToolRecordCode;
@@ -49,6 +50,7 @@ export interface AnalysisToolRecordEntityPropsInterface extends BaseEntityPropsI
   generalUrbanRetirementGrant?: GeneralUrbanRetirementGrantEntity | null;
   generalUrbanRetirementAnalysis?: GeneralUrbanRetirementAnalysisEntity | null;
   disabilityRetirementPlanningGrant?: DisabilityRetirementPlanningGrantEntity | null;
+  temporaryDisabilityBenefitsGrant?: TemporaryDisabilityBenefitsGrantEntity | null;
   specialCategoryRetirementAnalysis?: SpecialCategoryRetirementAnalysisEntity | null;
   specialRetirementGrant?: SpecialRetirementGrantEntity | null;
   status: AnalysisStatusEnum;

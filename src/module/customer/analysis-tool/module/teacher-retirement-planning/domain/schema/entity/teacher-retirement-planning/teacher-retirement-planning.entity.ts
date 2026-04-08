@@ -14,8 +14,8 @@ export class TeacherRetirementPlanningEntity extends BaseEntity<TeacherRetiremen
   public readonly analysisName: string | null;
   public readonly currentPosition: string | null;
   public readonly activityType: TeacherRetirementPlanningActivityTypeEnum;
-  public readonly publicServiceStartDate: Date;
-  public readonly careerStartDate: Date;
+  public readonly publicServiceStartDate: Date | null;
+  public readonly careerStartDate: Date | null;
   public readonly administrativeProcessAnalysis: string | null;
   public readonly teacherRetirementPlanningResult: TeacherRetirementPlanningResultEntity | null;
 
@@ -29,8 +29,8 @@ export class TeacherRetirementPlanningEntity extends BaseEntity<TeacherRetiremen
     this.analysisName = props.analysisName ?? null;
     this.currentPosition = props.currentPosition ?? null;
     this.activityType = props.activityType;
-    this.publicServiceStartDate = props.publicServiceStartDate;
-    this.careerStartDate = props.careerStartDate;
+    this.publicServiceStartDate = props.publicServiceStartDate ?? null;
+    this.careerStartDate = props.careerStartDate ?? null;
     this.administrativeProcessAnalysis =
       props.administrativeProcessAnalysis ?? null;
     this.teacherRetirementPlanningResult =

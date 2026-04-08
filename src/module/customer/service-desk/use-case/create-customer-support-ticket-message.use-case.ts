@@ -6,7 +6,6 @@ import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/accou
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/account/error/organization-member-not-found.error';
 import { CreateCustomerSupportTicketMessageRequestDto } from '@module/customer/service-desk/dto/request/create-customer-support-ticket-message.request.dto';
-import { SupportTicketCommandRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket/command/support-ticket.command.repository.gateway';
 import { SupportTicketQueryRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket/query/support-ticket.query.repository.gateway';
 import { SupportTicketMessageCommandRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket-message/command/support-ticket-message.command.repository.gateway';
 import { SupportTicketStatusEnum } from '@module/support/service-desk/domain/schema/entity/support-ticket/enum/support-ticket-status.enum';
@@ -31,8 +30,6 @@ export class CreateCustomerSupportTicketMessageUseCase {
     private readonly supportTicketQueryRepositoryGateway: SupportTicketQueryRepositoryGateway,
     @Inject(SupportTicketMessageCommandRepositoryGateway)
     private readonly supportTicketMessageCommandRepositoryGateway: SupportTicketMessageCommandRepositoryGateway,
-    @Inject(SupportTicketCommandRepositoryGateway)
-    private readonly supportTicketCommandRepositoryGateway: SupportTicketCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
   ) {}
@@ -89,15 +86,6 @@ export class CreateCustomerSupportTicketMessageUseCase {
         content: supportTicketMessage.content,
       }),
     ];
-
-    if (supportTicket.status === SupportTicketStatusEnum.IN_PROGRESS) {
-      transactionEvents.push(
-        this.supportTicketCommandRepositoryGateway.updateStatusByIdTransaction(
-          supportTicket.id,
-          SupportTicketStatusEnum.AWAITING_RESPONSE,
-        ),
-      );
-    }
 
     const transaction =
       await this.baseTransactionRepositoryGateway.execute(transactionEvents);

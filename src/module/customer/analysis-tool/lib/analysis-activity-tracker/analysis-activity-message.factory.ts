@@ -50,6 +50,8 @@ export class AnalysisActivityMessageFactory {
       'Concessão de aposentadoria para deficiente',
     [AnalysisToolRecordTypeEnum.SPECIAL_RETIREMENT_GRANT]:
       'Concessão de aposentadoria especial',
+    [AnalysisToolRecordTypeEnum.TEMPORARY_DISABILITY_BENEFITS_GRANT]:
+      'Concessão de benefício por incapacidade temporária',
   };
 
   private static readonly actionLabelMap: Record<

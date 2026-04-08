@@ -3107,6 +3107,66 @@ When a discount is expired or the limit is reached, return an empty/zero-discoun
 
 ---
 
+### 12. AI Analysis JSON Schema Pattern ⚠️ MANDATORY
+
+**RULE**: The JSON structure returned by the AI model MUST be defined via a `private get*JsonSchema(): object` method inside `AnalysisProcessorService`. **NEVER describe the JSON structure in the prompt/seeder text.**
+
+The prompt (stored in the DB via the seeder) is responsible only for **instructions and context** — what the AI should analyse and how. The **schema** enforces the output shape.
+
+**❌ WRONG — JSON structure described in the prompt:**
+
+```
+// In payment-plan-paid-resource-ia-config.seeder.ts
+prompt: `...
+ESTRUTURA OBRIGATÓRIA DO JSON:
+{
+  "resumoDoCaso": "...",
+  "sinteseDoCnis": "..."
+}
+`
+```
+
+**✅ CORRECT — JSON structure defined in the analysis-processor schema method:**
+
+```typescript
+// In analysis-processor.service.ts
+private getMyAnalysisJsonSchema(): object {
+  return {
+    type: 'object',
+    properties: {
+      insuredStatus:   { type: 'boolean', description: '...' },
+      gracePeriods: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            event:       { type: 'string' },
+            date:        { type: 'string' },
+            observation: { type: 'string' },
+          },
+          required: ['event', 'date', 'observation'],
+        },
+      },
+    },
+    required: ['insuredStatus', 'gracePeriods'],
+  };
+}
+```
+
+The schema **must exactly match** the corresponding `*Interface` file under `model/interface/`. If the interface has key `insuredStatus: boolean`, the schema must have `insuredStatus: { type: 'boolean' }`.
+
+**Rules:**
+
+- ✅ JSON schema is defined in `AnalysisProcessorService` as a private `get{Feature}JsonSchema()` method
+- ✅ Schema keys and types must match the `*Interface` file exactly
+- ✅ Use `required: [...]` in the schema so the AI is forced to return all mandatory fields
+- ✅ Prompt text describes only the analysis instructions (no JSON structure)
+- ✅ Seeder prompt is kept clear and concise — no JSON examples or schema
+- ❌ NO JSON structure in prompts or seeders
+- ❌ NO mismatch between schema keys and interface fields
+
+---
+
 ## Testing Guidelines
 
 ### Test Structure
@@ -3226,6 +3286,52 @@ When creating a new feature, follow this checklist:
 - [ ] Create domain-specific errors in `error/`
 - [ ] Write tests for use cases
 - [ ] Generate and apply database migration
+
+---
+
+## Entity Inheritance Rules ⚠️
+
+**NEVER extend `BaseBuildableObject` directly in entities.** Always use the correct base class for the layer:
+
+### TypeORM Entities (`infra/database/implementation/typeorm/schema/entity/`)
+**Must extend `BaseTypeormEntity`**, which automatically provides:
+- `id` — `@PrimaryGeneratedColumn('uuid')`
+- `createdAt` — `@CreateDateColumn({ name: 'created_at' })`
+- `updatedAt` — `@UpdateDateColumn({ name: 'updated_at' })`
+- `deletedAt` — `@DeleteDateColumn({ name: 'deleted_at' })`
+
+```typescript
+// ✅ CORRECT
+@Entity({ name: 'my_table' })
+export class MyTypeormEntity extends BaseTypeormEntity {
+  @Column(...)
+  public myField: string;
+}
+
+// ❌ WRONG — never do this in a TypeORM entity
+export class MyTypeormEntity extends BaseBuildableObject {
+  @PrimaryGeneratedColumn('uuid')
+  public id: string;           // BaseTypeormEntity already provides this
+
+  @CreateDateColumn({ name: 'data', ... })
+  public data: Date;           // wrong name; use createdAt / created_at
+}
+```
+
+### Core Domain Entities (`core/domain/schema/entity/` or `module/**/domain/schema/entity/`)
+**Must extend `BaseEntity<YourId>`** from `@core/domain/schema/entity/base/base.entity`, which provides `id`, `createdAt`, `updatedAt`, `deletedAt`.
+
+### Column naming convention
+| Property     | DB column name  |
+|-------------|-----------------|
+| `createdAt`  | `created_at`    |
+| `updatedAt`  | `updated_at`    |
+| `deletedAt`  | `deleted_at`    |
+
+> **Rationale:** Using a non-standard column name (e.g. `data` instead of `created_at`) breaks the
+> project-wide convention and requires extra migrations and frontend changes later. The `data` column
+> bug in `system_logs` is a concrete example — it required a migration, backend refactor, and
+> frontend model update to fix.
 
 ---
 
