@@ -373,10 +373,6 @@ export class CreateTemporaryDisabilityBenefitsGrantFirstAnalysisUseCase {
         const analysisToolClient =
           analysisToolRecordQueryResult.analysisToolClient;
 
-        if (analysisToolClient == null) {
-          throw new AnalysisToolRecordNotFoundError();
-        }
-
         return new AnalysisToolClientEntity({
           ...analysisToolClient,
           createdBy: analysisToolClient.createdBy.id,

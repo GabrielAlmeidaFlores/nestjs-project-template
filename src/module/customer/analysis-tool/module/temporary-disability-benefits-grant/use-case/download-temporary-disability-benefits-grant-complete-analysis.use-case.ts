@@ -79,7 +79,7 @@ export class DownloadTemporaryDisabilityBenefitsGrantCompleteAnalysisUseCase {
     return this.exportDocumentGateway.downloadFileAsStreamable(
       htmlContent,
       format,
-      'analise_completa_concessao_auxilio_doenca',
+      'analise_completa_auxilio_incapacidade_temporaria',
     );
   }
 

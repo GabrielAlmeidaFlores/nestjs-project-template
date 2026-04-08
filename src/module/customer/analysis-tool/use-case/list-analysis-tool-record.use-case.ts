@@ -104,13 +104,19 @@ export class ListAnalysisToolRecordUseCase {
             analysisToolRecord.disabilityRetirementPlanning ??
             analysisToolRecord.audienceQuestionGenerator;
 
-          if (analysis === null) {
+          const analysisId =
+            analysis?.id ??
+            analysisToolRecord.temporaryDisabilityBenefitsGrant
+              ?.temporaryDisabilityBenefitsGrantId ??
+            null;
+
+          if (analysisId === null) {
             return null;
           }
 
           return GetAnalysisToolRecordResponseDto.build({
             ...analysisToolRecord,
-            analysisId: analysis.id,
+            analysisId,
             status: analysisToolRecord.status,
             analysisToolClient: client,
             createdBy,

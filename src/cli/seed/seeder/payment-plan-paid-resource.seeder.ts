@@ -935,6 +935,36 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise de processo administrativo de aposentadoria por categoria especial via IA. Examina os documentos do processo administrativo do INSS, identifica inconsistências, avalia fundamentos do indeferimento ou pendências, e emite parecer técnico detalhado sobre a viabilidade de contestação administrativa ou judicial.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f7a8b9c0-1d2e-4f56-8a9b-0c1d2e3f4a5b'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_DISABILITY_BENEFITS_GRANT_FIRST_ANALYSIS,
+      creditCost: 5,
+      title:
+        'BENEFÍCIO POR INCAPACIDADE TEMPORÁRIA (CONCESSÃO) - PRIMEIRO STEP',
+      description:
+        'Primeira análise da concessão de benefício por incapacidade temporária com IA, combinando os dados estruturados do caso com a leitura e interpretação do CNIS. Gera parecer inicial técnico sobre carência, contribuições recentes, períodos de afastamento e viabilidade preliminar do benefício.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a2b3c4d5-e6f7-4012-bcde-f01234567890'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_DISABILITY_BENEFITS_GRANT_COMPLETE_ANALYSIS,
+      creditCost: 10,
+      title:
+        'BENEFÍCIO POR INCAPACIDADE TEMPORÁRIA (CONCESSÃO) - ANÁLISE COMPLETA',
+      description:
+        'Análise completa da concessão de benefício por incapacidade temporária com IA. Avalia elegibilidade, carência, qualidade de segurado, análise de incapacidade com base nos documentos médicos e CIDs, regras de aposentadoria alternativas e emite parecer técnico conclusivo.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b3c4d5e6-f7a8-4123-9def-012345678901'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_DISABILITY_BENEFITS_GRANT_SIMPLIFIED_ANALYSIS,
+      creditCost: 3,
+      title:
+        'BENEFÍCIO POR INCAPACIDADE TEMPORÁRIA (CONCESSÃO) - ANÁLISE SIMPLIFICADA',
+      description:
+        'Geração do relatório simplificado de análise da concessão de benefício por incapacidade temporária. Converte a análise técnica completa em um documento de fácil compreensão para o cliente, adequado para download e apresentação.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('f6a7b8c9-d0e1-4345-9abc-456789012345'),
       resource: PaymentPlanPaidResourceTypeEnum.MINI_ADVISOR_COMPLETE_ANALYSIS,
       creditCost: 3,

@@ -69,7 +69,7 @@ export class GetTemporaryDisabilityBenefitsGrantUseCase {
 
     const firstAnalysis =
       result.temporaryDisabilityBenefitsGrantResult !== null &&
-      result.temporaryDisabilityBenefitsGrantResult?.firstAnalysis !== null
+      result.temporaryDisabilityBenefitsGrantResult.firstAnalysis !== null
         ? this.parseStoredFirstAnalysis(
             result.temporaryDisabilityBenefitsGrantResult.firstAnalysis,
           )
@@ -77,7 +77,7 @@ export class GetTemporaryDisabilityBenefitsGrantUseCase {
 
     const completeAnalysis =
       result.temporaryDisabilityBenefitsGrantResult !== null &&
-      result.temporaryDisabilityBenefitsGrantResult?.completeAnalysis !== null
+      result.temporaryDisabilityBenefitsGrantResult.completeAnalysis !== null
         ? this.parseStoredCompleteAnalysis(
             result.temporaryDisabilityBenefitsGrantResult.completeAnalysis,
           )
