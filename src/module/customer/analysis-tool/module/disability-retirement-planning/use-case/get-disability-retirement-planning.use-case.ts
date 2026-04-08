@@ -2,15 +2,13 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { CidTenQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cid-ten/query/cid-ten.query.repository.gateway';
 import { CidTenId } from '@module/customer/analysis-tool/domain/schema/entity/cid-ten/value-object/cid-ten-id.value-object';
-import { CidTenNotFoundError } from '@module/customer/analysis-tool/error/cid-ten-not-found.error';
-import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
-import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
-import { DisabilityRetirementPlanningQueryRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning/query/disability-retirement-planning.query.repository.gateway';
-import { DisabilityDocumentViabilityEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/enum/disability-document-viability.enum';
-import { DisabilityRetirementPlanningActivityTypeEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/enum/disability-retirement-planning-activity-type.enum';
-import { DisabilityRetirementPlanningId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
+import {
+  GetAnalysisToolClientResponseDto,
+  GetAnalysisToolClientResponsibleResponseDto,
+} from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client.response.dto';
 import {
   GetDisabilityRetirementPlanningCidResponseDto,
   GetDisabilityRetirementPlanningDocumentResponseDto,
@@ -23,6 +21,13 @@ import {
   GetDisabilityRetirementPlanningResultResponseDto,
 } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/get-disability-retirement-planning.response.dto';
 import { DisabilityRetirementPlanningNotFoundError } from '@module/customer/analysis-tool/module/disability-retirement-planning/error/disability-retirement-planning-not-found.error';
+import { CidTenNotFoundError } from '@module/customer/analysis-tool/error/cid-ten-not-found.error';
+import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
+import { DisabilityRetirementPlanningQueryRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning/query/disability-retirement-planning.query.repository.gateway';
+import { DisabilityDocumentViabilityEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/enum/disability-document-viability.enum';
+import { DisabilityRetirementPlanningActivityTypeEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/enum/disability-retirement-planning-activity-type.enum';
+import { DisabilityRetirementPlanningId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
 import {
   DisabilityRetirementPlanningCompleteAnalysisModel,
   DisabilityRetirementPlanningDisabilityAnalysisModel,
@@ -40,6 +45,8 @@ export class GetDisabilityRetirementPlanningUseCase {
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(DisabilityRetirementPlanningQueryRepositoryGateway)
     private readonly disabilityRetirementPlanningQueryRepositoryGateway: DisabilityRetirementPlanningQueryRepositoryGateway,
     @Inject(FileProcessorGateway)
@@ -62,6 +69,14 @@ export class GetDisabilityRetirementPlanningUseCase {
     if (organizationMember === null) {
       throw new OrganizationMemberNotFoundError();
     }
+
+    const analysisToolRecordQueryResult =
+      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByDisabilityRetirementPlanningIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        disabilityRetirementPlanningId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+        DisabilityRetirementPlanningNotFoundError,
+      );
 
     const queryResult =
       await this.disabilityRetirementPlanningQueryRepositoryGateway.findOneDisabilityRetirementPlanningByIdWithRelations(
@@ -343,6 +358,27 @@ export class GetDisabilityRetirementPlanningUseCase {
       (entity) => entity.benefitNumber,
     );
 
+    const client = analysisToolRecordQueryResult.analysisToolClient;
+
+    const analysisToolClient = GetAnalysisToolClientResponseDto.build({
+      ...client,
+      analysisCount: 0,
+      legalProceedingNumber: client.analysisToolClientLegalProceeding.map(
+        (p) => p.legalProceedingNumber,
+      ),
+      inssBenefitNumber: client.analysisToolClientInssBenefit.map(
+        (b) => b.inssBenefitNumber,
+      ),
+      createdBy: GetAnalysisToolClientResponsibleResponseDto.build({
+        id: client.createdBy.customer.id,
+        name: client.createdBy.customer.name,
+      }),
+      updatedBy: GetAnalysisToolClientResponsibleResponseDto.build({
+        id: client.updatedBy.customer.id,
+        name: client.updatedBy.customer.name,
+      }),
+    });
+
     return GetDisabilityRetirementPlanningResponseDto.build({
       id: queryResult.id,
       currentPosition: queryResult.currentPosition,
@@ -375,6 +411,7 @@ export class GetDisabilityRetirementPlanningUseCase {
       }),
       documents,
       periods,
+      analysisToolClient,
     });
   }
 }
