@@ -139,7 +139,7 @@ export class DownloadTemporaryDisabilityBenefitsGrantSimplifiedAnalysisUseCase {
     return this.exportDocumentGateway.downloadFileAsStreamable(
       responseAi,
       format,
-      'analise_simplificada_concessao_auxilio_doenca',
+      'analise_simplificada_auxilio_incapacidade_temporaria',
     );
   }
 }

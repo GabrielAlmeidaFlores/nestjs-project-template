@@ -1,4 +1,4 @@
-import {
+﻿import {
   Body,
   HttpStatus,
   Param,
@@ -74,14 +74,14 @@ export class TemporaryDisabilityBenefitsGrantController {
   ) {}
 
   @BuildEndpointSpecification({
-    summary: 'Criar análise de concessão de auxílio-doença',
+    summary: 'Criar análise de auxílio de incapacidade temporária',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: '',
       method: RequestMethod.POST,
       type: CreateTemporaryDisabilityBenefitsGrantRequestDto,
     },
-    tag: ['concessao-auxilio-doenca'],
+    tag: ['auxilio-de-incapacidade-temporaria'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
       description: 'Análise criada com sucesso.',
@@ -103,13 +103,13 @@ export class TemporaryDisabilityBenefitsGrantController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Obter análise de concessão de auxílio-doença',
+    summary: 'Obter análise de auxílio de incapacidade temporária',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':temporaryDisabilityBenefitsGrantId',
       method: RequestMethod.GET,
     },
-    tag: ['concessao-auxilio-doenca'],
+    tag: ['auxilio-de-incapacidade-temporaria'],
     successResponse: {
       statusCode: HttpStatus.OK,
       description: 'Análise obtida com sucesso.',
@@ -135,14 +135,14 @@ export class TemporaryDisabilityBenefitsGrantController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Atualizar análise de concessão de auxílio-doença',
+    summary: 'Atualizar análise de auxílio de incapacidade temporária',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':temporaryDisabilityBenefitsGrantId',
       method: RequestMethod.PATCH,
       type: UpdateTemporaryDisabilityBenefitsGrantRequestDto,
     },
-    tag: ['concessao-auxilio-doenca'],
+    tag: ['auxilio-de-incapacidade-temporaria'],
     successResponse: {
       statusCode: HttpStatus.OK,
       description: 'Análise atualizada com sucesso.',
@@ -170,14 +170,15 @@ export class TemporaryDisabilityBenefitsGrantController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Adicionar períodos à análise de concessão de auxílio-doença',
+    summary:
+      'Adicionar períodos à análise de auxílio de incapacidade temporária',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':temporaryDisabilityBenefitsGrantId/period',
       method: RequestMethod.POST,
       type: CreateTemporaryDisabilityBenefitsGrantPeriodRequestDto,
     },
-    tag: ['concessao-auxilio-doenca'],
+    tag: ['auxilio-de-incapacidade-temporaria'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
       description: 'Períodos criados com sucesso.',
@@ -205,14 +206,15 @@ export class TemporaryDisabilityBenefitsGrantController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Atualizar período da análise de concessão de auxílio-doença',
+    summary:
+      'Atualizar período da análise de auxílio de incapacidade temporária',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':temporaryDisabilityBenefitsGrantId/period',
       method: RequestMethod.PATCH,
       type: UpdateTemporaryDisabilityBenefitsGrantPeriodRequestDto,
     },
-    tag: ['concessao-auxilio-doenca'],
+    tag: ['auxilio-de-incapacidade-temporaria'],
     successResponse: {
       statusCode: HttpStatus.OK,
       description: 'Período atualizado com sucesso.',
@@ -241,14 +243,14 @@ export class TemporaryDisabilityBenefitsGrantController {
 
   @BuildEndpointSpecification({
     summary:
-      'Adicionar situação do segurado à análise de concessão de auxílio-doença',
+      'Adicionar situação do segurado à análise de auxílio de incapacidade temporária',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':temporaryDisabilityBenefitsGrantId/insured-status',
       method: RequestMethod.POST,
       type: CreateTemporaryDisabilityBenefitsGrantInsuredStatusRequestDto,
     },
-    tag: ['concessao-auxilio-doenca'],
+    tag: ['auxilio-de-incapacidade-temporaria'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
       description: 'Situação do segurado criada com sucesso.',
@@ -277,14 +279,14 @@ export class TemporaryDisabilityBenefitsGrantController {
 
   @BuildEndpointSpecification({
     summary:
-      'Atualizar situação do segurado da análise de concessão de auxílio-doença',
+      'Atualizar situação do segurado da análise de auxílio de incapacidade temporária',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':temporaryDisabilityBenefitsGrantId/insured-status',
       method: RequestMethod.PATCH,
       type: UpdateTemporaryDisabilityBenefitsGrantInsuredStatusRequestDto,
     },
-    tag: ['concessao-auxilio-doenca'],
+    tag: ['auxilio-de-incapacidade-temporaria'],
     successResponse: {
       statusCode: HttpStatus.OK,
       description: 'Situação do segurado atualizada com sucesso.',
@@ -313,14 +315,14 @@ export class TemporaryDisabilityBenefitsGrantController {
 
   @BuildEndpointSpecification({
     summary:
-      'Adicionar vínculos empregatícios à análise de concessão de auxílio-doença',
+      'Adicionar vínculos empregatícios à análise de auxílio de incapacidade temporária',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':temporaryDisabilityBenefitsGrantId/work-periods',
       method: RequestMethod.POST,
       type: CreateTemporaryDisabilityBenefitsGrantWorkPeriodsRequestDto,
     },
-    tag: ['concessao-auxilio-doenca'],
+    tag: ['auxilio-de-incapacidade-temporaria'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
       description: 'Vínculos empregatícios criados com sucesso.',
@@ -349,14 +351,14 @@ export class TemporaryDisabilityBenefitsGrantController {
 
   @BuildEndpointSpecification({
     summary:
-      'Atualizar vínculo empregatício da análise de concessão de auxílio-doença',
+      'Atualizar vínculo empregatício da análise de auxílio de incapacidade temporária',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':temporaryDisabilityBenefitsGrantId/work-periods',
       method: RequestMethod.PATCH,
       type: UpdateTemporaryDisabilityBenefitsGrantWorkPeriodsRequestDto,
     },
-    tag: ['concessao-auxilio-doenca'],
+    tag: ['auxilio-de-incapacidade-temporaria'],
     successResponse: {
       statusCode: HttpStatus.OK,
       description: 'Vínculo empregatício atualizado com sucesso.',
@@ -384,13 +386,13 @@ export class TemporaryDisabilityBenefitsGrantController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Gerar pré-análise da concessão de auxílio-doença',
+    summary: 'Gerar pré-análise da auxílio de incapacidade temporária',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':temporaryDisabilityBenefitsGrantId/first-analysis',
       method: RequestMethod.POST,
     },
-    tag: ['concessao-auxilio-doenca'],
+    tag: ['auxilio-de-incapacidade-temporaria'],
     successResponse: {
       statusCode: HttpStatus.OK,
       description: 'Pré-análise gerada com sucesso.',
@@ -416,13 +418,13 @@ export class TemporaryDisabilityBenefitsGrantController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Criar resultado da análise de concessão de auxílio-doença',
+    summary: 'Criar resultado da análise de auxílio de incapacidade temporária',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':temporaryDisabilityBenefitsGrantId/result',
       method: RequestMethod.POST,
     },
-    tag: ['concessao-auxilio-doenca'],
+    tag: ['auxilio-de-incapacidade-temporaria'],
     successResponse: {
       statusCode: HttpStatus.OK,
       description: 'Resultado criado com sucesso.',
@@ -448,17 +450,17 @@ export class TemporaryDisabilityBenefitsGrantController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Baixar análise completa da concessão de auxílio-doença',
+    summary: 'Baixar análise completa da auxílio de incapacidade temporária',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':temporaryDisabilityBenefitsGrantId/download/complete-version',
       method: RequestMethod.GET,
     },
-    tag: ['concessao-auxilio-doenca'],
+    tag: ['auxilio-de-incapacidade-temporaria'],
     successResponse: {
       statusCode: HttpStatus.OK,
       description:
-        'Arquivo da análise completa de concessão de auxílio-doença retornado para download.',
+        'Arquivo da análise completa de auxílio de incapacidade temporária retornado para download.',
       type: Buffer,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -484,17 +486,18 @@ export class TemporaryDisabilityBenefitsGrantController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Baixar análise simplificada da concessão de auxílio-doença',
+    summary:
+      'Baixar análise simplificada da auxílio de incapacidade temporária',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':temporaryDisabilityBenefitsGrantId/download/simplified-version',
       method: RequestMethod.GET,
     },
-    tag: ['concessao-auxilio-doenca'],
+    tag: ['auxilio-de-incapacidade-temporaria'],
     successResponse: {
       statusCode: HttpStatus.OK,
       description:
-        'Arquivo da análise simplificada de concessão de auxílio-doença retornado para download.',
+        'Arquivo da análise simplificada de auxílio de incapacidade temporária retornado para download.',
       type: Buffer,
     },
     guard: [AuthGuard, OrganizationSessionGuard],

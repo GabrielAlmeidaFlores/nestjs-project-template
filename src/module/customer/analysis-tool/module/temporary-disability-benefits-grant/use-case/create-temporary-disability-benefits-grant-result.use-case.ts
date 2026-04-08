@@ -174,9 +174,6 @@ export class CreateTemporaryDisabilityBenefitsGrantResultUseCase {
 
     return CreateTemporaryDisabilityBenefitsGrantResultResponseDto.build({
       temporaryDisabilityBenefitsGrantCompleteAnalysis: parsedResult,
-      isEligibleForTemporaryDisabilityBenefits:
-        parsedResult.isEligibleForTemporaryDisabilityBenefits,
-      analysisResult: parsedResult.analysisResult,
     });
   }
 
