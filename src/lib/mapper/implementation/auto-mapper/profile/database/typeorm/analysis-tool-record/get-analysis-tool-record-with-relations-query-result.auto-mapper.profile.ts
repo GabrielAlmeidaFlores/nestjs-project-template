@@ -23,6 +23,7 @@ import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementat
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
 import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
+import { SpecialCategoryRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis.typeorm.entity';
 import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
 import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant.typeorm.entity';
@@ -54,6 +55,7 @@ import { GetRetirementPlanningRgpsWithRelationsQueryResult } from '@module/custo
 import { GetRetirementPlanningRppsQueryResult } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps/query/result/get-retirement-planning-rpps.query.resut';
 import { GetRuralTimelineAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
 import { GetSpecialActivityAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis/query/result/get-special-activity-analysis-with-relations.query.result';
+import { GetSpecialCategoryRetirementAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis/query/result/get-special-category-retirement-analysis-with-relations.query.result';
 import { GetSpeechGeneratorQueryResult } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/query/result/get-speech-generator.query.result';
 import { GetTeacherRetirementPlanningWithRelationsQueryResult } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/query/result/get-teacher-retirement-planning-with-relations.query.result';
 import { GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResult } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant/query/result/get-temporary-disability-benefits-grant-with-relations.query.result';
@@ -120,6 +122,16 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         SpecialActivityTypeormEntity,
         GetSpecialActivityAnalysisWithRelationsQueryResult,
       );
+
+      const specialCategoryRetirementAnalysis =
+        source.specialCategoryRetirementAnalysis !== null &&
+        source.specialCategoryRetirementAnalysis !== undefined
+          ? this.mapper.map(
+              source.specialCategoryRetirementAnalysis,
+              SpecialCategoryRetirementAnalysisTypeormEntity,
+              GetSpecialCategoryRetirementAnalysisWithRelationsQueryResult,
+            )
+          : null;
 
       const judicialCaseAnalysis = this.mapper.map(
         source.judicialCaseAnalysis,
@@ -309,6 +321,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         retirementPlanningRpps,
         retirementPlanningRgps,
         specialActivity,
+        specialCategoryRetirementAnalysis,
         judicialCaseAnalysis,
         administrativeProcedureInssAnalysis,
         medicalQuestionGenerator,
