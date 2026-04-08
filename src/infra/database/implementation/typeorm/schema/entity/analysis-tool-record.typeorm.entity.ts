@@ -24,6 +24,7 @@ import { SpecialCategoryRetirementAnalysisTypeormEntity } from '@infra/database/
 import { SpecialRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant.typeorm.entity';
 import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
 import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning.typeorm.entity';
+import { TemporaryDisabilityBenefitsGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant.typeorm.entity';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 
@@ -213,6 +214,10 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   @ManyToOne(() => DisabilityRetirementPlanningGrantTypeormEntity)
   @JoinColumn({ name: 'disability_retirement_planning_grant_id' })
   public disabilityRetirementPlanningGrant?: DisabilityRetirementPlanningGrantTypeormEntity | null;
+
+  @ManyToOne(() => TemporaryDisabilityBenefitsGrantTypeormEntity)
+  @JoinColumn({ name: 'temporary_disability_benefits_grant_id' })
+  public temporaryDisabilityBenefitsGrant?: TemporaryDisabilityBenefitsGrantTypeormEntity | null;
 
   @ManyToOne(() => GeneralUrbanRetirementGrantTypeormEntity)
   @JoinColumn({ name: 'general_urban_retirement_grant_id' })

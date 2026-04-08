@@ -26,6 +26,7 @@ import { SpecialCategoryRetirementAnalysisTypeormEntity } from '@infra/database/
 import { SpecialRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant.typeorm.entity';
 import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
 import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning.typeorm.entity';
+import { TemporaryDisabilityBenefitsGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
@@ -36,10 +37,10 @@ import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/anal
 import { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.entity';
-import { DisabilityRetirementPlanningEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/disability-retirement-planning.entity';
 import { DisabilityRetirementPlanningGrantEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant/disability-retirement-planning-grant.entity';
-import { GeneralUrbanRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/general-urban-retirement-analysis-entity';
+import { DisabilityRetirementPlanningEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/disability-retirement-planning.entity';
 import { GeneralUrbanRetirementGrantEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/general-urban-retirement-grant.entity';
+import { GeneralUrbanRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/general-urban-retirement-analysis-entity';
 import { InsuranceQualityAnalysisEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/insurance-quality-analysis.entity';
 import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
@@ -52,6 +53,7 @@ import { SpecialActivityEntity } from '@module/customer/analysis-tool/module/spe
 import { SpecialCategoryRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/special-category-retirement-analysis.entity';
 import { SpecialRetirementGrantEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/special-retirement-grant.entity';
 import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
+import { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/temporary-disability-benefits-grant.entity';
 
 @Injectable()
 export class AnalysisToolRecordEntityAutoMapperProfile {
@@ -254,6 +256,16 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
               SpecialRetirementGrantEntity,
             )
           : null;
+          
+      const temporaryDisabilityBenefitsGrant =
+        source.temporaryDisabilityBenefitsGrant !== null &&
+        source.temporaryDisabilityBenefitsGrant !== undefined
+          ? this.mapper.map(
+              source.temporaryDisabilityBenefitsGrant,
+              TemporaryDisabilityBenefitsGrantTypeormEntity,
+              TemporaryDisabilityBenefitsGrantEntity,
+            )
+          : null;
 
       return new AnalysisToolRecordEntity({
         id: new AnalysisToolRecordId(source.id),
@@ -286,6 +298,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         generalUrbanRetirementAnalysis,
         specialCategoryRetirementAnalysis,
         specialRetirementGrant,
+        temporaryDisabilityBenefitsGrant,
       });
     };
 
@@ -418,6 +431,13 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         AnalysisToolClientTypeormEntity,
       );
 
+      const temporaryDisabilityBenefitsGrant =
+        source.temporaryDisabilityBenefitsGrant !== null
+          ? ({
+              id: source.temporaryDisabilityBenefitsGrant.id.toString(),
+            } as TemporaryDisabilityBenefitsGrantTypeormEntity)
+          : null;
+
       const specialActivity =
         source.specialActivity !== null
           ? this.mapper.map(
@@ -516,6 +536,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         generalUrbanRetirementAnalysis,
         specialCategoryRetirementAnalysis,
         specialRetirementGrant,
+        temporaryDisabilityBenefitsGrant,
         analysisToolClient,
         createdBy: {
           id: source.createdBy.toString(),

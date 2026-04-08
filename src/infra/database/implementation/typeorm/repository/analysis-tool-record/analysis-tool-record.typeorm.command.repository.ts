@@ -8,6 +8,7 @@ import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
+import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 
@@ -61,5 +62,14 @@ export class AnalysisToolRecordTypeormCommandRepository
     );
 
     return this.update(id.toString(), mappedData);
+  }
+
+  public updateAnalysisToolRecordAnalysisToolClient(
+    id: AnalysisToolRecordId,
+    analysisToolClientId: AnalysisToolClientId,
+  ): TransactionType {
+    return this.update(id.toString(), {
+      analysisToolClient: { id: analysisToolClientId.toString() },
+    });
   }
 }

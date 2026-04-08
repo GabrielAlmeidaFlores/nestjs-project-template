@@ -19,8 +19,8 @@ export class GetTeacherRetirementPlanningWithRelationsQueryResult extends BaseBu
   public readonly analysisName: string | null;
   public readonly currentPosition: string | null;
   public readonly activityType: TeacherRetirementPlanningActivityTypeEnum;
-  public readonly publicServiceStartDate: Date;
-  public readonly careerStartDate: Date;
+  public readonly publicServiceStartDate: Date | null;
+  public readonly careerStartDate: Date | null;
   public readonly administrativeProcessAnalysis: string | null;
   public readonly inssBenefits: GetTeacherRetirementPlanningInssBenefitQueryResult[];
   public readonly legalProceedings: GetTeacherRetirementPlanningLegalProceedingQueryResult[];

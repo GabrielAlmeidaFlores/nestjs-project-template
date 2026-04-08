@@ -388,6 +388,18 @@ import { SupportTicketAttachmentEntityAutoMapperProfile } from '@lib/mapper/impl
 import { SupportTicketMessageEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/support-ticket-message/support-ticket-message-entity.auto-mapper.profile';
 import { SystemActivityEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/system-activity/system-activity-entity.auto-mapper.profile';
 import { GetTeacherRetirementPlanningWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/teacher-retirement-planning/get-teacher-retirement-planning-with-relations-query-result.auto-mapper.profile';
+import { GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant/get-temporary-disability-benefits-grant-with-relations-query-result.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant/temporary-disability-benefits-grant-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-document/temporary-disability-benefits-grant-document-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantInsuredStatusEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-insured-status/temporary-disability-benefits-grant-insured-status-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantInsuredStatusDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-insured-status-document/temporary-disability-benefits-grant-insured-status-document-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-period/temporary-disability-benefits-grant-period-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-period-document/temporary-disability-benefits-grant-period-document-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantPreviousBenefitsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-previous-benefits/temporary-disability-benefits-grant-previous-benefits-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantPreviousBenefitsDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-previous-benefits-document/temporary-disability-benefits-grant-previous-benefits-document-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-result/temporary-disability-benefits-grant-result-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantWorkPeriodsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-work-periods/temporary-disability-benefits-grant-work-periods-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-work-periods-earnings-history/temporary-disability-benefits-grant-work-periods-earnings-history-entity.auto-mapper.profile';
 import { GetTutorialQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/tutorial/get-tutorial-query-result.auto-mapper.profile';
 import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/tutorial/tutorial-entity.auto-mapper.profile';
 
@@ -650,6 +662,18 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetDisabilityRetirementPlanningGrantTimeAcceleratorQueryResultAutoMapperProfile,
     GetDisabilityRetirementPlanningGrantWithRelationsQueryResultAutoMapperProfile,
     DisabilityRetirementPlanningGrantEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantEntityAutoMapperProfile,
+    GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResultAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantResultEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantDocumentEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantPeriodEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantPeriodDocumentEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantPreviousBenefitsEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantPreviousBenefitsDocumentEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantInsuredStatusEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantInsuredStatusDocumentEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantWorkPeriodsEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryEntityAutoMapperProfile,
     GeneralUrbanRetirementAnalysisEntityAutoMapperProfile,
     GetGeneralUrbanRetirementAnalysisDocumentQueryResultAutoMapperProfile,
     GetGeneralUrbanRetirementAnalysisLegalProceedingQueryResultAutoMapperProfile,

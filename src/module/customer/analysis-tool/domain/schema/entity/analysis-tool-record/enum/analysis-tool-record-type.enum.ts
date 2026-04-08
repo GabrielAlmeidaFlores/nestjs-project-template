@@ -20,4 +20,5 @@ export enum AnalysisToolRecordTypeEnum {
   SPECIAL_CATEGORY_RETIREMENT = 'aposentadoria_categoria_especial',
   SPECIAL_RETIREMENT_GRANT = 'concessao_aposentadoria_especial',
   DISABILITY_RETIREMENT_PLANNING_GRANT = 'concessao_aposentadoria_para_deficiente',
+  TEMPORARY_DISABILITY_BENEFITS_GRANT = 'auxilio_incapacidade_temporaria',
 }

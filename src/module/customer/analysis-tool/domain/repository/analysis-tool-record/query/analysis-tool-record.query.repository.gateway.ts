@@ -28,6 +28,8 @@ import type { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/mod
 import type { SpecialActivityId } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/value-object/special-activity-id.value-object';
 import type { SpecialRetirementGrantId } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/value-object/special-retirement-grant-id/special-retirement-grant-id.value-object';
 import type { SpeechGeneratorId } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/value-object/speech-generator-id/speech-generator-id.value-object';
+import type { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
+import type { TemporaryDisabilityBenefitsGrantId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/value-object/temporary-disability-benefits-grant-id.value-object';
 import type { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import type { ConstructorType } from '@shared/system/type/constructor.type';
 
@@ -202,6 +204,19 @@ export abstract class AnalysisToolRecordQueryRepositoryGateway {
     err: ConstructorType<NotFoundError>,
   ): Promise<GetAnalysisToolRecordWithRelationsQueryResult>;
 
+  public abstract findWithRelationsByTemporaryDisabilityBenefitsGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    temporaryDisabilityBenefitsGrantId: TemporaryDisabilityBenefitsGrantId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult>;
+
+  public abstract findWithRelationsByTemporaryDisabilityBenefitsGrantIdAndOrganizationIdAndAuthIdentityId(
+    temporaryDisabilityBenefitsGrantId: TemporaryDisabilityBenefitsGrantId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult | null>;
+
   public abstract findWithRelationsByGeneralUrbanRetirementAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
     generalUrbanRetirementAnalysisId: GeneralUrbanRetirementAnalysisId,
     organizationId: OrganizationId,
@@ -232,4 +247,11 @@ export abstract class AnalysisToolRecordQueryRepositoryGateway {
   ): Promise<
     ListDataOutputModel<GetAnalysisToolRecordWithFullRelationsQueryResult>
   >;
+
+  public abstract findWithRelationsByTeacherRetirementPlanningIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    teacherRetirementPlanningId: TeacherRetirementPlanningId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult>;
 }
