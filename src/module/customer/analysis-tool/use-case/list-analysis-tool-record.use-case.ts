@@ -106,6 +106,8 @@ export class ListAnalysisToolRecordUseCase {
 
           const analysisId =
             analysis?.id ??
+            analysisToolRecord.specialCategoryRetirementAnalysis
+              ?.specialCategoryRetirementAnalysisId ??
             analysisToolRecord.temporaryDisabilityBenefitsGrant
               ?.temporaryDisabilityBenefitsGrantId ??
             null;
