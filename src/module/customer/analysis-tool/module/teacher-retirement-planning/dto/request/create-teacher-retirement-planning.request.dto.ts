@@ -148,11 +148,11 @@ export class CreateTeacherRetirementPlanningRequestDto extends BaseBuildableDtoO
   @RequestDtoEnumProperty(TeacherRetirementPlanningActivityTypeEnum)
   public readonly activityType: TeacherRetirementPlanningActivityTypeEnum;
 
-  @RequestDtoDateProperty({ required: true })
-  public readonly publicServiceStartDate: Date;
+  @RequestDtoDateProperty({ required: false })
+  public readonly publicServiceStartDate?: Date;
 
-  @RequestDtoDateProperty({ required: true })
-  public readonly careerStartDate: Date;
+  @RequestDtoDateProperty({ required: false })
+  public readonly careerStartDate?: Date;
 
   @RequestDtoStringProperty({ required: false, isArray: true })
   public readonly inssBenefitNumber?: string[];
