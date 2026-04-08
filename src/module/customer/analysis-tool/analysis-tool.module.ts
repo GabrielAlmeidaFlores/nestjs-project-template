@@ -14,6 +14,7 @@ import { RemunerationCalculatorModule } from '@module/customer/analysis-tool/lib
 import { AdministrativeProcedureInssAnalysisModule } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.module';
 import { AudienceQuestionGeneratorModule } from '@module/customer/analysis-tool/module/audience-question-generator/audience-question-generator.module';
 import { CnisFastAnalysisModule } from '@module/customer/analysis-tool/module/cnis-fast-analysis/cnis-fast-analysis.module';
+import { DeathBenefitModule } from '@module/customer/analysis-tool/module/death-benefit/death-benefit.module';
 import { DisabilityAssessmentForBpcAnalysisModule } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.module';
 import { DisabilityRetirementPlanningModule } from '@module/customer/analysis-tool/module/disability-retirement-planning/disability-retirement-planning.module';
 import { DisabilityRetirementPlanningGrantModule } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/disability-retirement-planning-grant.module';
@@ -88,6 +89,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     GeneralUrbanRetirementGrantModule,
     GeneralUrbanRetirementModule,
     SpecialCategoryRetirementAnalysisModule,
+    DeathBenefitModule,
   ],
   controllers: [AnalysisToolController],
   providers: [

@@ -1,0 +1,5 @@
+export enum DeathBenefitDependentClassEnum {
+  PRIMEIRA_CLASSE = 'PRIMEIRA_CLASSE',
+  SEGUNDA_CLASSE = 'SEGUNDA_CLASSE',
+  TERCEIRA_CLASSE = 'TERCEIRA_CLASSE',
+}
