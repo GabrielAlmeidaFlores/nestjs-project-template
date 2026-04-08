@@ -93,8 +93,8 @@ export class UpdateTeacherRetirementPlanningUseCase {
       analysisName: dto.analysisName ?? null,
       currentPosition: dto.currentPosition ?? null,
       activityType: dto.activityType,
-      publicServiceStartDate: dto.publicServiceStartDate,
-      careerStartDate: dto.careerStartDate,
+      publicServiceStartDate: dto.publicServiceStartDate ?? null,
+      careerStartDate: dto.careerStartDate ?? null,
       administrativeProcessAnalysis: dto.administrativeProcessAnalysis ?? null,
     });
 

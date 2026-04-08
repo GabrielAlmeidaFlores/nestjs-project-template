@@ -12,8 +12,8 @@ export interface TeacherRetirementPlanningEntityPropsInterface extends BaseEntit
   analysisName?: string | null;
   currentPosition?: string | null;
   activityType: TeacherRetirementPlanningActivityTypeEnum;
-  publicServiceStartDate: Date;
-  careerStartDate: Date;
+  publicServiceStartDate?: Date | null;
+  careerStartDate?: Date | null;
   administrativeProcessAnalysis?: string | null;
   teacherRetirementPlanningResult?: TeacherRetirementPlanningResultEntity | null;
 }

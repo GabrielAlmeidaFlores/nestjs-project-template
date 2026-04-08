@@ -6,6 +6,7 @@ import { TeacherRetirementPlanningPeriodServiceTypeEnum } from '@module/customer
 import { TeacherRetirementPlanningPeriodItemEducationLevelEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period-item/enum/teacher-retirement-planning-period-item-education-level.enum';
 import { TeacherRetirementPlanningPeriodItemInstitutionTypeEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period-item/enum/teacher-retirement-planning-period-item-institution-type.enum';
 import { TeacherRetirementPlanningPeriodItemRolePerformedEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period-item/enum/teacher-retirement-planning-period-item-role-performed.enum';
+import { GetAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client.response.dto';
 import { TeacherRetirementPlanningCompleteAnalysisResultResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning-result.response.dto';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
@@ -159,11 +160,11 @@ export class GetTeacherRetirementPlanningResponseDto extends BaseBuildableDtoObj
   @ResponseDtoEnumProperty(TeacherRetirementPlanningActivityTypeEnum)
   public activityType: TeacherRetirementPlanningActivityTypeEnum;
 
-  @ResponseDtoDateProperty()
-  public publicServiceStartDate: Date;
+  @ResponseDtoDateProperty({ required: false })
+  public publicServiceStartDate?: Date;
 
-  @ResponseDtoDateProperty()
-  public careerStartDate: Date;
+  @ResponseDtoDateProperty({ required: false })
+  public careerStartDate?: Date;
 
   @ResponseDtoStringProperty({ required: false })
   public administrativeProcessAnalysis?: string;
@@ -208,6 +209,9 @@ export class GetTeacherRetirementPlanningResponseDto extends BaseBuildableDtoObj
     },
   )
   public teacherRetirementPlanningResult?: GetTeacherRetirementPlanningResultResponseDto;
+
+  @ResponseDtoObjectProperty(() => GetAnalysisToolClientResponseDto)
+  public analysisToolClient: GetAnalysisToolClientResponseDto;
 
   protected override readonly _type =
     GetTeacherRetirementPlanningResponseDto.name;
