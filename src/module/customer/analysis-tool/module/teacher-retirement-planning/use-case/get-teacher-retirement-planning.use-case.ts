@@ -2,6 +2,11 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
+import {
+  GetAnalysisToolClientResponseDto,
+  GetAnalysisToolClientResponsibleResponseDto,
+} from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client.response.dto';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { TeacherRetirementPlanningQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/query/teacher-retirement-planning.query.repository.gateway';
@@ -34,6 +39,8 @@ export class GetTeacherRetirementPlanningUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(TeacherRetirementPlanningQueryRepositoryGateway)
     private readonly teacherRetirementPlanningQueryRepositoryGateway: TeacherRetirementPlanningQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
   ) {}
@@ -61,6 +68,34 @@ export class GetTeacherRetirementPlanningUseCase {
     if (planning === null) {
       throw new TeacherRetirementPlanningNotFoundError();
     }
+
+    const recordQueryResult =
+      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByTeacherRetirementPlanningIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        teacherRetirementPlanningId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+        TeacherRetirementPlanningNotFoundError,
+      );
+
+    const client = recordQueryResult.analysisToolClient;
+    const analysisToolClient = GetAnalysisToolClientResponseDto.build({
+      ...client,
+      analysisCount: 0,
+      legalProceedingNumber: client.analysisToolClientLegalProceeding.map(
+        (p) => p.legalProceedingNumber,
+      ),
+      inssBenefitNumber: client.analysisToolClientInssBenefit.map(
+        (b) => b.inssBenefitNumber,
+      ),
+      createdBy: GetAnalysisToolClientResponsibleResponseDto.build({
+        id: client.createdBy.customer.id,
+        name: client.createdBy.customer.name,
+      }),
+      updatedBy: GetAnalysisToolClientResponsibleResponseDto.build({
+        id: client.updatedBy.customer.id,
+        name: client.updatedBy.customer.name,
+      }),
+    });
 
     const periods = await Promise.all(
       planning.periods.map(async (period) =>
@@ -201,8 +236,12 @@ export class GetTeacherRetirementPlanningUseCase {
         currentPosition: planning.currentPosition,
       }),
       activityType: planning.activityType,
-      publicServiceStartDate: planning.publicServiceStartDate,
-      careerStartDate: planning.careerStartDate,
+      ...(planning.publicServiceStartDate !== null && {
+        publicServiceStartDate: planning.publicServiceStartDate,
+      }),
+      ...(planning.careerStartDate !== null && {
+        careerStartDate: planning.careerStartDate,
+      }),
       ...(planning.administrativeProcessAnalysis !== null && {
         administrativeProcessAnalysis: planning.administrativeProcessAnalysis,
       }),
@@ -222,6 +261,7 @@ export class GetTeacherRetirementPlanningUseCase {
       ...(teacherRetirementPlanningResult && {
         teacherRetirementPlanningResult,
       }),
+      analysisToolClient,
     });
 
     return response;
