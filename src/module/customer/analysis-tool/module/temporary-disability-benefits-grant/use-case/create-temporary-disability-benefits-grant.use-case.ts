@@ -45,7 +45,9 @@ export class CreateTemporaryDisabilityBenefitsGrantUseCase {
     private readonly temporaryDisabilityBenefitsGrantDocumentCommandRepositoryGateway: TemporaryDisabilityBenefitsGrantDocumentCommandRepositoryGateway,
     @Inject(TemporaryDisabilityBenefitsGrantInssBenefitCommandRepositoryGateway)
     private readonly temporaryDisabilityBenefitsGrantInssBenefitCommandRepositoryGateway: TemporaryDisabilityBenefitsGrantInssBenefitCommandRepositoryGateway,
-    @Inject(TemporaryDisabilityBenefitsGrantLegalProceedingCommandRepositoryGateway)
+    @Inject(
+      TemporaryDisabilityBenefitsGrantLegalProceedingCommandRepositoryGateway,
+    )
     private readonly temporaryDisabilityBenefitsGrantLegalProceedingCommandRepositoryGateway: TemporaryDisabilityBenefitsGrantLegalProceedingCommandRepositoryGateway,
     @Inject(AnalysisToolClientQueryRepositoryGateway)
     private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
