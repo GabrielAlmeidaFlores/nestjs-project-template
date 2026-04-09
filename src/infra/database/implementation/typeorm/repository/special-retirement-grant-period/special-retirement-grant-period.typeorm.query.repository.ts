@@ -6,8 +6,8 @@ import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.v
 import { SpecialRetirementGrantPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-period.typeorm.entity';
 import { GetSpecialRetirementGrantPeriodWithChildrenQueryResult } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-period/query/result/get-special-retirement-grant-period-with-children.query.result';
 import { SpecialRetirementGrantPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-period/query/special-retirement-grant-period.query.repository.gateway';
-import { GetSpecialRetirementGrantPeriodOverdueContributionQueryResult } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-period-overdue-contribution/query/result/get-special-retirement-grant-period-overdue-contribution.query.result';
 import { GetSpecialRetirementGrantPeriodObservationQueryResult } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-period-observation/query/result/get-special-retirement-grant-period-observation.query.result';
+import { GetSpecialRetirementGrantPeriodOverdueContributionQueryResult } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-period-overdue-contribution/query/result/get-special-retirement-grant-period-overdue-contribution.query.result';
 import { GetSpecialRetirementGrantPeriodPendingExitDateQueryResult } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-period-pending-exit-date/query/result/get-special-retirement-grant-period-pending-exit-date.query.result';
 import { GetSpecialRetirementGrantPeriodUnderMinimumQueryResult } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-period-under-minimum/query/result/get-special-retirement-grant-period-under-minimum.query.result';
 import { SpecialRetirementGrantId } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/value-object/special-retirement-grant-id/special-retirement-grant-id.value-object';
@@ -105,15 +105,14 @@ export class SpecialRetirementGrantPeriodTypeormQueryRepository implements Speci
             updatedAt: ped.updatedAt,
           }),
         ),
-        observations: (
-          row.specialRetirementGrantPeriodObservation ?? []
-        ).map((obs) =>
-          GetSpecialRetirementGrantPeriodObservationQueryResult.build({
-            id: new SpecialRetirementGrantPeriodObservationId(obs.id),
-            observation: obs.observation,
-            createdAt: obs.createdAt,
-            updatedAt: obs.updatedAt,
-          }),
+        observations: (row.specialRetirementGrantPeriodObservation ?? []).map(
+          (obs) =>
+            GetSpecialRetirementGrantPeriodObservationQueryResult.build({
+              id: new SpecialRetirementGrantPeriodObservationId(obs.id),
+              observation: obs.observation,
+              createdAt: obs.createdAt,
+              updatedAt: obs.updatedAt,
+            }),
         ),
         createdAt: row.createdAt,
         updatedAt: row.updatedAt,

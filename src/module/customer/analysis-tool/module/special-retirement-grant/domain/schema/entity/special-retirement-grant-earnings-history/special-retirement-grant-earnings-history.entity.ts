@@ -7,19 +7,19 @@ import { Description } from '@shared/system/decorator/property/description/descr
 
 export class SpecialRetirementGrantEarningsHistoryEntity extends BaseEntity<SpecialRetirementGrantEarningsHistoryId> {
   @Description('Competência.')
-  public readonly competence?: Date | null;
+  public readonly competence: Date | null;
 
   @Description('Remuneração.')
-  public readonly remuneration?: string | null;
+  public readonly remuneration: string | null;
 
   @Description('Indicadores CNIS.')
-  public readonly indicators?: string | null;
+  public readonly indicators: string | null;
 
   @Description('Data de pagamento.')
-  public readonly paymentDate?: Date | null;
+  public readonly paymentDate: Date | null;
 
   @Description('Indica competência abaixo do mínimo.')
-  public readonly competenceBelowTheMinimum?: boolean | null;
+  public readonly competenceBelowTheMinimum: boolean | null;
 
   @Description('Concessão de aposentadoria especial associada.')
   public readonly specialRetirementGrant: SpecialRetirementGrantEntity;

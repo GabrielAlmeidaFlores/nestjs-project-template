@@ -40,4 +40,3 @@ export class SpecialRetirementGrantPeriodUnderMinimumTypeormCommandRepository
     return this.create(mapped);
   }
 }
-

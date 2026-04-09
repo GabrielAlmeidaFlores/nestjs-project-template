@@ -58,4 +58,3 @@ export class SpecialRetirementGrantPeriodTypeormCommandRepository
     return this.delete(id.toString());
   }
 }
-

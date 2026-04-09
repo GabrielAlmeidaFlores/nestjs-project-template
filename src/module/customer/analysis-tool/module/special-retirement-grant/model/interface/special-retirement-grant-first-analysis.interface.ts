@@ -32,9 +32,11 @@ export interface SpecialRetirementGrantFirstAnalysisPeriodInterface {
   impact: string | null;
   gracePeriod: number | null;
   agents: SpecialRetirementGrantFirstAnalysisAgentInterface[];
-  status: 'valid' | 'pending' | 'invalid' | string;
+  status: 'valid' | 'pending' | 'invalid';
   earningsHistory: SpecialRetirementGrantFirstAnalysisEarningsHistoryItemInterface[];
-  observations?: SpecialRetirementGrantObservationsFirstAnalysisInterface[] | null;
+  observations?:
+    | SpecialRetirementGrantObservationsFirstAnalysisInterface[]
+    | null;
 }
 
 export interface SpecialRetirementGrantFirstAnalysisSummaryInterface {
@@ -64,7 +66,7 @@ export interface SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisInterface 
 export interface SpecialRetirementGrantFirstAnalysisTimelineItemInterface {
   startDate: string;
   endDate: string | null;
-  kind: 'special' | 'common' | 'overlap' | 'pendency' | 'gap' | string;
+  kind: 'special' | 'common' | 'overlap' | 'pendency' | 'gap';
   label: string | null;
 }
 

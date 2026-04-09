@@ -8,25 +8,25 @@ import { Description } from '@shared/system/decorator/property/description/descr
 
 export class SpecialRetirementGrantPeriodEntity extends BaseEntity<SpecialRetirementGrantPeriodId> {
   @Description('Sequencial do vínculo no CNIS.')
-  public readonly sequencial?: number | null;
+  public readonly sequencial: number | null;
 
   @Description('Origem do vínculo (nome do empregador/vínculo).')
-  public readonly employmentRelationshipSource?: string | null;
+  public readonly employmentRelationshipSource: string | null;
 
   @Description('Data de início do período.')
-  public readonly startDate?: Date | null;
+  public readonly startDate: Date | null;
 
   @Description('Data de fim do período.')
-  public readonly endDate?: Date | null;
+  public readonly endDate: Date | null;
 
   @Description('Categoria do vínculo.')
-  public readonly category?: string | null;
+  public readonly category: string | null;
 
   @Description('Status do período na linha do tempo integrada.')
-  public readonly status?: SpecialRetirementGrantPeriodStatusEnum | null;
+  public readonly status: SpecialRetirementGrantPeriodStatusEnum | null;
 
   @Description('Valor médio das remunerações/contribuições do vínculo.')
-  public readonly averageContributionAmount?: DecimalValue | null;
+  public readonly averageContributionAmount: DecimalValue | null;
 
   @Description('Indica se o período deve ser considerado.')
   public readonly shouldConsiderPeriod: boolean;
@@ -37,7 +37,7 @@ export class SpecialRetirementGrantPeriodEntity extends BaseEntity<SpecialRetire
   public readonly shouldConsiderLastRemunerationAsExitDate: boolean;
 
   @Description('Chave do documento CNIS associado à geração do período.')
-  public readonly cnisDocument?: string | null;
+  public readonly cnisDocument: string | null;
 
   @Description('Concessão de aposentadoria especial associada ao período.')
   public readonly specialRetirementGrant: SpecialRetirementGrantEntity;
@@ -53,10 +53,7 @@ export class SpecialRetirementGrantPeriodEntity extends BaseEntity<SpecialRetire
     this.endDate = props.endDate ?? null;
     this.category = props.category ?? null;
     this.status = props.status ?? null;
-    this.averageContributionAmount =
-      props.averageContributionAmount instanceof DecimalValue
-        ? props.averageContributionAmount
-        : (props.averageContributionAmount ?? null);
+    this.averageContributionAmount = props.averageContributionAmount ?? null;
     this.shouldConsiderPeriod = props.shouldConsiderPeriod;
     this.shouldConsiderLastRemunerationAsExitDate =
       props.shouldConsiderLastRemunerationAsExitDate;

@@ -217,15 +217,13 @@ export class GetSpecialRetirementGrantUseCase {
           }),
           shouldConsiderPeriod: period.shouldConsiderPeriod,
           overdueContributions: period.overdueContributions.map((oc) =>
-            SpecialRetirementGrantFirstAnalysisOverdueContributionModel.build(
-              {
-                id: oc.id.toString(),
-                overdueDate: oc.overdueDate,
-                ...(oc.paymentDate !== null && { paymentDate: oc.paymentDate }),
-                createdAt: oc.createdAt,
-                updatedAt: oc.updatedAt,
-              },
-            ),
+            SpecialRetirementGrantFirstAnalysisOverdueContributionModel.build({
+              id: oc.id.toString(),
+              overdueDate: oc.overdueDate,
+              ...(oc.paymentDate !== null && { paymentDate: oc.paymentDate }),
+              createdAt: oc.createdAt,
+              updatedAt: oc.updatedAt,
+            }),
           ),
           underMinimums: period.underMinimums.map((um) =>
             SpecialRetirementGrantFirstAnalysisUnderMinimumModel.build({
@@ -282,7 +280,7 @@ export class GetSpecialRetirementGrantUseCase {
         periods,
         technicalDiagnosis:
           SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisModel.build({
-            items: (raw.technicalDiagnosis?.items ?? []).map((item) =>
+            items: raw.technicalDiagnosis.items.map((item) =>
               SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemModel.build(
                 {
                   periodStartDate: new Date(item.periodStartDate),
@@ -296,7 +294,7 @@ export class GetSpecialRetirementGrantUseCase {
                   ...(item.legalFramework !== null && {
                     legalFramework: item.legalFramework,
                   }),
-                  agents: (item.agents ?? []).map((a) =>
+                  agents: item.agents.map((a) =>
                     SpecialRetirementGrantFirstAnalysisAgentModel.build({
                       type: a.type,
                       ...(a.intensity !== undefined &&
@@ -325,7 +323,7 @@ export class GetSpecialRetirementGrantUseCase {
           }),
         integratedTimeline:
           SpecialRetirementGrantFirstAnalysisIntegratedTimelineModel.build({
-            items: (raw.integratedTimeline?.items ?? []).map((t) =>
+            items: raw.integratedTimeline.items.map((t) =>
               SpecialRetirementGrantFirstAnalysisIntegratedTimelineItemModel.build(
                 {
                   startDate: new Date(t.startDate),
