@@ -256,9 +256,11 @@ import { TeacherRetirementPlanningResultTypeormCommandRepository } from '@infra/
 import { TemporaryDisabilityBenefitsGrantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant/temporary-disability-benefits-grant.typeorm.command.repository';
 import { TemporaryDisabilityBenefitsGrantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant/temporary-disability-benefits-grant.typeorm.query.repository';
 import { TemporaryDisabilityBenefitsGrantDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-document/temporary-disability-benefits-grant-document.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-inss-benefit/temporary-disability-benefits-grant-inss-benefit.typeorm.command.repository';
 import { TemporaryDisabilityBenefitsGrantInsuredStatusTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-insured-status/temporary-disability-benefits-grant-insured-status.typeorm.command.repository';
 import { TemporaryDisabilityBenefitsGrantInsuredStatusTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-insured-status/temporary-disability-benefits-grant-insured-status.typeorm.query.repository';
 import { TemporaryDisabilityBenefitsGrantInsuredStatusDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-insured-status-document/temporary-disability-benefits-grant-insured-status-document.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-legal-proceeding/temporary-disability-benefits-grant-legal-proceeding.typeorm.command.repository';
 import { TemporaryDisabilityBenefitsGrantPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-period/temporary-disability-benefits-grant-period.typeorm.command.repository';
 import { TemporaryDisabilityBenefitsGrantPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-period/temporary-disability-benefits-grant-period.typeorm.query.repository';
 import { TemporaryDisabilityBenefitsGrantPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-period-document/temporary-disability-benefits-grant-period-document.typeorm.command.repository';
@@ -479,8 +481,10 @@ import { TeacherRetirementPlanningRemunerationTypeormEntity } from '@infra/datab
 import { TeacherRetirementPlanningResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-result.typeorm.entity';
 import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-document.typeorm.entity';
+import { TemporaryDisabilityBenefitsGrantInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-inss-benefit.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantInsuredStatusDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-insured-status-document.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantInsuredStatusTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-insured-status.typeorm.entity';
+import { TemporaryDisabilityBenefitsGrantLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-legal-proceeding.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-period-document.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-period.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantPreviousBenefitsDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-previous-benefits-document.typeorm.entity';
@@ -602,6 +606,8 @@ export class TypeormIndex {
     TemporaryDisabilityBenefitsGrantInsuredStatusDocumentTypeormEntity,
     TemporaryDisabilityBenefitsGrantWorkPeriodsTypeormEntity,
     TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryTypeormEntity,
+    TemporaryDisabilityBenefitsGrantInssBenefitTypeormEntity,
+    TemporaryDisabilityBenefitsGrantLegalProceedingTypeormEntity,
     GeneralUrbanRetirementGrantTypeormEntity,
     GeneralUrbanRetirementGrantResultTypeormEntity,
     GeneralUrbanRetirementGrantInssBenefitTypeormEntity,
@@ -851,6 +857,8 @@ export class TypeormIndex {
     TemporaryDisabilityBenefitsGrantWorkPeriodsTypeormCommandRepository,
     TemporaryDisabilityBenefitsGrantWorkPeriodsTypeormQueryRepository,
     TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryTypeormCommandRepository,
+    TemporaryDisabilityBenefitsGrantInssBenefitTypeormCommandRepository,
+    TemporaryDisabilityBenefitsGrantLegalProceedingTypeormCommandRepository,
     GeneralUrbanRetirementGrantTypeormCommandRepository,
     GeneralUrbanRetirementGrantTypeormQueryRepository,
     GeneralUrbanRetirementGrantResultTypeormCommandRepository,

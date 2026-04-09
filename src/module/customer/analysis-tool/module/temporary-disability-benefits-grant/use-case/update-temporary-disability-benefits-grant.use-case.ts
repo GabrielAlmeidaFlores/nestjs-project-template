@@ -10,10 +10,16 @@ import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-pr
 import { TemporaryDisabilityBenefitsGrantCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant/command/temporary-disability-benefits-grant.command.repository.gateway';
 import { TemporaryDisabilityBenefitsGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant/query/temporary-disability-benefits-grant.query.repository.gateway';
 import { TemporaryDisabilityBenefitsGrantDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-document/command/temporary-disability-benefits-grant-document.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-inss-benefit/command/temporary-disability-benefits-grant-inss-benefit.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-legal-proceeding/command/temporary-disability-benefits-grant-legal-proceeding.command.repository.gateway';
 import { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/temporary-disability-benefits-grant.entity';
 import { TemporaryDisabilityBenefitsGrantId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/value-object/temporary-disability-benefits-grant-id.value-object';
 import { TemporaryDisabilityBenefitsGrantDocumentEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-document/temporary-disability-benefits-grant-document.entity';
 import { TemporaryDisabilityBenefitsGrantDocumentId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-document/value-object/temporary-disability-benefits-grant-document-id.value-object';
+import { TemporaryDisabilityBenefitsGrantInssBenefitEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-inss-benefit/temporary-disability-benefits-grant-inss-benefit.entity';
+import { TemporaryDisabilityBenefitsGrantInssBenefitId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-inss-benefit/value-object/temporary-disability-benefits-grant-inss-benefit-id.value-object';
+import { TemporaryDisabilityBenefitsGrantLegalProceedingEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-legal-proceeding/temporary-disability-benefits-grant-legal-proceeding.entity';
+import { TemporaryDisabilityBenefitsGrantLegalProceedingId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-legal-proceeding/value-object/temporary-disability-benefits-grant-legal-proceeding-id.value-object';
 import { UpdateTemporaryDisabilityBenefitsGrantRequestDto } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/dto/request/update-temporary-disability-benefits-grant.request.dto';
 import { UpdateTemporaryDisabilityBenefitsGrantResponseDto } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/dto/response/update-temporary-disability-benefits-grant.response.dto';
 import { TemporaryDisabilityBenefitsGrantNotFoundError } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/error/temporary-disability-benefits-grant-not-found.error';
@@ -38,6 +44,12 @@ export class UpdateTemporaryDisabilityBenefitsGrantUseCase {
     private readonly temporaryDisabilityBenefitsGrantCommandRepositoryGateway: TemporaryDisabilityBenefitsGrantCommandRepositoryGateway,
     @Inject(TemporaryDisabilityBenefitsGrantDocumentCommandRepositoryGateway)
     private readonly temporaryDisabilityBenefitsGrantDocumentCommandRepositoryGateway: TemporaryDisabilityBenefitsGrantDocumentCommandRepositoryGateway,
+    @Inject(TemporaryDisabilityBenefitsGrantInssBenefitCommandRepositoryGateway)
+    private readonly temporaryDisabilityBenefitsGrantInssBenefitCommandRepositoryGateway: TemporaryDisabilityBenefitsGrantInssBenefitCommandRepositoryGateway,
+    @Inject(
+      TemporaryDisabilityBenefitsGrantLegalProceedingCommandRepositoryGateway,
+    )
+    private readonly temporaryDisabilityBenefitsGrantLegalProceedingCommandRepositoryGateway: TemporaryDisabilityBenefitsGrantLegalProceedingCommandRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -133,6 +145,47 @@ export class UpdateTemporaryDisabilityBenefitsGrantUseCase {
 
         transactions.push(...documentTransactions);
       }
+    }
+
+    if (dto.inssBenefits !== undefined) {
+      transactions.push(
+        this.temporaryDisabilityBenefitsGrantInssBenefitCommandRepositoryGateway.deleteAllByTemporaryDisabilityBenefitsGrantId(
+          temporaryDisabilityBenefitsGrantId,
+        ),
+      );
+
+      const inssBenefitTransactions = dto.inssBenefits.map((inssBenefit) =>
+        this.temporaryDisabilityBenefitsGrantInssBenefitCommandRepositoryGateway.createTemporaryDisabilityBenefitsGrantInssBenefit(
+          new TemporaryDisabilityBenefitsGrantInssBenefitEntity({
+            id: new TemporaryDisabilityBenefitsGrantInssBenefitId(),
+            inssBenefit,
+            temporaryDisabilityBenefitsGrantId,
+          }),
+        ),
+      );
+
+      transactions.push(...inssBenefitTransactions);
+    }
+
+    if (dto.legalProceeding !== undefined) {
+      transactions.push(
+        this.temporaryDisabilityBenefitsGrantLegalProceedingCommandRepositoryGateway.deleteAllByTemporaryDisabilityBenefitsGrantId(
+          temporaryDisabilityBenefitsGrantId,
+        ),
+      );
+
+      const legalProceedingTransactions = dto.legalProceeding.map(
+        (legalProceedingNumber) =>
+          this.temporaryDisabilityBenefitsGrantLegalProceedingCommandRepositoryGateway.createTemporaryDisabilityBenefitsGrantLegalProceeding(
+            new TemporaryDisabilityBenefitsGrantLegalProceedingEntity({
+              id: new TemporaryDisabilityBenefitsGrantLegalProceedingId(),
+              legalProceedingNumber,
+              temporaryDisabilityBenefitsGrantId,
+            }),
+          ),
+      );
+
+      transactions.push(...legalProceedingTransactions);
     }
 
     const transaction =

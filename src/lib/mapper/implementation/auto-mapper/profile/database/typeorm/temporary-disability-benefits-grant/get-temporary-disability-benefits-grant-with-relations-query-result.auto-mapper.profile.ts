@@ -14,10 +14,14 @@ import { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysi
 import { TemporaryDisabilityBenefitsGrantId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/value-object/temporary-disability-benefits-grant-id.value-object';
 import { TemporaryDisabilityBenefitsGrantDocumentEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-document/temporary-disability-benefits-grant-document.entity';
 import { TemporaryDisabilityBenefitsGrantDocumentId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-document/value-object/temporary-disability-benefits-grant-document-id.value-object';
+import { TemporaryDisabilityBenefitsGrantInssBenefitEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-inss-benefit/temporary-disability-benefits-grant-inss-benefit.entity';
+import { TemporaryDisabilityBenefitsGrantInssBenefitId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-inss-benefit/value-object/temporary-disability-benefits-grant-inss-benefit-id.value-object';
 import { TemporaryDisabilityBenefitsGrantInsuredStatusEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-insured-status/temporary-disability-benefits-grant-insured-status.entity';
 import { TemporaryDisabilityBenefitsGrantInsuredStatusId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-insured-status/value-object/temporary-disability-benefits-grant-insured-status-id.value-object';
 import { TemporaryDisabilityBenefitsGrantInsuredStatusDocumentEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-insured-status-document/temporary-disability-benefits-grant-insured-status-document.entity';
 import { TemporaryDisabilityBenefitsGrantInsuredStatusDocumentId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-insured-status-document/value-object/temporary-disability-benefits-grant-insured-status-document-id.value-object';
+import { TemporaryDisabilityBenefitsGrantLegalProceedingEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-legal-proceeding/temporary-disability-benefits-grant-legal-proceeding.entity';
+import { TemporaryDisabilityBenefitsGrantLegalProceedingId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-legal-proceeding/value-object/temporary-disability-benefits-grant-legal-proceeding-id.value-object';
 import { TemporaryDisabilityBenefitsGrantPeriodEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-period/temporary-disability-benefits-grant-period.entity';
 import { TemporaryDisabilityBenefitsGrantPeriodId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-period/value-object/temporary-disability-benefits-grant-period-id.value-object';
 import { TemporaryDisabilityBenefitsGrantPeriodDocumentEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-period-document/temporary-disability-benefits-grant-period-document.entity';
@@ -32,7 +36,9 @@ import { TemporaryDisabilityBenefitsGrantWorkPeriodsId } from '@module/customer/
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-work-periods-earnings-history/temporary-disability-benefits-grant-work-periods-earnings-history.entity';
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-work-periods-earnings-history/value-object/temporary-disability-benefits-grant-work-periods-earnings-history-id.value-object';
 
+import type { TemporaryDisabilityBenefitsGrantInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-inss-benefit.typeorm.entity';
 import type { TemporaryDisabilityBenefitsGrantInsuredStatusDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-insured-status-document.typeorm.entity';
+import type { TemporaryDisabilityBenefitsGrantLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-legal-proceeding.typeorm.entity';
 import type { TemporaryDisabilityBenefitsGrantPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-period-document.typeorm.entity';
 import type { TemporaryDisabilityBenefitsGrantPreviousBenefitsDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-previous-benefits-document.typeorm.entity';
 import type { TemporaryDisabilityBenefitsGrantPreviousBenefitsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-previous-benefits.typeorm.entity';
@@ -290,6 +296,34 @@ export class GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResultAutoMapp
         ),
       );
 
+      const temporaryDisabilityBenefitsGrantInssBenefit = (
+        source.temporaryDisabilityBenefitsGrantInssBenefit ?? []
+      ).map(
+        (item: TemporaryDisabilityBenefitsGrantInssBenefitTypeormEntity) =>
+          new TemporaryDisabilityBenefitsGrantInssBenefitEntity({
+            id: new TemporaryDisabilityBenefitsGrantInssBenefitId(item.id),
+            inssBenefit: item.inssBenefit,
+            temporaryDisabilityBenefitsGrantId: grantEntity.id,
+            createdAt: item.createdAt,
+            updatedAt: item.updatedAt,
+            deletedAt: item.deletedAt,
+          }),
+      );
+
+      const temporaryDisabilityBenefitsGrantLegalProceeding = (
+        source.temporaryDisabilityBenefitsGrantLegalProceeding ?? []
+      ).map(
+        (item: TemporaryDisabilityBenefitsGrantLegalProceedingTypeormEntity) =>
+          new TemporaryDisabilityBenefitsGrantLegalProceedingEntity({
+            id: new TemporaryDisabilityBenefitsGrantLegalProceedingId(item.id),
+            legalProceedingNumber: item.legalProceedingNumber,
+            temporaryDisabilityBenefitsGrantId: grantEntity.id,
+            createdAt: item.createdAt,
+            updatedAt: item.updatedAt,
+            deletedAt: item.deletedAt,
+          }),
+      );
+
       return GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResult.build({
         temporaryDisabilityBenefitsGrantId:
           new TemporaryDisabilityBenefitsGrantId(source.id),
@@ -308,6 +342,8 @@ export class GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResultAutoMapp
         temporaryDisabilityBenefitsGrantPreviousBenefitsDocument,
         temporaryDisabilityBenefitsGrantWorkPeriods,
         temporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistory,
+        temporaryDisabilityBenefitsGrantInssBenefit,
+        temporaryDisabilityBenefitsGrantLegalProceeding,
       });
     };
 
