@@ -159,15 +159,19 @@ export class CreateSpecialRetirementGrantResultUseCase {
       );
 
     if (
-      analysisToolRecordQueryResult.specialRetirementGrant
+      (analysisToolRecordQueryResult.specialRetirementGrant
         ?.specialRetirementGrantResult
-        ?.specialRetirementGrantCompleteAnalysis !== null
+        ?.specialRetirementGrantCompleteAnalysis ?? null) !== null
     ) {
       throw new SpecialRetirementGrantResultAlreadyExistsError();
     }
 
     const specialRetirementGrantQueryResult =
       analysisToolRecordQueryResult.specialRetirementGrant;
+
+    if (specialRetirementGrantQueryResult === null) {
+      throw new SpecialRetirementGrantNotFoundError();
+    }
 
     const promptResponse =
       await this.getPaymentPlanPaidResourcePromptUseCase.execute(
@@ -261,8 +265,7 @@ export class CreateSpecialRetirementGrantResultUseCase {
 
     let specialRetirementGrantResult: SpecialRetirementGrantResultEntity;
     if (
-      analysisToolRecordQueryResult.specialRetirementGrant
-        .specialRetirementGrantResult === null
+      specialRetirementGrantQueryResult.specialRetirementGrantResult === null
     ) {
       specialRetirementGrantResult = new SpecialRetirementGrantResultEntity({
         specialRetirementGrantCompleteAnalysis,
@@ -271,8 +274,7 @@ export class CreateSpecialRetirementGrantResultUseCase {
       });
     } else {
       specialRetirementGrantResult = new SpecialRetirementGrantResultEntity({
-        ...analysisToolRecordQueryResult.specialRetirementGrant
-          .specialRetirementGrantResult,
+        ...specialRetirementGrantQueryResult.specialRetirementGrantResult,
         specialRetirementGrantCompleteAnalysis,
         specialRetirementGrantCompleteAnalysisDownload,
         specialRetirementGrantSimplifiedAnalysis: null,
@@ -339,8 +341,7 @@ export class CreateSpecialRetirementGrantResultUseCase {
 
     let resultTransaction: TransactionType;
     if (
-      analysisToolRecordQueryResult.specialRetirementGrant
-        .specialRetirementGrantResult === null
+      specialRetirementGrantQueryResult.specialRetirementGrantResult === null
     ) {
       resultTransaction =
         this.specialRetirementGrantResultCommandRepositoryGateway.createSpecialRetirementGrantResult(
@@ -349,8 +350,7 @@ export class CreateSpecialRetirementGrantResultUseCase {
     } else {
       resultTransaction =
         this.specialRetirementGrantResultCommandRepositoryGateway.updateSpecialRetirementGrantResult(
-          analysisToolRecordQueryResult.specialRetirementGrant
-            .specialRetirementGrantResult.id,
+          specialRetirementGrantQueryResult.specialRetirementGrantResult.id,
           specialRetirementGrantResult,
         );
     }

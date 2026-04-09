@@ -66,18 +66,14 @@ export class GetSpecialRetirementGrantUseCase {
       throw new SpecialRetirementGrantNotFoundError();
     }
 
-    let cnisDocument: URL | null = null;
-    let cnisDocumentOriginalFileName: string | null = null;
-    if (specialRetirementGrant.cnisDocument !== null) {
-      cnisDocument = await this.fileProcessorGateway.getFileSignedUrl(
+    const cnisDocument = await this.fileProcessorGateway.getFileSignedUrl(
+      specialRetirementGrant.cnisDocument,
+    );
+
+    const cnisDocumentOriginalFileName =
+      await this.fileProcessorGateway.getOriginalFileName(
         specialRetirementGrant.cnisDocument,
       );
-
-      cnisDocumentOriginalFileName =
-        await this.fileProcessorGateway.getOriginalFileName(
-          specialRetirementGrant.cnisDocument,
-        );
-    }
 
     const documents = await Promise.all(
       specialRetirementGrant.specialRetirementGrantDocument.map(async (doc) => {
@@ -136,8 +132,8 @@ export class GetSpecialRetirementGrantUseCase {
       id: specialRetirementGrant.id,
       name: specialRetirementGrant.name,
       specialActivity: specialRetirementGrant.specialActivity,
-      cnisDocument: cnisDocument?.toString() ?? '',
-      cnisDocumentOriginalFileName: cnisDocumentOriginalFileName ?? '',
+      cnisDocument: cnisDocument.toString(),
+      cnisDocumentOriginalFileName,
       documents,
       status: analysisToolRecordQueryResult.status,
       analysisToolClient: GetSpecialRetirementGrantClientResponseDto.build({
