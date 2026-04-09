@@ -22,7 +22,7 @@ export class SpecialRetirementGrantPeriodOverdueContributionEntity extends BaseE
   ) {
     super(SpecialRetirementGrantPeriodOverdueContributionId, props);
     this.overdueDate = props.overdueDate;
-    this.paymentDate = props.paymentDate;
+    this.paymentDate = props.paymentDate ?? null;
     this.specialRetirementGrantPeriod = props.specialRetirementGrantPeriod;
   }
 }
