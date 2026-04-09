@@ -13,8 +13,7 @@ import { TemporaryDisabilityBenefitsGrantInssBenefitEntity } from '@module/custo
 @Injectable()
 export class TemporaryDisabilityBenefitsGrantInssBenefitTypeormCommandRepository
   extends BaseTypeormCommandRepository<TemporaryDisabilityBenefitsGrantInssBenefitTypeormEntity>
-  implements
-    TemporaryDisabilityBenefitsGrantInssBenefitCommandRepositoryGateway
+  implements TemporaryDisabilityBenefitsGrantInssBenefitCommandRepositoryGateway
 {
   protected readonly _type =
     TemporaryDisabilityBenefitsGrantInssBenefitTypeormCommandRepository.name;
@@ -46,9 +45,7 @@ export class TemporaryDisabilityBenefitsGrantInssBenefitTypeormCommandRepository
       const manager = executor as EntityManager;
 
       await manager
-        .getRepository(
-          TemporaryDisabilityBenefitsGrantInssBenefitTypeormEntity,
-        )
+        .getRepository(TemporaryDisabilityBenefitsGrantInssBenefitTypeormEntity)
         .createQueryBuilder()
         .softDelete()
         .where(
