@@ -36,6 +36,10 @@ export class UpdateSpecialCategoryRetirementAnalysisUseCase {
         SpecialCategoryRetirementAnalysisNotFoundError,
       );
 
+    if (!queryResult.analysisToolClientId) {
+      throw new SpecialCategoryRetirementAnalysisNotFoundError();
+    }
+
     const updatedEntity = new SpecialCategoryRetirementAnalysisEntity({
       id,
       analysisToolClientId: queryResult.analysisToolClientId,

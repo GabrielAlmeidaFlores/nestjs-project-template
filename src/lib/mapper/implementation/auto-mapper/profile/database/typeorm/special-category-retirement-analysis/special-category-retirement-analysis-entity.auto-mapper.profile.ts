@@ -109,15 +109,10 @@ export class SpecialCategoryRetirementAnalysisEntityAutoMapperProfile {
     const convert = (
       source: SpecialCategoryRetirementAnalysisTypeormEntity,
     ): GetSpecialCategoryRetirementAnalysisWithRelationsQueryResult => {
-      if (!source.analysisToolClient) {
-        throw new IncompleteSourceDataForMappingError({
-          destinationClass:
-            GetSpecialCategoryRetirementAnalysisWithRelationsQueryResult.name,
-          sourceClass: SpecialCategoryRetirementAnalysisTypeormEntity.name,
-        });
-      }
-
       const parentId = new SpecialCategoryRetirementAnalysisId(source.id);
+      const analysisToolClientId = source.analysisToolClient
+        ? new AnalysisToolClientId(source.analysisToolClient.id)
+        : null;
       const workPeriodsOrm = source.workPeriods ?? [];
 
       const workPeriods = workPeriodsOrm.map((wp) => {
@@ -215,9 +210,7 @@ export class SpecialCategoryRetirementAnalysisEntityAutoMapperProfile {
         new GetSpecialCategoryRetirementAnalysisWithRelationsQueryResult();
       Object.assign(result, {
         specialCategoryRetirementAnalysisId: parentId,
-        analysisToolClientId: new AnalysisToolClientId(
-          source.analysisToolClient.id,
-        ),
+        analysisToolClientId,
         analysisCustomName: source.analysisCustomName,
         retirementAnalysisObjectiveType: source.retirementAnalysisObjectiveType,
         publicServiceFederativeEntityName:
