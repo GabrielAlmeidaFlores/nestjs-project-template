@@ -16988,61 +16988,133 @@ Você receberá um JSON com os seguintes campos:
 - \`tem_deficiencia_ou_limitacoes\`: Se o cliente possui deficiência ou limitações de saúde
 - \`client\`: Dados cadastrais do cliente
 
-## TIPOS DE ANÁLISE DISPONÍVEIS
+### 1. Aposentadoria Urbana Comum
+Benefício para quem trabalhou em atividades urbanas, contribuiu para o INSS e atingiu a idade mínima.
+Homem com 60 anos ou mais.
+Mulher com 55 anos ou mais.
 
-### 1. concessao_aposentadoria_urbana_geral
-Análise geral de aposentadoria urbana pela regra permanente ou de transição da EC 103/2019. Indicado para segurados urbanos que contribuíram com o INSS como empregado, contribuinte individual ou facultativo, sem características especiais (sem deficiência reconhecida, sem atividade especial, sem magistério, sem atividade rural significativa).
+Recomendar quando:
 
-### 2. planejamento_aposentadoria_para_deficiente
-Planejamento para pessoa com deficiência com requisitos de tempo de contribuição reduzidos: grau grave (20 anos homem / 15 anos mulher), moderado (29/24) e leve (34/29). Indicado quando o cliente possui deficiência reconhecida ou laudo médico que aponte impedimento biopsicossocial de longo prazo.
+Já contribuiu para o INSS.
+Já trabalhou como CLT, autônomo ou servidor público.
+Não possui incapacidade.
+Tem idade próxima ou acima da mínima.
+### 2. Aposentadoria Rural ou Híbrida
+Benefício para quem trabalhou no campo ou possui tempo rural + urbano.
 
-### 3. planejamento_previdenciario_professor
-Planejamento para professores que exercem função de magistério em educação básica (educação infantil, ensino fundamental ou ensino médio), com redução de 5 anos no tempo de contribuição exigido. Indicado quando o histórico de trabalho mencionar docência ou magistério.
+Recomendar quando:
 
-### 4. aposentadoria_categoria_especial
-Aposentadoria especial para trabalhadores expostos de forma habitual e permanente a agentes nocivos à saúde (ruído, produtos químicos, calor, agentes biológicos, entre outros), com requisito de 15, 20 ou 25 anos de exposição. Indicado quando o histórico mencionar trabalhos insalubres, PPP, atividade especial ou exposição a agentes nocivos.
+Trabalhou como agricultor.
+Possui histórico rural ou contribuição.
+Tem idade próxima da aposentadoria.
+Possui tempo misto (rural + urbano).
+Homem agricultor com 60+ ou mulher agricultora com 55+.
+### 3. Aposentadoria da Pessoa com Deficiência (PCD)
+Benefício para quem possui deficiência e contribuiu.
 
-### 5. RURAL_OR_HYBRID_RETIREMENT
-Aposentadoria por idade rural para segurado especial (trabalhador rural em economia familiar) com redução de 5 anos na idade mínima, ou aposentadoria por idade híbrida que soma períodos rurais e urbanos para fins de carência. Indicado para clientes com histórico de atividade rural significativa.
+Recomendar quando:
 
-### 6. PERMANENT_DISABILITY_RETIREMENT_PLANNING
-Aposentadoria por incapacidade permanente para segurados que ficaram definitivamente incapacitados para qualquer atividade laborativa. Indicado quando o cliente relata incapacidade permanente, doença grave com sequelas definitivas ou invalidez.
+É pessoa com deficiência.
+Já contribuiu.
+Possui histórico de trabalho.
+Possui limitação permanente (sem incapacidade total).
+### 4. Aposentadoria do Professor
+Benefício para quem exerceu docência.
 
-### 7. TEMPORARY_DISABILITY_RETIREMENT_PLANNING
-Auxílio por incapacidade temporária para segurados temporariamente incapacitados para o trabalho por mais de 15 dias consecutivos. Indicado quando o cliente menciona afastamento médico temporário, doença ou cirurgia recente sem sequelas permanentes.
+Recomendar quando:
 
-### 8. ACCIDENT_RETIREMENT_PLANNING
-Auxílio-acidente para segurados que sofreram acidente de qualquer natureza e ficaram com sequelas definitivas que reduzem a capacidade laborativa habitual, sem incapacitá-los totalmente. Indicado quando o cliente relata sequelas permanentes decorrentes de acidente.
+Trabalhou como servidor público ou CLT.
+Já contribuiu.
+Tem idade mais avançada.
 
-### 9. DEATH_PENSION_RETIREMENT_PLANNING
-Pensão por morte para dependentes de segurado falecido (cônjuge, filhos, entre outros). Indicado quando o cliente é dependente de um segurado falecido e deseja verificar o direito à pensão.
+Observação:
 
-### 10. MATERNITY_PAY_RETIREMENT_PLANNING
-Salário-maternidade para seguradas que deram à luz, adotaram ou obtiveram guarda judicial de criança para fins de adoção. Indicado quando a cliente mencionar gravidez, parto recente, adoção ou guarda de criança.
+Apenas sugestão secundária para quem informou servidor público.
+### 5. Aposentadoria Especial
+Benefício para quem trabalhou exposto a agentes nocivos.
 
-### 11. ELDERLY_BPC_RETIREMENT_PLANNING
-BPC para idosos com 65 anos ou mais em situação de hipossuficiência econômica, independentemente de contribuição ao INSS. Indicado para clientes idosos que não contribuíram ou com contribuição insuficiente para aposentadoria, em situação de vulnerabilidade econômica.
+Recomendar quando:
 
-### 12. DISABILITY_BPC_RETIREMENT_PLANNING
-BPC para pessoas com deficiência de qualquer idade com impedimento de longo prazo que obstrui sua participação plena na sociedade, em situação de hipossuficiência econômica. Indicado para clientes com deficiência sem histórico contributivo suficiente para aposentadoria.
+Já contribuiu.
+Trabalhou em atividade insalubre, perigosa ou com agentes nocivos.
 
-## REGRAS DE DECISÃO
+Observação:
 
-Aplique a primeira regra que corresponder à situação do cliente:
+Apenas sugestão secundária (não há pergunta específica).
+### 6. Aposentadoria por Incapacidade Permanente
+Benefício para incapacidade definitiva para o trabalho.
 
-1. Se é dependente de segurado falecido → \`DEATH_PENSION_RETIREMENT_PLANNING\`
-2. Se é segurada com parto, adoção ou guarda recente → \`MATERNITY_PAY_RETIREMENT_PLANNING\`
-3. Se relata sequelas de acidente que reduzem (mas não eliminam) a capacidade → \`ACCIDENT_RETIREMENT_PLANNING\`
-4. Se relata incapacidade total e permanente para qualquer trabalho → \`PERMANENT_DISABILITY_RETIREMENT_PLANNING\`
-5. Se relata afastamento temporário por doença ou cirurgia → \`TEMPORARY_DISABILITY_RETIREMENT_PLANNING\`
-6. Se possui deficiência documentada e histórico contributivo insuficiente → \`DISABILITY_BPC_RETIREMENT_PLANNING\`
-7. Se é idoso com 65 anos ou mais sem histórico contributivo suficiente → \`ELDERLY_BPC_RETIREMENT_PLANNING\`
-8. Se é professor com histórico de magistério em educação básica → \`planejamento_previdenciario_professor\`
-9. Se possui deficiência documentada com histórico contributivo → \`planejamento_aposentadoria_para_deficiente\`
-10. Se o histórico menciona atividade especial ou trabalho insalubre → \`aposentadoria_categoria_especial\`
-11. Se possui histórico rural significativo → \`RURAL_OR_HYBRID_RETIREMENT\`
-12. Para qualquer outro caso de segurado urbano → \`concessao_aposentadoria_urbana_geral\`
+Recomendar quando:
 
+Está doente ou incapacitado.
+Possui limitação para o trabalho.
+Já contribuiu.
+Incapacidade é definitiva ou longa.
+Não está trabalhando.
+### 7. Auxílio por Incapacidade Temporária
+Benefício para incapacidade temporária.
+
+Recomendar quando:
+
+Está doente ou incapacitado.
+Possui limitação para o trabalho.
+Já contribuiu.
+Situação é temporária.
+### 8. Auxílio-Acidente
+Benefício para redução permanente da capacidade, com possibilidade de trabalho.
+
+Recomendar quando:
+
+Possui limitação para o trabalho.
+Já contribuiu.
+Ainda consegue trabalhar parcialmente.
+
+Observação:
+
+Apenas sugestão secundária (sem pergunta específica).
+### 9. Pensão por Morte
+Benefício para dependentes de segurado falecido.
+
+Recomendar quando:
+
+É dependente de pessoa falecida.
+### 10. Salário-Maternidade
+Benefício durante afastamento por nascimento, adoção ou guarda.
+
+Recomendar quando:
+
+Cliente é mulher.
+Está trabalhando ou já contribuiu.
+Idade compatível com maternidade.
+
+Observação:
+
+Apenas sugestão secundária (sem pergunta específica).
+### 11. BPC - Idoso
+Benefício assistencial para idosos sem renda suficiente.
+
+Recomendar quando:
+
+Nunca contribuiu ou não sabe.
+Tem 65 anos ou mais.
+Não está trabalhando.
+
+Priorizar quando:
+
+Nunca trabalhou ou contribuiu.
+### 12. BPC - Pessoa com Deficiência
+Benefício assistencial para PCD de baixa renda.
+
+Recomendar quando:
+
+É pessoa com deficiência.
+Nunca contribuiu ou não sabe.
+Possui limitação para o trabalho.
+
+Priorizar quando:
+
+Nunca trabalhou.
+Não possui histórico de contribuição.
 ## FORMATO DE SAÍDA
 
 Retorne APENAS o seguinte JSON, sem nenhum texto adicional, sem markdown, sem explicações:
