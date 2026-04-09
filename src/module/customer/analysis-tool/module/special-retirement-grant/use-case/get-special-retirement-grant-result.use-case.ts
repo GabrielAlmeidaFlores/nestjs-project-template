@@ -54,10 +54,11 @@ export class GetSpecialRetirementGrantResultUseCase {
     const specialRetirementGrant =
       analysisToolRecordQueryResult.specialRetirementGrant;
 
-    if (
-      specialRetirementGrant === null ||
-      specialRetirementGrant.specialRetirementGrantResult === null
-    ) {
+    if (specialRetirementGrant === null) {
+      throw new SpecialRetirementGrantNotFoundError();
+    }
+
+    if (specialRetirementGrant.specialRetirementGrantResult === null) {
       throw new SpecialRetirementGrantNotFoundError();
     }
 
@@ -214,7 +215,7 @@ export class GetSpecialRetirementGrantResultUseCase {
         periods,
         technicalDiagnosis:
           SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisModel.build({
-            items: (raw.technicalDiagnosis?.items ?? []).map((item) =>
+            items: raw.technicalDiagnosis.items.map((item) =>
               SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemModel.build(
                 {
                   periodStartDate: new Date(item.periodStartDate),
@@ -228,7 +229,7 @@ export class GetSpecialRetirementGrantResultUseCase {
                   ...(item.legalFramework !== null && {
                     legalFramework: item.legalFramework,
                   }),
-                  agents: (item.agents ?? []).map((a) =>
+                  agents: item.agents.map((a) =>
                     SpecialRetirementGrantFirstAnalysisAgentModel.build({
                       type: a.type,
                       ...(a.intensity !== undefined &&
@@ -257,7 +258,7 @@ export class GetSpecialRetirementGrantResultUseCase {
           }),
         integratedTimeline:
           SpecialRetirementGrantFirstAnalysisIntegratedTimelineModel.build({
-            items: (raw.integratedTimeline?.items ?? []).map((t) =>
+            items: raw.integratedTimeline.items.map((t) =>
               SpecialRetirementGrantFirstAnalysisIntegratedTimelineItemModel.build(
                 {
                   startDate: new Date(t.startDate),

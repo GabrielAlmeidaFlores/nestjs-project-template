@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
 import { ResponseConfigInputModel } from '@infra/generative-ia/model/input/response-config.input.model';
@@ -30,7 +31,6 @@ import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/d
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
-import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 
 interface IaResponseInterface {
   regrasAplicaveis: object[];
@@ -42,67 +42,7 @@ interface IaResponseInterface {
 export class CreateSpecialRetirementGrantResultUseCase {
   protected readonly _type = CreateSpecialRetirementGrantResultUseCase.name;
 
-  private readonly JSON_SCHEMA = {
-    type: 'object',
-    properties: {
-      regrasAplicaveis: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            modalidade: { type: 'string' },
-            cumprida: { type: 'boolean' },
-            dataDaAposentadoria: { type: 'string' },
-            rmiPrevista: { type: 'string' },
-            valorDaCausaEstimada: { type: 'string' },
-            melhorRmi: { type: 'boolean' },
-            maiorValorDeCausa: { type: 'boolean' },
-            analiseDetalhada: { type: 'string' },
-          },
-          required: [
-            'modalidade',
-            'cumprida',
-            'dataDaAposentadoria',
-            'rmiPrevista',
-            'valorDaCausaEstimada',
-            'melhorRmi',
-            'maiorValorDeCausa',
-            'analiseDetalhada',
-          ],
-        },
-      },
-      periodosReconhecidos: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            origemDoVinculo: { type: 'string' },
-            periodo: { type: 'string' },
-            categoria: { type: 'string' },
-            agentes: { type: 'string' },
-            tempoEspecial: { type: 'string' },
-            tempoConvertido: { type: 'string' },
-            status: { type: 'string' },
-          },
-          required: [
-            'origemDoVinculo',
-            'periodo',
-            'categoria',
-            'agentes',
-            'tempoEspecial',
-            'tempoConvertido',
-            'status',
-          ],
-        },
-      },
-      resultadoDaAnalise: { type: 'string' },
-    },
-    required: [
-      'regrasAplicaveis',
-      'periodosReconhecidos',
-      'resultadoDaAnalise',
-    ],
-  };
+  private readonly JSON_SCHEMA;
 
   public constructor(
     @Inject(FileProcessorGateway)
@@ -131,7 +71,69 @@ export class CreateSpecialRetirementGrantResultUseCase {
     private readonly specialRetirementGrantEarningsHistoryQueryRepositoryGateway: SpecialRetirementGrantEarningsHistoryQueryRepositoryGateway,
     @Inject(AnalysisActivityTrackerGateway)
     private readonly analysisActivityTrackerGateway: AnalysisActivityTrackerGateway,
-  ) {}
+  ) {
+    this.JSON_SCHEMA = {
+      type: 'object',
+      properties: {
+        regrasAplicaveis: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              modalidade: { type: 'string' },
+              cumprida: { type: 'boolean' },
+              dataDaAposentadoria: { type: 'string' },
+              rmiPrevista: { type: 'string' },
+              valorDaCausaEstimada: { type: 'string' },
+              melhorRmi: { type: 'boolean' },
+              maiorValorDeCausa: { type: 'boolean' },
+              analiseDetalhada: { type: 'string' },
+            },
+            required: [
+              'modalidade',
+              'cumprida',
+              'dataDaAposentadoria',
+              'rmiPrevista',
+              'valorDaCausaEstimada',
+              'melhorRmi',
+              'maiorValorDeCausa',
+              'analiseDetalhada',
+            ],
+          },
+        },
+        periodosReconhecidos: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              origemDoVinculo: { type: 'string' },
+              periodo: { type: 'string' },
+              categoria: { type: 'string' },
+              agentes: { type: 'string' },
+              tempoEspecial: { type: 'string' },
+              tempoConvertido: { type: 'string' },
+              status: { type: 'string' },
+            },
+            required: [
+              'origemDoVinculo',
+              'periodo',
+              'categoria',
+              'agentes',
+              'tempoEspecial',
+              'tempoConvertido',
+              'status',
+            ],
+          },
+        },
+        resultadoDaAnalise: { type: 'string' },
+      },
+      required: [
+        'regrasAplicaveis',
+        'periodosReconhecidos',
+        'resultadoDaAnalise',
+      ],
+    };
+  }
 
   public async execute(
     sessionData: SessionDataModel,
@@ -166,9 +168,6 @@ export class CreateSpecialRetirementGrantResultUseCase {
 
     const specialRetirementGrantQueryResult =
       analysisToolRecordQueryResult.specialRetirementGrant;
-    if (specialRetirementGrantQueryResult === null) {
-      throw new SpecialRetirementGrantNotFoundError();
-    }
 
     const promptResponse =
       await this.getPaymentPlanPaidResourcePromptUseCase.execute(
@@ -261,30 +260,28 @@ export class CreateSpecialRetirementGrantResultUseCase {
         : '';
 
     let specialRetirementGrantResult: SpecialRetirementGrantResultEntity;
-    if (analysisToolRecordQueryResult.specialRetirementGrant?.specialRetirementGrantResult === null) {
-      specialRetirementGrantResult = new SpecialRetirementGrantResultEntity(
-        {
-          specialRetirementGrantCompleteAnalysis,
-          specialRetirementGrantCompleteAnalysisDownload,
-          specialRetirementGrantSimplifiedAnalysis: null,
-        },
-      );
-    }
-
-    if (analysisToolRecordQueryResult.specialRetirementGrant?.specialRetirementGrantResult !== null) {
-      specialRetirementGrantResult = new SpecialRetirementGrantResultEntity(
-        {
-          ...analysisToolRecordQueryResult.specialRetirementGrant?.specialRetirementGrantResult,
-          specialRetirementGrantCompleteAnalysis,
-          specialRetirementGrantCompleteAnalysisDownload,
-          specialRetirementGrantSimplifiedAnalysis: null,
-        },
-      );
+    if (
+      analysisToolRecordQueryResult.specialRetirementGrant
+        .specialRetirementGrantResult === null
+    ) {
+      specialRetirementGrantResult = new SpecialRetirementGrantResultEntity({
+        specialRetirementGrantCompleteAnalysis,
+        specialRetirementGrantCompleteAnalysisDownload,
+        specialRetirementGrantSimplifiedAnalysis: null,
+      });
+    } else {
+      specialRetirementGrantResult = new SpecialRetirementGrantResultEntity({
+        ...analysisToolRecordQueryResult.specialRetirementGrant
+          .specialRetirementGrantResult,
+        specialRetirementGrantCompleteAnalysis,
+        specialRetirementGrantCompleteAnalysisDownload,
+        specialRetirementGrantSimplifiedAnalysis: null,
+      });
     }
 
     const specialRetirementGrant = new SpecialRetirementGrantEntity({
       ...specialRetirementGrantQueryResult,
-      specialRetirementGrantResult: specialRetirementGrantResult!,
+      specialRetirementGrantResult: specialRetirementGrantResult,
       specialRetirementGrantBenefit: null,
       specialRetirementGrantLegalProceeding: null,
       specialRetirementGrantDocument: null,
@@ -341,17 +338,21 @@ export class CreateSpecialRetirementGrantResultUseCase {
       );
 
     let resultTransaction: TransactionType;
-    if (analysisToolRecordQueryResult.specialRetirementGrant?.specialRetirementGrantResult === null) {
-      resultTransaction = this.specialRetirementGrantResultCommandRepositoryGateway.createSpecialRetirementGrantResult(
-        specialRetirementGrantResult!,
-      );
-    }
-
-    if (analysisToolRecordQueryResult.specialRetirementGrant?.specialRetirementGrantResult !== null) {
-      resultTransaction = this.specialRetirementGrantResultCommandRepositoryGateway.updateSpecialRetirementGrantResult(
-        analysisToolRecordQueryResult.specialRetirementGrant?.specialRetirementGrantResult.id,
-        specialRetirementGrantResult!,
-      );
+    if (
+      analysisToolRecordQueryResult.specialRetirementGrant
+        .specialRetirementGrantResult === null
+    ) {
+      resultTransaction =
+        this.specialRetirementGrantResultCommandRepositoryGateway.createSpecialRetirementGrantResult(
+          specialRetirementGrantResult,
+        );
+    } else {
+      resultTransaction =
+        this.specialRetirementGrantResultCommandRepositoryGateway.updateSpecialRetirementGrantResult(
+          analysisToolRecordQueryResult.specialRetirementGrant
+            .specialRetirementGrantResult.id,
+          specialRetirementGrantResult,
+        );
     }
 
     const transactionsWithActivity =
@@ -359,20 +360,20 @@ export class CreateSpecialRetirementGrantResultUseCase {
         action: AnalysisActivityActionEnum.RESULT_ADDED,
         analysisType: analysisToolRecordQueryResult.type,
         organizationMemberId: organizationMember.id,
-        analysisToolClientId: analysisToolRecordQueryResult.analysisToolClient.id,
+        analysisToolClientId:
+          analysisToolRecordQueryResult.analysisToolClient.id,
         analysisToolRecordId: analysisToolRecordQueryResult.id,
         transactions: [
           consumeCreditTransaction,
-          resultTransaction!,
+          resultTransaction,
           updateSpecialRetirementGrantTransaction,
           updateAnalysisToolRecordTransaction,
         ],
       });
 
-    const transaction =
-      await this.baseTransactionRepositoryGateway.execute(
-        transactionsWithActivity,
-      );
+    const transaction = await this.baseTransactionRepositoryGateway.execute(
+      transactionsWithActivity,
+    );
     await transaction.commit();
 
     return CreateSpecialRetirementGrantResultResponseDto.build({

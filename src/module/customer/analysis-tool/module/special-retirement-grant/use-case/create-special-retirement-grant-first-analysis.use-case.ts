@@ -248,7 +248,7 @@ export class CreateSpecialRetirementGrantFirstAnalysisUseCase {
             periodEntity,
           );
 
-        const earningsHistory = p.earningsHistory ?? [];
+        const earningsHistory = p.earningsHistory;
 
         const earningsTx = earningsHistory.map((eh) =>
           this.specialRetirementGrantEarningsHistoryCommandRepositoryGateway.createSpecialRetirementGrantEarningsHistory(
@@ -363,7 +363,7 @@ export class CreateSpecialRetirementGrantFirstAnalysisUseCase {
               ...(p.gracePeriod !== null && { gracePeriod: p.gracePeriod }),
               shouldConsiderPeriod: true,
               status: p.status,
-              agents: (p.agents ?? []).map((a) =>
+              agents: p.agents.map((a) =>
                 SpecialRetirementGrantFirstAnalysisAgentModel.build({
                   type: a.type,
                   ...(a.intensity !== undefined &&
@@ -380,7 +380,7 @@ export class CreateSpecialRetirementGrantFirstAnalysisUseCase {
                     a.epiEficaz !== null && { epiEficaz: a.epiEficaz }),
                 }),
               ),
-              earningsHistory: (p.earningsHistory ?? []).map((eh) =>
+              earningsHistory: p.earningsHistory.map((eh) =>
                 SpecialRetirementGrantFirstAnalysisEarningsHistoryItemModel.build(
                   {
                     ...(eh.competence !== null && {
@@ -413,7 +413,7 @@ export class CreateSpecialRetirementGrantFirstAnalysisUseCase {
           ),
           technicalDiagnosis:
             SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisModel.build({
-              items: (raw.technicalDiagnosis?.items ?? []).map((item) =>
+              items: raw.technicalDiagnosis.items.map((item) =>
                 SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemModel.build(
                   {
                     periodStartDate: new Date(item.periodStartDate),
@@ -427,7 +427,7 @@ export class CreateSpecialRetirementGrantFirstAnalysisUseCase {
                     ...(item.legalFramework !== null && {
                       legalFramework: item.legalFramework,
                     }),
-                    agents: (item.agents ?? []).map((a) =>
+                    agents: item.agents.map((a) =>
                       SpecialRetirementGrantFirstAnalysisAgentModel.build({
                         type: a.type,
                         ...(a.intensity !== undefined &&
@@ -458,7 +458,7 @@ export class CreateSpecialRetirementGrantFirstAnalysisUseCase {
             }),
           integratedTimeline:
             SpecialRetirementGrantFirstAnalysisIntegratedTimelineModel.build({
-              items: (raw.integratedTimeline?.items ?? []).map((t) =>
+              items: raw.integratedTimeline.items.map((t) =>
                 SpecialRetirementGrantFirstAnalysisIntegratedTimelineItemModel.build(
                   {
                     startDate: new Date(t.startDate),
@@ -510,14 +510,14 @@ export class CreateSpecialRetirementGrantFirstAnalysisUseCase {
       name: grant.name,
       specialActivity: grant.specialActivity,
       cnisDocument: grant.cnisDocument,
-      documents: (grant.specialRetirementGrantDocument ?? []).map((d) => ({
+      documents: grant.specialRetirementGrantDocument.map((d) => ({
         id: d.id.toString(),
         type: d.type,
       })),
-      inssBenefits: (grant.specialRetirementGrantBenefit ?? []).map(
+      inssBenefits: grant.specialRetirementGrantBenefit.map(
         (b) => b.inssBenefitNumber,
       ),
-      legalProceedings: (grant.specialRetirementGrantLegalProceeding ?? []).map(
+      legalProceedings: grant.specialRetirementGrantLegalProceeding.map(
         (p) => p.legalProceedingNumber,
       ),
     };

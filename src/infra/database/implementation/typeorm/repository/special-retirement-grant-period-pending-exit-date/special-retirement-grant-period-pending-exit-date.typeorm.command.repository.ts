@@ -26,18 +26,18 @@ export class SpecialRetirementGrantPeriodPendingExitDateTypeormCommandRepository
   public createSpecialRetirementGrantPeriodPendingExitDate(
     props: SpecialRetirementGrantPeriodPendingExitDateEntity,
   ): TransactionType {
-    const mapped = SpecialRetirementGrantPeriodPendingExitDateTypeormEntity.build({
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      deletedAt: null,
-      id: props.id.toString(),
-      pendingDate: props.pendingDate,
-      pendingAmount: props.pendingAmount.toString(),
-      specialRetirementGrantPeriod: {
-        id: props.specialRetirementGrantPeriod.id.toString(),
-      } as never,
-    });
+    const mapped =
+      SpecialRetirementGrantPeriodPendingExitDateTypeormEntity.build({
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null,
+        id: props.id.toString(),
+        pendingDate: props.pendingDate,
+        pendingAmount: props.pendingAmount.toString(),
+        specialRetirementGrantPeriod: {
+          id: props.specialRetirementGrantPeriod.id.toString(),
+        } as never,
+      });
     return this.create(mapped);
   }
 }
-

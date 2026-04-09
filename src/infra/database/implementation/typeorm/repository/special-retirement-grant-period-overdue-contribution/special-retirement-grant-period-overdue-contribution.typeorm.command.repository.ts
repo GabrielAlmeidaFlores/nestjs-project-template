@@ -11,13 +11,16 @@ import { SpecialRetirementGrantPeriodOverdueContributionEntity } from '@module/c
 @Injectable()
 export class SpecialRetirementGrantPeriodOverdueContributionTypeormCommandRepository
   extends BaseTypeormCommandRepository<SpecialRetirementGrantPeriodOverdueContributionTypeormEntity>
-  implements SpecialRetirementGrantPeriodOverdueContributionCommandRepositoryGateway
+  implements
+    SpecialRetirementGrantPeriodOverdueContributionCommandRepositoryGateway
 {
   protected readonly _type =
     SpecialRetirementGrantPeriodOverdueContributionTypeormCommandRepository.name;
 
   public constructor(
-    @InjectRepository(SpecialRetirementGrantPeriodOverdueContributionTypeormEntity)
+    @InjectRepository(
+      SpecialRetirementGrantPeriodOverdueContributionTypeormEntity,
+    )
     repository: Repository<SpecialRetirementGrantPeriodOverdueContributionTypeormEntity>,
   ) {
     super(repository);
@@ -41,4 +44,3 @@ export class SpecialRetirementGrantPeriodOverdueContributionTypeormCommandReposi
     return this.create(mapped);
   }
 }
-

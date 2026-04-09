@@ -4,6 +4,6 @@ import type { SpecialRetirementGrantPeriodOverdueContributionId } from '@module/
 
 export interface SpecialRetirementGrantPeriodOverdueContributionEntityPropsInterface extends BaseEntityPropsInterface<SpecialRetirementGrantPeriodOverdueContributionId> {
   overdueDate: Date;
-  paymentDate: Date | null;
+  paymentDate?: Date | null;
   specialRetirementGrantPeriod: SpecialRetirementGrantPeriodEntity;
 }

@@ -9,9 +9,7 @@ import { SpecialRetirementGrantId } from '@module/customer/analysis-tool/module/
 import { SpecialRetirementGrantEarningsHistoryId } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-earnings-history/value-object/special-retirement-grant-earnings-history-id/special-retirement-grant-earnings-history-id.value-object';
 
 @Injectable()
-export class SpecialRetirementGrantEarningsHistoryTypeormQueryRepository
-  implements SpecialRetirementGrantEarningsHistoryQueryRepositoryGateway
-{
+export class SpecialRetirementGrantEarningsHistoryTypeormQueryRepository implements SpecialRetirementGrantEarningsHistoryQueryRepositoryGateway {
   protected readonly _type =
     SpecialRetirementGrantEarningsHistoryTypeormQueryRepository.name;
 
