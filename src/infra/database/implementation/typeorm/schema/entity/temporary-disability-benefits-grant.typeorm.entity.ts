@@ -2,7 +2,9 @@ import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-document.typeorm.entity';
+import { TemporaryDisabilityBenefitsGrantInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-inss-benefit.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantInsuredStatusTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-insured-status.typeorm.entity';
+import { TemporaryDisabilityBenefitsGrantLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-legal-proceeding.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-period.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-result.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-work-periods.typeorm.entity';
@@ -42,6 +44,22 @@ export class TemporaryDisabilityBenefitsGrantTypeormEntity extends BaseTypeormEn
   )
   public temporaryDisabilityBenefitsGrantDocument?:
     | TemporaryDisabilityBenefitsGrantDocumentTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => TemporaryDisabilityBenefitsGrantInssBenefitTypeormEntity,
+    (entity) => entity.temporaryDisabilityBenefitsGrant,
+  )
+  public temporaryDisabilityBenefitsGrantInssBenefit?:
+    | TemporaryDisabilityBenefitsGrantInssBenefitTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => TemporaryDisabilityBenefitsGrantLegalProceedingTypeormEntity,
+    (entity) => entity.temporaryDisabilityBenefitsGrant,
+  )
+  public temporaryDisabilityBenefitsGrantLegalProceeding?:
+    | TemporaryDisabilityBenefitsGrantLegalProceedingTypeormEntity[]
     | undefined;
 
   @OneToMany(

@@ -305,6 +305,12 @@ export class GetTemporaryDisabilityBenefitsGrantResponseDto extends BaseBuildabl
   )
   public analysisToolClient: GetTemporaryDisabilityBenefitsGrantAnalysisToolClientResponseDto;
 
+  @ResponseDtoStringProperty({ required: false, isArray: true })
+  public inssBenefits?: string[];
+
+  @ResponseDtoStringProperty({ required: false, isArray: true })
+  public legalProceeding?: string[];
+
   @ResponseDtoDateProperty()
   public createdAt: Date;
 

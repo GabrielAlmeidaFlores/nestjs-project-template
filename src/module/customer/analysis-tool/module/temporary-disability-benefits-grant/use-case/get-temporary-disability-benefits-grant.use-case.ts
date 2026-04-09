@@ -293,6 +293,18 @@ export class GetTemporaryDisabilityBenefitsGrantUseCase {
       ...(workPeriodsList.length > 0 && {
         temporaryDisabilityBenefitsGrantWorkPeriods: workPeriodsList,
       }),
+      ...((result.temporaryDisabilityBenefitsGrantInssBenefit ?? []).length >
+        0 && {
+        inssBenefits: (
+          result.temporaryDisabilityBenefitsGrantInssBenefit ?? []
+        ).map((item) => item.inssBenefit),
+      }),
+      ...((result.temporaryDisabilityBenefitsGrantLegalProceeding ?? [])
+        .length > 0 && {
+        legalProceeding: (
+          result.temporaryDisabilityBenefitsGrantLegalProceeding ?? []
+        ).map((item) => item.legalProceedingNumber),
+      }),
     });
   }
 
