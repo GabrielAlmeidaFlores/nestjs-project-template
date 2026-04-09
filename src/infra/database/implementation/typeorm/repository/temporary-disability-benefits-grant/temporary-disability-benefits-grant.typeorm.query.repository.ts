@@ -49,6 +49,8 @@ export class TemporaryDisabilityBenefitsGrantTypeormQueryRepository
           temporaryDisabilityBenefitsGrantWorkPeriods: {
             temporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistory: true,
           },
+          temporaryDisabilityBenefitsGrantInssBenefit: true,
+          temporaryDisabilityBenefitsGrantLegalProceeding: true,
         },
       },
       err,

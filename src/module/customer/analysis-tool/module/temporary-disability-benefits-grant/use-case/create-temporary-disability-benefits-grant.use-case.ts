@@ -15,9 +15,15 @@ import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { TemporaryDisabilityBenefitsGrantCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant/command/temporary-disability-benefits-grant.command.repository.gateway';
 import { TemporaryDisabilityBenefitsGrantDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-document/command/temporary-disability-benefits-grant-document.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-inss-benefit/command/temporary-disability-benefits-grant-inss-benefit.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-legal-proceeding/command/temporary-disability-benefits-grant-legal-proceeding.command.repository.gateway';
 import { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/temporary-disability-benefits-grant.entity';
 import { TemporaryDisabilityBenefitsGrantDocumentEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-document/temporary-disability-benefits-grant-document.entity';
 import { TemporaryDisabilityBenefitsGrantDocumentId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-document/value-object/temporary-disability-benefits-grant-document-id.value-object';
+import { TemporaryDisabilityBenefitsGrantInssBenefitEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-inss-benefit/temporary-disability-benefits-grant-inss-benefit.entity';
+import { TemporaryDisabilityBenefitsGrantInssBenefitId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-inss-benefit/value-object/temporary-disability-benefits-grant-inss-benefit-id.value-object';
+import { TemporaryDisabilityBenefitsGrantLegalProceedingEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-legal-proceeding/temporary-disability-benefits-grant-legal-proceeding.entity';
+import { TemporaryDisabilityBenefitsGrantLegalProceedingId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-legal-proceeding/value-object/temporary-disability-benefits-grant-legal-proceeding-id.value-object';
 import { CreateTemporaryDisabilityBenefitsGrantRequestDto } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/dto/request/create-temporary-disability-benefits-grant.request.dto';
 import { CreateTemporaryDisabilityBenefitsGrantResponseDto } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/dto/response/create-temporary-disability-benefits-grant.response.dto';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -37,6 +43,12 @@ export class CreateTemporaryDisabilityBenefitsGrantUseCase {
     private readonly temporaryDisabilityBenefitsGrantCommandRepositoryGateway: TemporaryDisabilityBenefitsGrantCommandRepositoryGateway,
     @Inject(TemporaryDisabilityBenefitsGrantDocumentCommandRepositoryGateway)
     private readonly temporaryDisabilityBenefitsGrantDocumentCommandRepositoryGateway: TemporaryDisabilityBenefitsGrantDocumentCommandRepositoryGateway,
+    @Inject(TemporaryDisabilityBenefitsGrantInssBenefitCommandRepositoryGateway)
+    private readonly temporaryDisabilityBenefitsGrantInssBenefitCommandRepositoryGateway: TemporaryDisabilityBenefitsGrantInssBenefitCommandRepositoryGateway,
+    @Inject(
+      TemporaryDisabilityBenefitsGrantLegalProceedingCommandRepositoryGateway,
+    )
+    private readonly temporaryDisabilityBenefitsGrantLegalProceedingCommandRepositoryGateway: TemporaryDisabilityBenefitsGrantLegalProceedingCommandRepositoryGateway,
     @Inject(AnalysisToolClientQueryRepositoryGateway)
     private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
     @Inject(AnalysisToolRecordQueryRepositoryGateway)
@@ -80,9 +92,21 @@ export class CreateTemporaryDisabilityBenefitsGrantUseCase {
       dto,
     );
 
+    const inssBenefitEntities = this.buildInssBenefitEntities(
+      temporaryDisabilityBenefitsGrant.id,
+      dto,
+    );
+
+    const legalProceedingEntities = this.buildLegalProceedingEntities(
+      temporaryDisabilityBenefitsGrant.id,
+      dto,
+    );
+
     await this.persistGrantAndDocuments(
       temporaryDisabilityBenefitsGrant,
       documentEntities,
+      inssBenefitEntities,
+      legalProceedingEntities,
     );
 
     const countRecords =
@@ -118,6 +142,8 @@ export class CreateTemporaryDisabilityBenefitsGrantUseCase {
   private async persistGrantAndDocuments(
     grant: TemporaryDisabilityBenefitsGrantEntity,
     documentEntities: TemporaryDisabilityBenefitsGrantDocumentEntity[],
+    inssBenefitEntities: TemporaryDisabilityBenefitsGrantInssBenefitEntity[],
+    legalProceedingEntities: TemporaryDisabilityBenefitsGrantLegalProceedingEntity[],
   ): Promise<void> {
     const grantTransaction =
       this.temporaryDisabilityBenefitsGrantCommandRepositoryGateway.createTemporaryDisabilityBenefitsGrant(
@@ -130,9 +156,23 @@ export class CreateTemporaryDisabilityBenefitsGrantUseCase {
       ),
     );
 
+    const inssBenefitTransactions = inssBenefitEntities.map((entity) =>
+      this.temporaryDisabilityBenefitsGrantInssBenefitCommandRepositoryGateway.createTemporaryDisabilityBenefitsGrantInssBenefit(
+        entity,
+      ),
+    );
+
+    const legalProceedingTransactions = legalProceedingEntities.map((entity) =>
+      this.temporaryDisabilityBenefitsGrantLegalProceedingCommandRepositoryGateway.createTemporaryDisabilityBenefitsGrantLegalProceeding(
+        entity,
+      ),
+    );
+
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       grantTransaction,
       ...documentTransactions,
+      ...inssBenefitTransactions,
+      ...legalProceedingTransactions,
     ]);
 
     await transaction.commit();
@@ -151,6 +191,42 @@ export class CreateTemporaryDisabilityBenefitsGrantUseCase {
     ]);
 
     await transaction.commit();
+  }
+
+  private buildInssBenefitEntities(
+    temporaryDisabilityBenefitsGrantId: TemporaryDisabilityBenefitsGrantEntity['id'],
+    dto: CreateTemporaryDisabilityBenefitsGrantRequestDto,
+  ): TemporaryDisabilityBenefitsGrantInssBenefitEntity[] {
+    if (!dto.inssBenefits || dto.inssBenefits.length === 0) {
+      return [];
+    }
+
+    return dto.inssBenefits.map(
+      (inssBenefit) =>
+        new TemporaryDisabilityBenefitsGrantInssBenefitEntity({
+          id: new TemporaryDisabilityBenefitsGrantInssBenefitId(),
+          inssBenefit,
+          temporaryDisabilityBenefitsGrantId,
+        }),
+    );
+  }
+
+  private buildLegalProceedingEntities(
+    temporaryDisabilityBenefitsGrantId: TemporaryDisabilityBenefitsGrantEntity['id'],
+    dto: CreateTemporaryDisabilityBenefitsGrantRequestDto,
+  ): TemporaryDisabilityBenefitsGrantLegalProceedingEntity[] {
+    if (!dto.legalProceeding || dto.legalProceeding.length === 0) {
+      return [];
+    }
+
+    return dto.legalProceeding.map(
+      (legalProceedingNumber) =>
+        new TemporaryDisabilityBenefitsGrantLegalProceedingEntity({
+          id: new TemporaryDisabilityBenefitsGrantLegalProceedingId(),
+          legalProceedingNumber,
+          temporaryDisabilityBenefitsGrantId,
+        }),
+    );
   }
 
   private async buildDocumentEntities(

@@ -38,6 +38,12 @@ export class CreateTemporaryDisabilityBenefitsGrantRequestDto extends BaseBuilda
   )
   public documents?: CreateTemporaryDisabilityBenefitsGrantDocumentRequestDto[];
 
+  @RequestDtoStringProperty({ required: false, isArray: true })
+  public inssBenefits?: string[];
+
+  @RequestDtoStringProperty({ required: false, isArray: true })
+  public legalProceeding?: string[];
+
   protected override readonly _type =
     CreateTemporaryDisabilityBenefitsGrantRequestDto.name;
 }
