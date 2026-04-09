@@ -389,6 +389,8 @@ import { TemporaryDisabilityBenefitsGrantPreviousBenefitsDocumentEntityAutoMappe
 import { TemporaryDisabilityBenefitsGrantResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-result/temporary-disability-benefits-grant-result-entity.auto-mapper.profile';
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-work-periods/temporary-disability-benefits-grant-work-periods-entity.auto-mapper.profile';
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-work-periods-earnings-history/temporary-disability-benefits-grant-work-periods-earnings-history-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-inss-benefit/temporary-disability-benefits-grant-inss-benefit-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-legal-proceeding/temporary-disability-benefits-grant-legal-proceeding-entity.auto-mapper.profile';
 import { GetTutorialQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/tutorial/get-tutorial-query-result.auto-mapper.profile';
 import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/tutorial/tutorial-entity.auto-mapper.profile';
 
@@ -652,6 +654,8 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     TemporaryDisabilityBenefitsGrantInsuredStatusDocumentEntityAutoMapperProfile,
     TemporaryDisabilityBenefitsGrantWorkPeriodsEntityAutoMapperProfile,
     TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantInssBenefitEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantLegalProceedingEntityAutoMapperProfile,
     GeneralUrbanRetirementAnalysisEntityAutoMapperProfile,
     GetGeneralUrbanRetirementAnalysisDocumentQueryResultAutoMapperProfile,
     GetGeneralUrbanRetirementAnalysisLegalProceedingQueryResultAutoMapperProfile,

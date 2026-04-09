@@ -11,6 +11,8 @@ import type { TemporaryDisabilityBenefitsGrantPreviousBenefitsEntity } from '@mo
 import type { TemporaryDisabilityBenefitsGrantPreviousBenefitsDocumentEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-previous-benefits-document/temporary-disability-benefits-grant-previous-benefits-document.entity';
 import type { TemporaryDisabilityBenefitsGrantResultEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-result/temporary-disability-benefits-grant-result.entity';
 import type { TemporaryDisabilityBenefitsGrantWorkPeriodsEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-work-periods/temporary-disability-benefits-grant-work-periods.entity';
+import type { TemporaryDisabilityBenefitsGrantInssBenefitEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-inss-benefit/temporary-disability-benefits-grant-inss-benefit.entity';
+import type { TemporaryDisabilityBenefitsGrantLegalProceedingEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-legal-proceeding/temporary-disability-benefits-grant-legal-proceeding.entity';
 import type { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-work-periods-earnings-history/temporary-disability-benefits-grant-work-periods-earnings-history.entity';
 
 export class GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResult extends BaseBuildableObject {
@@ -48,6 +50,12 @@ export class GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResult extends
     | null;
   public readonly temporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistory:
     | TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryEntity[]
+    | null;
+  public readonly temporaryDisabilityBenefitsGrantInssBenefit:
+    | TemporaryDisabilityBenefitsGrantInssBenefitEntity[]
+    | null;
+  public readonly temporaryDisabilityBenefitsGrantLegalProceeding:
+    | TemporaryDisabilityBenefitsGrantLegalProceedingEntity[]
     | null;
 
   protected override readonly _type =
