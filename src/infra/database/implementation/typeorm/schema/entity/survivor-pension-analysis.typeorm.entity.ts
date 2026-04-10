@@ -8,7 +8,7 @@ import { SurvivorPensionAnalysisDeceasedBenefitDependentsTypeormEntity } from '@
 import { SurvivorPensionAnalysisDeceasedWorkHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/survivor-pension-analysis-deceased-work-history.typeorm.entity';
 import { SurvivorPensionAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/survivor-pension-analysis-result.typeorm.entity';
 
-@Entity({ name: 'survivor_pension_analysis' })
+@Entity({ name: 'spa' })
 export class SurvivorPensionAnalysisTypeormEntity extends BaseTypeormEntity {
   @OneToOne(
     () => AnalysisToolRecordTypeormEntity,

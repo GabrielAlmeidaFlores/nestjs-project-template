@@ -5,7 +5,7 @@ import { SurvivorPensionAnalysisDeceasedBenefitDependentsDocumentTypeormEntity }
 import { SurvivorPensionAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/survivor-pension-analysis.typeorm.entity';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 
-@Entity({ name: 'survivor_pension_analysis_deceased_benefit_dependents' })
+@Entity({ name: 'spa_deceased_benefit_dependents' })
 export class SurvivorPensionAnalysisDeceasedBenefitDependentsTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'dependent_full_name',

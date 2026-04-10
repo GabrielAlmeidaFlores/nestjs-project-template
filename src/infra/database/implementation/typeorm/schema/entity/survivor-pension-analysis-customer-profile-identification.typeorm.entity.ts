@@ -4,7 +4,7 @@ import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema
 import { SurvivorPensionAnalysisCustomerProfileIdentificationDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/survivor-pension-analysis-customer-profile-identification-document.typeorm.entity';
 import { SurvivorPensionAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/survivor-pension-analysis.typeorm.entity';
 
-@Entity({ name: 'survivor_pension_analysis_customer_profile_identification' })
+@Entity({ name: 'spa_customer_profile_identification' })
 export class SurvivorPensionAnalysisCustomerProfileIdentificationTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'analysis_tool_client_id',
