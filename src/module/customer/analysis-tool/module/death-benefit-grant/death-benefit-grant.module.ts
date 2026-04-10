@@ -1,0 +1,46 @@
+import { Module } from '@nestjs/common';
+
+import { DatabaseModule } from '@infra/database/database.module';
+import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
+import { DeathBenefitGrantController } from '@module/customer/analysis-tool/module/death-benefit-grant/death-benefit-grant.controller';
+import { CreateDeathBenefitGrantDependentUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/create-death-benefit-grant-dependent.use-case';
+import { CreateDeathBenefitGrantFirstAnalysisUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/create-death-benefit-grant-first-analysis.use-case';
+import { CreateDeathBenefitGrantPeriodUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/create-death-benefit-grant-period.use-case';
+import { CreateDeathBenefitGrantResultUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/create-death-benefit-grant-result.use-case';
+import { CreateDeathBenefitGrantUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/create-death-benefit-grant.use-case';
+import { DeleteDeathBenefitGrantPeriodUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/delete-death-benefit-grant-period.use-case';
+import { GetDeathBenefitGrantUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/get-death-benefit-grant.use-case';
+import { UpdateDeathBenefitGrantInstitorUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/update-death-benefit-grant-institutor.use-case';
+import { UpdateDeathBenefitGrantDocumentUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/update-death-benefit-grant-document.use-case';
+import { UpdateDeathBenefitGrantLegalRepresentativeUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/update-death-benefit-grant-legal-representative.use-case';
+import { UpdateDeathBenefitGrantPeriodUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/update-death-benefit-grant-period.use-case';
+import { UpdateDeathBenefitGrantUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/update-death-benefit-grant.use-case';
+import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
+import { OrganizationSessionModule } from '@shared/api/gateway/guard/organization-session/organization-session.module';
+
+@Module({
+  imports: [
+    AuthModule,
+    DatabaseModule,
+    FileProcessorModule,
+    OrganizationSessionModule,
+  ],
+  controllers: [DeathBenefitGrantController],
+  providers: [
+    CreateDeathBenefitGrantUseCase,
+    GetDeathBenefitGrantUseCase,
+    UpdateDeathBenefitGrantUseCase,
+    UpdateDeathBenefitGrantDocumentUseCase,
+    CreateDeathBenefitGrantPeriodUseCase,
+    UpdateDeathBenefitGrantPeriodUseCase,
+    DeleteDeathBenefitGrantPeriodUseCase,
+    UpdateDeathBenefitGrantInstitorUseCase,
+    UpdateDeathBenefitGrantLegalRepresentativeUseCase,
+    CreateDeathBenefitGrantDependentUseCase,
+    CreateDeathBenefitGrantFirstAnalysisUseCase,
+    CreateDeathBenefitGrantResultUseCase,
+  ],
+})
+export class DeathBenefitGrantModule {
+  protected readonly _type = DeathBenefitGrantModule.name;
+}
