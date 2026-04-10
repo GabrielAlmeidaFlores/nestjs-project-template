@@ -1,4 +1,3 @@
-import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
 import { DeathBenefitGrantDocumentTypeEnum } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/enum/death-benefit-grant-document-type.enum';
 import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
 import { RequestDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-boolean-property/request-dto-boolean-property.decorator';
@@ -23,21 +22,6 @@ export class UpdateDeathBenefitGrantInstitutorDataDocumentRequestDto extends Bas
 
 @RequestDto()
 export class UpdateDeathBenefitGrantInstitutorDataRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoStringProperty({ required: false })
-  public name?: string;
-
-  @RequestDtoStringProperty({ required: false })
-  public cpf?: string;
-
-  @RequestDtoDateProperty({ required: false })
-  public birthDate?: Date;
-
-  @RequestDtoEnumProperty(GenderEnum, { required: false })
-  public gender?: GenderEnum;
-
-  @RequestDtoDateProperty({ required: false })
-  public deathDate?: Date;
-
   @RequestDtoBooleanProperty({ required: false })
   public wasRetired?: boolean;
 

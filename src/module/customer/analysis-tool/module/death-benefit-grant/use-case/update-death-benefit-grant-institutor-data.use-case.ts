@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
-import { PersonalDocument } from '@core/domain/schema/value-object/personal-document/personal-document.value-object';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
@@ -71,14 +70,11 @@ export class UpdateDeathBenefitGrantInstitutorDataUseCase {
 
     const institutorEntity = new DeathBenefitGrantInstitorEntity({
       id: newInstitutorId,
-      name: dto.name ?? existingInstitutor?.name ?? null,
-      cpf:
-        dto.cpf !== undefined
-          ? new PersonalDocument(dto.cpf)
-          : (existingInstitutor?.cpf ?? null),
-      birthDate: dto.birthDate ?? existingInstitutor?.birthDate ?? null,
-      gender: dto.gender ?? existingInstitutor?.gender ?? null,
-      deathDate: dto.deathDate ?? existingInstitutor?.deathDate ?? null,
+      name: existingInstitutor?.name ?? null,
+      cpf: existingInstitutor?.cpf ?? null,
+      birthDate: existingInstitutor?.birthDate ?? null,
+      gender: existingInstitutor?.gender ?? null,
+      deathDate: existingInstitutor?.deathDate ?? null,
       wasRetired: dto.wasRetired ?? existingInstitutor?.wasRetired ?? null,
       retirementBenefitNumber:
         dto.retirementBenefitNumber ??

@@ -6,7 +6,6 @@ import { CreateDeathBenefitGrantDependentRequestDto } from '@module/customer/ana
 import { CreateDeathBenefitGrantPeriodRequestDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/request/create-death-benefit-grant-period.request.dto';
 import { CreateDeathBenefitGrantRequestDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/request/create-death-benefit-grant.request.dto';
 import { UpdateDeathBenefitGrantInstitutorDataRequestDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/request/update-death-benefit-grant-institutor-data.request.dto';
-import { UpdateDeathBenefitGrantInstitorRequestDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/request/update-death-benefit-grant-institutor.request.dto';
 import { UpdateDeathBenefitGrantLegalRepresentativeRequestDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/request/update-death-benefit-grant-legal-representative.request.dto';
 import { UpdateDeathBenefitGrantPeriodRequestDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/request/update-death-benefit-grant-period.request.dto';
 import { UpdateDeathBenefitGrantRequestDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/request/update-death-benefit-grant.request.dto';
@@ -18,7 +17,6 @@ import { CreateDeathBenefitGrantResponseDto } from '@module/customer/analysis-to
 import { DeleteDeathBenefitGrantPeriodResponseDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/response/delete-death-benefit-grant-period.response.dto';
 import { GetDeathBenefitGrantResponseDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/response/get-death-benefit-grant.response.dto';
 import { UpdateDeathBenefitGrantInstitutorDataResponseDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/response/update-death-benefit-grant-institutor-data.response.dto';
-import { UpdateDeathBenefitGrantInstitorResponseDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/response/update-death-benefit-grant-institutor.response.dto';
 import { UpdateDeathBenefitGrantLegalRepresentativeResponseDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/response/update-death-benefit-grant-legal-representative.response.dto';
 import { UpdateDeathBenefitGrantPeriodResponseDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/response/update-death-benefit-grant-period.response.dto';
 import { UpdateDeathBenefitGrantResponseDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/response/update-death-benefit-grant.response.dto';
@@ -30,7 +28,6 @@ import { CreateDeathBenefitGrantUseCase } from '@module/customer/analysis-tool/m
 import { DeleteDeathBenefitGrantPeriodUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/delete-death-benefit-grant-period.use-case';
 import { GetDeathBenefitGrantUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/get-death-benefit-grant.use-case';
 import { UpdateDeathBenefitGrantInstitutorDataUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/update-death-benefit-grant-institutor-data.use-case';
-import { UpdateDeathBenefitGrantInstitorUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/update-death-benefit-grant-institutor.use-case';
 import { UpdateDeathBenefitGrantLegalRepresentativeUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/update-death-benefit-grant-legal-representative.use-case';
 import { UpdateDeathBenefitGrantPeriodUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/update-death-benefit-grant-period.use-case';
 import { UpdateDeathBenefitGrantUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/update-death-benefit-grant.use-case';
@@ -57,7 +54,6 @@ export class DeathBenefitGrantController {
     private readonly createDeathBenefitGrantPeriodUseCase: CreateDeathBenefitGrantPeriodUseCase,
     private readonly updateDeathBenefitGrantPeriodUseCase: UpdateDeathBenefitGrantPeriodUseCase,
     private readonly deleteDeathBenefitGrantPeriodUseCase: DeleteDeathBenefitGrantPeriodUseCase,
-    private readonly updateDeathBenefitGrantInstitorUseCase: UpdateDeathBenefitGrantInstitorUseCase,
     private readonly updateDeathBenefitGrantLegalRepresentativeUseCase: UpdateDeathBenefitGrantLegalRepresentativeUseCase,
     private readonly createDeathBenefitGrantDependentUseCase: CreateDeathBenefitGrantDependentUseCase,
     private readonly createDeathBenefitGrantFirstAnalysisUseCase: CreateDeathBenefitGrantFirstAnalysisUseCase,
@@ -272,38 +268,6 @@ export class DeathBenefitGrantController {
       organizationSessionData,
       deathBenefitGrantId,
       deathBenefitGrantPeriodId,
-    );
-  }
-
-  @BuildEndpointSpecification({
-    summary: 'Atualizar instituidor do benefício',
-    userLevel: [UserLevelEnum.CUSTOMER],
-    http: {
-      path: ':id/benefit-institutor',
-      method: RequestMethod.PATCH,
-      type: UpdateDeathBenefitGrantInstitorRequestDto,
-    },
-    tag: ['pensao-por-morte'],
-    successResponse: {
-      statusCode: HttpStatus.OK,
-      description: 'Instituidor do benefício atualizado com sucesso.',
-      type: UpdateDeathBenefitGrantInstitorResponseDto,
-    },
-    guard: [AuthGuard, OrganizationSessionGuard],
-  })
-  public async updateBenefitInstitutor(
-    @GetSessionData() sessionData: SessionDataModel,
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
-    @Param('id', new ParseValueObjectPipe(DeathBenefitGrantId))
-    deathBenefitGrantId: DeathBenefitGrantId,
-    @Body() dto: UpdateDeathBenefitGrantInstitorRequestDto,
-  ): Promise<UpdateDeathBenefitGrantInstitorResponseDto> {
-    return await this.updateDeathBenefitGrantInstitorUseCase.execute(
-      sessionData,
-      organizationSessionData,
-      deathBenefitGrantId,
-      dto,
     );
   }
 
