@@ -49,7 +49,7 @@ export class ListSystemLogsErrorsUseCase {
     return SystemLogItemResponseDto.build({
       code: item.code,
       endpoint: item.endpoint,
-      data: item.data,
+      createdAt: item.createdAt,
       isError: item.isError,
       stackTrace: item.stackTrace ?? null,
       requestBody: item.requestBody ?? null,

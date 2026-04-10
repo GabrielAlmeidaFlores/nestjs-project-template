@@ -6,6 +6,7 @@ import {
   FindManyOptions,
   FindOptionsRelations,
   FindOptionsWhere,
+  In,
   IsNull,
   Like,
   Not,
@@ -1594,63 +1595,67 @@ export class AnalysisToolRecordTypeormQueryRepository
       LAST_MILLISECOND,
     );
 
-    const searchParams: FindManyOptions<AnalysisToolRecordTypeormEntity> = {
-      where: {
-        createdAt: Between(startDate, endDate),
+    const where: FindOptionsWhere<AnalysisToolRecordTypeormEntity> = {
+      createdAt: Between(startDate, endDate),
+    };
+
+    const relations: FindOptionsRelations<AnalysisToolRecordTypeormEntity> = {
+      createdBy: {
+        customer: { authIdentity: true },
+        organization: true,
       },
-      relations: {
+      updatedBy: {
+        customer: { authIdentity: true },
+        organization: true,
+      },
+      analysisToolClient: {
         createdBy: {
-          customer: {
-            authIdentity: true,
-          },
+          customer: { authIdentity: true },
           organization: true,
         },
         updatedBy: {
-          customer: {
-            authIdentity: true,
-          },
+          customer: { authIdentity: true },
           organization: true,
         },
-        analysisToolClient: {
-          createdBy: {
-            customer: {
-              authIdentity: true,
-            },
-            organization: true,
-          },
-          updatedBy: {
-            customer: {
-              authIdentity: true,
-            },
-            organization: true,
-          },
-          analysisToolClientInssBenefit: true,
-          analysisToolClientLegalProceeding: true,
-        },
+        analysisToolClientInssBenefit: true,
+        analysisToolClientLegalProceeding: true,
       },
     };
 
     if (listData.searchBy !== null) {
-      (
-        searchParams.where as FindOptionsWhere<AnalysisToolRecordTypeormEntity>
-      ).code = Like(`${listData.searchBy}`);
+      where.code = Like(`${listData.searchBy}`);
     }
 
     if (listData.type !== null) {
-      (
-        searchParams.where as FindOptionsWhere<AnalysisToolRecordTypeormEntity>
-      ).type = listData.type;
+      where.type = listData.type;
     }
 
     const skip = (listData.page - 1) * listData.limit;
 
-    const [items, total] = await this.repository.findAndCount({
-      ...searchParams,
+    const [idsResult, total] = await this.repository.findAndCount({
+      select: { id: true },
+      where,
       skip,
       take: listData.limit,
-      order: {
-        createdAt: 'DESC',
-      },
+      order: { createdAt: 'DESC' },
+    });
+
+    if (idsResult.length === 0) {
+      return new ListDataOutputModel({
+        resource: [],
+        totalItems: total,
+        page: listData.page,
+        limit: listData.limit,
+      });
+    }
+
+    const ids = idsResult.map((r) => r.id);
+
+    const items = await this.repository.find({
+      where: { id: In(ids) },
+      withDeleted: true,
+      relations,
+      order: { createdAt: 'DESC' },
     });
 
     const mappedData = this.mapperGateway.mapArray(
