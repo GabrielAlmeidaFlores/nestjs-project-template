@@ -47,20 +47,20 @@ import { CustomerTermsTypeormCommandRepository } from '@infra/database/implement
 import { CustomerTermsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/customer-terms/customer-terms.typeorm.query.repository';
 import { CustomerTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer/customer.typeorm.command.repository';
 import { CustomerTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/customer/customer.typeorm.query.repository';
-import { DeathBenefitBenefitInstitorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-benefit-institutor/death-benefit-benefit-institutor.typeorm.command.repository';
-import { DeathBenefitDependentDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-dependent-document/death-benefit-dependent-document.typeorm.command.repository';
-import { DeathBenefitDependentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-dependent/death-benefit-dependent.typeorm.command.repository';
-import { DeathBenefitDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-document/death-benefit-document.typeorm.command.repository';
-import { DeathBenefitInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-inss-benefit/death-benefit-inss-benefit.typeorm.command.repository';
-import { DeathBenefitLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-legal-proceeding/death-benefit-legal-proceeding.typeorm.command.repository';
-import { DeathBenefitLegalRepresentativeTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-legal-representative/death-benefit-legal-representative.typeorm.command.repository';
-import { DeathBenefitPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-period-document/death-benefit-period-document.typeorm.command.repository';
-import { DeathBenefitPeriodEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-period-earnings-history/death-benefit-period-earnings-history.typeorm.command.repository';
-import { DeathBenefitPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-period/death-benefit-period.typeorm.command.repository';
-import { DeathBenefitPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-period/death-benefit-period.typeorm.query.repository';
-import { DeathBenefitResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-result/death-benefit-result.typeorm.command.repository';
-import { DeathBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit/death-benefit.typeorm.command.repository';
-import { DeathBenefitTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/death-benefit/death-benefit.typeorm.query.repository';
+import { DeathBenefitGrantInstitorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-institutor/death-benefit-grant-institutor.typeorm.command.repository';
+import { DeathBenefitGrantDependentDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-dependent-document/death-benefit-grant-dependent-document.typeorm.command.repository';
+import { DeathBenefitGrantDependentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-dependent/death-benefit-grant-dependent.typeorm.command.repository';
+import { DeathBenefitGrantDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-document/death-benefit-grant-document.typeorm.command.repository';
+import { DeathBenefitGrantInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-inss-benefit/death-benefit-grant-inss-benefit.typeorm.command.repository';
+import { DeathBenefitGrantLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-legal-proceeding/death-benefit-grant-legal-proceeding.typeorm.command.repository';
+import { DeathBenefitGrantLegalRepresentativeTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-legal-representative/death-benefit-grant-legal-representative.typeorm.command.repository';
+import { DeathBenefitGrantPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-period-document/death-benefit-grant-period-document.typeorm.command.repository';
+import { DeathBenefitGrantPeriodEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-period-earnings-history/death-benefit-grant-period-earnings-history.typeorm.command.repository';
+import { DeathBenefitGrantPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-period/death-benefit-grant-period.typeorm.command.repository';
+import { DeathBenefitGrantPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-period/death-benefit-grant-period.typeorm.query.repository';
+import { DeathBenefitGrantResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-result/death-benefit-grant-result.typeorm.command.repository';
+import { DeathBenefitGrantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant/death-benefit-grant.typeorm.command.repository';
+import { DeathBenefitGrantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant/death-benefit-grant.typeorm.query.repository';
 import { DisabilityAssessmentForBpcAnalysisBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-assessment-for-bpc-analysis-benefit/disability-assessment-for-bpc-analysis-benefit.typeorm.command.repository';
 import { DisabilityAssessmentForBpcAnalysisDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-assessment-for-bpc-analysis-document/disability-assessment-for-bpc-analysis-document.typeorm.command.repository';
 import { DisabilityAssessmentForBpcAnalysisLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-assessment-for-bpc-analysis-legal-proceeding/disability-assessment-for-bpc-analysis-legal-proceeding.typeorm.command.repository';
@@ -304,18 +304,18 @@ import { CustomerEmailSentTypeormEntity } from '@infra/database/implementation/t
 import { CustomerTermsAcceptanceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-terms-acceptance.typeorm.entity';
 import { CustomerTermsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-terms.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
-import { DeathBenefitBenefitInstitorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-benefit-institutor.typeorm.entity';
-import { DeathBenefitDependentDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-dependent-document.typeorm.entity';
-import { DeathBenefitDependentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-dependent.typeorm.entity';
-import { DeathBenefitDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-document.typeorm.entity';
-import { DeathBenefitInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-inss-benefit.typeorm.entity';
-import { DeathBenefitLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-legal-proceeding.typeorm.entity';
-import { DeathBenefitLegalRepresentativeTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-legal-representative.typeorm.entity';
-import { DeathBenefitPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-period-document.typeorm.entity';
-import { DeathBenefitPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-period-earnings-history.typeorm.entity';
-import { DeathBenefitPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-period.typeorm.entity';
-import { DeathBenefitResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-result.typeorm.entity';
-import { DeathBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit.typeorm.entity';
+import { DeathBenefitGrantInstitorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-institutor.typeorm.entity';
+import { DeathBenefitGrantDependentDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-dependent-document.typeorm.entity';
+import { DeathBenefitGrantDependentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-dependent.typeorm.entity';
+import { DeathBenefitGrantDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-document.typeorm.entity';
+import { DeathBenefitGrantInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-inss-benefit.typeorm.entity';
+import { DeathBenefitGrantLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-legal-proceeding.typeorm.entity';
+import { DeathBenefitGrantLegalRepresentativeTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-legal-representative.typeorm.entity';
+import { DeathBenefitGrantPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-period-document.typeorm.entity';
+import { DeathBenefitGrantPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-period-earnings-history.typeorm.entity';
+import { DeathBenefitGrantPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-period.typeorm.entity';
+import { DeathBenefitGrantResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-result.typeorm.entity';
+import { DeathBenefitGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant.typeorm.entity';
 import { DisabilityAssessmentForBpcAnalysisBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis-benefit.entity';
 import { DisabilityAssessmentForBpcAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis-document.entity';
 import { DisabilityAssessmentForBpcAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis-legal-proceeding.entity';
@@ -708,18 +708,18 @@ export class TypeormIndex {
     SupportTicketTypeormEntity,
     SupportTicketAttachmentTypeormEntity,
     SupportTicketMessageTypeormEntity,
-    DeathBenefitTypeormEntity,
-    DeathBenefitResultTypeormEntity,
-    DeathBenefitDocumentTypeormEntity,
-    DeathBenefitInssBenefitTypeormEntity,
-    DeathBenefitLegalProceedingTypeormEntity,
-    DeathBenefitLegalRepresentativeTypeormEntity,
-    DeathBenefitBenefitInstitorTypeormEntity,
-    DeathBenefitDependentTypeormEntity,
-    DeathBenefitDependentDocumentTypeormEntity,
-    DeathBenefitPeriodTypeormEntity,
-    DeathBenefitPeriodEarningsHistoryTypeormEntity,
-    DeathBenefitPeriodDocumentTypeormEntity,
+    DeathBenefitGrantTypeormEntity,
+    DeathBenefitGrantResultTypeormEntity,
+    DeathBenefitGrantDocumentTypeormEntity,
+    DeathBenefitGrantInssBenefitTypeormEntity,
+    DeathBenefitGrantLegalProceedingTypeormEntity,
+    DeathBenefitGrantLegalRepresentativeTypeormEntity,
+    DeathBenefitGrantInstitorTypeormEntity,
+    DeathBenefitGrantDependentTypeormEntity,
+    DeathBenefitGrantDependentDocumentTypeormEntity,
+    DeathBenefitGrantPeriodTypeormEntity,
+    DeathBenefitGrantPeriodEarningsHistoryTypeormEntity,
+    DeathBenefitGrantPeriodDocumentTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [
@@ -979,20 +979,20 @@ export class TypeormIndex {
     RegulatoryUpdateEmailPreferenceTypeormCommandRepository,
     RegulatoryUpdateMonitoredSourceTypeormQueryRepository,
     RegulatoryUpdateMonitoredSourceTypeormCommandRepository,
-    DeathBenefitTypeormCommandRepository,
-    DeathBenefitTypeormQueryRepository,
-    DeathBenefitResultTypeormCommandRepository,
-    DeathBenefitDocumentTypeormCommandRepository,
-    DeathBenefitInssBenefitTypeormCommandRepository,
-    DeathBenefitLegalProceedingTypeormCommandRepository,
-    DeathBenefitLegalRepresentativeTypeormCommandRepository,
-    DeathBenefitBenefitInstitorTypeormCommandRepository,
-    DeathBenefitDependentTypeormCommandRepository,
-    DeathBenefitDependentDocumentTypeormCommandRepository,
-    DeathBenefitPeriodTypeormCommandRepository,
-    DeathBenefitPeriodTypeormQueryRepository,
-    DeathBenefitPeriodEarningsHistoryTypeormCommandRepository,
-    DeathBenefitPeriodDocumentTypeormCommandRepository,
+    DeathBenefitGrantTypeormCommandRepository,
+    DeathBenefitGrantTypeormQueryRepository,
+    DeathBenefitGrantResultTypeormCommandRepository,
+    DeathBenefitGrantDocumentTypeormCommandRepository,
+    DeathBenefitGrantInssBenefitTypeormCommandRepository,
+    DeathBenefitGrantLegalProceedingTypeormCommandRepository,
+    DeathBenefitGrantLegalRepresentativeTypeormCommandRepository,
+    DeathBenefitGrantInstitorTypeormCommandRepository,
+    DeathBenefitGrantDependentTypeormCommandRepository,
+    DeathBenefitGrantDependentDocumentTypeormCommandRepository,
+    DeathBenefitGrantPeriodTypeormCommandRepository,
+    DeathBenefitGrantPeriodTypeormQueryRepository,
+    DeathBenefitGrantPeriodEarningsHistoryTypeormCommandRepository,
+    DeathBenefitGrantPeriodDocumentTypeormCommandRepository,
   ];
 
   public static readonly dynamicModule = TypeOrmModule.forFeature(

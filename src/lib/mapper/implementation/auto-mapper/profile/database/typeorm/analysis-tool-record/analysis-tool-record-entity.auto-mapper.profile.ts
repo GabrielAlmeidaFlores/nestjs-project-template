@@ -244,7 +244,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
-      const deathBenefit = null;
+      const deathBenefitGrant = null;
 
       return new AnalysisToolRecordEntity({
         id: new AnalysisToolRecordId(source.id),
@@ -276,7 +276,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         disabilityRetirementPlanning,
         generalUrbanRetirementAnalysis,
         specialCategoryRetirementAnalysis,
-        deathBenefit,
+        deathBenefitGrant,
       });
     };
 

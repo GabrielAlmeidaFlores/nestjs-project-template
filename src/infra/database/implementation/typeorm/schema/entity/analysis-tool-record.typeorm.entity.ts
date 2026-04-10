@@ -5,7 +5,7 @@ import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/
 import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
-import { DeathBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit.typeorm.entity';
+import { DeathBenefitGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant.typeorm.entity';
 import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis.entity';
 import { DisabilityRetirementPlanningGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-grant.typeorm.entity';
 import { DisabilityRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning.typeorm.entity';
@@ -214,9 +214,9 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({ name: 'disability_retirement_planning_grant_id' })
   public disabilityRetirementPlanningGrant?: DisabilityRetirementPlanningGrantTypeormEntity | null;
 
-  @ManyToOne(() => DeathBenefitTypeormEntity)
+  @ManyToOne(() => DeathBenefitGrantTypeormEntity)
   @JoinColumn({ name: 'death_benefit_id' })
-  public deathBenefit?: DeathBenefitTypeormEntity | null;
+  public deathBenefitGrant?: DeathBenefitGrantTypeormEntity | null;
 
   @ManyToOne(() => GeneralUrbanRetirementGrantTypeormEntity)
   @JoinColumn({ name: 'general_urban_retirement_grant_id' })

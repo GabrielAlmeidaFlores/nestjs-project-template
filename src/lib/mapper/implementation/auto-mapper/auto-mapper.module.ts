@@ -110,20 +110,20 @@ import { DisabilityRetirementPlanningGrantPeriodEarningsHistoryEntityAutoMapperP
 import { DisabilityRetirementPlanningGrantResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-grant-result/disability-retirement-planning-grant-result-entity.auto-mapper.profile';
 import { DisabilityRetirementPlanningGrantTimeAcceleratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-grant-time-accelerator/disability-retirement-planning-grant-time-accelerator-entity.auto-mapper.profile';
 import { GetDisabilityRetirementPlanningGrantTimeAcceleratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-grant-time-accelerator/get-disability-retirement-planning-grant-time-accelerator-query-result.auto-mapper.profile';
-import { DeathBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit/death-benefit-entity.auto-mapper.profile';
-import { GetDeathBenefitWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit/get-death-benefit-with-relations-query-result.auto-mapper.profile';
-import { DeathBenefitResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-result/death-benefit-result-entity.auto-mapper.profile';
-import { DeathBenefitDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-document/death-benefit-document-entity.auto-mapper.profile';
-import { DeathBenefitInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-inss-benefit/death-benefit-inss-benefit-entity.auto-mapper.profile';
-import { DeathBenefitLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-legal-proceeding/death-benefit-legal-proceeding-entity.auto-mapper.profile';
-import { DeathBenefitLegalRepresentativeEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-legal-representative/death-benefit-legal-representative-entity.auto-mapper.profile';
-import { DeathBenefitBenefitInstitorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-benefit-institutor/death-benefit-benefit-institutor-entity.auto-mapper.profile';
-import { DeathBenefitDependentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-dependent/death-benefit-dependent-entity.auto-mapper.profile';
-import { DeathBenefitDependentDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-dependent-document/death-benefit-dependent-document-entity.auto-mapper.profile';
-import { DeathBenefitPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-period/death-benefit-period-entity.auto-mapper.profile';
-import { GetDeathBenefitPeriodQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-period/get-death-benefit-period-query-result.auto-mapper.profile';
-import { DeathBenefitPeriodEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-period-earnings-history/death-benefit-period-earnings-history-entity.auto-mapper.profile';
-import { DeathBenefitPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-period-document/death-benefit-period-document-entity.auto-mapper.profile';
+import { DeathBenefitGrantEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-grant/death-benefit-grant-entity.auto-mapper.profile';
+import { GetDeathBenefitGrantWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-grant/get-death-benefit-grant-with-relations-query-result.auto-mapper.profile';
+import { DeathBenefitGrantResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-grant-result/death-benefit-grant-result-entity.auto-mapper.profile';
+import { DeathBenefitGrantDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-grant-document/death-benefit-grant-document-entity.auto-mapper.profile';
+import { DeathBenefitGrantInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-grant-inss-benefit/death-benefit-grant-inss-benefit-entity.auto-mapper.profile';
+import { DeathBenefitGrantLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-grant-legal-proceeding/death-benefit-grant-legal-proceeding-entity.auto-mapper.profile';
+import { DeathBenefitGrantLegalRepresentativeEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-grant-legal-representative/death-benefit-grant-legal-representative-entity.auto-mapper.profile';
+import { DeathBenefitGrantInstitorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-grant-institutor/death-benefit-grant-institutor-entity.auto-mapper.profile';
+import { DeathBenefitGrantDependentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-grant-dependent/death-benefit-grant-dependent-entity.auto-mapper.profile';
+import { DeathBenefitGrantDependentDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-grant-dependent-document/death-benefit-grant-dependent-document-entity.auto-mapper.profile';
+import { DeathBenefitGrantPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-grant-period/death-benefit-grant-period-entity.auto-mapper.profile';
+import { GetDeathBenefitGrantPeriodQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-grant-period/get-death-benefit-grant-period-query-result.auto-mapper.profile';
+import { DeathBenefitGrantPeriodEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-grant-period-earnings-history/death-benefit-grant-period-earnings-history-entity.auto-mapper.profile';
+import { DeathBenefitGrantPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-grant-period-document/death-benefit-grant-period-document-entity.auto-mapper.profile';
 import { DisabilityRetirementPlanningInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-inss-benefit/disability-retirement-planning-inss-benefit-entity.auto-mapper.profile';
 import { GetDisabilityRetirementPlanningInssBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-inss-benefit/get-disability-retirement-planning-inss-benefit-query-result.auto-mapper.profile';
 import { DisabilityRetirementPlanningLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-legal-proceeding/disability-retirement-planning-legal-proceeding-entity.auto-mapper.profile';
@@ -642,20 +642,20 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetDisabilityRetirementPlanningGrantTimeAcceleratorQueryResultAutoMapperProfile,
     GetDisabilityRetirementPlanningGrantWithRelationsQueryResultAutoMapperProfile,
     DisabilityRetirementPlanningGrantEntityAutoMapperProfile,
-    DeathBenefitEntityAutoMapperProfile,
-    GetDeathBenefitWithRelationsQueryResultAutoMapperProfile,
-    DeathBenefitResultEntityAutoMapperProfile,
-    DeathBenefitDocumentEntityAutoMapperProfile,
-    DeathBenefitInssBenefitEntityAutoMapperProfile,
-    DeathBenefitLegalProceedingEntityAutoMapperProfile,
-    DeathBenefitLegalRepresentativeEntityAutoMapperProfile,
-    DeathBenefitBenefitInstitorEntityAutoMapperProfile,
-    DeathBenefitDependentEntityAutoMapperProfile,
-    DeathBenefitDependentDocumentEntityAutoMapperProfile,
-    DeathBenefitPeriodEntityAutoMapperProfile,
-    GetDeathBenefitPeriodQueryResultAutoMapperProfile,
-    DeathBenefitPeriodEarningsHistoryEntityAutoMapperProfile,
-    DeathBenefitPeriodDocumentEntityAutoMapperProfile,
+    DeathBenefitGrantEntityAutoMapperProfile,
+    GetDeathBenefitGrantWithRelationsQueryResultAutoMapperProfile,
+    DeathBenefitGrantResultEntityAutoMapperProfile,
+    DeathBenefitGrantDocumentEntityAutoMapperProfile,
+    DeathBenefitGrantInssBenefitEntityAutoMapperProfile,
+    DeathBenefitGrantLegalProceedingEntityAutoMapperProfile,
+    DeathBenefitGrantLegalRepresentativeEntityAutoMapperProfile,
+    DeathBenefitGrantInstitorEntityAutoMapperProfile,
+    DeathBenefitGrantDependentEntityAutoMapperProfile,
+    DeathBenefitGrantDependentDocumentEntityAutoMapperProfile,
+    DeathBenefitGrantPeriodEntityAutoMapperProfile,
+    GetDeathBenefitGrantPeriodQueryResultAutoMapperProfile,
+    DeathBenefitGrantPeriodEarningsHistoryEntityAutoMapperProfile,
+    DeathBenefitGrantPeriodDocumentEntityAutoMapperProfile,
     GeneralUrbanRetirementAnalysisEntityAutoMapperProfile,
     GetGeneralUrbanRetirementAnalysisDocumentQueryResultAutoMapperProfile,
     GetGeneralUrbanRetirementAnalysisLegalProceedingQueryResultAutoMapperProfile,
