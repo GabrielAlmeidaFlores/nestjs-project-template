@@ -7,8 +7,8 @@ import { BaseTypeormCommandRepository } from '@infra/database/implementation/typ
 import { DeathBenefitGrantDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-document.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { DeathBenefitGrantDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/repository/death-benefit-grant-document/command/death-benefit-grant-document.command.repository.gateway';
-import { DeathBenefitGrantId } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant/value-object/death-benefit-grant-id.value-object';
 import { DeathBenefitGrantDocumentEntity } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-document/death-benefit-grant-document.entity';
+import { DeathBenefitGrantInstitorId } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-institutor/value-object/death-benefit-grant-institutor-id.value-object';
 
 @Injectable()
 export class DeathBenefitGrantDocumentTypeormCommandRepository
@@ -38,20 +38,19 @@ export class DeathBenefitGrantDocumentTypeormCommandRepository
     return this.create(mappedData);
   }
 
-  public deleteAllByDeathBenefitGrantId(
-    deathBenefitGrantId: DeathBenefitGrantId,
+  public deleteAllByDeathBenefitGrantInstitorId(
+    deathBenefitGrantInstitorId: DeathBenefitGrantInstitorId,
   ): TransactionType {
     return async (executor: unknown) => {
       const manager = executor as EntityManager;
 
       await manager
         .getRepository(DeathBenefitGrantDocumentTypeormEntity)
-        .createQueryBuilder()
-        .softDelete()
-        .where('death_benefit_id = :deathBenefitGrantId', {
-          deathBenefitGrantId: deathBenefitGrantId.toString(),
-        })
-        .execute();
+        .softDelete({
+          deathBenefitGrantInstitutor: {
+            id: deathBenefitGrantInstitorId.toString(),
+          },
+        });
     };
   }
 }

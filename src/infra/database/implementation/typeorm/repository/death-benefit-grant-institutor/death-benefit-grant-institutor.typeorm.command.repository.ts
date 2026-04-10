@@ -1,4 +1,3 @@
-import { DeathBenefitGrantInstitorId } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-institutor/value-object/death-benefit-grant-institutor-id.value-object';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -9,6 +8,7 @@ import { DeathBenefitGrantInstitorTypeormEntity } from '@infra/database/implemen
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { DeathBenefitGrantInstitorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/repository/death-benefit-grant-institutor/command/death-benefit-grant-institutor.command.repository.gateway';
 import { DeathBenefitGrantInstitorEntity } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-institutor/death-benefit-grant-institutor.entity';
+import { DeathBenefitGrantInstitorId } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-institutor/value-object/death-benefit-grant-institutor-id.value-object';
 
 @Injectable()
 export class DeathBenefitGrantInstitorTypeormCommandRepository
@@ -49,5 +49,11 @@ export class DeathBenefitGrantInstitorTypeormCommandRepository
     );
 
     return this.update(id.toString(), mappedData);
+  }
+
+  public deleteDeathBenefitGrantBenefitInstitutor(
+    id: DeathBenefitGrantInstitorId,
+  ): TransactionType {
+    return this.delete(id.toString());
   }
 }

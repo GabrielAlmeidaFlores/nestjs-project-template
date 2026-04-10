@@ -3,6 +3,7 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { PersonalDocument } from '@core/domain/schema/value-object/personal-document/personal-document.value-object';
 import { DeathBenefitGrantDependentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-dependent.typeorm.entity';
 import { DeathBenefitGrantInstitorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-institutor.typeorm.entity';
 import { DeathBenefitGrantResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-result.typeorm.entity';
@@ -66,21 +67,6 @@ export class GetDeathBenefitGrantWithRelationsQueryResultAutoMapperProfile {
             )
           : null;
 
-      const deathBenefitGrantDocument = (
-        source.deathBenefitGrantDocument ?? []
-      ).map(
-        (item) =>
-          new DeathBenefitGrantDocumentEntity({
-            id: new DeathBenefitGrantDocumentId(item.id),
-            document: item.document,
-            type: item.type,
-            deathBenefitGrantId: deathBenefitGrantEntity.id,
-            createdAt: item.createdAt,
-            updatedAt: item.updatedAt,
-            deletedAt: item.deletedAt,
-          }),
-      );
-
       const deathBenefitGrantInssBenefit = (
         source.deathBenefitGrantInssBenefit ?? []
       ).map(
@@ -117,7 +103,10 @@ export class GetDeathBenefitGrantWithRelationsQueryResultAutoMapperProfile {
               legalRepresentativeItem.id,
             ),
             name: legalRepresentativeItem.name,
-            cpf: legalRepresentativeItem.cpf,
+            cpf:
+              legalRepresentativeItem.cpf !== null
+                ? new PersonalDocument(legalRepresentativeItem.cpf)
+                : null,
             birthDate: legalRepresentativeItem.birthDate,
             legalRepresentativeRelationship:
               legalRepresentativeItem.legalRepresentativeRelationship,
@@ -136,18 +125,54 @@ export class GetDeathBenefitGrantWithRelationsQueryResultAutoMapperProfile {
         ? new DeathBenefitGrantInstitorEntity({
             id: new DeathBenefitGrantInstitorId(benefitInstitutor.id),
             name: benefitInstitutor.name,
-            cpf: benefitInstitutor.cpf,
+            cpf:
+              benefitInstitutor.cpf !== null
+                ? new PersonalDocument(benefitInstitutor.cpf)
+                : null,
             birthDate: benefitInstitutor.birthDate,
-            sex: benefitInstitutor.sex,
+            gender: benefitInstitutor.gender,
             deathDate: benefitInstitutor.deathDate,
             wasRetired: benefitInstitutor.wasRetired,
             retirementBenefitNumber: benefitInstitutor.retirementBenefitNumber,
+            isDeathDeclarantChildOrSpouse:
+              benefitInstitutor.isDeathDeclarantChildOrSpouse,
+            deathDeclarantRelationshipDescription:
+              benefitInstitutor.deathDeclarantRelationshipDescription,
+            wantsToProveWorkPeriodNotInCnis:
+              benefitInstitutor.wantsToProveWorkPeriodNotInCnis,
+            wasRuralInsured: benefitInstitutor.wasRuralInsured,
+            ruralPeriodStartDate: benefitInstitutor.ruralPeriodStartDate,
+            ruralPeriodEndDate: benefitInstitutor.ruralPeriodEndDate,
+            ruralPeriodDocumentDescription:
+              benefitInstitutor.ruralPeriodDocumentDescription,
+            wasUnemployedAtDeath: benefitInstitutor.wasUnemployedAtDeath,
+            wantsToProveDisabilityBeforeDeath:
+              benefitInstitutor.wantsToProveDisabilityBeforeDeath,
+            wantsToProveUnemploymentByWitness:
+              benefitInstitutor.wantsToProveUnemploymentByWitness,
             deathBenefitGrantId: deathBenefitGrantEntity.id,
             createdAt: benefitInstitutor.createdAt,
             updatedAt: benefitInstitutor.updatedAt,
             deletedAt: benefitInstitutor.deletedAt,
           })
         : null;
+
+      const deathBenefitGrantDocument = benefitInstitutor
+        ? (benefitInstitutor.deathBenefitGrantDocument ?? []).map(
+            (item) =>
+              new DeathBenefitGrantDocumentEntity({
+                id: new DeathBenefitGrantDocumentId(item.id),
+                document: item.document,
+                type: item.type,
+                deathBenefitGrantInstitorId: new DeathBenefitGrantInstitorId(
+                  benefitInstitutor.id,
+                ),
+                createdAt: item.createdAt,
+                updatedAt: item.updatedAt,
+                deletedAt: item.deletedAt,
+              }),
+          )
+        : [];
 
       const deathBenefitGrantDependent = (
         source.deathBenefitGrantDependent ?? []
@@ -158,7 +183,7 @@ export class GetDeathBenefitGrantWithRelationsQueryResultAutoMapperProfile {
             name: item.name,
             dependentClass: item.dependentClass,
             dependentType: item.dependentType,
-            sex: item.sex,
+            gender: item.gender,
             birthDate: item.birthDate,
             hasDisabilityOrInvalidism: item.hasDisabilityOrInvalidism,
             isMinorUnder16: item.isMinorUnder16,

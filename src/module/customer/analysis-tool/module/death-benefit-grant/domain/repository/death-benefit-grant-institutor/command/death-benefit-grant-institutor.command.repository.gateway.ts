@@ -11,4 +11,8 @@ export abstract class DeathBenefitGrantInstitorCommandRepositoryGateway {
     id: DeathBenefitGrantInstitorId,
     props: DeathBenefitGrantInstitorEntity,
   ): TransactionType;
+
+  public abstract deleteDeathBenefitGrantBenefitInstitutor(
+    id: DeathBenefitGrantInstitorId,
+  ): TransactionType;
 }

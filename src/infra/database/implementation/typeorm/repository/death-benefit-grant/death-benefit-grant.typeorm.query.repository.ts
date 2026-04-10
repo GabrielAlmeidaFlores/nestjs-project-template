@@ -35,11 +35,12 @@ export class DeathBenefitGrantTypeormQueryRepository
         where: { id: id.toString() },
         relations: {
           deathBenefitGrantResult: true,
-          deathBenefitGrantDocument: true,
           deathBenefitGrantInssBenefit: true,
           deathBenefitGrantLegalProceeding: true,
           deathBenefitGrantLegalRepresentative: true,
-          deathBenefitGrantBenefitInstitutor: true,
+          deathBenefitGrantBenefitInstitutor: {
+            deathBenefitGrantDocument: true,
+          },
           deathBenefitGrantDependent: {
             deathBenefitGrantDependentDocument: true,
           },

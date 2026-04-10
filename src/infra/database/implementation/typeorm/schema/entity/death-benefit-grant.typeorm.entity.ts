@@ -3,7 +3,6 @@ import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { DeathBenefitGrantDependentDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-dependent-document.typeorm.entity';
 import { DeathBenefitGrantDependentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-dependent.typeorm.entity';
-import { DeathBenefitGrantDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-document.typeorm.entity';
 import { DeathBenefitGrantInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-inss-benefit.typeorm.entity';
 import { DeathBenefitGrantInstitorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-institutor.typeorm.entity';
 import { DeathBenefitGrantLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-legal-proceeding.typeorm.entity';
@@ -32,14 +31,6 @@ export class DeathBenefitGrantTypeormEntity extends BaseTypeormEntity {
   public deathBenefitGrantResult?:
     | DeathBenefitGrantResultTypeormEntity
     | null
-    | undefined;
-
-  @OneToMany(
-    () => DeathBenefitGrantDocumentTypeormEntity,
-    (entity) => entity.deathBenefitGrant,
-  )
-  public deathBenefitGrantDocument?:
-    | DeathBenefitGrantDocumentTypeormEntity[]
     | undefined;
 
   @OneToMany(

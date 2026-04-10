@@ -85,7 +85,7 @@ export class GetDeathBenefitGrantInstitorResponseDto extends BaseBuildableDtoObj
   public birthDate?: Date;
 
   @ResponseDtoEnumProperty(GenderEnum, { required: false })
-  public sex?: GenderEnum;
+  public gender?: GenderEnum;
 
   @ResponseDtoDateProperty({ required: false })
   public deathDate?: Date;
@@ -126,7 +126,7 @@ export class GetDeathBenefitGrantDependentResponseDto extends BaseBuildableDtoOb
   public dependentType: DeathBenefitGrantDependentTypeEnum;
 
   @ResponseDtoEnumProperty(GenderEnum)
-  public sex: GenderEnum;
+  public gender: GenderEnum;
 
   @ResponseDtoDateProperty()
   public birthDate: Date;

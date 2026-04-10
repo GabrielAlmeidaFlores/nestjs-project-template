@@ -9,7 +9,7 @@ export interface DeathBenefitGrantDependentEntityPropsInterface extends BaseEnti
   name: string;
   dependentClass: DeathBenefitGrantDependentClassEnum;
   dependentType: DeathBenefitGrantDependentTypeEnum;
-  sex: GenderEnum;
+  gender: GenderEnum;
   birthDate: Date;
   hasDisabilityOrInvalidism: boolean;
   isMinorUnder16: boolean;

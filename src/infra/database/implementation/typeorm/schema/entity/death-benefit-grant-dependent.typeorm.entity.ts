@@ -27,8 +27,8 @@ export class DeathBenefitGrantDependentTypeormEntity extends BaseTypeormEntity {
   })
   public dependentType: DeathBenefitGrantDependentTypeEnum;
 
-  @Column({ name: 'sex', type: 'simple-enum', enum: GenderEnum })
-  public sex: GenderEnum;
+  @Column({ name: 'gender', type: 'simple-enum', enum: GenderEnum })
+  public gender: GenderEnum;
 
   @Column({
     name: 'birth_date',

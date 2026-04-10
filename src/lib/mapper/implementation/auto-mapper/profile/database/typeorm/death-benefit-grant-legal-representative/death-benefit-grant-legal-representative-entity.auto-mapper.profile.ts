@@ -2,6 +2,7 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { PersonalDocument } from '@core/domain/schema/value-object/personal-document/personal-document.value-object';
 import { DeathBenefitGrantLegalRepresentativeTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-legal-representative.typeorm.entity';
 import { DeathBenefitGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
@@ -43,7 +44,7 @@ export class DeathBenefitGrantLegalRepresentativeEntityAutoMapperProfile {
           return new DeathBenefitGrantLegalRepresentativeEntity({
             id: new DeathBenefitGrantLegalRepresentativeId(source.id),
             name: source.name,
-            cpf: source.cpf,
+            cpf: source.cpf !== null ? new PersonalDocument(source.cpf) : null,
             birthDate: source.birthDate,
             legalRepresentativeRelationship:
               source.legalRepresentativeRelationship,
@@ -72,7 +73,7 @@ export class DeathBenefitGrantLegalRepresentativeEntityAutoMapperProfile {
           DeathBenefitGrantLegalRepresentativeTypeormEntity.build({
             id: source.id.toString(),
             name: source.name,
-            cpf: source.cpf,
+            cpf: source.cpf?.toString() ?? null,
             birthDate: source.birthDate,
             legalRepresentativeRelationship:
               source.legalRepresentativeRelationship,

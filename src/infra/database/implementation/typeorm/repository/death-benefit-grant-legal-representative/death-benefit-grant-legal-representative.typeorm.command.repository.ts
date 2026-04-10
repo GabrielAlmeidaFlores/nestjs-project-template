@@ -50,4 +50,10 @@ export class DeathBenefitGrantLegalRepresentativeTypeormCommandRepository
 
     return this.update(id.toString(), mappedData);
   }
+
+  public deleteDeathBenefitGrantLegalRepresentative(
+    id: DeathBenefitGrantLegalRepresentativeId,
+  ): TransactionType {
+    return this.delete(id.toString());
+  }
 }

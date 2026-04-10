@@ -215,7 +215,7 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   public disabilityRetirementPlanningGrant?: DisabilityRetirementPlanningGrantTypeormEntity | null;
 
   @ManyToOne(() => DeathBenefitGrantTypeormEntity)
-  @JoinColumn({ name: 'death_benefit_id' })
+  @JoinColumn({ name: 'death_benefit_grant_id' })
   public deathBenefitGrant?: DeathBenefitGrantTypeormEntity | null;
 
   @ManyToOne(() => GeneralUrbanRetirementGrantTypeormEntity)
