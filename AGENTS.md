@@ -495,11 +495,13 @@ export class AnalysisTypeormEntity extends BaseTypeormEntity {
 **Rules**:
 
 - ✅ Implement gateway interfaces
-- ✅ Use TypeORM Repository
+- ✅ Use TypeORM Repository (`find`, `findOne`, `findAndCount`, `count`)
 - ✅ Use AutoMapper to map TypeORM ↔ Domain entities
 - ✅ Handle database-specific logic
 - ❌ NO business logic
 - ❌ NO direct entity exposure to use cases
+- ❌ **NO `createQueryBuilder` / QueryBuilder** — use the TypeORM `find`/`findAndCount`/`findOne` API. QueryBuilder is only acceptable in extreme edge cases where the ORM API genuinely cannot express the query (e.g. complex CTEs). Document clearly why if ever used.
+- ❌ **Never use `createQueryBuilder` to work around soft-delete on relations** — use the two-step pattern instead: first `findAndCount` with `select: { id: true }` (no `withDeleted`) to paginate non-deleted main records, then `find({ where: { id: In(ids) }, withDeleted: true, relations: {...} })` to load full data including soft-deleted relations.
 
 **Example**:
 
@@ -3001,6 +3003,52 @@ When creating a new feature, follow this checklist:
 - [ ] Create domain-specific errors in `error/`
 - [ ] Write tests for use cases
 - [ ] Generate and apply database migration
+
+---
+
+## Entity Inheritance Rules ⚠️
+
+**NEVER extend `BaseBuildableObject` directly in entities.** Always use the correct base class for the layer:
+
+### TypeORM Entities (`infra/database/implementation/typeorm/schema/entity/`)
+**Must extend `BaseTypeormEntity`**, which automatically provides:
+- `id` — `@PrimaryGeneratedColumn('uuid')`
+- `createdAt` — `@CreateDateColumn({ name: 'created_at' })`
+- `updatedAt` — `@UpdateDateColumn({ name: 'updated_at' })`
+- `deletedAt` — `@DeleteDateColumn({ name: 'deleted_at' })`
+
+```typescript
+// ✅ CORRECT
+@Entity({ name: 'my_table' })
+export class MyTypeormEntity extends BaseTypeormEntity {
+  @Column(...)
+  public myField: string;
+}
+
+// ❌ WRONG — never do this in a TypeORM entity
+export class MyTypeormEntity extends BaseBuildableObject {
+  @PrimaryGeneratedColumn('uuid')
+  public id: string;           // BaseTypeormEntity already provides this
+
+  @CreateDateColumn({ name: 'data', ... })
+  public data: Date;           // wrong name; use createdAt / created_at
+}
+```
+
+### Core Domain Entities (`core/domain/schema/entity/` or `module/**/domain/schema/entity/`)
+**Must extend `BaseEntity<YourId>`** from `@core/domain/schema/entity/base/base.entity`, which provides `id`, `createdAt`, `updatedAt`, `deletedAt`.
+
+### Column naming convention
+| Property     | DB column name  |
+|-------------|-----------------|
+| `createdAt`  | `created_at`    |
+| `updatedAt`  | `updated_at`    |
+| `deletedAt`  | `deleted_at`    |
+
+> **Rationale:** Using a non-standard column name (e.g. `data` instead of `created_at`) breaks the
+> project-wide convention and requires extra migrations and frontend changes later. The `data` column
+> bug in `system_logs` is a concrete example — it required a migration, backend refactor, and
+> frontend model update to fix.
 
 ---
 
