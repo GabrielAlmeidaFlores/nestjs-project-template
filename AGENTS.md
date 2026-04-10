@@ -495,11 +495,13 @@ export class AnalysisTypeormEntity extends BaseTypeormEntity {
 **Rules**:
 
 - ✅ Implement gateway interfaces
-- ✅ Use TypeORM Repository
+- ✅ Use TypeORM Repository (`find`, `findOne`, `findAndCount`, `count`)
 - ✅ Use AutoMapper to map TypeORM ↔ Domain entities
 - ✅ Handle database-specific logic
 - ❌ NO business logic
 - ❌ NO direct entity exposure to use cases
+- ❌ **NO `createQueryBuilder` / QueryBuilder** — use the TypeORM `find`/`findAndCount`/`findOne` API. QueryBuilder is only acceptable in extreme edge cases where the ORM API genuinely cannot express the query (e.g. complex CTEs). Document clearly why if ever used.
+- ❌ **Never use `createQueryBuilder` to work around soft-delete on relations** — use the two-step pattern instead: first `findAndCount` with `select: { id: true }` (no `withDeleted`) to paginate non-deleted main records, then `find({ where: { id: In(ids) }, withDeleted: true, relations: {...} })` to load full data including soft-deleted relations.
 
 **Example**:
 
