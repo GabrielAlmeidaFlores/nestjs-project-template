@@ -307,6 +307,28 @@ import { SupportTicketTypeormQueryRepository } from '@infra/database/implementat
 import { SupportTicketAttachmentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/support-ticket-attachment/support-ticket-attachment.typeorm.command.repository';
 import { SupportTicketMessageTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/support-ticket-message/support-ticket-message.typeorm.command.repository';
 import { SupportTicketMessageTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/support-ticket-message/support-ticket-message.typeorm.query.repository';
+import { SurvivorPensionAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis/survivor-pension-analysis.typeorm.command.repository';
+import { SurvivorPensionAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis/survivor-pension-analysis.typeorm.query.repository';
+import { SurvivorPensionAnalysisBenefitOriginatorIdentificationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-benefit-originator-identification/survivor-pension-analysis-benefit-originator-identification.typeorm.command.repository';
+import { SurvivorPensionAnalysisBenefitOriginatorIdentificationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-benefit-originator-identification/survivor-pension-analysis-benefit-originator-identification.typeorm.query.repository';
+import { SurvivorPensionAnalysisBenefitOriginatorIdentificationDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-benefit-originator-identification-document/survivor-pension-analysis-benefit-originator-identification-document.typeorm.command.repository';
+import { SurvivorPensionAnalysisCustomerProfileIdentificationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-customer-profile-identification/survivor-pension-analysis-customer-profile-identification.typeorm.command.repository';
+import { SurvivorPensionAnalysisCustomerProfileIdentificationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-customer-profile-identification/survivor-pension-analysis-customer-profile-identification.typeorm.query.repository';
+import { SurvivorPensionAnalysisCustomerProfileIdentificationDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-customer-profile-identification-document/survivor-pension-analysis-customer-profile-identification-document.typeorm.command.repository';
+import { SurvivorPensionAnalysisDeceasedBenefitDependentsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-deceased-benefit-dependents/survivor-pension-analysis-deceased-benefit-dependents.typeorm.command.repository';
+import { SurvivorPensionAnalysisDeceasedBenefitDependentsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-deceased-benefit-dependents/survivor-pension-analysis-deceased-benefit-dependents.typeorm.query.repository';
+import { SurvivorPensionAnalysisDeceasedBenefitDependentsDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-deceased-benefit-dependents-document/survivor-pension-analysis-deceased-benefit-dependents-document.typeorm.command.repository';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-deceased-work-history/survivor-pension-analysis-deceased-work-history.typeorm.command.repository';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-deceased-work-history/survivor-pension-analysis-deceased-work-history.typeorm.query.repository';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-deceased-work-history-period/survivor-pension-analysis-deceased-work-history-period.typeorm.command.repository';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-deceased-work-history-period/survivor-pension-analysis-deceased-work-history-period.typeorm.query.repository';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-deceased-work-history-period-document/survivor-pension-analysis-deceased-work-history-period-document.typeorm.command.repository';
+import { SurvivorPensionAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-result/survivor-pension-analysis-result.typeorm.command.repository';
+import { SurvivorPensionAnalysisResultTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-result/survivor-pension-analysis-result.typeorm.query.repository';
+import { SurvivorPensionAnalysisResultDependentPensionAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-result-dependent-pension-analysis/survivor-pension-analysis-result-dependent-pension-analysis.typeorm.command.repository';
+import { SurvivorPensionAnalysisResultDependentPensionAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-result-dependent-pension-analysis/survivor-pension-analysis-result-dependent-pension-analysis.typeorm.query.repository';
+import { SurvivorPensionAnalysisResultRetirementRuleTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-result-retirement-rule/survivor-pension-analysis-result-retirement-rule.typeorm.command.repository';
+import { SurvivorPensionAnalysisResultRetirementRuleTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-result-retirement-rule/survivor-pension-analysis-result-retirement-rule.typeorm.query.repository';
 import { SystemActivitiesTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/system-activities/system-activities.typeorm.command.repository';
 import { SystemActivitiesTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/system-activities/system-activities.typeorm.query.repository';
 import { SystemLogTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/system-log/system-log.typeorm.command.repository';
@@ -590,6 +612,28 @@ import { SpeechGeneratorBenefitCommandRepositoryGateway } from '@module/customer
 import { SpeechGeneratorDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator-document/command/speech-generator-document.command.repository.gateway';
 import { SpeechGeneratorLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator-legal-proceeding/command/speech-generator-legal-proceeding.command.repository.gateway';
 import { SpeechGeneratorResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator-result/command/speech-generator-result.command.repository.gateway';
+import { SurvivorPensionAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis/command/survivor-pension-analysis.command.repository.gateway';
+import { SurvivorPensionAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis/query/survivor-pension-analysis.query.repository.gateway';
+import { SurvivorPensionAnalysisBenefitOriginatorIdentificationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-benefit-originator-identification/command/survivor-pension-analysis-benefit-originator-identification.command.repository.gateway';
+import { SurvivorPensionAnalysisBenefitOriginatorIdentificationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-benefit-originator-identification/query/survivor-pension-analysis-benefit-originator-identification.query.repository.gateway';
+import { SurvivorPensionAnalysisBenefitOriginatorIdentificationDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-benefit-originator-identification-document/command/survivor-pension-analysis-benefit-originator-identification-document.command.repository.gateway';
+import { SurvivorPensionAnalysisCustomerProfileIdentificationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-customer-profile-identification/command/survivor-pension-analysis-customer-profile-identification.command.repository.gateway';
+import { SurvivorPensionAnalysisCustomerProfileIdentificationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-customer-profile-identification/query/survivor-pension-analysis-customer-profile-identification.query.repository.gateway';
+import { SurvivorPensionAnalysisCustomerProfileIdentificationDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-customer-profile-identification-document/command/survivor-pension-analysis-customer-profile-identification-document.command.repository.gateway';
+import { SurvivorPensionAnalysisDeceasedBenefitDependentsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-deceased-benefit-dependents/command/survivor-pension-analysis-deceased-benefit-dependents.command.repository.gateway';
+import { SurvivorPensionAnalysisDeceasedBenefitDependentsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-deceased-benefit-dependents/query/survivor-pension-analysis-deceased-benefit-dependents.query.repository.gateway';
+import { SurvivorPensionAnalysisDeceasedBenefitDependentsDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-deceased-benefit-dependents-document/command/survivor-pension-analysis-deceased-benefit-dependents-document.command.repository.gateway';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-deceased-work-history/command/survivor-pension-analysis-deceased-work-history.command.repository.gateway';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-deceased-work-history/query/survivor-pension-analysis-deceased-work-history.query.repository.gateway';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-deceased-work-history-period/command/survivor-pension-analysis-deceased-work-history-period.command.repository.gateway';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-deceased-work-history-period/query/survivor-pension-analysis-deceased-work-history-period.query.repository.gateway';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-deceased-work-history-period-document/command/survivor-pension-analysis-deceased-work-history-period-document.command.repository.gateway';
+import { SurvivorPensionAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-result/command/survivor-pension-analysis-result.command.repository.gateway';
+import { SurvivorPensionAnalysisResultQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-result/query/survivor-pension-analysis-result.query.repository.gateway';
+import { SurvivorPensionAnalysisResultDependentPensionAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-result-dependent-pension-analysis/command/survivor-pension-analysis-result-dependent-pension-analysis.command.repository.gateway';
+import { SurvivorPensionAnalysisResultDependentPensionAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-result-dependent-pension-analysis/query/survivor-pension-analysis-result-dependent-pension-analysis.query.repository.gateway';
+import { SurvivorPensionAnalysisResultRetirementRuleCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-result-retirement-rule/command/survivor-pension-analysis-result-retirement-rule.command.repository.gateway';
+import { SurvivorPensionAnalysisResultRetirementRuleQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-result-retirement-rule/query/survivor-pension-analysis-result-retirement-rule.query.repository.gateway';
 import { TeacherRetirementPlanningCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/command/teacher-retirement-planning.command.repository.gateway';
 import { TeacherRetirementPlanningQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/query/teacher-retirement-planning.query.repository.gateway';
 import { TeacherRetirementPlanningDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-document/command/teacher-retirement-planning-document.command.repository.gateway';
@@ -2195,6 +2239,125 @@ const classProvider: ClassProvider[] = [
   {
     provide: SupportAttendantCommandRepositoryGateway,
     useClass: SupportAttendantTypeormCommandRepository,
+  },
+  {
+    provide: SurvivorPensionAnalysisCommandRepositoryGateway,
+    useClass: SurvivorPensionAnalysisTypeormCommandRepository,
+  },
+  {
+    provide: SurvivorPensionAnalysisQueryRepositoryGateway,
+    useClass: SurvivorPensionAnalysisTypeormQueryRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisCustomerProfileIdentificationCommandRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisCustomerProfileIdentificationTypeormCommandRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisCustomerProfileIdentificationQueryRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisCustomerProfileIdentificationTypeormQueryRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisCustomerProfileIdentificationDocumentCommandRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisCustomerProfileIdentificationDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisBenefitOriginatorIdentificationCommandRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisBenefitOriginatorIdentificationTypeormCommandRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisBenefitOriginatorIdentificationQueryRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisBenefitOriginatorIdentificationTypeormQueryRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisBenefitOriginatorIdentificationDocumentCommandRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisBenefitOriginatorIdentificationDocumentTypeormCommandRepository,
+  },
+  {
+    provide: SurvivorPensionAnalysisDeceasedWorkHistoryCommandRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisDeceasedWorkHistoryTypeormCommandRepository,
+  },
+  {
+    provide: SurvivorPensionAnalysisDeceasedWorkHistoryQueryRepositoryGateway,
+    useClass: SurvivorPensionAnalysisDeceasedWorkHistoryTypeormQueryRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisDeceasedWorkHistoryPeriodCommandRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisDeceasedWorkHistoryPeriodTypeormCommandRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisDeceasedWorkHistoryPeriodQueryRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisDeceasedWorkHistoryPeriodTypeormQueryRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisDeceasedWorkHistoryPeriodDocumentCommandRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisDeceasedWorkHistoryPeriodDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisDeceasedBenefitDependentsCommandRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisDeceasedBenefitDependentsTypeormCommandRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisDeceasedBenefitDependentsQueryRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisDeceasedBenefitDependentsTypeormQueryRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisDeceasedBenefitDependentsDocumentCommandRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisDeceasedBenefitDependentsDocumentTypeormCommandRepository,
+  },
+  {
+    provide: SurvivorPensionAnalysisResultCommandRepositoryGateway,
+    useClass: SurvivorPensionAnalysisResultTypeormCommandRepository,
+  },
+  {
+    provide: SurvivorPensionAnalysisResultQueryRepositoryGateway,
+    useClass: SurvivorPensionAnalysisResultTypeormQueryRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisResultRetirementRuleCommandRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisResultRetirementRuleTypeormCommandRepository,
+  },
+  {
+    provide: SurvivorPensionAnalysisResultRetirementRuleQueryRepositoryGateway,
+    useClass: SurvivorPensionAnalysisResultRetirementRuleTypeormQueryRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisResultDependentPensionAnalysisCommandRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisResultDependentPensionAnalysisTypeormCommandRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisResultDependentPensionAnalysisQueryRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisResultDependentPensionAnalysisTypeormQueryRepository,
   },
 ];
 

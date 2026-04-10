@@ -50,6 +50,8 @@ export class AnalysisActivityMessageFactory {
       'Concessão de aposentadoria para deficiente',
     [AnalysisToolRecordTypeEnum.TEMPORARY_DISABILITY_BENEFITS_GRANT]:
       'Concessão de benefício por incapacidade temporária',
+    [AnalysisToolRecordTypeEnum.SURVIVOR_PENSION_ANALYSIS]:
+      'Análise de pensão por morte',
   };
 
   private static readonly actionLabelMap: Record<
