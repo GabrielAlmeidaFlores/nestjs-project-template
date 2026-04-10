@@ -1,8 +1,8 @@
-import { DeathBenefitGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant.typeorm.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { DeathBenefitGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant.typeorm.entity';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 
@@ -60,7 +60,7 @@ export class DeathBenefitGrantInstitorTypeormEntity extends BaseTypeormEntity {
     (entity) => entity.deathBenefitGrantBenefitInstitutor,
     { nullable: true },
   )
-  @JoinColumn({ name: 'death_benefit_id' })
+  @JoinColumn({ name: 'death_benefit_grant_id' })
   public deathBenefitGrant?: DeathBenefitGrantTypeormEntity | null;
 
   protected override readonly _type =

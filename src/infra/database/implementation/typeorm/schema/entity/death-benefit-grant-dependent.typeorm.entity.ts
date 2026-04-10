@@ -8,7 +8,7 @@ import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/sche
 import { DeathBenefitGrantDependentClassEnum } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/enum/death-benefit-grant-dependent-class.enum';
 import { DeathBenefitGrantDependentTypeEnum } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/enum/death-benefit-grant-dependent-type.enum';
 
-@Entity({ name: 'death_benefit_dependent' })
+@Entity({ name: 'death_benefit_grant_dependent' })
 export class DeathBenefitGrantDependentTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'name', type: 'varchar', length: 255 })
   public name: string;
@@ -56,7 +56,7 @@ export class DeathBenefitGrantDependentTypeormEntity extends BaseTypeormEntity {
     (entity) => entity.deathBenefitGrantDependent,
     { nullable: true },
   )
-  @JoinColumn({ name: 'death_benefit_id' })
+  @JoinColumn({ name: 'death_benefit_grant_id' })
   public deathBenefitGrant?: DeathBenefitGrantTypeormEntity | null;
 
   @OneToMany(

@@ -1,19 +1,19 @@
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+
+import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { DeathBenefitGrantDependentDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-dependent-document.typeorm.entity';
 import { DeathBenefitGrantDependentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-dependent.typeorm.entity';
 import { DeathBenefitGrantDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-document.typeorm.entity';
 import { DeathBenefitGrantInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-inss-benefit.typeorm.entity';
+import { DeathBenefitGrantInstitorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-institutor.typeorm.entity';
 import { DeathBenefitGrantLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-legal-proceeding.typeorm.entity';
 import { DeathBenefitGrantLegalRepresentativeTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-legal-representative.typeorm.entity';
 import { DeathBenefitGrantPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-period-document.typeorm.entity';
 import { DeathBenefitGrantPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-period-earnings-history.typeorm.entity';
 import { DeathBenefitGrantPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-period.typeorm.entity';
 import { DeathBenefitGrantResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-result.typeorm.entity';
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
-import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
-import { DeathBenefitGrantInstitorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-institutor.typeorm.entity';
-
-@Entity({ name: 'death_benefit' })
+@Entity({ name: 'death_benefit_grant' })
 export class DeathBenefitGrantTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'analysis_name',
@@ -28,7 +28,7 @@ export class DeathBenefitGrantTypeormEntity extends BaseTypeormEntity {
     (entity) => entity.deathBenefitGrant,
     { nullable: true },
   )
-  @JoinColumn({ name: 'death_benefit_result_id' })
+  @JoinColumn({ name: 'death_benefit_grant_result_id' })
   public deathBenefitGrantResult?:
     | DeathBenefitGrantResultTypeormEntity
     | null

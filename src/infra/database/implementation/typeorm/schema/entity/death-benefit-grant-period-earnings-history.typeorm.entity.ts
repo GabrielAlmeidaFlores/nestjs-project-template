@@ -1,10 +1,10 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
-import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 import { DeathBenefitGrantPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-period.typeorm.entity';
+import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 
-@Entity({ name: 'death_benefit_period_earnings_history' })
+@Entity({ name: 'death_benefit_grant_period_earnings_history' })
 export class DeathBenefitGrantPeriodEarningsHistoryTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'competence',
@@ -59,7 +59,7 @@ export class DeathBenefitGrantPeriodEarningsHistoryTypeormEntity extends BaseTyp
     (entity) => entity.deathBenefitGrantPeriodEarningsHistory,
     { nullable: true },
   )
-  @JoinColumn({ name: 'death_benefit_period_id' })
+  @JoinColumn({ name: 'death_benefit_grant_period_id' })
   public deathBenefitGrantPeriod?: DeathBenefitGrantPeriodTypeormEntity | null;
 
   protected override readonly _type =
