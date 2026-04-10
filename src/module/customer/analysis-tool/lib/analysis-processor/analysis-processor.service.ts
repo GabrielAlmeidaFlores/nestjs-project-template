@@ -1337,6 +1337,222 @@ Análise processada do CNIS:
     );
   }
 
+  public async getSurvivorPensionAnalysisResult(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: this.getSurvivorPensionAnalysisResultJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getSurvivorPensionAnalysisRetirementRules(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getSurvivorPensionAnalysisRetirementRulesJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getSurvivorPensionAnalysisDependentPensionAnalyses(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getSurvivorPensionAnalysisDependentPensionAnalysesJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getSurvivorPensionAnalysisCompleteAnalysisText(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getSurvivorPensionAnalysisSimplifiedAnalysisText(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  private getSurvivorPensionAnalysisResultJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        isInsuredStatusConfirmed: {
+          type: 'boolean',
+          description:
+            'Indica se o falecido possuía qualidade de segurado na data do óbito.',
+        },
+        insuredStatusSummary: {
+          type: 'string',
+          description:
+            'Resumo técnico sobre a qualidade de segurado do falecido.',
+        },
+        isRetirementRightConfirmed: {
+          type: 'boolean',
+          description:
+            'Indica se o falecido havia cumprido requisitos para ao menos uma regra de aposentadoria.',
+        },
+        retirementRightSummary: {
+          type: 'string',
+          description:
+            'Resumo sobre o direito à aposentadoria do falecido no momento do óbito.',
+        },
+      },
+      required: [
+        'isInsuredStatusConfirmed',
+        'insuredStatusSummary',
+        'isRetirementRightConfirmed',
+        'retirementRightSummary',
+      ],
+    };
+  }
+
+  private getSurvivorPensionAnalysisRetirementRulesJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        retirementRules: {
+          type: 'array',
+          description:
+            'Lista das regras de aposentadoria analisadas para o falecido.',
+          items: {
+            type: 'object',
+            properties: {
+              ruleName: {
+                type: 'string',
+                description: 'Nome da regra de aposentadoria analisada.',
+              },
+              isRequirementMet: {
+                type: 'boolean',
+                description: 'Indica se os requisitos foram cumpridos.',
+              },
+              entitlementDate: {
+                type: 'string',
+                description:
+                  'Data em que o requisito foi ou seria cumprido, no formato YYYY-MM-DD. Null se não aplicável.',
+              },
+              estimatedRmi: {
+                type: 'number',
+                description:
+                  'Valor decimal da RMI estimada para essa regra. Null se não calculável.',
+              },
+              isBestRmi: {
+                type: 'boolean',
+                description:
+                  'Indica se esta regra gera a melhor RMI entre todas as regras.',
+              },
+              isHighestClaimValue: {
+                type: 'boolean',
+                description:
+                  'Indica se esta regra gera o maior valor de benefício considerando todas as variáveis.',
+              },
+              detailedAnalysis: {
+                type: 'string',
+                description:
+                  'Análise detalhada dos requisitos e resultado para esta regra específica.',
+              },
+            },
+            required: [
+              'ruleName',
+              'isRequirementMet',
+              'isBestRmi',
+              'isHighestClaimValue',
+              'detailedAnalysis',
+            ],
+          },
+        },
+      },
+      required: ['retirementRules'],
+    };
+  }
+
+  private getSurvivorPensionAnalysisDependentPensionAnalysesJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        dependentPensionAnalyses: {
+          type: 'array',
+          description:
+            'Lista das análises de pensão para cada dependente identificado.',
+          items: {
+            type: 'object',
+            properties: {
+              dependentName: {
+                type: 'string',
+                description: 'Nome completo do dependente.',
+              },
+              dependencyDegree: {
+                type: 'string',
+                description:
+                  'Grau de dependência (ex: cônjuge, filho menor, pai/mãe).',
+              },
+              isDependencyVerified: {
+                type: 'boolean',
+                description:
+                  'Indica se a dependência econômica ou legal foi verificada.',
+              },
+              pensionStartDate: {
+                type: 'string',
+                description:
+                  'Data estimada de início da pensão no formato YYYY-MM-DD. Null se não aplicável.',
+              },
+              estimatedPensionDuration: {
+                type: 'string',
+                description:
+                  'Descrição da duração estimada da pensão conforme art. 77 da Lei 8.213/91.',
+              },
+            },
+            required: [
+              'dependentName',
+              'dependencyDegree',
+              'isDependencyVerified',
+              'estimatedPensionDuration',
+            ],
+          },
+        },
+      },
+      required: ['dependentPensionAnalyses'],
+    };
+  }
+
   private getTemporaryDisabilityBenefitsGrantFirstAnalysisJsonSchema(): object {
     return {
       type: 'object',
