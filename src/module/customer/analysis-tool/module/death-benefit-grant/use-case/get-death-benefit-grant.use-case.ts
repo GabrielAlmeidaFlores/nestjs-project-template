@@ -103,7 +103,7 @@ export class GetDeathBenefitGrantUseCase {
               name: result.deathBenefitGrantLegalRepresentative.name,
             }),
             ...(result.deathBenefitGrantLegalRepresentative.cpf !== null && {
-              cpf: result.deathBenefitGrantLegalRepresentative.cpf,
+              cpf: result.deathBenefitGrantLegalRepresentative.cpf.toString(),
             }),
             ...(result.deathBenefitGrantLegalRepresentative.birthDate !==
               null && {
@@ -130,14 +130,14 @@ export class GetDeathBenefitGrantUseCase {
               name: result.deathBenefitGrantBenefitInstitutor.name,
             }),
             ...(result.deathBenefitGrantBenefitInstitutor.cpf !== null && {
-              cpf: result.deathBenefitGrantBenefitInstitutor.cpf,
+              cpf: result.deathBenefitGrantBenefitInstitutor.cpf.toString(),
             }),
             ...(result.deathBenefitGrantBenefitInstitutor.birthDate !==
               null && {
               birthDate: result.deathBenefitGrantBenefitInstitutor.birthDate,
             }),
-            ...(result.deathBenefitGrantBenefitInstitutor.sex !== null && {
-              sex: result.deathBenefitGrantBenefitInstitutor.sex,
+            ...(result.deathBenefitGrantBenefitInstitutor.gender !== null && {
+              gender: result.deathBenefitGrantBenefitInstitutor.gender,
             }),
             ...(result.deathBenefitGrantBenefitInstitutor.deathDate !==
               null && {
@@ -242,7 +242,7 @@ export class GetDeathBenefitGrantUseCase {
       >
     >,
   ): Promise<GetDeathBenefitGrantDependentResponseDto> {
-    const dep = result.deathBenefitGrantDependent!.find(
+    const dep = (result.deathBenefitGrantDependent ?? []).find(
       (d) => d.id.toString() === dependentIdString,
     )!;
 
@@ -273,7 +273,7 @@ export class GetDeathBenefitGrantUseCase {
       name: dep.name,
       dependentClass: dep.dependentClass,
       dependentType: dep.dependentType,
-      sex: dep.sex,
+      gender: dep.gender,
       birthDate: dep.birthDate,
       hasDisabilityOrInvalidism: dep.hasDisabilityOrInvalidism,
       isMinorUnder16: dep.isMinorUnder16,

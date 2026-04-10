@@ -2,6 +2,7 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { PersonalDocument } from '@core/domain/schema/value-object/personal-document/personal-document.value-object';
 import { DeathBenefitGrantInstitorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-institutor.typeorm.entity';
 import { DeathBenefitGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
@@ -42,12 +43,27 @@ export class DeathBenefitGrantInstitorEntityAutoMapperProfile {
           return new DeathBenefitGrantInstitorEntity({
             id: new DeathBenefitGrantInstitorId(source.id),
             name: source.name,
-            cpf: source.cpf,
+            cpf: source.cpf !== null ? new PersonalDocument(source.cpf) : null,
             birthDate: source.birthDate,
-            sex: source.sex,
+            gender: source.gender,
             deathDate: source.deathDate,
             wasRetired: source.wasRetired,
             retirementBenefitNumber: source.retirementBenefitNumber,
+            isDeathDeclarantChildOrSpouse: source.isDeathDeclarantChildOrSpouse,
+            deathDeclarantRelationshipDescription:
+              source.deathDeclarantRelationshipDescription,
+            wantsToProveWorkPeriodNotInCnis:
+              source.wantsToProveWorkPeriodNotInCnis,
+            wasRuralInsured: source.wasRuralInsured,
+            ruralPeriodStartDate: source.ruralPeriodStartDate,
+            ruralPeriodEndDate: source.ruralPeriodEndDate,
+            ruralPeriodDocumentDescription:
+              source.ruralPeriodDocumentDescription,
+            wasUnemployedAtDeath: source.wasUnemployedAtDeath,
+            wantsToProveDisabilityBeforeDeath:
+              source.wantsToProveDisabilityBeforeDeath,
+            wantsToProveUnemploymentByWitness:
+              source.wantsToProveUnemploymentByWitness,
             deathBenefitGrantId: new DeathBenefitGrantId(
               source.deathBenefitGrant.id,
             ),
@@ -72,12 +88,28 @@ export class DeathBenefitGrantInstitorEntityAutoMapperProfile {
           DeathBenefitGrantInstitorTypeormEntity.build({
             id: source.id.toString(),
             name: source.name,
-            cpf: source.cpf,
+            cpf: source.cpf !== null ? source.cpf.toString() : null,
             birthDate: source.birthDate,
-            sex: source.sex,
+            gender: source.gender,
             deathDate: source.deathDate,
             wasRetired: source.wasRetired,
             retirementBenefitNumber: source.retirementBenefitNumber,
+            isDeathDeclarantChildOrSpouse:
+              source.isDeathDeclarantChildOrSpouse ?? false,
+            deathDeclarantRelationshipDescription:
+              source.deathDeclarantRelationshipDescription,
+            wantsToProveWorkPeriodNotInCnis:
+              source.wantsToProveWorkPeriodNotInCnis ?? false,
+            wasRuralInsured: source.wasRuralInsured ?? false,
+            ruralPeriodStartDate: source.ruralPeriodStartDate,
+            ruralPeriodEndDate: source.ruralPeriodEndDate,
+            ruralPeriodDocumentDescription:
+              source.ruralPeriodDocumentDescription,
+            wasUnemployedAtDeath: source.wasUnemployedAtDeath ?? false,
+            wantsToProveDisabilityBeforeDeath:
+              source.wantsToProveDisabilityBeforeDeath ?? false,
+            wantsToProveUnemploymentByWitness:
+              source.wantsToProveUnemploymentByWitness ?? false,
             deathBenefitGrant: DeathBenefitGrantTypeormEntity.build({
               id: source.deathBenefitGrantId.toString(),
             } as DeathBenefitGrantTypeormEntity),

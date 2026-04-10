@@ -46,12 +46,9 @@ export class DeathBenefitGrantLegalProceedingTypeormCommandRepository
 
       await manager
         .getRepository(DeathBenefitGrantLegalProceedingTypeormEntity)
-        .createQueryBuilder()
-        .softDelete()
-        .where('death_benefit_id = :deathBenefitGrantId', {
-          deathBenefitGrantId: deathBenefitGrantId.toString(),
-        })
-        .execute();
+        .softDelete({
+          deathBenefitGrant: { id: deathBenefitGrantId.toString() },
+        });
     };
   }
 }

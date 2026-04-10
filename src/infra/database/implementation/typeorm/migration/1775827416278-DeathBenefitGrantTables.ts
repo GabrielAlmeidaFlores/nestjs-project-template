@@ -1,0 +1,162 @@
+import type { MigrationInterface, QueryRunner } from 'typeorm';
+
+export class DeathBenefitGrantTables1775827416278 implements MigrationInterface {
+  name = 'DeathBenefitGrantTables1775827416278';
+
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `CREATE TABLE \`death_benefit_grant_dependent\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, \`dependent_class\` enum ('PRIMEIRA_CLASSE', 'SEGUNDA_CLASSE', 'TERCEIRA_CLASSE') NOT NULL, \`dependent_type\` enum ('CONJUGE', 'COMPANHEIRO', 'SEPARADO_DE_FATO_COM_ALIMENTOS', 'DIVORCIADO_COM_ALIMENTOS', 'FILHO_MENOR_21_NAO_EMANCIPADO', 'FILHO_INVALIDO', 'FILHO_COM_DEFICIENCIA_GRAVE', 'MENOR_18_SOB_GUARDA', 'ENTEADO', 'MENOR_18_TUTELADO', 'PAI_DO_FALECIDO', 'MAE_DO_FALECIDO', 'IRMAO_MENOR_21_NAO_EMANCIPADO', 'IRMAO_INVALIDO', 'IRMAO_COM_DEFICIENCIA_INTELECTUAL_OU_MENTAL_OU_GRAVE') NOT NULL, \`sex\` enum ('male', 'female') NOT NULL, \`birth_date\` date NOT NULL, \`has_disability_or_invalidism\` tinyint NOT NULL, \`is_minor_under_16\` tinyint NOT NULL, \`stable_union_or_marriage_start_date\` date NULL, \`death_benefit_grant_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`death_benefit_grant_dependent_document\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`document\` varchar(255) NOT NULL, \`death_benefit_grant_dependent_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`death_benefit_grant_document\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`document\` varchar(255) NOT NULL, \`type\` enum ('CNIS', 'DEATH_CERTIFICATE', 'EMPLOYMENT_BOND_DOCUMENTS', 'RURAL_DOCUMENTS', 'MEDICAL_DOCUMENTS', 'INVOLUNTARY_UNEMPLOYMENT_EVIDENCE') NOT NULL, \`death_benefit_grant_institutor_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`death_benefit_grant_inss_benefit\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`inss_benefit\` varchar(255) NOT NULL, \`death_benefit_grant_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`death_benefit_grant_institutor\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NULL, \`cpf\` varchar(255) NULL, \`birth_date\` date NULL, \`gender\` enum ('male', 'female') NULL, \`death_date\` date NULL, \`was_retired\` tinyint NULL, \`retirement_benefit_number\` varchar(255) NULL, \`is_death_declarant_child_or_spouse\` tinyint NOT NULL DEFAULT 0, \`death_declarant_relationship_description\` varchar(255) NULL, \`wants_to_prove_work_period_not_in_cnis\` tinyint NOT NULL DEFAULT 0, \`was_rural_insured\` tinyint NOT NULL DEFAULT 0, \`rural_period_start_date\` date NULL, \`rural_period_end_date\` date NULL, \`rural_period_document_description\` varchar(255) NULL, \`was_unemployed_at_death\` tinyint NOT NULL DEFAULT 0, \`wants_to_prove_disability_before_death\` tinyint NOT NULL DEFAULT 0, \`wants_to_prove_unemployment_by_witness\` tinyint NOT NULL DEFAULT 0, \`death_benefit_grant_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`death_benefit_grant_legal_proceeding\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`legal_proceeding_number\` varchar(255) NOT NULL, \`death_benefit_grant_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`death_benefit_grant_legal_representative\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NULL, \`cpf\` varchar(255) NULL, \`birth_date\` date NULL, \`legal_representative_relationship\` varchar(255) NULL, \`is_minor_under_guardianship\` tinyint NULL, \`death_benefit_grant_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`death_benefit_grant_period_earnings_history\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`competence\` date NULL, \`remuneration\` longtext NULL, \`indicators\` varchar(255) NULL, \`payment_date\` date NULL, \`contribution\` varchar(255) NULL, \`contribution_salary\` varchar(255) NULL, \`analysis\` longtext NULL, \`competence_below_the_minimum\` tinyint NULL, \`death_benefit_grant_period_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`death_benefit_grant_period\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`start_date\` date NOT NULL, \`end_date\` date NULL, \`category\` enum ('EMPREGADO_URBANO', 'EMPREGADO_RURAL', 'EMPREGO_DOMESTICO', 'TRABALHADOR_AVULSO', 'CONTRIBUINTE_INDIVIDUAL_AUTONOMO', 'CONTRIBUINTE_INDIVIDUAL_PRESTADOR', 'MEI', 'SEGURADO_ESPECIAL', 'SEGURADO_FACULTATIVO') NOT NULL, \`is_pendency\` tinyint NOT NULL, \`competence_below_the_minimum\` tinyint NOT NULL, \`pendency_reason\` enum ('LEAVE_DATE', 'COMPETENCE_BELOW_MINIMUM', 'INCONSISTENT_COMPETENCE') NULL, \`type_of_contribution\` varchar(255) NULL, \`status\` tinyint NOT NULL, \`period_consideration\` enum ('SIM', 'NAO', 'PROVISORIO') NULL, \`contribution_average\` decimal(10,2) NULL, \`bond_origin\` varchar(255) NULL, \`death_benefit_grant_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`death_benefit_grant_period_document\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`document\` varchar(255) NOT NULL, \`death_benefit_grant_period_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`death_benefit_grant_result\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`first_analysis\` longtext NULL, \`complete_analysis\` longtext NULL, \`simplified_analysis\` longtext NULL, \`complete_analysis_download\` longtext NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`death_benefit_grant\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`analysis_name\` varchar(255) NULL, \`death_benefit_grant_result_id\` varchar(36) NULL, UNIQUE INDEX \`REL_165a3a5178aa6ea6a0c3e62da2\` (\`death_benefit_grant_result_id\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_record\` ADD \`death_benefit_id\` varchar(36) NULL`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`payment_plan_paid_resource\` CHANGE \`resource\` \`resource\` enum ('LEGAL_PLEADING_COMPLETE_ANALYSIS', 'LEGAL_PLEADING_SIMPLIFIED_ANALYSIS', 'LEGAL_PLEADING_QUICK_DOCUMENT_ANALYSIS', 'RETIREMENT_PLANNING_RPPS_COMPLETE_ANALYSIS', 'TEACHER_RETIREMENT_PLANNING_COMPLETE_ANALYSIS', 'TEACHER_RETIREMENT_PLANNING_SIMPLIFIED_ANALYSIS', 'CNIS_FAST_ANALYSIS_COMPLETE_ANALYSIS', 'CNIS_FAST_ANALYSIS_SIMPLIFIED_ANALYSIS', 'LEGAL_PROCEEDING_MONITORING', 'ELOY_CHAT_SOCIAL_SECURITY_QUESTIONS', 'ELOY_CHAT_LEGISLATION_QUESTIONS', 'ELOY_CHAT_WINNING_LEGAL_THESIS_RESEARCH', 'ELOY_CHAT_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_CNIS_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_COMPARE_CNIS_CTPS', 'RETIREMENT_PLANNING_RGPS_SPECIAL_PERIOD_PPP_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_NO_END_DATE_DOCUMENTS_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_RURAL_TIME_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_MILITARY_SERVICE_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_PUBLIC_SERVICE_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_CTPS_OUTSIDE_CNIS_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_STUDENT_APPRENTICE_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_WORK_ABROAD_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_INFORMAL_WORK_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_LABOR_COURT_DECISION_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_FINAL_RULES_ANALYSIS', 'SPECIAL_ACTIVITY_COMPLETE_ANALYSIS', 'SPECIAL_ACTIVITY_SIMPLIFIED_ANALYSIS', 'ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS_COMPLETE_ANALYSIS', 'ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS_SIMPLIFIED_ANALYSIS', 'JUDICIAL_CASE_ANALYSIS_COMPLETE_ANALYSIS', 'JUDICIAL_CASE_ANALYSIS_SIMPLIFIED_ANALYSIS', 'MEDICAL_QUESTION_GENERATOR_SIMPLIFIED_ANALYSIS', 'MEDICAL_QUESTION_GENERATOR_COMPLETE_ANALYSIS', 'MEDICAL_AND_SOCIAL_REPORT_OBJECTION_GENERATOR_ANALYSIS_COMPLETE_ANALYSIS', 'MEDICAL_AND_SOCIAL_REPORT_OBJECTION_GENERATOR_ANALYSIS_SIMPLIFIED_ANALYSIS', 'SPEECH_GENERATOR_COMPLETE_ANALYSIS', 'SPEECH_GENERATOR_SIMPLIFIED_ANALYSIS', 'DISABILITY_ASSESSMENT_FOR_BPC_ANALYSIS_COMPLETE_ANALYSIS', 'DISABILITY_ASSESSMENT_FOR_BPC_ANALYSIS_SIMPLIFIED_ANALYSIS', 'PER_CAPITA_INCOME_FOR_BPC_ANALYSIS_COMPLETE_ANALYSIS', 'PER_CAPITA_INCOME_FOR_BPC_ANALYSIS_SIMPLIFIED_ANALYSIS', 'INSURANCE_QUALITY_ANALYSIS_COMPLETE_ANALYSIS', 'INSURANCE_QUALITY_ANALYSIS_SIMPLIFIED_ANALYSIS', 'INITIAL_PETITION_GENERATOR_COMPLETE_ANALYSIS', 'INITIAL_PETITION_GENERATOR_SIMPLIFIED_ANALYSIS', 'ADMINISTRATIVE_REQUEST_GENERATOR_COMPLETE_ANALYSIS', 'ADMINISTRATIVE_REQUEST_GENERATOR_SIMPLIFIED_ANALYSIS', 'FULL_OPINION_GENERATOR_COMPLETE_ANALYSIS', 'FULL_OPINION_GENERATOR_SIMPLIFIED_ANALYSIS', 'RURAL_TIMELINE_COMPLETE_ANALYSIS', 'RURAL_TIMELINE_SIMPLIFIED_ANALYSIS', 'RURAL_TIMELINE_ANALYSIS_INDIVIDUAL_PERIOD_DOCUMENT_ANALYSIS', 'RURAL_TIMELINE_ANALYSIS_PERIOD_DOCUMENT_ANALYSIS', 'AUDIENCE_QUESTIONS_GENERATOR_COMPLETE_ANALYSIS', 'AUDIENCE_QUESTIONS_GENERATOR_SIMPLIFIED_ANALYSIS', 'RURAL_TIMELINE_ANALYSIS_CONSOLIDATED_DOCUMENT_ANALYSIS', 'RURAL_TIMELINE_CNIS_CONTRIBUTION_PERIOD_IMPACT_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_CNIS_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_COMPARE_CNIS_CTPS', 'GENERAL_URBAN_RETIREMENT_GRANT_SPECIAL_PERIOD_PPP_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_NO_END_DATE_DOCUMENTS_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_RURAL_TIME_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_MILITARY_SERVICE_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_PUBLIC_SERVICE_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_CTPS_OUTSIDE_CNIS_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_STUDENT_APPRENTICE_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_WORK_ABROAD_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_INFORMAL_WORK_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_LABOR_COURT_DECISION_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_COMPLETE_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_SIMPLIFIED_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_COMPLETE_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_SIMPLIFIED_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_ADMINISTRATIVE_REQUEST_DENIED_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_BENEFIT_AWARD_LETTER_ANALYSIS', 'RURAL_TIMELINE_CNIS_CONTRIBUTION_PERIOD_ADJUSTMENT_SIMULATION', 'TEACHER_ADMINISTRATIVE_PROCESS_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_COMPLETE_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_SIMPLIFIED_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_ADMINISTRATIVE_PROCESS_ANALYSIS', 'SPECIAL_CATEGORY_RETIREMENT_COMPLETE_ANALYSIS', 'SPECIAL_CATEGORY_RETIREMENT_SIMPLIFIED_ANALYSIS', 'SPECIAL_CATEGORY_RETIREMENT_CONVERSION_ANALYSIS', 'SPECIAL_CATEGORY_RETIREMENT_RULES_ANALYSIS', 'SPECIAL_CATEGORY_RETIREMENT_ADMINISTRATIVE_PROCEDURE_ANALYSIS', 'MINI_ADVISOR_COMPLETE_ANALYSIS', 'MINI_ADVISOR_SIMPLIFIED_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_GRANT_COMPLETE_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_GRANT_SIMPLIFIED_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_GRANT_FIRST_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_GRANT_RURAL_TIME_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_GRANT_MILITARY_SERVICE_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_GRANT_PUBLIC_SERVICE_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_GRANT_CTPS_OUTSIDE_CNIS_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_GRANT_STUDENT_APPRENTICE_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_GRANT_WORK_ABROAD_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_GRANT_INFORMAL_WORK_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_GRANT_LABOR_COURT_DECISION_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_GRANT_PPP_ANALYSIS', 'SPECIAL_RETIREMENT_GRANT_COMPLETE_ANALYSIS', 'SPECIAL_RETIREMENT_GRANT_SIMPLIFIED_ANALYSIS', 'SPECIAL_RETIREMENT_GRANT_FIRST_ANALYSIS', 'DEATH_BENEFIT_GRANT_COMPLETE_ANALYSIS', 'DEATH_BENEFIT_GRANT_SIMPLIFIED_ANALYSIS', 'DEATH_BENEFIT_GRANT_FIRST_ANALYSIS', 'REGULATORY_UPDATES') NOT NULL`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_record\` CHANGE \`type\` \`type\` enum ('analise_rapida_cnis', 'planejamento_previdenciario_rgps', 'planejamento_aposentadoria_rpps', 'planejamento_previdenciario_professor', 'atividade_especial', 'analise_caso_judicial', 'analise_procedimento_administrativo_inss', 'gerador_perguntas_medicas', 'analise_geradora_objeção_laudo_medico_social', 'gerador_discurso', 'avaliacao_deficiencia_para_bpc', 'analise_renda_per_capita_para_bpc', 'analise_linha_tempo_rural', 'gerador_perguntas_audiencia', 'analise_qualidade_segurado', 'planejamento_aposentadoria_para_deficiente', 'concessao_aposentadoria_urbana_geral', 'analise_aposentadoria_urbana_geral', 'aposentadoria_categoria_especial', 'concessao_aposentadoria_para_deficiente', 'concessao_aposentadoria_especial', 'concessao_pensao_por_morte') NOT NULL`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`death_benefit_grant_dependent\` ADD CONSTRAINT \`FK_000dad09c6f82921fc1bb850094\` FOREIGN KEY (\`death_benefit_grant_id\`) REFERENCES \`death_benefit_grant\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`death_benefit_grant_dependent_document\` ADD CONSTRAINT \`FK_247c99292a6c39331a83bbff536\` FOREIGN KEY (\`death_benefit_grant_dependent_id\`) REFERENCES \`death_benefit_grant_dependent\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`death_benefit_grant_document\` ADD CONSTRAINT \`FK_6acdbf254bed5eb62d4d54958d3\` FOREIGN KEY (\`death_benefit_grant_institutor_id\`) REFERENCES \`death_benefit_grant_institutor\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`death_benefit_grant_inss_benefit\` ADD CONSTRAINT \`FK_c42248174e62c8ab4213a78d302\` FOREIGN KEY (\`death_benefit_grant_id\`) REFERENCES \`death_benefit_grant\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`death_benefit_grant_institutor\` ADD CONSTRAINT \`FK_af54fe944063e55562980d11819\` FOREIGN KEY (\`death_benefit_grant_id\`) REFERENCES \`death_benefit_grant\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`death_benefit_grant_legal_proceeding\` ADD CONSTRAINT \`FK_edf118fe62a0020e1dfce429221\` FOREIGN KEY (\`death_benefit_grant_id\`) REFERENCES \`death_benefit_grant\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`death_benefit_grant_legal_representative\` ADD CONSTRAINT \`FK_6469ec1c17e2b7d019e261af829\` FOREIGN KEY (\`death_benefit_grant_id\`) REFERENCES \`death_benefit_grant\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`death_benefit_grant_period_earnings_history\` ADD CONSTRAINT \`FK_dc24a22d07e6417341b891b1aa1\` FOREIGN KEY (\`death_benefit_grant_period_id\`) REFERENCES \`death_benefit_grant_period\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`death_benefit_grant_period\` ADD CONSTRAINT \`FK_c5a05057aef1fcddf4212652855\` FOREIGN KEY (\`death_benefit_grant_id\`) REFERENCES \`death_benefit_grant\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`death_benefit_grant_period_document\` ADD CONSTRAINT \`FK_7d2e31af6a89efadd993d4597dd\` FOREIGN KEY (\`death_benefit_grant_period_id\`) REFERENCES \`death_benefit_grant_period\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`death_benefit_grant\` ADD CONSTRAINT \`FK_165a3a5178aa6ea6a0c3e62da20\` FOREIGN KEY (\`death_benefit_grant_result_id\`) REFERENCES \`death_benefit_grant_result\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_record\` ADD CONSTRAINT \`FK_40b7c5c5f6f722d303f7866fb10\` FOREIGN KEY (\`death_benefit_id\`) REFERENCES \`death_benefit_grant\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+  }
+
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_record\` DROP FOREIGN KEY \`FK_40b7c5c5f6f722d303f7866fb10\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`death_benefit_grant\` DROP FOREIGN KEY \`FK_165a3a5178aa6ea6a0c3e62da20\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`death_benefit_grant_period_document\` DROP FOREIGN KEY \`FK_7d2e31af6a89efadd993d4597dd\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`death_benefit_grant_period\` DROP FOREIGN KEY \`FK_c5a05057aef1fcddf4212652855\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`death_benefit_grant_period_earnings_history\` DROP FOREIGN KEY \`FK_dc24a22d07e6417341b891b1aa1\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`death_benefit_grant_legal_representative\` DROP FOREIGN KEY \`FK_6469ec1c17e2b7d019e261af829\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`death_benefit_grant_legal_proceeding\` DROP FOREIGN KEY \`FK_edf118fe62a0020e1dfce429221\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`death_benefit_grant_institutor\` DROP FOREIGN KEY \`FK_af54fe944063e55562980d11819\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`death_benefit_grant_inss_benefit\` DROP FOREIGN KEY \`FK_c42248174e62c8ab4213a78d302\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`death_benefit_grant_document\` DROP FOREIGN KEY \`FK_6acdbf254bed5eb62d4d54958d3\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`death_benefit_grant_dependent_document\` DROP FOREIGN KEY \`FK_247c99292a6c39331a83bbff536\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`death_benefit_grant_dependent\` DROP FOREIGN KEY \`FK_000dad09c6f82921fc1bb850094\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_record\` CHANGE \`type\` \`type\` enum ('analise_rapida_cnis', 'planejamento_previdenciario_rgps', 'planejamento_aposentadoria_rpps', 'planejamento_previdenciario_professor', 'atividade_especial', 'analise_caso_judicial', 'analise_procedimento_administrativo_inss', 'gerador_perguntas_medicas', 'analise_geradora_objeção_laudo_medico_social', 'gerador_discurso', 'avaliacao_deficiencia_para_bpc', 'analise_renda_per_capita_para_bpc', 'analise_linha_tempo_rural', 'gerador_perguntas_audiencia', 'analise_qualidade_segurado', 'planejamento_aposentadoria_para_deficiente', 'concessao_aposentadoria_urbana_geral', 'analise_aposentadoria_urbana_geral', 'aposentadoria_categoria_especial', 'concessao_aposentadoria_para_deficiente') NOT NULL`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`payment_plan_paid_resource\` CHANGE \`resource\` \`resource\` enum ('LEGAL_PLEADING_COMPLETE_ANALYSIS', 'LEGAL_PLEADING_SIMPLIFIED_ANALYSIS', 'LEGAL_PLEADING_QUICK_DOCUMENT_ANALYSIS', 'RETIREMENT_PLANNING_RPPS_COMPLETE_ANALYSIS', 'TEACHER_RETIREMENT_PLANNING_COMPLETE_ANALYSIS', 'TEACHER_RETIREMENT_PLANNING_SIMPLIFIED_ANALYSIS', 'CNIS_FAST_ANALYSIS_COMPLETE_ANALYSIS', 'CNIS_FAST_ANALYSIS_SIMPLIFIED_ANALYSIS', 'LEGAL_PROCEEDING_MONITORING', 'ELOY_CHAT_SOCIAL_SECURITY_QUESTIONS', 'ELOY_CHAT_LEGISLATION_QUESTIONS', 'ELOY_CHAT_WINNING_LEGAL_THESIS_RESEARCH', 'ELOY_CHAT_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_CNIS_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_COMPARE_CNIS_CTPS', 'RETIREMENT_PLANNING_RGPS_SPECIAL_PERIOD_PPP_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_NO_END_DATE_DOCUMENTS_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_RURAL_TIME_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_MILITARY_SERVICE_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_PUBLIC_SERVICE_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_CTPS_OUTSIDE_CNIS_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_STUDENT_APPRENTICE_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_WORK_ABROAD_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_INFORMAL_WORK_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_LABOR_COURT_DECISION_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_FINAL_RULES_ANALYSIS', 'SPECIAL_ACTIVITY_COMPLETE_ANALYSIS', 'SPECIAL_ACTIVITY_SIMPLIFIED_ANALYSIS', 'ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS_COMPLETE_ANALYSIS', 'ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS_SIMPLIFIED_ANALYSIS', 'JUDICIAL_CASE_ANALYSIS_COMPLETE_ANALYSIS', 'JUDICIAL_CASE_ANALYSIS_SIMPLIFIED_ANALYSIS', 'MEDICAL_QUESTION_GENERATOR_SIMPLIFIED_ANALYSIS', 'MEDICAL_QUESTION_GENERATOR_COMPLETE_ANALYSIS', 'MEDICAL_AND_SOCIAL_REPORT_OBJECTION_GENERATOR_ANALYSIS_COMPLETE_ANALYSIS', 'MEDICAL_AND_SOCIAL_REPORT_OBJECTION_GENERATOR_ANALYSIS_SIMPLIFIED_ANALYSIS', 'SPEECH_GENERATOR_COMPLETE_ANALYSIS', 'SPEECH_GENERATOR_SIMPLIFIED_ANALYSIS', 'DISABILITY_ASSESSMENT_FOR_BPC_ANALYSIS_COMPLETE_ANALYSIS', 'DISABILITY_ASSESSMENT_FOR_BPC_ANALYSIS_SIMPLIFIED_ANALYSIS', 'PER_CAPITA_INCOME_FOR_BPC_ANALYSIS_COMPLETE_ANALYSIS', 'PER_CAPITA_INCOME_FOR_BPC_ANALYSIS_SIMPLIFIED_ANALYSIS', 'INSURANCE_QUALITY_ANALYSIS_COMPLETE_ANALYSIS', 'INSURANCE_QUALITY_ANALYSIS_SIMPLIFIED_ANALYSIS', 'INITIAL_PETITION_GENERATOR_COMPLETE_ANALYSIS', 'INITIAL_PETITION_GENERATOR_SIMPLIFIED_ANALYSIS', 'ADMINISTRATIVE_REQUEST_GENERATOR_COMPLETE_ANALYSIS', 'ADMINISTRATIVE_REQUEST_GENERATOR_SIMPLIFIED_ANALYSIS', 'FULL_OPINION_GENERATOR_COMPLETE_ANALYSIS', 'FULL_OPINION_GENERATOR_SIMPLIFIED_ANALYSIS', 'RURAL_TIMELINE_COMPLETE_ANALYSIS', 'RURAL_TIMELINE_SIMPLIFIED_ANALYSIS', 'RURAL_TIMELINE_ANALYSIS_INDIVIDUAL_PERIOD_DOCUMENT_ANALYSIS', 'RURAL_TIMELINE_ANALYSIS_PERIOD_DOCUMENT_ANALYSIS', 'AUDIENCE_QUESTIONS_GENERATOR_COMPLETE_ANALYSIS', 'AUDIENCE_QUESTIONS_GENERATOR_SIMPLIFIED_ANALYSIS', 'RURAL_TIMELINE_ANALYSIS_CONSOLIDATED_DOCUMENT_ANALYSIS', 'RURAL_TIMELINE_CNIS_CONTRIBUTION_PERIOD_IMPACT_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_CNIS_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_COMPARE_CNIS_CTPS', 'GENERAL_URBAN_RETIREMENT_GRANT_SPECIAL_PERIOD_PPP_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_NO_END_DATE_DOCUMENTS_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_RURAL_TIME_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_MILITARY_SERVICE_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_PUBLIC_SERVICE_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_CTPS_OUTSIDE_CNIS_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_STUDENT_APPRENTICE_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_WORK_ABROAD_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_INFORMAL_WORK_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_LABOR_COURT_DECISION_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_COMPLETE_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_GRANT_SIMPLIFIED_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_COMPLETE_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_SIMPLIFIED_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_ADMINISTRATIVE_REQUEST_DENIED_ANALYSIS', 'GENERAL_URBAN_RETIREMENT_BENEFIT_AWARD_LETTER_ANALYSIS', 'RURAL_TIMELINE_CNIS_CONTRIBUTION_PERIOD_ADJUSTMENT_SIMULATION', 'TEACHER_ADMINISTRATIVE_PROCESS_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_COMPLETE_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_SIMPLIFIED_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_ADMINISTRATIVE_PROCESS_ANALYSIS', 'SPECIAL_CATEGORY_RETIREMENT_COMPLETE_ANALYSIS', 'SPECIAL_CATEGORY_RETIREMENT_SIMPLIFIED_ANALYSIS', 'SPECIAL_CATEGORY_RETIREMENT_CONVERSION_ANALYSIS', 'SPECIAL_CATEGORY_RETIREMENT_RULES_ANALYSIS', 'SPECIAL_CATEGORY_RETIREMENT_ADMINISTRATIVE_PROCEDURE_ANALYSIS', 'MINI_ADVISOR_COMPLETE_ANALYSIS', 'MINI_ADVISOR_SIMPLIFIED_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_GRANT_COMPLETE_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_GRANT_SIMPLIFIED_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_GRANT_FIRST_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_GRANT_RURAL_TIME_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_GRANT_MILITARY_SERVICE_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_GRANT_PUBLIC_SERVICE_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_GRANT_CTPS_OUTSIDE_CNIS_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_GRANT_STUDENT_APPRENTICE_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_GRANT_WORK_ABROAD_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_GRANT_INFORMAL_WORK_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_GRANT_LABOR_COURT_DECISION_ANALYSIS', 'DISABILITY_RETIREMENT_PLANNING_GRANT_PPP_ANALYSIS', 'REGULATORY_UPDATES') NOT NULL`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_record\` DROP COLUMN \`death_benefit_id\``,
+    );
+    await queryRunner.query(
+      `DROP INDEX \`REL_165a3a5178aa6ea6a0c3e62da2\` ON \`death_benefit_grant\``,
+    );
+    await queryRunner.query(`DROP TABLE \`death_benefit_grant\``);
+    await queryRunner.query(`DROP TABLE \`death_benefit_grant_result\``);
+    await queryRunner.query(
+      `DROP TABLE \`death_benefit_grant_period_document\``,
+    );
+    await queryRunner.query(`DROP TABLE \`death_benefit_grant_period\``);
+    await queryRunner.query(
+      `DROP TABLE \`death_benefit_grant_period_earnings_history\``,
+    );
+    await queryRunner.query(
+      `DROP TABLE \`death_benefit_grant_legal_representative\``,
+    );
+    await queryRunner.query(
+      `DROP TABLE \`death_benefit_grant_legal_proceeding\``,
+    );
+    await queryRunner.query(`DROP TABLE \`death_benefit_grant_document\``);
+    await queryRunner.query(`DROP TABLE \`death_benefit_grant_institutor\``);
+    await queryRunner.query(`DROP TABLE \`death_benefit_grant_inss_benefit\``);
+    await queryRunner.query(
+      `DROP TABLE \`death_benefit_grant_dependent_document\``,
+    );
+    await queryRunner.query(`DROP TABLE \`death_benefit_grant_dependent\``);
+  }
+}

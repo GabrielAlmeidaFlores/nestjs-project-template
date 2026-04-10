@@ -889,6 +889,33 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise do Perfil Profissiográfico Previdenciário (PPP) com IA para identificação e estruturação de períodos contributivos na concessão de aposentadoria da pessoa com deficiência. Extrai e organiza os dados do PPP em períodos prontos para inserção na análise, com categoria, status de deficiência, média de contribuição e origem do vínculo.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d1f2a3b4-c5e6-4a7b-8c9d-e0f1a2b3c401'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DEATH_BENEFIT_GRANT_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title: 'PENSÃO POR MORTE (CONCESSÃO) - ANÁLISE COMPLETA',
+      description:
+        'Análise completa de concessão de pensão por morte com IA. Consolida os dados do instituidor, dependentes, períodos contributivos, benefícios, processos judiciais e documentos apresentados, gerando parecer técnico detalhado sobre enquadramento legal, viabilidade da concessão, qualidade de dependente, carência e estratégia recomendada.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d1f2a3b4-c5e6-4a7b-8c9d-e0f1a2b3c402'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DEATH_BENEFIT_GRANT_SIMPLIFIED_ANALYSIS,
+      creditCost: 3,
+      title: 'PENSÃO POR MORTE (CONCESSÃO) - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada de concessão de pensão por morte com IA. Resume os principais pontos sobre a qualidade de segurado do instituidor, a condição dos dependentes, os documentos apresentados e a viabilidade geral do benefício, com orientação objetiva para tomada de decisão rápida.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d1f2a3b4-c5e6-4a7b-8c9d-e0f1a2b3c403'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DEATH_BENEFIT_GRANT_FIRST_ANALYSIS,
+      creditCost: 5,
+      title: 'PENSÃO POR MORTE (CONCESSÃO) - PRIMEIRO STEP',
+      description:
+        'Primeira análise da concessão de pensão por morte com IA, cruzando os dados estruturados do caso com a análise processada do CNIS do instituidor. Gera parecer inicial técnico sobre qualidade de segurado, carência, relação de dependência, documentação existente e viabilidade preliminar do benefício.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4890-abcd-ef1234567890'),
       resource:
         PaymentPlanPaidResourceTypeEnum.SPECIAL_CATEGORY_RETIREMENT_COMPLETE_ANALYSIS,

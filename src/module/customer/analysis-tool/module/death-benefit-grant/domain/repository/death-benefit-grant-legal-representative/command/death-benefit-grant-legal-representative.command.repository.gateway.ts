@@ -11,4 +11,8 @@ export abstract class DeathBenefitGrantLegalRepresentativeCommandRepositoryGatew
     id: DeathBenefitGrantLegalRepresentativeId,
     props: DeathBenefitGrantLegalRepresentativeEntity,
   ): TransactionType;
+
+  public abstract deleteDeathBenefitGrantLegalRepresentative(
+    id: DeathBenefitGrantLegalRepresentativeId,
+  ): TransactionType;
 }

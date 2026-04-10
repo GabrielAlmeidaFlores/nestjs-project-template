@@ -10,8 +10,8 @@ import { CreateDeathBenefitGrantResultUseCase } from '@module/customer/analysis-
 import { CreateDeathBenefitGrantUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/create-death-benefit-grant.use-case';
 import { DeleteDeathBenefitGrantPeriodUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/delete-death-benefit-grant-period.use-case';
 import { GetDeathBenefitGrantUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/get-death-benefit-grant.use-case';
+import { UpdateDeathBenefitGrantInstitutorDataUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/update-death-benefit-grant-institutor-data.use-case';
 import { UpdateDeathBenefitGrantInstitorUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/update-death-benefit-grant-institutor.use-case';
-import { UpdateDeathBenefitGrantDocumentUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/update-death-benefit-grant-document.use-case';
 import { UpdateDeathBenefitGrantLegalRepresentativeUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/update-death-benefit-grant-legal-representative.use-case';
 import { UpdateDeathBenefitGrantPeriodUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/update-death-benefit-grant-period.use-case';
 import { UpdateDeathBenefitGrantUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/update-death-benefit-grant.use-case';
@@ -30,7 +30,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateDeathBenefitGrantUseCase,
     GetDeathBenefitGrantUseCase,
     UpdateDeathBenefitGrantUseCase,
-    UpdateDeathBenefitGrantDocumentUseCase,
+    UpdateDeathBenefitGrantInstitutorDataUseCase,
     CreateDeathBenefitGrantPeriodUseCase,
     UpdateDeathBenefitGrantPeriodUseCase,
     DeleteDeathBenefitGrantPeriodUseCase,

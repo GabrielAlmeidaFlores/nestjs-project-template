@@ -11,7 +11,7 @@ export class DeathBenefitGrantDependentEntity extends BaseEntity<DeathBenefitGra
   public readonly name: string;
   public readonly dependentClass: DeathBenefitGrantDependentClassEnum;
   public readonly dependentType: DeathBenefitGrantDependentTypeEnum;
-  public readonly sex: GenderEnum;
+  public readonly gender: GenderEnum;
   public readonly birthDate: Date;
   public readonly hasDisabilityOrInvalidism: boolean;
   public readonly isMinorUnder16: boolean;
@@ -25,7 +25,7 @@ export class DeathBenefitGrantDependentEntity extends BaseEntity<DeathBenefitGra
     this.name = props.name;
     this.dependentClass = props.dependentClass;
     this.dependentType = props.dependentType;
-    this.sex = props.sex;
+    this.gender = props.gender;
     this.birthDate = props.birthDate;
     this.hasDisabilityOrInvalidism = props.hasDisabilityOrInvalidism;
     this.isMinorUnder16 = props.isMinorUnder16;

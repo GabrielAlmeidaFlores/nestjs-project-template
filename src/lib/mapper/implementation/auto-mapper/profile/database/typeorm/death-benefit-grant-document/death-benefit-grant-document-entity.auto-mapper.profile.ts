@@ -3,11 +3,11 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { DeathBenefitGrantDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-document.typeorm.entity';
-import { DeathBenefitGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant.typeorm.entity';
+import { DeathBenefitGrantInstitorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-institutor.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
-import { DeathBenefitGrantId } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant/value-object/death-benefit-grant-id.value-object';
 import { DeathBenefitGrantDocumentEntity } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-document/death-benefit-grant-document.entity';
 import { DeathBenefitGrantDocumentId } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-document/value-object/death-benefit-grant-document-id.value-object';
+import { DeathBenefitGrantInstitorId } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-institutor/value-object/death-benefit-grant-institutor-id.value-object';
 
 @Injectable()
 export class DeathBenefitGrantDocumentEntityAutoMapperProfile {
@@ -32,7 +32,7 @@ export class DeathBenefitGrantDocumentEntityAutoMapperProfile {
         (
           source: DeathBenefitGrantDocumentTypeormEntity,
         ): DeathBenefitGrantDocumentEntity => {
-          if (!source.deathBenefitGrant) {
+          if (!source.deathBenefitGrantInstitutor) {
             throw new IncompleteSourceDataForMappingError({
               destinationClass: DeathBenefitGrantDocumentEntity.name,
               sourceClass: DeathBenefitGrantDocumentTypeormEntity.name,
@@ -43,8 +43,8 @@ export class DeathBenefitGrantDocumentEntityAutoMapperProfile {
             id: new DeathBenefitGrantDocumentId(source.id),
             document: source.document,
             type: source.type,
-            deathBenefitGrantId: new DeathBenefitGrantId(
-              source.deathBenefitGrant.id,
+            deathBenefitGrantInstitorId: new DeathBenefitGrantInstitorId(
+              source.deathBenefitGrantInstitutor.id,
             ),
             createdAt: source.createdAt,
             updatedAt: source.updatedAt,
@@ -68,9 +68,10 @@ export class DeathBenefitGrantDocumentEntityAutoMapperProfile {
             id: source.id.toString(),
             document: source.document,
             type: source.type,
-            deathBenefitGrant: DeathBenefitGrantTypeormEntity.build({
-              id: source.deathBenefitGrantId.toString(),
-            } as DeathBenefitGrantTypeormEntity),
+            deathBenefitGrantInstitutor:
+              DeathBenefitGrantInstitorTypeormEntity.build({
+                id: source.deathBenefitGrantInstitorId.toString(),
+              } as DeathBenefitGrantInstitorTypeormEntity),
             createdAt: source.createdAt,
             updatedAt: source.updatedAt,
             deletedAt: source.deletedAt,

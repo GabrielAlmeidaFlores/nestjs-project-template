@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { PersonalDocument } from '@core/domain/schema/value-object/personal-document/personal-document.value-object';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
@@ -12,21 +13,20 @@ import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domai
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
-import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { DeathBenefitGrantCommandRepositoryGateway } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/repository/death-benefit-grant/command/death-benefit-grant.command.repository.gateway';
-import { DeathBenefitGrantDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/repository/death-benefit-grant-document/command/death-benefit-grant-document.command.repository.gateway';
 import { DeathBenefitGrantInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/repository/death-benefit-grant-inss-benefit/command/death-benefit-grant-inss-benefit.command.repository.gateway';
+import { DeathBenefitGrantInstitorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/repository/death-benefit-grant-institutor/command/death-benefit-grant-institutor.command.repository.gateway';
 import { DeathBenefitGrantLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/repository/death-benefit-grant-legal-proceeding/command/death-benefit-grant-legal-proceeding.command.repository.gateway';
+import { DeathBenefitGrantLegalRepresentativeCommandRepositoryGateway } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/repository/death-benefit-grant-legal-representative/command/death-benefit-grant-legal-representative.command.repository.gateway';
 import { DeathBenefitGrantEntity } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant/death-benefit-grant.entity';
-import { DeathBenefitGrantDocumentEntity } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-document/death-benefit-grant-document.entity';
-import { DeathBenefitGrantDocumentId } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-document/value-object/death-benefit-grant-document-id.value-object';
 import { DeathBenefitGrantInssBenefitEntity } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-inss-benefit/death-benefit-grant-inss-benefit.entity';
+import { DeathBenefitGrantInstitorEntity } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-institutor/death-benefit-grant-institutor.entity';
 import { DeathBenefitGrantLegalProceedingEntity } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-legal-proceeding/death-benefit-grant-legal-proceeding.entity';
+import { DeathBenefitGrantLegalRepresentativeEntity } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-legal-representative/death-benefit-grant-legal-representative.entity';
 import { CreateDeathBenefitGrantRequestDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/request/create-death-benefit-grant.request.dto';
 import { CreateDeathBenefitGrantResponseDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/response/create-death-benefit-grant.response.dto';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
-import { FileModel } from '@shared/system/model/generic/file.model';
 
 @Injectable()
 export class CreateDeathBenefitGrantUseCase {
@@ -39,8 +39,10 @@ export class CreateDeathBenefitGrantUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(DeathBenefitGrantCommandRepositoryGateway)
     private readonly deathBenefitGrantCommandRepositoryGateway: DeathBenefitGrantCommandRepositoryGateway,
-    @Inject(DeathBenefitGrantDocumentCommandRepositoryGateway)
-    private readonly deathBenefitGrantDocumentCommandRepositoryGateway: DeathBenefitGrantDocumentCommandRepositoryGateway,
+    @Inject(DeathBenefitGrantInstitorCommandRepositoryGateway)
+    private readonly deathBenefitGrantInstitorCommandRepositoryGateway: DeathBenefitGrantInstitorCommandRepositoryGateway,
+    @Inject(DeathBenefitGrantLegalRepresentativeCommandRepositoryGateway)
+    private readonly deathBenefitGrantLegalRepresentativeCommandRepositoryGateway: DeathBenefitGrantLegalRepresentativeCommandRepositoryGateway,
     @Inject(DeathBenefitGrantInssBenefitCommandRepositoryGateway)
     private readonly deathBenefitGrantInssBenefitCommandRepositoryGateway: DeathBenefitGrantInssBenefitCommandRepositoryGateway,
     @Inject(DeathBenefitGrantLegalProceedingCommandRepositoryGateway)
@@ -51,8 +53,6 @@ export class CreateDeathBenefitGrantUseCase {
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(AnalysisToolRecordCommandRepositoryGateway)
     private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
-    @Inject(FileProcessorGateway)
-    private readonly fileProcessorGateway: FileProcessorGateway,
   ) {}
 
   public async execute(
@@ -81,10 +81,35 @@ export class CreateDeathBenefitGrantUseCase {
       analysisName: dto.analysisName ?? null,
     });
 
-    const documentEntities = await this.buildDocumentEntities(
-      deathBenefitGrant.id,
-      dto,
-    );
+    const institutorEntity = new DeathBenefitGrantInstitorEntity({
+      name: dto.institutor.name ?? null,
+      cpf:
+        dto.institutor.cpf !== undefined
+          ? new PersonalDocument(dto.institutor.cpf)
+          : null,
+      birthDate: dto.institutor.birthDate ?? null,
+      gender: dto.institutor.gender ?? null,
+      deathDate: dto.institutor.deathDate ?? null,
+      wasRetired: dto.institutor.wasRetired ?? null,
+      deathBenefitGrantId: deathBenefitGrant.id,
+    });
+
+    const legalRepresentativeEntity =
+      dto.legalRepresentative !== undefined
+        ? new DeathBenefitGrantLegalRepresentativeEntity({
+            name: dto.legalRepresentative.name ?? null,
+            cpf:
+              dto.legalRepresentative.cpf !== undefined
+                ? new PersonalDocument(dto.legalRepresentative.cpf)
+                : null,
+            birthDate: dto.legalRepresentative.birthDate ?? null,
+            isMinorUnderGuardianship:
+              dto.legalRepresentative.isMinorUnderGuardianship ?? null,
+            legalRepresentativeRelationship:
+              dto.legalRepresentative.legalRepresentativeRelationship ?? null,
+            deathBenefitGrantId: deathBenefitGrant.id,
+          })
+        : null;
 
     const inssBenefitEntities =
       dto.inssBenefitNumber !== undefined
@@ -110,7 +135,8 @@ export class CreateDeathBenefitGrantUseCase {
 
     await this.createOnDatabase(
       deathBenefitGrant,
-      documentEntities,
+      institutorEntity,
+      legalRepresentativeEntity,
       inssBenefitEntities,
       legalProceedingEntities,
     );
@@ -129,7 +155,7 @@ export class CreateDeathBenefitGrantUseCase {
 
     const analysisToolRecord = new AnalysisToolRecordEntity({
       code: new AnalysisToolRecordCode(countRecords + 1),
-      type: AnalysisToolRecordTypeEnum.DEATH_BENEFIT,
+      type: AnalysisToolRecordTypeEnum.DEATH_BENEFIT_GRANT,
       cnisFastAnalysis: null,
       deathBenefitGrant,
       analysisToolClient,
@@ -147,7 +173,8 @@ export class CreateDeathBenefitGrantUseCase {
 
   private async createOnDatabase(
     deathBenefitGrant: DeathBenefitGrantEntity,
-    documentEntities: DeathBenefitGrantDocumentEntity[],
+    institorEntity: DeathBenefitGrantInstitorEntity,
+    legalRepresentativeEntity: DeathBenefitGrantLegalRepresentativeEntity | null,
     inssBenefitEntities: DeathBenefitGrantInssBenefitEntity[],
     legalProceedingEntities: DeathBenefitGrantLegalProceedingEntity[],
   ): Promise<void> {
@@ -156,11 +183,19 @@ export class CreateDeathBenefitGrantUseCase {
         deathBenefitGrant,
       );
 
-    const documentTransactions = documentEntities.map((value) =>
-      this.deathBenefitGrantDocumentCommandRepositoryGateway.createDeathBenefitGrantDocument(
-        value,
-      ),
-    );
+    const institorTransaction =
+      this.deathBenefitGrantInstitorCommandRepositoryGateway.createDeathBenefitGrantBenefitInstitutor(
+        institorEntity,
+      );
+
+    const legalRepresentativeTransactions =
+      legalRepresentativeEntity !== null
+        ? [
+            this.deathBenefitGrantLegalRepresentativeCommandRepositoryGateway.createDeathBenefitGrantLegalRepresentative(
+              legalRepresentativeEntity,
+            ),
+          ]
+        : [];
 
     const inssBenefitTransactions = inssBenefitEntities.map((value) =>
       this.deathBenefitGrantInssBenefitCommandRepositoryGateway.createDeathBenefitGrantInssBenefit(
@@ -176,7 +211,8 @@ export class CreateDeathBenefitGrantUseCase {
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       deathBenefitGrantTransaction,
-      ...documentTransactions,
+      institorTransaction,
+      ...legalRepresentativeTransactions,
       ...inssBenefitTransactions,
       ...legalProceedingTransactions,
     ]);
@@ -197,37 +233,5 @@ export class CreateDeathBenefitGrantUseCase {
     ]);
 
     await transaction.commit();
-  }
-
-  private async buildDocumentEntities(
-    deathBenefitGrantId: DeathBenefitGrantEntity['id'],
-    dto: CreateDeathBenefitGrantRequestDto,
-  ): Promise<DeathBenefitGrantDocumentEntity[]> {
-    if (!dto.documents || dto.documents.length === 0) {
-      return [];
-    }
-
-    return Promise.all(
-      dto.documents.map(async (documentDto) => {
-        const buffer = documentDto.file.base64.decodeToBuffer();
-
-        const fileModel = FileModel.build({
-          buffer,
-          originalName: documentDto.file.originalFileName,
-          size: buffer.length,
-          encoding: '7bit',
-        });
-
-        const documentUrl =
-          await this.fileProcessorGateway.uploadFile(fileModel);
-
-        return new DeathBenefitGrantDocumentEntity({
-          id: new DeathBenefitGrantDocumentId(),
-          document: documentUrl,
-          type: documentDto.type,
-          deathBenefitGrantId,
-        });
-      }),
-    );
   }
 }
