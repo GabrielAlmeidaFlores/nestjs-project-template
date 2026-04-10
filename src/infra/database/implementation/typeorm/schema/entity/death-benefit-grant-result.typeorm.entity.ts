@@ -3,7 +3,7 @@ import { Column, Entity, OneToOne } from 'typeorm';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { DeathBenefitGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant.typeorm.entity';
 
-@Entity({ name: 'death_benefit_result' })
+@Entity({ name: 'death_benefit_grant_result' })
 export class DeathBenefitGrantResultTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'first_analysis', type: 'longtext', nullable: true })
   public deathBenefitGrantFirstAnalysis: string | null;

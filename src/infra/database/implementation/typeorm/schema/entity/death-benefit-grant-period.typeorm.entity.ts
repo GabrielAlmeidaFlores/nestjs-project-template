@@ -9,7 +9,7 @@ import { DeathBenefitGrantCategoryEnum } from '@module/customer/analysis-tool/mo
 import { DeathBenefitGrantPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-period/enum/death-benefit-grant-period-consideration.enum';
 import { DeathBenefitGrantPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-period/enum/death-benefit-grant-period-pendency-reason.enum';
 
-@Entity({ name: 'death_benefit_period' })
+@Entity({ name: 'death_benefit_grant_period' })
 export class DeathBenefitGrantPeriodTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'start_date',
@@ -83,7 +83,7 @@ export class DeathBenefitGrantPeriodTypeormEntity extends BaseTypeormEntity {
     (entity) => entity.deathBenefitGrantPeriod,
     { nullable: true },
   )
-  @JoinColumn({ name: 'death_benefit_id' })
+  @JoinColumn({ name: 'death_benefit_grant_id' })
   public deathBenefitGrant?: DeathBenefitGrantTypeormEntity | null;
 
   @OneToMany(

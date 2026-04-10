@@ -1,11 +1,11 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { DeathBenefitGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant.typeorm.entity';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
-import { DeathBenefitGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant.typeorm.entity';
 
-@Entity({ name: 'death_benefit_legal_representative' })
+@Entity({ name: 'death_benefit_grant_legal_representative' })
 export class DeathBenefitGrantLegalRepresentativeTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'name', type: 'varchar', length: 255, nullable: true })
   public name: string | null;
@@ -47,7 +47,7 @@ export class DeathBenefitGrantLegalRepresentativeTypeormEntity extends BaseTypeo
     (entity) => entity.deathBenefitGrantLegalRepresentative,
     { nullable: true },
   )
-  @JoinColumn({ name: 'death_benefit_id' })
+  @JoinColumn({ name: 'death_benefit_grant_id' })
   public deathBenefitGrant?: DeathBenefitGrantTypeormEntity | null;
 
   protected override readonly _type =
