@@ -5,7 +5,7 @@ import { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodTypeormEntity } from '@
 import { SurvivorPensionAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/survivor-pension-analysis.typeorm.entity';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 
-@Entity({ name: 'survivor_pension_analysis_deceased_work_history' })
+@Entity({ name: 'spa_deceased_work_history' })
 export class SurvivorPensionAnalysisDeceasedWorkHistoryTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'start_date',

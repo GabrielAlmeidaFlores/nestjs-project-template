@@ -4,7 +4,7 @@ import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema
 import { SurvivorPensionAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/survivor-pension-analysis-result.typeorm.entity';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 
-@Entity({ name: 'survivor_pension_analysis_result_retirement_rule' })
+@Entity({ name: 'spa_result_retirement_rule' })
 export class SurvivorPensionAnalysisResultRetirementRuleTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'rule_name',

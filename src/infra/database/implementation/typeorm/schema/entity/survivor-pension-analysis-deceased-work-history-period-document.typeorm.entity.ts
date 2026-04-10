@@ -4,7 +4,7 @@ import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema
 import { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/survivor-pension-analysis-deceased-work-history-period.typeorm.entity';
 
 @Entity({
-  name: 'survivor_pension_analysis_deceased_work_history_period_document',
+  name: 'spa_deceased_work_history_period_document',
 })
 export class SurvivorPensionAnalysisDeceasedWorkHistoryPeriodDocumentTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'document_type', type: 'varchar', length: 255 })

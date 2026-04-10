@@ -5,7 +5,7 @@ import { SurvivorPensionAnalysisBenefitOriginatorIdentificationDocumentTypeormEn
 import { SurvivorPensionAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/survivor-pension-analysis.typeorm.entity';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 
-@Entity({ name: 'survivor_pension_analysis_benefit_originator_identification' })
+@Entity({ name: 'spa_benefit_originator_identification' })
 export class SurvivorPensionAnalysisBenefitOriginatorIdentificationTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'analysis_tool_client_id',

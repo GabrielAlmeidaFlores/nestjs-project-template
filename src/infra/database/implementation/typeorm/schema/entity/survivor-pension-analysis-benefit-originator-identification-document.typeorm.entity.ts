@@ -4,7 +4,7 @@ import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema
 import { SurvivorPensionAnalysisBenefitOriginatorIdentificationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/survivor-pension-analysis-benefit-originator-identification.typeorm.entity';
 
 @Entity({
-  name: 'survivor_pension_analysis_benefit_originator_identification_document',
+  name: 'spa_benefit_originator_identification_document',
 })
 export class SurvivorPensionAnalysisBenefitOriginatorIdentificationDocumentTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'document_type', type: 'varchar', length: 255 })

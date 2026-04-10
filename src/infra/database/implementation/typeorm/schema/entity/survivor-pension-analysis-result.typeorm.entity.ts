@@ -5,7 +5,7 @@ import { SurvivorPensionAnalysisResultDependentPensionAnalysisTypeormEntity } fr
 import { SurvivorPensionAnalysisResultRetirementRuleTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/survivor-pension-analysis-result-retirement-rule.typeorm.entity';
 import { SurvivorPensionAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/survivor-pension-analysis.typeorm.entity';
 
-@Entity({ name: 'survivor_pension_analysis_result' })
+@Entity({ name: 'spa_result' })
 export class SurvivorPensionAnalysisResultTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'is_insured_status_confirmed',

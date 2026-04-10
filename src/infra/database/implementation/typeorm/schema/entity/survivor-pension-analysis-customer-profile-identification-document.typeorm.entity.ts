@@ -4,7 +4,7 @@ import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema
 import { SurvivorPensionAnalysisCustomerProfileIdentificationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/survivor-pension-analysis-customer-profile-identification.typeorm.entity';
 
 @Entity({
-  name: 'survivor_pension_analysis_customer_profile_identification_document',
+  name: 'spa_customer_profile_identification_document',
 })
 export class SurvivorPensionAnalysisCustomerProfileIdentificationDocumentTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'document_type', type: 'varchar', length: 255 })
