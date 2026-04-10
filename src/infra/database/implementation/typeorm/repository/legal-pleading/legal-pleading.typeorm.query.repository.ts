@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Constructor } from 'type-fest';
-import { FindOptionsWhere, Like, Repository, Between } from 'typeorm';
+import { FindOptionsWhere, In, Like, Repository, Between } from 'typeorm';
 
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { NotFoundError } from '@core/error/not-found.error';
@@ -574,33 +574,45 @@ export class LegalPleadingTypeormQueryRepository
 
     const data = await this.list(listData, {
       where,
+      select: { id: true },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+
+    if (data.resource.length === 0) {
+      return new ListDataOutputModel({
+        resource: [],
+        page: data.page,
+        totalItems: data.totalItems,
+        limit: data.limit,
+      });
+    }
+
+    const ids = data.resource.map((r) => r.id);
+
+    const items = await this.repository.find({
+      where: { id: In(ids) },
+      withDeleted: true,
       relations: {
         analysisToolClient: {
           analysisToolClientInssBenefit: true,
           analysisToolClientLegalProceeding: true,
           createdBy: {
-            customer: {
-              authIdentity: true,
-            },
+            customer: { authIdentity: true },
             organization: true,
           },
           updatedBy: {
-            customer: {
-              authIdentity: true,
-            },
+            customer: { authIdentity: true },
             organization: true,
           },
         },
         createdBy: {
-          customer: {
-            authIdentity: true,
-          },
+          customer: { authIdentity: true },
           organization: true,
         },
         updatedBy: {
-          customer: {
-            authIdentity: true,
-          },
+          customer: { authIdentity: true },
           organization: true,
         },
         legalPleadingDocument: true,
@@ -608,14 +620,12 @@ export class LegalPleadingTypeormQueryRepository
         legalPleadingResult: true,
         legalPleadingHistory: true,
       },
-      order: {
-        createdAt: 'DESC',
-      },
+      order: { createdAt: 'DESC' },
     });
 
     return new ListDataOutputModel({
       resource: this.mapperGateway.mapArray(
-        data.resource,
+        items,
         LegalPleadingTypeormEntity,
         GetLegalPleadingWithFullRelationsQueryResult,
       ),
