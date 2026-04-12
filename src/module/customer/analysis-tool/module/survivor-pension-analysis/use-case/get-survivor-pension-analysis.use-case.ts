@@ -147,7 +147,7 @@ export class GetSurvivorPensionAnalysisUseCase {
         });
         fileIndex += period.documents.length;
         return GetSurvivorPensionAnalysisCompleteDwhPeriodResponseDto.build({
-          survivorPensionAnalysisDwhpId: period.id,
+          survivorPensionAnalysisDeceasedWorkHistoryPeriodId: period.id,
           survivorPensionAnalysisDeceasedWorkHistoryId:
             period.survivorPensionAnalysisDeceasedWorkHistoryId,
           ...(period.startDate !== null && { startDate: period.startDate }),
@@ -188,7 +188,7 @@ export class GetSurvivorPensionAnalysisUseCase {
       });
       fileIndex += dbd.documents.length;
       return GetSurvivorPensionAnalysisCompleteDbdResponseDto.build({
-        survivorPensionAnalysisDbdId: dbd.id,
+        survivorPensionAnalysisDeceasedBenefitDependentsId: dbd.id,
         survivorPensionAnalysisId: dbd.survivorPensionAnalysisId,
         ...(dbd.dependentFullName !== null && {
           dependentFullName: dbd.dependentFullName,
@@ -214,7 +214,7 @@ export class GetSurvivorPensionAnalysisUseCase {
     const cpiDto =
       spaData.customerProfileIdentification !== null
         ? GetSurvivorPensionAnalysisCompleteCpiResponseDto.build({
-            survivorPensionAnalysisCpiId:
+            survivorPensionAnalysisCustomerProfileIdentificationId:
               spaData.customerProfileIdentification.id,
             survivorPensionAnalysisId:
               spaData.customerProfileIdentification.survivorPensionAnalysisId,
@@ -255,7 +255,7 @@ export class GetSurvivorPensionAnalysisUseCase {
     const boiDto =
       spaData.benefitOriginatorIdentification !== null
         ? GetSurvivorPensionAnalysisCompleteBoiResponseDto.build({
-            survivorPensionAnalysisBoiId:
+            survivorPensionAnalysisBenefitOriginatorIdentificationId:
               spaData.benefitOriginatorIdentification.id,
             survivorPensionAnalysisId:
               spaData.benefitOriginatorIdentification.survivorPensionAnalysisId,
@@ -289,7 +289,7 @@ export class GetSurvivorPensionAnalysisUseCase {
     const dwhDto =
       spaData.deceasedWorkHistory !== null
         ? GetSurvivorPensionAnalysisCompleteDwhResponseDto.build({
-            survivorPensionAnalysisDwhId: spaData.deceasedWorkHistory.id,
+            survivorPensionAnalysisDeceasedWorkHistoryId: spaData.deceasedWorkHistory.id,
             survivorPensionAnalysisId:
               spaData.deceasedWorkHistory.survivorPensionAnalysisId,
             ...(spaData.deceasedWorkHistory.startDate !== null && {
@@ -330,7 +330,7 @@ export class GetSurvivorPensionAnalysisUseCase {
             }),
             retirementRules: spaData.result.retirementRules.map((rr) =>
               GetSurvivorPensionAnalysisResultRetirementRuleResponseDto.build({
-                survivorPensionAnalysisRrId: rr.id,
+                survivorPensionAnalysisResultRetirementRuleId: rr.id,
                 survivorPensionAnalysisResultId:
                   rr.survivorPensionAnalysisResultId,
                 ...(rr.ruleName !== null && { ruleName: rr.ruleName }),
@@ -358,7 +358,7 @@ export class GetSurvivorPensionAnalysisUseCase {
               spaData.result.dependentPensionAnalyses.map((dpa) =>
                 GetSurvivorPensionAnalysisResultDependentPensionAnalysisResponseDto.build(
                   {
-                    survivorPensionAnalysisDpaId: dpa.id,
+                    survivorPensionAnalysisResultDependentPensionAnalysisId: dpa.id,
                     survivorPensionAnalysisResultId:
                       dpa.survivorPensionAnalysisResultId,
                     ...(dpa.dependentName !== null && {

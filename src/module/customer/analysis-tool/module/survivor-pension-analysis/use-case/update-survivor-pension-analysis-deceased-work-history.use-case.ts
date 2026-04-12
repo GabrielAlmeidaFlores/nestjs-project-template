@@ -10,7 +10,7 @@ import { SurvivorPensionAnalysisDeceasedWorkHistoryEntity } from '@module/custom
 import { SurvivorPensionAnalysisDeceasedWorkHistoryId } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-deceased-work-history/value-object/survivor-pension-analysis-deceased-work-history-id/survivor-pension-analysis-deceased-work-history-id.value-object';
 import { UpdateSurvivorPensionAnalysisDeceasedWorkHistoryRequestDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/request/update-survivor-pension-analysis-deceased-work-history.request.dto';
 import { UpdateSurvivorPensionAnalysisDeceasedWorkHistoryResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/update-survivor-pension-analysis-deceased-work-history.response.dto';
-import { SurvivorPensionAnalysisDwhNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-deceased-work-history-not-found.error';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-deceased-work-history-not-found.error';
 import { SurvivorPensionAnalysisNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -36,7 +36,7 @@ export class UpdateSurvivorPensionAnalysisDeceasedWorkHistoryUseCase {
   public async execute(
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
-    survivorPensionAnalysisDwhId: SurvivorPensionAnalysisDeceasedWorkHistoryId,
+    survivorPensionAnalysisDeceasedWorkHistoryId: SurvivorPensionAnalysisDeceasedWorkHistoryId,
     dto: UpdateSurvivorPensionAnalysisDeceasedWorkHistoryRequestDto,
   ): Promise<UpdateSurvivorPensionAnalysisDeceasedWorkHistoryResponseDto> {
     const organizationMember =
@@ -51,8 +51,8 @@ export class UpdateSurvivorPensionAnalysisDeceasedWorkHistoryUseCase {
 
     const dwhQueryResult =
       await this.survivorPensionAnalysisDeceasedWorkHistoryQueryRepositoryGateway.findOneByIdOrFail(
-        survivorPensionAnalysisDwhId,
-        SurvivorPensionAnalysisDwhNotFoundError,
+        survivorPensionAnalysisDeceasedWorkHistoryId,
+        SurvivorPensionAnalysisDeceasedWorkHistoryNotFoundError,
       );
 
     await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsBySurvivorPensionAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
@@ -63,7 +63,7 @@ export class UpdateSurvivorPensionAnalysisDeceasedWorkHistoryUseCase {
     );
 
     const updatedDwh = new SurvivorPensionAnalysisDeceasedWorkHistoryEntity({
-      id: survivorPensionAnalysisDwhId,
+      id: survivorPensionAnalysisDeceasedWorkHistoryId,
       survivorPensionAnalysisId: dwhQueryResult.survivorPensionAnalysisId,
       startDate: dto.startDate ?? dwhQueryResult.startDate,
       endDate: dto.endDate ?? dwhQueryResult.endDate,
@@ -71,7 +71,7 @@ export class UpdateSurvivorPensionAnalysisDeceasedWorkHistoryUseCase {
 
     const txn = await this.baseTransactionRepositoryGateway.execute([
       this.survivorPensionAnalysisDeceasedWorkHistoryCommandRepositoryGateway.updateSurvivorPensionAnalysisDeceasedWorkHistory(
-        survivorPensionAnalysisDwhId,
+        survivorPensionAnalysisDeceasedWorkHistoryId,
         updatedDwh,
       ),
     ]);
@@ -79,7 +79,7 @@ export class UpdateSurvivorPensionAnalysisDeceasedWorkHistoryUseCase {
     await txn.commit();
 
     return UpdateSurvivorPensionAnalysisDeceasedWorkHistoryResponseDto.build({
-      survivorPensionAnalysisDwhId,
+      survivorPensionAnalysisDeceasedWorkHistoryId,
     });
   }
 }

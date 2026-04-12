@@ -8,7 +8,7 @@ import { SurvivorPensionAnalysisCustomerProfileIdentificationCommandRepositoryGa
 import { SurvivorPensionAnalysisCustomerProfileIdentificationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-customer-profile-identification/query/survivor-pension-analysis-customer-profile-identification.query.repository.gateway';
 import { SurvivorPensionAnalysisCustomerProfileIdentificationId } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-customer-profile-identification/value-object/survivor-pension-analysis-customer-profile-identification-id/survivor-pension-analysis-customer-profile-identification-id.value-object';
 import { DeleteSurvivorPensionAnalysisCustomerProfileIdentificationResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/delete-survivor-pension-analysis-customer-profile-identification.response.dto';
-import { SurvivorPensionAnalysisCpiNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-customer-profile-identification-not-found.error';
+import { SurvivorPensionAnalysisCustomerProfileIdentificationNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-customer-profile-identification-not-found.error';
 import { SurvivorPensionAnalysisNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -38,7 +38,7 @@ export class DeleteSurvivorPensionAnalysisCustomerProfileIdentificationUseCase {
   public async execute(
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
-    survivorPensionAnalysisCpiId: SurvivorPensionAnalysisCustomerProfileIdentificationId,
+    survivorPensionAnalysisCustomerProfileIdentificationId: SurvivorPensionAnalysisCustomerProfileIdentificationId,
   ): Promise<DeleteSurvivorPensionAnalysisCustomerProfileIdentificationResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
@@ -52,8 +52,8 @@ export class DeleteSurvivorPensionAnalysisCustomerProfileIdentificationUseCase {
 
     const cpiQueryResult =
       await this.survivorPensionAnalysisCustomerProfileIdentificationQueryRepositoryGateway.findOneByIdOrFail(
-        survivorPensionAnalysisCpiId,
-        SurvivorPensionAnalysisCpiNotFoundError,
+        survivorPensionAnalysisCustomerProfileIdentificationId,
+        SurvivorPensionAnalysisCustomerProfileIdentificationNotFoundError,
       );
 
     await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsBySurvivorPensionAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
@@ -65,14 +65,14 @@ export class DeleteSurvivorPensionAnalysisCustomerProfileIdentificationUseCase {
 
     const txn = await this.baseTransactionRepositoryGateway.execute([
       this.survivorPensionAnalysisCustomerProfileIdentificationCommandRepositoryGateway.deleteSurvivorPensionAnalysisCustomerProfileIdentification(
-        survivorPensionAnalysisCpiId,
+        survivorPensionAnalysisCustomerProfileIdentificationId,
       ),
     ]);
 
     await txn.commit();
 
     return DeleteSurvivorPensionAnalysisCustomerProfileIdentificationResponseDto.build(
-      { survivorPensionAnalysisCpiId },
+      { survivorPensionAnalysisCustomerProfileIdentificationId },
     );
   }
 }

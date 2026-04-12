@@ -28,7 +28,7 @@ export class DeleteSurvivorPensionAnalysisResultDependentPensionAnalysisUseCase 
   public async execute(
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
-    survivorPensionAnalysisDpaId: SurvivorPensionAnalysisResultDependentPensionAnalysisId,
+    survivorPensionAnalysisResultDependentPensionAnalysisId: SurvivorPensionAnalysisResultDependentPensionAnalysisId,
   ): Promise<DeleteSurvivorPensionAnalysisResultDependentPensionAnalysisResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
@@ -42,7 +42,7 @@ export class DeleteSurvivorPensionAnalysisResultDependentPensionAnalysisUseCase 
 
     const txn = await this.baseTransactionRepositoryGateway.execute([
       this.survivorPensionAnalysisResultDependentPensionAnalysisCommandRepositoryGateway.deleteSurvivorPensionAnalysisResultDependentPensionAnalysis(
-        survivorPensionAnalysisDpaId,
+        survivorPensionAnalysisResultDependentPensionAnalysisId,
       ),
     ]);
 
@@ -50,7 +50,7 @@ export class DeleteSurvivorPensionAnalysisResultDependentPensionAnalysisUseCase 
 
     return DeleteSurvivorPensionAnalysisResultDependentPensionAnalysisResponseDto.build(
       {
-        survivorPensionAnalysisDpaId,
+        survivorPensionAnalysisResultDependentPensionAnalysisId,
       },
     );
   }

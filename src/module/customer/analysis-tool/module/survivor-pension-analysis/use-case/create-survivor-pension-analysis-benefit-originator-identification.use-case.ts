@@ -83,7 +83,7 @@ export class CreateSurvivorPensionAnalysisBenefitOriginatorIdentificationUseCase
     await txn.commit();
 
     return CreateSurvivorPensionAnalysisBenefitOriginatorIdentificationResponseDto.build(
-      { survivorPensionAnalysisBoiId: boiEntity.id },
+      { survivorPensionAnalysisBenefitOriginatorIdentificationId: boiEntity.id },
     );
   }
 }

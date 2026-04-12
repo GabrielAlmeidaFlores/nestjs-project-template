@@ -8,7 +8,7 @@ export class PutSurvivorPensionAnalysisDeceasedWorkHistoryPeriodDocumentsRespons
   @ResponseDtoValueObjectProperty(
     SurvivorPensionAnalysisDeceasedWorkHistoryPeriodId,
   )
-  public survivorPensionAnalysisDwhpId: SurvivorPensionAnalysisDeceasedWorkHistoryPeriodId;
+  public survivorPensionAnalysisDeceasedWorkHistoryPeriodId: SurvivorPensionAnalysisDeceasedWorkHistoryPeriodId;
 
   protected override readonly _type =
     PutSurvivorPensionAnalysisDeceasedWorkHistoryPeriodDocumentsResponseDto.name;

@@ -6,7 +6,7 @@ import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/
 import { SurvivorPensionAnalysisCustomerProfileIdentificationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-customer-profile-identification/query/survivor-pension-analysis-customer-profile-identification.query.repository.gateway';
 import { SurvivorPensionAnalysisCustomerProfileIdentificationId } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-customer-profile-identification/value-object/survivor-pension-analysis-customer-profile-identification-id/survivor-pension-analysis-customer-profile-identification-id.value-object';
 import { GetSurvivorPensionAnalysisCustomerProfileIdentificationResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/get-survivor-pension-analysis-customer-profile-identification.response.dto';
-import { SurvivorPensionAnalysisCpiNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-customer-profile-identification-not-found.error';
+import { SurvivorPensionAnalysisCustomerProfileIdentificationNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-customer-profile-identification-not-found.error';
 import { SurvivorPensionAnalysisNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -30,7 +30,7 @@ export class GetSurvivorPensionAnalysisCustomerProfileIdentificationUseCase {
   public async execute(
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
-    survivorPensionAnalysisCpiId: SurvivorPensionAnalysisCustomerProfileIdentificationId,
+    survivorPensionAnalysisCustomerProfileIdentificationId: SurvivorPensionAnalysisCustomerProfileIdentificationId,
   ): Promise<GetSurvivorPensionAnalysisCustomerProfileIdentificationResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
@@ -44,8 +44,8 @@ export class GetSurvivorPensionAnalysisCustomerProfileIdentificationUseCase {
 
     const cpiResult =
       await this.survivorPensionAnalysisCustomerProfileIdentificationQueryRepositoryGateway.findOneByIdOrFail(
-        survivorPensionAnalysisCpiId,
-        SurvivorPensionAnalysisCpiNotFoundError,
+        survivorPensionAnalysisCustomerProfileIdentificationId,
+        SurvivorPensionAnalysisCustomerProfileIdentificationNotFoundError,
       );
 
     await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsBySurvivorPensionAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
@@ -57,7 +57,7 @@ export class GetSurvivorPensionAnalysisCustomerProfileIdentificationUseCase {
 
     return GetSurvivorPensionAnalysisCustomerProfileIdentificationResponseDto.build(
       {
-        survivorPensionAnalysisCpiId: cpiResult.id,
+        survivorPensionAnalysisCustomerProfileIdentificationId: cpiResult.id,
         survivorPensionAnalysisId: cpiResult.survivorPensionAnalysisId,
         ...(cpiResult.analysisToolClientId !== null && {
           analysisToolClientId: cpiResult.analysisToolClientId,

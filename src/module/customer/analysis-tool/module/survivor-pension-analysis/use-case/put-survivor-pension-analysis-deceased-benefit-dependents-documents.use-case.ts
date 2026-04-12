@@ -11,7 +11,7 @@ import { SurvivorPensionAnalysisDeceasedBenefitDependentsId } from '@module/cust
 import { SurvivorPensionAnalysisDeceasedBenefitDependentsDocumentEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-deceased-benefit-dependents-document/survivor-pension-analysis-deceased-benefit-dependents-document.entity';
 import { PutSurvivorPensionAnalysisDeceasedBenefitDependentsDocumentsRequestDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/request/put-survivor-pension-analysis-deceased-benefit-dependents-documents.request.dto';
 import { PutSurvivorPensionAnalysisDeceasedBenefitDependentsDocumentsResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/put-survivor-pension-analysis-deceased-benefit-dependents-documents.response.dto';
-import { SurvivorPensionAnalysisDbdNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-deceased-benefit-dependents-not-found.error';
+import { SurvivorPensionAnalysisDeceasedBenefitDependentsNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-deceased-benefit-dependents-not-found.error';
 import { SurvivorPensionAnalysisNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -44,7 +44,7 @@ export class PutSurvivorPensionAnalysisDeceasedBenefitDependentsDocumentsUseCase
   public async execute(
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
-    survivorPensionAnalysisDbdId: SurvivorPensionAnalysisDeceasedBenefitDependentsId,
+    survivorPensionAnalysisDeceasedBenefitDependentsId: SurvivorPensionAnalysisDeceasedBenefitDependentsId,
     dto: PutSurvivorPensionAnalysisDeceasedBenefitDependentsDocumentsRequestDto,
   ): Promise<PutSurvivorPensionAnalysisDeceasedBenefitDependentsDocumentsResponseDto> {
     const organizationMember =
@@ -59,8 +59,8 @@ export class PutSurvivorPensionAnalysisDeceasedBenefitDependentsDocumentsUseCase
 
     const dbdResult =
       await this.survivorPensionAnalysisDeceasedBenefitDependentsQueryRepositoryGateway.findOneByIdOrFail(
-        survivorPensionAnalysisDbdId,
-        SurvivorPensionAnalysisDbdNotFoundError,
+        survivorPensionAnalysisDeceasedBenefitDependentsId,
+        SurvivorPensionAnalysisDeceasedBenefitDependentsNotFoundError,
       );
 
     await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsBySurvivorPensionAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
@@ -89,7 +89,7 @@ export class PutSurvivorPensionAnalysisDeceasedBenefitDependentsDocumentsUseCase
       (uploaded) =>
         new SurvivorPensionAnalysisDeceasedBenefitDependentsDocumentEntity({
           survivorPensionAnalysisDeceasedBenefitDependentsId:
-            survivorPensionAnalysisDbdId,
+            survivorPensionAnalysisDeceasedBenefitDependentsId,
           documentType: uploaded.documentType,
           documentName: uploaded.documentName,
         }),
@@ -97,7 +97,7 @@ export class PutSurvivorPensionAnalysisDeceasedBenefitDependentsDocumentsUseCase
 
     const txn = await this.baseTransactionRepositoryGateway.execute([
       this.survivorPensionAnalysisDeceasedBenefitDependentsDocumentCommandRepositoryGateway.deleteAllBySurvivorPensionAnalysisDeceasedBenefitDependentsId(
-        survivorPensionAnalysisDbdId,
+        survivorPensionAnalysisDeceasedBenefitDependentsId,
       ),
       ...documentEntities.map((entity) =>
         this.survivorPensionAnalysisDeceasedBenefitDependentsDocumentCommandRepositoryGateway.createSurvivorPensionAnalysisDeceasedBenefitDependentsDocument(
@@ -109,7 +109,7 @@ export class PutSurvivorPensionAnalysisDeceasedBenefitDependentsDocumentsUseCase
     await txn.commit();
 
     return PutSurvivorPensionAnalysisDeceasedBenefitDependentsDocumentsResponseDto.build(
-      { survivorPensionAnalysisDbdId },
+      { survivorPensionAnalysisDeceasedBenefitDependentsId },
     );
   }
 }

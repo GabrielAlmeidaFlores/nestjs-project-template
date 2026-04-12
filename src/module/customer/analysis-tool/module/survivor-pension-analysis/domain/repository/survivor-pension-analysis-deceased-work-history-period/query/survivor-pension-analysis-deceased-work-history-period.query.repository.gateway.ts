@@ -5,7 +5,7 @@ import type { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodId } from '@module
 import type { ConstructorType } from '@shared/system/type/constructor.type';
 
 export abstract class SurvivorPensionAnalysisDeceasedWorkHistoryPeriodQueryRepositoryGateway {
-  public abstract findManyBySurvivorPensionAnalysisDeceasedWorkHistoryId(
+  public abstract listBySurvivorPensionAnalysisDeceasedWorkHistoryId(
     survivorPensionAnalysisDeceasedWorkHistoryId: SurvivorPensionAnalysisDeceasedWorkHistoryId,
   ): Promise<GetSurvivorPensionAnalysisDeceasedWorkHistoryPeriodQueryResult[]>;
 

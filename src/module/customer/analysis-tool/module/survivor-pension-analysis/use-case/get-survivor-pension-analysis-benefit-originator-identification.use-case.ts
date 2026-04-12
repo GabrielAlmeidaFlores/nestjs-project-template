@@ -6,7 +6,7 @@ import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/
 import { SurvivorPensionAnalysisBenefitOriginatorIdentificationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-benefit-originator-identification/query/survivor-pension-analysis-benefit-originator-identification.query.repository.gateway';
 import { SurvivorPensionAnalysisBenefitOriginatorIdentificationId } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-benefit-originator-identification/value-object/survivor-pension-analysis-benefit-originator-identification-id/survivor-pension-analysis-benefit-originator-identification-id.value-object';
 import { GetSurvivorPensionAnalysisBenefitOriginatorIdentificationResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/get-survivor-pension-analysis-benefit-originator-identification.response.dto';
-import { SurvivorPensionAnalysisBoiNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-benefit-originator-identification-not-found.error';
+import { SurvivorPensionAnalysisBenefitOriginatorIdentificationNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-benefit-originator-identification-not-found.error';
 import { SurvivorPensionAnalysisNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -30,7 +30,7 @@ export class GetSurvivorPensionAnalysisBenefitOriginatorIdentificationUseCase {
   public async execute(
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
-    survivorPensionAnalysisBoiId: SurvivorPensionAnalysisBenefitOriginatorIdentificationId,
+    survivorPensionAnalysisBenefitOriginatorIdentificationId: SurvivorPensionAnalysisBenefitOriginatorIdentificationId,
   ): Promise<GetSurvivorPensionAnalysisBenefitOriginatorIdentificationResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
@@ -44,8 +44,8 @@ export class GetSurvivorPensionAnalysisBenefitOriginatorIdentificationUseCase {
 
     const boiResult =
       await this.survivorPensionAnalysisBenefitOriginatorIdentificationQueryRepositoryGateway.findOneByIdOrFail(
-        survivorPensionAnalysisBoiId,
-        SurvivorPensionAnalysisBoiNotFoundError,
+        survivorPensionAnalysisBenefitOriginatorIdentificationId,
+        SurvivorPensionAnalysisBenefitOriginatorIdentificationNotFoundError,
       );
 
     await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsBySurvivorPensionAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
@@ -57,7 +57,7 @@ export class GetSurvivorPensionAnalysisBenefitOriginatorIdentificationUseCase {
 
     return GetSurvivorPensionAnalysisBenefitOriginatorIdentificationResponseDto.build(
       {
-        survivorPensionAnalysisBoiId: boiResult.id,
+        survivorPensionAnalysisBenefitOriginatorIdentificationId: boiResult.id,
         survivorPensionAnalysisId: boiResult.survivorPensionAnalysisId,
         ...(boiResult.analysisToolClientId !== null && {
           analysisToolClientId: boiResult.analysisToolClientId,

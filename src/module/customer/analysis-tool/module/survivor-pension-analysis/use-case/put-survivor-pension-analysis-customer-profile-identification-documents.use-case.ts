@@ -11,7 +11,7 @@ import { SurvivorPensionAnalysisId } from '@module/customer/analysis-tool/module
 import { SurvivorPensionAnalysisCustomerProfileIdentificationDocumentEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-customer-profile-identification-document/survivor-pension-analysis-customer-profile-identification-document.entity';
 import { PutSurvivorPensionAnalysisCustomerProfileIdentificationDocumentsRequestDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/request/put-survivor-pension-analysis-customer-profile-identification-documents.request.dto';
 import { PutSurvivorPensionAnalysisCustomerProfileIdentificationDocumentsResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/put-survivor-pension-analysis-customer-profile-identification-documents.response.dto';
-import { SurvivorPensionAnalysisCpiNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-customer-profile-identification-not-found.error';
+import { SurvivorPensionAnalysisCustomerProfileIdentificationNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-customer-profile-identification-not-found.error';
 import { SurvivorPensionAnalysisNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -70,7 +70,7 @@ export class PutSurvivorPensionAnalysisCustomerProfileIdentificationDocumentsUse
       );
 
     if (cpiResult === null) {
-      throw new SurvivorPensionAnalysisCpiNotFoundError();
+      throw new SurvivorPensionAnalysisCustomerProfileIdentificationNotFoundError();
     }
 
     const uploadedDocuments = await Promise.all(
@@ -111,7 +111,7 @@ export class PutSurvivorPensionAnalysisCustomerProfileIdentificationDocumentsUse
     await txn.commit();
 
     return PutSurvivorPensionAnalysisCustomerProfileIdentificationDocumentsResponseDto.build(
-      { survivorPensionAnalysisCpiId: cpiResult.id },
+      { survivorPensionAnalysisCustomerProfileIdentificationId: cpiResult.id },
     );
   }
 }

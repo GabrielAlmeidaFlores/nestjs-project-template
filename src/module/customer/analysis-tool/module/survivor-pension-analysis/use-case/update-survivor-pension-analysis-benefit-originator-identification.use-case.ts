@@ -10,7 +10,7 @@ import { SurvivorPensionAnalysisBenefitOriginatorIdentificationEntity } from '@m
 import { SurvivorPensionAnalysisBenefitOriginatorIdentificationId } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-benefit-originator-identification/value-object/survivor-pension-analysis-benefit-originator-identification-id/survivor-pension-analysis-benefit-originator-identification-id.value-object';
 import { UpdateSurvivorPensionAnalysisBenefitOriginatorIdentificationRequestDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/request/update-survivor-pension-analysis-benefit-originator-identification.request.dto';
 import { UpdateSurvivorPensionAnalysisBenefitOriginatorIdentificationResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/update-survivor-pension-analysis-benefit-originator-identification.response.dto';
-import { SurvivorPensionAnalysisBoiNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-benefit-originator-identification-not-found.error';
+import { SurvivorPensionAnalysisBenefitOriginatorIdentificationNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-benefit-originator-identification-not-found.error';
 import { SurvivorPensionAnalysisNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -40,7 +40,7 @@ export class UpdateSurvivorPensionAnalysisBenefitOriginatorIdentificationUseCase
   public async execute(
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
-    survivorPensionAnalysisBoiId: SurvivorPensionAnalysisBenefitOriginatorIdentificationId,
+    survivorPensionAnalysisBenefitOriginatorIdentificationId: SurvivorPensionAnalysisBenefitOriginatorIdentificationId,
     dto: UpdateSurvivorPensionAnalysisBenefitOriginatorIdentificationRequestDto,
   ): Promise<UpdateSurvivorPensionAnalysisBenefitOriginatorIdentificationResponseDto> {
     const organizationMember =
@@ -55,8 +55,8 @@ export class UpdateSurvivorPensionAnalysisBenefitOriginatorIdentificationUseCase
 
     const boiQueryResult =
       await this.survivorPensionAnalysisBenefitOriginatorIdentificationQueryRepositoryGateway.findOneByIdOrFail(
-        survivorPensionAnalysisBoiId,
-        SurvivorPensionAnalysisBoiNotFoundError,
+        survivorPensionAnalysisBenefitOriginatorIdentificationId,
+        SurvivorPensionAnalysisBenefitOriginatorIdentificationNotFoundError,
       );
 
     await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsBySurvivorPensionAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
@@ -68,7 +68,7 @@ export class UpdateSurvivorPensionAnalysisBenefitOriginatorIdentificationUseCase
 
     const updatedBoi =
       new SurvivorPensionAnalysisBenefitOriginatorIdentificationEntity({
-        id: survivorPensionAnalysisBoiId,
+        id: survivorPensionAnalysisBenefitOriginatorIdentificationId,
         survivorPensionAnalysisId: boiQueryResult.survivorPensionAnalysisId,
         analysisToolClientId:
           dto.analysisToolClientId ?? boiQueryResult.analysisToolClientId,
@@ -82,7 +82,7 @@ export class UpdateSurvivorPensionAnalysisBenefitOriginatorIdentificationUseCase
 
     const txn = await this.baseTransactionRepositoryGateway.execute([
       this.survivorPensionAnalysisBenefitOriginatorIdentificationCommandRepositoryGateway.updateSurvivorPensionAnalysisBenefitOriginatorIdentification(
-        survivorPensionAnalysisBoiId,
+        survivorPensionAnalysisBenefitOriginatorIdentificationId,
         updatedBoi,
       ),
     ]);
@@ -90,7 +90,7 @@ export class UpdateSurvivorPensionAnalysisBenefitOriginatorIdentificationUseCase
     await txn.commit();
 
     return UpdateSurvivorPensionAnalysisBenefitOriginatorIdentificationResponseDto.build(
-      { survivorPensionAnalysisBoiId },
+      { survivorPensionAnalysisBenefitOriginatorIdentificationId },
     );
   }
 }

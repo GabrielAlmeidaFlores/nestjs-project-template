@@ -25,7 +25,7 @@ export class SurvivorPensionAnalysisResultRetirementRuleTypeormQueryRepository
     super(repository);
   }
 
-  public async findManyBySurvivorPensionAnalysisResultId(
+  public async listBySurvivorPensionAnalysisResultId(
     id: SurvivorPensionAnalysisResultId,
   ): Promise<GetSurvivorPensionAnalysisResultRetirementRuleQueryResult[]> {
     const data = await this.find({

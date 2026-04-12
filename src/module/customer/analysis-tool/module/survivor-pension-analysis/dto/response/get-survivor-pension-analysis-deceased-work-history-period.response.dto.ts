@@ -13,7 +13,7 @@ export class GetSurvivorPensionAnalysisDeceasedWorkHistoryPeriodResponseDto exte
   @ResponseDtoValueObjectProperty(
     SurvivorPensionAnalysisDeceasedWorkHistoryPeriodId,
   )
-  public survivorPensionAnalysisDwhpId: SurvivorPensionAnalysisDeceasedWorkHistoryPeriodId;
+  public survivorPensionAnalysisDeceasedWorkHistoryPeriodId: SurvivorPensionAnalysisDeceasedWorkHistoryPeriodId;
 
   @ResponseDtoValueObjectProperty(SurvivorPensionAnalysisDeceasedWorkHistoryId)
   public survivorPensionAnalysisDeceasedWorkHistoryId: SurvivorPensionAnalysisDeceasedWorkHistoryId;

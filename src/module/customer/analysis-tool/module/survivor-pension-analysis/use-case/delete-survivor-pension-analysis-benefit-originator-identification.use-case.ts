@@ -8,7 +8,7 @@ import { SurvivorPensionAnalysisBenefitOriginatorIdentificationCommandRepository
 import { SurvivorPensionAnalysisBenefitOriginatorIdentificationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-benefit-originator-identification/query/survivor-pension-analysis-benefit-originator-identification.query.repository.gateway';
 import { SurvivorPensionAnalysisBenefitOriginatorIdentificationId } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-benefit-originator-identification/value-object/survivor-pension-analysis-benefit-originator-identification-id/survivor-pension-analysis-benefit-originator-identification-id.value-object';
 import { DeleteSurvivorPensionAnalysisBenefitOriginatorIdentificationResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/delete-survivor-pension-analysis-benefit-originator-identification.response.dto';
-import { SurvivorPensionAnalysisBoiNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-benefit-originator-identification-not-found.error';
+import { SurvivorPensionAnalysisBenefitOriginatorIdentificationNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-benefit-originator-identification-not-found.error';
 import { SurvivorPensionAnalysisNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -38,7 +38,7 @@ export class DeleteSurvivorPensionAnalysisBenefitOriginatorIdentificationUseCase
   public async execute(
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
-    survivorPensionAnalysisBoiId: SurvivorPensionAnalysisBenefitOriginatorIdentificationId,
+    survivorPensionAnalysisBenefitOriginatorIdentificationId: SurvivorPensionAnalysisBenefitOriginatorIdentificationId,
   ): Promise<DeleteSurvivorPensionAnalysisBenefitOriginatorIdentificationResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
@@ -52,8 +52,8 @@ export class DeleteSurvivorPensionAnalysisBenefitOriginatorIdentificationUseCase
 
     const boiQueryResult =
       await this.survivorPensionAnalysisBenefitOriginatorIdentificationQueryRepositoryGateway.findOneByIdOrFail(
-        survivorPensionAnalysisBoiId,
-        SurvivorPensionAnalysisBoiNotFoundError,
+        survivorPensionAnalysisBenefitOriginatorIdentificationId,
+        SurvivorPensionAnalysisBenefitOriginatorIdentificationNotFoundError,
       );
 
     await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsBySurvivorPensionAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
@@ -65,14 +65,14 @@ export class DeleteSurvivorPensionAnalysisBenefitOriginatorIdentificationUseCase
 
     const txn = await this.baseTransactionRepositoryGateway.execute([
       this.survivorPensionAnalysisBenefitOriginatorIdentificationCommandRepositoryGateway.deleteSurvivorPensionAnalysisBenefitOriginatorIdentification(
-        survivorPensionAnalysisBoiId,
+        survivorPensionAnalysisBenefitOriginatorIdentificationId,
       ),
     ]);
 
     await txn.commit();
 
     return DeleteSurvivorPensionAnalysisBenefitOriginatorIdentificationResponseDto.build(
-      { survivorPensionAnalysisBoiId },
+      { survivorPensionAnalysisBenefitOriginatorIdentificationId },
     );
   }
 }

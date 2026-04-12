@@ -9,8 +9,8 @@ import { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodCommandRepositoryGatewa
 import { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-deceased-work-history-period/query/survivor-pension-analysis-deceased-work-history-period.query.repository.gateway';
 import { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodId } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-deceased-work-history-period/value-object/survivor-pension-analysis-deceased-work-history-period-id/survivor-pension-analysis-deceased-work-history-period-id.value-object';
 import { DeleteSurvivorPensionAnalysisDeceasedWorkHistoryPeriodResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/delete-survivor-pension-analysis-deceased-work-history-period.response.dto';
-import { SurvivorPensionAnalysisDwhNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-deceased-work-history-not-found.error';
-import { SurvivorPensionAnalysisDwhpNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-deceased-work-history-period-not-found.error';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-deceased-work-history-not-found.error';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-deceased-work-history-period-not-found.error';
 import { SurvivorPensionAnalysisNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -42,7 +42,7 @@ export class DeleteSurvivorPensionAnalysisDeceasedWorkHistoryPeriodUseCase {
   public async execute(
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
-    survivorPensionAnalysisDwhpId: SurvivorPensionAnalysisDeceasedWorkHistoryPeriodId,
+    survivorPensionAnalysisDeceasedWorkHistoryPeriodId: SurvivorPensionAnalysisDeceasedWorkHistoryPeriodId,
   ): Promise<DeleteSurvivorPensionAnalysisDeceasedWorkHistoryPeriodResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
@@ -56,14 +56,14 @@ export class DeleteSurvivorPensionAnalysisDeceasedWorkHistoryPeriodUseCase {
 
     const dwhpResult =
       await this.survivorPensionAnalysisDeceasedWorkHistoryPeriodQueryRepositoryGateway.findOneByIdOrFail(
-        survivorPensionAnalysisDwhpId,
-        SurvivorPensionAnalysisDwhpNotFoundError,
+        survivorPensionAnalysisDeceasedWorkHistoryPeriodId,
+        SurvivorPensionAnalysisDeceasedWorkHistoryPeriodNotFoundError,
       );
 
     const dwhResult =
       await this.survivorPensionAnalysisDeceasedWorkHistoryQueryRepositoryGateway.findOneByIdOrFail(
         dwhpResult.survivorPensionAnalysisDeceasedWorkHistoryId,
-        SurvivorPensionAnalysisDwhNotFoundError,
+        SurvivorPensionAnalysisDeceasedWorkHistoryNotFoundError,
       );
 
     await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsBySurvivorPensionAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
@@ -75,14 +75,14 @@ export class DeleteSurvivorPensionAnalysisDeceasedWorkHistoryPeriodUseCase {
 
     const txn = await this.baseTransactionRepositoryGateway.execute([
       this.survivorPensionAnalysisDeceasedWorkHistoryPeriodCommandRepositoryGateway.deleteSurvivorPensionAnalysisDeceasedWorkHistoryPeriod(
-        survivorPensionAnalysisDwhpId,
+        survivorPensionAnalysisDeceasedWorkHistoryPeriodId,
       ),
     ]);
 
     await txn.commit();
 
     return DeleteSurvivorPensionAnalysisDeceasedWorkHistoryPeriodResponseDto.build(
-      { survivorPensionAnalysisDwhpId },
+      { survivorPensionAnalysisDeceasedWorkHistoryPeriodId },
     );
   }
 }

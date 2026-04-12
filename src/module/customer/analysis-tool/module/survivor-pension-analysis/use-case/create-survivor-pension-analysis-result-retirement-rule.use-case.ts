@@ -90,7 +90,7 @@ export class CreateSurvivorPensionAnalysisResultRetirementRuleUseCase {
     await txn.commit();
 
     return CreateSurvivorPensionAnalysisResultRetirementRuleResponseDto.build({
-      survivorPensionAnalysisRrId: entity.id,
+      survivorPensionAnalysisResultRetirementRuleId: entity.id,
     });
   }
 }

@@ -31,7 +31,7 @@ export class SurvivorPensionAnalysisDeceasedWorkHistoryPeriodTypeormQueryReposit
     super(repository);
   }
 
-  public async findManyBySurvivorPensionAnalysisDeceasedWorkHistoryId(
+  public async listBySurvivorPensionAnalysisDeceasedWorkHistoryId(
     survivorPensionAnalysisDeceasedWorkHistoryId: SurvivorPensionAnalysisDeceasedWorkHistoryId,
   ): Promise<GetSurvivorPensionAnalysisDeceasedWorkHistoryPeriodQueryResult[]> {
     const data = await this.find({

@@ -26,7 +26,7 @@ export class DeleteSurvivorPensionAnalysisResultRetirementRuleUseCase {
   public async execute(
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
-    survivorPensionAnalysisRrId: SurvivorPensionAnalysisResultRetirementRuleId,
+    survivorPensionAnalysisResultRetirementRuleId: SurvivorPensionAnalysisResultRetirementRuleId,
   ): Promise<DeleteSurvivorPensionAnalysisResultRetirementRuleResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
@@ -40,14 +40,14 @@ export class DeleteSurvivorPensionAnalysisResultRetirementRuleUseCase {
 
     const txn = await this.baseTransactionRepositoryGateway.execute([
       this.survivorPensionAnalysisResultRetirementRuleCommandRepositoryGateway.deleteSurvivorPensionAnalysisResultRetirementRule(
-        survivorPensionAnalysisRrId,
+        survivorPensionAnalysisResultRetirementRuleId,
       ),
     ]);
 
     await txn.commit();
 
     return DeleteSurvivorPensionAnalysisResultRetirementRuleResponseDto.build({
-      survivorPensionAnalysisRrId,
+      survivorPensionAnalysisResultRetirementRuleId,
     });
   }
 }

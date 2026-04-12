@@ -13,7 +13,7 @@ export class GetSurvivorPensionAnalysisBenefitOriginatorIdentificationResponseDt
   @ResponseDtoValueObjectProperty(
     SurvivorPensionAnalysisBenefitOriginatorIdentificationId,
   )
-  public survivorPensionAnalysisBoiId: SurvivorPensionAnalysisBenefitOriginatorIdentificationId;
+  public survivorPensionAnalysisBenefitOriginatorIdentificationId: SurvivorPensionAnalysisBenefitOriginatorIdentificationId;
 
   @ResponseDtoValueObjectProperty(SurvivorPensionAnalysisId)
   public survivorPensionAnalysisId: SurvivorPensionAnalysisId;

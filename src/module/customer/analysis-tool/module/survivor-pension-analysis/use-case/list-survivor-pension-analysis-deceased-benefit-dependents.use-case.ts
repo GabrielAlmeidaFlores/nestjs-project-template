@@ -51,13 +51,13 @@ export class ListSurvivorPensionAnalysisDeceasedBenefitDependentsUseCase {
     );
 
     const dbdResults =
-      await this.survivorPensionAnalysisDeceasedBenefitDependentsQueryRepositoryGateway.findManyBySurvivorPensionAnalysisId(
+      await this.survivorPensionAnalysisDeceasedBenefitDependentsQueryRepositoryGateway.listBySurvivorPensionAnalysisId(
         survivorPensionAnalysisId,
       );
 
     const dependents = dbdResults.map((dbd) =>
       GetSurvivorPensionAnalysisDeceasedBenefitDependentsResponseDto.build({
-        survivorPensionAnalysisDbdId: dbd.id,
+        survivorPensionAnalysisDeceasedBenefitDependentsId: dbd.id,
         survivorPensionAnalysisId: dbd.survivorPensionAnalysisId,
         ...(dbd.dependentFullName !== null && {
           dependentFullName: dbd.dependentFullName,

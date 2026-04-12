@@ -86,7 +86,7 @@ export class CreateSurvivorPensionAnalysisCustomerProfileIdentificationUseCase {
     await txn.commit();
 
     return CreateSurvivorPensionAnalysisCustomerProfileIdentificationResponseDto.build(
-      { survivorPensionAnalysisCpiId: cpiEntity.id },
+      { survivorPensionAnalysisCustomerProfileIdentificationId: cpiEntity.id },
     );
   }
 }
