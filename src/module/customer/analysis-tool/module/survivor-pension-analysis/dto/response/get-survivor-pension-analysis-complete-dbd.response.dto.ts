@@ -14,7 +14,7 @@ export class GetSurvivorPensionAnalysisCompleteDbdResponseDto extends BaseBuilda
   @ResponseDtoValueObjectProperty(
     SurvivorPensionAnalysisDeceasedBenefitDependentsId,
   )
-  public survivorPensionAnalysisDbdId: SurvivorPensionAnalysisDeceasedBenefitDependentsId;
+  public survivorPensionAnalysisDeceasedBenefitDependentsId: SurvivorPensionAnalysisDeceasedBenefitDependentsId;
 
   @ResponseDtoValueObjectProperty(SurvivorPensionAnalysisId)
   public survivorPensionAnalysisId: SurvivorPensionAnalysisId;

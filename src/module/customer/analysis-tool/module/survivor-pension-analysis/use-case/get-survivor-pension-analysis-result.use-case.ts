@@ -80,7 +80,7 @@ export class GetSurvivorPensionAnalysisResultUseCase {
       }),
       retirementRules: result.retirementRules.map((rr) =>
         GetSurvivorPensionAnalysisResultRetirementRuleResponseDto.build({
-          survivorPensionAnalysisRrId: rr.id,
+          survivorPensionAnalysisResultRetirementRuleId: rr.id,
           survivorPensionAnalysisResultId: rr.survivorPensionAnalysisResultId,
           ...(rr.ruleName !== null && { ruleName: rr.ruleName }),
           ...(rr.isRequirementMet !== null && {
@@ -104,7 +104,7 @@ export class GetSurvivorPensionAnalysisResultUseCase {
       dependentPensionAnalyses: result.dependentPensionAnalyses.map((dpa) =>
         GetSurvivorPensionAnalysisResultDependentPensionAnalysisResponseDto.build(
           {
-            survivorPensionAnalysisDpaId: dpa.id,
+            survivorPensionAnalysisResultDependentPensionAnalysisId: dpa.id,
             survivorPensionAnalysisResultId:
               dpa.survivorPensionAnalysisResultId,
             ...(dpa.dependentName !== null && {

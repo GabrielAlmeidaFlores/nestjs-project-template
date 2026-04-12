@@ -13,7 +13,7 @@ import { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodEntity } from '@module/
 import { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodDocumentEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-deceased-work-history-period-document/survivor-pension-analysis-deceased-work-history-period-document.entity';
 import { PutSurvivorPensionAnalysisDeceasedWorkHistoryPeriodsRequestDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/request/put-survivor-pension-analysis-deceased-work-history-periods.request.dto';
 import { PutSurvivorPensionAnalysisDeceasedWorkHistoryPeriodsResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/put-survivor-pension-analysis-deceased-work-history-periods.response.dto';
-import { SurvivorPensionAnalysisDwhNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-deceased-work-history-not-found.error';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-deceased-work-history-not-found.error';
 import { SurvivorPensionAnalysisNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -48,7 +48,7 @@ export class PutSurvivorPensionAnalysisDeceasedWorkHistoryPeriodsUseCase {
   public async execute(
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
-    survivorPensionAnalysisDwhId: SurvivorPensionAnalysisDeceasedWorkHistoryId,
+    survivorPensionAnalysisDeceasedWorkHistoryId: SurvivorPensionAnalysisDeceasedWorkHistoryId,
     dto: PutSurvivorPensionAnalysisDeceasedWorkHistoryPeriodsRequestDto,
   ): Promise<PutSurvivorPensionAnalysisDeceasedWorkHistoryPeriodsResponseDto> {
     const organizationMember =
@@ -63,8 +63,8 @@ export class PutSurvivorPensionAnalysisDeceasedWorkHistoryPeriodsUseCase {
 
     const dwhResult =
       await this.survivorPensionAnalysisDeceasedWorkHistoryQueryRepositoryGateway.findOneByIdOrFail(
-        survivorPensionAnalysisDwhId,
-        SurvivorPensionAnalysisDwhNotFoundError,
+        survivorPensionAnalysisDeceasedWorkHistoryId,
+        SurvivorPensionAnalysisDeceasedWorkHistoryNotFoundError,
       );
 
     await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsBySurvivorPensionAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
@@ -98,7 +98,7 @@ export class PutSurvivorPensionAnalysisDeceasedWorkHistoryPeriodsUseCase {
       ({ periodDto }) =>
         new SurvivorPensionAnalysisDeceasedWorkHistoryPeriodEntity({
           survivorPensionAnalysisDeceasedWorkHistoryId:
-            survivorPensionAnalysisDwhId,
+            survivorPensionAnalysisDeceasedWorkHistoryId,
           ...(periodDto.startDate !== undefined && {
             startDate: periodDto.startDate,
           }),
@@ -131,7 +131,7 @@ export class PutSurvivorPensionAnalysisDeceasedWorkHistoryPeriodsUseCase {
 
     const transactions = [
       this.survivorPensionAnalysisDeceasedWorkHistoryPeriodCommandRepositoryGateway.deleteAllBySurvivorPensionAnalysisDeceasedWorkHistoryId(
-        survivorPensionAnalysisDwhId,
+        survivorPensionAnalysisDeceasedWorkHistoryId,
       ),
       ...periodsWithFileNames.flatMap(({ fileNames }, i) => {
         const entity = periodEntities[i];
@@ -163,7 +163,7 @@ export class PutSurvivorPensionAnalysisDeceasedWorkHistoryPeriodsUseCase {
     await txn.commit();
 
     return PutSurvivorPensionAnalysisDeceasedWorkHistoryPeriodsResponseDto.build(
-      { survivorPensionAnalysisDwhId },
+      { survivorPensionAnalysisDeceasedWorkHistoryId },
     );
   }
 }

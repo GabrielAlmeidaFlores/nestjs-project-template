@@ -71,7 +71,7 @@ export class CreateSurvivorPensionAnalysisDeceasedWorkHistoryUseCase {
     await txn.commit();
 
     return CreateSurvivorPensionAnalysisDeceasedWorkHistoryResponseDto.build({
-      survivorPensionAnalysisDwhId: dwhEntity.id,
+      survivorPensionAnalysisDeceasedWorkHistoryId: dwhEntity.id,
     });
   }
 }

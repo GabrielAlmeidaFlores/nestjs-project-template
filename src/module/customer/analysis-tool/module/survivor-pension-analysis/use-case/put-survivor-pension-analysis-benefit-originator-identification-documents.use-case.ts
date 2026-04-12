@@ -11,7 +11,7 @@ import { SurvivorPensionAnalysisId } from '@module/customer/analysis-tool/module
 import { SurvivorPensionAnalysisBenefitOriginatorIdentificationDocumentEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-benefit-originator-identification-document/survivor-pension-analysis-benefit-originator-identification-document.entity';
 import { PutSurvivorPensionAnalysisBenefitOriginatorIdentificationDocumentsRequestDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/request/put-survivor-pension-analysis-benefit-originator-identification-documents.request.dto';
 import { PutSurvivorPensionAnalysisBenefitOriginatorIdentificationDocumentsResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/put-survivor-pension-analysis-benefit-originator-identification-documents.response.dto';
-import { SurvivorPensionAnalysisBoiNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-benefit-originator-identification-not-found.error';
+import { SurvivorPensionAnalysisBenefitOriginatorIdentificationNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-benefit-originator-identification-not-found.error';
 import { SurvivorPensionAnalysisNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -70,7 +70,7 @@ export class PutSurvivorPensionAnalysisBenefitOriginatorIdentificationDocumentsU
       );
 
     if (boiResult === null) {
-      throw new SurvivorPensionAnalysisBoiNotFoundError();
+      throw new SurvivorPensionAnalysisBenefitOriginatorIdentificationNotFoundError();
     }
 
     const uploadedDocuments = await Promise.all(
@@ -114,7 +114,7 @@ export class PutSurvivorPensionAnalysisBenefitOriginatorIdentificationDocumentsU
     await txn.commit();
 
     return PutSurvivorPensionAnalysisBenefitOriginatorIdentificationDocumentsResponseDto.build(
-      { survivorPensionAnalysisBoiId: boiResult.id },
+      { survivorPensionAnalysisBenefitOriginatorIdentificationId: boiResult.id },
     );
   }
 }

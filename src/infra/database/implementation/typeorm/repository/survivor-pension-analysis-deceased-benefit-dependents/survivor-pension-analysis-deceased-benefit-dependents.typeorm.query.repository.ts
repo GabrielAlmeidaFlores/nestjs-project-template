@@ -31,7 +31,7 @@ export class SurvivorPensionAnalysisDeceasedBenefitDependentsTypeormQueryReposit
     super(repository);
   }
 
-  public async findManyBySurvivorPensionAnalysisId(
+  public async listBySurvivorPensionAnalysisId(
     survivorPensionAnalysisId: SurvivorPensionAnalysisId,
   ): Promise<GetSurvivorPensionAnalysisDeceasedBenefitDependentsQueryResult[]> {
     const data = await this.find({

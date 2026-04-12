@@ -82,7 +82,7 @@ export class CreateSurvivorPensionAnalysisDeceasedBenefitDependentsUseCase {
     await txn.commit();
 
     return CreateSurvivorPensionAnalysisDeceasedBenefitDependentsResponseDto.build(
-      { survivorPensionAnalysisDbdId: entity.id },
+      { survivorPensionAnalysisDeceasedBenefitDependentsId: entity.id },
     );
   }
 }

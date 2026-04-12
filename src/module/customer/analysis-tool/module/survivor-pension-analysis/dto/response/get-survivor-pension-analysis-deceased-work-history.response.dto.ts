@@ -10,7 +10,7 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @ResponseDto()
 export class GetSurvivorPensionAnalysisDeceasedWorkHistoryResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(SurvivorPensionAnalysisDeceasedWorkHistoryId)
-  public survivorPensionAnalysisDwhId: SurvivorPensionAnalysisDeceasedWorkHistoryId;
+  public survivorPensionAnalysisDeceasedWorkHistoryId: SurvivorPensionAnalysisDeceasedWorkHistoryId;
 
   @ResponseDtoValueObjectProperty(SurvivorPensionAnalysisId)
   public survivorPensionAnalysisId: SurvivorPensionAnalysisId;

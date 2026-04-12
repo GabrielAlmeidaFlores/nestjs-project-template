@@ -6,7 +6,7 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @ResponseDto()
 export class CreateSurvivorPensionAnalysisResultRetirementRuleResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(SurvivorPensionAnalysisResultRetirementRuleId)
-  public survivorPensionAnalysisRrId: SurvivorPensionAnalysisResultRetirementRuleId;
+  public survivorPensionAnalysisResultRetirementRuleId: SurvivorPensionAnalysisResultRetirementRuleId;
 
   protected override readonly _type =
     CreateSurvivorPensionAnalysisResultRetirementRuleResponseDto.name;

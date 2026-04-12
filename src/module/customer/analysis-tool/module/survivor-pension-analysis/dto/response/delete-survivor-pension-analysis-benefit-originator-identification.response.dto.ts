@@ -8,7 +8,7 @@ export class DeleteSurvivorPensionAnalysisBenefitOriginatorIdentificationRespons
   @ResponseDtoValueObjectProperty(
     SurvivorPensionAnalysisBenefitOriginatorIdentificationId,
   )
-  public survivorPensionAnalysisBoiId: SurvivorPensionAnalysisBenefitOriginatorIdentificationId;
+  public survivorPensionAnalysisBenefitOriginatorIdentificationId: SurvivorPensionAnalysisBenefitOriginatorIdentificationId;
 
   protected override readonly _type =
     DeleteSurvivorPensionAnalysisBenefitOriginatorIdentificationResponseDto.name;

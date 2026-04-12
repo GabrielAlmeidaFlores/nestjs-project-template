@@ -2,7 +2,7 @@ import type { GetSurvivorPensionAnalysisResultRetirementRuleQueryResult } from '
 import type { SurvivorPensionAnalysisResultId } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-result/value-object/survivor-pension-analysis-result-id/survivor-pension-analysis-result-id.value-object';
 
 export abstract class SurvivorPensionAnalysisResultRetirementRuleQueryRepositoryGateway {
-  public abstract findManyBySurvivorPensionAnalysisResultId(
+  public abstract listBySurvivorPensionAnalysisResultId(
     id: SurvivorPensionAnalysisResultId,
   ): Promise<GetSurvivorPensionAnalysisResultRetirementRuleQueryResult[]>;
 }

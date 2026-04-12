@@ -60,14 +60,14 @@ export class ListSurvivorPensionAnalysisResultDependentPensionAnalysesUseCase {
     );
 
     const dpaList =
-      await this.survivorPensionAnalysisResultDependentPensionAnalysisQueryRepositoryGateway.findManyBySurvivorPensionAnalysisResultId(
+      await this.survivorPensionAnalysisResultDependentPensionAnalysisQueryRepositoryGateway.listBySurvivorPensionAnalysisResultId(
         survivorPensionAnalysisResultId,
       );
 
     const dependentPensionAnalyses = dpaList.map((dpa) =>
       GetSurvivorPensionAnalysisResultDependentPensionAnalysisResponseDto.build(
         {
-          survivorPensionAnalysisDpaId: dpa.id,
+          survivorPensionAnalysisResultDependentPensionAnalysisId: dpa.id,
           survivorPensionAnalysisResultId: dpa.survivorPensionAnalysisResultId,
           ...(dpa.dependentName !== null && {
             dependentName: dpa.dependentName,

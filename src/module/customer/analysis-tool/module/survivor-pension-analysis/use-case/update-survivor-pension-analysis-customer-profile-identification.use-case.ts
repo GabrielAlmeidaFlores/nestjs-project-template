@@ -10,7 +10,7 @@ import { SurvivorPensionAnalysisCustomerProfileIdentificationEntity } from '@mod
 import { SurvivorPensionAnalysisCustomerProfileIdentificationId } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-customer-profile-identification/value-object/survivor-pension-analysis-customer-profile-identification-id/survivor-pension-analysis-customer-profile-identification-id.value-object';
 import { UpdateSurvivorPensionAnalysisCustomerProfileIdentificationRequestDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/request/update-survivor-pension-analysis-customer-profile-identification.request.dto';
 import { UpdateSurvivorPensionAnalysisCustomerProfileIdentificationResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/update-survivor-pension-analysis-customer-profile-identification.response.dto';
-import { SurvivorPensionAnalysisCpiNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-customer-profile-identification-not-found.error';
+import { SurvivorPensionAnalysisCustomerProfileIdentificationNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-customer-profile-identification-not-found.error';
 import { SurvivorPensionAnalysisNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -40,7 +40,7 @@ export class UpdateSurvivorPensionAnalysisCustomerProfileIdentificationUseCase {
   public async execute(
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
-    survivorPensionAnalysisCpiId: SurvivorPensionAnalysisCustomerProfileIdentificationId,
+    survivorPensionAnalysisCustomerProfileIdentificationId: SurvivorPensionAnalysisCustomerProfileIdentificationId,
     dto: UpdateSurvivorPensionAnalysisCustomerProfileIdentificationRequestDto,
   ): Promise<UpdateSurvivorPensionAnalysisCustomerProfileIdentificationResponseDto> {
     const organizationMember =
@@ -55,8 +55,8 @@ export class UpdateSurvivorPensionAnalysisCustomerProfileIdentificationUseCase {
 
     const cpiQueryResult =
       await this.survivorPensionAnalysisCustomerProfileIdentificationQueryRepositoryGateway.findOneByIdOrFail(
-        survivorPensionAnalysisCpiId,
-        SurvivorPensionAnalysisCpiNotFoundError,
+        survivorPensionAnalysisCustomerProfileIdentificationId,
+        SurvivorPensionAnalysisCustomerProfileIdentificationNotFoundError,
       );
 
     await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsBySurvivorPensionAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
@@ -68,7 +68,7 @@ export class UpdateSurvivorPensionAnalysisCustomerProfileIdentificationUseCase {
 
     const updatedCpi =
       new SurvivorPensionAnalysisCustomerProfileIdentificationEntity({
-        id: survivorPensionAnalysisCpiId,
+        id: survivorPensionAnalysisCustomerProfileIdentificationId,
         survivorPensionAnalysisId: cpiQueryResult.survivorPensionAnalysisId,
         analysisToolClientId:
           dto.analysisToolClientId ?? cpiQueryResult.analysisToolClientId,
@@ -83,7 +83,7 @@ export class UpdateSurvivorPensionAnalysisCustomerProfileIdentificationUseCase {
 
     const txn = await this.baseTransactionRepositoryGateway.execute([
       this.survivorPensionAnalysisCustomerProfileIdentificationCommandRepositoryGateway.updateSurvivorPensionAnalysisCustomerProfileIdentification(
-        survivorPensionAnalysisCpiId,
+        survivorPensionAnalysisCustomerProfileIdentificationId,
         updatedCpi,
       ),
     ]);
@@ -91,7 +91,7 @@ export class UpdateSurvivorPensionAnalysisCustomerProfileIdentificationUseCase {
     await txn.commit();
 
     return UpdateSurvivorPensionAnalysisCustomerProfileIdentificationResponseDto.build(
-      { survivorPensionAnalysisCpiId },
+      { survivorPensionAnalysisCustomerProfileIdentificationId },
     );
   }
 }

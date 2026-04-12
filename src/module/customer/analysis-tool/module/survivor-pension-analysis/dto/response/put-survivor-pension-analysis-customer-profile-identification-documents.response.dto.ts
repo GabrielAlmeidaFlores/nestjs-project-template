@@ -8,7 +8,7 @@ export class PutSurvivorPensionAnalysisCustomerProfileIdentificationDocumentsRes
   @ResponseDtoValueObjectProperty(
     SurvivorPensionAnalysisCustomerProfileIdentificationId,
   )
-  public survivorPensionAnalysisCpiId: SurvivorPensionAnalysisCustomerProfileIdentificationId;
+  public survivorPensionAnalysisCustomerProfileIdentificationId: SurvivorPensionAnalysisCustomerProfileIdentificationId;
 
   protected override readonly _type =
     PutSurvivorPensionAnalysisCustomerProfileIdentificationDocumentsResponseDto.name;

@@ -303,7 +303,7 @@ export class SurvivorPensionAnalysisController {
     summary: 'Atualizar identificação do perfil do cliente',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'customer-profile-identification/:survivorPensionAnalysisCpiId',
+      path: 'customer-profile-identification/:survivorPensionAnalysisCustomerProfileIdentificationId',
       method: RequestMethod.PATCH,
       type: UpdateSurvivorPensionAnalysisCustomerProfileIdentificationRequestDto,
     },
@@ -320,19 +320,19 @@ export class SurvivorPensionAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
-      'survivorPensionAnalysisCpiId',
+      'survivorPensionAnalysisCustomerProfileIdentificationId',
       new ParseValueObjectPipe(
         SurvivorPensionAnalysisCustomerProfileIdentificationId,
       ),
     )
-    survivorPensionAnalysisCpiId: SurvivorPensionAnalysisCustomerProfileIdentificationId,
+    survivorPensionAnalysisCustomerProfileIdentificationId: SurvivorPensionAnalysisCustomerProfileIdentificationId,
     @Body()
     dto: UpdateSurvivorPensionAnalysisCustomerProfileIdentificationRequestDto,
   ): Promise<UpdateSurvivorPensionAnalysisCustomerProfileIdentificationResponseDto> {
     return this.updateSurvivorPensionAnalysisCpiUseCase.execute(
       sessionData,
       organizationSessionData,
-      survivorPensionAnalysisCpiId,
+      survivorPensionAnalysisCustomerProfileIdentificationId,
       dto,
     );
   }
@@ -341,7 +341,7 @@ export class SurvivorPensionAnalysisController {
     summary: 'Excluir identificação do perfil do cliente',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'customer-profile-identification/:survivorPensionAnalysisCpiId',
+      path: 'customer-profile-identification/:survivorPensionAnalysisCustomerProfileIdentificationId',
       method: RequestMethod.DELETE,
     },
     tag: ['pensao-por-morte'],
@@ -357,17 +357,17 @@ export class SurvivorPensionAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
-      'survivorPensionAnalysisCpiId',
+      'survivorPensionAnalysisCustomerProfileIdentificationId',
       new ParseValueObjectPipe(
         SurvivorPensionAnalysisCustomerProfileIdentificationId,
       ),
     )
-    survivorPensionAnalysisCpiId: SurvivorPensionAnalysisCustomerProfileIdentificationId,
+    survivorPensionAnalysisCustomerProfileIdentificationId: SurvivorPensionAnalysisCustomerProfileIdentificationId,
   ): Promise<DeleteSurvivorPensionAnalysisCustomerProfileIdentificationResponseDto> {
     return this.deleteSurvivorPensionAnalysisCpiUseCase.execute(
       sessionData,
       organizationSessionData,
-      survivorPensionAnalysisCpiId,
+      survivorPensionAnalysisCustomerProfileIdentificationId,
     );
   }
 
@@ -375,7 +375,7 @@ export class SurvivorPensionAnalysisController {
     summary: 'Obter identificação do perfil do cliente',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'customer-profile-identification/:survivorPensionAnalysisCpiId',
+      path: 'customer-profile-identification/:survivorPensionAnalysisCustomerProfileIdentificationId',
       method: RequestMethod.GET,
     },
     tag: ['pensao-por-morte'],
@@ -391,17 +391,17 @@ export class SurvivorPensionAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
-      'survivorPensionAnalysisCpiId',
+      'survivorPensionAnalysisCustomerProfileIdentificationId',
       new ParseValueObjectPipe(
         SurvivorPensionAnalysisCustomerProfileIdentificationId,
       ),
     )
-    survivorPensionAnalysisCpiId: SurvivorPensionAnalysisCustomerProfileIdentificationId,
+    survivorPensionAnalysisCustomerProfileIdentificationId: SurvivorPensionAnalysisCustomerProfileIdentificationId,
   ): Promise<GetSurvivorPensionAnalysisCustomerProfileIdentificationResponseDto> {
     return this.getSurvivorPensionAnalysisCpiUseCase.execute(
       sessionData,
       organizationSessionData,
-      survivorPensionAnalysisCpiId,
+      survivorPensionAnalysisCustomerProfileIdentificationId,
     );
   }
 
@@ -483,7 +483,7 @@ export class SurvivorPensionAnalysisController {
     summary: 'Atualizar identificação do originador do benefício',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'benefit-originator-identification/:survivorPensionAnalysisBoiId',
+      path: 'benefit-originator-identification/:survivorPensionAnalysisBenefitOriginatorIdentificationId',
       method: RequestMethod.PATCH,
       type: UpdateSurvivorPensionAnalysisBenefitOriginatorIdentificationRequestDto,
     },
@@ -501,19 +501,19 @@ export class SurvivorPensionAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
-      'survivorPensionAnalysisBoiId',
+      'survivorPensionAnalysisBenefitOriginatorIdentificationId',
       new ParseValueObjectPipe(
         SurvivorPensionAnalysisBenefitOriginatorIdentificationId,
       ),
     )
-    survivorPensionAnalysisBoiId: SurvivorPensionAnalysisBenefitOriginatorIdentificationId,
+    survivorPensionAnalysisBenefitOriginatorIdentificationId: SurvivorPensionAnalysisBenefitOriginatorIdentificationId,
     @Body()
     dto: UpdateSurvivorPensionAnalysisBenefitOriginatorIdentificationRequestDto,
   ): Promise<UpdateSurvivorPensionAnalysisBenefitOriginatorIdentificationResponseDto> {
     return this.updateSurvivorPensionAnalysisBoiUseCase.execute(
       sessionData,
       organizationSessionData,
-      survivorPensionAnalysisBoiId,
+      survivorPensionAnalysisBenefitOriginatorIdentificationId,
       dto,
     );
   }
@@ -522,7 +522,7 @@ export class SurvivorPensionAnalysisController {
     summary: 'Excluir identificação do originador do benefício',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'benefit-originator-identification/:survivorPensionAnalysisBoiId',
+      path: 'benefit-originator-identification/:survivorPensionAnalysisBenefitOriginatorIdentificationId',
       method: RequestMethod.DELETE,
     },
     tag: ['pensao-por-morte'],
@@ -539,17 +539,17 @@ export class SurvivorPensionAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
-      'survivorPensionAnalysisBoiId',
+      'survivorPensionAnalysisBenefitOriginatorIdentificationId',
       new ParseValueObjectPipe(
         SurvivorPensionAnalysisBenefitOriginatorIdentificationId,
       ),
     )
-    survivorPensionAnalysisBoiId: SurvivorPensionAnalysisBenefitOriginatorIdentificationId,
+    survivorPensionAnalysisBenefitOriginatorIdentificationId: SurvivorPensionAnalysisBenefitOriginatorIdentificationId,
   ): Promise<DeleteSurvivorPensionAnalysisBenefitOriginatorIdentificationResponseDto> {
     return this.deleteSurvivorPensionAnalysisBoiUseCase.execute(
       sessionData,
       organizationSessionData,
-      survivorPensionAnalysisBoiId,
+      survivorPensionAnalysisBenefitOriginatorIdentificationId,
     );
   }
 
@@ -557,7 +557,7 @@ export class SurvivorPensionAnalysisController {
     summary: 'Obter identificação do originador do benefício',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'benefit-originator-identification/:survivorPensionAnalysisBoiId',
+      path: 'benefit-originator-identification/:survivorPensionAnalysisBenefitOriginatorIdentificationId',
       method: RequestMethod.GET,
     },
     tag: ['pensao-por-morte'],
@@ -574,17 +574,17 @@ export class SurvivorPensionAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
-      'survivorPensionAnalysisBoiId',
+      'survivorPensionAnalysisBenefitOriginatorIdentificationId',
       new ParseValueObjectPipe(
         SurvivorPensionAnalysisBenefitOriginatorIdentificationId,
       ),
     )
-    survivorPensionAnalysisBoiId: SurvivorPensionAnalysisBenefitOriginatorIdentificationId,
+    survivorPensionAnalysisBenefitOriginatorIdentificationId: SurvivorPensionAnalysisBenefitOriginatorIdentificationId,
   ): Promise<GetSurvivorPensionAnalysisBenefitOriginatorIdentificationResponseDto> {
     return this.getSurvivorPensionAnalysisBoiUseCase.execute(
       sessionData,
       organizationSessionData,
-      survivorPensionAnalysisBoiId,
+      survivorPensionAnalysisBenefitOriginatorIdentificationId,
     );
   }
 
@@ -665,7 +665,7 @@ export class SurvivorPensionAnalysisController {
     summary: 'Atualizar histórico de trabalho do falecido',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'deceased-work-history/:survivorPensionAnalysisDwhId',
+      path: 'deceased-work-history/:survivorPensionAnalysisDeceasedWorkHistoryId',
       method: RequestMethod.PATCH,
       type: UpdateSurvivorPensionAnalysisDeceasedWorkHistoryRequestDto,
     },
@@ -682,16 +682,16 @@ export class SurvivorPensionAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
-      'survivorPensionAnalysisDwhId',
+      'survivorPensionAnalysisDeceasedWorkHistoryId',
       new ParseValueObjectPipe(SurvivorPensionAnalysisDeceasedWorkHistoryId),
     )
-    survivorPensionAnalysisDwhId: SurvivorPensionAnalysisDeceasedWorkHistoryId,
+    survivorPensionAnalysisDeceasedWorkHistoryId: SurvivorPensionAnalysisDeceasedWorkHistoryId,
     @Body() dto: UpdateSurvivorPensionAnalysisDeceasedWorkHistoryRequestDto,
   ): Promise<UpdateSurvivorPensionAnalysisDeceasedWorkHistoryResponseDto> {
     return this.updateSurvivorPensionAnalysisDwhUseCase.execute(
       sessionData,
       organizationSessionData,
-      survivorPensionAnalysisDwhId,
+      survivorPensionAnalysisDeceasedWorkHistoryId,
       dto,
     );
   }
@@ -700,7 +700,7 @@ export class SurvivorPensionAnalysisController {
     summary: 'Excluir histórico de trabalho do falecido',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'deceased-work-history/:survivorPensionAnalysisDwhId',
+      path: 'deceased-work-history/:survivorPensionAnalysisDeceasedWorkHistoryId',
       method: RequestMethod.DELETE,
     },
     tag: ['pensao-por-morte'],
@@ -716,15 +716,15 @@ export class SurvivorPensionAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
-      'survivorPensionAnalysisDwhId',
+      'survivorPensionAnalysisDeceasedWorkHistoryId',
       new ParseValueObjectPipe(SurvivorPensionAnalysisDeceasedWorkHistoryId),
     )
-    survivorPensionAnalysisDwhId: SurvivorPensionAnalysisDeceasedWorkHistoryId,
+    survivorPensionAnalysisDeceasedWorkHistoryId: SurvivorPensionAnalysisDeceasedWorkHistoryId,
   ): Promise<DeleteSurvivorPensionAnalysisDeceasedWorkHistoryResponseDto> {
     return this.deleteSurvivorPensionAnalysisDwhUseCase.execute(
       sessionData,
       organizationSessionData,
-      survivorPensionAnalysisDwhId,
+      survivorPensionAnalysisDeceasedWorkHistoryId,
     );
   }
 
@@ -732,7 +732,7 @@ export class SurvivorPensionAnalysisController {
     summary: 'Obter histórico de trabalho do falecido',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'deceased-work-history/:survivorPensionAnalysisDwhId',
+      path: 'deceased-work-history/:survivorPensionAnalysisDeceasedWorkHistoryId',
       method: RequestMethod.GET,
     },
     tag: ['pensao-por-morte'],
@@ -748,15 +748,15 @@ export class SurvivorPensionAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
-      'survivorPensionAnalysisDwhId',
+      'survivorPensionAnalysisDeceasedWorkHistoryId',
       new ParseValueObjectPipe(SurvivorPensionAnalysisDeceasedWorkHistoryId),
     )
-    survivorPensionAnalysisDwhId: SurvivorPensionAnalysisDeceasedWorkHistoryId,
+    survivorPensionAnalysisDeceasedWorkHistoryId: SurvivorPensionAnalysisDeceasedWorkHistoryId,
   ): Promise<GetSurvivorPensionAnalysisDeceasedWorkHistoryResponseDto> {
     return this.getSurvivorPensionAnalysisDwhUseCase.execute(
       sessionData,
       organizationSessionData,
-      survivorPensionAnalysisDwhId,
+      survivorPensionAnalysisDeceasedWorkHistoryId,
     );
   }
 
@@ -764,7 +764,7 @@ export class SurvivorPensionAnalysisController {
     summary: 'Criar período do histórico de trabalho',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'deceased-work-history/:survivorPensionAnalysisDwhId/period',
+      path: 'deceased-work-history/:survivorPensionAnalysisDeceasedWorkHistoryId/period',
       method: RequestMethod.POST,
       type: CreateSurvivorPensionAnalysisDeceasedWorkHistoryPeriodRequestDto,
     },
@@ -781,17 +781,17 @@ export class SurvivorPensionAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
-      'survivorPensionAnalysisDwhId',
+      'survivorPensionAnalysisDeceasedWorkHistoryId',
       new ParseValueObjectPipe(SurvivorPensionAnalysisDeceasedWorkHistoryId),
     )
-    survivorPensionAnalysisDwhId: SurvivorPensionAnalysisDeceasedWorkHistoryId,
+    survivorPensionAnalysisDeceasedWorkHistoryId: SurvivorPensionAnalysisDeceasedWorkHistoryId,
     @Body()
     dto: CreateSurvivorPensionAnalysisDeceasedWorkHistoryPeriodRequestDto,
   ): Promise<CreateSurvivorPensionAnalysisDeceasedWorkHistoryPeriodResponseDto> {
     return this.createSurvivorPensionAnalysisDwhpUseCase.execute(
       sessionData,
       organizationSessionData,
-      survivorPensionAnalysisDwhId,
+      survivorPensionAnalysisDeceasedWorkHistoryId,
       dto,
     );
   }
@@ -800,7 +800,7 @@ export class SurvivorPensionAnalysisController {
     summary: 'Atualizar período do histórico de trabalho',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'deceased-work-history/period/:survivorPensionAnalysisDwhpId',
+      path: 'deceased-work-history/period/:survivorPensionAnalysisDeceasedWorkHistoryPeriodId',
       method: RequestMethod.PATCH,
       type: UpdateSurvivorPensionAnalysisDeceasedWorkHistoryPeriodRequestDto,
     },
@@ -817,19 +817,19 @@ export class SurvivorPensionAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
-      'survivorPensionAnalysisDwhpId',
+      'survivorPensionAnalysisDeceasedWorkHistoryPeriodId',
       new ParseValueObjectPipe(
         SurvivorPensionAnalysisDeceasedWorkHistoryPeriodId,
       ),
     )
-    survivorPensionAnalysisDwhpId: SurvivorPensionAnalysisDeceasedWorkHistoryPeriodId,
+    survivorPensionAnalysisDeceasedWorkHistoryPeriodId: SurvivorPensionAnalysisDeceasedWorkHistoryPeriodId,
     @Body()
     dto: UpdateSurvivorPensionAnalysisDeceasedWorkHistoryPeriodRequestDto,
   ): Promise<UpdateSurvivorPensionAnalysisDeceasedWorkHistoryPeriodResponseDto> {
     return this.updateSurvivorPensionAnalysisDwhpUseCase.execute(
       sessionData,
       organizationSessionData,
-      survivorPensionAnalysisDwhpId,
+      survivorPensionAnalysisDeceasedWorkHistoryPeriodId,
       dto,
     );
   }
@@ -838,7 +838,7 @@ export class SurvivorPensionAnalysisController {
     summary: 'Excluir período do histórico de trabalho',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'deceased-work-history/period/:survivorPensionAnalysisDwhpId',
+      path: 'deceased-work-history/period/:survivorPensionAnalysisDeceasedWorkHistoryPeriodId',
       method: RequestMethod.DELETE,
     },
     tag: ['pensao-por-morte'],
@@ -854,17 +854,17 @@ export class SurvivorPensionAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
-      'survivorPensionAnalysisDwhpId',
+      'survivorPensionAnalysisDeceasedWorkHistoryPeriodId',
       new ParseValueObjectPipe(
         SurvivorPensionAnalysisDeceasedWorkHistoryPeriodId,
       ),
     )
-    survivorPensionAnalysisDwhpId: SurvivorPensionAnalysisDeceasedWorkHistoryPeriodId,
+    survivorPensionAnalysisDeceasedWorkHistoryPeriodId: SurvivorPensionAnalysisDeceasedWorkHistoryPeriodId,
   ): Promise<DeleteSurvivorPensionAnalysisDeceasedWorkHistoryPeriodResponseDto> {
     return this.deleteSurvivorPensionAnalysisDwhpUseCase.execute(
       sessionData,
       organizationSessionData,
-      survivorPensionAnalysisDwhpId,
+      survivorPensionAnalysisDeceasedWorkHistoryPeriodId,
     );
   }
 
@@ -872,7 +872,7 @@ export class SurvivorPensionAnalysisController {
     summary: 'Obter período do histórico de trabalho',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'deceased-work-history/period/:survivorPensionAnalysisDwhpId',
+      path: 'deceased-work-history/period/:survivorPensionAnalysisDeceasedWorkHistoryPeriodId',
       method: RequestMethod.GET,
     },
     tag: ['pensao-por-morte'],
@@ -888,17 +888,17 @@ export class SurvivorPensionAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
-      'survivorPensionAnalysisDwhpId',
+      'survivorPensionAnalysisDeceasedWorkHistoryPeriodId',
       new ParseValueObjectPipe(
         SurvivorPensionAnalysisDeceasedWorkHistoryPeriodId,
       ),
     )
-    survivorPensionAnalysisDwhpId: SurvivorPensionAnalysisDeceasedWorkHistoryPeriodId,
+    survivorPensionAnalysisDeceasedWorkHistoryPeriodId: SurvivorPensionAnalysisDeceasedWorkHistoryPeriodId,
   ): Promise<GetSurvivorPensionAnalysisDeceasedWorkHistoryPeriodResponseDto> {
     return this.getSurvivorPensionAnalysisDwhpUseCase.execute(
       sessionData,
       organizationSessionData,
-      survivorPensionAnalysisDwhpId,
+      survivorPensionAnalysisDeceasedWorkHistoryPeriodId,
     );
   }
 
@@ -906,7 +906,7 @@ export class SurvivorPensionAnalysisController {
     summary: 'Listar períodos do histórico de trabalho',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'deceased-work-history/:survivorPensionAnalysisDwhId/periods',
+      path: 'deceased-work-history/:survivorPensionAnalysisDeceasedWorkHistoryId/periods',
       method: RequestMethod.GET,
     },
     tag: ['pensao-por-morte'],
@@ -922,15 +922,15 @@ export class SurvivorPensionAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
-      'survivorPensionAnalysisDwhId',
+      'survivorPensionAnalysisDeceasedWorkHistoryId',
       new ParseValueObjectPipe(SurvivorPensionAnalysisDeceasedWorkHistoryId),
     )
-    survivorPensionAnalysisDwhId: SurvivorPensionAnalysisDeceasedWorkHistoryId,
+    survivorPensionAnalysisDeceasedWorkHistoryId: SurvivorPensionAnalysisDeceasedWorkHistoryId,
   ): Promise<ListSurvivorPensionAnalysisDeceasedWorkHistoryPeriodsResponseDto> {
     return this.listSurvivorPensionAnalysisDwhpsUseCase.execute(
       sessionData,
       organizationSessionData,
-      survivorPensionAnalysisDwhId,
+      survivorPensionAnalysisDeceasedWorkHistoryId,
     );
   }
 
@@ -938,7 +938,7 @@ export class SurvivorPensionAnalysisController {
     summary: 'Substituir períodos do histórico de trabalho',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'deceased-work-history/:survivorPensionAnalysisDwhId/periods',
+      path: 'deceased-work-history/:survivorPensionAnalysisDeceasedWorkHistoryId/periods',
       method: RequestMethod.PUT,
       type: PutSurvivorPensionAnalysisDeceasedWorkHistoryPeriodsRequestDto,
     },
@@ -956,16 +956,16 @@ export class SurvivorPensionAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
-      'survivorPensionAnalysisDwhId',
+      'survivorPensionAnalysisDeceasedWorkHistoryId',
       new ParseValueObjectPipe(SurvivorPensionAnalysisDeceasedWorkHistoryId),
     )
-    survivorPensionAnalysisDwhId: SurvivorPensionAnalysisDeceasedWorkHistoryId,
+    survivorPensionAnalysisDeceasedWorkHistoryId: SurvivorPensionAnalysisDeceasedWorkHistoryId,
     @Body() dto: PutSurvivorPensionAnalysisDeceasedWorkHistoryPeriodsRequestDto,
   ): Promise<PutSurvivorPensionAnalysisDeceasedWorkHistoryPeriodsResponseDto> {
     return this.putSurvivorPensionAnalysisDwhpsUseCase.execute(
       sessionData,
       organizationSessionData,
-      survivorPensionAnalysisDwhId,
+      survivorPensionAnalysisDeceasedWorkHistoryId,
       dto,
     );
   }
@@ -974,7 +974,7 @@ export class SurvivorPensionAnalysisController {
     summary: 'Substituir documentos do período do histórico de trabalho',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'deceased-work-history/period/:survivorPensionAnalysisDwhpId/documents',
+      path: 'deceased-work-history/period/:survivorPensionAnalysisDeceasedWorkHistoryPeriodId/documents',
       method: RequestMethod.PUT,
       type: PutSurvivorPensionAnalysisDeceasedWorkHistoryPeriodDocumentsRequestDto,
     },
@@ -992,19 +992,19 @@ export class SurvivorPensionAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
-      'survivorPensionAnalysisDwhpId',
+      'survivorPensionAnalysisDeceasedWorkHistoryPeriodId',
       new ParseValueObjectPipe(
         SurvivorPensionAnalysisDeceasedWorkHistoryPeriodId,
       ),
     )
-    survivorPensionAnalysisDwhpId: SurvivorPensionAnalysisDeceasedWorkHistoryPeriodId,
+    survivorPensionAnalysisDeceasedWorkHistoryPeriodId: SurvivorPensionAnalysisDeceasedWorkHistoryPeriodId,
     @Body()
     dto: PutSurvivorPensionAnalysisDeceasedWorkHistoryPeriodDocumentsRequestDto,
   ): Promise<PutSurvivorPensionAnalysisDeceasedWorkHistoryPeriodDocumentsResponseDto> {
     return this.putSurvivorPensionAnalysisDwhpDocsUseCase.execute(
       sessionData,
       organizationSessionData,
-      survivorPensionAnalysisDwhpId,
+      survivorPensionAnalysisDeceasedWorkHistoryPeriodId,
       dto,
     );
   }
@@ -1049,7 +1049,7 @@ export class SurvivorPensionAnalysisController {
     summary: 'Atualizar dependente do benefício do falecido',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'deceased-benefit-dependents/:survivorPensionAnalysisDbdId',
+      path: 'deceased-benefit-dependents/:survivorPensionAnalysisDeceasedBenefitDependentsId',
       method: RequestMethod.PATCH,
       type: UpdateSurvivorPensionAnalysisDeceasedBenefitDependentsRequestDto,
     },
@@ -1067,19 +1067,19 @@ export class SurvivorPensionAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
-      'survivorPensionAnalysisDbdId',
+      'survivorPensionAnalysisDeceasedBenefitDependentsId',
       new ParseValueObjectPipe(
         SurvivorPensionAnalysisDeceasedBenefitDependentsId,
       ),
     )
-    survivorPensionAnalysisDbdId: SurvivorPensionAnalysisDeceasedBenefitDependentsId,
+    survivorPensionAnalysisDeceasedBenefitDependentsId: SurvivorPensionAnalysisDeceasedBenefitDependentsId,
     @Body()
     dto: UpdateSurvivorPensionAnalysisDeceasedBenefitDependentsRequestDto,
   ): Promise<UpdateSurvivorPensionAnalysisDeceasedBenefitDependentsResponseDto> {
     return this.updateSurvivorPensionAnalysisDbdUseCase.execute(
       sessionData,
       organizationSessionData,
-      survivorPensionAnalysisDbdId,
+      survivorPensionAnalysisDeceasedBenefitDependentsId,
       dto,
     );
   }
@@ -1088,7 +1088,7 @@ export class SurvivorPensionAnalysisController {
     summary: 'Excluir dependente do benefício do falecido',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'deceased-benefit-dependents/:survivorPensionAnalysisDbdId',
+      path: 'deceased-benefit-dependents/:survivorPensionAnalysisDeceasedBenefitDependentsId',
       method: RequestMethod.DELETE,
     },
     tag: ['pensao-por-morte'],
@@ -1104,17 +1104,17 @@ export class SurvivorPensionAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
-      'survivorPensionAnalysisDbdId',
+      'survivorPensionAnalysisDeceasedBenefitDependentsId',
       new ParseValueObjectPipe(
         SurvivorPensionAnalysisDeceasedBenefitDependentsId,
       ),
     )
-    survivorPensionAnalysisDbdId: SurvivorPensionAnalysisDeceasedBenefitDependentsId,
+    survivorPensionAnalysisDeceasedBenefitDependentsId: SurvivorPensionAnalysisDeceasedBenefitDependentsId,
   ): Promise<DeleteSurvivorPensionAnalysisDeceasedBenefitDependentsResponseDto> {
     return this.deleteSurvivorPensionAnalysisDbdUseCase.execute(
       sessionData,
       organizationSessionData,
-      survivorPensionAnalysisDbdId,
+      survivorPensionAnalysisDeceasedBenefitDependentsId,
     );
   }
 
@@ -1122,7 +1122,7 @@ export class SurvivorPensionAnalysisController {
     summary: 'Obter dependente do benefício do falecido',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'deceased-benefit-dependents/:survivorPensionAnalysisDbdId',
+      path: 'deceased-benefit-dependents/:survivorPensionAnalysisDeceasedBenefitDependentsId',
       method: RequestMethod.GET,
     },
     tag: ['pensao-por-morte'],
@@ -1138,17 +1138,17 @@ export class SurvivorPensionAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
-      'survivorPensionAnalysisDbdId',
+      'survivorPensionAnalysisDeceasedBenefitDependentsId',
       new ParseValueObjectPipe(
         SurvivorPensionAnalysisDeceasedBenefitDependentsId,
       ),
     )
-    survivorPensionAnalysisDbdId: SurvivorPensionAnalysisDeceasedBenefitDependentsId,
+    survivorPensionAnalysisDeceasedBenefitDependentsId: SurvivorPensionAnalysisDeceasedBenefitDependentsId,
   ): Promise<GetSurvivorPensionAnalysisDeceasedBenefitDependentsResponseDto> {
     return this.getSurvivorPensionAnalysisDbdUseCase.execute(
       sessionData,
       organizationSessionData,
-      survivorPensionAnalysisDbdId,
+      survivorPensionAnalysisDeceasedBenefitDependentsId,
     );
   }
 
@@ -1224,7 +1224,7 @@ export class SurvivorPensionAnalysisController {
     summary: 'Substituir documentos do dependente do benefício do falecido',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'deceased-benefit-dependents/:survivorPensionAnalysisDbdId/documents',
+      path: 'deceased-benefit-dependents/:survivorPensionAnalysisDeceasedBenefitDependentsId/documents',
       method: RequestMethod.PUT,
       type: PutSurvivorPensionAnalysisDeceasedBenefitDependentsDocumentsRequestDto,
     },
@@ -1242,19 +1242,19 @@ export class SurvivorPensionAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
-      'survivorPensionAnalysisDbdId',
+      'survivorPensionAnalysisDeceasedBenefitDependentsId',
       new ParseValueObjectPipe(
         SurvivorPensionAnalysisDeceasedBenefitDependentsId,
       ),
     )
-    survivorPensionAnalysisDbdId: SurvivorPensionAnalysisDeceasedBenefitDependentsId,
+    survivorPensionAnalysisDeceasedBenefitDependentsId: SurvivorPensionAnalysisDeceasedBenefitDependentsId,
     @Body()
     dto: PutSurvivorPensionAnalysisDeceasedBenefitDependentsDocumentsRequestDto,
   ): Promise<PutSurvivorPensionAnalysisDeceasedBenefitDependentsDocumentsResponseDto> {
     return this.putSurvivorPensionAnalysisDbdDocsUseCase.execute(
       sessionData,
       organizationSessionData,
-      survivorPensionAnalysisDbdId,
+      survivorPensionAnalysisDeceasedBenefitDependentsId,
       dto,
     );
   }
@@ -1364,7 +1364,7 @@ export class SurvivorPensionAnalysisController {
     summary: 'Excluir regra de aposentadoria do resultado',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'result/retirement-rule/:survivorPensionAnalysisRrId',
+      path: 'result/retirement-rule/:survivorPensionAnalysisResultRetirementRuleId',
       method: RequestMethod.DELETE,
     },
     tag: ['pensao-por-morte'],
@@ -1380,15 +1380,15 @@ export class SurvivorPensionAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
-      'survivorPensionAnalysisRrId',
+      'survivorPensionAnalysisResultRetirementRuleId',
       new ParseValueObjectPipe(SurvivorPensionAnalysisResultRetirementRuleId),
     )
-    survivorPensionAnalysisRrId: SurvivorPensionAnalysisResultRetirementRuleId,
+    survivorPensionAnalysisResultRetirementRuleId: SurvivorPensionAnalysisResultRetirementRuleId,
   ): Promise<DeleteSurvivorPensionAnalysisResultRetirementRuleResponseDto> {
     return this.deleteSurvivorPensionAnalysisRrUseCase.execute(
       sessionData,
       organizationSessionData,
-      survivorPensionAnalysisRrId,
+      survivorPensionAnalysisResultRetirementRuleId,
     );
   }
 
@@ -1464,7 +1464,7 @@ export class SurvivorPensionAnalysisController {
     summary: 'Excluir análise de pensão do dependente',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'result/dependent-pension-analysis/:survivorPensionAnalysisDpaId',
+      path: 'result/dependent-pension-analysis/:survivorPensionAnalysisResultDependentPensionAnalysisId',
       method: RequestMethod.DELETE,
     },
     tag: ['pensao-por-morte'],
@@ -1480,17 +1480,17 @@ export class SurvivorPensionAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
-      'survivorPensionAnalysisDpaId',
+      'survivorPensionAnalysisResultDependentPensionAnalysisId',
       new ParseValueObjectPipe(
         SurvivorPensionAnalysisResultDependentPensionAnalysisId,
       ),
     )
-    survivorPensionAnalysisDpaId: SurvivorPensionAnalysisResultDependentPensionAnalysisId,
+    survivorPensionAnalysisResultDependentPensionAnalysisId: SurvivorPensionAnalysisResultDependentPensionAnalysisId,
   ): Promise<DeleteSurvivorPensionAnalysisResultDependentPensionAnalysisResponseDto> {
     return this.deleteSurvivorPensionAnalysisDpaUseCase.execute(
       sessionData,
       organizationSessionData,
-      survivorPensionAnalysisDpaId,
+      survivorPensionAnalysisResultDependentPensionAnalysisId,
     );
   }
 

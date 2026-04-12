@@ -10,7 +10,7 @@ import { SurvivorPensionAnalysisDeceasedBenefitDependentsEntity } from '@module/
 import { SurvivorPensionAnalysisDeceasedBenefitDependentsId } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-deceased-benefit-dependents/value-object/survivor-pension-analysis-deceased-benefit-dependents-id/survivor-pension-analysis-deceased-benefit-dependents-id.value-object';
 import { UpdateSurvivorPensionAnalysisDeceasedBenefitDependentsRequestDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/request/update-survivor-pension-analysis-deceased-benefit-dependents.request.dto';
 import { UpdateSurvivorPensionAnalysisDeceasedBenefitDependentsResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/update-survivor-pension-analysis-deceased-benefit-dependents.response.dto';
-import { SurvivorPensionAnalysisDbdNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-deceased-benefit-dependents-not-found.error';
+import { SurvivorPensionAnalysisDeceasedBenefitDependentsNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-deceased-benefit-dependents-not-found.error';
 import { SurvivorPensionAnalysisNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -40,7 +40,7 @@ export class UpdateSurvivorPensionAnalysisDeceasedBenefitDependentsUseCase {
   public async execute(
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
-    survivorPensionAnalysisDbdId: SurvivorPensionAnalysisDeceasedBenefitDependentsId,
+    survivorPensionAnalysisDeceasedBenefitDependentsId: SurvivorPensionAnalysisDeceasedBenefitDependentsId,
     dto: UpdateSurvivorPensionAnalysisDeceasedBenefitDependentsRequestDto,
   ): Promise<UpdateSurvivorPensionAnalysisDeceasedBenefitDependentsResponseDto> {
     const organizationMember =
@@ -55,8 +55,8 @@ export class UpdateSurvivorPensionAnalysisDeceasedBenefitDependentsUseCase {
 
     const dbdResult =
       await this.survivorPensionAnalysisDeceasedBenefitDependentsQueryRepositoryGateway.findOneByIdOrFail(
-        survivorPensionAnalysisDbdId,
-        SurvivorPensionAnalysisDbdNotFoundError,
+        survivorPensionAnalysisDeceasedBenefitDependentsId,
+        SurvivorPensionAnalysisDeceasedBenefitDependentsNotFoundError,
       );
 
     await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsBySurvivorPensionAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
@@ -68,7 +68,7 @@ export class UpdateSurvivorPensionAnalysisDeceasedBenefitDependentsUseCase {
 
     const updatedEntity =
       new SurvivorPensionAnalysisDeceasedBenefitDependentsEntity({
-        id: survivorPensionAnalysisDbdId,
+        id: survivorPensionAnalysisDeceasedBenefitDependentsId,
         survivorPensionAnalysisId: dbdResult.survivorPensionAnalysisId,
         dependentFullName: dto.dependentFullName ?? dbdResult.dependentFullName,
         dependencyClassificationLevel:
@@ -85,7 +85,7 @@ export class UpdateSurvivorPensionAnalysisDeceasedBenefitDependentsUseCase {
 
     const txn = await this.baseTransactionRepositoryGateway.execute([
       this.survivorPensionAnalysisDeceasedBenefitDependentsCommandRepositoryGateway.updateSurvivorPensionAnalysisDeceasedBenefitDependents(
-        survivorPensionAnalysisDbdId,
+        survivorPensionAnalysisDeceasedBenefitDependentsId,
         updatedEntity,
       ),
     ]);
@@ -93,7 +93,7 @@ export class UpdateSurvivorPensionAnalysisDeceasedBenefitDependentsUseCase {
     await txn.commit();
 
     return UpdateSurvivorPensionAnalysisDeceasedBenefitDependentsResponseDto.build(
-      { survivorPensionAnalysisDbdId },
+      { survivorPensionAnalysisDeceasedBenefitDependentsId },
     );
   }
 }

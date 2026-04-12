@@ -58,13 +58,13 @@ export class ListSurvivorPensionAnalysisResultRetirementRulesUseCase {
     );
 
     const rrList =
-      await this.survivorPensionAnalysisResultRetirementRuleQueryRepositoryGateway.findManyBySurvivorPensionAnalysisResultId(
+      await this.survivorPensionAnalysisResultRetirementRuleQueryRepositoryGateway.listBySurvivorPensionAnalysisResultId(
         survivorPensionAnalysisResultId,
       );
 
     const retirementRules = rrList.map((rr) =>
       GetSurvivorPensionAnalysisResultRetirementRuleResponseDto.build({
-        survivorPensionAnalysisRrId: rr.id,
+        survivorPensionAnalysisResultRetirementRuleId: rr.id,
         survivorPensionAnalysisResultId: rr.survivorPensionAnalysisResultId,
         ...(rr.ruleName !== null && { ruleName: rr.ruleName }),
         ...(rr.isRequirementMet !== null && {

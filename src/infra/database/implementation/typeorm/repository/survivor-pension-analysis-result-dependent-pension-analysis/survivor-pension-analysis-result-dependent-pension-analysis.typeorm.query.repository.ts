@@ -28,7 +28,7 @@ export class SurvivorPensionAnalysisResultDependentPensionAnalysisTypeormQueryRe
     super(repository);
   }
 
-  public async findManyBySurvivorPensionAnalysisResultId(
+  public async listBySurvivorPensionAnalysisResultId(
     id: SurvivorPensionAnalysisResultId,
   ): Promise<
     GetSurvivorPensionAnalysisResultDependentPensionAnalysisQueryResult[]

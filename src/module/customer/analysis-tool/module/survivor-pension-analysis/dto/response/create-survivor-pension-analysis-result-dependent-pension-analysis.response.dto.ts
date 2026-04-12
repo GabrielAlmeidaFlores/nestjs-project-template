@@ -8,7 +8,7 @@ export class CreateSurvivorPensionAnalysisResultDependentPensionAnalysisResponse
   @ResponseDtoValueObjectProperty(
     SurvivorPensionAnalysisResultDependentPensionAnalysisId,
   )
-  public survivorPensionAnalysisDpaId: SurvivorPensionAnalysisResultDependentPensionAnalysisId;
+  public survivorPensionAnalysisResultDependentPensionAnalysisId: SurvivorPensionAnalysisResultDependentPensionAnalysisId;
 
   protected override readonly _type =
     CreateSurvivorPensionAnalysisResultDependentPensionAnalysisResponseDto.name;

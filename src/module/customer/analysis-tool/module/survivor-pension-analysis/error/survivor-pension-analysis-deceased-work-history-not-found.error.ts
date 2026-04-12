@@ -1,8 +1,8 @@
 import { NotFoundError } from '@core/error/not-found.error';
 
-export class SurvivorPensionAnalysisDwhNotFoundError extends NotFoundError {
+export class SurvivorPensionAnalysisDeceasedWorkHistoryNotFoundError extends NotFoundError {
   protected override readonly _type =
-    SurvivorPensionAnalysisDwhNotFoundError.name;
+    SurvivorPensionAnalysisDeceasedWorkHistoryNotFoundError.name;
 
   public constructor() {
     super(

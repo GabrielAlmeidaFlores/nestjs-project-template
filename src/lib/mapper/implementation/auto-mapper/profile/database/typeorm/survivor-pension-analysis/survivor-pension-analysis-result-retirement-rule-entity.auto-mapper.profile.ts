@@ -56,6 +56,9 @@ export class SurvivorPensionAnalysisResultRetirementRuleEntityAutoMapperProfile 
                 ? new DecimalValue(source.estimatedRmi)
                 : null,
             isBestRmi: source.isBestRmi,
+            isHighestClaimValue: source.isHighestClaimValue,
+            detailedAnalysis: source.detailedAnalysis,
+            createdAt: source.createdAt,
             updatedAt: source.updatedAt,
             deletedAt: source.deletedAt,
           });
