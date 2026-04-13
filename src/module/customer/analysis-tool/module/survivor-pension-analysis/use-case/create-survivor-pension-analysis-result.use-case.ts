@@ -360,7 +360,9 @@ export class CreateSurvivorPensionAnalysisResultUseCase {
       if (
         typeof data.isInsuredStatusConfirmed !== 'boolean' ||
         typeof data.insuredStatusSummary !== 'string' ||
-        typeof data.isRetirementRightConfirmed !== 'boolean'
+        typeof data.isRetirementRightConfirmed !== 'boolean' ||
+        typeof data.retirementRightSummary !== 'string' ||
+        typeof data.completeAnalysis !== 'string'
       ) {
         throw new InvalidSurvivorPensionAnalysisResultJsonError();
       }
