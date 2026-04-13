@@ -30,9 +30,21 @@ export class CreditPackSeeder implements SeederInterface {
     }
 
     const packs = [
-      new CreditPackEntity({ price: new DecimalValue('49.9'), creditAmount: 50, active: true }),
-      new CreditPackEntity({ price: new DecimalValue('129.9'), creditAmount: 150, active: true }),
-      new CreditPackEntity({ price: new DecimalValue('399.9'), creditAmount: 500, active: true }),
+      new CreditPackEntity({
+        price: new DecimalValue('49.9'),
+        creditAmount: 50,
+        active: true,
+      }),
+      new CreditPackEntity({
+        price: new DecimalValue('129.9'),
+        creditAmount: 150,
+        active: true,
+      }),
+      new CreditPackEntity({
+        price: new DecimalValue('399.9'),
+        creditAmount: 500,
+        active: true,
+      }),
     ];
 
     return packs.map((pack) =>
