@@ -259,10 +259,23 @@ export class GetSurvivorPensionAnalysisUseCase {
               spaData.benefitOriginatorIdentification.id,
             survivorPensionAnalysisId:
               spaData.benefitOriginatorIdentification.survivorPensionAnalysisId,
-            ...(spaData.benefitOriginatorIdentification.analysisToolClientId !==
+            ...(spaData.benefitOriginatorIdentification.clientName !== null && {
+              clientName: spaData.benefitOriginatorIdentification.clientName,
+            }),
+            ...(spaData.benefitOriginatorIdentification
+              .clientFederalDocument !== null && {
+              clientFederalDocument:
+                spaData.benefitOriginatorIdentification.clientFederalDocument,
+            }),
+            ...(spaData.benefitOriginatorIdentification.clientBirthDate !==
               null && {
-              analysisToolClientId:
-                spaData.benefitOriginatorIdentification.analysisToolClientId,
+              clientBirthDate:
+                spaData.benefitOriginatorIdentification.clientBirthDate,
+            }),
+            ...(spaData.benefitOriginatorIdentification.clientGender !==
+              null && {
+              clientGender:
+                spaData.benefitOriginatorIdentification.clientGender,
             }),
             ...(spaData.benefitOriginatorIdentification.deathDate !== null && {
               deathDate: spaData.benefitOriginatorIdentification.deathDate,
@@ -289,7 +302,8 @@ export class GetSurvivorPensionAnalysisUseCase {
     const dwhDto =
       spaData.deceasedWorkHistory !== null
         ? GetSurvivorPensionAnalysisCompleteDwhResponseDto.build({
-            survivorPensionAnalysisDeceasedWorkHistoryId: spaData.deceasedWorkHistory.id,
+            survivorPensionAnalysisDeceasedWorkHistoryId:
+              spaData.deceasedWorkHistory.id,
             survivorPensionAnalysisId:
               spaData.deceasedWorkHistory.survivorPensionAnalysisId,
             ...(spaData.deceasedWorkHistory.startDate !== null && {
@@ -358,7 +372,8 @@ export class GetSurvivorPensionAnalysisUseCase {
               spaData.result.dependentPensionAnalyses.map((dpa) =>
                 GetSurvivorPensionAnalysisResultDependentPensionAnalysisResponseDto.build(
                   {
-                    survivorPensionAnalysisResultDependentPensionAnalysisId: dpa.id,
+                    survivorPensionAnalysisResultDependentPensionAnalysisId:
+                      dpa.id,
                     survivorPensionAnalysisResultId:
                       dpa.survivorPensionAnalysisResultId,
                     ...(dpa.dependentName !== null && {
