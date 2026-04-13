@@ -114,7 +114,9 @@ export class PutSurvivorPensionAnalysisBenefitOriginatorIdentificationDocumentsU
     await txn.commit();
 
     return PutSurvivorPensionAnalysisBenefitOriginatorIdentificationDocumentsResponseDto.build(
-      { survivorPensionAnalysisBenefitOriginatorIdentificationId: boiResult.id },
+      {
+        survivorPensionAnalysisBenefitOriginatorIdentificationId: boiResult.id,
+      },
     );
   }
 }

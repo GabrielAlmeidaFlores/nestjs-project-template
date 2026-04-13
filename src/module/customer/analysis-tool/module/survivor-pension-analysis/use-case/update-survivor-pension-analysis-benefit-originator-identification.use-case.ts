@@ -70,8 +70,11 @@ export class UpdateSurvivorPensionAnalysisBenefitOriginatorIdentificationUseCase
       new SurvivorPensionAnalysisBenefitOriginatorIdentificationEntity({
         id: survivorPensionAnalysisBenefitOriginatorIdentificationId,
         survivorPensionAnalysisId: boiQueryResult.survivorPensionAnalysisId,
-        analysisToolClientId:
-          dto.analysisToolClientId ?? boiQueryResult.analysisToolClientId,
+        clientName: dto.clientName ?? boiQueryResult.clientName,
+        clientFederalDocument:
+          dto.clientFederalDocument ?? boiQueryResult.clientFederalDocument,
+        clientBirthDate: dto.clientBirthDate ?? boiQueryResult.clientBirthDate,
+        clientGender: dto.clientGender ?? boiQueryResult.clientGender,
         deathDate: dto.deathDate ?? boiQueryResult.deathDate,
         federativeEntity:
           dto.federativeEntity ?? boiQueryResult.federativeEntity,

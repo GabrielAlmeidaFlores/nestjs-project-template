@@ -57,8 +57,15 @@ export class CreateSurvivorPensionAnalysisBenefitOriginatorIdentificationUseCase
     const boiEntity =
       new SurvivorPensionAnalysisBenefitOriginatorIdentificationEntity({
         survivorPensionAnalysisId,
-        ...(dto.analysisToolClientId !== undefined && {
-          analysisToolClientId: dto.analysisToolClientId,
+        ...(dto.clientName !== undefined && { clientName: dto.clientName }),
+        ...(dto.clientFederalDocument !== undefined && {
+          clientFederalDocument: dto.clientFederalDocument,
+        }),
+        ...(dto.clientBirthDate !== undefined && {
+          clientBirthDate: dto.clientBirthDate,
+        }),
+        ...(dto.clientGender !== undefined && {
+          clientGender: dto.clientGender,
         }),
         ...(dto.deathDate !== undefined && {
           deathDate: dto.deathDate,
@@ -83,7 +90,9 @@ export class CreateSurvivorPensionAnalysisBenefitOriginatorIdentificationUseCase
     await txn.commit();
 
     return CreateSurvivorPensionAnalysisBenefitOriginatorIdentificationResponseDto.build(
-      { survivorPensionAnalysisBenefitOriginatorIdentificationId: boiEntity.id },
+      {
+        survivorPensionAnalysisBenefitOriginatorIdentificationId: boiEntity.id,
+      },
     );
   }
 }

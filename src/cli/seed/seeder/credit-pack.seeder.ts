@@ -1,7 +1,7 @@
 import { Inject } from '@nestjs/common';
 
-import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
+import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { CreditPackCommandRepositoryGateway } from '@module/customer/credit-pack/domain/repository/credit-pack/command/credit-pack.command.repository.gateway';
 import { CreditPackQueryRepositoryGateway } from '@module/customer/credit-pack/domain/repository/credit-pack/query/credit-pack.query.repository.gateway';
@@ -42,9 +42,10 @@ export class CreditPackSeeder implements SeederInterface {
   ) {}
 
   public async execute(): Promise<Array<TransactionType>> {
-    const existing = await this.creditPackQueryRepositoryGateway.listActiveCreditPacks(
-      new ListDataInputModel({ page: 1, limit: 10 }),
-    );
+    const existing =
+      await this.creditPackQueryRepositoryGateway.listActiveCreditPacks(
+        new ListDataInputModel({ page: 1, limit: 10 }),
+      );
 
     if (existing.totalItems > 0) {
       return [];

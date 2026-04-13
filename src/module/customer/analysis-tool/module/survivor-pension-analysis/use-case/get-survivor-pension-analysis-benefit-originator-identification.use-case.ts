@@ -59,8 +59,17 @@ export class GetSurvivorPensionAnalysisBenefitOriginatorIdentificationUseCase {
       {
         survivorPensionAnalysisBenefitOriginatorIdentificationId: boiResult.id,
         survivorPensionAnalysisId: boiResult.survivorPensionAnalysisId,
-        ...(boiResult.analysisToolClientId !== null && {
-          analysisToolClientId: boiResult.analysisToolClientId,
+        ...(boiResult.clientName !== null && {
+          clientName: boiResult.clientName,
+        }),
+        ...(boiResult.clientFederalDocument !== null && {
+          clientFederalDocument: boiResult.clientFederalDocument,
+        }),
+        ...(boiResult.clientBirthDate !== null && {
+          clientBirthDate: boiResult.clientBirthDate,
+        }),
+        ...(boiResult.clientGender !== null && {
+          clientGender: boiResult.clientGender,
         }),
         ...(boiResult.deathDate !== null && {
           deathDate: boiResult.deathDate,

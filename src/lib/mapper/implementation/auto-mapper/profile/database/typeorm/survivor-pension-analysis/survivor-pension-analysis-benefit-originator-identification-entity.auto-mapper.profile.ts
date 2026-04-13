@@ -2,10 +2,11 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { SurvivorPensionAnalysisBenefitOriginatorIdentificationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/survivor-pension-analysis-benefit-originator-identification.typeorm.entity';
 import { SurvivorPensionAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/survivor-pension-analysis.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
-import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { SurvivorPensionAnalysisId } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis/value-object/survivor-pension-analysis-id/survivor-pension-analysis-id.value-object';
 import { SurvivorPensionAnalysisBenefitOriginatorIdentificationEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-benefit-originator-identification/survivor-pension-analysis-benefit-originator-identification.entity';
 import { SurvivorPensionAnalysisBenefitOriginatorIdentificationId } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-benefit-originator-identification/value-object/survivor-pension-analysis-benefit-originator-identification-id/survivor-pension-analysis-benefit-originator-identification-id.value-object';
@@ -44,10 +45,13 @@ export class SurvivorPensionAnalysisBenefitOriginatorIdentificationEntityAutoMap
         survivorPensionAnalysisId: new SurvivorPensionAnalysisId(
           source.survivorPensionAnalysis.id,
         ),
-        analysisToolClientId:
-          source.analysisToolClientId !== null
-            ? new AnalysisToolClientId(source.analysisToolClientId)
+        clientName: source.clientName,
+        clientFederalDocument:
+          source.clientFederalDocument !== null
+            ? new FederalDocument(source.clientFederalDocument)
             : null,
+        clientBirthDate: source.clientBirthDate,
+        clientGender: source.clientGender as GenderEnum | null,
         deathDate: source.deathDate,
         federativeEntity: source.federativeEntity,
         stateCode: source.stateCode,
@@ -75,7 +79,13 @@ export class SurvivorPensionAnalysisBenefitOriginatorIdentificationEntityAutoMap
       return SurvivorPensionAnalysisBenefitOriginatorIdentificationTypeormEntity.build(
         {
           id: source.id.toString(),
-          analysisToolClientId: source.analysisToolClientId?.toString() ?? null,
+          clientName: source.clientName,
+          clientFederalDocument:
+            source.clientFederalDocument !== null
+              ? source.clientFederalDocument.toString()
+              : null,
+          clientBirthDate: source.clientBirthDate,
+          clientGender: source.clientGender,
           deathDate: source.deathDate,
           federativeEntity: source.federativeEntity,
           stateCode: source.stateCode,

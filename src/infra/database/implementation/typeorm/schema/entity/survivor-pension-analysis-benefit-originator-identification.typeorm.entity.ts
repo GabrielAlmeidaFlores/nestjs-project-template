@@ -8,12 +8,36 @@ import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/sche
 @Entity({ name: 'spa_benefit_originator_identification' })
 export class SurvivorPensionAnalysisBenefitOriginatorIdentificationTypeormEntity extends BaseTypeormEntity {
   @Column({
-    name: 'analysis_tool_client_id',
+    name: 'client_name',
     type: 'varchar',
-    length: 36,
+    length: 255,
     nullable: true,
   })
-  public analysisToolClientId: string | null;
+  public clientName: string | null;
+
+  @Column({
+    name: 'client_federal_document',
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+  })
+  public clientFederalDocument: string | null;
+
+  @Column({
+    name: 'client_birth_date',
+    type: 'date',
+    nullable: true,
+    transformer: DateOnlyTransformer,
+  })
+  public clientBirthDate: Date | null;
+
+  @Column({
+    name: 'client_gender',
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+  })
+  public clientGender: string | null;
 
   @Column({
     name: 'death_date',
