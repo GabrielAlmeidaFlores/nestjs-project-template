@@ -31,6 +31,7 @@ interface SpaResultAiResponseInterface {
   insuredStatusSummary: string;
   isRetirementRightConfirmed: boolean;
   retirementRightSummary: string;
+  completeAnalysis: string;
 }
 
 interface SpaRetirementRulesAiResponseInterface {
@@ -199,7 +200,7 @@ export class CreateSurvivorPensionAnalysisResultUseCase {
             insuredStatusSummary: parsedResult.insuredStatusSummary,
             isRetirementRightConfirmed: parsedResult.isRetirementRightConfirmed,
             retirementRightSummary: parsedResult.retirementRightSummary,
-            completeAnalysis: existingResult.completeAnalysis,
+            completeAnalysis: parsedResult.completeAnalysis,
             simplifiedAnalysis: existingResult.simplifiedAnalysis,
           })
         : new SurvivorPensionAnalysisResultEntity({
@@ -208,6 +209,7 @@ export class CreateSurvivorPensionAnalysisResultUseCase {
             insuredStatusSummary: parsedResult.insuredStatusSummary,
             isRetirementRightConfirmed: parsedResult.isRetirementRightConfirmed,
             retirementRightSummary: parsedResult.retirementRightSummary,
+            completeAnalysis: parsedResult.completeAnalysis,
           });
 
     const rrEntities = parsedRetirementRules.retirementRules.map(
@@ -364,7 +366,6 @@ export class CreateSurvivorPensionAnalysisResultUseCase {
       }
     });
   }
-
   private parseRetirementRulesResponse(
     raw: string | null,
   ): SpaRetirementRulesAiResponseInterface {
