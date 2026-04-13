@@ -8,6 +8,7 @@ import { DeathBenefitGrantDependentTypeormEntity } from '@infra/database/impleme
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { DeathBenefitGrantDependentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/repository/death-benefit-grant-dependent/command/death-benefit-grant-dependent.command.repository.gateway';
 import { DeathBenefitGrantDependentEntity } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-dependent/death-benefit-grant-dependent.entity';
+import { DeathBenefitGrantDependentId } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-dependent/value-object/death-benefit-grant-dependent-id.value-object';
 
 @Injectable()
 export class DeathBenefitGrantDependentTypeormCommandRepository
@@ -35,5 +36,11 @@ export class DeathBenefitGrantDependentTypeormCommandRepository
     );
 
     return this.create(mappedData);
+  }
+
+  public deleteDeathBenefitGrantDependent(
+    id: DeathBenefitGrantDependentId,
+  ): TransactionType {
+    return this.delete(id.toString());
   }
 }

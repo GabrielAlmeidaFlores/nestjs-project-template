@@ -11,16 +11,16 @@ import { Base64FileRequestDto } from '@shared/api/util/dto/request/base64-file.r
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @RequestDto()
-export class CreateDeathBenefitGrantDependentDocumentRequestDto extends BaseBuildableDtoObject {
+export class UpdateDeathBenefitGrantDependentDocumentRequestDto extends BaseBuildableDtoObject {
   @RequestDtoObjectProperty(() => Base64FileRequestDto)
   public file: Base64FileRequestDto;
 
   protected override readonly _type =
-    CreateDeathBenefitGrantDependentDocumentRequestDto.name;
+    UpdateDeathBenefitGrantDependentDocumentRequestDto.name;
 }
 
 @RequestDto()
-export class CreateDeathBenefitGrantDependentRequestDto extends BaseBuildableDtoObject {
+export class UpdateDeathBenefitGrantDependentDto extends BaseBuildableDtoObject {
   @RequestDtoStringProperty()
   public name: string;
 
@@ -46,11 +46,25 @@ export class CreateDeathBenefitGrantDependentRequestDto extends BaseBuildableDto
   public stableUnionOrMarriageStartDate?: Date;
 
   @RequestDtoObjectProperty(
-    () => CreateDeathBenefitGrantDependentDocumentRequestDto,
-    { required: false, isArray: true },
+    () => UpdateDeathBenefitGrantDependentDocumentRequestDto,
+    {
+      required: false,
+      isArray: true,
+    },
   )
-  public documents?: CreateDeathBenefitGrantDependentDocumentRequestDto[];
+  public documents?: UpdateDeathBenefitGrantDependentDocumentRequestDto[];
+
+  protected override readonly _type = UpdateDeathBenefitGrantDependentDto.name;
+}
+
+@RequestDto()
+export class UpdateDeathBenefitGrantDependentRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoObjectProperty(() => UpdateDeathBenefitGrantDependentDto, {
+    required: false,
+    isArray: true,
+  })
+  public dependents?: UpdateDeathBenefitGrantDependentDto[];
 
   protected override readonly _type =
-    CreateDeathBenefitGrantDependentRequestDto.name;
+    UpdateDeathBenefitGrantDependentRequestDto.name;
 }
