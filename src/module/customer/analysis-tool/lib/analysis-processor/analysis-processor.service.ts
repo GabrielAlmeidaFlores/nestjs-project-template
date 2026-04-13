@@ -1423,7 +1423,7 @@ Análise processada do CNIS:
         insuredStatusSummary: {
           type: 'string',
           description:
-            'Resumo técnico sobre a qualidade de segurado do falecido.',
+            'Resumo curto e direto sobre a qualidade de segurado do falecido. Deve ser texto simples, sem formatação markdown, sem asteriscos, sem hashtags, sem tabelas. Máximo de 255 caracteres.',
         },
         isRetirementRightConfirmed: {
           type: 'boolean',
@@ -1433,7 +1433,7 @@ Análise processada do CNIS:
         retirementRightSummary: {
           type: 'string',
           description:
-            'Resumo sobre o direito à aposentadoria do falecido no momento do óbito.',
+            'Resumo curto e direto sobre o direito à aposentadoria do falecido no momento do óbito. Deve ser texto simples, sem formatação markdown, sem asteriscos, sem hashtags, sem tabelas. Máximo de 255 caracteres.',
         },
       },
       required: [
