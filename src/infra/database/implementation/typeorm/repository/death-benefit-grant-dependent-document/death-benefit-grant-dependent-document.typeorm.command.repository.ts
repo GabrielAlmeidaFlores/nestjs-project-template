@@ -39,19 +39,18 @@ export class DeathBenefitGrantDependentDocumentTypeormCommandRepository
   }
 
   public deleteAllByDeathBenefitGrantDependentId(
-    DeathBenefitGrantDependentId: DeathBenefitGrantDependentId,
+    deathBenefitGrantDependentId: DeathBenefitGrantDependentId,
   ): TransactionType {
     return async (executor: unknown) => {
       const manager = executor as EntityManager;
 
       await manager
         .getRepository(DeathBenefitGrantDependentDocumentTypeormEntity)
-        .createQueryBuilder()
-        .softDelete()
-        .where('death_benefit_dependent_id = :DeathBenefitGrantDependentId', {
-          DeathBenefitGrantDependentId: DeathBenefitGrantDependentId.toString(),
-        })
-        .execute();
+        .softDelete({
+          deathBenefitGrantDependent: {
+            id: deathBenefitGrantDependentId.toString(),
+          },
+        });
     };
   }
 }

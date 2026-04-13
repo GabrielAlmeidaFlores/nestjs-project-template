@@ -1,5 +1,4 @@
 import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
-import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { DeathBenefitGrantId } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant/value-object/death-benefit-grant-id.value-object';
 import { DeathBenefitGrantCategoryEnum } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-period/enum/death-benefit-grant-category.enum';
@@ -102,10 +101,10 @@ export class GetDeathBenefitGrantInstitorResponseDto extends BaseBuildableDtoObj
 
 @ResponseDto()
 export class GetDeathBenefitGrantDependentDocumentResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoValueObjectProperty(Base64, {
+  @ResponseDtoStringProperty({
     description: 'Arquivo em Base64',
   })
-  public document: Base64;
+  public document: string;
 
   @ResponseDtoStringProperty()
   public originalFileName: string;
@@ -231,10 +230,10 @@ export class GetDeathBenefitGrantPeriodResponseDto extends BaseBuildableDtoObjec
 
 @ResponseDto()
 export class GetDeathBenefitGrantCnisDocumentResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoValueObjectProperty(Base64, {
+  @ResponseDtoStringProperty({
     description: 'Arquivo em Base64',
   })
-  public document: Base64;
+  public document: string;
 
   @ResponseDtoStringProperty()
   public originalFileName: string;

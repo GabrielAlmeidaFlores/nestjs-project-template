@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { DeathBenefitGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/repository/death-benefit-grant/query/death-benefit-grant.query.repository.gateway';
 import { DeathBenefitGrantId } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant/value-object/death-benefit-grant-id.value-object';
@@ -223,13 +222,13 @@ export class GetDeathBenefitGrantUseCase {
   private async buildCnisDocumentResponse(
     document: string,
   ): Promise<GetDeathBenefitGrantCnisDocumentResponseDto> {
-    const [buffer, originalFileName] = await Promise.all([
-      this.fileProcessorGateway.getFileBuffer(document),
+    const [documentUrl, originalFileName] = await Promise.all([
+      this.fileProcessorGateway.getFileSignedUrl(document),
       this.fileProcessorGateway.getOriginalFileName(document),
     ]);
 
     return GetDeathBenefitGrantCnisDocumentResponseDto.build({
-      document: new Base64(buffer.toString('base64')),
+      document: documentUrl.toString(),
       originalFileName,
     });
   }
@@ -244,7 +243,11 @@ export class GetDeathBenefitGrantUseCase {
   ): Promise<GetDeathBenefitGrantDependentResponseDto> {
     const dep = (result.deathBenefitGrantDependent ?? []).find(
       (d) => d.id.toString() === dependentIdString,
-    )!;
+    );
+
+    if (!dep) {
+      throw new Error('Dependent not found');
+    }
 
     const dependentDocs = (
       result.deathBenefitGrantDependentDocument ?? []
@@ -256,13 +259,13 @@ export class GetDeathBenefitGrantUseCase {
       dependentDocs.length > 0
         ? await Promise.all(
             dependentDocs.map(async (doc) => {
-              const [buffer, originalFileName] = await Promise.all([
-                this.fileProcessorGateway.getFileBuffer(doc.document),
+              const [documentUrl, originalFileName] = await Promise.all([
+                this.fileProcessorGateway.getFileSignedUrl(doc.document),
                 this.fileProcessorGateway.getOriginalFileName(doc.document),
               ]);
 
               return GetDeathBenefitGrantDependentDocumentResponseDto.build({
-                document: new Base64(buffer.toString('base64')),
+                document: documentUrl.toString(),
                 originalFileName,
               });
             }),
