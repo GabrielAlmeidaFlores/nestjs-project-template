@@ -183,6 +183,15 @@ export class DownloadSurvivorPensionAnalysisCompleteAnalysisUseCase {
           : null,
         benefitOriginatorIdentification: spaData.benefitOriginatorIdentification
           ? {
+              clientName:
+                spaData.benefitOriginatorIdentification.clientName,
+              clientFederalDocument:
+                spaData.benefitOriginatorIdentification.clientFederalDocument?.toString() ??
+                null,
+              clientBirthDate:
+                spaData.benefitOriginatorIdentification.clientBirthDate,
+              clientGender:
+                spaData.benefitOriginatorIdentification.clientGender,
               deathDate: spaData.benefitOriginatorIdentification.deathDate,
               federativeEntity:
                 spaData.benefitOriginatorIdentification.federativeEntity,
