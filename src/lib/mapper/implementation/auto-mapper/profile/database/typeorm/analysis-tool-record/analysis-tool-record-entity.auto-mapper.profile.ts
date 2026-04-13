@@ -259,7 +259,6 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
           : null;
 
       const survivorPensionAnalysis =
-        source.survivorPensionAnalysis !== null &&
         source.survivorPensionAnalysis !== undefined
           ? this.mapper.map(
               source.survivorPensionAnalysis,
