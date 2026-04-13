@@ -1435,12 +1435,18 @@ Análise processada do CNIS:
           description:
             'Resumo curto e direto sobre o direito à aposentadoria do falecido no momento do óbito. Deve ser texto simples, sem formatação markdown, sem asteriscos, sem hashtags, sem tabelas. Máximo de 255 caracteres.',
         },
+        completeAnalysis: {
+          type: 'string',
+          description:
+            'Análise completa e detalhada em formato Markdown. Deve conter: (1) análise da qualidade de segurado e carência; (2) situação dos dependentes; (3) regras de aposentadoria verificadas; (4) parecer técnico conclusivo com recomendações. Use títulos (##), negrito (**), listas (-) e parágrafos para estruturar o texto.',
+        },
       },
       required: [
         'isInsuredStatusConfirmed',
         'insuredStatusSummary',
         'isRetirementRightConfirmed',
         'retirementRightSummary',
+        'completeAnalysis',
       ],
     };
   }
@@ -1487,7 +1493,7 @@ Análise processada do CNIS:
               detailedAnalysis: {
                 type: 'string',
                 description:
-                  'Análise detalhada dos requisitos e resultado para esta regra específica.',
+                  'Análise detalhada dos requisitos e resultado para esta regra específica. Retorne texto simples sem markdown, sem asteriscos, sem hashtags. Use \\n para separar cada linha. Estruture em três blocos separados por uma linha em branco (\\n\\n): (1) "📊 Requisitos analisados:" seguido de cada requisito em linha separada com "→ ✅" ou "→ ❌"; (2) "💰 Cálculo da RMI:" com cada item em linha separada (média salarial, coeficiente, RMI estimada); (3) "⚠️ Valor da causa:" com cada item em linha separada (DIB, DER, tempo de atraso, valor em R$). Omita blocos cujos dados não estejam disponíveis.',
               },
             },
             required: [
@@ -1537,7 +1543,7 @@ Análise processada do CNIS:
               estimatedPensionDuration: {
                 type: 'string',
                 description:
-                  'Descrição da duração estimada da pensão conforme art. 77 da Lei 8.213/91.',
+                  'Duração estimada da pensão em formato curto e direto. Retorne apenas a duração, sem citar artigos de lei ou explicações jurídicas. Exemplos de formato esperado: "4 meses", "1 ano", "2 anos e 3 meses", "Até 21 anos", "4 meses ou até a cessação da condição", "Enquanto durar a invalidez". Máximo 50 caracteres.',
               },
             },
             required: [
@@ -1738,7 +1744,7 @@ Análise processada do CNIS:
               detailedAnalysis: {
                 type: 'string',
                 description:
-                  'Análise detalhada sobre o cumprimento ou não dos requisitos desta regra. Retorne em formato Markdown (use ##, ###, **negrito**, listas com - e parágrafos)',
+                  'Análise detalhada dos requisitos e resultado para esta regra específica. Retorne texto simples sem markdown, sem asteriscos, sem hashtags. Use \\n para separar cada linha. Estruture em três blocos separados por uma linha em branco (\\n\\n): (1) "📊 Requisitos analisados:" seguido de cada requisito em linha separada com "→ ✅" ou "→ ❌"; (2) "💰 Cálculo da RMI:" com cada item em linha separada (média salarial, coeficiente, RMI estimada); (3) "⚠️ Valor da causa:" com cada item em linha separada (DIB, DER, tempo de atraso, valor em R$). Omita blocos cujos dados não estejam disponíveis.',
               },
             },
             required: [
