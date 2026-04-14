@@ -1,4 +1,5 @@
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { GetAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client.response.dto';
 import { TeacherRetirementPlanningActivityTypeEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/enum/teacher-retirement-planning-activity-type.enum';
 import { TeacherRetirementPlanningFederativeEntityEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/enum/teacher-retirement-planning-federative-entity.enum';
 import { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
@@ -159,11 +160,11 @@ export class GetTeacherRetirementPlanningResponseDto extends BaseBuildableDtoObj
   @ResponseDtoEnumProperty(TeacherRetirementPlanningActivityTypeEnum)
   public activityType: TeacherRetirementPlanningActivityTypeEnum;
 
-  @ResponseDtoDateProperty()
-  public publicServiceStartDate: Date;
+  @ResponseDtoDateProperty({ required: false })
+  public publicServiceStartDate?: Date;
 
-  @ResponseDtoDateProperty()
-  public careerStartDate: Date;
+  @ResponseDtoDateProperty({ required: false })
+  public careerStartDate?: Date;
 
   @ResponseDtoStringProperty({ required: false })
   public administrativeProcessAnalysis?: string;
@@ -208,6 +209,9 @@ export class GetTeacherRetirementPlanningResponseDto extends BaseBuildableDtoObj
     },
   )
   public teacherRetirementPlanningResult?: GetTeacherRetirementPlanningResultResponseDto;
+
+  @ResponseDtoObjectProperty(() => GetAnalysisToolClientResponseDto)
+  public analysisToolClient: GetAnalysisToolClientResponseDto;
 
   protected override readonly _type =
     GetTeacherRetirementPlanningResponseDto.name;

@@ -22,8 +22,11 @@ import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/mod
 import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
 import { SpecialActivityEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/special-activity-entity';
 import { SpecialCategoryRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/special-category-retirement-analysis.entity';
+import { SpecialRetirementGrantEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/special-retirement-grant.entity';
 import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
+import { SurvivorPensionAnalysisEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis/survivor-pension-analysis.entity';
 import { TeacherRetirementPlanningEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
+import { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/temporary-disability-benefits-grant.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { AnalysisToolRecordEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity.props.interface';
@@ -136,6 +139,16 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly disabilityRetirementPlanningGrant: DisabilityRetirementPlanningGrantEntity | null;
 
   @Description(
+    'Concessão de benefício por incapacidade temporária associada ao registro da ferramenta de análise',
+  )
+  public readonly temporaryDisabilityBenefitsGrant: TemporaryDisabilityBenefitsGrantEntity | null;
+
+  @Description(
+    'Análise de pensão por morte associada ao registro da ferramenta de análise',
+  )
+  public readonly survivorPensionAnalysis: SurvivorPensionAnalysisEntity | null;
+
+  @Description(
     'Análise de aposentadoria por categoria especial associada ao registro da ferramenta de análise',
   )
   public readonly specialCategoryRetirementAnalysis: SpecialCategoryRetirementAnalysisEntity | null;
@@ -144,6 +157,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     'Benefício de morte associado ao registro da ferramenta de análise',
   )
   public readonly deathBenefitGrant: DeathBenefitGrantEntity | null;
+
+  @Description(
+    'Concessão de aposentadoria especial associada ao registro da ferramenta de análise',
+  )
+  public readonly specialRetirementGrant: SpecialRetirementGrantEntity | null;
 
   @Description(
     'Cliente da ferramenta de análise associado ao registro da ferramenta de análise',
@@ -194,9 +212,13 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
       props.generalUrbanRetirementAnalysis ?? null;
     this.disabilityRetirementPlanningGrant =
       props.disabilityRetirementPlanningGrant ?? null;
+    this.temporaryDisabilityBenefitsGrant =
+      props.temporaryDisabilityBenefitsGrant ?? null;
+    this.survivorPensionAnalysis = props.survivorPensionAnalysis ?? null;
     this.specialCategoryRetirementAnalysis =
       props.specialCategoryRetirementAnalysis ?? null;
     this.deathBenefitGrant = props.deathBenefitGrant ?? null;
+    this.specialRetirementGrant = props.specialRetirementGrant ?? null;
     this.status = props.status;
     this.analysisToolClient = props.analysisToolClient;
     this.createdBy = props.createdBy;

@@ -1,6 +1,7 @@
 import { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
 import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { CidTenId } from '@module/customer/analysis-tool/domain/schema/entity/cid-ten/value-object/cid-ten-id.value-object';
+import { GetAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client.response.dto';
 import { FederativeEntityEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/enum/federative-entity.enum';
 import { DisabilityRetirementPlanningId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
 import { DisabilityRetirementPlanningDocumentTypeEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-document/enum/disability-retirement-planning-document-type.enum';
@@ -287,6 +288,9 @@ export class GetDisabilityRetirementPlanningResponseDto extends BaseBuildableDto
     { required: false, isArray: true },
   )
   public periods?: GetDisabilityRetirementPlanningPeriodResponseDto[];
+
+  @ResponseDtoObjectProperty(() => GetAnalysisToolClientResponseDto)
+  public analysisToolClient: GetAnalysisToolClientResponseDto;
 
   protected override readonly _type =
     GetDisabilityRetirementPlanningResponseDto.name;

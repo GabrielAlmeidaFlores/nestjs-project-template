@@ -31,8 +31,11 @@ import { RetirementPlanningRppsModule } from '@module/customer/analysis-tool/mod
 import { RuralTimelineAnalysisModule } from '@module/customer/analysis-tool/module/rural-timeline-analysis/rural-timeline-analysis.module';
 import { SpecialActivityAnalysisModule } from '@module/customer/analysis-tool/module/special-activity-analysis/special-activity-analysis.module';
 import { SpecialCategoryRetirementAnalysisModule } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/special-category-retirement-analysis.module';
+import { SpecialRetirementGrantModule } from '@module/customer/analysis-tool/module/special-retirement-grant/special-retirement-grant.module';
 import { SpeechGeneratorModule } from '@module/customer/analysis-tool/module/speech-generator/speech-generator.module';
+import { SurvivorPensionAnalysisModule } from '@module/customer/analysis-tool/module/survivor-pension-analysis/survivor-pension-analysis.module';
 import { TeacherRetirementPlanningModule } from '@module/customer/analysis-tool/module/teacher-retirement-planning/teacher-retirement-planning.module';
+import { TemporaryDisabilityBenefitsGrantModule } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/temporary-disability-benefits-grant.module';
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
 import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
 import { DeleteAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-record.use-case';
@@ -83,6 +86,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     RuralTimelineAnalysisModule,
     RetirementPlanningRgpsModule,
     RetirementPlanningRppsModule,
+    SpecialRetirementGrantModule,
     TeacherRetirementPlanningModule,
     DisabilityRetirementPlanningModule,
     DisabilityRetirementPlanningGrantModule,
@@ -90,6 +94,8 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     GeneralUrbanRetirementModule,
     SpecialCategoryRetirementAnalysisModule,
     DeathBenefitGrantModule,
+    SurvivorPensionAnalysisModule,
+    TemporaryDisabilityBenefitsGrantModule,
   ],
   controllers: [AnalysisToolController],
   providers: [
