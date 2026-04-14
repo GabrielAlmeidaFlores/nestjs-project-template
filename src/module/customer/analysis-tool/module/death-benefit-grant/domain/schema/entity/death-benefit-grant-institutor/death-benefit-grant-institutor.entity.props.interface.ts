@@ -2,6 +2,7 @@ import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/b
 import type { GenderEnum } from '@core/domain/schema/enum/gender.enum';
 import type { PersonalDocument } from '@core/domain/schema/value-object/personal-document/personal-document.value-object';
 import type { DeathBenefitGrantId } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant/value-object/death-benefit-grant-id.value-object';
+import type { DeathBenefitGrantDocumentEntity } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-document/death-benefit-grant-document.entity';
 import type { DeathBenefitGrantInstitorId } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-institutor/value-object/death-benefit-grant-institutor-id.value-object';
 
 export interface DeathBenefitGrantInstitorEntityPropsInterface extends BaseEntityPropsInterface<DeathBenefitGrantInstitorId> {
@@ -23,4 +24,5 @@ export interface DeathBenefitGrantInstitorEntityPropsInterface extends BaseEntit
   wantsToProveDisabilityBeforeDeath?: boolean | null;
   wantsToProveUnemploymentByWitness?: boolean | null;
   deathBenefitGrantId: DeathBenefitGrantId;
+  deathBenefitGrantDocument?: DeathBenefitGrantDocumentEntity[] | null;
 }

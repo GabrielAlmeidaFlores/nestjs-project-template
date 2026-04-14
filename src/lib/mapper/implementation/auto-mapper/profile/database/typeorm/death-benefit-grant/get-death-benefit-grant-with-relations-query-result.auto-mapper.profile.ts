@@ -32,6 +32,8 @@ import { DeathBenefitGrantPeriodDocumentId } from '@module/customer/analysis-too
 import { DeathBenefitGrantPeriodEarningsHistoryEntity } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-period-earnings-history/death-benefit-grant-period-earnings-history.entity';
 import { DeathBenefitGrantPeriodEarningsHistoryId } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-period-earnings-history/value-object/death-benefit-grant-period-earnings-history-id.value-object';
 import { DeathBenefitGrantResultEntity } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-result/death-benefit-grant-result.entity';
+import { DeathBenefitGrantTimeAcceleratorEntity } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-time-accelerator/death-benefit-grant-time-accelerator.entity';
+import { DeathBenefitGrantTimeAcceleratorId } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-time-accelerator/value-object/death-benefit-grant-time-accelerator-id.value-object';
 
 @Injectable()
 export class GetDeathBenefitGrantWithRelationsQueryResultAutoMapperProfile {
@@ -121,6 +123,24 @@ export class GetDeathBenefitGrantWithRelationsQueryResultAutoMapperProfile {
 
       const [benefitInstitutor] =
         source.deathBenefitGrantBenefitInstitutor ?? [];
+
+      const deathBenefitGrantDocument = benefitInstitutor
+        ? (benefitInstitutor.deathBenefitGrantDocument ?? []).map(
+            (item) =>
+              new DeathBenefitGrantDocumentEntity({
+                id: new DeathBenefitGrantDocumentId(item.id),
+                document: item.document,
+                type: item.type,
+                deathBenefitGrantInstitorId: new DeathBenefitGrantInstitorId(
+                  benefitInstitutor.id,
+                ),
+                createdAt: item.createdAt,
+                updatedAt: item.updatedAt,
+                deletedAt: item.deletedAt,
+              }),
+          )
+        : [];
+
       const deathBenefitGrantBenefitInstitutor = benefitInstitutor
         ? new DeathBenefitGrantInstitorEntity({
             id: new DeathBenefitGrantInstitorId(benefitInstitutor.id),
@@ -154,25 +174,9 @@ export class GetDeathBenefitGrantWithRelationsQueryResultAutoMapperProfile {
             createdAt: benefitInstitutor.createdAt,
             updatedAt: benefitInstitutor.updatedAt,
             deletedAt: benefitInstitutor.deletedAt,
+            deathBenefitGrantDocument,
           })
         : null;
-
-      const deathBenefitGrantDocument = benefitInstitutor
-        ? (benefitInstitutor.deathBenefitGrantDocument ?? []).map(
-            (item) =>
-              new DeathBenefitGrantDocumentEntity({
-                id: new DeathBenefitGrantDocumentId(item.id),
-                document: item.document,
-                type: item.type,
-                deathBenefitGrantInstitorId: new DeathBenefitGrantInstitorId(
-                  benefitInstitutor.id,
-                ),
-                createdAt: item.createdAt,
-                updatedAt: item.updatedAt,
-                deletedAt: item.deletedAt,
-              }),
-          )
-        : [];
 
       const deathBenefitGrantDependent = (
         source.deathBenefitGrantDependent ?? []
@@ -290,7 +294,6 @@ export class GetDeathBenefitGrantWithRelationsQueryResultAutoMapperProfile {
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
         deathBenefitGrantResult,
-        deathBenefitGrantDocument,
         deathBenefitGrantInssBenefit,
         deathBenefitGrantLegalProceeding,
         deathBenefitGrantLegalRepresentative,
@@ -300,6 +303,27 @@ export class GetDeathBenefitGrantWithRelationsQueryResultAutoMapperProfile {
         deathBenefitGrantPeriod,
         deathBenefitGrantPeriodDocument,
         deathBenefitGrantPeriodEarningsHistory,
+        deathBenefitGrantTimeAccelerator: (
+          source.deathBenefitGrantTimeAccelerator ?? []
+        ).map(
+          (item) =>
+            new DeathBenefitGrantTimeAcceleratorEntity({
+              id: new DeathBenefitGrantTimeAcceleratorId(item.id),
+              type: item.type,
+              recognitionInss: item.recognitionInss,
+              recognitionJudicial: item.recognitionJudicial,
+              viability: item.viability,
+              technicalNote: item.technicalNote,
+              startDate: item.startDate,
+              endDate: item.endDate,
+              institution: item.institution,
+              affectsQualifyingPeriod: item.affectsQualifyingPeriod,
+              deathBenefitGrantId: deathBenefitGrantEntity.id,
+              createdAt: item.createdAt,
+              updatedAt: item.updatedAt,
+              deletedAt: item.deletedAt,
+            }),
+        ),
       });
     };
 

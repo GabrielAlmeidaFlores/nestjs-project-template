@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { DeathBenefitGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/repository/death-benefit-grant/query/death-benefit-grant.query.repository.gateway';
 import { DeathBenefitGrantId } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant/value-object/death-benefit-grant-id.value-object';
+import { DeathBenefitGrantDocumentTypeEnum } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/enum/death-benefit-grant-document-type.enum';
 import {
   GetDeathBenefitGrantResponseDto,
   GetDeathBenefitGrantCnisDocumentResponseDto,
@@ -16,6 +17,7 @@ import {
   GetDeathBenefitGrantPeriodResponseDto,
   GetDeathBenefitGrantPeriodEarningsHistoryResponseDto,
 } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/response/get-death-benefit-grant.response.dto';
+import { DeathBenefitGrantDependentNotFoundError } from '@module/customer/analysis-tool/module/death-benefit-grant/error/death-benefit-grant-dependent-not-found.error';
 import { DeathBenefitGrantNotFoundError } from '@module/customer/analysis-tool/module/death-benefit-grant/error/death-benefit-grant-not-found.error';
 
 @Injectable()
@@ -38,7 +40,10 @@ export class GetDeathBenefitGrantUseCase {
         DeathBenefitGrantNotFoundError,
       );
 
-    const cnisDocumentEntity = result.deathBenefitGrantDocument?.[0] ?? null;
+    const cnisDocumentEntity =
+      result.deathBenefitGrantBenefitInstitutor?.deathBenefitGrantDocument?.find(
+        (document) => document.type === DeathBenefitGrantDocumentTypeEnum.CNIS,
+      ) ?? null;
 
     const cnisDocument =
       cnisDocumentEntity !== null
@@ -246,7 +251,7 @@ export class GetDeathBenefitGrantUseCase {
     );
 
     if (!dep) {
-      throw new Error('Dependent not found');
+      throw new DeathBenefitGrantDependentNotFoundError();
     }
 
     const dependentDocs = (

@@ -11,6 +11,7 @@ import { DeathBenefitGrantPeriodDocumentTypeormEntity } from '@infra/database/im
 import { DeathBenefitGrantPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-period-earnings-history.typeorm.entity';
 import { DeathBenefitGrantPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-period.typeorm.entity';
 import { DeathBenefitGrantResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-result.typeorm.entity';
+import { DeathBenefitGrantTimeAcceleratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-time-accelerator.typeorm.entity';
 
 @Entity({ name: 'death_benefit_grant' })
 export class DeathBenefitGrantTypeormEntity extends BaseTypeormEntity {
@@ -103,6 +104,14 @@ export class DeathBenefitGrantTypeormEntity extends BaseTypeormEntity {
   )
   public deathBenefitGrantPeriodEarningsHistory?:
     | DeathBenefitGrantPeriodEarningsHistoryTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => DeathBenefitGrantTimeAcceleratorTypeormEntity,
+    (entity) => entity.deathBenefitGrant,
+  )
+  public deathBenefitGrantTimeAccelerator?:
+    | DeathBenefitGrantTimeAcceleratorTypeormEntity[]
     | undefined;
 
   protected override readonly _type = DeathBenefitGrantTypeormEntity.name;
