@@ -78,6 +78,19 @@ export class DeathBenefitGrantPeriodTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'bond_origin', type: 'varchar', length: 255, nullable: true })
   public bondOrigin: string | null;
 
+  @Column({ name: 'impact', type: 'varchar', length: 500, nullable: true })
+  public impact: string | null;
+
+  @Column({ name: 'grace_period', type: 'int', nullable: true })
+  public gracePeriod: number | null;
+
+  @Column({
+    name: 'complement_via_my_inss',
+    type: 'boolean',
+    nullable: true,
+  })
+  public complementViaMyInss: boolean | null;
+
   @ManyToOne(
     () => DeathBenefitGrantTypeormEntity,
     (entity) => entity.deathBenefitGrantPeriod,

@@ -39,19 +39,16 @@ export class DeathBenefitGrantPeriodEarningsHistoryTypeormCommandRepository
   }
 
   public deleteAllByDeathBenefitGrantPeriodId(
-    DeathBenefitGrantPeriodId: DeathBenefitGrantPeriodId,
+    deathBenefitGrantPeriodId: DeathBenefitGrantPeriodId,
   ): TransactionType {
     return async (executor: unknown) => {
       const manager = executor as EntityManager;
 
       await manager
         .getRepository(DeathBenefitGrantPeriodEarningsHistoryTypeormEntity)
-        .createQueryBuilder()
-        .softDelete()
-        .where('death_benefit_period_id = :DeathBenefitGrantPeriodId', {
-          DeathBenefitGrantPeriodId: DeathBenefitGrantPeriodId.toString(),
-        })
-        .execute();
+        .softDelete({
+          deathBenefitGrantPeriod: { id: deathBenefitGrantPeriodId.toString() },
+        });
     };
   }
 }

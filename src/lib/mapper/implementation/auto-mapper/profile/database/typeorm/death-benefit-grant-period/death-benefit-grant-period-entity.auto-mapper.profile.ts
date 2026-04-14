@@ -56,6 +56,9 @@ export class DeathBenefitGrantPeriodEntityAutoMapperProfile {
                 ? new DecimalValue(source.contributionAverage)
                 : null,
             bondOrigin: source.bondOrigin,
+            impact: source.impact,
+            gracePeriod: source.gracePeriod,
+            complementViaMyInss: source.complementViaMyInss,
             deathBenefitGrantId: new DeathBenefitGrantId(
               source.deathBenefitGrant.id,
             ),
@@ -93,6 +96,9 @@ export class DeathBenefitGrantPeriodEntityAutoMapperProfile {
                 ? source.contributionAverage.toString()
                 : null,
             bondOrigin: source.bondOrigin,
+            impact: source.impact,
+            gracePeriod: source.gracePeriod,
+            complementViaMyInss: source.complementViaMyInss,
             deathBenefitGrant: DeathBenefitGrantTypeormEntity.build({
               id: source.deathBenefitGrantId.toString(),
             } as DeathBenefitGrantTypeormEntity),

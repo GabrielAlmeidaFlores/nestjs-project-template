@@ -9,6 +9,9 @@ import { CnisModel } from '@lib/cnis-processor/model/generic/cnis.model';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { DeathBenefitGrantCategoryEnum } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-period/enum/death-benefit-grant-category.enum';
 import { DeathBenefitGrantPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-period/enum/death-benefit-grant-period-pendency-reason.enum';
+import { DeathBenefitGrantTimeAcceleratorRecognitionInssEnum } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-time-accelerator/enum/death-benefit-grant-time-accelerator-recognition-inss.enum';
+import { DeathBenefitGrantTimeAcceleratorRecognitionJudicialEnum } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-time-accelerator/enum/death-benefit-grant-time-accelerator-recognition-judicial.enum';
+import { DeathBenefitGrantTimeAcceleratorViabilityEnum } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-time-accelerator/enum/death-benefit-grant-time-accelerator-viability.enum';
 import { DisabilityRetirementPlanningGrantCategoryEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant/enum/disability-retirement-planning-grant-category.enum';
 import { DisabilityRetirementPlanningGrantDisabilityDegreeEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-disability-period/enum/disability-retirement-planning-grant-disability-degree.enum';
 import { DisabilityRetirementPlanningGrantPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-period/enum/disability-retirement-planning-grant-period-consideration.enum';
@@ -2460,6 +2463,33 @@ An�lise processada do CNIS:
     };
   }
 
+  public async getDeathBenefitGrantTimeAcceleratorAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Use exclusivamente os valores de enum fornecidos no schema para os campos de reconhecimento e viabilidade.
+- Cada item de \`timeAccelerators\` deve ser compatível com a criação de um período de acelerador de tempo.
+- Preencha \`technicalNote\`, \`startDate\`, \`endDate\` e \`institution\` quando essas informações estiverem disponíveis nos documentos analisados.
+- Não incluir tag <br> na resposta.
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getDeathBenefitGrantTimeAcceleratorAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
   public async getDeathBenefitGrantFirstAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
@@ -2733,6 +2763,15 @@ Análise processada do CNIS:
                 type: 'string',
                 description: 'Origem do vínculo empregatício',
               },
+              impact: {
+                type: 'string',
+                description: 'Impacto do período na análise previdenciária',
+              },
+              complementViaMyInss: {
+                type: 'boolean',
+                description:
+                  'Indica se deseja fazer a complementação via Meu INSS',
+              },
               earningsHistory: {
                 type: 'array',
                 description:
@@ -2806,6 +2845,244 @@ Análise processada do CNIS:
         'dependentQualityAnalysis',
         'retirementRuleSummaries',
         'periods',
+      ],
+    };
+  }
+
+  public async getDeathBenefitGrantResultAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS; não realize cálculos como valores salariais, use estritamente os fornecidos.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: this.getDeathBenefitGrantResultAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getDeathBenefitGrantSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  private getDeathBenefitGrantTimeAcceleratorAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        timeAccelerators: {
+          type: 'array',
+          description:
+            'Lista de períodos de acelerador de tempo identificados nos documentos analisados',
+          items: {
+            type: 'object',
+            properties: {
+              recognitionInss: {
+                type: 'string',
+                enum: Object.values(
+                  DeathBenefitGrantTimeAcceleratorRecognitionInssEnum,
+                ),
+                description: 'Probabilidade de reconhecimento no INSS',
+              },
+              recognitionJudicial: {
+                type: 'string',
+                enum: Object.values(
+                  DeathBenefitGrantTimeAcceleratorRecognitionJudicialEnum,
+                ),
+                description: 'Probabilidade de reconhecimento judicial',
+              },
+              viability: {
+                type: 'string',
+                enum: Object.values(
+                  DeathBenefitGrantTimeAcceleratorViabilityEnum,
+                ),
+                description: 'Nível de viabilidade do período analisado',
+              },
+              technicalNote: {
+                type: 'string',
+                description: 'Nota técnica resumindo os fundamentos do período',
+              },
+              startDate: {
+                type: 'string',
+                format: 'date-time',
+                description: 'Data de início do período no formato ISO 8601',
+              },
+              endDate: {
+                type: 'string',
+                format: 'date-time',
+                description: 'Data de fim do período no formato ISO 8601',
+              },
+              institution: {
+                type: 'string',
+                description: 'Instituição ou empregador relacionado ao período',
+              },
+              affectsQualifyingPeriod: {
+                type: 'boolean',
+                description:
+                  'Indica se o período afeta carência ou tempo qualificável',
+              },
+            },
+            required: [
+              'recognitionInss',
+              'recognitionJudicial',
+              'viability',
+              'technicalNote',
+              'startDate',
+              'endDate',
+              'institution',
+              'affectsQualifyingPeriod',
+            ],
+          },
+        },
+      },
+      required: ['timeAccelerators'],
+    };
+  }
+
+  private getDeathBenefitGrantResultAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        eligibilityStatus: {
+          type: 'string',
+          enum: ['ELIGIBLE', 'PARTIALLY_ELIGIBLE', 'NOT_ELIGIBLE'],
+          description:
+            'Status de elegibilidade para pensão por morte: ELIGIBLE (elegível), PARTIALLY_ELIGIBLE (parcialmente elegível), NOT_ELIGIBLE (não elegível)',
+        },
+        insuredQualityStatus: {
+          type: 'string',
+          enum: ['PROVEN', 'NOT_PROVEN'],
+          description:
+            'Status da qualidade de segurado do instituidor falecido: PROVEN (comprovada), NOT_PROVEN (não comprovada)',
+        },
+        dependentQualityStatus: {
+          type: 'string',
+          enum: ['PROVEN', 'PARTIALLY_PROVEN', 'NOT_PROVEN'],
+          description:
+            'Status geral da qualidade de dependente: PROVEN (comprovada), PARTIALLY_PROVEN (parcialmente comprovada), NOT_PROVEN (não comprovada)',
+        },
+        applicableRules: {
+          type: 'array',
+          description:
+            'Resumo de regras aplicáveis para pensão por morte (RGPS)',
+          items: {
+            type: 'object',
+            properties: {
+              ruleName: {
+                type: 'string',
+                description: 'Nome da regra de pensão por morte',
+              },
+              result: {
+                type: 'string',
+                description: 'Resultado da aplicação da regra',
+              },
+              rightDate: {
+                type: 'string',
+                format: 'date',
+                description: 'Data do direito no formato YYYY-MM-DD',
+              },
+              estimatedRmi: {
+                type: 'string',
+                description:
+                  'RMI prevista em formato textual (ex: R$ 3.218,45)',
+              },
+              quotaQuantity: {
+                type: 'number',
+                description: 'Quantidade de cotas',
+              },
+              quotaValue: {
+                type: 'string',
+                description:
+                  'Valor da cota em formato textual (ex: R$ 2.000,00)',
+              },
+              detailedAnalysis: {
+                type: 'string',
+                description: 'Análise detalhada da regra em formato markdown',
+              },
+            },
+            required: ['ruleName', 'result', 'detailedAnalysis'],
+          },
+        },
+        dependentAnalysis: {
+          type: 'array',
+          description: 'Resultado da análise dos dependentes',
+          items: {
+            type: 'object',
+            properties: {
+              dependentName: {
+                type: 'string',
+                description: 'Nome do dependente',
+              },
+              dependencyDegree: {
+                type: 'string',
+                description: 'Grau de dependência (ex: Cônjuge, Filho Menor)',
+              },
+              dependentQualityStatus: {
+                type: 'string',
+                enum: ['PROVEN', 'PARTIALLY_PROVEN', 'NOT_PROVEN'],
+                description:
+                  'Status da qualidade de dependente: PROVEN (comprovada), PARTIALLY_PROVEN (parcialmente comprovada), NOT_PROVEN (não comprovada)',
+              },
+              quotaValue: {
+                type: 'string',
+                description: 'Valor da cota do dependente em formato textual',
+              },
+              pensionStartDate: {
+                type: 'string',
+                format: 'date',
+                description: 'Data de início da pensão no formato YYYY-MM-DD',
+              },
+              estimatedPensionDuration: {
+                type: 'string',
+                description:
+                  'Duração estimada da pensão (ex: Vitalício, 4 anos)',
+              },
+            },
+            required: [
+              'dependentName',
+              'dependencyDegree',
+              'dependentQualityStatus',
+              'estimatedPensionDuration',
+            ],
+          },
+        },
+        analysisDescription: {
+          type: 'string',
+          description:
+            'Descrição completa e detalhada do resultado da análise de pensão por morte em formato Markdown. Deve conter o histórico previdenciário do instituidor, análise da qualidade de segurado, análise dos dependentes, aplicação das regras de pensão e conclusão fundamentada.',
+        },
+      },
+      required: [
+        'eligibilityStatus',
+        'insuredQualityStatus',
+        'dependentQualityStatus',
+        'applicableRules',
+        'dependentAnalysis',
+        'analysisDescription',
       ],
     };
   }

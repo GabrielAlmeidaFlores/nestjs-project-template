@@ -324,6 +324,14 @@ export class CreateDeathBenefitGrantFirstAnalysisUseCase {
                 period.bondOrigin !== null && {
                   bondOrigin: period.bondOrigin,
                 }),
+              ...(period.impact !== undefined &&
+                period.impact !== null && {
+                  impact: period.impact,
+                }),
+              ...(period.complementViaMyInss !== undefined &&
+                period.complementViaMyInss !== null && {
+                  complementViaMyInss: period.complementViaMyInss,
+                }),
             }),
           ),
         }),
@@ -501,6 +509,13 @@ export class CreateDeathBenefitGrantFirstAnalysisUseCase {
             contributionAverage: period.contributionAverage.toString(),
           }),
           ...(period.bondOrigin !== null && { bondOrigin: period.bondOrigin }),
+          ...(period.impact !== null && { impact: period.impact }),
+          ...(period.gracePeriod !== null && {
+            gracePeriod: period.gracePeriod,
+          }),
+          ...(period.complementViaMyInss !== null && {
+            complementViaMyInss: period.complementViaMyInss,
+          }),
         }),
       ),
       // timeAccelerators: (
