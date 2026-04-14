@@ -8667,6 +8667,77 @@ E terminar com a assinatura.
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_GRANT_COMPLETE_ANALYSIS,
+      ),
+      prompt: `Você é um especialista em Direito Previdenciário brasileiro e concessão de aposentadoria especial.
+
+Gere uma ANÁLISE COMPLETA usando os documentos fornecidos (CNIS e PPPs) e os dados do cliente.
+
+A sua resposta DEVE ser um JSON válido seguindo EXATAMENTE o schema abaixo. NÃO retorne markdown, texto livre ou qualquer conteúdo fora do JSON.
+
+Schema obrigatório:
+{
+  "regrasAplicaveis": [
+    {
+      "modalidade": "Nome da regra/modalidade de aposentadoria especial (ex: Aposentadoria Especial 25 anos, Regra de Transição por Pontos, etc.)",
+      "cumprida": true/false (se o segurado já cumpriu os requisitos desta modalidade),
+      "dataDaAposentadoria": "Data estimada em que o segurado poderá se aposentar nesta modalidade (formato DD/MM/AAAA ou texto descritivo se já cumprida)",
+      "rmiPrevista": "Renda Mensal Inicial prevista para esta modalidade (valor em R$ ou descrição)",
+      "valorDaCausaEstimada": "Valor da causa estimado caso seja necessário ingressar judicialmente (valor em R$)",
+      "melhorRmi": true/false (se esta modalidade oferece a melhor RMI entre todas as analisadas),
+      "maiorValorDeCausa": true/false (se esta modalidade oferece o maior valor de causa entre todas),
+      "analiseDetalhada": "Texto detalhado em markdown com a análise completa desta modalidade, incluindo fundamentação legal, tempo de contribuição especial computado, carência, pontos críticos e recomendações específicas"
+    }
+  ],
+  "periodosReconhecidos": [
+    {
+      "origemDoVinculo": "Origem do vínculo empregatício (ex: CNIS, PPP, CTPS, etc.)",
+      "periodo": "Período do vínculo (formato DD/MM/AAAA a DD/MM/AAAA)",
+      "categoria": "Categoria da atividade especial (ex: 25 anos, 20 anos, 15 anos)",
+      "agentes": "Agentes nocivos identificados nos documentos (ex: ruído acima de 85 dB, agentes químicos, etc.)",
+      "tempoEspecial": "Tempo de atividade especial computado neste período",
+      "tempoConvertido": "Tempo convertido para tempo comum (fator de conversão aplicado)",
+      "status": "Status do reconhecimento do período (ex: Reconhecido pelo INSS, Pendente de comprovação, Necessita PPP, etc.)"
+    }
+  ],
+  "resultadoDaAnalise": "Texto completo em markdown com o resultado consolidado da análise, incluindo: 1) Resumo executivo, 2) Linha do tempo integrada (vínculos, remunerações e pendências), 3) Pontos críticos (PEXT, competências abaixo do mínimo, vínculos sem data fim), 4) Recomendação estratégica (via administrativa ou judicial, documentos faltantes e próximos passos)"
+}
+
+Regras importantes:
+- Analise TODAS as modalidades de aposentadoria especial aplicáveis ao caso.
+- Identifique e liste TODOS os períodos de atividade especial encontrados nos documentos.
+- Marque corretamente "melhorRmi" e "maiorValorDeCausa" (apenas UMA modalidade pode ser true para cada).
+- Extraia agentes nocivos dos PPPs/LTCATs, NÃO do CNIS.
+- NÃO invente dados; baseie-se exclusivamente nos documentos fornecidos.
+- O campo "resultadoDaAnalise" deve conter uma análise completa e detalhada em markdown.
+- O campo "analiseDetalhada" de cada regra deve conter fundamentação legal e análise minuciosa.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_GRANT_FIRST_ANALYSIS,
+      ),
+      prompt: `Você é um especialista em Direito Previdenciário brasileiro e concessão de aposentadoria especial.
+
+Gere uma FIRST ANALYSIS em formato ESTRITAMENTE JSON compatível com o schema exigido pelo endpoint.
+
+Regras:
+- Baseie-se prioritariamente na análise processada do CNIS (JSON) e nos dados estruturados enviados em arquivos.
+- NÃO invente remunerações; use as remunerações fornecidas.
+- Agentes nocivos NÃO vêm do CNIS: extraia e consolide a partir de PPP/LTCAT e demais documentos anexos.
+- Preencha: summary (tempo/carência), periods (com earningsHistory + agents + status), technicalDiagnosis e integratedTimeline.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_GRANT_SIMPLIFIED_ANALYSIS,
+      ),
+      prompt: `Você é um especialista em Direito Previdenciário brasileiro.
+
+Gere uma ANÁLISE SIMPLIFICADA, em linguagem acessível, com no máximo 4 parágrafos, baseada nos documentos fornecidos (CNIS e PPPs) e dados do cliente.
+
+Destaque: status geral, principais pendências e próximos passos.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
         PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_SIMPLIFIED_ANALYSIS,
       ),
       prompt: `# PROMPT PARA GERAÇÃO DE MENSAGEM WHATSAPP - ANÁLISE DE TEMPO ESPECIAL

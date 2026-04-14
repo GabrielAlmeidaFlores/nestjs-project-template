@@ -23,6 +23,7 @@ import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementat
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
 import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
 import { SpecialCategoryRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis.typeorm.entity';
+import { SpecialRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant.typeorm.entity';
 import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
 import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant.typeorm.entity';
@@ -50,6 +51,7 @@ import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/mod
 import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
 import { SpecialActivityEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/special-activity-entity';
 import { SpecialCategoryRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/special-category-retirement-analysis.entity';
+import { SpecialRetirementGrantEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/special-retirement-grant.entity';
 import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
 import { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/temporary-disability-benefits-grant.entity';
 
@@ -246,6 +248,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const specialRetirementGrant =
+        source.specialRetirementGrant !== undefined
+          ? this.mapper.map(
+              source.specialRetirementGrant,
+              SpecialRetirementGrantTypeormEntity,
+              SpecialRetirementGrantEntity,
+            )
+          : null;
+
       const temporaryDisabilityBenefitsGrant =
         source.temporaryDisabilityBenefitsGrant !== null &&
         source.temporaryDisabilityBenefitsGrant !== undefined
@@ -286,6 +297,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         disabilityRetirementPlanning,
         generalUrbanRetirementAnalysis,
         specialCategoryRetirementAnalysis,
+        specialRetirementGrant,
         temporaryDisabilityBenefitsGrant,
       });
     };
@@ -486,6 +498,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const specialRetirementGrant =
+        source.specialRetirementGrant !== null
+          ? this.mapper.map(
+              source.specialRetirementGrant,
+              SpecialRetirementGrantEntity,
+              SpecialRetirementGrantTypeormEntity,
+            )
+          : null;
+
       return AnalysisToolRecordTypeormEntity.build({
         id: source.id.toString(),
         code: source.code.toString(),
@@ -514,6 +535,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         disabilityRetirementPlanning,
         generalUrbanRetirementAnalysis,
         specialCategoryRetirementAnalysis,
+        specialRetirementGrant,
         temporaryDisabilityBenefitsGrant,
         analysisToolClient,
         createdBy: {

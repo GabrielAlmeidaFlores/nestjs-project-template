@@ -914,6 +914,42 @@ An�lise processada do CNIS:
     );
   }
 
+  public async getSpecialRetirementGrantFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson = true,
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON;
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize cálculos salariais além do que for necessário; use estritamente os fornecidos.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Para cada item de \`periods\`, use prioritariamente os dados estruturados já enviados nos arquivos do prompt; não invente valores.
+- O campo \`agents\` NÃO vem do CNIS analisado; extraia e consolide agentes nocivos a partir dos documentos anexados (PPP, LTCAT, etc.) e devolva no formato estruturado.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: asJson
+          ? ResponseConfigInputModel.build({
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema:
+                this.getSpecialRetirementGrantFirstAnalysisJsonSchema(),
+            })
+          : null,
+      }),
+    );
+  }
+
   public async getDisabilityRetirementPlanningGrantResultAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
@@ -1020,6 +1056,30 @@ An�lise processada do CNIS:
   }
 
   public async getSpecialCategoryRetirementAdministrativeProcedureAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getSpecialRetirementGrantCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getSpecialRetirementGrantSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null> {
@@ -2030,6 +2090,235 @@ Análise processada do CNIS:
         disabilityAnalysis: disabilityAnalysisSchema,
       },
       required: ['periods', 'disabilityAnalysis'],
+    };
+  }
+
+  private getSpecialRetirementGrantFirstAnalysisJsonSchema(): object {
+    const agentSchema = {
+      type: 'object',
+      properties: {
+        type: {
+          type: 'string',
+          description: 'Tipo do agente nocivo. Ex: Ruído, Calor, Químicos',
+        },
+        intensity: {
+          type: 'string',
+          description: 'Intensidade/medição (quando houver). Ex: 87dB',
+        },
+        unit: { type: 'string', description: 'Unidade da medição. Ex: dB, °C' },
+        habitual: {
+          type: 'boolean',
+          description: 'Exposição habitual.',
+        },
+        permanence: {
+          type: 'boolean',
+          description: 'Exposição permanente.',
+        },
+        source: {
+          type: 'string',
+          description: 'Fonte da informação. Ex: PPP, LTCAT',
+        },
+        epiEficaz: {
+          type: 'boolean',
+          description:
+            'Indica se EPI foi considerado eficaz, quando aplicável.',
+        },
+      },
+      required: ['type'],
+    };
+
+    const earningsSchema = {
+      type: 'object',
+      properties: {
+        competence: {
+          type: 'string',
+          format: 'date',
+          description: 'Competência no formato YYYY-MM-DD',
+        },
+        remuneration: { type: 'string', description: 'Remuneração' },
+        indicators: { type: 'string', description: 'Indicadores CNIS' },
+        paymentDate: {
+          type: 'string',
+          format: 'date',
+          description: 'Data de pagamento no formato YYYY-MM-DD',
+        },
+        competenceBelowTheMinimum: {
+          type: 'boolean',
+          description: 'Indica competência abaixo do mínimo',
+        },
+      },
+      required: [
+        'competence',
+        'remuneration',
+        'indicators',
+        'paymentDate',
+        'competenceBelowTheMinimum',
+      ],
+    };
+
+    return {
+      type: 'object',
+      properties: {
+        summary: {
+          type: 'object',
+          properties: {
+            specialTime: {
+              type: 'string',
+              description: 'Tempo especial. Ex: 23 anos e 4 meses',
+            },
+            commonTime: {
+              type: 'string',
+              description: 'Tempo comum. Ex: 12 anos e 3 meses',
+            },
+            specialGracePeriod: {
+              type: 'number',
+              description: 'Carência no tempo especial (contribuições)',
+            },
+            commonGracePeriod: {
+              type: 'number',
+              description: 'Carência no tempo comum (contribuições)',
+            },
+            totalTime: {
+              type: 'string',
+              description: 'Tempo total. Ex: 30 anos e 2 meses',
+            },
+            totalGracePeriod: {
+              type: 'number',
+              description: 'Carência total (contribuições)',
+            },
+          },
+          required: [
+            'specialTime',
+            'commonTime',
+            'specialGracePeriod',
+            'commonGracePeriod',
+            'totalTime',
+            'totalGracePeriod',
+          ],
+        },
+        periods: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              employmentRelationshipSource: {
+                type: 'string',
+                description: 'Origem do vínculo (empregador/vínculo).',
+              },
+              startDate: {
+                type: 'string',
+                format: 'date',
+                description: 'Data de início do período (YYYY-MM-DD).',
+              },
+              endDate: {
+                type: 'string',
+                format: 'date',
+                description: 'Data de fim do período (YYYY-MM-DD) ou null.',
+              },
+              category: {
+                type: 'string',
+                description: 'Categoria do vínculo.',
+              },
+              impact: {
+                type: 'string',
+                description: 'Impacto em tempo. Ex: 2 anos e 3 meses.',
+              },
+              gracePeriod: {
+                type: 'number',
+                description: 'Carência do período (contribuições).',
+              },
+              agents: {
+                type: 'array',
+                items: agentSchema,
+                description: 'Agentes nocivos consolidados por IA.',
+              },
+              status: {
+                type: 'string',
+                description: 'Status (valid/pending/invalid).',
+              },
+              earningsHistory: {
+                type: 'array',
+                items: earningsSchema,
+                description: 'Remunerações do período (CNIS).',
+              },
+              observations: {
+                type: 'array',
+                items: { type: 'string' },
+                description: 'Observações do período (quando houver).',
+              },
+            },
+            required: [
+              'employmentRelationshipSource',
+              'startDate',
+              'endDate',
+              'category',
+              'impact',
+              'gracePeriod',
+              'agents',
+              'status',
+              'earningsHistory',
+            ],
+          },
+        },
+        technicalDiagnosis: {
+          type: 'object',
+          properties: {
+            items: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  periodStartDate: { type: 'string', format: 'date' },
+                  periodEndDate: { type: 'string', format: 'date' },
+                  recognized: { type: 'boolean' },
+                  justification: { type: 'string' },
+                  legalFramework: {
+                    type: 'array',
+                    items: { type: 'string' },
+                  },
+                  agents: { type: 'array', items: agentSchema },
+                  epiEficaz: { type: 'boolean' },
+                  observations: { type: 'array', items: { type: 'string' } },
+                },
+                required: [
+                  'periodStartDate',
+                  'periodEndDate',
+                  'recognized',
+                  'justification',
+                  'legalFramework',
+                  'agents',
+                ],
+              },
+            },
+          },
+          required: ['items'],
+        },
+        integratedTimeline: {
+          type: 'object',
+          properties: {
+            items: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  startDate: { type: 'string', format: 'date' },
+                  endDate: { type: 'string', format: 'date' },
+                  kind: { type: 'string' },
+                  label: { type: 'string' },
+                },
+                required: ['startDate', 'endDate', 'kind', 'label'],
+              },
+            },
+          },
+          required: ['items'],
+        },
+      },
+      required: [
+        'summary',
+        'periods',
+        'technicalDiagnosis',
+        'integratedTimeline',
+      ],
     };
   }
 

@@ -360,6 +360,17 @@ import { SpecialCategoryRetirementAnalysisResultEntityAutoMapperProfile } from '
 import { SpecialCategoryRetirementAnalysisResultConversionItemEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-category-retirement-analysis-result-conversion-item/special-category-retirement-analysis-result-conversion-item-entity.auto-mapper.profile';
 import { SpecialCategoryRetirementAnalysisResultRuleItemEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-category-retirement-analysis-result-rule-item/special-category-retirement-analysis-result-rule-item-entity.auto-mapper.profile';
 import { SpecialCategoryRetirementAnalysisWorkPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-category-retirement-analysis-work-period/special-category-retirement-analysis-work-period-entity.auto-mapper.profile';
+import { GetSpecialRetirementGrantQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant/get-special-retirement-grant-query-result.auto-mapper.profile';
+import { GetSpecialRetirementGrantWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant/get-special-retirement-grant-with-relations-query-result.auto-mapper.profile';
+import { SpecialRetirementGrantEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant/special-retirement-grant-entity.auto-mapper.profile';
+import { GetSpecialRetirementGrantBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-benefit/get-special-retirement-grant-benefit-query-result.auto-mapper.profile';
+import { SpecialRetirementGrantBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-benefit/special-retirement-grant-benefit-entity.auto-mapper.profile';
+import { GetSpecialRetirementGrantDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-document/get-special-retirement-grant-document-query-result.auto-mapper.profile';
+import { SpecialRetirementGrantDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-document/special-retirement-grant-document-entity.auto-mapper.profile';
+import { GetSpecialRetirementGrantLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-legal-proceeding/get-special-retirement-grant-legal-proceeding-query-result.auto-mapper.profile';
+import { SpecialRetirementGrantLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-legal-proceeding/special-retirement-grant-legal-proceeding-entity.auto-mapper.profile';
+import { GetSpecialRetirementGrantResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-result/get-special-retirement-grant-result-query-result.auto-mapper.profile';
+import { SpecialRetirementGrantResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-result/special-retirement-grant-result-entity.auto-mapper.profile';
 import { GetSpeechGeneratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator/get-speech-generator-query-result.auto-mapper.profile';
 import { GetSpeechGeneratorWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator/get-speech-generator-with-relations-query-result.auto-mapper.profile';
 import { SpeechGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator/speech-generator-entity.auto-mapper.profile';
@@ -599,6 +610,17 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetAdministrativeProcedureInssAnalysisLegalProceedingQueryResultAutoMapperProfile,
     AdministrativeProcedureInssAnalysisResultEntityAutoMapperProfile,
     GetAdministrativeProcedureInssAnalysisResultQueryResultAutoMapperProfile,
+    SpecialRetirementGrantEntityAutoMapperProfile,
+    GetSpecialRetirementGrantQueryResultAutoMapperProfile,
+    GetSpecialRetirementGrantWithRelationsQueryResultAutoMapperProfile,
+    SpecialRetirementGrantBenefitEntityAutoMapperProfile,
+    GetSpecialRetirementGrantBenefitQueryResultAutoMapperProfile,
+    SpecialRetirementGrantLegalProceedingEntityAutoMapperProfile,
+    GetSpecialRetirementGrantLegalProceedingQueryResultAutoMapperProfile,
+    SpecialRetirementGrantDocumentEntityAutoMapperProfile,
+    GetSpecialRetirementGrantDocumentQueryResultAutoMapperProfile,
+    SpecialRetirementGrantResultEntityAutoMapperProfile,
+    GetSpecialRetirementGrantResultQueryResultAutoMapperProfile,
     DisabilityAssessmentForBpcAnalysisEntityAutoMapperProfile,
     GetDisabilityAssessmentForBpcAnalysisQueryResultAutoMapperProfile,
     DisabilityAssessmentForBpcAnalysisBenefitEntityAutoMapperProfile,

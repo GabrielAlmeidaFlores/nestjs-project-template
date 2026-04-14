@@ -204,7 +204,17 @@ export abstract class AnalysisProcessorGateway {
     files: Buffer[],
   ): Promise<string | null>;
 
+  public abstract getSpecialRetirementGrantCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
   public abstract getMiniAdvisorCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getSpecialRetirementGrantSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null>;
@@ -215,6 +225,13 @@ export abstract class AnalysisProcessorGateway {
   ): Promise<string | null>;
 
   public abstract getDisabilityRetirementPlanningGrantFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson?: boolean,
+  ): Promise<string | null>;
+
+  public abstract getSpecialRetirementGrantFirstAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
     files: Buffer[],
