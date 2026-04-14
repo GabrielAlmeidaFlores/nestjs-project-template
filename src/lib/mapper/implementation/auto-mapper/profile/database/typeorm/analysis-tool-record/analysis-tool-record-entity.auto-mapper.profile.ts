@@ -17,6 +17,7 @@ import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementatio
 import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis.entity';
 import { MedicalQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
+import { BpcElderlyAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis.typeorm.entity';
 import { PerCapitaIncomeForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
@@ -46,6 +47,7 @@ import { InsuranceQualityAnalysisEntity } from '@module/customer/analysis-tool/m
 import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
 import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
+import { BpcElderlyAnalysisEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/bpc-elderly-analysis.entity';
 import { PerCapitaIncomeForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.entity';
 import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
@@ -196,6 +198,16 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         PerCapitaIncomeForBpcAnalysisEntity,
       );
 
+      const bpcElderlyAnalysis =
+        source.bpcElderlyAnalysis !== null &&
+        source.bpcElderlyAnalysis !== undefined
+          ? this.mapper.map(
+              source.bpcElderlyAnalysis,
+              BpcElderlyAnalysisTypeormEntity,
+              BpcElderlyAnalysisEntity,
+            )
+          : null;
+
       const specialActivity =
         source.specialActivity !== null
           ? this.mapper.map(
@@ -303,6 +315,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         disabilityAssessmentForBpcAnalysis,
         audienceQuestionGenerator,
         perCapitaIncomeForBpcAnalysis,
+        bpcElderlyAnalysis,
         ruralTimelineAnalysis,
         insuranceQualityAnalysis,
         disabilityRetirementPlanning,
@@ -437,6 +450,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         PerCapitaIncomeForBpcAnalysisTypeormEntity,
       );
 
+      const bpcElderlyAnalysis =
+        source.bpcElderlyAnalysis !== null
+          ? this.mapper.map(
+              source.bpcElderlyAnalysis,
+              BpcElderlyAnalysisEntity,
+              BpcElderlyAnalysisTypeormEntity,
+            )
+          : null;
+
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         AnalysisToolClientEntity,
@@ -548,6 +570,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         speechGenerator,
         disabilityAssessmentForBpcAnalysis,
         perCapitaIncomeForBpcAnalysis,
+        bpcElderlyAnalysis,
         ruralTimeline,
         insuranceQualityAnalysis,
         teacherRetirementPlanning,

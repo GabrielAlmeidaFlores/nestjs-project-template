@@ -272,6 +272,17 @@ import { GetPerCapitaIncomeForBpcAnalysisLegalProceedingQueryResultAutoMapperPro
 import { PerCapitaIncomeForBpcAnalysisLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/per-capita-income-for-bpc-analysis-legal-proceeding/per-capita-income-for-bpc-analysis-legal-proceeding-entity.auto-mapper.profile';
 import { GetPerCapitaIncomeForBpcAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/per-capita-income-for-bpc-analysis-result/get-per-capita-income-for-bpc-analysis-result-query-result.auto-mapper.profile';
 import { PerCapitaIncomeForBpcAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/per-capita-income-for-bpc-analysis-result/per-capita-income-for-bpc-analysis-result-entity.auto-mapper.profile';
+import { BpcElderlyAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis/bpc-elderly-analysis-entity.auto-mapper.profile';
+import { GetBpcElderlyAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis/get-bpc-elderly-analysis-query-result.auto-mapper.profile';
+import { GetBpcElderlyAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis/get-bpc-elderly-analysis-with-relations-query-result.auto-mapper.profile';
+import { BpcElderlyAnalysisDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-document/bpc-elderly-analysis-document-entity.auto-mapper.profile';
+import { GetBpcElderlyAnalysisDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-document/get-bpc-elderly-analysis-document-query-result.auto-mapper.profile';
+import { BpcElderlyAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-result/bpc-elderly-analysis-result-entity.auto-mapper.profile';
+import { GetBpcElderlyAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-result/get-bpc-elderly-analysis-result-query-result.auto-mapper.profile';
+import { BpcElderlyAnalysisFamilyMemberEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-family-member/bpc-elderly-analysis-family-member-entity.auto-mapper.profile';
+import { GetBpcElderlyAnalysisFamilyMemberQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-family-member/get-bpc-elderly-analysis-family-member-query-result.auto-mapper.profile';
+import { BpcElderlyAnalysisFamilyMemberDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-family-member-document/bpc-elderly-analysis-family-member-document-entity.auto-mapper.profile';
+import { GetBpcElderlyAnalysisFamilyMemberDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-family-member-document/get-bpc-elderly-analysis-family-member-document-query-result.auto-mapper.profile';
 import { RegulatoryUpdateEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/regulatory-update/regulatory-update-entity.auto-mapper.profile';
 import { RegulatoryUpdateEmailPreferenceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/regulatory-update-email-preference/regulatory-update-email-preference-entity.auto-mapper.profile';
 import { RegulatoryUpdateMonitoredSourceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/regulatory-update-monitored-source/regulatory-update-monitored-source-entity.auto-mapper.profile';
@@ -729,6 +740,17 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     PerCapitaIncomeForBpcAnalysisLegalProceedingEntityAutoMapperProfile,
     PerCapitaIncomeForBpcAnalysisResultEntityAutoMapperProfile,
     GetPerCapitaIncomeForBpcAnalysisResultQueryResultAutoMapperProfile,
+    BpcElderlyAnalysisEntityAutoMapperProfile,
+    GetBpcElderlyAnalysisQueryResultAutoMapperProfile,
+    GetBpcElderlyAnalysisWithRelationsQueryResultAutoMapperProfile,
+    BpcElderlyAnalysisDocumentEntityAutoMapperProfile,
+    GetBpcElderlyAnalysisDocumentQueryResultAutoMapperProfile,
+    BpcElderlyAnalysisResultEntityAutoMapperProfile,
+    GetBpcElderlyAnalysisResultQueryResultAutoMapperProfile,
+    BpcElderlyAnalysisFamilyMemberEntityAutoMapperProfile,
+    GetBpcElderlyAnalysisFamilyMemberQueryResultAutoMapperProfile,
+    BpcElderlyAnalysisFamilyMemberDocumentEntityAutoMapperProfile,
+    GetBpcElderlyAnalysisFamilyMemberDocumentQueryResultAutoMapperProfile,
     JudicialCaseAnalysisEntityAutoMapperProfile,
     GetJudicialCaseAnalysisQueryResultAutoMapperProfile,
     GetJudicialCaseAnalysisWithRelationsQueryResultAutoMapperProfile,

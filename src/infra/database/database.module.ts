@@ -208,6 +208,12 @@ import { PerCapitaIncomeForBpcAnalysisFamilyMemberTypeormQueryRepository } from 
 import { PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/per-capita-income-for-bpc-analysis-family-member-document/per-capita-income-for-bpc-analysis-family-member-document.typeorm.command.repository';
 import { PerCapitaIncomeForBpcAnalysisLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/per-capita-income-for-bpc-analysis-legal-proceeding/per-capita-income-for-bpc-analysis-legal-proceeding.typeorm.command.repository';
 import { PerCapitaIncomeForBpcAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/per-capita-income-for-bpc-analysis-result/per-capita-income-for-bpc-analysis-result.typeorm.command.repository';
+import { BpcElderlyAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-analysis/bpc-elderly-analysis.typeorm.command.repository';
+import { BpcElderlyAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-analysis/bpc-elderly-analysis.typeorm.query.repository';
+import { BpcElderlyAnalysisDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-analysis-document/bpc-elderly-analysis-document.typeorm.command.repository';
+import { BpcElderlyAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-analysis-result/bpc-elderly-analysis-result.typeorm.command.repository';
+import { BpcElderlyAnalysisFamilyMemberTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-analysis-family-member/bpc-elderly-analysis-family-member.typeorm.command.repository';
+import { BpcElderlyAnalysisFamilyMemberDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-analysis-family-member-document/bpc-elderly-analysis-family-member-document.typeorm.command.repository';
 import { RegulatoryUpdateTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/regulatory-update/regulatory-update.typeorm.command.repository';
 import { RegulatoryUpdateTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/regulatory-update/regulatory-update.typeorm.query.repository';
 import { RegulatoryUpdateEmailPreferenceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/regulatory-update-email-preference/regulatory-update-email-preference.typeorm.command.repository';
@@ -540,6 +546,12 @@ import { PerCapitaIncomeForBpcAnalysisFamilyMemberQueryRepositoryGateway } from 
 import { PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis-family-member-document/command/per-capita-income-for-bpc-analysis-family-member-document.command.repository.gateway';
 import { PerCapitaIncomeForBpcAnalysisLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis-legal-proceeding/command/per-capita-income-for-bpc-analysis-legal-proceeding.command.repository.gateway';
 import { PerCapitaIncomeForBpcAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis-result/command/per-capita-income-for-bpc-analysis-result.command.repository.gateway';
+import { BpcElderlyAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis/command/bpc-elderly-analysis.command.repository.gateway';
+import { BpcElderlyAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis/query/bpc-elderly-analysis.query.repository.gateway';
+import { BpcElderlyAnalysisDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-document/command/bpc-elderly-analysis-document.command.repository.gateway';
+import { BpcElderlyAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-result/command/bpc-elderly-analysis-result.command.repository.gateway';
+import { BpcElderlyAnalysisFamilyMemberCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-family-member/command/bpc-elderly-analysis-family-member.command.repository.gateway';
+import { BpcElderlyAnalysisFamilyMemberDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-family-member-document/command/bpc-elderly-analysis-family-member-document.command.repository.gateway';
 import { RetirementPlanningRgpsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps/command/retirement-planning-rgps.repository.gateway';
 import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
 import { RetirementPlanningRgpsAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps-analysis-result/command/retirement-planning-rgps-analysis-result.repository.gateway';
@@ -2219,6 +2231,32 @@ const classProvider: ClassProvider[] = [
   {
     provide: PerCapitaIncomeForBpcAnalysisResultCommandRepositoryGateway,
     useClass: PerCapitaIncomeForBpcAnalysisResultTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyAnalysisCommandRepositoryGateway,
+    useClass: BpcElderlyAnalysisTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyAnalysisQueryRepositoryGateway,
+    useClass: BpcElderlyAnalysisTypeormQueryRepository,
+  },
+  {
+    provide: BpcElderlyAnalysisDocumentCommandRepositoryGateway,
+    useClass: BpcElderlyAnalysisDocumentTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyAnalysisResultCommandRepositoryGateway,
+    useClass: BpcElderlyAnalysisResultTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyAnalysisFamilyMemberCommandRepositoryGateway,
+    useClass: BpcElderlyAnalysisFamilyMemberTypeormCommandRepository,
+  },
+  {
+    provide:
+      BpcElderlyAnalysisFamilyMemberDocumentCommandRepositoryGateway,
+    useClass:
+      BpcElderlyAnalysisFamilyMemberDocumentTypeormCommandRepository,
   },
   {
     provide: MiniAdvisorCommandRepositoryGateway,

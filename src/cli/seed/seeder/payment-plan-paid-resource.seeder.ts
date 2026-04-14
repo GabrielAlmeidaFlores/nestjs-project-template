@@ -1052,6 +1052,24 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Gera o documento de análise simplificada da pensão por morte, com linguagem acessível para apresentação ao cliente.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a1c2e3f4-b5d6-4a7b-8c9d-0e1f2a3b4c5d'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_ELDERLY_ANALYSIS_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title: 'BPC AO IDOSO - ANÁLISE COMPLETA',
+      description:
+        'Análise completa do direito ao BPC/LOAS para idosos com IA. Examina condições de elegibilidade por idade (65 anos), renda familiar per capita, composição do grupo familiar, rendas e benefícios de cada membro, despesas dedutíveis, identifica possibilidades de enquadramento e emite parecer técnico conclusivo com fundamentação legal e jurisprudencial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b2d3f4a5-c6e7-4b8c-9d0e-1f2a3b4c5d6e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_ELDERLY_ANALYSIS_SIMPLIFIED_ANALYSIS,
+      creditCost: 2,
+      title: 'BPC AO IDOSO - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada do direito ao BPC/LOAS para idosos com IA. Verifica critério de idade (65 anos), calcula renda per capita familiar e compara com o limite legal de 1/4 do salário mínimo, informando de forma objetiva sobre a elegibilidade. Versão resumida e acessível para apresentação ao cliente.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {
