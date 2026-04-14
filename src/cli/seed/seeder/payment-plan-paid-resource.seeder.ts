@@ -1007,6 +1007,51 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Acompanhamento semanal automático de atualizações normativas previdenciárias brasileiras via IA. Exibe lista e detalhe de normas publicadas (portarias, instruções normativas, resoluções) com resumo, principais alterações, status de implementação e impacto para os beneficiários.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b2c3d4e5-f6a7-4901-bcde-f01234567891'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SURVIVOR_PENSION_ANALYSIS_COMPLETE_ANALYSIS,
+      creditCost: 8,
+      title: 'ANÁLISE DE PENSÃO POR MORTE - RESULTADO PRINCIPAL',
+      description:
+        'Gera o resultado principal da análise de pensão por morte: confirma qualidade de segurado do falecido, avalia direito à aposentadoria e produz análise completa e simplificada do caso.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c3d4e5f6-a7b8-4012-8def-012345678912'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SURVIVOR_PENSION_ANALYSIS_RETIREMENT_RULES,
+      creditCost: 0,
+      title: 'ANÁLISE DE PENSÃO POR MORTE - REGRAS DE APOSENTADORIA',
+      description:
+        'Analisa cada regra de aposentadoria aplicável ao falecido, estimando RMI, data de direito e identificando a melhor regra.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d4e5f6a7-b8c9-4123-9ef0-123456789023'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SURVIVOR_PENSION_ANALYSIS_DEPENDENT_PENSION_ANALYSES,
+      creditCost: 0,
+      title: 'ANÁLISE DE PENSÃO POR MORTE - ANÁLISE POR DEPENDENTE',
+      description:
+        'Avalia o direito à pensão de cada dependente identificado, estimando início e duração do benefício conforme art. 77 da Lei 8.213/91.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e5f6a7b8-c9d0-4234-af01-234567890134'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SURVIVOR_PENSION_ANALYSIS_COMPLETE_ANALYSIS_TEXT,
+      creditCost: 5,
+      title: 'ANÁLISE DE PENSÃO POR MORTE - ANÁLISE COMPLETA',
+      description:
+        'Gera o documento de análise completa e detalhada da pensão por morte, com fundamentação jurídica, para uso profissional.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f6a7b8c9-d0e1-4345-b012-345678901245'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SURVIVOR_PENSION_ANALYSIS_SIMPLIFIED_ANALYSIS_TEXT,
+      creditCost: 2,
+      title: 'ANÁLISE DE PENSÃO POR MORTE - ANÁLISE SIMPLIFICADA',
+      description:
+        'Gera o documento de análise simplificada da pensão por morte, com linguagem acessível para apresentação ao cliente.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {

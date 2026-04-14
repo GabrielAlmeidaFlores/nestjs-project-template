@@ -25,6 +25,7 @@ import type { SpecialActivityEntity } from '@module/customer/analysis-tool/modul
 import type { SpecialCategoryRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/special-category-retirement-analysis.entity';
 import type { SpecialRetirementGrantEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/special-retirement-grant.entity';
 import type { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
+import type { SurvivorPensionAnalysisEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis/survivor-pension-analysis.entity';
 import type { TeacherRetirementPlanningEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
 import type { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/temporary-disability-benefits-grant.entity';
 
@@ -51,6 +52,7 @@ export interface AnalysisToolRecordEntityPropsInterface extends BaseEntityPropsI
   generalUrbanRetirementAnalysis?: GeneralUrbanRetirementAnalysisEntity | null;
   disabilityRetirementPlanningGrant?: DisabilityRetirementPlanningGrantEntity | null;
   temporaryDisabilityBenefitsGrant?: TemporaryDisabilityBenefitsGrantEntity | null;
+  survivorPensionAnalysis?: SurvivorPensionAnalysisEntity | null;
   specialCategoryRetirementAnalysis?: SpecialCategoryRetirementAnalysisEntity | null;
   specialRetirementGrant?: SpecialRetirementGrantEntity | null;
   status: AnalysisStatusEnum;

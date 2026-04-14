@@ -32,6 +32,7 @@ import { SpecialActivityAnalysisModule } from '@module/customer/analysis-tool/mo
 import { SpecialCategoryRetirementAnalysisModule } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/special-category-retirement-analysis.module';
 import { SpecialRetirementGrantModule } from '@module/customer/analysis-tool/module/special-retirement-grant/special-retirement-grant.module';
 import { SpeechGeneratorModule } from '@module/customer/analysis-tool/module/speech-generator/speech-generator.module';
+import { SurvivorPensionAnalysisModule } from '@module/customer/analysis-tool/module/survivor-pension-analysis/survivor-pension-analysis.module';
 import { TeacherRetirementPlanningModule } from '@module/customer/analysis-tool/module/teacher-retirement-planning/teacher-retirement-planning.module';
 import { TemporaryDisabilityBenefitsGrantModule } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/temporary-disability-benefits-grant.module';
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
@@ -91,6 +92,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     GeneralUrbanRetirementGrantModule,
     GeneralUrbanRetirementModule,
     SpecialCategoryRetirementAnalysisModule,
+    SurvivorPensionAnalysisModule,
     TemporaryDisabilityBenefitsGrantModule,
   ],
   controllers: [AnalysisToolController],
