@@ -10,6 +10,9 @@ import type { BpcElderlyAnalysisFamilyMemberEntity } from '@module/customer/anal
 import type { BpcElderlyAnalysisResultEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-result/bpc-elderly-analysis-result.entity';
 
 export class BpcElderlyAnalysisEntity extends BaseEntity<BpcElderlyAnalysisId> {
+  @Description('Nome da análise de BPC ao Idoso.')
+  public readonly name: string | null;
+
   @Description('Resultado da análise de BPC ao Idoso.')
   public readonly bpcElderlyAnalysisResult: BpcElderlyAnalysisResultEntity | null;
 
@@ -33,6 +36,7 @@ export class BpcElderlyAnalysisEntity extends BaseEntity<BpcElderlyAnalysisId> {
   public constructor(props: BpcElderlyAnalysisEntityPropsInterface) {
     super(BpcElderlyAnalysisId, props);
 
+    this.name = props.name ?? null;
     this.bpcElderlyAnalysisResult = props.bpcElderlyAnalysisResult ?? null;
     this.bpcElderlyAnalysisFamilyMember =
       props.bpcElderlyAnalysisFamilyMember ?? [];

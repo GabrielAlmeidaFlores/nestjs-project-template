@@ -11,8 +11,10 @@ import { BpcElderlyAnalysisDocumentCommandRepositoryGateway } from '@module/cust
 import { BpcElderlyAnalysisEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/bpc-elderly-analysis.entity';
 import { BpcElderlyAnalysisId } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/value-object/bpc-elderly-analysis-id/bpc-elderly-analysis-id.value-object';
 import { BpcElderlyAnalysisDocumentEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-document/bpc-elderly-analysis-document.entity';
+import { BpcElderlyAnalysisDocumentTypeEnum } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-document/enum/bpc-elderly-analysis-document-type.enum';
 import { CreateBpcElderlyAnalysisDocumentRequestDto } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/dto/request/create-bpc-elderly-analysis-document.request.dto';
 import { CreateBpcElderlyAnalysisDocumentResponseDto } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/dto/response/create-bpc-elderly-analysis-document.response.dto';
+import { BpcElderlyAnalysisDocumentRequiredError } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/error/bpc-elderly-analysis-document-required.error';
 import { BpcElderlyAnalysisNotFoundError } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/error/bpc-elderly-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -74,31 +76,66 @@ export class CreateBpcElderlyAnalysisDocumentUseCase {
       updatedBy: organizationMember.id,
     });
 
+    const hasCnisDocument = dto.cnisDocument !== undefined;
+    const hasCadUnicoDocuments =
+      dto.cadUnicoDocuments !== undefined && dto.cadUnicoDocuments.length > 0;
+
+    if (!hasCnisDocument && !hasCadUnicoDocuments) {
+      throw new BpcElderlyAnalysisDocumentRequiredError();
+    }
+
     const documentEntities: BpcElderlyAnalysisDocumentEntity[] = [];
 
-    for (const documentDto of dto.documents) {
-      const fileBuffer = Buffer.from(
-        documentDto.document.base64.toString(),
+    if (hasCnisDocument) {
+      const cnisBuffer = Buffer.from(
+        dto.cnisDocument.base64.toString(),
         'base64',
       );
 
-      const fileModel = FileModel.build({
-        buffer: fileBuffer,
-        originalName: documentDto.document.originalFileName,
-        size: fileBuffer.length,
+      const cnisFileModel = FileModel.build({
+        buffer: cnisBuffer,
+        originalName: dto.cnisDocument.originalFileName,
+        size: cnisBuffer.length,
         encoding: '7bit',
       });
 
-      const uploadedFile =
-        await this.fileProcessorGateway.uploadFile(fileModel);
+      const uploadedCnis =
+        await this.fileProcessorGateway.uploadFile(cnisFileModel);
 
       documentEntities.push(
         new BpcElderlyAnalysisDocumentEntity({
-          document: uploadedFile,
-          type: documentDto.type,
+          document: uploadedCnis,
+          type: BpcElderlyAnalysisDocumentTypeEnum.CNIS,
           bpcElderlyAnalysis,
         }),
       );
+    }
+
+    if (hasCadUnicoDocuments) {
+      for (const cadUnicoFile of dto.cadUnicoDocuments) {
+        const cadUnicoBuffer = Buffer.from(
+          cadUnicoFile.base64.toString(),
+          'base64',
+        );
+
+        const cadUnicoFileModel = FileModel.build({
+          buffer: cadUnicoBuffer,
+          originalName: cadUnicoFile.originalFileName,
+          size: cadUnicoBuffer.length,
+          encoding: '7bit',
+        });
+
+        const uploadedCadUnico =
+          await this.fileProcessorGateway.uploadFile(cadUnicoFileModel);
+
+        documentEntities.push(
+          new BpcElderlyAnalysisDocumentEntity({
+            document: uploadedCadUnico,
+            type: BpcElderlyAnalysisDocumentTypeEnum.CAD_UNICO,
+            bpcElderlyAnalysis,
+          }),
+        );
+      }
     }
 
     const createDocumentsTransactions =

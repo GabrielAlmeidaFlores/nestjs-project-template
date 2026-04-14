@@ -153,7 +153,7 @@ export class CreateBpcElderlyAnalysisResultUseCase {
       'utf-8',
     );
 
-    const completeAnalysis =
+    const completeAnalysisRaw =
       await this.analysisProcessorGateway.getBpcElderlyAnalysisCompleteAnalysis(
         promptResponse.prompt,
         [
@@ -164,9 +164,11 @@ export class CreateBpcElderlyAnalysisResultUseCase {
         ],
       );
 
+    const parsedAnalysis = this.parseAnalysisResult(completeAnalysisRaw);
+
     const bpcElderlyAnalysisResult = new BpcElderlyAnalysisResultEntity({
-      completeAnalysis,
-      simplifiedAnalysis: null,
+      completeAnalysis: parsedAnalysis.analysisDetails,
+      simplifiedAnalysis: parsedAnalysis.simplifiedAnalysisDetails,
     });
 
     const bpcElderlyAnalysis = new BpcElderlyAnalysisEntity({
@@ -256,5 +258,28 @@ export class CreateBpcElderlyAnalysisResultUseCase {
         bpcElderlyCompleteAnalysisResult: completeAnalysisAsHtml,
       }),
     });
+  }
+
+  private parseAnalysisResult(raw: string | null): {
+    analysisDetails: string | null;
+    simplifiedAnalysisDetails: string | null;
+  } {
+    if (raw === null) {
+      return { analysisDetails: null, simplifiedAnalysisDetails: null };
+    }
+
+    try {
+      const parsed = JSON.parse(raw) as {
+        analysisDetails?: string;
+        simplifiedAnalysisDetails?: string;
+      };
+
+      return {
+        analysisDetails: parsed.analysisDetails ?? null,
+        simplifiedAnalysisDetails: parsed.simplifiedAnalysisDetails ?? null,
+      };
+    } catch {
+      return { analysisDetails: raw, simplifiedAnalysisDetails: null };
+    }
   }
 }

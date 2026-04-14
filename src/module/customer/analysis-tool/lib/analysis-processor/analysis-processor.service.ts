@@ -1479,9 +1479,12 @@ Análise processada do CNIS:
       GenerateResponseInputModel.build({
         systemInstruction,
         promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: this.getBpcElderlyAnalysisCompleteAnalysisJsonSchema(),
+        }),
       }),
     );
-    // TODO VER PARA COLOCAR RESPONSE SCHEMA
   }
 
   private getSurvivorPensionAnalysisResultJsonSchema(): object {
@@ -3273,6 +3276,69 @@ Análise processada do CNIS:
         'rppsSummary',
         'finalAnalysis',
         'completeAnalysisReport',
+      ],
+    };
+  }
+
+  private getBpcElderlyAnalysisCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        diagnosis: {
+          enum: ['eligible', 'ineligible', 'pending'],
+          type: 'string',
+          description: 'Diagnóstico da análise de BPC ao Idoso.',
+        },
+        totalHouseholdIncome: {
+          type: 'number',
+          description: 'Renda Familiar Total',
+          example: 2500.75,
+        },
+        perCapitaIncome: {
+          type: 'number',
+          description: 'Renda per capita',
+          example: 833.58,
+        },
+        eligibilityJustification: {
+          type: 'string',
+          description:
+            'Justificativa detalhada do diagnóstico, considerando os critérios de elegibilidade do BPC ao Idoso e as especificidades do caso analisado. Deve conter uma análise fundamentada dos documentos apresentados, a situação socioeconômica do idoso e a aplicação da legislação pertinente.',
+        },
+        type: {
+          enum: ['BPC_IDOSO'],
+          type: 'string',
+          description: 'Tipo de análise realizada, que é BPC IDOSO.',
+        },
+        benefitStartDate: {
+          type: 'string',
+          description: 'Data de início do benefício, se houver',
+        },
+        amount: {
+          type: 'number',
+          description: 'Valor do benefício, se houver',
+          example: 606.78,
+        },
+        analysisDetails: {
+          type: 'string',
+          description:
+            'Detalhamento completo da análise, incluindo a avaliação de cada documento apresentado, a situação socioeconômica do idoso, a aplicação dos critérios legais e a conclusão sobre a elegibilidade para o BPC ao Idoso. Esta seção deve fornecer uma visão abrangente do processo de análise, destacando os pontos fortes e as possíveis fragilidades do caso.',
+        },
+        simplifiedAnalysisDetails: {
+          type: 'string',
+          description:
+            'Resumo simplificado da análise de BPC ao Idoso, destinado ao cliente final. Deve ser escrito em linguagem clara e acessível, sem termos técnicos jurídicos complexos, apresentando de forma objetiva o diagnóstico, os principais pontos considerados e a conclusão sobre a elegibilidade. Máximo de 500 palavras.',
+        },
+      },
+      required: [
+        'diagnosis',
+        'totalHouseholdIncome',
+        'perCapitaIncome',
+        'eligibilityJustification',
+        'type',
+        'benefitStartDate',
+        'amount',
+        'analysisDetails',
+        'simplifiedAnalysisDetails',
       ],
     };
   }

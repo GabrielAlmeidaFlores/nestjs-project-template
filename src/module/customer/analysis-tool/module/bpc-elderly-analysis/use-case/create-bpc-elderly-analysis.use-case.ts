@@ -71,6 +71,7 @@ export class CreateBpcElderlyAnalysisUseCase {
     });
 
     const bpcElderlyAnalysis = new BpcElderlyAnalysisEntity({
+      name: dto.name !== undefined ? dto.name : null,
       createdBy: organizationMember.id,
       updatedBy: organizationMember.id,
     });

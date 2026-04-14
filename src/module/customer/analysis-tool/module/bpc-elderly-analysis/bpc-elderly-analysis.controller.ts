@@ -1,5 +1,14 @@
-import { Body, HttpStatus, Param, RequestMethod } from '@nestjs/common';
+import {
+  Body,
+  HttpStatus,
+  Param,
+  ParseEnumPipe,
+  Query,
+  RequestMethod,
+  StreamableFile,
+} from '@nestjs/common';
 
+import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { BpcElderlyAnalysisId } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/value-object/bpc-elderly-analysis-id/bpc-elderly-analysis-id.value-object';
 import { CreateBpcElderlyAnalysisDocumentRequestDto } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/dto/request/create-bpc-elderly-analysis-document.request.dto';
 import { CreateBpcElderlyAnalysisFamilyMemberRequestDto } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/dto/request/create-bpc-elderly-analysis-family-member.request.dto';
@@ -13,6 +22,8 @@ import { CreateBpcElderlyAnalysisDocumentUseCase } from '@module/customer/analys
 import { CreateBpcElderlyAnalysisFamilyMemberUseCase } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/use-case/create-bpc-elderly-analysis-family-member.use-case';
 import { CreateBpcElderlyAnalysisResultUseCase } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/use-case/create-bpc-elderly-analysis-result.use-case';
 import { CreateBpcElderlyAnalysisUseCase } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/use-case/create-bpc-elderly-analysis.use-case';
+import { DownloadBpcElderlyAnalysisCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/use-case/download-bpc-elderly-analysis-complete-analysis.use-case';
+import { DownloadBpcElderlyAnalysisSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/use-case/download-bpc-elderly-analysis-simplified-analysis.use-case';
 import { GetBpcElderlyAnalysisUseCase } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/use-case/get-bpc-elderly-analysis.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
@@ -33,6 +44,8 @@ export class BpcElderlyAnalysisController {
     private readonly createBpcElderlyAnalysisUseCase: CreateBpcElderlyAnalysisUseCase,
     private readonly createBpcElderlyAnalysisDocumentUseCase: CreateBpcElderlyAnalysisDocumentUseCase,
     private readonly createBpcElderlyAnalysisFamilyMemberUseCase: CreateBpcElderlyAnalysisFamilyMemberUseCase,
+    private readonly downloadBpcElderlyAnalysisCompleteAnalysisUseCase: DownloadBpcElderlyAnalysisCompleteAnalysisUseCase,
+    private readonly downloadBpcElderlyAnalysisSimplifiedAnalysisUseCase: DownloadBpcElderlyAnalysisSimplifiedAnalysisUseCase,
     private readonly createBpcElderlyAnalysisResultUseCase: CreateBpcElderlyAnalysisResultUseCase,
     private readonly getBpcElderlyAnalysisUseCase: GetBpcElderlyAnalysisUseCase,
   ) {}
@@ -199,6 +212,78 @@ export class BpcElderlyAnalysisController {
       sessionData,
       organizationSessionData,
       bpcElderlyAnalysisId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Baixar análise completa de BPC ao Idoso',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':bpcElderlyAnalysisId/download/complete-version',
+      method: RequestMethod.GET,
+    },
+    tag: ['analise-bpc-ao-idoso'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Arquivo da análise completa de BPC ao Idoso retornado para download.',
+      type: Buffer,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async downloadBpcElderlyAnalysisCompleteAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'bpcElderlyAnalysisId',
+      new ParseValueObjectPipe(BpcElderlyAnalysisId),
+    )
+    bpcElderlyAnalysisId: BpcElderlyAnalysisId,
+    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
+    format: ExportDocumentFormatEnum,
+  ): Promise<StreamableFile> {
+    return await this.downloadBpcElderlyAnalysisCompleteAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      bpcElderlyAnalysisId,
+      format,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Baixar análise simplificada de BPC ao Idoso',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':bpcElderlyAnalysisId/download/simplified-version',
+      method: RequestMethod.GET,
+    },
+    tag: ['analise-bpc-ao-idoso'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Arquivo da análise simplificada de BPC ao Idoso retornado para download.',
+      type: Buffer,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async downloadBpcElderlyAnalysisSimplifiedAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'bpcElderlyAnalysisId',
+      new ParseValueObjectPipe(BpcElderlyAnalysisId),
+    )
+    bpcElderlyAnalysisId: BpcElderlyAnalysisId,
+    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
+    format: ExportDocumentFormatEnum,
+  ): Promise<StreamableFile> {
+    return await this.downloadBpcElderlyAnalysisSimplifiedAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      bpcElderlyAnalysisId,
+      format,
     );
   }
 }
