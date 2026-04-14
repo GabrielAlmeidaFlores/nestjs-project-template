@@ -342,6 +342,33 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise simplificada de atividade especial com IA. Identifica principais agentes nocivos expostos, valida se há enquadramento legal básico, calcula tempo especial total reconhecível e ganho estimado com conversão. Versão resumida para avaliação inicial de viabilidade.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('2b1c7e6a-0f3d-4a9d-8b2e-8f1a6c3d5e90'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_GRANT_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title: 'CONCESSÃO APOSENTADORIA ESPECIAL - ANÁLISE COMPLETA',
+      description:
+        'Análise completa da concessão de aposentadoria especial com IA. Examina CNIS e PPPs, aponta pendências (PEXT, competências abaixo do mínimo, vínculos sem data fim) e entrega recomendações estratégicas para requerimento administrativo e/ou ação judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b2c1a6f4-7d3e-4c2b-9a1e-0f3d4a9d8b2e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_GRANT_FIRST_ANALYSIS,
+      creditCost: 5,
+      title: 'CONCESSÃO APOSENTADORIA ESPECIAL - FIRST ANALYSIS',
+      description:
+        'First analysis da concessão de aposentadoria especial com IA. Gera resumo de tempo e carência, períodos com remunerações e agentes, diagnóstico técnico e linha do tempo integrada com base em CNIS e documentos anexados.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('6f4a2c1d-9b7e-4d1a-8c3f-1a2b3c4d5e6f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_GRANT_SIMPLIFIED_ANALYSIS,
+      creditCost: 5,
+      title: 'CONCESSÃO APOSENTADORIA ESPECIAL - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada da concessão de aposentadoria especial com IA. Resume elegibilidade, principais pendências e próximos passos recomendados, baseada em CNIS e PPPs.',
+    }),
 
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('0a308887-2dc9-4194-a9dd-b2b94c3ab820'),
