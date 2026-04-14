@@ -376,6 +376,17 @@ import { SpecialCategoryRetirementAnalysisResultEntityAutoMapperProfile } from '
 import { SpecialCategoryRetirementAnalysisResultConversionItemEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-category-retirement-analysis-result-conversion-item/special-category-retirement-analysis-result-conversion-item-entity.auto-mapper.profile';
 import { SpecialCategoryRetirementAnalysisResultRuleItemEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-category-retirement-analysis-result-rule-item/special-category-retirement-analysis-result-rule-item-entity.auto-mapper.profile';
 import { SpecialCategoryRetirementAnalysisWorkPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-category-retirement-analysis-work-period/special-category-retirement-analysis-work-period-entity.auto-mapper.profile';
+import { GetSpecialRetirementGrantQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant/get-special-retirement-grant-query-result.auto-mapper.profile';
+import { GetSpecialRetirementGrantWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant/get-special-retirement-grant-with-relations-query-result.auto-mapper.profile';
+import { SpecialRetirementGrantEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant/special-retirement-grant-entity.auto-mapper.profile';
+import { GetSpecialRetirementGrantBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-benefit/get-special-retirement-grant-benefit-query-result.auto-mapper.profile';
+import { SpecialRetirementGrantBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-benefit/special-retirement-grant-benefit-entity.auto-mapper.profile';
+import { GetSpecialRetirementGrantDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-document/get-special-retirement-grant-document-query-result.auto-mapper.profile';
+import { SpecialRetirementGrantDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-document/special-retirement-grant-document-entity.auto-mapper.profile';
+import { GetSpecialRetirementGrantLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-legal-proceeding/get-special-retirement-grant-legal-proceeding-query-result.auto-mapper.profile';
+import { SpecialRetirementGrantLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-legal-proceeding/special-retirement-grant-legal-proceeding-entity.auto-mapper.profile';
+import { GetSpecialRetirementGrantResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-result/get-special-retirement-grant-result-query-result.auto-mapper.profile';
+import { SpecialRetirementGrantResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-result/special-retirement-grant-result-entity.auto-mapper.profile';
 import { GetSpeechGeneratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator/get-speech-generator-query-result.auto-mapper.profile';
 import { GetSpeechGeneratorWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator/get-speech-generator-with-relations-query-result.auto-mapper.profile';
 import { SpeechGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator/speech-generator-entity.auto-mapper.profile';
@@ -391,8 +402,48 @@ import { SupportAttendantEntityAutoMapperProfile } from '@lib/mapper/implementat
 import { SupportTicketEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/support-ticket/support-ticket-entity.auto-mapper.profile';
 import { SupportTicketAttachmentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/support-ticket-attachment/support-ticket-attachment-entity.auto-mapper.profile';
 import { SupportTicketMessageEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/support-ticket-message/support-ticket-message-entity.auto-mapper.profile';
+import { GetSurvivorPensionAnalysisBenefitOriginatorIdentificationDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/get-survivor-pension-analysis-benefit-originator-identification-document-query-result.auto-mapper.profile';
+import { GetSurvivorPensionAnalysisBenefitOriginatorIdentificationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/get-survivor-pension-analysis-benefit-originator-identification-query-result.auto-mapper.profile';
+import { GetSurvivorPensionAnalysisCustomerProfileIdentificationDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/get-survivor-pension-analysis-customer-profile-identification-document-query-result.auto-mapper.profile';
+import { GetSurvivorPensionAnalysisCustomerProfileIdentificationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/get-survivor-pension-analysis-customer-profile-identification-query-result.auto-mapper.profile';
+import { GetSurvivorPensionAnalysisDeceasedBenefitDependentsDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/get-survivor-pension-analysis-deceased-benefit-dependents-document-query-result.auto-mapper.profile';
+import { GetSurvivorPensionAnalysisDeceasedBenefitDependentsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/get-survivor-pension-analysis-deceased-benefit-dependents-query-result.auto-mapper.profile';
+import { GetSurvivorPensionAnalysisDeceasedWorkHistoryPeriodDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/get-survivor-pension-analysis-deceased-work-history-period-document-query-result.auto-mapper.profile';
+import { GetSurvivorPensionAnalysisDeceasedWorkHistoryPeriodQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/get-survivor-pension-analysis-deceased-work-history-period-query-result.auto-mapper.profile';
+import { GetSurvivorPensionAnalysisDeceasedWorkHistoryQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/get-survivor-pension-analysis-deceased-work-history-query-result.auto-mapper.profile';
+import { GetSurvivorPensionAnalysisResultDependentPensionAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/get-survivor-pension-analysis-result-dependent-pension-analysis-query-result.auto-mapper.profile';
+import { GetSurvivorPensionAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/get-survivor-pension-analysis-result-query-result.auto-mapper.profile';
+import { GetSurvivorPensionAnalysisResultRetirementRuleQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/get-survivor-pension-analysis-result-retirement-rule-query-result.auto-mapper.profile';
+import { GetSurvivorPensionAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/get-survivor-pension-analysis-with-relations-query-result.auto-mapper.profile';
+import { SurvivorPensionAnalysisBenefitOriginatorIdentificationDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/survivor-pension-analysis-benefit-originator-identification-document-entity.auto-mapper.profile';
+import { SurvivorPensionAnalysisBenefitOriginatorIdentificationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/survivor-pension-analysis-benefit-originator-identification-entity.auto-mapper.profile';
+import { SurvivorPensionAnalysisCustomerProfileIdentificationDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/survivor-pension-analysis-customer-profile-identification-document-entity.auto-mapper.profile';
+import { SurvivorPensionAnalysisCustomerProfileIdentificationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/survivor-pension-analysis-customer-profile-identification-entity.auto-mapper.profile';
+import { SurvivorPensionAnalysisDeceasedBenefitDependentsDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/survivor-pension-analysis-deceased-benefit-dependents-document-entity.auto-mapper.profile';
+import { SurvivorPensionAnalysisDeceasedBenefitDependentsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/survivor-pension-analysis-deceased-benefit-dependents-entity.auto-mapper.profile';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/survivor-pension-analysis-deceased-work-history-entity.auto-mapper.profile';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/survivor-pension-analysis-deceased-work-history-period-document-entity.auto-mapper.profile';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/survivor-pension-analysis-deceased-work-history-period-entity.auto-mapper.profile';
+import { SurvivorPensionAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/survivor-pension-analysis-entity.auto-mapper.profile';
+import { SurvivorPensionAnalysisResultDependentPensionAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/survivor-pension-analysis-result-dependent-pension-analysis-entity.auto-mapper.profile';
+import { SurvivorPensionAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/survivor-pension-analysis-result-entity.auto-mapper.profile';
+import { SurvivorPensionAnalysisResultRetirementRuleEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/survivor-pension-analysis-result-retirement-rule-entity.auto-mapper.profile';
 import { SystemActivityEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/system-activity/system-activity-entity.auto-mapper.profile';
 import { GetTeacherRetirementPlanningWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/teacher-retirement-planning/get-teacher-retirement-planning-with-relations-query-result.auto-mapper.profile';
+import { GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant/get-temporary-disability-benefits-grant-with-relations-query-result.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant/temporary-disability-benefits-grant-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-document/temporary-disability-benefits-grant-document-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-inss-benefit/temporary-disability-benefits-grant-inss-benefit-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantInsuredStatusEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-insured-status/temporary-disability-benefits-grant-insured-status-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantInsuredStatusDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-insured-status-document/temporary-disability-benefits-grant-insured-status-document-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-legal-proceeding/temporary-disability-benefits-grant-legal-proceeding-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-period/temporary-disability-benefits-grant-period-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-period-document/temporary-disability-benefits-grant-period-document-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantPreviousBenefitsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-previous-benefits/temporary-disability-benefits-grant-previous-benefits-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantPreviousBenefitsDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-previous-benefits-document/temporary-disability-benefits-grant-previous-benefits-document-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-result/temporary-disability-benefits-grant-result-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantWorkPeriodsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-work-periods/temporary-disability-benefits-grant-work-periods-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-work-periods-earnings-history/temporary-disability-benefits-grant-work-periods-earnings-history-entity.auto-mapper.profile';
 import { GetTutorialQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/tutorial/get-tutorial-query-result.auto-mapper.profile';
 import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/tutorial/tutorial-entity.auto-mapper.profile';
 
@@ -601,6 +652,17 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetAdministrativeProcedureInssAnalysisLegalProceedingQueryResultAutoMapperProfile,
     AdministrativeProcedureInssAnalysisResultEntityAutoMapperProfile,
     GetAdministrativeProcedureInssAnalysisResultQueryResultAutoMapperProfile,
+    SpecialRetirementGrantEntityAutoMapperProfile,
+    GetSpecialRetirementGrantQueryResultAutoMapperProfile,
+    GetSpecialRetirementGrantWithRelationsQueryResultAutoMapperProfile,
+    SpecialRetirementGrantBenefitEntityAutoMapperProfile,
+    GetSpecialRetirementGrantBenefitQueryResultAutoMapperProfile,
+    SpecialRetirementGrantLegalProceedingEntityAutoMapperProfile,
+    GetSpecialRetirementGrantLegalProceedingQueryResultAutoMapperProfile,
+    SpecialRetirementGrantDocumentEntityAutoMapperProfile,
+    GetSpecialRetirementGrantDocumentQueryResultAutoMapperProfile,
+    SpecialRetirementGrantResultEntityAutoMapperProfile,
+    GetSpecialRetirementGrantResultQueryResultAutoMapperProfile,
     DisabilityAssessmentForBpcAnalysisEntityAutoMapperProfile,
     GetDisabilityAssessmentForBpcAnalysisQueryResultAutoMapperProfile,
     DisabilityAssessmentForBpcAnalysisBenefitEntityAutoMapperProfile,
@@ -660,6 +722,20 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     DeathBenefitGrantPeriodDocumentEntityAutoMapperProfile,
     DeathBenefitGrantTimeAcceleratorEntityAutoMapperProfile,
     GetDeathBenefitGrantTimeAcceleratorQueryResultAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantEntityAutoMapperProfile,
+    GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResultAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantResultEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantDocumentEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantPeriodEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantPeriodDocumentEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantPreviousBenefitsEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantPreviousBenefitsDocumentEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantInsuredStatusEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantInsuredStatusDocumentEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantWorkPeriodsEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantInssBenefitEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsGrantLegalProceedingEntityAutoMapperProfile,
     GeneralUrbanRetirementAnalysisEntityAutoMapperProfile,
     GetGeneralUrbanRetirementAnalysisDocumentQueryResultAutoMapperProfile,
     GetGeneralUrbanRetirementAnalysisLegalProceedingQueryResultAutoMapperProfile,
@@ -796,6 +872,32 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     SupportTicketEntityAutoMapperProfile,
     SupportTicketAttachmentEntityAutoMapperProfile,
     SupportTicketMessageEntityAutoMapperProfile,
+    SurvivorPensionAnalysisEntityAutoMapperProfile,
+    SurvivorPensionAnalysisCustomerProfileIdentificationEntityAutoMapperProfile,
+    SurvivorPensionAnalysisCustomerProfileIdentificationDocumentEntityAutoMapperProfile,
+    SurvivorPensionAnalysisBenefitOriginatorIdentificationEntityAutoMapperProfile,
+    SurvivorPensionAnalysisBenefitOriginatorIdentificationDocumentEntityAutoMapperProfile,
+    SurvivorPensionAnalysisDeceasedWorkHistoryEntityAutoMapperProfile,
+    SurvivorPensionAnalysisDeceasedWorkHistoryPeriodEntityAutoMapperProfile,
+    SurvivorPensionAnalysisDeceasedWorkHistoryPeriodDocumentEntityAutoMapperProfile,
+    SurvivorPensionAnalysisDeceasedBenefitDependentsEntityAutoMapperProfile,
+    SurvivorPensionAnalysisDeceasedBenefitDependentsDocumentEntityAutoMapperProfile,
+    SurvivorPensionAnalysisResultEntityAutoMapperProfile,
+    SurvivorPensionAnalysisResultRetirementRuleEntityAutoMapperProfile,
+    SurvivorPensionAnalysisResultDependentPensionAnalysisEntityAutoMapperProfile,
+    GetSurvivorPensionAnalysisWithRelationsQueryResultAutoMapperProfile,
+    GetSurvivorPensionAnalysisCustomerProfileIdentificationQueryResultAutoMapperProfile,
+    GetSurvivorPensionAnalysisCustomerProfileIdentificationDocumentQueryResultAutoMapperProfile,
+    GetSurvivorPensionAnalysisBenefitOriginatorIdentificationQueryResultAutoMapperProfile,
+    GetSurvivorPensionAnalysisBenefitOriginatorIdentificationDocumentQueryResultAutoMapperProfile,
+    GetSurvivorPensionAnalysisDeceasedWorkHistoryQueryResultAutoMapperProfile,
+    GetSurvivorPensionAnalysisDeceasedWorkHistoryPeriodQueryResultAutoMapperProfile,
+    GetSurvivorPensionAnalysisDeceasedWorkHistoryPeriodDocumentQueryResultAutoMapperProfile,
+    GetSurvivorPensionAnalysisDeceasedBenefitDependentsQueryResultAutoMapperProfile,
+    GetSurvivorPensionAnalysisDeceasedBenefitDependentsDocumentQueryResultAutoMapperProfile,
+    GetSurvivorPensionAnalysisResultQueryResultAutoMapperProfile,
+    GetSurvivorPensionAnalysisResultRetirementRuleQueryResultAutoMapperProfile,
+    GetSurvivorPensionAnalysisResultDependentPensionAnalysisQueryResultAutoMapperProfile,
   ],
   exports: [AutoMapperService],
 })

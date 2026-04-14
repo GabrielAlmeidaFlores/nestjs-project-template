@@ -260,7 +260,11 @@ An�lise processada do CNIS:
                         },
                         activityType: {
                           type: 'string',
-                          enum: ['Atividade como professor', 'Atividade comum'],
+                          enum: [
+                            'atividade_professor',
+                            'atividade_comum',
+                            'periodo_sem_atividade',
+                          ],
                           description: 'Tipo de atividade exercida',
                         },
                         type: {
@@ -915,6 +919,42 @@ An�lise processada do CNIS:
     );
   }
 
+  public async getSpecialRetirementGrantFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson = true,
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON;
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize cálculos salariais além do que for necessário; use estritamente os fornecidos.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Para cada item de \`periods\`, use prioritariamente os dados estruturados já enviados nos arquivos do prompt; não invente valores.
+- O campo \`agents\` NÃO vem do CNIS analisado; extraia e consolide agentes nocivos a partir dos documentos anexados (PPP, LTCAT, etc.) e devolva no formato estruturado.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: asJson
+          ? ResponseConfigInputModel.build({
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema:
+                this.getSpecialRetirementGrantFirstAnalysisJsonSchema(),
+            })
+          : null,
+      }),
+    );
+  }
+
   public async getDisabilityRetirementPlanningGrantResultAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
@@ -1021,6 +1061,30 @@ An�lise processada do CNIS:
   }
 
   public async getSpecialCategoryRetirementAdministrativeProcedureAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getSpecialRetirementGrantCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getSpecialRetirementGrantSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null> {
@@ -1335,6 +1399,39 @@ Análise processada do CNIS:
       }),
     );
   }
+  public async getTemporaryDisabilityBenefitsGrantFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson = true,
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: asJson
+          ? ResponseConfigInputModel.build({
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema:
+                this.getTemporaryDisabilityBenefitsGrantFirstAnalysisJsonSchema(),
+            })
+          : null,
+      }),
+    );
+  }
 
   public async getDeathBenefitGrantResultAnalysis(
     systemInstruction: string,
@@ -1364,6 +1461,35 @@ Análise processada do CNIS:
       }),
     );
   }
+  public async getTemporaryDisabilityBenefitsGrantCompleteAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getTemporaryDisabilityBenefitsGrantCompleteAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
 
   public async getDeathBenefitGrantSimplifiedAnalysis(
     systemInstruction: string,
@@ -1375,6 +1501,454 @@ Análise processada do CNIS:
         promptFiles: files,
       }),
     );
+  }
+  public async getTemporaryDisabilityBenefitsGrantSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getSurvivorPensionAnalysisResult(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: this.getSurvivorPensionAnalysisResultJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getSurvivorPensionAnalysisRetirementRules(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getSurvivorPensionAnalysisRetirementRulesJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getSurvivorPensionAnalysisDependentPensionAnalyses(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getSurvivorPensionAnalysisDependentPensionAnalysesJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getSurvivorPensionAnalysisCompleteAnalysisText(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getSurvivorPensionAnalysisSimplifiedAnalysisText(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  private getSurvivorPensionAnalysisResultJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        isInsuredStatusConfirmed: {
+          type: 'boolean',
+          description:
+            'Indica se o falecido possuía qualidade de segurado na data do óbito.',
+        },
+        insuredStatusSummary: {
+          type: 'string',
+          description:
+            'Resumo curto e direto sobre a qualidade de segurado do falecido. Deve ser texto simples, sem formatação markdown, sem asteriscos, sem hashtags, sem tabelas. Máximo de 255 caracteres.',
+        },
+        isRetirementRightConfirmed: {
+          type: 'boolean',
+          description:
+            'Indica se o falecido havia cumprido requisitos para ao menos uma regra de aposentadoria.',
+        },
+        retirementRightSummary: {
+          type: 'string',
+          description:
+            'Resumo curto e direto sobre o direito à aposentadoria do falecido no momento do óbito. Deve ser texto simples, sem formatação markdown, sem asteriscos, sem hashtags, sem tabelas. Máximo de 255 caracteres.',
+        },
+        completeAnalysis: {
+          type: 'string',
+          description:
+            'Análise completa e detalhada em formato Markdown. Deve conter: (1) análise da qualidade de segurado e carência; (2) situação dos dependentes; (3) regras de aposentadoria verificadas; (4) parecer técnico conclusivo com recomendações. Use títulos (##), negrito (**), listas (-) e parágrafos para estruturar o texto.',
+        },
+      },
+      required: [
+        'isInsuredStatusConfirmed',
+        'insuredStatusSummary',
+        'isRetirementRightConfirmed',
+        'retirementRightSummary',
+        'completeAnalysis',
+      ],
+    };
+  }
+
+  private getSurvivorPensionAnalysisRetirementRulesJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        retirementRules: {
+          type: 'array',
+          description:
+            'Lista das regras de aposentadoria analisadas para o falecido.',
+          items: {
+            type: 'object',
+            properties: {
+              ruleName: {
+                type: 'string',
+                description: 'Nome da regra de aposentadoria analisada.',
+              },
+              isRequirementMet: {
+                type: 'boolean',
+                description: 'Indica se os requisitos foram cumpridos.',
+              },
+              entitlementDate: {
+                type: 'string',
+                description:
+                  'Data em que o requisito foi ou seria cumprido, no formato YYYY-MM-DD. Null se não aplicável.',
+              },
+              estimatedRmi: {
+                type: 'number',
+                description:
+                  'Valor decimal da RMI estimada para essa regra. Null se não calculável.',
+              },
+              isBestRmi: {
+                type: 'boolean',
+                description:
+                  'Indica se esta regra gera a melhor RMI entre todas as regras.',
+              },
+              isHighestClaimValue: {
+                type: 'boolean',
+                description:
+                  'Indica se esta regra gera o maior valor de benefício considerando todas as variáveis.',
+              },
+              detailedAnalysis: {
+                type: 'string',
+                description:
+                  'Análise detalhada dos requisitos e resultado para esta regra específica. Retorne texto simples sem markdown, sem asteriscos, sem hashtags. Use \\n para separar cada linha. Estruture em três blocos separados por uma linha em branco (\\n\\n): (1) "📊 Requisitos analisados:" seguido de cada requisito em linha separada com "→ ✅" ou "→ ❌"; (2) "💰 Cálculo da RMI:" com cada item em linha separada (média salarial, coeficiente, RMI estimada); (3) "⚠️ Valor da causa:" com cada item em linha separada (DIB, DER, tempo de atraso, valor em R$). Omita blocos cujos dados não estejam disponíveis.',
+              },
+            },
+            required: [
+              'ruleName',
+              'isRequirementMet',
+              'isBestRmi',
+              'isHighestClaimValue',
+              'detailedAnalysis',
+            ],
+          },
+        },
+      },
+      required: ['retirementRules'],
+    };
+  }
+
+  private getSurvivorPensionAnalysisDependentPensionAnalysesJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        dependentPensionAnalyses: {
+          type: 'array',
+          description:
+            'Lista das análises de pensão para cada dependente identificado.',
+          items: {
+            type: 'object',
+            properties: {
+              dependentName: {
+                type: 'string',
+                description: 'Nome completo do dependente.',
+              },
+              dependencyDegree: {
+                type: 'string',
+                description:
+                  'Grau de dependência (ex: cônjuge, filho menor, pai/mãe).',
+              },
+              isDependencyVerified: {
+                type: 'boolean',
+                description:
+                  'Indica se a dependência econômica ou legal foi verificada.',
+              },
+              pensionStartDate: {
+                type: 'string',
+                description:
+                  'Data estimada de início da pensão no formato YYYY-MM-DD. Null se não aplicável.',
+              },
+              estimatedPensionDuration: {
+                type: 'string',
+                description:
+                  'Duração estimada da pensão em formato curto e direto. Retorne apenas a duração, sem citar artigos de lei ou explicações jurídicas. Exemplos de formato esperado: "4 meses", "1 ano", "2 anos e 3 meses", "Até 21 anos", "4 meses ou até a cessação da condição", "Enquanto durar a invalidez". Máximo 50 caracteres.',
+              },
+            },
+            required: [
+              'dependentName',
+              'dependencyDegree',
+              'isDependencyVerified',
+              'estimatedPensionDuration',
+            ],
+          },
+        },
+      },
+      required: ['dependentPensionAnalyses'],
+    };
+  }
+
+  private getTemporaryDisabilityBenefitsGrantFirstAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        insuredStatus: {
+          type: 'boolean',
+          description:
+            'Indica se o segurado possui qualidade de segurado na Data de Início da Incapacidade (DII)',
+        },
+        gracePeriodStatus: {
+          type: 'boolean',
+          description:
+            'Indica se o segurado está em período de graça na Data de Início da Incapacidade (DII)',
+        },
+        gracePeriods: {
+          type: 'array',
+          description:
+            'Lista de eventos que geraram ou sustentam o período de graça',
+          items: {
+            type: 'object',
+            properties: {
+              event: {
+                type: 'string',
+                description:
+                  'Nome do evento que gerou ou sustenta o período de graça. Ex: Último vínculo empregatício, Desemprego involuntário, Afastamento por doença',
+              },
+              date: {
+                type: 'string',
+                description: 'Data do evento no formato DD/MM/AAAA',
+              },
+              observation: {
+                type: 'string',
+                description:
+                  'Análise técnica sobre como esse evento impacta o período de graça',
+              },
+            },
+            required: ['event', 'date', 'observation'],
+          },
+        },
+        analysisConclusion: {
+          type: 'string',
+          description:
+            'Conclusão técnica completa da análise, incluindo carência, qualidade de segurado, pontos de atenção e viabilidade preliminar do benefício',
+        },
+        graceExtensionDueToInvoluntaryUnemployment: {
+          type: 'boolean',
+          description:
+            'Indica se há direito à extensão do período de graça em razão de desemprego involuntário (art. 15, §2º da Lei 8.213/91)',
+        },
+        requestToExtendGracePeriod: {
+          type: 'boolean',
+          description:
+            'Indica se é recomendável requerer prorrogação do período de graça administrativamente',
+        },
+      },
+      required: [
+        'insuredStatus',
+        'gracePeriodStatus',
+        'gracePeriods',
+        'analysisConclusion',
+        'graceExtensionDueToInvoluntaryUnemployment',
+        'requestToExtendGracePeriod',
+      ],
+    };
+  }
+
+  private getTemporaryDisabilityBenefitsGrantCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        isEligibleForTemporaryDisabilityBenefits: {
+          type: 'boolean',
+          description:
+            'Indica se o segurado tem direito ao benefício por incapacidade temporária',
+        },
+        gracePeriodAnalysis: {
+          type: 'object',
+          description: 'Análise da carência previdenciária',
+          properties: {
+            totalContribution: {
+              type: 'string',
+              description:
+                'Total de contribuições computadas para fins de carência. Ex: 36 contribuições',
+            },
+            minimumGracePeriodRequired: {
+              type: 'string',
+              description:
+                'Carência mínima exigida para o benefício. Ex: 12 contribuições',
+            },
+            status: {
+              type: 'boolean',
+              description: 'Indica se a carência foi cumprida',
+            },
+          },
+          required: [
+            'totalContribution',
+            'minimumGracePeriodRequired',
+            'status',
+          ],
+        },
+        insuredStatus: {
+          type: 'object',
+          description: 'Situação de segurado na Data de Início da Incapacidade',
+          properties: {
+            lastContributionDate: {
+              type: 'string',
+              description:
+                'Data da última contribuição encontrada no CNIS no formato DD/MM/AAAA',
+            },
+            disabilityStartDate: {
+              type: 'string',
+              description:
+                'Data de Início da Incapacidade (DII) informada no caso no formato DD/MM/AAAA',
+            },
+            gracePeriod: {
+              type: 'boolean',
+              description:
+                'Indica se o segurado está em período de graça na DII',
+            },
+            status: {
+              type: 'boolean',
+              description:
+                'Indica se o segurado possui qualidade de segurado na DII',
+            },
+          },
+          required: [
+            'lastContributionDate',
+            'disabilityStartDate',
+            'gracePeriod',
+            'status',
+          ],
+        },
+        disabilityAnalysis: {
+          type: 'object',
+          description:
+            'Análise da incapacidade com base nos documentos médicos',
+          properties: {
+            informedCids: {
+              type: 'array',
+              description:
+                'Lista dos CIDs informados no caso. Cada item deve conter o código CID seguido de hífen e descrição. Ex: ["M51.1 - Degeneração de disco intervertebral", "G43 - Enxaqueca"]',
+              items: { type: 'string' },
+            },
+            preliminaryAnalysis: {
+              type: 'string',
+              description:
+                'Análise preliminar da incapacidade com base nos documentos e CIDs, avaliando gravidade, impacto laboral e perspectivas de concessão',
+            },
+          },
+          required: ['informedCids', 'preliminaryAnalysis'],
+        },
+        retirementRules: {
+          type: 'array',
+          description:
+            'Lista das regras de aposentadoria que o segurado pode ter direito, caso seja elegível',
+          items: {
+            type: 'object',
+            properties: {
+              ruleName: {
+                type: 'string',
+                description:
+                  'Nome da regra de aposentadoria. Ex: Aposentadoria por Idade Urbana',
+              },
+              fulfilled: {
+                type: 'boolean',
+                description: 'Indica se os requisitos da regra foram cumpridos',
+              },
+              retirementDate: {
+                type: 'string',
+                description:
+                  'Data estimada de aposentadoria no formato DD/MM/AAAA, ou vazio se não aplicável',
+              },
+              expectedRmi: {
+                type: 'number',
+                description:
+                  'RMI (Renda Mensal Inicial) estimada em reais para esta regra de aposentadoria. Calcule com base no histórico de contribuições do CNIS usando a média dos 80% maiores salários de contribuição corrigidos. Nunca use 0 — sempre estime um valor com base nos dados disponíveis.',
+              },
+              causeValue: {
+                type: 'number',
+                description:
+                  'Valor de causa estimado em reais para fins de uma eventual ação judicial. Calcule como o produto do RMI estimado pelo número de meses de competência (prescrição quinquenal de 60 meses). Nunca use 0 — sempre estime com base nos dados disponíveis.',
+              },
+              detailedAnalysis: {
+                type: 'string',
+                description:
+                  'Análise detalhada dos requisitos e resultado para esta regra específica. Retorne texto simples sem markdown, sem asteriscos, sem hashtags. Use \\n para separar cada linha. Estruture em três blocos separados por uma linha em branco (\\n\\n): (1) "📊 Requisitos analisados:" seguido de cada requisito em linha separada com "→ ✅" ou "→ ❌"; (2) "💰 Cálculo da RMI:" com cada item em linha separada (média salarial, coeficiente, RMI estimada); (3) "⚠️ Valor da causa:" com cada item em linha separada (DIB, DER, tempo de atraso, valor em R$). Omita blocos cujos dados não estejam disponíveis.',
+              },
+            },
+            required: [
+              'ruleName',
+              'fulfilled',
+              'retirementDate',
+              'expectedRmi',
+              'causeValue',
+              'detailedAnalysis',
+            ],
+          },
+        },
+        analysisResult: {
+          type: 'string',
+          description:
+            'Parecer técnico conclusivo completo da análise, incluindo verificação de carência, qualidade de segurado, análise de incapacidade, regras de aposentadoria aplicáveis e recomendações técnicas. Retorne em formato Markdown (use ##, ###, **negrito**, listas com - e parágrafos)',
+        },
+      },
+      required: [
+        'isEligibleForTemporaryDisabilityBenefits',
+        'gracePeriodAnalysis',
+        'insuredStatus',
+        'disabilityAnalysis',
+        'retirementRules',
+        'analysisResult',
+      ],
+    };
   }
 
   private getDisabilityRetirementPlanningCompleteAnalysisJsonSchema(): object {
@@ -1855,6 +2429,235 @@ Análise processada do CNIS:
         disabilityAnalysis: disabilityAnalysisSchema,
       },
       required: ['periods', 'disabilityAnalysis'],
+    };
+  }
+
+  private getSpecialRetirementGrantFirstAnalysisJsonSchema(): object {
+    const agentSchema = {
+      type: 'object',
+      properties: {
+        type: {
+          type: 'string',
+          description: 'Tipo do agente nocivo. Ex: Ruído, Calor, Químicos',
+        },
+        intensity: {
+          type: 'string',
+          description: 'Intensidade/medição (quando houver). Ex: 87dB',
+        },
+        unit: { type: 'string', description: 'Unidade da medição. Ex: dB, °C' },
+        habitual: {
+          type: 'boolean',
+          description: 'Exposição habitual.',
+        },
+        permanence: {
+          type: 'boolean',
+          description: 'Exposição permanente.',
+        },
+        source: {
+          type: 'string',
+          description: 'Fonte da informação. Ex: PPP, LTCAT',
+        },
+        epiEficaz: {
+          type: 'boolean',
+          description:
+            'Indica se EPI foi considerado eficaz, quando aplicável.',
+        },
+      },
+      required: ['type'],
+    };
+
+    const earningsSchema = {
+      type: 'object',
+      properties: {
+        competence: {
+          type: 'string',
+          format: 'date',
+          description: 'Competência no formato YYYY-MM-DD',
+        },
+        remuneration: { type: 'string', description: 'Remuneração' },
+        indicators: { type: 'string', description: 'Indicadores CNIS' },
+        paymentDate: {
+          type: 'string',
+          format: 'date',
+          description: 'Data de pagamento no formato YYYY-MM-DD',
+        },
+        competenceBelowTheMinimum: {
+          type: 'boolean',
+          description: 'Indica competência abaixo do mínimo',
+        },
+      },
+      required: [
+        'competence',
+        'remuneration',
+        'indicators',
+        'paymentDate',
+        'competenceBelowTheMinimum',
+      ],
+    };
+
+    return {
+      type: 'object',
+      properties: {
+        summary: {
+          type: 'object',
+          properties: {
+            specialTime: {
+              type: 'string',
+              description: 'Tempo especial. Ex: 23 anos e 4 meses',
+            },
+            commonTime: {
+              type: 'string',
+              description: 'Tempo comum. Ex: 12 anos e 3 meses',
+            },
+            specialGracePeriod: {
+              type: 'number',
+              description: 'Carência no tempo especial (contribuições)',
+            },
+            commonGracePeriod: {
+              type: 'number',
+              description: 'Carência no tempo comum (contribuições)',
+            },
+            totalTime: {
+              type: 'string',
+              description: 'Tempo total. Ex: 30 anos e 2 meses',
+            },
+            totalGracePeriod: {
+              type: 'number',
+              description: 'Carência total (contribuições)',
+            },
+          },
+          required: [
+            'specialTime',
+            'commonTime',
+            'specialGracePeriod',
+            'commonGracePeriod',
+            'totalTime',
+            'totalGracePeriod',
+          ],
+        },
+        periods: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              employmentRelationshipSource: {
+                type: 'string',
+                description: 'Origem do vínculo (empregador/vínculo).',
+              },
+              startDate: {
+                type: 'string',
+                format: 'date',
+                description: 'Data de início do período (YYYY-MM-DD).',
+              },
+              endDate: {
+                type: 'string',
+                format: 'date',
+                description: 'Data de fim do período (YYYY-MM-DD) ou null.',
+              },
+              category: {
+                type: 'string',
+                description: 'Categoria do vínculo.',
+              },
+              impact: {
+                type: 'string',
+                description: 'Impacto em tempo. Ex: 2 anos e 3 meses.',
+              },
+              gracePeriod: {
+                type: 'number',
+                description: 'Carência do período (contribuições).',
+              },
+              agents: {
+                type: 'array',
+                items: agentSchema,
+                description: 'Agentes nocivos consolidados por IA.',
+              },
+              status: {
+                type: 'string',
+                description: 'Status (valid/pending/invalid).',
+              },
+              earningsHistory: {
+                type: 'array',
+                items: earningsSchema,
+                description: 'Remunerações do período (CNIS).',
+              },
+              observations: {
+                type: 'array',
+                items: { type: 'string' },
+                description: 'Observações do período (quando houver).',
+              },
+            },
+            required: [
+              'employmentRelationshipSource',
+              'startDate',
+              'endDate',
+              'category',
+              'impact',
+              'gracePeriod',
+              'agents',
+              'status',
+              'earningsHistory',
+            ],
+          },
+        },
+        technicalDiagnosis: {
+          type: 'object',
+          properties: {
+            items: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  periodStartDate: { type: 'string', format: 'date' },
+                  periodEndDate: { type: 'string', format: 'date' },
+                  recognized: { type: 'boolean' },
+                  justification: { type: 'string' },
+                  legalFramework: {
+                    type: 'array',
+                    items: { type: 'string' },
+                  },
+                  agents: { type: 'array', items: agentSchema },
+                  epiEficaz: { type: 'boolean' },
+                  observations: { type: 'array', items: { type: 'string' } },
+                },
+                required: [
+                  'periodStartDate',
+                  'periodEndDate',
+                  'recognized',
+                  'justification',
+                  'legalFramework',
+                  'agents',
+                ],
+              },
+            },
+          },
+          required: ['items'],
+        },
+        integratedTimeline: {
+          type: 'object',
+          properties: {
+            items: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  startDate: { type: 'string', format: 'date' },
+                  endDate: { type: 'string', format: 'date' },
+                  kind: { type: 'string' },
+                  label: { type: 'string' },
+                },
+                required: ['startDate', 'endDate', 'kind', 'label'],
+              },
+            },
+          },
+          required: ['items'],
+        },
+      },
+      required: [
+        'summary',
+        'periods',
+        'technicalDiagnosis',
+        'integratedTimeline',
+      ],
     };
   }
 

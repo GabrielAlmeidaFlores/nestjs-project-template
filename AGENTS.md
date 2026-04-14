@@ -582,6 +582,48 @@ export class AnalysisTypeormEntity extends BaseTypeormEntity {
 - ✅ Handle database-specific logic
 - ❌ NO business logic
 - ❌ NO direct entity exposure to use cases
+- ❌ **NO `QueryBuilder` / `createQueryBuilder()`** — STRICTLY FORBIDDEN
+
+#### ⚠️ CRITICAL: QueryBuilder is Prohibited
+
+**NEVER use `createQueryBuilder()`, `QueryBuilder`, `getRawAndEntities()`, `getRawMany()`, or any other QueryBuilder API.**
+
+Use the TypeORM `Repository` API methods exclusively:
+- `repo.find(options)` — list with `FindManyOptions`
+- `repo.findOne(options)` — single result with `FindOneOptions`
+- `repo.save(entity)` — insert/update via base command repository
+- `repo.update(criteria, data)` — update by criteria
+- `repo.softDelete(criteria)` — soft delete by criteria
+- `repo.count(options)` — count
+
+**Batch soft delete (replaces QueryBuilder `.softDelete().where(...)`):**
+
+```typescript
+// ❌ WRONG — QueryBuilder soft delete
+return async (executor: unknown) => {
+  const manager = executor as EntityManager;
+  await manager
+    .getRepository(ChildTypeormEntity)
+    .createQueryBuilder()
+    .softDelete()
+    .where('parent_id = :id', { id: parentId.toString() })
+    .execute();
+};
+
+// ✅ CORRECT — Repository API soft delete by relation
+return async (executor: unknown) => {
+  const manager = executor as EntityManager;
+  await manager
+    .getRepository(ChildTypeormEntity)
+    .softDelete({ parent: { id: parentId.toString() } });
+};
+```
+
+**Why QueryBuilder is prohibited:**
+1. **Readability**: Repository API is declarative and easier to understand
+2. **Type safety**: `FindOptionsWhere` is fully typed; QueryBuilder strings are not
+3. **Consistency**: One pattern throughout the entire codebase
+4. **Maintenance**: No raw SQL-like strings that can silently break on renames
 
 **Example**:
 
@@ -979,6 +1021,27 @@ protected readonly _type = ClassName.name;
 
 // In classes that extend another class
 protected override readonly _type = ClassName.name;
+```
+
+**⚠️ EXCEPTION: Abstract Gateway Classes** — Abstract repository gateway classes (used as NestJS DI tokens with `implements`, NOT `extends`) must **NOT** have `_type`. Adding `protected _type` to an abstract class used with `implements` causes TS2720 ("Property '_type' is protected but type is not a class derived from..."). Repository gateway abstract classes are never instantiated and serve purely as DI tokens — they do not need `_type`.
+
+```typescript
+// ❌ WRONG - adding _type to an abstract gateway class used as DI token
+export abstract class AnalysisQueryRepositoryGateway {
+  protected readonly _type = AnalysisQueryRepositoryGateway.name; // ❌ causes TS2720
+  public abstract findById(id: AnalysisId): Promise<AnalysisEntity | null>;
+}
+
+// ✅ CORRECT - abstract gateway has NO _type
+export abstract class AnalysisQueryRepositoryGateway {
+  public abstract findById(id: AnalysisId): Promise<AnalysisEntity | null>;
+}
+
+// ✅ CORRECT - the implementing class has _type
+@Injectable()
+export class AnalysisTypeormQueryRepository implements AnalysisQueryRepositoryGateway {
+  protected readonly _type = AnalysisTypeormQueryRepository.name; // ✅
+}
 ```
 
 **Examples**:
@@ -2568,35 +2631,23 @@ const resource = list.resource.map((attendant) =>
 Use when the calculation is an intrinsic part of the query (e.g., COUNT via JOIN/subquery on the same table) and the field would never make sense without that context. Must be standardized:
 
 - The field must be declared with a clear name indicating it is computed (e.g., `resolvedTicketsCount`, not `count`)
-- The TypeORM repository query is responsible for populating it (via `getRawAndEntities()` or subquery)
+- The TypeORM repository query is responsible for populating it using a **separate count query** (QueryBuilder is prohibited — see Repository Implementation rules)
 - The query result documents (via field name) that the value is computed
 
+Since `QueryBuilder` is prohibited, implement batch counts via a separate `find` + aggregation in the use case, or via a TypeORM `count` call:
+
 ```typescript
-// query result — explicitly named computed field
-export class GetSupportAttendantQueryResult extends BaseBuildableObject {
-  public readonly id: SupportAttendantId;
-  public readonly name: string;
-  public readonly resolvedTicketsCount: number; // ✅ allowed if part of the main query
-}
-
-// typeorm repo — computes via subquery
-const { entities, raw } = await this.repository
-  .createQueryBuilder('attendant')
-  .addSelect(
-    (sub) => sub.select('COUNT(t.id)').from('support_ticket', 't')
-      .where('t.assigned_attendant_id = attendant.id')
-      .andWhere('t.status = :s'),
-    'resolvedCount',
-  )
-  .setParameter('s', SupportTicketStatusEnum.RESOLVED)
-  .getRawAndEntities();
-
-const resource = entities.map((attendant, i) =>
-  GetSupportAttendantQueryResult.build({
-    id: new SupportAttendantId(attendant.id),
-    name: attendant.name,
-    resolvedTicketsCount: Number(raw[i]?.resolvedCount ?? 0),
-  }),
+// ✅ CORRECT — batch count without QueryBuilder
+const countPerResult = await Promise.all(
+  resultIds.map(async (id) => ({
+    id,
+    count: await manager.getRepository(TicketTypeormEntity).count({
+      where: {
+        assignedAttendant: { id: id.toString() },
+        status: SupportTicketStatusEnum.RESOLVED,
+      },
+    }),
+  })),
 );
 ```
 
@@ -3104,6 +3155,66 @@ usedCount < affiliate.paymentPlanDiscountRedemptionLimit
 ```
 
 When a discount is expired or the limit is reached, return an empty/zero-discount response — do **not** throw 404. Keep the same response DTO shape and do **not** set the affiliate cookie.
+
+---
+
+### 12. AI Analysis JSON Schema Pattern ⚠️ MANDATORY
+
+**RULE**: The JSON structure returned by the AI model MUST be defined via a `private get*JsonSchema(): object` method inside `AnalysisProcessorService`. **NEVER describe the JSON structure in the prompt/seeder text.**
+
+The prompt (stored in the DB via the seeder) is responsible only for **instructions and context** — what the AI should analyse and how. The **schema** enforces the output shape.
+
+**❌ WRONG — JSON structure described in the prompt:**
+
+```
+// In payment-plan-paid-resource-ia-config.seeder.ts
+prompt: `...
+ESTRUTURA OBRIGATÓRIA DO JSON:
+{
+  "resumoDoCaso": "...",
+  "sinteseDoCnis": "..."
+}
+`
+```
+
+**✅ CORRECT — JSON structure defined in the analysis-processor schema method:**
+
+```typescript
+// In analysis-processor.service.ts
+private getMyAnalysisJsonSchema(): object {
+  return {
+    type: 'object',
+    properties: {
+      insuredStatus:   { type: 'boolean', description: '...' },
+      gracePeriods: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            event:       { type: 'string' },
+            date:        { type: 'string' },
+            observation: { type: 'string' },
+          },
+          required: ['event', 'date', 'observation'],
+        },
+      },
+    },
+    required: ['insuredStatus', 'gracePeriods'],
+  };
+}
+```
+
+The schema **must exactly match** the corresponding `*Interface` file under `model/interface/`. If the interface has key `insuredStatus: boolean`, the schema must have `insuredStatus: { type: 'boolean' }`.
+
+**Rules:**
+
+- ✅ JSON schema is defined in `AnalysisProcessorService` as a private `get{Feature}JsonSchema()` method
+- ✅ Schema keys and types must match the `*Interface` file exactly
+- ✅ Use `required: [...]` in the schema so the AI is forced to return all mandatory fields
+- ✅ Prompt text describes only the analysis instructions (no JSON structure)
+- ✅ Seeder prompt is kept clear and concise — no JSON examples or schema
+- ❌ NO JSON structure in prompts or seeders
+- ❌ NO mismatch between schema keys and interface fields
 
 ---
 

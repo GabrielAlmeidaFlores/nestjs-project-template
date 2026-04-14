@@ -66,17 +66,17 @@ export class TeacherRetirementPlanningTypeormEntity extends BaseTypeormEntity {
     name: 'public_service_start_date',
     type: 'date',
     transformer: DateOnlyTransformer,
-    nullable: false,
+    nullable: true,
   })
-  public publicServiceStartDate: Date;
+  public publicServiceStartDate: Date | null;
 
   @Column({
     name: 'career_start_date',
     type: 'date',
     transformer: DateOnlyTransformer,
-    nullable: false,
+    nullable: true,
   })
-  public careerStartDate: Date;
+  public careerStartDate: Date | null;
 
   @Column({
     name: 'administrative_process_analysis',

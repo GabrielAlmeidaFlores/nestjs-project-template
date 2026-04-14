@@ -310,6 +310,20 @@ import { SpecialCategoryRetirementAnalysisResultRuleItemTypeormCommandRepository
 import { SpecialCategoryRetirementAnalysisResultRuleItemTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-result-rule-item/special-category-retirement-analysis-result-rule-item.typeorm.query.repository';
 import { SpecialCategoryRetirementAnalysisWorkPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-work-period/special-category-retirement-analysis-work-period.typeorm.command.repository';
 import { SpecialCategoryRetirementAnalysisWorkPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-work-period/special-category-retirement-analysis-work-period.typeorm.query.repository';
+import { SpecialRetirementGrantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant/special-retirement-grant.typeorm.command.repository';
+import { SpecialRetirementGrantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant/special-retirement-grant.typeorm.query.repository';
+import { SpecialRetirementGrantBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-benefit/special-retirement-grant-benefit.typeorm.command.repository';
+import { SpecialRetirementGrantDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-document/special-retirement-grant-document.typeorm.command.repository';
+import { SpecialRetirementGrantEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-earnings-history/special-retirement-grant-earnings-history.typeorm.command.repository';
+import { SpecialRetirementGrantEarningsHistoryTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-earnings-history/special-retirement-grant-earnings-history.typeorm.query.repository';
+import { SpecialRetirementGrantLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-legal-proceeding/special-retirement-grant-legal-proceeding.typeorm.command.repository';
+import { SpecialRetirementGrantPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-period/special-retirement-grant-period.typeorm.command.repository';
+import { SpecialRetirementGrantPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-period/special-retirement-grant-period.typeorm.query.repository';
+import { SpecialRetirementGrantPeriodObservationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-period-observation/special-retirement-grant-period-observation.typeorm.command.repository';
+import { SpecialRetirementGrantPeriodOverdueContributionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-period-overdue-contribution/special-retirement-grant-period-overdue-contribution.typeorm.command.repository';
+import { SpecialRetirementGrantPeriodPendingExitDateTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-period-pending-exit-date/special-retirement-grant-period-pending-exit-date.typeorm.command.repository';
+import { SpecialRetirementGrantPeriodUnderMinimumTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-period-under-minimum/special-retirement-grant-period-under-minimum.typeorm.command.repository';
+import { SpecialRetirementGrantResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-result/special-retirement-grant-result.typeorm.command.repository';
 import { SpeechGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator/speech-generator.typeorm.command.repository';
 import { SpeechGeneratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/speech-generator/speech-generator.typeorm.query.repository';
 import { SpeechGeneratorBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-benefit/speech-generator-benefit.typeorm.command.repository';
@@ -323,6 +337,28 @@ import { SupportTicketTypeormQueryRepository } from '@infra/database/implementat
 import { SupportTicketAttachmentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/support-ticket-attachment/support-ticket-attachment.typeorm.command.repository';
 import { SupportTicketMessageTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/support-ticket-message/support-ticket-message.typeorm.command.repository';
 import { SupportTicketMessageTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/support-ticket-message/support-ticket-message.typeorm.query.repository';
+import { SurvivorPensionAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis/survivor-pension-analysis.typeorm.command.repository';
+import { SurvivorPensionAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis/survivor-pension-analysis.typeorm.query.repository';
+import { SurvivorPensionAnalysisBenefitOriginatorIdentificationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-benefit-originator-identification/survivor-pension-analysis-benefit-originator-identification.typeorm.command.repository';
+import { SurvivorPensionAnalysisBenefitOriginatorIdentificationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-benefit-originator-identification/survivor-pension-analysis-benefit-originator-identification.typeorm.query.repository';
+import { SurvivorPensionAnalysisBenefitOriginatorIdentificationDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-benefit-originator-identification-document/survivor-pension-analysis-benefit-originator-identification-document.typeorm.command.repository';
+import { SurvivorPensionAnalysisCustomerProfileIdentificationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-customer-profile-identification/survivor-pension-analysis-customer-profile-identification.typeorm.command.repository';
+import { SurvivorPensionAnalysisCustomerProfileIdentificationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-customer-profile-identification/survivor-pension-analysis-customer-profile-identification.typeorm.query.repository';
+import { SurvivorPensionAnalysisCustomerProfileIdentificationDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-customer-profile-identification-document/survivor-pension-analysis-customer-profile-identification-document.typeorm.command.repository';
+import { SurvivorPensionAnalysisDeceasedBenefitDependentsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-deceased-benefit-dependents/survivor-pension-analysis-deceased-benefit-dependents.typeorm.command.repository';
+import { SurvivorPensionAnalysisDeceasedBenefitDependentsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-deceased-benefit-dependents/survivor-pension-analysis-deceased-benefit-dependents.typeorm.query.repository';
+import { SurvivorPensionAnalysisDeceasedBenefitDependentsDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-deceased-benefit-dependents-document/survivor-pension-analysis-deceased-benefit-dependents-document.typeorm.command.repository';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-deceased-work-history/survivor-pension-analysis-deceased-work-history.typeorm.command.repository';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-deceased-work-history/survivor-pension-analysis-deceased-work-history.typeorm.query.repository';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-deceased-work-history-period/survivor-pension-analysis-deceased-work-history-period.typeorm.command.repository';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-deceased-work-history-period/survivor-pension-analysis-deceased-work-history-period.typeorm.query.repository';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-deceased-work-history-period-document/survivor-pension-analysis-deceased-work-history-period-document.typeorm.command.repository';
+import { SurvivorPensionAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-result/survivor-pension-analysis-result.typeorm.command.repository';
+import { SurvivorPensionAnalysisResultTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-result/survivor-pension-analysis-result.typeorm.query.repository';
+import { SurvivorPensionAnalysisResultDependentPensionAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-result-dependent-pension-analysis/survivor-pension-analysis-result-dependent-pension-analysis.typeorm.command.repository';
+import { SurvivorPensionAnalysisResultDependentPensionAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-result-dependent-pension-analysis/survivor-pension-analysis-result-dependent-pension-analysis.typeorm.query.repository';
+import { SurvivorPensionAnalysisResultRetirementRuleTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-result-retirement-rule/survivor-pension-analysis-result-retirement-rule.typeorm.command.repository';
+import { SurvivorPensionAnalysisResultRetirementRuleTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/survivor-pension-analysis-result-retirement-rule/survivor-pension-analysis-result-retirement-rule.typeorm.query.repository';
 import { SystemActivitiesTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/system-activities/system-activities.typeorm.command.repository';
 import { SystemActivitiesTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/system-activities/system-activities.typeorm.query.repository';
 import { SystemLogTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/system-log/system-log.typeorm.command.repository';
@@ -338,6 +374,23 @@ import { TeacherRetirementPlanningPeriodItemDocumentTypeormCommandRepository } f
 import { TeacherRetirementPlanningRemunerationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-remuneration/teacher-retirement-planning-remuneration.typeorm.command.repository';
 import { TeacherRetirementPlanningRemunerationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-remuneration/teacher-retirement-planning-remuneration.typeorm.query.repository';
 import { TeacherRetirementPlanningResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-result/teacher-retirement-planning-result.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant/temporary-disability-benefits-grant.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant/temporary-disability-benefits-grant.typeorm.query.repository';
+import { TemporaryDisabilityBenefitsGrantDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-document/temporary-disability-benefits-grant-document.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-inss-benefit/temporary-disability-benefits-grant-inss-benefit.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantInsuredStatusTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-insured-status/temporary-disability-benefits-grant-insured-status.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantInsuredStatusTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-insured-status/temporary-disability-benefits-grant-insured-status.typeorm.query.repository';
+import { TemporaryDisabilityBenefitsGrantInsuredStatusDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-insured-status-document/temporary-disability-benefits-grant-insured-status-document.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-legal-proceeding/temporary-disability-benefits-grant-legal-proceeding.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-period/temporary-disability-benefits-grant-period.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-period/temporary-disability-benefits-grant-period.typeorm.query.repository';
+import { TemporaryDisabilityBenefitsGrantPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-period-document/temporary-disability-benefits-grant-period-document.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantPreviousBenefitsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-previous-benefits/temporary-disability-benefits-grant-previous-benefits.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantPreviousBenefitsDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-previous-benefits-document/temporary-disability-benefits-grant-previous-benefits-document.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-result/temporary-disability-benefits-grant-result.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantWorkPeriodsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-work-periods/temporary-disability-benefits-grant-work-periods.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsGrantWorkPeriodsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-work-periods/temporary-disability-benefits-grant-work-periods.typeorm.query.repository';
+import { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-work-periods-earnings-history/temporary-disability-benefits-grant-work-periods-earnings-history.typeorm.command.repository';
 import { TutorialTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/tutorial/tutorial.typeorm.command.repository';
 import { TutorialTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/tutorial/tutorial.typeorm.query.repository';
 import { TypeormModule } from '@infra/database/implementation/typeorm/typeorm.module';
@@ -599,12 +652,48 @@ import { SpecialCategoryRetirementAnalysisResultRuleItemCommandRepositoryGateway
 import { SpecialCategoryRetirementAnalysisResultRuleItemQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-result-rule-item/query/special-category-retirement-analysis-result-rule-item.query.repository.gateway';
 import { SpecialCategoryRetirementAnalysisWorkPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-work-period/command/special-category-retirement-analysis-work-period.command.repository.gateway';
 import { SpecialCategoryRetirementAnalysisWorkPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-work-period/query/special-category-retirement-analysis-work-period.query.repository.gateway';
+import { SpecialRetirementGrantCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant/command/special-retirement-grant.command.repository.gateway';
+import { SpecialRetirementGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant/query/special-retirement-grant.query.repository.gateway';
+import { SpecialRetirementGrantBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-benefit/command/special-retirement-grant-benefit.command.repository.gateway';
+import { SpecialRetirementGrantDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-document/command/special-retirement-grant-document.command.repository.gateway';
+import { SpecialRetirementGrantEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-earnings-history/command/special-retirement-grant-earnings-history.command.repository.gateway';
+import { SpecialRetirementGrantEarningsHistoryQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-earnings-history/query/special-retirement-grant-earnings-history.query.repository.gateway';
+import { SpecialRetirementGrantLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-legal-proceeding/command/special-retirement-grant-legal-proceeding.command.repository.gateway';
+import { SpecialRetirementGrantPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-period/command/special-retirement-grant-period.command.repository.gateway';
+import { SpecialRetirementGrantPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-period/query/special-retirement-grant-period.query.repository.gateway';
+import { SpecialRetirementGrantPeriodObservationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-period-observation/command/special-retirement-grant-period-observation.command.repository.gateway';
+import { SpecialRetirementGrantPeriodOverdueContributionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-period-overdue-contribution/command/special-retirement-grant-period-overdue-contribution.command.repository.gateway';
+import { SpecialRetirementGrantPeriodPendingExitDateCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-period-pending-exit-date/command/special-retirement-grant-period-pending-exit-date.command.repository.gateway';
+import { SpecialRetirementGrantPeriodUnderMinimumCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-period-under-minimum/command/special-retirement-grant-period-under-minimum.command.repository.gateway';
+import { SpecialRetirementGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-result/command/special-retirement-grant-result.command.repository.gateway';
 import { SpeechGeneratorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/command/speech-generator.command.repository.gateway';
 import { SpeechGeneratorQueryRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/query/speech-generator.query.repository.gateway';
 import { SpeechGeneratorBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator-benefit/command/speech-generator-benefit.command.repository.gateway';
 import { SpeechGeneratorDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator-document/command/speech-generator-document.command.repository.gateway';
 import { SpeechGeneratorLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator-legal-proceeding/command/speech-generator-legal-proceeding.command.repository.gateway';
 import { SpeechGeneratorResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator-result/command/speech-generator-result.command.repository.gateway';
+import { SurvivorPensionAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis/command/survivor-pension-analysis.command.repository.gateway';
+import { SurvivorPensionAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis/query/survivor-pension-analysis.query.repository.gateway';
+import { SurvivorPensionAnalysisBenefitOriginatorIdentificationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-benefit-originator-identification/command/survivor-pension-analysis-benefit-originator-identification.command.repository.gateway';
+import { SurvivorPensionAnalysisBenefitOriginatorIdentificationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-benefit-originator-identification/query/survivor-pension-analysis-benefit-originator-identification.query.repository.gateway';
+import { SurvivorPensionAnalysisBenefitOriginatorIdentificationDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-benefit-originator-identification-document/command/survivor-pension-analysis-benefit-originator-identification-document.command.repository.gateway';
+import { SurvivorPensionAnalysisCustomerProfileIdentificationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-customer-profile-identification/command/survivor-pension-analysis-customer-profile-identification.command.repository.gateway';
+import { SurvivorPensionAnalysisCustomerProfileIdentificationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-customer-profile-identification/query/survivor-pension-analysis-customer-profile-identification.query.repository.gateway';
+import { SurvivorPensionAnalysisCustomerProfileIdentificationDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-customer-profile-identification-document/command/survivor-pension-analysis-customer-profile-identification-document.command.repository.gateway';
+import { SurvivorPensionAnalysisDeceasedBenefitDependentsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-deceased-benefit-dependents/command/survivor-pension-analysis-deceased-benefit-dependents.command.repository.gateway';
+import { SurvivorPensionAnalysisDeceasedBenefitDependentsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-deceased-benefit-dependents/query/survivor-pension-analysis-deceased-benefit-dependents.query.repository.gateway';
+import { SurvivorPensionAnalysisDeceasedBenefitDependentsDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-deceased-benefit-dependents-document/command/survivor-pension-analysis-deceased-benefit-dependents-document.command.repository.gateway';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-deceased-work-history/command/survivor-pension-analysis-deceased-work-history.command.repository.gateway';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-deceased-work-history/query/survivor-pension-analysis-deceased-work-history.query.repository.gateway';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-deceased-work-history-period/command/survivor-pension-analysis-deceased-work-history-period.command.repository.gateway';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-deceased-work-history-period/query/survivor-pension-analysis-deceased-work-history-period.query.repository.gateway';
+import { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-deceased-work-history-period-document/command/survivor-pension-analysis-deceased-work-history-period-document.command.repository.gateway';
+import { SurvivorPensionAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-result/command/survivor-pension-analysis-result.command.repository.gateway';
+import { SurvivorPensionAnalysisResultQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-result/query/survivor-pension-analysis-result.query.repository.gateway';
+import { SurvivorPensionAnalysisResultDependentPensionAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-result-dependent-pension-analysis/command/survivor-pension-analysis-result-dependent-pension-analysis.command.repository.gateway';
+import { SurvivorPensionAnalysisResultDependentPensionAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-result-dependent-pension-analysis/query/survivor-pension-analysis-result-dependent-pension-analysis.query.repository.gateway';
+import { SurvivorPensionAnalysisResultRetirementRuleCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-result-retirement-rule/command/survivor-pension-analysis-result-retirement-rule.command.repository.gateway';
+import { SurvivorPensionAnalysisResultRetirementRuleQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-result-retirement-rule/query/survivor-pension-analysis-result-retirement-rule.query.repository.gateway';
 import { TeacherRetirementPlanningCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/command/teacher-retirement-planning.command.repository.gateway';
 import { TeacherRetirementPlanningQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/query/teacher-retirement-planning.query.repository.gateway';
 import { TeacherRetirementPlanningDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-document/command/teacher-retirement-planning-document.command.repository.gateway';
@@ -616,6 +705,23 @@ import { TeacherRetirementPlanningPeriodItemDocumentCommandRepositoryGateway } f
 import { TeacherRetirementPlanningRemunerationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-remuneration/command/teacher-retirement-planning-remuneration.command.repository.gateway';
 import { TeacherRetirementPlanningRemunerationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-remuneration/query/teacher-retirement-planning-remuneration.query.repository.gateway';
 import { TeacherRetirementPlanningResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-result/command/teacher-retirement-planning-result.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant/command/temporary-disability-benefits-grant.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant/query/temporary-disability-benefits-grant.query.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-document/command/temporary-disability-benefits-grant-document.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-inss-benefit/command/temporary-disability-benefits-grant-inss-benefit.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantInsuredStatusCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-insured-status/command/temporary-disability-benefits-grant-insured-status.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantInsuredStatusQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-insured-status/query/temporary-disability-benefits-grant-insured-status.query.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantInsuredStatusDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-insured-status-document/command/temporary-disability-benefits-grant-insured-status-document.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-legal-proceeding/command/temporary-disability-benefits-grant-legal-proceeding.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-period/command/temporary-disability-benefits-grant-period.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-period/query/temporary-disability-benefits-grant-period.query.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-period-document/command/temporary-disability-benefits-grant-period-document.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantPreviousBenefitsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-previous-benefits/command/temporary-disability-benefits-grant-previous-benefits.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantPreviousBenefitsDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-previous-benefits-document/command/temporary-disability-benefits-grant-previous-benefits-document.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-result/command/temporary-disability-benefits-grant-result.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantWorkPeriodsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-work-periods/command/temporary-disability-benefits-grant-work-periods.command.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantWorkPeriodsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-work-periods/query/temporary-disability-benefits-grant-work-periods.query.repository.gateway';
+import { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-work-periods-earnings-history/command/temporary-disability-benefits-grant-work-periods-earnings-history.command.repository.gateway';
 import { CreditPackCommandRepositoryGateway } from '@module/customer/credit-pack/domain/repository/credit-pack/command/credit-pack.command.repository.gateway';
 import { CreditPackQueryRepositoryGateway } from '@module/customer/credit-pack/domain/repository/credit-pack/query/credit-pack.query.repository.gateway';
 import { OrganizationCreditPackPurchaseCommandRepositoryGateway } from '@module/customer/credit-pack/domain/repository/organization-credit-pack-purchase/command/organization-credit-pack-purchase.command.repository.gateway';
@@ -794,6 +900,66 @@ const classProvider: ClassProvider[] = [
   {
     provide: AdministrativeProcedureInssAnalysisResultCommandRepositoryGateway,
     useClass: AdministrativeProcedureInssAnalysisResultTypeormCommandRepository,
+  },
+  {
+    provide: SpecialRetirementGrantCommandRepositoryGateway,
+    useClass: SpecialRetirementGrantTypeormCommandRepository,
+  },
+  {
+    provide: SpecialRetirementGrantQueryRepositoryGateway,
+    useClass: SpecialRetirementGrantTypeormQueryRepository,
+  },
+  {
+    provide: SpecialRetirementGrantBenefitCommandRepositoryGateway,
+    useClass: SpecialRetirementGrantBenefitTypeormCommandRepository,
+  },
+  {
+    provide: SpecialRetirementGrantDocumentCommandRepositoryGateway,
+    useClass: SpecialRetirementGrantDocumentTypeormCommandRepository,
+  },
+  {
+    provide: SpecialRetirementGrantLegalProceedingCommandRepositoryGateway,
+    useClass: SpecialRetirementGrantLegalProceedingTypeormCommandRepository,
+  },
+  {
+    provide: SpecialRetirementGrantResultCommandRepositoryGateway,
+    useClass: SpecialRetirementGrantResultTypeormCommandRepository,
+  },
+  {
+    provide: SpecialRetirementGrantPeriodCommandRepositoryGateway,
+    useClass: SpecialRetirementGrantPeriodTypeormCommandRepository,
+  },
+  {
+    provide: SpecialRetirementGrantPeriodObservationCommandRepositoryGateway,
+    useClass: SpecialRetirementGrantPeriodObservationTypeormCommandRepository,
+  },
+  {
+    provide: SpecialRetirementGrantPeriodQueryRepositoryGateway,
+    useClass: SpecialRetirementGrantPeriodTypeormQueryRepository,
+  },
+  {
+    provide: SpecialRetirementGrantEarningsHistoryCommandRepositoryGateway,
+    useClass: SpecialRetirementGrantEarningsHistoryTypeormCommandRepository,
+  },
+  {
+    provide: SpecialRetirementGrantEarningsHistoryQueryRepositoryGateway,
+    useClass: SpecialRetirementGrantEarningsHistoryTypeormQueryRepository,
+  },
+  {
+    provide: SpecialRetirementGrantPeriodUnderMinimumCommandRepositoryGateway,
+    useClass: SpecialRetirementGrantPeriodUnderMinimumTypeormCommandRepository,
+  },
+  {
+    provide:
+      SpecialRetirementGrantPeriodPendingExitDateCommandRepositoryGateway,
+    useClass:
+      SpecialRetirementGrantPeriodPendingExitDateTypeormCommandRepository,
+  },
+  {
+    provide:
+      SpecialRetirementGrantPeriodOverdueContributionCommandRepositoryGateway,
+    useClass:
+      SpecialRetirementGrantPeriodOverdueContributionTypeormCommandRepository,
   },
   {
     provide: DisabilityAssessmentForBpcAnalysisCommandRepositoryGateway,
@@ -1782,6 +1948,92 @@ const classProvider: ClassProvider[] = [
   {
     provide: DeathBenefitGrantTimeAcceleratorQueryRepositoryGateway,
     useClass: DeathBenefitGrantTimeAcceleratorTypeormQueryRepository,
+    provide: TemporaryDisabilityBenefitsGrantCommandRepositoryGateway,
+    useClass: TemporaryDisabilityBenefitsGrantTypeormCommandRepository,
+  },
+  {
+    provide: TemporaryDisabilityBenefitsGrantQueryRepositoryGateway,
+    useClass: TemporaryDisabilityBenefitsGrantTypeormQueryRepository,
+  },
+  {
+    provide: TemporaryDisabilityBenefitsGrantResultCommandRepositoryGateway,
+    useClass: TemporaryDisabilityBenefitsGrantResultTypeormCommandRepository,
+  },
+  {
+    provide: TemporaryDisabilityBenefitsGrantDocumentCommandRepositoryGateway,
+    useClass: TemporaryDisabilityBenefitsGrantDocumentTypeormCommandRepository,
+  },
+  {
+    provide: TemporaryDisabilityBenefitsGrantPeriodCommandRepositoryGateway,
+    useClass: TemporaryDisabilityBenefitsGrantPeriodTypeormCommandRepository,
+  },
+  {
+    provide: TemporaryDisabilityBenefitsGrantPeriodQueryRepositoryGateway,
+    useClass: TemporaryDisabilityBenefitsGrantPeriodTypeormQueryRepository,
+  },
+  {
+    provide:
+      TemporaryDisabilityBenefitsGrantPeriodDocumentCommandRepositoryGateway,
+    useClass:
+      TemporaryDisabilityBenefitsGrantPeriodDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryDisabilityBenefitsGrantPreviousBenefitsCommandRepositoryGateway,
+    useClass:
+      TemporaryDisabilityBenefitsGrantPreviousBenefitsTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryDisabilityBenefitsGrantPreviousBenefitsDocumentCommandRepositoryGateway,
+    useClass:
+      TemporaryDisabilityBenefitsGrantPreviousBenefitsDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryDisabilityBenefitsGrantInsuredStatusCommandRepositoryGateway,
+    useClass:
+      TemporaryDisabilityBenefitsGrantInsuredStatusTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryDisabilityBenefitsGrantInsuredStatusQueryRepositoryGateway,
+    useClass:
+      TemporaryDisabilityBenefitsGrantInsuredStatusTypeormQueryRepository,
+  },
+  {
+    provide:
+      TemporaryDisabilityBenefitsGrantInsuredStatusDocumentCommandRepositoryGateway,
+    useClass:
+      TemporaryDisabilityBenefitsGrantInsuredStatusDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryDisabilityBenefitsGrantWorkPeriodsCommandRepositoryGateway,
+    useClass:
+      TemporaryDisabilityBenefitsGrantWorkPeriodsTypeormCommandRepository,
+  },
+  {
+    provide: TemporaryDisabilityBenefitsGrantWorkPeriodsQueryRepositoryGateway,
+    useClass: TemporaryDisabilityBenefitsGrantWorkPeriodsTypeormQueryRepository,
+  },
+  {
+    provide:
+      TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryCommandRepositoryGateway,
+    useClass:
+      TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryDisabilityBenefitsGrantInssBenefitCommandRepositoryGateway,
+    useClass:
+      TemporaryDisabilityBenefitsGrantInssBenefitTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryDisabilityBenefitsGrantLegalProceedingCommandRepositoryGateway,
+    useClass:
+      TemporaryDisabilityBenefitsGrantLegalProceedingTypeormCommandRepository,
   },
   {
     provide: RuralTimelineAnalysisCommandRepositoryGateway,
@@ -2169,6 +2421,125 @@ const classProvider: ClassProvider[] = [
   {
     provide: SupportAttendantCommandRepositoryGateway,
     useClass: SupportAttendantTypeormCommandRepository,
+  },
+  {
+    provide: SurvivorPensionAnalysisCommandRepositoryGateway,
+    useClass: SurvivorPensionAnalysisTypeormCommandRepository,
+  },
+  {
+    provide: SurvivorPensionAnalysisQueryRepositoryGateway,
+    useClass: SurvivorPensionAnalysisTypeormQueryRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisCustomerProfileIdentificationCommandRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisCustomerProfileIdentificationTypeormCommandRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisCustomerProfileIdentificationQueryRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisCustomerProfileIdentificationTypeormQueryRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisCustomerProfileIdentificationDocumentCommandRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisCustomerProfileIdentificationDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisBenefitOriginatorIdentificationCommandRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisBenefitOriginatorIdentificationTypeormCommandRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisBenefitOriginatorIdentificationQueryRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisBenefitOriginatorIdentificationTypeormQueryRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisBenefitOriginatorIdentificationDocumentCommandRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisBenefitOriginatorIdentificationDocumentTypeormCommandRepository,
+  },
+  {
+    provide: SurvivorPensionAnalysisDeceasedWorkHistoryCommandRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisDeceasedWorkHistoryTypeormCommandRepository,
+  },
+  {
+    provide: SurvivorPensionAnalysisDeceasedWorkHistoryQueryRepositoryGateway,
+    useClass: SurvivorPensionAnalysisDeceasedWorkHistoryTypeormQueryRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisDeceasedWorkHistoryPeriodCommandRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisDeceasedWorkHistoryPeriodTypeormCommandRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisDeceasedWorkHistoryPeriodQueryRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisDeceasedWorkHistoryPeriodTypeormQueryRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisDeceasedWorkHistoryPeriodDocumentCommandRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisDeceasedWorkHistoryPeriodDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisDeceasedBenefitDependentsCommandRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisDeceasedBenefitDependentsTypeormCommandRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisDeceasedBenefitDependentsQueryRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisDeceasedBenefitDependentsTypeormQueryRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisDeceasedBenefitDependentsDocumentCommandRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisDeceasedBenefitDependentsDocumentTypeormCommandRepository,
+  },
+  {
+    provide: SurvivorPensionAnalysisResultCommandRepositoryGateway,
+    useClass: SurvivorPensionAnalysisResultTypeormCommandRepository,
+  },
+  {
+    provide: SurvivorPensionAnalysisResultQueryRepositoryGateway,
+    useClass: SurvivorPensionAnalysisResultTypeormQueryRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisResultRetirementRuleCommandRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisResultRetirementRuleTypeormCommandRepository,
+  },
+  {
+    provide: SurvivorPensionAnalysisResultRetirementRuleQueryRepositoryGateway,
+    useClass: SurvivorPensionAnalysisResultRetirementRuleTypeormQueryRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisResultDependentPensionAnalysisCommandRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisResultDependentPensionAnalysisTypeormCommandRepository,
+  },
+  {
+    provide:
+      SurvivorPensionAnalysisResultDependentPensionAnalysisQueryRepositoryGateway,
+    useClass:
+      SurvivorPensionAnalysisResultDependentPensionAnalysisTypeormQueryRepository,
   },
 ];
 

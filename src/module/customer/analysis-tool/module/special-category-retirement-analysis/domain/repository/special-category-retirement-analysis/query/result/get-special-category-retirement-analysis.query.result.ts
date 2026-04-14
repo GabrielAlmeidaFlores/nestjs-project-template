@@ -4,7 +4,7 @@ import type { SpecialCategoryRetirementAnalysisId } from '@module/customer/analy
 
 export class GetSpecialCategoryRetirementAnalysisQueryResult {
   public readonly specialCategoryRetirementAnalysisId: SpecialCategoryRetirementAnalysisId;
-  public readonly analysisToolClientId: AnalysisToolClientId;
+  public readonly analysisToolClientId: AnalysisToolClientId | null;
   public readonly analysisCustomName: string | null;
   public readonly retirementAnalysisObjectiveType: RetirementAnalysisObjectiveTypeEnum | null;
   public readonly publicServiceFederativeEntityName: string | null;
