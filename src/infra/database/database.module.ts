@@ -1948,6 +1948,8 @@ const classProvider: ClassProvider[] = [
   {
     provide: DeathBenefitGrantTimeAcceleratorQueryRepositoryGateway,
     useClass: DeathBenefitGrantTimeAcceleratorTypeormQueryRepository,
+  },
+  {
     provide: TemporaryDisabilityBenefitsGrantCommandRepositoryGateway,
     useClass: TemporaryDisabilityBenefitsGrantTypeormCommandRepository,
   },
