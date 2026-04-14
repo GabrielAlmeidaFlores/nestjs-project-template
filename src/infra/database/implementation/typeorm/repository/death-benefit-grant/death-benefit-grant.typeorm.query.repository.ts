@@ -48,6 +48,7 @@ export class DeathBenefitGrantTypeormQueryRepository
             deathBenefitGrantPeriodDocument: true,
             deathBenefitGrantPeriodEarningsHistory: true,
           },
+          deathBenefitGrantTimeAccelerator: true,
         },
       },
       err,

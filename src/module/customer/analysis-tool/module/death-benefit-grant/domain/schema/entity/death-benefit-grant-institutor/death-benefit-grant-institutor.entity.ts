@@ -4,6 +4,7 @@ import { DeathBenefitGrantInstitorId } from '@module/customer/analysis-tool/modu
 import type { GenderEnum } from '@core/domain/schema/enum/gender.enum';
 import type { PersonalDocument } from '@core/domain/schema/value-object/personal-document/personal-document.value-object';
 import type { DeathBenefitGrantId } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant/value-object/death-benefit-grant-id.value-object';
+import type { DeathBenefitGrantDocumentEntity } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-document/death-benefit-grant-document.entity';
 import type { DeathBenefitGrantInstitorEntityPropsInterface } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-institutor/death-benefit-grant-institutor.entity.props.interface';
 
 export class DeathBenefitGrantInstitorEntity extends BaseEntity<DeathBenefitGrantInstitorId> {
@@ -25,6 +26,9 @@ export class DeathBenefitGrantInstitorEntity extends BaseEntity<DeathBenefitGran
   public readonly wantsToProveDisabilityBeforeDeath: boolean | null;
   public readonly wantsToProveUnemploymentByWitness: boolean | null;
   public readonly deathBenefitGrantId: DeathBenefitGrantId;
+  public readonly deathBenefitGrantDocument:
+    | DeathBenefitGrantDocumentEntity[]
+    | null;
 
   protected readonly _type = DeathBenefitGrantInstitorEntity.name;
 
@@ -54,5 +58,6 @@ export class DeathBenefitGrantInstitorEntity extends BaseEntity<DeathBenefitGran
     this.wantsToProveUnemploymentByWitness =
       props.wantsToProveUnemploymentByWitness ?? null;
     this.deathBenefitGrantId = props.deathBenefitGrantId;
+    this.deathBenefitGrantDocument = props.deathBenefitGrantDocument ?? null;
   }
 }
