@@ -329,6 +329,11 @@ import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implemen
 import { AuthIdentityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/auth-identity.typeorm.entity';
 import { BankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-payment.typeorm.entity';
 import { BankTransferTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-transfer.typeorm.entity';
+import { BpcElderlyAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-document.typeorm.entity';
+import { BpcElderlyAnalysisFamilyMemberDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-family-member-document.typeorm.entity';
+import { BpcElderlyAnalysisFamilyMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-family-member.typeorm.entity';
+import { BpcElderlyAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-result.typeorm.entity';
+import { BpcElderlyAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis.typeorm.entity';
 import { CidTenTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cid-ten.typeorm.entity';
 import { CnisFastAnalysisInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-inss-benefit.typeorm.entity';
 import { CnisFastAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-legal-proceeding.typeorm.entity';
@@ -807,6 +812,11 @@ export class TypeormIndex {
     SurvivorPensionAnalysisResultTypeormEntity,
     SurvivorPensionAnalysisResultRetirementRuleTypeormEntity,
     SurvivorPensionAnalysisResultDependentPensionAnalysisTypeormEntity,
+    BpcElderlyAnalysisTypeormEntity,
+    BpcElderlyAnalysisDocumentTypeormEntity,
+    BpcElderlyAnalysisFamilyMemberTypeormEntity,
+    BpcElderlyAnalysisFamilyMemberDocumentTypeormEntity,
+    BpcElderlyAnalysisResultTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [

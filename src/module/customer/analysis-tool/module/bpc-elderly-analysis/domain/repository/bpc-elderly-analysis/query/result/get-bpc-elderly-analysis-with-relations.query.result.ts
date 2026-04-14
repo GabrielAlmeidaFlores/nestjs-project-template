@@ -1,0 +1,22 @@
+import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
+
+import type { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
+import type { GetBpcElderlyAnalysisDocumentQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis/query/result/get-bpc-elderly-analysis-document.query.result';
+import type { GetBpcElderlyAnalysisFamilyMemberQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis/query/result/get-bpc-elderly-analysis-family-member.query.result';
+import type { GetBpcElderlyAnalysisResultQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-result/query/result/get-bpc-elderly-analysis-result.query.result';
+import type { BpcElderlyAnalysisId } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/value-object/bpc-elderly-analysis-id/bpc-elderly-analysis-id.value-object';
+
+export class GetBpcElderlyAnalysisWithRelationsQueryResult extends BaseBuildableObject {
+  public readonly id: BpcElderlyAnalysisId;
+  public readonly bpcElderlyAnalysisResult: GetBpcElderlyAnalysisResultQueryResult | null;
+  public readonly bpcElderlyAnalysisFamilyMember: GetBpcElderlyAnalysisFamilyMemberQueryResult[];
+  public readonly bpcElderlyAnalysisDocument: GetBpcElderlyAnalysisDocumentQueryResult[];
+  public readonly createdBy: GetOrganizationMemberWithCustomerRelationQueryResult;
+  public readonly updatedBy: GetOrganizationMemberWithCustomerRelationQueryResult;
+  public readonly createdAt: Date;
+  public readonly updatedAt: Date;
+  public readonly deletedAt: Date | null;
+
+  protected override readonly _type =
+    GetBpcElderlyAnalysisWithRelationsQueryResult.name;
+}

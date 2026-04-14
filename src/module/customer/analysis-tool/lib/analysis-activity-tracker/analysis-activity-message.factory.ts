@@ -54,6 +54,8 @@ export class AnalysisActivityMessageFactory {
       'Concessão de benefício por incapacidade temporária',
     [AnalysisToolRecordTypeEnum.SURVIVOR_PENSION_ANALYSIS]:
       'Análise de pensão por morte',
+    [AnalysisToolRecordTypeEnum.BPC_ELDERLY_ANALYSIS]:
+      'Análise de BPC ao Idoso',
   };
 
   private static readonly actionLabelMap: Record<
