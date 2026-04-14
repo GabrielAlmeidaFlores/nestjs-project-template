@@ -1262,6 +1262,121 @@ An�lise processada do CNIS:
     );
   }
 
+  public async getDeathBenefitGrantTimeAcceleratorAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Use exclusivamente os valores de enum fornecidos no schema para os campos de reconhecimento e viabilidade.
+- Cada item de \`timeAccelerators\` deve ser compatível com a criação de um período de acelerador de tempo.
+- Preencha \`technicalNote\`, \`startDate\`, \`endDate\` e \`institution\` quando essas informações estiverem disponíveis nos documentos analisados.
+- Não incluir tag <br> na resposta.
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getDeathBenefitGrantTimeAcceleratorAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getDeathBenefitGrantFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson = true,
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON;
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize calculos como valores salariais, use estritamente os fornecidos.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Para cada item de \`periods\`, use prioritariamente os dados estruturados já enviados nos arquivos do prompt; não invente valores.
+- O campo \`contributionAverage\` representa a média das remunerações do período já informada nos dados estruturados; quando esse valor estiver disponível, reutilize exatamente esse valor e não retorne \`0\`.
+- O campo \`contributionAverage\` não é uma lista de contribuições e não deve ser calculado como soma zerada por ausência de detalhamento mensal.
+- Quando o valor de \`contributionAverage\` não estiver presente nos dados estruturados do período, omita esse campo em vez de retornar \`0\`.
+- O campo \`belowMinimumContributions\` deve conter somente as competências cujos valores ficaram abaixo do mínimo.
+- Não liste em \`belowMinimumContributions\` contribuições que não estejam abaixo do mínimo.
+- Quando não houver competências abaixo do mínimo, retorne \`belowMinimumContributions: []\`.
+- O campo \`competenceBelowTheMinimum\` deve ser \`true\` somente quando houver ao menos um item em \`belowMinimumContributions\`; caso contrário, deve ser \`false\`.
+- O campo \`isPendency\` deve indicar se o período possui qualquer pendência relevante.
+- O campo \`reasonPendency\` só deve ser preenchido quando realmente existir pendência no período.
+- Analise a qualidade de segurado do instituidor falecido com base nos períodos e data do óbito.
+- Analise o direito à aposentadoria programada do instituidor falecido antes do óbito.
+- Analise o direito à aposentadoria por incapacidade permanente do instituidor falecido.
+- Analise a comprovação da qualidade de dependente de cada dependente com base nos documentos anexados.
+- Para cada regra de aposentadoria aplicável ao instituidor falecido, retorne o resumo com resultado, data do direito, RMI prevista, e a análise detalhada.
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: asJson
+          ? ResponseConfigInputModel.build({
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema: this.getDeathBenefitGrantFirstAnalysisJsonSchema(),
+            })
+          : null,
+      }),
+    );
+  }
+
+  public async getDeathBenefitGrantResultAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS; não realize cálculos como valores salariais, use estritamente os fornecidos.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: this.getDeathBenefitGrantResultAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getDeathBenefitGrantSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
   private getDisabilityRetirementPlanningCompleteAnalysisJsonSchema(): object {
     const disabilityAnalysisSchema = {
       type: 'object',
@@ -2463,80 +2578,6 @@ An�lise processada do CNIS:
     };
   }
 
-  public async getDeathBenefitGrantTimeAcceleratorAnalysis(
-    systemInstruction: string,
-    files: Buffer[],
-  ): Promise<string | null> {
-    const prompt = `
-# IMPORTANTE
-- Retorne estritamente um objeto JSON compatível com o schema solicitado.
-- Use exclusivamente os valores de enum fornecidos no schema para os campos de reconhecimento e viabilidade.
-- Cada item de \`timeAccelerators\` deve ser compatível com a criação de um período de acelerador de tempo.
-- Preencha \`technicalNote\`, \`startDate\`, \`endDate\` e \`institution\` quando essas informações estiverem disponíveis nos documentos analisados.
-- Não incluir tag <br> na resposta.
-`;
-
-    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
-      GenerateResponseInputModel.build({
-        systemInstruction,
-        prompt,
-        promptFiles: files,
-        responseConfig: ResponseConfigInputModel.build({
-          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
-          jsonSchema:
-            this.getDeathBenefitGrantTimeAcceleratorAnalysisJsonSchema(),
-        }),
-      }),
-    );
-  }
-
-  public async getDeathBenefitGrantFirstAnalysis(
-    systemInstruction: string,
-    cnisAnalysisJson: string,
-    files: Buffer[],
-    asJson = true,
-  ): Promise<string | null> {
-    const prompt = `
-# IMPORTANTE
-- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON;
-- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize calculos como valores salariais, use estritamente os fornecidos.
-- Não incluir tag <br> na resposta.
-- Retorne estritamente um objeto JSON compatível com o schema solicitado.
-- Para cada item de \`periods\`, use prioritariamente os dados estruturados já enviados nos arquivos do prompt; não invente valores.
-- O campo \`contributionAverage\` representa a média das remunerações do período já informada nos dados estruturados; quando esse valor estiver disponível, reutilize exatamente esse valor e não retorne \`0\`.
-- O campo \`contributionAverage\` não é uma lista de contribuições e não deve ser calculado como soma zerada por ausência de detalhamento mensal.
-- Quando o valor de \`contributionAverage\` não estiver presente nos dados estruturados do período, omita esse campo em vez de retornar \`0\`.
-- O campo \`belowMinimumContributions\` deve conter somente as competências cujos valores ficaram abaixo do mínimo.
-- Não liste em \`belowMinimumContributions\` contribuições que não estejam abaixo do mínimo.
-- Quando não houver competências abaixo do mínimo, retorne \`belowMinimumContributions: []\`.
-- O campo \`competenceBelowTheMinimum\` deve ser \`true\` somente quando houver ao menos um item em \`belowMinimumContributions\`; caso contrário, deve ser \`false\`.
-- O campo \`isPendency\` deve indicar se o período possui qualquer pendência relevante.
-- O campo \`reasonPendency\` só deve ser preenchido quando realmente existir pendência no período.
-- Analise a qualidade de segurado do instituidor falecido com base nos períodos e data do óbito.
-- Analise o direito à aposentadoria programada do instituidor falecido antes do óbito.
-- Analise o direito à aposentadoria por incapacidade permanente do instituidor falecido.
-- Analise a comprovação da qualidade de dependente de cada dependente com base nos documentos anexados.
-- Para cada regra de aposentadoria aplicável ao instituidor falecido, retorne o resumo com resultado, data do direito, RMI prevista, e a análise detalhada.
-Análise processada do CNIS:
-  ${cnisAnalysisJson}
-`;
-
-    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
-      GenerateResponseInputModel.build({
-        systemInstruction,
-        prompt,
-        promptFiles: files,
-        responseConfig: asJson
-          ? ResponseConfigInputModel.build({
-              responseMimeType:
-                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
-              jsonSchema: this.getDeathBenefitGrantFirstAnalysisJsonSchema(),
-            })
-          : null,
-      }),
-    );
-  }
-
   private getDeathBenefitGrantFirstAnalysisJsonSchema(): object {
     return {
       type: 'object',
@@ -2847,47 +2888,6 @@ Análise processada do CNIS:
         'periods',
       ],
     };
-  }
-
-  public async getDeathBenefitGrantResultAnalysis(
-    systemInstruction: string,
-    cnisAnalysisJson: string,
-    files: Buffer[],
-  ): Promise<string | null> {
-    const prompt = `
-# IMPORTANTE
-- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
-- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS; não realize cálculos como valores salariais, use estritamente os fornecidos.
-- Não incluir tag <br> na resposta.
-- Retorne estritamente um objeto JSON compatível com o schema solicitado.
-
-Análise processada do CNIS:
-  ${cnisAnalysisJson}
-`;
-
-    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
-      GenerateResponseInputModel.build({
-        systemInstruction,
-        prompt,
-        promptFiles: files,
-        responseConfig: ResponseConfigInputModel.build({
-          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
-          jsonSchema: this.getDeathBenefitGrantResultAnalysisJsonSchema(),
-        }),
-      }),
-    );
-  }
-
-  public async getDeathBenefitGrantSimplifiedAnalysis(
-    systemInstruction: string,
-    files: Buffer[],
-  ): Promise<string | null> {
-    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
-      GenerateResponseInputModel.build({
-        systemInstruction,
-        promptFiles: files,
-      }),
-    );
   }
 
   private getDeathBenefitGrantTimeAcceleratorAnalysisJsonSchema(): object {
