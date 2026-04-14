@@ -11,11 +11,11 @@ import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
+import { BpcElderlyAnalysisEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/bpc-elderly-analysis.entity';
+import { BpcElderlyAnalysisId } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/value-object/bpc-elderly-analysis-id/bpc-elderly-analysis-id.value-object';
 import { BpcElderlyAnalysisDocumentEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-document/bpc-elderly-analysis-document.entity';
 import { BpcElderlyAnalysisFamilyMemberEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-family-member/bpc-elderly-analysis-family-member.entity';
 import { BpcElderlyAnalysisResultEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-result/bpc-elderly-analysis-result.entity';
-import { BpcElderlyAnalysisEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/bpc-elderly-analysis.entity';
-import { BpcElderlyAnalysisId } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/value-object/bpc-elderly-analysis-id/bpc-elderly-analysis-id.value-object';
 
 @Injectable()
 export class BpcElderlyAnalysisEntityAutoMapperProfile {
@@ -70,6 +70,7 @@ export class BpcElderlyAnalysisEntityAutoMapperProfile {
 
       return new BpcElderlyAnalysisEntity({
         id: new BpcElderlyAnalysisId(source.id),
+        name: source.name ?? null,
         bpcElderlyAnalysisResult,
         bpcElderlyAnalysisFamilyMember,
         bpcElderlyAnalysisDocument,
@@ -140,6 +141,7 @@ export class BpcElderlyAnalysisEntityAutoMapperProfile {
 
       return BpcElderlyAnalysisTypeormEntity.build({
         id: source.id.toString(),
+        name: source.name,
         analysisToolRecord,
         bpcElderlyAnalysisResult,
         bpcElderlyAnalysisFamilyMember,

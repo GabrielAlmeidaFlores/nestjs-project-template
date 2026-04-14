@@ -1,4 +1,11 @@
-import { Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
@@ -9,6 +16,9 @@ import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/
 
 @Entity({ name: 'bpc_elderly_analysis' })
 export class BpcElderlyAnalysisTypeormEntity extends BaseTypeormEntity {
+  @Column({ name: 'name', type: 'varchar', length: 255, nullable: true })
+  public name: string | null;
+
   @OneToOne(
     () => BpcElderlyAnalysisResultTypeormEntity,
     (entity) => entity.bpcElderlyAnalysis,

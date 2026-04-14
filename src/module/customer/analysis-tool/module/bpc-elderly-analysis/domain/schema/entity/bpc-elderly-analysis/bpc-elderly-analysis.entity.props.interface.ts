@@ -6,10 +6,12 @@ import type { BpcElderlyAnalysisDocumentEntity } from '@module/customer/analysis
 import type { BpcElderlyAnalysisFamilyMemberEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-family-member/bpc-elderly-analysis-family-member.entity';
 import type { BpcElderlyAnalysisResultEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-result/bpc-elderly-analysis-result.entity';
 
-export interface BpcElderlyAnalysisEntityPropsInterface
-  extends BaseEntityPropsInterface<BpcElderlyAnalysisId> {
+export interface BpcElderlyAnalysisEntityPropsInterface extends BaseEntityPropsInterface<BpcElderlyAnalysisId> {
+  name?: string | null;
   bpcElderlyAnalysisResult?: BpcElderlyAnalysisResultEntity | null;
-  bpcElderlyAnalysisFamilyMember?: BpcElderlyAnalysisFamilyMemberEntity[] | null;
+  bpcElderlyAnalysisFamilyMember?:
+    | BpcElderlyAnalysisFamilyMemberEntity[]
+    | null;
   bpcElderlyAnalysisDocument?: BpcElderlyAnalysisDocumentEntity[] | null;
   analysisToolRecord?: AnalysisToolRecordEntity | null;
   createdBy: OrganizationMemberId;
