@@ -1397,6 +1397,228 @@ Análise processada do CNIS:
     );
   }
 
+  public async getSurvivorPensionAnalysisResult(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: this.getSurvivorPensionAnalysisResultJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getSurvivorPensionAnalysisRetirementRules(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getSurvivorPensionAnalysisRetirementRulesJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getSurvivorPensionAnalysisDependentPensionAnalyses(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getSurvivorPensionAnalysisDependentPensionAnalysesJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getSurvivorPensionAnalysisCompleteAnalysisText(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getSurvivorPensionAnalysisSimplifiedAnalysisText(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  private getSurvivorPensionAnalysisResultJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        isInsuredStatusConfirmed: {
+          type: 'boolean',
+          description:
+            'Indica se o falecido possuía qualidade de segurado na data do óbito.',
+        },
+        insuredStatusSummary: {
+          type: 'string',
+          description:
+            'Resumo curto e direto sobre a qualidade de segurado do falecido. Deve ser texto simples, sem formatação markdown, sem asteriscos, sem hashtags, sem tabelas. Máximo de 255 caracteres.',
+        },
+        isRetirementRightConfirmed: {
+          type: 'boolean',
+          description:
+            'Indica se o falecido havia cumprido requisitos para ao menos uma regra de aposentadoria.',
+        },
+        retirementRightSummary: {
+          type: 'string',
+          description:
+            'Resumo curto e direto sobre o direito à aposentadoria do falecido no momento do óbito. Deve ser texto simples, sem formatação markdown, sem asteriscos, sem hashtags, sem tabelas. Máximo de 255 caracteres.',
+        },
+        completeAnalysis: {
+          type: 'string',
+          description:
+            'Análise completa e detalhada em formato Markdown. Deve conter: (1) análise da qualidade de segurado e carência; (2) situação dos dependentes; (3) regras de aposentadoria verificadas; (4) parecer técnico conclusivo com recomendações. Use títulos (##), negrito (**), listas (-) e parágrafos para estruturar o texto.',
+        },
+      },
+      required: [
+        'isInsuredStatusConfirmed',
+        'insuredStatusSummary',
+        'isRetirementRightConfirmed',
+        'retirementRightSummary',
+        'completeAnalysis',
+      ],
+    };
+  }
+
+  private getSurvivorPensionAnalysisRetirementRulesJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        retirementRules: {
+          type: 'array',
+          description:
+            'Lista das regras de aposentadoria analisadas para o falecido.',
+          items: {
+            type: 'object',
+            properties: {
+              ruleName: {
+                type: 'string',
+                description: 'Nome da regra de aposentadoria analisada.',
+              },
+              isRequirementMet: {
+                type: 'boolean',
+                description: 'Indica se os requisitos foram cumpridos.',
+              },
+              entitlementDate: {
+                type: 'string',
+                description:
+                  'Data em que o requisito foi ou seria cumprido, no formato YYYY-MM-DD. Null se não aplicável.',
+              },
+              estimatedRmi: {
+                type: 'number',
+                description:
+                  'Valor decimal da RMI estimada para essa regra. Null se não calculável.',
+              },
+              isBestRmi: {
+                type: 'boolean',
+                description:
+                  'Indica se esta regra gera a melhor RMI entre todas as regras.',
+              },
+              isHighestClaimValue: {
+                type: 'boolean',
+                description:
+                  'Indica se esta regra gera o maior valor de benefício considerando todas as variáveis.',
+              },
+              detailedAnalysis: {
+                type: 'string',
+                description:
+                  'Análise detalhada dos requisitos e resultado para esta regra específica. Retorne texto simples sem markdown, sem asteriscos, sem hashtags. Use \\n para separar cada linha. Estruture em três blocos separados por uma linha em branco (\\n\\n): (1) "📊 Requisitos analisados:" seguido de cada requisito em linha separada com "→ ✅" ou "→ ❌"; (2) "💰 Cálculo da RMI:" com cada item em linha separada (média salarial, coeficiente, RMI estimada); (3) "⚠️ Valor da causa:" com cada item em linha separada (DIB, DER, tempo de atraso, valor em R$). Omita blocos cujos dados não estejam disponíveis.',
+              },
+            },
+            required: [
+              'ruleName',
+              'isRequirementMet',
+              'isBestRmi',
+              'isHighestClaimValue',
+              'detailedAnalysis',
+            ],
+          },
+        },
+      },
+      required: ['retirementRules'],
+    };
+  }
+
+  private getSurvivorPensionAnalysisDependentPensionAnalysesJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        dependentPensionAnalyses: {
+          type: 'array',
+          description:
+            'Lista das análises de pensão para cada dependente identificado.',
+          items: {
+            type: 'object',
+            properties: {
+              dependentName: {
+                type: 'string',
+                description: 'Nome completo do dependente.',
+              },
+              dependencyDegree: {
+                type: 'string',
+                description:
+                  'Grau de dependência (ex: cônjuge, filho menor, pai/mãe).',
+              },
+              isDependencyVerified: {
+                type: 'boolean',
+                description:
+                  'Indica se a dependência econômica ou legal foi verificada.',
+              },
+              pensionStartDate: {
+                type: 'string',
+                description:
+                  'Data estimada de início da pensão no formato YYYY-MM-DD. Null se não aplicável.',
+              },
+              estimatedPensionDuration: {
+                type: 'string',
+                description:
+                  'Duração estimada da pensão em formato curto e direto. Retorne apenas a duração, sem citar artigos de lei ou explicações jurídicas. Exemplos de formato esperado: "4 meses", "1 ano", "2 anos e 3 meses", "Até 21 anos", "4 meses ou até a cessação da condição", "Enquanto durar a invalidez". Máximo 50 caracteres.',
+              },
+            },
+            required: [
+              'dependentName',
+              'dependencyDegree',
+              'isDependencyVerified',
+              'estimatedPensionDuration',
+            ],
+          },
+        },
+      },
+      required: ['dependentPensionAnalyses'],
+    };
+  }
+
   private getTemporaryDisabilityBenefitsGrantFirstAnalysisJsonSchema(): object {
     return {
       type: 'object',
@@ -1582,7 +1804,7 @@ Análise processada do CNIS:
               detailedAnalysis: {
                 type: 'string',
                 description:
-                  'Análise detalhada sobre o cumprimento ou não dos requisitos desta regra. Retorne em formato Markdown (use ##, ###, **negrito**, listas com - e parágrafos)',
+                  'Análise detalhada dos requisitos e resultado para esta regra específica. Retorne texto simples sem markdown, sem asteriscos, sem hashtags. Use \\n para separar cada linha. Estruture em três blocos separados por uma linha em branco (\\n\\n): (1) "📊 Requisitos analisados:" seguido de cada requisito em linha separada com "→ ✅" ou "→ ❌"; (2) "💰 Cálculo da RMI:" com cada item em linha separada (média salarial, coeficiente, RMI estimada); (3) "⚠️ Valor da causa:" com cada item em linha separada (DIB, DER, tempo de atraso, valor em R$). Omita blocos cujos dados não estejam disponíveis.',
               },
             },
             required: [

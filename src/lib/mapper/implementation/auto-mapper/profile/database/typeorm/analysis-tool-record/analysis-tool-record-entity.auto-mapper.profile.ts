@@ -25,6 +25,7 @@ import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typ
 import { SpecialCategoryRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis.typeorm.entity';
 import { SpecialRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant.typeorm.entity';
 import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
+import { SurvivorPensionAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/survivor-pension-analysis.typeorm.entity';
 import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
@@ -53,6 +54,7 @@ import { SpecialActivityEntity } from '@module/customer/analysis-tool/module/spe
 import { SpecialCategoryRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/special-category-retirement-analysis.entity';
 import { SpecialRetirementGrantEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/special-retirement-grant.entity';
 import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
+import { SurvivorPensionAnalysisEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis/survivor-pension-analysis.entity';
 import { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/temporary-disability-benefits-grant.entity';
 
 @Injectable()
@@ -267,6 +269,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const survivorPensionAnalysis =
+        source.survivorPensionAnalysis !== undefined
+          ? this.mapper.map(
+              source.survivorPensionAnalysis,
+              SurvivorPensionAnalysisTypeormEntity,
+              SurvivorPensionAnalysisEntity,
+            )
+          : null;
+
       return new AnalysisToolRecordEntity({
         id: new AnalysisToolRecordId(source.id),
         code: new AnalysisToolRecordCode(source.code),
@@ -299,6 +310,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         specialCategoryRetirementAnalysis,
         specialRetirementGrant,
         temporaryDisabilityBenefitsGrant,
+        survivorPensionAnalysis,
       });
     };
 
@@ -438,6 +450,13 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             } as TemporaryDisabilityBenefitsGrantTypeormEntity)
           : null;
 
+      const survivorPensionAnalysis =
+        source.survivorPensionAnalysis !== null
+          ? ({
+              id: source.survivorPensionAnalysis.id.toString(),
+            } as SurvivorPensionAnalysisTypeormEntity)
+          : undefined;
+
       const specialActivity =
         source.specialActivity !== null
           ? this.mapper.map(
@@ -537,6 +556,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         specialCategoryRetirementAnalysis,
         specialRetirementGrant,
         temporaryDisabilityBenefitsGrant,
+        survivorPensionAnalysis,
         analysisToolClient,
         createdBy: {
           id: source.createdBy.toString(),

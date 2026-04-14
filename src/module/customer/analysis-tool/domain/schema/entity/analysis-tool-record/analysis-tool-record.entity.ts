@@ -23,6 +23,7 @@ import { SpecialActivityEntity } from '@module/customer/analysis-tool/module/spe
 import { SpecialCategoryRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/special-category-retirement-analysis.entity';
 import { SpecialRetirementGrantEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/special-retirement-grant.entity';
 import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
+import { SurvivorPensionAnalysisEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis/survivor-pension-analysis.entity';
 import { TeacherRetirementPlanningEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
 import { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/temporary-disability-benefits-grant.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
@@ -142,6 +143,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly temporaryDisabilityBenefitsGrant: TemporaryDisabilityBenefitsGrantEntity | null;
 
   @Description(
+    'Análise de pensão por morte associada ao registro da ferramenta de análise',
+  )
+  public readonly survivorPensionAnalysis: SurvivorPensionAnalysisEntity | null;
+
+  @Description(
     'Análise de aposentadoria por categoria especial associada ao registro da ferramenta de análise',
   )
   public readonly specialCategoryRetirementAnalysis: SpecialCategoryRetirementAnalysisEntity | null;
@@ -202,6 +208,7 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
       props.disabilityRetirementPlanningGrant ?? null;
     this.temporaryDisabilityBenefitsGrant =
       props.temporaryDisabilityBenefitsGrant ?? null;
+    this.survivorPensionAnalysis = props.survivorPensionAnalysis ?? null;
     this.specialCategoryRetirementAnalysis =
       props.specialCategoryRetirementAnalysis ?? null;
     this.specialRetirementGrant = props.specialRetirementGrant ?? null;
