@@ -45,6 +45,9 @@ export class GetDeathBenefitGrantPeriodQueryResultAutoMapperProfile {
                 ? new DecimalValue(source.contributionAverage)
                 : null,
             bondOrigin: source.bondOrigin,
+            impact: source.impact,
+            gracePeriod: source.gracePeriod,
+            complementViaMyInss: source.complementViaMyInss,
             createdAt: source.createdAt,
             updatedAt: source.updatedAt,
             deletedAt: source.deletedAt,

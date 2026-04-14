@@ -248,4 +248,20 @@ export abstract class AnalysisProcessorGateway {
     files: Buffer[],
     asJson?: boolean,
   ): Promise<string | null>;
+
+  public abstract getDeathBenefitGrantTimeAcceleratorAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getDeathBenefitGrantResultAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getDeathBenefitGrantSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
 }

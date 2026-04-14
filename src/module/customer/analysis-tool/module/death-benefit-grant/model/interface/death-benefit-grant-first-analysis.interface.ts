@@ -53,6 +53,8 @@ export interface DeathBenefitGrantFirstAnalysisPeriodInterface {
   belowMinimumContributions: DeathBenefitGrantFirstAnalysisBelowMinimumContributionItemInterface[];
   reasonPendency?: DeathBenefitGrantPeriodPendencyReasonEnum;
   bondOrigin?: string | null;
+  impact?: string | null;
+  complementViaMyInss?: boolean | null;
   earningsHistory: DeathBenefitGrantFirstAnalysisEarningsHistoryItemInterface[];
 }
 

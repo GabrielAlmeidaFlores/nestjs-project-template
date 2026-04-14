@@ -19,6 +19,9 @@ export class GetDeathBenefitGrantPeriodQueryResult extends BaseBuildableObject {
   public readonly periodConsideration: DeathBenefitGrantPeriodConsiderationEnum | null;
   public readonly contributionAverage: DecimalValue | null;
   public readonly bondOrigin: string | null;
+  public readonly impact: string | null;
+  public readonly gracePeriod: number | null;
+  public readonly complementViaMyInss: boolean | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

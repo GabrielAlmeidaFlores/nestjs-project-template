@@ -20,6 +20,9 @@ export class DeathBenefitGrantPeriodEntity extends BaseEntity<DeathBenefitGrantP
   public readonly periodConsideration: DeathBenefitGrantPeriodConsiderationEnum | null;
   public readonly bondOrigin: string | null;
   public readonly contributionAverage: DecimalValue | null;
+  public readonly impact: string | null;
+  public readonly gracePeriod: number | null;
+  public readonly complementViaMyInss: boolean | null;
   public readonly deathBenefitGrantId: DeathBenefitGrantId;
 
   protected readonly _type = DeathBenefitGrantPeriodEntity.name;
@@ -37,6 +40,9 @@ export class DeathBenefitGrantPeriodEntity extends BaseEntity<DeathBenefitGrantP
     this.periodConsideration = props.periodConsideration ?? null;
     this.bondOrigin = props.bondOrigin ?? null;
     this.contributionAverage = props.contributionAverage ?? null;
+    this.impact = props.impact ?? null;
+    this.gracePeriod = props.gracePeriod ?? null;
+    this.complementViaMyInss = props.complementViaMyInss ?? null;
     this.deathBenefitGrantId = props.deathBenefitGrantId;
   }
 }

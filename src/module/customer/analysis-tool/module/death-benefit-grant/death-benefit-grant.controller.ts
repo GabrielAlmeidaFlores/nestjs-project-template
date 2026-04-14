@@ -1,35 +1,55 @@
-import { Body, HttpStatus, Param, RequestMethod } from '@nestjs/common';
+import {
+  Body,
+  HttpStatus,
+  Param,
+  Query,
+  RequestMethod,
+  StreamableFile,
+} from '@nestjs/common';
+import { ParseEnumPipe } from '@nestjs/common/pipes';
 
+import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { DeathBenefitGrantId } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant/value-object/death-benefit-grant-id.value-object';
 import { DeathBenefitGrantPeriodId } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-period/value-object/death-benefit-grant-period-id.value-object';
+import { DeathBenefitGrantTimeAcceleratorId } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-time-accelerator/value-object/death-benefit-grant-time-accelerator-id.value-object';
+import { AnalyzeDeathBenefitGrantTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/request/analyze-death-benefit-grant-time-accelerator.request.dto';
 import { CreateDeathBenefitGrantPeriodRequestDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/request/create-death-benefit-grant-period.request.dto';
 import { CreateDeathBenefitGrantRequestDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/request/create-death-benefit-grant.request.dto';
 import { UpdateDeathBenefitGrantDependentRequestDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/request/update-death-benefit-grant-dependent.request.dto';
 import { UpdateDeathBenefitGrantInstitutorDataRequestDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/request/update-death-benefit-grant-institutor-data.request.dto';
 import { UpdateDeathBenefitGrantLegalRepresentativeRequestDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/request/update-death-benefit-grant-legal-representative.request.dto';
 import { UpdateDeathBenefitGrantPeriodRequestDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/request/update-death-benefit-grant-period.request.dto';
+import { UpdateDeathBenefitGrantTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/request/update-death-benefit-grant-time-accelerator.request.dto';
 import { UpdateDeathBenefitGrantRequestDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/request/update-death-benefit-grant.request.dto';
+import { AnalyzeDeathBenefitGrantTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/response/analyze-death-benefit-grant-time-accelerator.response.dto';
 import { CreateDeathBenefitGrantFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/response/create-death-benefit-grant-first-analysis.response.dto';
 import { CreateDeathBenefitGrantPeriodResponseDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/response/create-death-benefit-grant-period.response.dto';
 import { CreateDeathBenefitGrantResultResponseDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/response/create-death-benefit-grant-result.response.dto';
 import { CreateDeathBenefitGrantResponseDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/response/create-death-benefit-grant.response.dto';
 import { DeleteDeathBenefitGrantPeriodResponseDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/response/delete-death-benefit-grant-period.response.dto';
+import { DeleteDeathBenefitGrantTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/response/delete-death-benefit-grant-time-accelerator.response.dto';
 import { GetDeathBenefitGrantResponseDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/response/get-death-benefit-grant.response.dto';
 import { UpdateDeathBenefitGrantDependentResponseDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/response/update-death-benefit-grant-dependent.response.dto';
 import { UpdateDeathBenefitGrantInstitutorDataResponseDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/response/update-death-benefit-grant-institutor-data.response.dto';
 import { UpdateDeathBenefitGrantLegalRepresentativeResponseDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/response/update-death-benefit-grant-legal-representative.response.dto';
 import { UpdateDeathBenefitGrantPeriodResponseDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/response/update-death-benefit-grant-period.response.dto';
+import { UpdateDeathBenefitGrantTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/response/update-death-benefit-grant-time-accelerator.response.dto';
 import { UpdateDeathBenefitGrantResponseDto } from '@module/customer/analysis-tool/module/death-benefit-grant/dto/response/update-death-benefit-grant.response.dto';
+import { AnalyzeDeathBenefitGrantTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/analyze-death-benefit-grant-time-accelerator.use-case';
 import { CreateDeathBenefitGrantFirstAnalysisUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/create-death-benefit-grant-first-analysis.use-case';
 import { CreateDeathBenefitGrantPeriodUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/create-death-benefit-grant-period.use-case';
 import { CreateDeathBenefitGrantResultUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/create-death-benefit-grant-result.use-case';
 import { CreateDeathBenefitGrantUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/create-death-benefit-grant.use-case';
 import { DeleteDeathBenefitGrantPeriodUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/delete-death-benefit-grant-period.use-case';
+import { DeleteDeathBenefitGrantTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/delete-death-benefit-grant-time-accelerator.use-case';
+import { DownloadDeathBenefitGrantCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/download-death-benefit-grant-complete-analysis.use-case';
+import { DownloadDeathBenefitGrantSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/download-death-benefit-grant-simplified-analysis.use-case';
 import { GetDeathBenefitGrantUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/get-death-benefit-grant.use-case';
 import { UpdateDeathBenefitGrantDependentUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/update-death-benefit-grant-dependent.use-case';
 import { UpdateDeathBenefitGrantInstitutorDataUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/update-death-benefit-grant-institutor-data.use-case';
 import { UpdateDeathBenefitGrantLegalRepresentativeUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/update-death-benefit-grant-legal-representative.use-case';
 import { UpdateDeathBenefitGrantPeriodUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/update-death-benefit-grant-period.use-case';
+import { UpdateDeathBenefitGrantTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/update-death-benefit-grant-time-accelerator.use-case';
 import { UpdateDeathBenefitGrantUseCase } from '@module/customer/analysis-tool/module/death-benefit-grant/use-case/update-death-benefit-grant.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
@@ -58,6 +78,11 @@ export class DeathBenefitGrantController {
     private readonly updateDeathBenefitGrantDependentUseCase: UpdateDeathBenefitGrantDependentUseCase,
     private readonly createDeathBenefitGrantFirstAnalysisUseCase: CreateDeathBenefitGrantFirstAnalysisUseCase,
     private readonly createDeathBenefitGrantResultUseCase: CreateDeathBenefitGrantResultUseCase,
+    private readonly analyzeDeathBenefitGrantTimeAcceleratorUseCase: AnalyzeDeathBenefitGrantTimeAcceleratorUseCase,
+    private readonly updateDeathBenefitGrantTimeAcceleratorUseCase: UpdateDeathBenefitGrantTimeAcceleratorUseCase,
+    private readonly deleteDeathBenefitGrantTimeAcceleratorUseCase: DeleteDeathBenefitGrantTimeAcceleratorUseCase,
+    private readonly downloadDeathBenefitGrantCompleteAnalysisUseCase: DownloadDeathBenefitGrantCompleteAnalysisUseCase,
+    private readonly downloadDeathBenefitGrantSimplifiedAnalysisUseCase: DownloadDeathBenefitGrantSimplifiedAnalysisUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -390,6 +415,166 @@ export class DeathBenefitGrantController {
       sessionData,
       organizationSessionData,
       deathBenefitGrantId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Analisar documentos de acelerador de tempo da pensão por morte',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'analyze-time-accelerator-documents',
+      method: RequestMethod.POST,
+      type: AnalyzeDeathBenefitGrantTimeAcceleratorRequestDto,
+    },
+    tag: ['pensao-por-morte'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Documentos de acelerador de tempo analisados com sucesso.',
+      type: AnalyzeDeathBenefitGrantTimeAcceleratorResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async analyzeTimeAccelerator(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Body() dto: AnalyzeDeathBenefitGrantTimeAcceleratorRequestDto,
+  ): Promise<AnalyzeDeathBenefitGrantTimeAcceleratorResponseDto> {
+    return await this.analyzeDeathBenefitGrantTimeAcceleratorUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Substituir aceleradores de tempo da pensão por morte',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':id/time-accelerator',
+      method: RequestMethod.PATCH,
+      type: UpdateDeathBenefitGrantTimeAcceleratorRequestDto,
+    },
+    tag: ['pensao-por-morte'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Aceleradores de tempo atualizados com sucesso.',
+      type: UpdateDeathBenefitGrantTimeAcceleratorResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateTimeAccelerator(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('id', new ParseValueObjectPipe(DeathBenefitGrantId))
+    deathBenefitGrantId: DeathBenefitGrantId,
+    @Body() dto: UpdateDeathBenefitGrantTimeAcceleratorRequestDto,
+  ): Promise<UpdateDeathBenefitGrantTimeAcceleratorResponseDto> {
+    return await this.updateDeathBenefitGrantTimeAcceleratorUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      deathBenefitGrantId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Excluir acelerador de tempo da pensão por morte',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':id/time-accelerator/:timeAcceleratorId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['pensao-por-morte'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Acelerador de tempo excluído com sucesso.',
+      type: DeleteDeathBenefitGrantTimeAcceleratorResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async deleteTimeAccelerator(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('id', new ParseValueObjectPipe(DeathBenefitGrantId))
+    deathBenefitGrantId: DeathBenefitGrantId,
+    @Param(
+      'timeAcceleratorId',
+      new ParseValueObjectPipe(DeathBenefitGrantTimeAcceleratorId),
+    )
+    deathBenefitGrantTimeAcceleratorId: DeathBenefitGrantTimeAcceleratorId,
+  ): Promise<DeleteDeathBenefitGrantTimeAcceleratorResponseDto> {
+    return await this.deleteDeathBenefitGrantTimeAcceleratorUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      deathBenefitGrantId,
+      deathBenefitGrantTimeAcceleratorId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Download da análise completa de pensão por morte',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':id/result/download-complete',
+      method: RequestMethod.GET,
+    },
+    tag: ['pensao-por-morte'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Arquivo de análise completa gerado com sucesso.',
+      type: StreamableFile,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async downloadCompleteAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('id', new ParseValueObjectPipe(DeathBenefitGrantId))
+    deathBenefitGrantId: DeathBenefitGrantId,
+    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
+    format: ExportDocumentFormatEnum,
+  ): Promise<StreamableFile> {
+    return await this.downloadDeathBenefitGrantCompleteAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      deathBenefitGrantId,
+      format,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Download da análise simplificada de pensão por morte',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':id/result/download-simplified',
+      method: RequestMethod.GET,
+    },
+    tag: ['pensao-por-morte'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Arquivo de análise simplificada gerado com sucesso.',
+      type: StreamableFile,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async downloadSimplifiedAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('id', new ParseValueObjectPipe(DeathBenefitGrantId))
+    deathBenefitGrantId: DeathBenefitGrantId,
+    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
+    format: ExportDocumentFormatEnum,
+  ): Promise<StreamableFile> {
+    return await this.downloadDeathBenefitGrantSimplifiedAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      deathBenefitGrantId,
+      format,
     );
   }
 }

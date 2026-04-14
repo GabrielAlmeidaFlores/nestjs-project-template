@@ -18,5 +18,8 @@ export interface DeathBenefitGrantPeriodEntityPropsInterface extends BaseEntityP
   periodConsideration?: DeathBenefitGrantPeriodConsiderationEnum | null;
   bondOrigin?: string | null;
   contributionAverage?: DecimalValue | null;
+  impact?: string | null;
+  gracePeriod?: number | null;
+  complementViaMyInss?: boolean | null;
   deathBenefitGrantId: DeathBenefitGrantId;
 }
