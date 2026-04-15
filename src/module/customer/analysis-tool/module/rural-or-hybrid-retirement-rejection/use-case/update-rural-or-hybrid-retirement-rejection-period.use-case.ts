@@ -15,10 +15,8 @@ import { RuralOrHybridRetirementRejectionPeriodEntity } from '@module/customer/a
 import { RuralOrHybridRetirementRejectionPeriodId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period/value-object/rural-or-hybrid-retirement-rejection-period-id.value-object';
 import { RuralOrHybridRetirementRejectionPeriodDocumentEntity } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period-document/rural-or-hybrid-retirement-rejection-period-document.entity';
 import { RuralOrHybridRetirementRejectionPeriodDocumentId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period-document/value-object/rural-or-hybrid-retirement-rejection-period-document-id.value-object';
-import {
-  RuralOrHybridRetirementRejectionPeriodItemRequestDto,
-  UpdateRuralOrHybridRetirementRejectionPeriodRequestDto,
-} from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/request/update-rural-or-hybrid-retirement-rejection-period.request.dto';
+import { RuralOrHybridRetirementRejectionPeriodItemRequestDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/request/create-rural-or-hybrid-retirement-rejection-period.request.dto';
+import { UpdateRuralOrHybridRetirementRejectionPeriodRequestDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/request/update-rural-or-hybrid-retirement-rejection-period.request.dto';
 import { UpdateRuralOrHybridRetirementRejectionPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/response/update-rural-or-hybrid-retirement-rejection-period.response.dto';
 import { RuralOrHybridRetirementRejectionNotFoundError } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/error/rural-or-hybrid-retirement-rejection-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -196,11 +194,7 @@ export class UpdateRuralOrHybridRetirementRejectionPeriodUseCase {
   }
 
   private buildDeletedPeriodEntity(
-    existingPeriod: Awaited<
-      ReturnType<
-        typeof this.ruralOrHybridRetirementRejectionQueryRepositoryGateway.findOneByRuralOrHybridRetirementRejectionIdOrFailWithRelations
-      >
-    >['ruralOrHybridRetirementRejectionPeriod'][number],
+    existingPeriod: RuralOrHybridRetirementRejectionPeriodEntity,
     ruralOrHybridRetirementRejectionId: RuralOrHybridRetirementRejectionId,
   ): RuralOrHybridRetirementRejectionPeriodEntity {
     return new RuralOrHybridRetirementRejectionPeriodEntity({

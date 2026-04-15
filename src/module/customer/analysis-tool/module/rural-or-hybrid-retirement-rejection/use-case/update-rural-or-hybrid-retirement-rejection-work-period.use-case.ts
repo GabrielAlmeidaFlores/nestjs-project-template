@@ -196,11 +196,7 @@ export class UpdateRuralOrHybridRetirementRejectionWorkPeriodUseCase {
   }
 
   private buildDeletedWorkPeriodEntity(
-    existingWorkPeriod: Awaited<
-      ReturnType<
-        typeof this.ruralOrHybridRetirementRejectionQueryRepositoryGateway.findOneByRuralOrHybridRetirementRejectionIdOrFailWithRelations
-      >
-    >['ruralOrHybridRetirementRejectionWorkPeriod'][number],
+    existingWorkPeriod: RuralOrHybridRetirementRejectionWorkPeriodEntity,
     ruralOrHybridRetirementRejectionId: RuralOrHybridRetirementRejectionId,
   ): RuralOrHybridRetirementRejectionWorkPeriodEntity {
     return new RuralOrHybridRetirementRejectionWorkPeriodEntity({

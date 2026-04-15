@@ -50,7 +50,7 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
       result.ruralOrHybridRetirementRejectionDocument?.[0] ?? null;
 
     const cnisDocument =
-      cnisDocumentEntity !== null
+      cnisDocumentEntity !== null && cnisDocumentEntity.document !== null
         ? await this.buildCnisDocumentResponse(cnisDocumentEntity.document)
         : null;
 
@@ -82,7 +82,7 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
               .completeAnalysis !== null && {
               ruralOrHybridRetirementRejectionCompleteAnalysis: JSON.parse(
                 result.ruralOrHybridRetirementRejectionResult.completeAnalysis,
-              ) as object,
+              ) as RuralOrHybridRetirementRejectionResultInterface,
             }),
             ...(result.ruralOrHybridRetirementRejectionResult
               .simplifiedAnalysis !== null && {
@@ -94,7 +94,7 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
               null && {
               ruralOrHybridRetirementRejectionFirstAnalysis: JSON.parse(
                 result.ruralOrHybridRetirementRejectionResult.firstAnalysis,
-              ) as object,
+              ) as RuralOrHybridRetirementRejectionFirstAnalysisInterface,
             }),
             ...(result.ruralOrHybridRetirementRejectionResult
               .completeAnalysisDownload !== null && {
@@ -102,25 +102,39 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
                 result.ruralOrHybridRetirementRejectionResult
                   .completeAnalysisDownload,
             }),
-                  ruralOrHybridRetirementRejectionId: result.ruralOrHybridRetirementRejectionId,
+          }),
       }),
       ...(result.ruralOrHybridRetirementRejectionInssBenefit !== null && {
         ruralOrHybridRetirementRejectionInssBenefit:
-          result.ruralOrHybridRetirementRejectionInssBenefit.map((b) =>
-            GetRuralOrHybridRetirementRejectionInssBenefitResponseDto.build({
-              inssBenefit: b.inssBenefit,
-            }),
-          ),
+          result.ruralOrHybridRetirementRejectionInssBenefit
+            .filter(
+              (
+                b,
+              ): b is typeof b & { inssBenefit: string } =>
+                b.inssBenefit !== null,
+            )
+            .map((b) =>
+              GetRuralOrHybridRetirementRejectionInssBenefitResponseDto.build({
+                inssBenefit: b.inssBenefit,
+              }),
+            ),
       }),
       ...(result.ruralOrHybridRetirementRejectionLegalProceeding !== null && {
         ruralOrHybridRetirementRejectionLegalProceeding:
-          result.ruralOrHybridRetirementRejectionLegalProceeding.map((p) =>
-            GetRuralOrHybridRetirementRejectionLegalProceedingResponseDto.build(
-              {
-                legalProceedingNumber: p.legalProceedingNumber,
-              },
+          result.ruralOrHybridRetirementRejectionLegalProceeding
+            .filter(
+              (
+                p,
+              ): p is typeof p & { legalProceedingNumber: string } =>
+                p.legalProceedingNumber !== null,
+            )
+            .map((p) =>
+              GetRuralOrHybridRetirementRejectionLegalProceedingResponseDto.build(
+                {
+                  legalProceedingNumber: p.legalProceedingNumber,
+                },
+              ),
             ),
-          ),
       }),
       ...(result.ruralOrHybridRetirementRejectionPeriod !== null && {
         ruralOrHybridRetirementRejectionPeriod:
@@ -139,8 +153,7 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
               (d) =>
                 d.ruralOrHybridRetirementRejectionPeriodId.toString() ===
                 p.id.toString(),
-                              result.ruralOrHybridRetirementRejectionResult.firstAnalysis,
-                            ) as RuralOrHybridRetirementRejectionFirstAnalysisInterface,
+            );
 
             return GetRuralOrHybridRetirementRejectionPeriodResponseDto.build({
               ...(p.startDate !== null && { startDate: p.startDate }),
@@ -285,7 +298,7 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
                   canTestifyEndDate: w.canTestifyEndDate,
                 }),
                 ...(witnessDocuments.length > 0 && {
-                  documents: witnessDocuments.map((wd) =>
+                  documents: witnessDocuments.map((_wd) =>
                     GetRuralOrHybridRetirementRejectionTestimonialWitnessDocumentResponseDto.build(
                       {},
                     ),
@@ -380,7 +393,7 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
                     GetRuralOrHybridRetirementRejectionWorkPeriodEarningsHistoryResponseDto.build(
                       {
                         ...(eh.competence !== null && {
-                          competence: eh.competence,
+                          competence: new Date(eh.competence),
                         }),
                         ...(eh.remuneration !== null && {
                           remuneration: eh.remuneration,

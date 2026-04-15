@@ -92,11 +92,13 @@ export class UpdateRuralOrHybridRetirementRejectionUseCase {
     ];
 
     if (dto.documents !== undefined) {
-      transactions.push(
-        this.ruralOrHybridRetirementRejectionDocumentCommandRepositoryGateway.deleteAllByRuralOrHybridRetirementRejectionId(
-          ruralOrHybridRetirementRejectionId,
-        ),
-      );
+      for (const doc of existing.ruralOrHybridRetirementRejectionDocument ?? []) {
+        transactions.push(
+          this.ruralOrHybridRetirementRejectionDocumentCommandRepositoryGateway.deleteRuralOrHybridRetirementRejectionDocument(
+            doc.id,
+          ),
+        );
+      }
 
       if (dto.documents.length > 0) {
         const documentTransactions = await Promise.all(
@@ -129,11 +131,13 @@ export class UpdateRuralOrHybridRetirementRejectionUseCase {
     }
 
     if (dto.inssBenefitNumber !== undefined) {
-      transactions.push(
-        this.ruralOrHybridRetirementRejectionInssBenefitCommandRepositoryGateway.deleteAllByRuralOrHybridRetirementRejectionId(
-          ruralOrHybridRetirementRejectionId,
-        ),
-      );
+      for (const benefit of existing.ruralOrHybridRetirementRejectionInssBenefit ?? []) {
+        transactions.push(
+          this.ruralOrHybridRetirementRejectionInssBenefitCommandRepositoryGateway.deleteRuralOrHybridRetirementRejectionInssBenefit(
+            benefit.id,
+          ),
+        );
+      }
 
       transactions.push(
         ...dto.inssBenefitNumber.map((inssBenefit) =>
@@ -149,11 +153,13 @@ export class UpdateRuralOrHybridRetirementRejectionUseCase {
     }
 
     if (dto.legalProceedingNumber !== undefined) {
-      transactions.push(
-        this.ruralOrHybridRetirementRejectionLegalProceedingCommandRepositoryGateway.deleteAllByRuralOrHybridRetirementRejectionId(
-          ruralOrHybridRetirementRejectionId,
-        ),
-      );
+      for (const lp of existing.ruralOrHybridRetirementRejectionLegalProceeding ?? []) {
+        transactions.push(
+          this.ruralOrHybridRetirementRejectionLegalProceedingCommandRepositoryGateway.deleteRuralOrHybridRetirementRejectionLegalProceeding(
+            lp.id,
+          ),
+        );
+      }
 
       transactions.push(
         ...dto.legalProceedingNumber.map((legalProceedingNumber) =>
