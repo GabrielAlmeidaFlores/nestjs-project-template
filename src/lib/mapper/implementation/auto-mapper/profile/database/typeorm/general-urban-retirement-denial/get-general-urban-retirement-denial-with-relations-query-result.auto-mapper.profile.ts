@@ -115,6 +115,8 @@ export class GetGeneralUrbanRetirementDenialWithRelationsQueryResultAutoMapperPr
       id: new GeneralUrbanRetirementDenialResultId(source.id),
       inssDecisionAnalysis: source.inssDecisionAnalysis,
       firstAnalysis: source.firstAnalysis,
+      completeAnalysis: source.completeAnalysis,
+      completeAnalysisDownload: source.completeAnalysisDownload,
       createdAt: source.createdAt,
       updatedAt: source.updatedAt,
       deletedAt: source.deletedAt,

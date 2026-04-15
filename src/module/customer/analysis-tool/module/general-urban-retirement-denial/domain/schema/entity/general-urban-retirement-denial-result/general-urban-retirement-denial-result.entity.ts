@@ -7,6 +7,8 @@ import type { GeneralUrbanRetirementDenialResultEntityPropsInterface } from './g
 export class GeneralUrbanRetirementDenialResultEntity extends BaseEntity<GeneralUrbanRetirementDenialResultId> {
   public readonly inssDecisionAnalysis: string | null;
   public readonly firstAnalysis: string | null;
+  public readonly completeAnalysis: string | null;
+  public readonly completeAnalysisDownload: string | null;
 
   protected readonly _type = GeneralUrbanRetirementDenialResultEntity.name;
 
@@ -16,5 +18,7 @@ export class GeneralUrbanRetirementDenialResultEntity extends BaseEntity<General
     super(GeneralUrbanRetirementDenialResultId, props);
     this.inssDecisionAnalysis = props.inssDecisionAnalysis ?? null;
     this.firstAnalysis = props.firstAnalysis ?? null;
+    this.completeAnalysis = props.completeAnalysis ?? null;
+    this.completeAnalysisDownload = props.completeAnalysisDownload ?? null;
   }
 }
