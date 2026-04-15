@@ -7,10 +7,14 @@ import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-pr
 import { GeneralUrbanRetirementDenialQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial/query/general-urban-retirement-denial.query.repository.gateway';
 import { GeneralUrbanRetirementDenialDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial-document/command/general-urban-retirement-denial-document.command.repository.gateway';
 import { GeneralUrbanRetirementDenialId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/value-object/general-urban-retirement-denial-id/general-urban-retirement-denial-id.value-object';
+import { GeneralUrbanRetirementDenialDocumentTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-document/enum/general-urban-retirement-denial-document-type.enum';
 import { GeneralUrbanRetirementDenialDocumentEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-document/general-urban-retirement-denial-document.entity';
 import { GeneralUrbanRetirementDenialDocumentId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-document/value-object/general-urban-retirement-denial-document-id/general-urban-retirement-denial-document-id.value-object';
 import { UploadGeneralUrbanRetirementDenialDocumentsRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/upload-general-urban-retirement-denial-documents.request.dto';
 import { UploadGeneralUrbanRetirementDenialDocumentsResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/upload-general-urban-retirement-denial-documents.response.dto';
+import { GeneralUrbanRetirementDenialAdministrativeProcedureNotPresentError } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/error/general-urban-retirement-denial-administrative-procedure-not-present.error';
+import { GeneralUrbanRetirementDenialCnisNotPresentError } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/error/general-urban-retirement-denial-cnis-not-present.error';
+import { GeneralUrbanRetirementDenialDocumentInvalidError } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/error/general-urban-retirement-denial-document-invalid.error';
 import { GeneralUrbanRetirementDenialNotFoundError } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/error/general-urban-retirement-denial-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -48,6 +52,29 @@ export class UploadGeneralUrbanRetirementDenialDocumentsUseCase {
 
     if (organizationMember === null) {
       throw new OrganizationMemberNotFoundError();
+    }
+
+    if (dto.documents.length === 0) {
+      throw new GeneralUrbanRetirementDenialDocumentInvalidError();
+    }
+
+    const isCnisPresent = dto.documents.some(
+      (document) =>
+        document.type === GeneralUrbanRetirementDenialDocumentTypeEnum.CNIS,
+    );
+
+    if (!isCnisPresent) {
+      throw new GeneralUrbanRetirementDenialCnisNotPresentError();
+    }
+
+    const isAdministrativeProcedurePresent = dto.documents.some(
+      (document) =>
+        document.type ===
+        GeneralUrbanRetirementDenialDocumentTypeEnum.ADMINISTRATIVE_PROCEDURE,
+    );
+
+    if (!isAdministrativeProcedurePresent) {
+      throw new GeneralUrbanRetirementDenialAdministrativeProcedureNotPresentError();
     }
 
     await this.generalUrbanRetirementDenialQueryRepositoryGateway.findOneByGeneralUrbanRetirementDenialIdOrFailWithRelations(
