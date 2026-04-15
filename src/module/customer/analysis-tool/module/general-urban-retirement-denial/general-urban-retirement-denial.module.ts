@@ -10,6 +10,7 @@ import { CreateGeneralUrbanRetirementDenialInssDecisionAnalysisUseCase } from '@
 import { CreateGeneralUrbanRetirementDenialUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/create-general-urban-retirement-denial.use-case';
 import { GetGeneralUrbanRetirementDenialUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/get-general-urban-retirement-denial.use-case';
 import { SaveGeneralUrbanRetirementDenialPeriodsUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/save-general-urban-retirement-denial-periods.use-case';
+import { UpdateGeneralUrbanRetirementDenialUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/update-general-urban-retirement-denial.use-case';
 import { UploadGeneralUrbanRetirementDenialDocumentsUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/upload-general-urban-retirement-denial-documents.use-case';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
 import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
@@ -35,6 +36,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateGeneralUrbanRetirementDenialInssDecisionAnalysisUseCase,
     CreateGeneralUrbanRetirementDenialFirstAnalysisUseCase,
     SaveGeneralUrbanRetirementDenialPeriodsUseCase,
+    UpdateGeneralUrbanRetirementDenialUseCase,
   ],
 })
 export class GeneralUrbanRetirementDenialModule {
