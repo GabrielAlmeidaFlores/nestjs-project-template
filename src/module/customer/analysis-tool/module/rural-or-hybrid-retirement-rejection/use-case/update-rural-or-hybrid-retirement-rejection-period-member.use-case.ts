@@ -33,9 +33,13 @@ export class UpdateRuralOrHybridRetirementRejectionPeriodMemberUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(RuralOrHybridRetirementRejectionQueryRepositoryGateway)
     private readonly ruralOrHybridRetirementRejectionQueryRepositoryGateway: RuralOrHybridRetirementRejectionQueryRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway: RuralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway: RuralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
@@ -70,7 +74,8 @@ export class UpdateRuralOrHybridRetirementRejectionPeriodMemberUseCase {
       existingRejection.ruralOrHybridRetirementRejectionPeriod ?? []
     ).find(
       (period) =>
-        period.id.toString() === ruralOrHybridRetirementRejectionPeriodId.toString(),
+        period.id.toString() ===
+        ruralOrHybridRetirementRejectionPeriodId.toString(),
     );
 
     if (!existingPeriod) {
@@ -85,7 +90,8 @@ export class UpdateRuralOrHybridRetirementRejectionPeriodMemberUseCase {
         ruralOrHybridRetirementRejectionPeriodId.toString(),
     );
     const existingMemberDocuments =
-      existingRejection.ruralOrHybridRetirementRejectionPeriodMemberDocument ?? [];
+      existingRejection.ruralOrHybridRetirementRejectionPeriodMemberDocument ??
+      [];
     const transactions: TransactionType[] = [];
 
     for (const existingMember of existingMembers) {
@@ -135,7 +141,8 @@ export class UpdateRuralOrHybridRetirementRejectionPeriodMemberUseCase {
               encoding: '7bit',
             });
 
-            const document = await this.fileProcessorGateway.uploadFile(fileModel);
+            const document =
+              await this.fileProcessorGateway.uploadFile(fileModel);
 
             return this.ruralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway.createRuralOrHybridRetirementRejectionPeriodMemberDocument(
               new RuralOrHybridRetirementRejectionPeriodMemberDocumentEntity({
@@ -157,11 +164,9 @@ export class UpdateRuralOrHybridRetirementRejectionPeriodMemberUseCase {
 
     await transaction.commit();
 
-    return UpdateRuralOrHybridRetirementRejectionPeriodMemberResponseDto.build(
-      {
-        ruralOrHybridRetirementRejectionId,
-      },
-    );
+    return UpdateRuralOrHybridRetirementRejectionPeriodMemberResponseDto.build({
+      ruralOrHybridRetirementRejectionId,
+    });
   }
 
   private buildMemberEntity(

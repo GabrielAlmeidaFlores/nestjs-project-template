@@ -4,8 +4,8 @@ import { Repository } from 'typeorm';
 
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
-import { RuralOrHybridRetirementRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-rejection.typeorm.entity';
 import { RuralOrHybridRetirementRejectionTimeAcceleratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-rejection-time-accelerator.typeorm.entity';
+import { RuralOrHybridRetirementRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-rejection.typeorm.entity';
 import { RuralOrHybridRetirementRejectionTimeAcceleratorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-time-accelerator/command/rural-or-hybrid-retirement-rejection-time-accelerator.command.repository.gateway';
 import { RuralOrHybridRetirementRejectionTimeAcceleratorEntity } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-time-accelerator/rural-or-hybrid-retirement-rejection-time-accelerator.entity';
 import { RuralOrHybridRetirementRejectionTimeAcceleratorId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-time-accelerator/value-object/rural-or-hybrid-retirement-rejection-time-accelerator-id.value-object';
@@ -13,13 +13,16 @@ import { RuralOrHybridRetirementRejectionTimeAcceleratorId } from '@module/custo
 @Injectable()
 export class RuralOrHybridRetirementRejectionTimeAcceleratorTypeormCommandRepository
   extends BaseTypeormCommandRepository<RuralOrHybridRetirementRejectionTimeAcceleratorTypeormEntity>
-  implements RuralOrHybridRetirementRejectionTimeAcceleratorCommandRepositoryGateway
+  implements
+    RuralOrHybridRetirementRejectionTimeAcceleratorCommandRepositoryGateway
 {
   protected readonly _type =
     RuralOrHybridRetirementRejectionTimeAcceleratorTypeormCommandRepository.name;
 
   public constructor(
-    @InjectRepository(RuralOrHybridRetirementRejectionTimeAcceleratorTypeormEntity)
+    @InjectRepository(
+      RuralOrHybridRetirementRejectionTimeAcceleratorTypeormEntity,
+    )
     repository: Repository<RuralOrHybridRetirementRejectionTimeAcceleratorTypeormEntity>,
   ) {
     super(repository);

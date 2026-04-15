@@ -13,7 +13,8 @@ import { RuralOrHybridRetirementRejectionPeriodMemberId } from '@module/customer
 @Injectable()
 export class RuralOrHybridRetirementRejectionPeriodMemberTypeormCommandRepository
   extends BaseTypeormCommandRepository<RuralOrHybridRetirementRejectionPeriodMemberTypeormEntity>
-  implements RuralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway
+  implements
+    RuralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway
 {
   protected readonly _type =
     RuralOrHybridRetirementRejectionPeriodMemberTypeormCommandRepository.name;

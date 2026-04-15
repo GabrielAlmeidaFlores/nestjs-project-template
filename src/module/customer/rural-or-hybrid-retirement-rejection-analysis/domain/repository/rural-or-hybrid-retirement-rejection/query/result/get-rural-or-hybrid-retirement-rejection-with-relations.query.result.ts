@@ -1,11 +1,9 @@
 import { BaseBuildableObject } from '@shared/api/util/object/base-buildable.object';
-import { RuralOrHybridRetirementRejectionId } from '@module/customer/rural-or-hybrid-retirement-rejection-analysis/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id/rural-or-hybrid-retirement-rejection-id.value-object';
+
+import type { RuralOrHybridRetirementRejectionId } from '@module/customer/rural-or-hybrid-retirement-rejection-analysis/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id/rural-or-hybrid-retirement-rejection-id.value-object';
 
 export class GetRuralOrHybridRetirementRejectionWithRelationsQueryResult extends BaseBuildableObject {
   public readonly id: RuralOrHybridRetirementRejectionId;
-  public readonly organizationId: string;
-  public readonly organizationMemberId: string;
-  public readonly analysisToolRecordId: string;
   public readonly federativeEntity: string;
   public readonly state: string | null;
   public readonly municipality: string | null;
@@ -26,5 +24,6 @@ export class GetRuralOrHybridRetirementRejectionWithRelationsQueryResult extends
   public readonly updatedAt: Date | null;
   public readonly deletedAt: Date | null;
 
-  protected override readonly _type = GetRuralOrHybridRetirementRejectionWithRelationsQueryResult.name;
+  protected override readonly _type =
+    GetRuralOrHybridRetirementRejectionWithRelationsQueryResult.name;
 }

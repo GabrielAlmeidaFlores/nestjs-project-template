@@ -79,7 +79,9 @@ export class DownloadRuralOrHybridRetirementRejectionCompleteAnalysisUseCase {
         throw new RuralOrHybridRetirementRejectionCompleteAnalysisDownloadNotFoundError();
       }
 
-      const parsedResult = this.parseCompleteAnalysis(currentResult.completeAnalysis);
+      const parsedResult = this.parseCompleteAnalysis(
+        currentResult.completeAnalysis,
+      );
 
       downloadContent = this.buildCompleteAnalysisDownload(parsedResult);
 
@@ -100,9 +102,8 @@ export class DownloadRuralOrHybridRetirementRejectionCompleteAnalysisUseCase {
       await transaction.commit();
     }
 
-    const htmlContent = await this.exportDocumentGateway.convertMarkdownToHtml(
-      downloadContent,
-    );
+    const htmlContent =
+      await this.exportDocumentGateway.convertMarkdownToHtml(downloadContent);
 
     return this.exportDocumentGateway.downloadFileAsStreamable(
       htmlContent,
@@ -137,7 +138,10 @@ export class DownloadRuralOrHybridRetirementRejectionCompleteAnalysisUseCase {
         'Recomendacao de estrategia',
         parsedResult.strategyRecommendation,
       ),
-      this.buildSection('Analise das evidencias', parsedResult.evidenceAnalysis),
+      this.buildSection(
+        'Analise das evidencias',
+        parsedResult.evidenceAnalysis,
+      ),
       this.buildSection(
         'Conformidade cronologica',
         parsedResult.timelineCompliance,

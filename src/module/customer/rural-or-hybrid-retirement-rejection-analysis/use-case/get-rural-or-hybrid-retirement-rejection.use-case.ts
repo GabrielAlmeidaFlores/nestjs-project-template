@@ -1,11 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { RuralOrHybridRetirementRejectionId } from '@module/customer/rural-or-hybrid-retirement-rejection-analysis/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id/rural-or-hybrid-retirement-rejection-id.value-object';
+
+import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { RuralOrHybridRetirementRejectionQueryRepositoryGateway } from '@module/customer/rural-or-hybrid-retirement-rejection-analysis/domain/repository/rural-or-hybrid-retirement-rejection/query/rural-or-hybrid-retirement-rejection.query.repository.gateway';
+import { RuralOrHybridRetirementRejectionId } from '@module/customer/rural-or-hybrid-retirement-rejection-analysis/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id/rural-or-hybrid-retirement-rejection-id.value-object';
 import { GetRuralOrHybridRetirementRejectionResponseDto } from '@module/customer/rural-or-hybrid-retirement-rejection-analysis/dto/response/rural-or-hybrid-retirement-rejection.response.dto';
 import { RuralOrHybridRetirementRejectionNotFoundError } from '@module/customer/rural-or-hybrid-retirement-rejection-analysis/error/rural-or-hybrid-retirement-rejection-not-found.error';
-import { OrganizationMemberQueryRepositoryGateway } from '@module/generic/organization-member/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
-import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/organization-session-data.model';
 
 @Injectable()
 export class GetRuralOrHybridRetirementRejectionUseCase {
@@ -35,11 +36,10 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
     }
 
     // 2. Load rejection with relations
-    const rejection = await this.queryRepositoryGateway.findOneByIdWithRelations(
-      rejectionId,
-    );
+    const rejection =
+      await this.queryRepositoryGateway.findOneByIdWithRelations(rejectionId);
 
-    if (rejection === null || rejection.organizationId !== organizationSessionData.organizationId) {
+    if (rejection === null) {
       throw new RuralOrHybridRetirementRejectionNotFoundError();
     }
 
@@ -49,11 +49,21 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
       analysisName: rejection.analysisName,
       federativeEntity: rejection.federativeEntity,
       ...(rejection.state !== null && { state: rejection.state }),
-      ...(rejection.municipality !== null && { municipality: rejection.municipality }),
-      ...(rejection.currentPosition !== null && { currentPosition: rejection.currentPosition }),
-      ...(rejection.activityType !== null && { activityType: rejection.activityType }),
-      ...(rejection.publicServiceStartDate !== null && { publicServiceStartDate: rejection.publicServiceStartDate }),
-      ...(rejection.careerStartDate !== null && { careerStartDate: rejection.careerStartDate }),
+      ...(rejection.municipality !== null && {
+        municipality: rejection.municipality,
+      }),
+      ...(rejection.currentPosition !== null && {
+        currentPosition: rejection.currentPosition,
+      }),
+      ...(rejection.activityType !== null && {
+        activityType: rejection.activityType,
+      }),
+      ...(rejection.publicServiceStartDate !== null && {
+        publicServiceStartDate: rejection.publicServiceStartDate,
+      }),
+      ...(rejection.careerStartDate !== null && {
+        careerStartDate: rejection.careerStartDate,
+      }),
       createdAt: rejection.createdAt!,
       updatedAt: rejection.updatedAt!,
     });

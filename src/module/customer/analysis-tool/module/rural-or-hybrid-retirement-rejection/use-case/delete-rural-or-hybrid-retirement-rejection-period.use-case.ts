@@ -29,11 +29,17 @@ export class DeleteRuralOrHybridRetirementRejectionPeriodUseCase {
     private readonly ruralOrHybridRetirementRejectionQueryRepositoryGateway: RuralOrHybridRetirementRejectionQueryRepositoryGateway,
     @Inject(RuralOrHybridRetirementRejectionPeriodCommandRepositoryGateway)
     private readonly ruralOrHybridRetirementRejectionPeriodCommandRepositoryGateway: RuralOrHybridRetirementRejectionPeriodCommandRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionPeriodDocumentCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionPeriodDocumentCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionPeriodDocumentCommandRepositoryGateway: RuralOrHybridRetirementRejectionPeriodDocumentCommandRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway: RuralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway: RuralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
@@ -65,7 +71,8 @@ export class DeleteRuralOrHybridRetirementRejectionPeriodUseCase {
       existingRejection.ruralOrHybridRetirementRejectionPeriod ?? []
     ).find(
       (period) =>
-        period.id.toString() === ruralOrHybridRetirementRejectionPeriodId.toString(),
+        period.id.toString() ===
+        ruralOrHybridRetirementRejectionPeriodId.toString(),
     );
 
     if (!existingPeriod) {

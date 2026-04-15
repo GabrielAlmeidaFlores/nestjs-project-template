@@ -1,14 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { RuralOrHybridRetirementRejectionEntity } from '@module/customer/rural-or-hybrid-retirement-rejection-analysis/domain/schema/entity/rural-or-hybrid-retirement-rejection/rural-or-hybrid-retirement-rejection.entity';
-import { RuralOrHybridRetirementRejectionId } from '@module/customer/rural-or-hybrid-retirement-rejection-analysis/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id/rural-or-hybrid-retirement-rejection-id.value-object';
+
+import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { RuralOrHybridRetirementRejectionCommandRepositoryGateway } from '@module/customer/rural-or-hybrid-retirement-rejection-analysis/domain/repository/rural-or-hybrid-retirement-rejection/command/rural-or-hybrid-retirement-rejection.command.repository.gateway';
 import { RuralOrHybridRetirementRejectionQueryRepositoryGateway } from '@module/customer/rural-or-hybrid-retirement-rejection-analysis/domain/repository/rural-or-hybrid-retirement-rejection/query/rural-or-hybrid-retirement-rejection.query.repository.gateway';
+import { RuralOrHybridRetirementRejectionEntity } from '@module/customer/rural-or-hybrid-retirement-rejection-analysis/domain/schema/entity/rural-or-hybrid-retirement-rejection/rural-or-hybrid-retirement-rejection.entity';
+import { RuralOrHybridRetirementRejectionId } from '@module/customer/rural-or-hybrid-retirement-rejection-analysis/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id/rural-or-hybrid-retirement-rejection-id.value-object';
 import { CreateRuralOrHybridRetirementRejectionRequestDto } from '@module/customer/rural-or-hybrid-retirement-rejection-analysis/dto/request/create-rural-or-hybrid-retirement-rejection.request.dto';
 import { CreateRuralOrHybridRetirementRejectionResponseDto } from '@module/customer/rural-or-hybrid-retirement-rejection-analysis/dto/response/rural-or-hybrid-retirement-rejection.response.dto';
-import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/gateway/base-transaction.repository.gateway';
-import { OrganizationMemberQueryRepositoryGateway } from '@module/generic/organization-member/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
-import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/organization-session-data.model';
 
 @Injectable()
 export class CreateRuralOrHybridRetirementRejectionUseCase {
@@ -44,9 +45,6 @@ export class CreateRuralOrHybridRetirementRejectionUseCase {
     // 2. Create rejection entity
     const rejectionEntity = new RuralOrHybridRetirementRejectionEntity({
       id: new RuralOrHybridRetirementRejectionId(),
-      organizationId: organizationSessionData.organizationId,
-      organizationMemberId: organizationMember.id.toString(),
-      analysisToolRecordId: '', // Will be set after analysis tool record is created
       federativeEntity: dto.federativeEntity,
       state: dto.state ?? null,
       municipality: dto.municipality ?? null,

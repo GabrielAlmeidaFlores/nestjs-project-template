@@ -13,13 +13,16 @@ import { RuralOrHybridRetirementRejectionTestimonialWitnessDocumentId } from '@m
 @Injectable()
 export class RuralOrHybridRetirementRejectionTestimonialWitnessDocumentTypeormCommandRepository
   extends BaseTypeormCommandRepository<RuralOrHybridRetirementRejectionTestimonialWitnessDocumentTypeormEntity>
-  implements RuralOrHybridRetirementRejectionTestimonialWitnessDocumentCommandRepositoryGateway
+  implements
+    RuralOrHybridRetirementRejectionTestimonialWitnessDocumentCommandRepositoryGateway
 {
   protected readonly _type =
     RuralOrHybridRetirementRejectionTestimonialWitnessDocumentTypeormCommandRepository.name;
 
   public constructor(
-    @InjectRepository(RuralOrHybridRetirementRejectionTestimonialWitnessDocumentTypeormEntity)
+    @InjectRepository(
+      RuralOrHybridRetirementRejectionTestimonialWitnessDocumentTypeormEntity,
+    )
     repository: Repository<RuralOrHybridRetirementRejectionTestimonialWitnessDocumentTypeormEntity>,
   ) {
     super(repository);

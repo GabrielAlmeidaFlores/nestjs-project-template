@@ -6,8 +6,8 @@ import { Repository } from 'typeorm';
 import { NotFoundError } from '@core/error/not-found.error';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { RuralOrHybridRetirementRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-rejection.typeorm.entity';
-import { RuralOrHybridRetirementRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection/query/rural-or-hybrid-retirement-rejection.query.repository.gateway';
 import { GetRuralOrHybridRetirementRejectionWithRelationsQueryResult } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection/query/result/get-rural-or-hybrid-retirement-rejection-with-relations.query.result';
+import { RuralOrHybridRetirementRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection/query/rural-or-hybrid-retirement-rejection.query.repository.gateway';
 import { RuralOrHybridRetirementRejectionId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id.value-object';
 
 @Injectable()
@@ -122,7 +122,8 @@ export class RuralOrHybridRetirementRejectionTypeormQueryRepository
 
     const workPeriodDocumentAnalyses = workPeriods.flatMap((workPeriod) =>
       (
-        workPeriod.ruralOrHybridRetirementRejectionWorkPeriodDocumentAnalysis ?? []
+        workPeriod.ruralOrHybridRetirementRejectionWorkPeriodDocumentAnalysis ??
+        []
       ).map((workPeriodDocumentAnalysis) => ({
         ...workPeriodDocumentAnalysis,
         ruralOrHybridRetirementRejectionWorkPeriodId: workPeriod.id,
@@ -131,7 +132,8 @@ export class RuralOrHybridRetirementRejectionTypeormQueryRepository
 
     const workPeriodEarningsHistory = workPeriods.flatMap((workPeriod) =>
       (
-        workPeriod.ruralOrHybridRetirementRejectionWorkPeriodEarningsHistory ?? []
+        workPeriod.ruralOrHybridRetirementRejectionWorkPeriodEarningsHistory ??
+        []
       ).map((earningsHistory) => ({
         ...earningsHistory,
         ruralOrHybridRetirementRejectionWorkPeriodId: workPeriod.id,
@@ -139,9 +141,8 @@ export class RuralOrHybridRetirementRejectionTypeormQueryRepository
     );
 
     return GetRuralOrHybridRetirementRejectionWithRelationsQueryResult.build({
-      ruralOrHybridRetirementRejectionId: new RuralOrHybridRetirementRejectionId(
-        data.id,
-      ),
+      ruralOrHybridRetirementRejectionId:
+        new RuralOrHybridRetirementRejectionId(data.id),
       analysisName: data.analysisName,
       activityType: data.activityType,
       applicationSubmissionDate: data.applicationSubmissionDate,
@@ -161,7 +162,8 @@ export class RuralOrHybridRetirementRejectionTypeormQueryRepository
       ruralOrHybridRetirementRejectionPeriod: periods,
       ruralOrHybridRetirementRejectionPeriodDocument: periodDocuments,
       ruralOrHybridRetirementRejectionPeriodMember: periodMembers,
-      ruralOrHybridRetirementRejectionPeriodMemberDocument: periodMemberDocuments,
+      ruralOrHybridRetirementRejectionPeriodMemberDocument:
+        periodMemberDocuments,
       ruralOrHybridRetirementRejectionTestimonialWitness: testimonialWitnesses,
       ruralOrHybridRetirementRejectionTestimonialWitnessDocument:
         testimonialWitnessDocuments,

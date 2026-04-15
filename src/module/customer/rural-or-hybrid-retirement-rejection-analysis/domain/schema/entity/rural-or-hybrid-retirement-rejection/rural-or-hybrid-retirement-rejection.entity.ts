@@ -1,12 +1,10 @@
-import type {BaseEntityPropsInterface} from '@core/domain/schema/entity/base/base.entity.props.interface';
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+
 import { RuralOrHybridRetirementRejectionId } from './value-object/rural-or-hybrid-retirement-rejection-id/rural-or-hybrid-retirement-rejection-id.value-object';
 
-export interface RuralOrHybridRetirementRejectionEntityPropsInterface
-  extends BaseEntityPropsInterface<RuralOrHybridRetirementRejectionId> {
-  organizationId: string;
-  organizationMemberId: string;
-  analysisToolRecordId: string;
+import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base.entity.props.interface';
+
+export interface RuralOrHybridRetirementRejectionEntityPropsInterface extends BaseEntityPropsInterface<RuralOrHybridRetirementRejectionId> {
   federativeEntity: string;
   state: string | null;
   municipality: string | null;
@@ -26,9 +24,6 @@ export interface RuralOrHybridRetirementRejectionEntityPropsInterface
 }
 
 export class RuralOrHybridRetirementRejectionEntity extends BaseEntity<RuralOrHybridRetirementRejectionId> {
-  public readonly organizationId: string;
-  public readonly organizationMemberId: string;
-  public readonly analysisToolRecordId: string;
   public readonly federativeEntity: string;
   public readonly state: string | null;
   public readonly municipality: string | null;
@@ -52,9 +47,6 @@ export class RuralOrHybridRetirementRejectionEntity extends BaseEntity<RuralOrHy
     props: RuralOrHybridRetirementRejectionEntityPropsInterface,
   ) {
     super(RuralOrHybridRetirementRejectionId, props);
-    this.organizationId = props.organizationId;
-    this.organizationMemberId = props.organizationMemberId;
-    this.analysisToolRecordId = props.analysisToolRecordId;
     this.federativeEntity = props.federativeEntity;
     this.state = props.state ?? null;
     this.municipality = props.municipality ?? null;

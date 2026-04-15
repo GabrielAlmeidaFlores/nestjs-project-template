@@ -27,8 +27,7 @@ import { FileModel } from '@shared/system/model/generic/file.model';
 
 @Injectable()
 export class UpdateRuralOrHybridRetirementRejectionUseCase {
-  protected readonly _type =
-    UpdateRuralOrHybridRetirementRejectionUseCase.name;
+  protected readonly _type = UpdateRuralOrHybridRetirementRejectionUseCase.name;
 
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
@@ -41,7 +40,9 @@ export class UpdateRuralOrHybridRetirementRejectionUseCase {
     private readonly ruralOrHybridRetirementRejectionDocumentCommandRepositoryGateway: RuralOrHybridRetirementRejectionDocumentCommandRepositoryGateway,
     @Inject(RuralOrHybridRetirementRejectionInssBenefitCommandRepositoryGateway)
     private readonly ruralOrHybridRetirementRejectionInssBenefitCommandRepositoryGateway: RuralOrHybridRetirementRejectionInssBenefitCommandRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionLegalProceedingCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionLegalProceedingCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionLegalProceedingCommandRepositoryGateway: RuralOrHybridRetirementRejectionLegalProceedingCommandRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,

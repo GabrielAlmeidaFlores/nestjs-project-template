@@ -37,8 +37,7 @@ export class RuralOrHybridRetirementRejectionTestimonialWitnessItemRequestDto ex
   public canTestifyEndDate?: Date;
 
   @RequestDtoObjectProperty(
-    () =>
-      RuralOrHybridRetirementRejectionTestimonialWitnessDocumentRequestDto,
+    () => RuralOrHybridRetirementRejectionTestimonialWitnessDocumentRequestDto,
     { required: false, isArray: true },
   )
   public documents?: RuralOrHybridRetirementRejectionTestimonialWitnessDocumentRequestDto[];
@@ -50,8 +49,7 @@ export class RuralOrHybridRetirementRejectionTestimonialWitnessItemRequestDto ex
 @RequestDto()
 export class CreateRuralOrHybridRetirementRejectionTestimonialWitnessRequestDto extends BaseBuildableDtoObject {
   @RequestDtoObjectProperty(
-    () =>
-      RuralOrHybridRetirementRejectionTestimonialWitnessItemRequestDto,
+    () => RuralOrHybridRetirementRejectionTestimonialWitnessItemRequestDto,
     { isArray: true },
   )
   public testimonialWitnesses: RuralOrHybridRetirementRejectionTestimonialWitnessItemRequestDto[];

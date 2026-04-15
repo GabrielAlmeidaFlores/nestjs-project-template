@@ -56,15 +56,19 @@ export class AnalyzeRuralOrHybridRetirementRejectionTimeAcceleratorUseCase {
       throw new OrganizationMemberNotFoundError();
     }
 
+    const paymentPlanPaidResourceType = this.getPaymentPlanPaidResourceType(
+      dto.json.timeType,
+    );
+
     const promptResponse =
       await this.getPaymentPlanPaidResourcePromptUseCase.execute(
-        PaymentPlanPaidResourceTypeEnum.RURAL_OR_HYBRID_RETIREMENT_REJECTION_TIME_ACCELERATOR_ANALYSIS,
+        paymentPlanPaidResourceType,
       );
 
     const consumeCreditTransaction =
       await this.consumeOrganizationCreditUseCase.execute(
         organizationSessionData.organizationId,
-        PaymentPlanPaidResourceTypeEnum.RURAL_OR_HYBRID_RETIREMENT_REJECTION_TIME_ACCELERATOR_ANALYSIS,
+        paymentPlanPaidResourceType,
         organizationMember.id,
       );
 
@@ -214,5 +218,33 @@ export class AnalyzeRuralOrHybridRetirementRejectionTimeAcceleratorUseCase {
 
   private isRecord(value: unknown): value is Record<string, unknown> {
     return typeof value === 'object' && value !== null;
+  }
+
+  private getPaymentPlanPaidResourceType(
+    timeType: RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum,
+  ): PaymentPlanPaidResourceTypeEnum {
+    const paymentPlanPaidResourceTypeByTimeType: Record<
+      RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum,
+      PaymentPlanPaidResourceTypeEnum
+    > = {
+      [RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum.TEMPO_RURAL]:
+        PaymentPlanPaidResourceTypeEnum.TIME_ACCELERATOR_RURAL_TIME_ANALYSIS,
+      [RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum.SERVICO_MILITAR]:
+        PaymentPlanPaidResourceTypeEnum.TIME_ACCELERATOR_MILITARY_SERVICE_ANALYSIS,
+      [RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum.SERVICO_PUBLICO]:
+        PaymentPlanPaidResourceTypeEnum.TIME_ACCELERATOR_PUBLIC_SERVICE_ANALYSIS,
+      [RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum.CTPS]:
+        PaymentPlanPaidResourceTypeEnum.TIME_ACCELERATOR_CTPS_OUTSIDE_CNIS_ANALYSIS,
+      [RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum.ALUNO_APRENDIZ]:
+        PaymentPlanPaidResourceTypeEnum.TIME_ACCELERATOR_STUDENT_APPRENTICE_ANALYSIS,
+      [RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum.TRABALHO_NO_EXTERIOR]:
+        PaymentPlanPaidResourceTypeEnum.TIME_ACCELERATOR_WORK_ABROAD_ANALYSIS,
+      [RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum.TRABALHO_INFORMAL]:
+        PaymentPlanPaidResourceTypeEnum.TIME_ACCELERATOR_INFORMAL_WORK_ANALYSIS,
+      [RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum.SENTENCA_TRABALHISTA]:
+        PaymentPlanPaidResourceTypeEnum.TIME_ACCELERATOR_LABOR_COURT_DECISION_ANALYSIS,
+    };
+
+    return paymentPlanPaidResourceTypeByTimeType[timeType];
   }
 }

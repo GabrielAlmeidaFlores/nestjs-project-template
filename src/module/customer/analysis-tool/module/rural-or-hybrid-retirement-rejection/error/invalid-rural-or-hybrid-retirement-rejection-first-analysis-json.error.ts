@@ -5,6 +5,8 @@ export class InvalidRuralOrHybridRetirementRejectionFirstAnalysisJsonError exten
     InvalidRuralOrHybridRetirementRejectionFirstAnalysisJsonError.name;
 
   public constructor() {
-    super('O JSON da primeira análise de indeferimento de aposentadoria rural ou híbrida é inválido.');
+    super(
+      'O JSON da primeira análise de indeferimento de aposentadoria rural ou híbrida é inválido.',
+    );
   }
 }

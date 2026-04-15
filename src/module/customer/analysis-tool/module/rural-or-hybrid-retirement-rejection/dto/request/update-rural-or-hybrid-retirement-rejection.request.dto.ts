@@ -13,10 +13,9 @@ export class UpdateRuralOrHybridRetirementRejectionRequestDto extends BaseBuilda
   @RequestDtoStringProperty({ required: false })
   public analysisName?: string;
 
-  @RequestDtoEnumProperty(
-    RuralOrHybridRetirementRejectionActivityTypeEnum,
-    { required: false },
-  )
+  @RequestDtoEnumProperty(RuralOrHybridRetirementRejectionActivityTypeEnum, {
+    required: false,
+  })
   public activityType?: RuralOrHybridRetirementRejectionActivityTypeEnum;
 
   @RequestDtoEnumProperty(

@@ -33,9 +33,13 @@ export class CreateRuralOrHybridRetirementRejectionTestimonialWitnessUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(RuralOrHybridRetirementRejectionQueryRepositoryGateway)
     private readonly ruralOrHybridRetirementRejectionQueryRepositoryGateway: RuralOrHybridRetirementRejectionQueryRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionTestimonialWitnessCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionTestimonialWitnessCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionTestimonialWitnessCommandRepositoryGateway: RuralOrHybridRetirementRejectionTestimonialWitnessCommandRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionTestimonialWitnessDocumentCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionTestimonialWitnessDocumentCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionTestimonialWitnessDocumentCommandRepositoryGateway: RuralOrHybridRetirementRejectionTestimonialWitnessDocumentCommandRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
@@ -95,7 +99,8 @@ export class CreateRuralOrHybridRetirementRejectionTestimonialWitnessUseCase {
               encoding: '7bit',
             });
 
-            const document = await this.fileProcessorGateway.uploadFile(fileModel);
+            const document =
+              await this.fileProcessorGateway.uploadFile(fileModel);
 
             return this.ruralOrHybridRetirementRejectionTestimonialWitnessDocumentCommandRepositoryGateway.createRuralOrHybridRetirementRejectionTestimonialWitnessDocument(
               new RuralOrHybridRetirementRejectionTestimonialWitnessDocumentEntity(

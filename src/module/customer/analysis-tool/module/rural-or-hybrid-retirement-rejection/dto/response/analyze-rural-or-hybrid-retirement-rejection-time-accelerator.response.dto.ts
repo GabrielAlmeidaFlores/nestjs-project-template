@@ -49,8 +49,7 @@ export class AnalyzeRuralOrHybridRetirementRejectionTimeAcceleratorItemResponseD
 @ResponseDto()
 export class AnalyzeRuralOrHybridRetirementRejectionTimeAcceleratorResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoObjectProperty(
-    () =>
-      AnalyzeRuralOrHybridRetirementRejectionTimeAcceleratorItemResponseDto,
+    () => AnalyzeRuralOrHybridRetirementRejectionTimeAcceleratorItemResponseDto,
     { isArray: true },
   )
   public timeAccelerators: AnalyzeRuralOrHybridRetirementRejectionTimeAcceleratorItemResponseDto[];

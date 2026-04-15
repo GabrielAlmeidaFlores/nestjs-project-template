@@ -4,8 +4,8 @@ import { Repository } from 'typeorm';
 
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
-import { RuralOrHybridRetirementRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-rejection.typeorm.entity';
 import { RuralOrHybridRetirementRejectionTestimonialWitnessTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-rejection-testimonial-witness.typeorm.entity';
+import { RuralOrHybridRetirementRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-rejection.typeorm.entity';
 import { RuralOrHybridRetirementRejectionTestimonialWitnessCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-testimonial-witness/command/rural-or-hybrid-retirement-rejection-testimonial-witness.command.repository.gateway';
 import { RuralOrHybridRetirementRejectionTestimonialWitnessEntity } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-testimonial-witness/rural-or-hybrid-retirement-rejection-testimonial-witness.entity';
 import { RuralOrHybridRetirementRejectionTestimonialWitnessId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-testimonial-witness/value-object/rural-or-hybrid-retirement-rejection-testimonial-witness-id.value-object';
@@ -13,13 +13,16 @@ import { RuralOrHybridRetirementRejectionTestimonialWitnessId } from '@module/cu
 @Injectable()
 export class RuralOrHybridRetirementRejectionTestimonialWitnessTypeormCommandRepository
   extends BaseTypeormCommandRepository<RuralOrHybridRetirementRejectionTestimonialWitnessTypeormEntity>
-  implements RuralOrHybridRetirementRejectionTestimonialWitnessCommandRepositoryGateway
+  implements
+    RuralOrHybridRetirementRejectionTestimonialWitnessCommandRepositoryGateway
 {
   protected readonly _type =
     RuralOrHybridRetirementRejectionTestimonialWitnessTypeormCommandRepository.name;
 
   public constructor(
-    @InjectRepository(RuralOrHybridRetirementRejectionTestimonialWitnessTypeormEntity)
+    @InjectRepository(
+      RuralOrHybridRetirementRejectionTestimonialWitnessTypeormEntity,
+    )
     repository: Repository<RuralOrHybridRetirementRejectionTestimonialWitnessTypeormEntity>,
   ) {
     super(repository);

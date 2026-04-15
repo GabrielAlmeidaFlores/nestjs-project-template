@@ -35,7 +35,9 @@ export class CreateRuralOrHybridRetirementRejectionWorkPeriodUseCase {
     private readonly ruralOrHybridRetirementRejectionQueryRepositoryGateway: RuralOrHybridRetirementRejectionQueryRepositoryGateway,
     @Inject(RuralOrHybridRetirementRejectionWorkPeriodCommandRepositoryGateway)
     private readonly ruralOrHybridRetirementRejectionWorkPeriodCommandRepositoryGateway: RuralOrHybridRetirementRejectionWorkPeriodCommandRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionWorkPeriodDocumentCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionWorkPeriodDocumentCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionWorkPeriodDocumentCommandRepositoryGateway: RuralOrHybridRetirementRejectionWorkPeriodDocumentCommandRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
@@ -91,7 +93,8 @@ export class CreateRuralOrHybridRetirementRejectionWorkPeriodUseCase {
               encoding: '7bit',
             });
 
-            const document = await this.fileProcessorGateway.uploadFile(fileModel);
+            const document =
+              await this.fileProcessorGateway.uploadFile(fileModel);
 
             return this.ruralOrHybridRetirementRejectionWorkPeriodDocumentCommandRepositoryGateway.createRuralOrHybridRetirementRejectionWorkPeriodDocument(
               new RuralOrHybridRetirementRejectionWorkPeriodDocumentEntity({

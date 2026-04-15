@@ -7,8 +7,8 @@ import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { RuralOrHybridRetirementRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection/query/rural-or-hybrid-retirement-rejection.query.repository.gateway';
 import { RuralOrHybridRetirementRejectionWorkPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-work-period/command/rural-or-hybrid-retirement-rejection-work-period.command.repository.gateway';
-import { RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-work-period-document-analysis/command/rural-or-hybrid-retirement-rejection-work-period-document-analysis.command.repository.gateway';
 import { RuralOrHybridRetirementRejectionWorkPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-work-period-document/command/rural-or-hybrid-retirement-rejection-work-period-document.command.repository.gateway';
+import { RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-work-period-document-analysis/command/rural-or-hybrid-retirement-rejection-work-period-document-analysis.command.repository.gateway';
 import { RuralOrHybridRetirementRejectionWorkPeriodEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-work-period-earnings-history/command/rural-or-hybrid-retirement-rejection-work-period-earnings-history.command.repository.gateway';
 import { RuralOrHybridRetirementRejectionId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id.value-object';
 import { RuralOrHybridRetirementRejectionWorkPeriodEntity } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-work-period/rural-or-hybrid-retirement-rejection-work-period.entity';
@@ -35,11 +35,17 @@ export class UpdateRuralOrHybridRetirementRejectionWorkPeriodUseCase {
     private readonly ruralOrHybridRetirementRejectionQueryRepositoryGateway: RuralOrHybridRetirementRejectionQueryRepositoryGateway,
     @Inject(RuralOrHybridRetirementRejectionWorkPeriodCommandRepositoryGateway)
     private readonly ruralOrHybridRetirementRejectionWorkPeriodCommandRepositoryGateway: RuralOrHybridRetirementRejectionWorkPeriodCommandRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionWorkPeriodDocumentCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionWorkPeriodDocumentCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionWorkPeriodDocumentCommandRepositoryGateway: RuralOrHybridRetirementRejectionWorkPeriodDocumentCommandRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisCommandRepositoryGateway: RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisCommandRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionWorkPeriodEarningsHistoryCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionWorkPeriodEarningsHistoryCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionWorkPeriodEarningsHistoryCommandRepositoryGateway: RuralOrHybridRetirementRejectionWorkPeriodEarningsHistoryCommandRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
@@ -72,7 +78,8 @@ export class UpdateRuralOrHybridRetirementRejectionWorkPeriodUseCase {
     const existingWorkPeriods =
       existingRejection.ruralOrHybridRetirementRejectionWorkPeriod ?? [];
     const existingWorkPeriodDocuments =
-      existingRejection.ruralOrHybridRetirementRejectionWorkPeriodDocument ?? [];
+      existingRejection.ruralOrHybridRetirementRejectionWorkPeriodDocument ??
+      [];
     const existingWorkPeriodDocumentAnalyses =
       existingRejection.ruralOrHybridRetirementRejectionWorkPeriodDocumentAnalysis ??
       [];
@@ -160,7 +167,8 @@ export class UpdateRuralOrHybridRetirementRejectionWorkPeriodUseCase {
               encoding: '7bit',
             });
 
-            const document = await this.fileProcessorGateway.uploadFile(fileModel);
+            const document =
+              await this.fileProcessorGateway.uploadFile(fileModel);
 
             return this.ruralOrHybridRetirementRejectionWorkPeriodDocumentCommandRepositoryGateway.createRuralOrHybridRetirementRejectionWorkPeriodDocument(
               new RuralOrHybridRetirementRejectionWorkPeriodDocumentEntity({
@@ -201,8 +209,7 @@ export class UpdateRuralOrHybridRetirementRejectionWorkPeriodUseCase {
       startDate: existingWorkPeriod.startDate,
       endDate: existingWorkPeriod.endDate,
       category: existingWorkPeriod.category,
-      competenceBelowTheMinimum:
-        existingWorkPeriod.competenceBelowTheMinimum,
+      competenceBelowTheMinimum: existingWorkPeriod.competenceBelowTheMinimum,
       pendencyReason: existingWorkPeriod.pendencyReason,
       periodConsideration: existingWorkPeriod.periodConsideration,
       contributionAverage: existingWorkPeriod.contributionAverage,

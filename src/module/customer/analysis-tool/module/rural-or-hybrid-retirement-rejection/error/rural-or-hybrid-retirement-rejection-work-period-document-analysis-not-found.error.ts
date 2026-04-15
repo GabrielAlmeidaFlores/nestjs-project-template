@@ -5,6 +5,8 @@ export class RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisNotFoundE
     RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisNotFoundError.name;
 
   public constructor() {
-    super('Análise de documento do período de trabalho da análise de indeferimento de aposentadoria rural ou híbrida não encontrada.');
+    super(
+      'Análise de documento do período de trabalho da análise de indeferimento de aposentadoria rural ou híbrida não encontrada.',
+    );
   }
 }

@@ -5,6 +5,8 @@ export class RuralOrHybridRetirementRejectionResultNotFoundError extends NotFoun
     RuralOrHybridRetirementRejectionResultNotFoundError.name;
 
   public constructor() {
-    super('Resultado da análise de indeferimento de aposentadoria rural ou híbrida não encontrado.');
+    super(
+      'Resultado da análise de indeferimento de aposentadoria rural ou híbrida não encontrado.',
+    );
   }
 }

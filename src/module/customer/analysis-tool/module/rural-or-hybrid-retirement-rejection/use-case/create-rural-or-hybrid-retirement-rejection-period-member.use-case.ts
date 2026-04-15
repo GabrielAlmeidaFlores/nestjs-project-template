@@ -35,9 +35,13 @@ export class CreateRuralOrHybridRetirementRejectionPeriodMemberUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(RuralOrHybridRetirementRejectionQueryRepositoryGateway)
     private readonly ruralOrHybridRetirementRejectionQueryRepositoryGateway: RuralOrHybridRetirementRejectionQueryRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway: RuralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway: RuralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
@@ -72,7 +76,8 @@ export class CreateRuralOrHybridRetirementRejectionPeriodMemberUseCase {
       existingRejection.ruralOrHybridRetirementRejectionPeriod ?? []
     ).find(
       (period) =>
-        period.id.toString() === ruralOrHybridRetirementRejectionPeriodId.toString(),
+        period.id.toString() ===
+        ruralOrHybridRetirementRejectionPeriodId.toString(),
     );
 
     if (!existingPeriod) {
@@ -106,7 +111,8 @@ export class CreateRuralOrHybridRetirementRejectionPeriodMemberUseCase {
               encoding: '7bit',
             });
 
-            const document = await this.fileProcessorGateway.uploadFile(fileModel);
+            const document =
+              await this.fileProcessorGateway.uploadFile(fileModel);
 
             return this.ruralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway.createRuralOrHybridRetirementRejectionPeriodMemberDocument(
               new RuralOrHybridRetirementRejectionPeriodMemberDocumentEntity({
@@ -128,11 +134,9 @@ export class CreateRuralOrHybridRetirementRejectionPeriodMemberUseCase {
 
     await transaction.commit();
 
-    return CreateRuralOrHybridRetirementRejectionPeriodMemberResponseDto.build(
-      {
-        ruralOrHybridRetirementRejectionId,
-      },
-    );
+    return CreateRuralOrHybridRetirementRejectionPeriodMemberResponseDto.build({
+      ruralOrHybridRetirementRejectionId,
+    });
   }
 
   private buildMemberEntity(

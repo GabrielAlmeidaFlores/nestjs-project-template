@@ -1,7 +1,7 @@
 import { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
 import { RuralOrHybridRetirementRejectionProductionDestinationEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period/enum/rural-or-hybrid-retirement-rejection-production-destination.enum';
-import { RuralOrHybridRetirementRejectionWorkerTypeEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period/enum/rural-or-hybrid-retirement-rejection-worker-type.enum';
 import { RuralOrHybridRetirementRejectionWorkScheduleEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period/enum/rural-or-hybrid-retirement-rejection-work-schedule.enum';
+import { RuralOrHybridRetirementRejectionWorkerTypeEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period/enum/rural-or-hybrid-retirement-rejection-worker-type.enum';
 import { RuralOrHybridRetirementRejectionPeriodDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period-document/enum/rural-or-hybrid-retirement-rejection-period-document-type.enum';
 import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
 import { RequestDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-boolean-property/request-dto-boolean-property.decorator';
@@ -18,7 +18,9 @@ export class RuralOrHybridRetirementRejectionPeriodDocumentRequestDto extends Ba
   @RequestDtoObjectProperty(() => Base64FileRequestDto)
   public file: Base64FileRequestDto;
 
-  @RequestDtoEnumProperty(RuralOrHybridRetirementRejectionPeriodDocumentTypeEnum)
+  @RequestDtoEnumProperty(
+    RuralOrHybridRetirementRejectionPeriodDocumentTypeEnum,
+  )
   public type: RuralOrHybridRetirementRejectionPeriodDocumentTypeEnum;
 
   protected override readonly _type =
@@ -38,10 +40,9 @@ export class RuralOrHybridRetirementRejectionPeriodItemRequestDto extends BaseBu
   })
   public workerType?: RuralOrHybridRetirementRejectionWorkerTypeEnum;
 
-  @RequestDtoEnumProperty(
-    RuralOrHybridRetirementRejectionWorkScheduleEnum,
-    { required: false },
-  )
+  @RequestDtoEnumProperty(RuralOrHybridRetirementRejectionWorkScheduleEnum, {
+    required: false,
+  })
   public workSchedule?: RuralOrHybridRetirementRejectionWorkScheduleEnum;
 
   @RequestDtoStringProperty({ required: false })

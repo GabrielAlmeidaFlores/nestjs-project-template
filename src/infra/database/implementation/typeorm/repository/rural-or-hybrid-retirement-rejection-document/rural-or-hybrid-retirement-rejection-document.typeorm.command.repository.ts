@@ -28,8 +28,8 @@ export class RuralOrHybridRetirementRejectionDocumentTypeormCommandRepository
   public createRuralOrHybridRetirementRejectionDocument(
     props: RuralOrHybridRetirementRejectionDocumentEntity,
   ): TransactionType {
-    const mappedData = RuralOrHybridRetirementRejectionDocumentTypeormEntity.build(
-      {
+    const mappedData =
+      RuralOrHybridRetirementRejectionDocumentTypeormEntity.build({
         id: props.id.toString(),
         document: props.document,
         type: props.type,
@@ -40,8 +40,7 @@ export class RuralOrHybridRetirementRejectionDocumentTypeormCommandRepository
         createdAt: props.createdAt,
         updatedAt: props.updatedAt,
         deletedAt: props.deletedAt,
-      } as RuralOrHybridRetirementRejectionDocumentTypeormEntity,
-    );
+      } as RuralOrHybridRetirementRejectionDocumentTypeormEntity);
 
     return this.create(mappedData);
   }

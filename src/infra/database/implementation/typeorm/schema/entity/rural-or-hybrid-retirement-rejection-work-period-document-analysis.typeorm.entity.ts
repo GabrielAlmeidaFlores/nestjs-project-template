@@ -3,9 +3,16 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { RuralOrHybridRetirementRejectionWorkPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-rejection-work-period.typeorm.entity';
 
-@Entity({ name: 'rural_or_hybrid_retirement_rejection_work_period_document_analysis' })
+@Entity({
+  name: 'rural_or_hybrid_retirement_rejection_work_period_document_analysis',
+})
 export class RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisTypeormEntity extends BaseTypeormEntity {
-  @Column({ name: 'document_type', type: 'varchar', length: 255, nullable: true })
+  @Column({
+    name: 'document_type',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
   public documentType: string | null;
 
   @Column({ name: 'own_name', type: 'varchar', length: 255, nullable: true })
@@ -19,7 +26,8 @@ export class RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisTypeormEn
 
   @ManyToOne(
     () => RuralOrHybridRetirementRejectionWorkPeriodTypeormEntity,
-    (entity) => entity.ruralOrHybridRetirementRejectionWorkPeriodDocumentAnalysis,
+    (entity) =>
+      entity.ruralOrHybridRetirementRejectionWorkPeriodDocumentAnalysis,
   )
   @JoinColumn({ name: 'rural_or_hybrid_retirement_rejection_work_period_id' })
   public ruralOrHybridRetirementRejectionWorkPeriod?:

@@ -5,6 +5,8 @@ export class RuralOrHybridRetirementRejectionSimplifiedAnalysisNotFoundError ext
     RuralOrHybridRetirementRejectionSimplifiedAnalysisNotFoundError.name;
 
   public constructor() {
-    super('Download da análise simplificada de indeferimento de aposentadoria rural ou híbrida não encontrado.');
+    super(
+      'Download da análise simplificada de indeferimento de aposentadoria rural ou híbrida não encontrado.',
+    );
   }
 }

@@ -1,14 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { RuralOrHybridRetirementRejectionEntity } from '@module/customer/rural-or-hybrid-retirement-rejection-analysis/domain/schema/entity/rural-or-hybrid-retirement-rejection/rural-or-hybrid-retirement-rejection.entity';
-import { RuralOrHybridRetirementRejectionId } from '@module/customer/rural-or-hybrid-retirement-rejection-analysis/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id/rural-or-hybrid-retirement-rejection-id.value-object';
+
+import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { RuralOrHybridRetirementRejectionCommandRepositoryGateway } from '@module/customer/rural-or-hybrid-retirement-rejection-analysis/domain/repository/rural-or-hybrid-retirement-rejection/command/rural-or-hybrid-retirement-rejection.command.repository.gateway';
 import { RuralOrHybridRetirementRejectionQueryRepositoryGateway } from '@module/customer/rural-or-hybrid-retirement-rejection-analysis/domain/repository/rural-or-hybrid-retirement-rejection/query/rural-or-hybrid-retirement-rejection.query.repository.gateway';
+import { RuralOrHybridRetirementRejectionEntity } from '@module/customer/rural-or-hybrid-retirement-rejection-analysis/domain/schema/entity/rural-or-hybrid-retirement-rejection/rural-or-hybrid-retirement-rejection.entity';
+import { RuralOrHybridRetirementRejectionId } from '@module/customer/rural-or-hybrid-retirement-rejection-analysis/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id/rural-or-hybrid-retirement-rejection-id.value-object';
 import { UpdateRuralOrHybridRetirementRejectionResponseDto } from '@module/customer/rural-or-hybrid-retirement-rejection-analysis/dto/response/rural-or-hybrid-retirement-rejection.response.dto';
 import { RuralOrHybridRetirementRejectionNotFoundError } from '@module/customer/rural-or-hybrid-retirement-rejection-analysis/error/rural-or-hybrid-retirement-rejection-not-found.error';
-import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/gateway/base-transaction.repository.gateway';
-import { OrganizationMemberQueryRepositoryGateway } from '@module/generic/organization-member/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
-import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/organization-session-data.model';
 
 interface UpdateRuralOrHybridRetirementRejectionInputModel {
   analysisName?: string;
@@ -54,28 +55,39 @@ export class UpdateRuralOrHybridRetirementRejectionUseCase {
     }
 
     // 2. Load rejection
-    const rejection = await this.queryRepositoryGateway.findOneByIdWithRelations(
-      rejectionId,
-    );
+    const rejection =
+      await this.queryRepositoryGateway.findOneByIdWithRelations(rejectionId);
 
-    if (rejection === null || rejection.organizationId !== organizationSessionData.organizationId) {
+    if (rejection === null) {
       throw new RuralOrHybridRetirementRejectionNotFoundError();
     }
 
     // 3. Create updated entity
     const updatedEntity = new RuralOrHybridRetirementRejectionEntity({
       id: rejection.id,
-      organizationId: rejection.organizationId,
-      organizationMemberId: rejection.organizationMemberId,
-      analysisToolRecordId: rejection.analysisToolRecordId,
       federativeEntity: input.federativeEntity ?? rejection.federativeEntity,
       state: input.state !== undefined ? input.state : rejection.state,
-      municipality: input.municipality !== undefined ? input.municipality : rejection.municipality,
+      municipality:
+        input.municipality !== undefined
+          ? input.municipality
+          : rejection.municipality,
       analysisName: input.analysisName ?? rejection.analysisName,
-      currentPosition: input.currentPosition !== undefined ? input.currentPosition : rejection.currentPosition,
-      activityType: input.activityType !== undefined ? input.activityType : rejection.activityType,
-      publicServiceStartDate: input.publicServiceStartDate !== undefined ? input.publicServiceStartDate : rejection.publicServiceStartDate,
-      careerStartDate: input.careerStartDate !== undefined ? input.careerStartDate : rejection.careerStartDate,
+      currentPosition:
+        input.currentPosition !== undefined
+          ? input.currentPosition
+          : rejection.currentPosition,
+      activityType:
+        input.activityType !== undefined
+          ? input.activityType
+          : rejection.activityType,
+      publicServiceStartDate:
+        input.publicServiceStartDate !== undefined
+          ? input.publicServiceStartDate
+          : rejection.publicServiceStartDate,
+      careerStartDate:
+        input.careerStartDate !== undefined
+          ? input.careerStartDate
+          : rejection.careerStartDate,
       inssBenefitIds: rejection.inssBenefitIds,
       legalProceedingIds: rejection.legalProceedingIds,
       periodIds: rejection.periodIds,

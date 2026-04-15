@@ -23,6 +23,8 @@ import {
   GetRuralOrHybridRetirementRejectionTimeAcceleratorResponseDto,
 } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/response/get-rural-or-hybrid-retirement-rejection.response.dto';
 import { RuralOrHybridRetirementRejectionNotFoundError } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/error/rural-or-hybrid-retirement-rejection-not-found.error';
+import type { RuralOrHybridRetirementRejectionFirstAnalysisInterface } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/model/interface/rural-or-hybrid-retirement-rejection-first-analysis.interface';
+import type { RuralOrHybridRetirementRejectionResultInterface } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/model/interface/rural-or-hybrid-retirement-rejection-result.interface';
 
 @Injectable()
 export class GetRuralOrHybridRetirementRejectionUseCase {
@@ -55,8 +57,12 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
     return GetRuralOrHybridRetirementRejectionResponseDto.build({
       ruralOrHybridRetirementRejectionId:
         result.ruralOrHybridRetirementRejectionId,
-      ...(result.analysisName !== null && { analysisName: result.analysisName }),
-      ...(result.activityType !== null && { activityType: result.activityType }),
+      ...(result.analysisName !== null && {
+        analysisName: result.analysisName,
+      }),
+      ...(result.activityType !== null && {
+        activityType: result.activityType,
+      }),
       ...(result.requestedBenefit !== null && {
         requestedBenefit: result.requestedBenefit,
       }),
@@ -72,8 +78,8 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
       ...(result.ruralOrHybridRetirementRejectionResult !== null && {
         ruralOrHybridRetirementRejectionResult:
           GetRuralOrHybridRetirementRejectionResultResponseDto.build({
-            ...(result.ruralOrHybridRetirementRejectionResult.completeAnalysis !==
-              null && {
+            ...(result.ruralOrHybridRetirementRejectionResult
+              .completeAnalysis !== null && {
               ruralOrHybridRetirementRejectionCompleteAnalysis: JSON.parse(
                 result.ruralOrHybridRetirementRejectionResult.completeAnalysis,
               ) as object,
@@ -81,7 +87,8 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
             ...(result.ruralOrHybridRetirementRejectionResult
               .simplifiedAnalysis !== null && {
               ruralOrHybridRetirementRejectionSimplifiedAnalysis:
-                result.ruralOrHybridRetirementRejectionResult.simplifiedAnalysis,
+                result.ruralOrHybridRetirementRejectionResult
+                  .simplifiedAnalysis,
             }),
             ...(result.ruralOrHybridRetirementRejectionResult.firstAnalysis !==
               null && {
@@ -95,7 +102,7 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
                 result.ruralOrHybridRetirementRejectionResult
                   .completeAnalysisDownload,
             }),
-          }),
+                  ruralOrHybridRetirementRejectionId: result.ruralOrHybridRetirementRejectionId,
       }),
       ...(result.ruralOrHybridRetirementRejectionInssBenefit !== null && {
         ruralOrHybridRetirementRejectionInssBenefit:
@@ -108,9 +115,11 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
       ...(result.ruralOrHybridRetirementRejectionLegalProceeding !== null && {
         ruralOrHybridRetirementRejectionLegalProceeding:
           result.ruralOrHybridRetirementRejectionLegalProceeding.map((p) =>
-            GetRuralOrHybridRetirementRejectionLegalProceedingResponseDto.build({
-              legalProceedingNumber: p.legalProceedingNumber,
-            }),
+            GetRuralOrHybridRetirementRejectionLegalProceedingResponseDto.build(
+              {
+                legalProceedingNumber: p.legalProceedingNumber,
+              },
+            ),
           ),
       }),
       ...(result.ruralOrHybridRetirementRejectionPeriod !== null && {
@@ -130,7 +139,8 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
               (d) =>
                 d.ruralOrHybridRetirementRejectionPeriodId.toString() ===
                 p.id.toString(),
-            );
+                              result.ruralOrHybridRetirementRejectionResult.firstAnalysis,
+                            ) as RuralOrHybridRetirementRejectionFirstAnalysisInterface,
 
             return GetRuralOrHybridRetirementRejectionPeriodResponseDto.build({
               ...(p.startDate !== null && { startDate: p.startDate }),
@@ -141,25 +151,36 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
               ...(p.propertyCategory !== null && {
                 propertyCategory: p.propertyCategory,
               }),
-              ...(p.propertyOwner !== null && { propertyOwner: p.propertyOwner }),
+              ...(p.propertyOwner !== null && {
+                propertyOwner: p.propertyOwner,
+              }),
               ...(p.propertyCep !== null && { propertyCep: p.propertyCep }),
-              ...(p.propertyState !== null && { propertyState: p.propertyState }),
+              ...(p.propertyState !== null && {
+                propertyState: p.propertyState,
+              }),
               ...(p.propertyCity !== null && { propertyCity: p.propertyCity }),
               ...(p.propertyNeighbourhood !== null && {
                 propertyNeighbourhood: p.propertyNeighbourhood,
               }),
-              ...(p.propertyStreet !== null && { propertyStreet: p.propertyStreet }),
-              ...(p.propertyNumber !== null && { propertyNumber: p.propertyNumber }),
+              ...(p.propertyStreet !== null && {
+                propertyStreet: p.propertyStreet,
+              }),
+              ...(p.propertyNumber !== null && {
+                propertyNumber: p.propertyNumber,
+              }),
               ...(p.productionDestination !== null && {
                 productionDestination: p.productionDestination,
               }),
               ...(p.employee !== null && { employee: p.employee }),
-              ...(p.employeeAmount !== null && { employeeAmount: p.employeeAmount }),
+              ...(p.employeeAmount !== null && {
+                employeeAmount: p.employeeAmount,
+              }),
               ...(p.agriculturalMachinery !== null && {
                 agriculturalMachinery: p.agriculturalMachinery,
               }),
               ...(p.agriculturalMachineryDescription !== null && {
-                agriculturalMachineryDescription: p.agriculturalMachineryDescription,
+                agriculturalMachineryDescription:
+                  p.agriculturalMachineryDescription,
               }),
               ...(p.farmVehicles !== null && { farmVehicles: p.farmVehicles }),
               ...(p.farmVehiclesDescription !== null && {
@@ -235,7 +256,8 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
             });
           }),
       }),
-      ...(result.ruralOrHybridRetirementRejectionTestimonialWitness !== null && {
+      ...(result.ruralOrHybridRetirementRejectionTestimonialWitness !==
+        null && {
         ruralOrHybridRetirementRejectionTestimonialWitness:
           result.ruralOrHybridRetirementRejectionTestimonialWitness.map((w) => {
             const witnessDocuments = (
@@ -389,21 +411,25 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
       ...(result.ruralOrHybridRetirementRejectionTimeAccelerator !== null && {
         ruralOrHybridRetirementRejectionTimeAccelerator:
           result.ruralOrHybridRetirementRejectionTimeAccelerator.map((ta) =>
-            GetRuralOrHybridRetirementRejectionTimeAcceleratorResponseDto.build({
-              ...(ta.timeType !== null && { timeType: ta.timeType }),
-              ...(ta.institution !== null && { institution: ta.institution }),
-              ...(ta.recognitionInss !== null && {
-                recognitionInss: ta.recognitionInss,
-              }),
-              ...(ta.affectsQualifyingPeriod !== null && {
-                affectsQualifyingPeriod: ta.affectsQualifyingPeriod,
-              }),
-              ...(ta.technicalNote !== null && { technicalNote: ta.technicalNote }),
-              ...(ta.startDate !== null && { startDate: ta.startDate }),
-              ...(ta.endDate !== null && { endDate: ta.endDate }),
-              ...(ta.gracePeriod !== null && { gracePeriod: ta.gracePeriod }),
-              ...(ta.viability !== null && { viability: ta.viability }),
-            }),
+            GetRuralOrHybridRetirementRejectionTimeAcceleratorResponseDto.build(
+              {
+                ...(ta.timeType !== null && { timeType: ta.timeType }),
+                ...(ta.institution !== null && { institution: ta.institution }),
+                ...(ta.recognitionInss !== null && {
+                  recognitionInss: ta.recognitionInss,
+                }),
+                ...(ta.affectsQualifyingPeriod !== null && {
+                  affectsQualifyingPeriod: ta.affectsQualifyingPeriod,
+                }),
+                ...(ta.technicalNote !== null && {
+                  technicalNote: ta.technicalNote,
+                }),
+                ...(ta.startDate !== null && { startDate: ta.startDate }),
+                ...(ta.endDate !== null && { endDate: ta.endDate }),
+                ...(ta.gracePeriod !== null && { gracePeriod: ta.gracePeriod }),
+                ...(ta.viability !== null && { viability: ta.viability }),
+              },
+            ),
           ),
       }),
     });

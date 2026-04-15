@@ -37,11 +37,17 @@ export class UpdateRuralOrHybridRetirementRejectionPeriodUseCase {
     private readonly ruralOrHybridRetirementRejectionQueryRepositoryGateway: RuralOrHybridRetirementRejectionQueryRepositoryGateway,
     @Inject(RuralOrHybridRetirementRejectionPeriodCommandRepositoryGateway)
     private readonly ruralOrHybridRetirementRejectionPeriodCommandRepositoryGateway: RuralOrHybridRetirementRejectionPeriodCommandRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionPeriodDocumentCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionPeriodDocumentCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionPeriodDocumentCommandRepositoryGateway: RuralOrHybridRetirementRejectionPeriodDocumentCommandRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway: RuralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway: RuralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
@@ -78,7 +84,8 @@ export class UpdateRuralOrHybridRetirementRejectionPeriodUseCase {
     const existingPeriodMembers =
       existingRejection.ruralOrHybridRetirementRejectionPeriodMember ?? [];
     const existingPeriodMemberDocuments =
-      existingRejection.ruralOrHybridRetirementRejectionPeriodMemberDocument ?? [];
+      existingRejection.ruralOrHybridRetirementRejectionPeriodMemberDocument ??
+      [];
     const transactions: TransactionType[] = [];
 
     for (const existingPeriod of existingPeriods) {
@@ -160,7 +167,8 @@ export class UpdateRuralOrHybridRetirementRejectionPeriodUseCase {
               encoding: '7bit',
             });
 
-            const document = await this.fileProcessorGateway.uploadFile(fileModel);
+            const document =
+              await this.fileProcessorGateway.uploadFile(fileModel);
 
             return this.ruralOrHybridRetirementRejectionPeriodDocumentCommandRepositoryGateway.createRuralOrHybridRetirementRejectionPeriodDocument(
               new RuralOrHybridRetirementRejectionPeriodDocumentEntity({

@@ -24,9 +24,13 @@ export class DeleteRuralOrHybridRetirementRejectionTestimonialWitnessUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(RuralOrHybridRetirementRejectionQueryRepositoryGateway)
     private readonly ruralOrHybridRetirementRejectionQueryRepositoryGateway: RuralOrHybridRetirementRejectionQueryRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionTestimonialWitnessCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionTestimonialWitnessCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionTestimonialWitnessCommandRepositoryGateway: RuralOrHybridRetirementRejectionTestimonialWitnessCommandRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionTestimonialWitnessDocumentCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionTestimonialWitnessDocumentCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionTestimonialWitnessDocumentCommandRepositoryGateway: RuralOrHybridRetirementRejectionTestimonialWitnessDocumentCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,

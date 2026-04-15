@@ -5,6 +5,8 @@ export class InvalidRuralOrHybridRetirementRejectionResultJsonError extends Inva
     InvalidRuralOrHybridRetirementRejectionResultJsonError.name;
 
   public constructor() {
-    super('O JSON do resultado da análise de indeferimento de aposentadoria rural ou híbrida é inválido.');
+    super(
+      'O JSON do resultado da análise de indeferimento de aposentadoria rural ou híbrida é inválido.',
+    );
   }
 }

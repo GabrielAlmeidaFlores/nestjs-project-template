@@ -5,8 +5,8 @@ import { TransactionType } from '@core/domain/repository/base/transaction/type/t
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { RuralOrHybridRetirementRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection/query/rural-or-hybrid-retirement-rejection.query.repository.gateway';
-import { RuralOrHybridRetirementRejectionId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id.value-object';
 import { RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-work-period-document-analysis/command/rural-or-hybrid-retirement-rejection-work-period-document-analysis.command.repository.gateway';
+import { RuralOrHybridRetirementRejectionId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id.value-object';
 import { RuralOrHybridRetirementRejectionWorkPeriodId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-work-period/value-object/rural-or-hybrid-retirement-rejection-work-period-id.value-object';
 import { RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisEntity } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-work-period-document-analysis/rural-or-hybrid-retirement-rejection-work-period-document-analysis.entity';
 import { RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-work-period-document-analysis/value-object/rural-or-hybrid-retirement-rejection-work-period-document-analysis-id.value-object';
@@ -30,7 +30,9 @@ export class CreateRuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisUse
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(RuralOrHybridRetirementRejectionQueryRepositoryGateway)
     private readonly ruralOrHybridRetirementRejectionQueryRepositoryGateway: RuralOrHybridRetirementRejectionQueryRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisCommandRepositoryGateway: RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
@@ -63,7 +65,8 @@ export class CreateRuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisUse
       existingRejection.ruralOrHybridRetirementRejectionWorkPeriod ?? []
     ).find(
       (workPeriod) =>
-        workPeriod.id.toString() === ruralOrHybridRetirementRejectionWorkPeriodId.toString(),
+        workPeriod.id.toString() ===
+        ruralOrHybridRetirementRejectionWorkPeriodId.toString(),
     );
 
     if (!existingWorkPeriod) {
@@ -98,13 +101,15 @@ export class CreateRuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisUse
     ruralOrHybridRetirementRejectionWorkPeriodId: RuralOrHybridRetirementRejectionWorkPeriodId,
     documentAnalysisDto: RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisItemRequestDto,
   ): RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisEntity {
-    return new RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisEntity({
-      id: ruralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisId,
-      documentType: documentAnalysisDto.documentType ?? null,
-      ownName: documentAnalysisDto.ownName ?? null,
-      documentYear: documentAnalysisDto.documentYear ?? null,
-      technicalNote: documentAnalysisDto.technicalNote ?? null,
-      ruralOrHybridRetirementRejectionWorkPeriodId,
-    });
+    return new RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisEntity(
+      {
+        id: ruralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisId,
+        documentType: documentAnalysisDto.documentType ?? null,
+        ownName: documentAnalysisDto.ownName ?? null,
+        documentYear: documentAnalysisDto.documentYear ?? null,
+        technicalNote: documentAnalysisDto.technicalNote ?? null,
+        ruralOrHybridRetirementRejectionWorkPeriodId,
+      },
+    );
   }
 }
