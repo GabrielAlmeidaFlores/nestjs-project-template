@@ -329,4 +329,9 @@ export abstract class AnalysisProcessorGateway {
     cnisAnalysisJson: string,
     files: Buffer[],
   ): Promise<string | null>;
+
+  public abstract getGeneralUrbanRetirementDenialSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
 }

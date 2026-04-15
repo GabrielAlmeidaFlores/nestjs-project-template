@@ -1,5 +1,14 @@
-import { Body, HttpStatus, Param, RequestMethod } from '@nestjs/common';
+import {
+  Body,
+  HttpStatus,
+  Param,
+  ParseEnumPipe,
+  Query,
+  RequestMethod,
+  StreamableFile,
+} from '@nestjs/common';
 
+import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { GeneralUrbanRetirementDenialId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/value-object/general-urban-retirement-denial-id/general-urban-retirement-denial-id.value-object';
 import { GeneralUrbanRetirementDenialTimeAcceleratorId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-time-accelerator/value-object/general-urban-retirement-denial-time-accelerator-id/general-urban-retirement-denial-time-accelerator-id.value-object';
 import { AnalyzeGeneralUrbanRetirementDenialPppRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/analyze-general-urban-retirement-denial-ppp.request.dto';
@@ -31,6 +40,8 @@ import { CreateGeneralUrbanRetirementDenialInssDecisionAnalysisUseCase } from '@
 import { CreateGeneralUrbanRetirementDenialResultUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/create-general-urban-retirement-denial-result.use-case';
 import { CreateGeneralUrbanRetirementDenialUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/create-general-urban-retirement-denial.use-case';
 import { DeleteGeneralUrbanRetirementDenialTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/delete-general-urban-retirement-denial-time-accelerator.use-case';
+import { DownloadGeneralUrbanRetirementDenialCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/download-general-urban-retirement-denial-complete-analysis.use-case';
+import { DownloadGeneralUrbanRetirementDenialSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/download-general-urban-retirement-denial-simplified-analysis.use-case';
 import { GetGeneralUrbanRetirementDenialUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/get-general-urban-retirement-denial.use-case';
 import { SaveGeneralUrbanRetirementDenialPeriodsUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/save-general-urban-retirement-denial-periods.use-case';
 import { UpdateGeneralUrbanRetirementDenialTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/update-general-urban-retirement-denial-time-accelerator.use-case';
@@ -65,6 +76,8 @@ export class GeneralUrbanRetirementDenialController {
     private readonly analyzeGeneralUrbanRetirementDenialPppUseCase: AnalyzeGeneralUrbanRetirementDenialPppUseCase,
     private readonly compareGeneralUrbanRetirementDenialCnisCtpsUseCase: CompareGeneralUrbanRetirementDenialCnisCtpsUseCase,
     private readonly createGeneralUrbanRetirementDenialResultUseCase: CreateGeneralUrbanRetirementDenialResultUseCase,
+    private readonly downloadGeneralUrbanRetirementDenialCompleteAnalysisUseCase: DownloadGeneralUrbanRetirementDenialCompleteAnalysisUseCase,
+    private readonly downloadGeneralUrbanRetirementDenialSimplifiedAnalysisUseCase: DownloadGeneralUrbanRetirementDenialSimplifiedAnalysisUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -467,6 +480,74 @@ export class GeneralUrbanRetirementDenialController {
       sessionData,
       organizationSessionData,
       generalUrbanRetirementDenialId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Baixar análise completa de indeferimento de aposentadoria urbana comum',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':id/download/complete-version',
+      method: RequestMethod.GET,
+    },
+    tag: ['indeferimento-aposentadoria-urbana-geral'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Análise completa disponibilizada para download com sucesso.',
+      type: Buffer,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async downloadCompleteAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('id', new ParseValueObjectPipe(GeneralUrbanRetirementDenialId))
+    generalUrbanRetirementDenialId: GeneralUrbanRetirementDenialId,
+    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
+    format: ExportDocumentFormatEnum,
+  ): Promise<StreamableFile> {
+    return await this.downloadGeneralUrbanRetirementDenialCompleteAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      generalUrbanRetirementDenialId,
+      format,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Baixar análise simplificada de indeferimento de aposentadoria urbana comum',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':id/download/simplified-version',
+      method: RequestMethod.GET,
+    },
+    tag: ['indeferimento-aposentadoria-urbana-geral'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Análise simplificada disponibilizada para download com sucesso.',
+      type: Buffer,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async downloadSimplifiedAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('id', new ParseValueObjectPipe(GeneralUrbanRetirementDenialId))
+    generalUrbanRetirementDenialId: GeneralUrbanRetirementDenialId,
+    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
+    format: ExportDocumentFormatEnum,
+  ): Promise<StreamableFile> {
+    return await this.downloadGeneralUrbanRetirementDenialSimplifiedAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      generalUrbanRetirementDenialId,
+      format,
     );
   }
 }

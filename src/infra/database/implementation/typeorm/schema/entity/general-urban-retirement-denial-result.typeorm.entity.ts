@@ -21,6 +21,9 @@ export class GeneralUrbanRetirementDenialResultTypeormEntity extends BaseTypeorm
   })
   public completeAnalysisDownload: string | null;
 
+  @Column({ name: 'simplified_analysis', type: 'longtext', nullable: true })
+  public simplifiedAnalysis: string | null;
+
   @OneToOne(
     () => GeneralUrbanRetirementDenialTypeormEntity,
     (entity) => entity.generalUrbanRetirementDenialResult,

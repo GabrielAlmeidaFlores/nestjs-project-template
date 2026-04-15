@@ -6,4 +6,5 @@ export interface GeneralUrbanRetirementDenialResultEntityPropsInterface extends 
   firstAnalysis?: string | null;
   completeAnalysis?: string | null;
   completeAnalysisDownload?: string | null;
+  simplifiedAnalysis?: string | null;
 }

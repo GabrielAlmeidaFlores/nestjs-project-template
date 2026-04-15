@@ -117,6 +117,7 @@ export class GetGeneralUrbanRetirementDenialWithRelationsQueryResultAutoMapperPr
       firstAnalysis: source.firstAnalysis,
       completeAnalysis: source.completeAnalysis,
       completeAnalysisDownload: source.completeAnalysisDownload,
+      simplifiedAnalysis: source.simplifiedAnalysis,
       createdAt: source.createdAt,
       updatedAt: source.updatedAt,
       deletedAt: source.deletedAt,
