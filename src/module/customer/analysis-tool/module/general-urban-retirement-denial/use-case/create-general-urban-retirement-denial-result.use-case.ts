@@ -209,7 +209,6 @@ export class CreateGeneralUrbanRetirementDenialResultUseCase {
           ),
       ),
       analysisResult: parsedResult.analysisResult,
-      completeAnalysisDownload: parsedResult.completeAnalysisDownload,
     });
   }
 

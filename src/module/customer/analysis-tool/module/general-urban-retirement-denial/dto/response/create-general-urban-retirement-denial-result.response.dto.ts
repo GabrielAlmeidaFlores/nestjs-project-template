@@ -70,9 +70,6 @@ export class CreateGeneralUrbanRetirementDenialResultResponseDto extends BaseBui
   @ResponseDtoStringProperty()
   public analysisResult: string;
 
-  @ResponseDtoStringProperty()
-  public completeAnalysisDownload: string;
-
   protected override readonly _type =
     CreateGeneralUrbanRetirementDenialResultResponseDto.name;
 }
