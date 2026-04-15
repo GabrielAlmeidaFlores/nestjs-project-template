@@ -15,5 +15,6 @@ export class BpcElderlyAnalysisResultTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({ name: 'bpc_elderly_analysis_id' })
   public bpcElderlyAnalysis?: BpcElderlyAnalysisTypeormEntity | undefined;
 
-  protected override readonly _type = BpcElderlyAnalysisResultTypeormEntity.name;
+  protected override readonly _type =
+    BpcElderlyAnalysisResultTypeormEntity.name;
 }

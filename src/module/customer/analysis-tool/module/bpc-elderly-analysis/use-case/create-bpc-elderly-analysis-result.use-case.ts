@@ -20,7 +20,6 @@ import { BpcElderlyAnalysisId } from '@module/customer/analysis-tool/module/bpc-
 import { BpcElderlyAnalysisResultEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-result/bpc-elderly-analysis-result.entity';
 import { CreateBpcElderlyAnalysisResultResponseDto } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/dto/response/create-bpc-elderly-analysis-result.response.dto';
 import { BpcElderlyAnalysisNotFoundError } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/error/bpc-elderly-analysis-not-found.error';
-import { BpcElderlyAnalysisResultAlreadyExistsError } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/error/bpc-elderly-analysis-result-already-exists.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
@@ -98,10 +97,6 @@ export class CreateBpcElderlyAnalysisResultUseCase {
 
     if (bpcElderlyAnalysisQueryResult === null) {
       throw new BpcElderlyAnalysisNotFoundError();
-    }
-
-    if (bpcElderlyAnalysisQueryResult.bpcElderlyAnalysisResult !== null) {
-      throw new BpcElderlyAnalysisResultAlreadyExistsError();
     }
 
     const clientDataBuffer = Buffer.from(

@@ -53,6 +53,8 @@ export class BpcElderlyAnalysisTypeormQueryRepository
             bpcElderlyAnalysisFamilyMemberDocument: true,
           },
           bpcElderlyAnalysisDocument: true,
+          bpcElderlyAnalysisInssBenefit: true,
+          bpcElderlyAnalysisLegalProceeding: true,
           bpcElderlyAnalysisResult: true,
           analysisToolRecord: {
             analysisToolClient: {

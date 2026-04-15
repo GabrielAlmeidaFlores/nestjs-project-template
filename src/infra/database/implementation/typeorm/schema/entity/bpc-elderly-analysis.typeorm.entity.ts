@@ -11,6 +11,8 @@ import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { BpcElderlyAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-document.typeorm.entity';
 import { BpcElderlyAnalysisFamilyMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-family-member.typeorm.entity';
+import { BpcElderlyAnalysisInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-inss-benefit.typeorm.entity';
+import { BpcElderlyAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-legal-proceeding.typeorm.entity';
 import { BpcElderlyAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-result.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 
@@ -42,6 +44,22 @@ export class BpcElderlyAnalysisTypeormEntity extends BaseTypeormEntity {
   )
   public bpcElderlyAnalysisDocument?:
     | BpcElderlyAnalysisDocumentTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => BpcElderlyAnalysisInssBenefitTypeormEntity,
+    (entity) => entity.bpcElderlyAnalysis,
+  )
+  public bpcElderlyAnalysisInssBenefit?:
+    | BpcElderlyAnalysisInssBenefitTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => BpcElderlyAnalysisLegalProceedingTypeormEntity,
+    (entity) => entity.bpcElderlyAnalysis,
+  )
+  public bpcElderlyAnalysisLegalProceeding?:
+    | BpcElderlyAnalysisLegalProceedingTypeormEntity[]
     | undefined;
 
   @OneToOne(

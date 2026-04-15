@@ -7,6 +7,8 @@ import type { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/do
 import type { BpcElderlyAnalysisEntityPropsInterface } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/bpc-elderly-analysis.entity.props.interface';
 import type { BpcElderlyAnalysisDocumentEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-document/bpc-elderly-analysis-document.entity';
 import type { BpcElderlyAnalysisFamilyMemberEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-family-member/bpc-elderly-analysis-family-member.entity';
+import type { BpcElderlyAnalysisInssBenefitEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-inss-benefit/bpc-elderly-analysis-inss-benefit.entity';
+import type { BpcElderlyAnalysisLegalProceedingEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-legal-proceeding/bpc-elderly-analysis-legal-proceeding.entity';
 import type { BpcElderlyAnalysisResultEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-result/bpc-elderly-analysis-result.entity';
 
 export class BpcElderlyAnalysisEntity extends BaseEntity<BpcElderlyAnalysisId> {
@@ -21,6 +23,12 @@ export class BpcElderlyAnalysisEntity extends BaseEntity<BpcElderlyAnalysisId> {
 
   @Description('Documentos associados à análise de BPC ao Idoso.')
   public readonly bpcElderlyAnalysisDocument: BpcElderlyAnalysisDocumentEntity[];
+
+  @Description('Benefícios INSS associados à análise de BPC ao Idoso.')
+  public readonly bpcElderlyAnalysisInssBenefit: BpcElderlyAnalysisInssBenefitEntity[];
+
+  @Description('Processos judiciais associados à análise de BPC ao Idoso.')
+  public readonly bpcElderlyAnalysisLegalProceeding: BpcElderlyAnalysisLegalProceedingEntity[];
 
   @Description('Registro da ferramenta de análise associado.')
   public readonly analysisToolRecord: AnalysisToolRecordEntity | null;
@@ -41,6 +49,10 @@ export class BpcElderlyAnalysisEntity extends BaseEntity<BpcElderlyAnalysisId> {
     this.bpcElderlyAnalysisFamilyMember =
       props.bpcElderlyAnalysisFamilyMember ?? [];
     this.bpcElderlyAnalysisDocument = props.bpcElderlyAnalysisDocument ?? [];
+    this.bpcElderlyAnalysisInssBenefit =
+      props.bpcElderlyAnalysisInssBenefit ?? [];
+    this.bpcElderlyAnalysisLegalProceeding =
+      props.bpcElderlyAnalysisLegalProceeding ?? [];
     this.analysisToolRecord = props.analysisToolRecord ?? null;
     this.createdBy = props.createdBy;
     this.updatedBy = props.updatedBy;

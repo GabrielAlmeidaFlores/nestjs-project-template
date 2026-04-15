@@ -47,7 +47,8 @@ export class GetBpcElderlyAnalysisClientResponseDto extends BaseBuildableDtoObje
   @ResponseDtoEnumProperty(AnalysisToolClientTypeEnum, { required: false })
   public clientType?: AnalysisToolClientTypeEnum;
 
-  protected override readonly _type = GetBpcElderlyAnalysisClientResponseDto.name;
+  protected override readonly _type =
+    GetBpcElderlyAnalysisClientResponseDto.name;
 }
 
 @ResponseDto()
@@ -61,7 +62,8 @@ export class GetBpcElderlyAnalysisResultResponseDto extends BaseBuildableDtoObje
   @ResponseDtoDateProperty()
   public updatedAt: Date;
 
-  protected override readonly _type = GetBpcElderlyAnalysisResultResponseDto.name;
+  protected override readonly _type =
+    GetBpcElderlyAnalysisResultResponseDto.name;
 }
 
 @ResponseDto()
@@ -90,7 +92,8 @@ export class GetBpcElderlyAnalysisDocumentResponseDto extends BaseBuildableDtoOb
   @ResponseDtoEnumProperty(BpcElderlyAnalysisDocumentTypeEnum)
   public type: BpcElderlyAnalysisDocumentTypeEnum;
 
-  protected override readonly _type = GetBpcElderlyAnalysisDocumentResponseDto.name;
+  protected override readonly _type =
+    GetBpcElderlyAnalysisDocumentResponseDto.name;
 }
 
 @ResponseDto()
@@ -151,13 +154,10 @@ export class GetBpcElderlyAnalysisResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(BpcElderlyAnalysisId)
   public id: BpcElderlyAnalysisId;
 
-  @ResponseDtoObjectProperty(
-    () => GetBpcElderlyAnalysisDocumentResponseDto,
-    {
-      required: false,
-      isArray: true,
-    },
-  )
+  @ResponseDtoObjectProperty(() => GetBpcElderlyAnalysisDocumentResponseDto, {
+    required: false,
+    isArray: true,
+  })
   public documents?: GetBpcElderlyAnalysisDocumentResponseDto[];
 
   @ResponseDtoObjectProperty(
