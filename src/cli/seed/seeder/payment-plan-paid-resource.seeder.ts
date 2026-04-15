@@ -1052,6 +1052,142 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Gera o documento de análise simplificada da pensão por morte, com linguagem acessível para apresentação ao cliente.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a2b3c4d5-e6f7-4890-b1c2-d3e4f5a6b7c1'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL_COMPLETE_ANALYSIS,
+      creditCost: 8,
+      title: 'INDEFERIMENTO APOSENTADORIA URBANA COMUM - ANÁLISE COMPLETA',
+      description:
+        'Análise completa de indeferimento de aposentadoria urbana comum com IA. Consolida o histórico contributivo, os períodos analisados, os aceleradores de tempo e a decisão do INSS, gerando parecer técnico detalhado com enquadramento nas regras aplicáveis, fundamentação jurídica, estratégia processual recomendada e perspectivas do caso.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a2b3c4d5-e6f7-4890-b1c2-d3e4f5a6b7c2'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL_SIMPLIFIED_ANALYSIS,
+      creditCost: 3,
+      title: 'INDEFERIMENTO APOSENTADORIA URBANA COMUM - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada de indeferimento de aposentadoria urbana comum com IA. Resume os principais achados da análise completa, indica a viabilidade geral do caso, os pontos críticos e os próximos passos recomendados, em linguagem acessível para apresentação ao cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a2b3c4d5-e6f7-4890-b1c2-d3e4f5a6b7c3'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL_INSS_DECISION_ANALYSIS,
+      creditCost: 5,
+      title:
+        'INDEFERIMENTO APOSENTADORIA URBANA COMUM - ANÁLISE DA DECISÃO DO INSS',
+      description:
+        'Análise da carta de indeferimento e documentos do processo administrativo do INSS com IA. Examina o fundamento da negativa, identifica erros de cálculo ou enquadramento legal, aponta eventuais irregularidades processuais e orienta sobre a melhor estratégia de impugnação — administrativa ou judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a2b3c4d5-e6f7-4890-b1c2-d3e4f5a6b7c4'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL_FIRST_ANALYSIS,
+      creditCost: 5,
+      title: 'INDEFERIMENTO APOSENTADORIA URBANA COMUM - PRIMEIRO STEP',
+      description:
+        'Primeira análise de indeferimento de aposentadoria urbana comum com IA, combinando os dados estruturados do caso com a leitura e interpretação do CNIS. Gera parecer inicial técnico sobre tempo de contribuição, carência, períodos relevantes, pontos de atenção e viabilidade preliminar de reversão do indeferimento.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a2b3c4d5-e6f7-4890-b1c2-d3e4f5a6b7c5'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL_RURAL_TIME_ANALYSIS,
+      creditCost: 4,
+      title:
+        'INDEFERIMENTO APOSENTADORIA URBANA COMUM - ANÁLISE DE TEMPO RURAL',
+      description:
+        'Análise de períodos de atividade rural com IA para reconhecimento previdenciário no contexto de indeferimento de aposentadoria urbana comum. Examina documentos comprobatórios, valida início de prova material, calcula tempo rural computável e orienta sobre reconhecimento administrativo ou judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a2b3c4d5-e6f7-4890-b1c2-d3e4f5a6b7c6'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL_MILITARY_SERVICE_ANALYSIS,
+      creditCost: 4,
+      title:
+        'INDEFERIMENTO APOSENTADORIA URBANA COMUM - ANÁLISE DE SERVIÇO MILITAR',
+      description:
+        'Análise de tempo de serviço militar obrigatório com IA para cômputo previdenciário no contexto de indeferimento de aposentadoria urbana comum. Valida certificados e certidões, calcula o período computável, verifica sobreposição com outros vínculos e orienta sobre averbação.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a2b3c4d5-e6f7-4890-b1c2-d3e4f5a6b7c7'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL_PUBLIC_SERVICE_ANALYSIS,
+      creditCost: 5,
+      title:
+        'INDEFERIMENTO APOSENTADORIA URBANA COMUM - ANÁLISE DE SERVIÇO PÚBLICO',
+      description:
+        'Análise de tempo de serviço público com IA para averbação no RGPS no contexto de indeferimento de aposentadoria urbana comum. Examina CTC, valida períodos computáveis, identifica riscos de contagem em duplicidade e orienta sobre averbação administrativa ou judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a2b3c4d5-e6f7-4890-b1c2-d3e4f5a6b7c8'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL_CTPS_OUTSIDE_CNIS_ANALYSIS,
+      creditCost: 4,
+      title:
+        'INDEFERIMENTO APOSENTADORIA URBANA COMUM - ANÁLISE DE CTPS FORA DO CNIS',
+      description:
+        'Análise de vínculos anotados na CTPS mas ausentes no CNIS com IA para indeferimento de aposentadoria urbana comum. Identifica períodos omissos, avalia a força probatória dos documentos e orienta sobre regularização no INSS.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a2b3c4d5-e6f7-4890-b1c2-d3e4f5a6b7c9'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL_STUDENT_APPRENTICE_ANALYSIS,
+      creditCost: 3,
+      title:
+        'INDEFERIMENTO APOSENTADORIA URBANA COMUM - ANÁLISE DE ESTUDANTE APRENDIZ',
+      description:
+        'Análise de tempo como estudante aprendiz com IA para reconhecimento previdenciário no contexto de indeferimento de aposentadoria urbana comum. Valida documentos escolares, contraprestação e elementos probatórios necessários ao cômputo do período.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a2b3c4d5-e6f7-4890-b1c2-d3e4f5a6b7ca'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL_WORK_ABROAD_ANALYSIS,
+      creditCost: 5,
+      title:
+        'INDEFERIMENTO APOSENTADORIA URBANA COMUM - ANÁLISE DE TRABALHO NO EXTERIOR',
+      description:
+        'Análise de períodos de trabalho no exterior com IA para reconhecimento no RGPS no contexto de indeferimento de aposentadoria urbana comum. Examina acordos internacionais, valida documentação estrangeira e orienta sobre totalização e formalidades documentais.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a2b3c4d5-e6f7-4890-b1c2-d3e4f5a6b7cb'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL_INFORMAL_WORK_ANALYSIS,
+      creditCost: 4,
+      title:
+        'INDEFERIMENTO APOSENTADORIA URBANA COMUM - ANÁLISE DE TRABALHO INFORMAL',
+      description:
+        'Análise de períodos de trabalho informal com IA no contexto de indeferimento de aposentadoria urbana comum. Examina provas da atividade, recolhimentos existentes, necessidade de indenização e impacto do período no tempo de contribuição e na carência.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a2b3c4d5-e6f7-4890-b1c2-d3e4f5a6b7cc'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL_LABOR_COURT_DECISION_ANALYSIS,
+      creditCost: 6,
+      title:
+        'INDEFERIMENTO APOSENTADORIA URBANA COMUM - ANÁLISE DE DECISÃO TRABALHISTA',
+      description:
+        'Análise de sentenças e acordos trabalhistas com IA para reconhecimento previdenciário no contexto de indeferimento de aposentadoria urbana comum. Examina robustez da decisão, períodos reconhecidos, remunerações e a melhor estratégia de aproveitamento perante o INSS.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a2b3c4d5-e6f7-4890-b1c2-d3e4f5a6b7cd'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL_PPP_ANALYSIS,
+      creditCost: 4,
+      title: 'INDEFERIMENTO APOSENTADORIA URBANA COMUM - ANÁLISE DE PPP',
+      description:
+        'Análise do Perfil Profissiográfico Previdenciário (PPP) com IA para identificação e estruturação de períodos contributivos no contexto de indeferimento de aposentadoria urbana comum. Extrai e organiza os dados do PPP em períodos prontos para inserção na análise, com categoria, média de contribuição e origem do vínculo.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a2b3c4d5-e6f7-4890-b1c2-d3e4f5a6b7ce'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL_COMPARE_CNIS_CTPS,
+      creditCost: 4,
+      title:
+        'INDEFERIMENTO APOSENTADORIA URBANA COMUM - COMPARAÇÃO CNIS E CTPS',
+      description:
+        'Comparação inteligente entre vínculos do CNIS e anotações da CTPS com IA para indeferimento de aposentadoria urbana comum. Identifica períodos divergentes, vínculos omissos no CNIS, inconsistências de datas e dados, gerando relatório de períodos que podem ser reconhecidos judicialmente ou administrativamente para reverter o indeferimento.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {
