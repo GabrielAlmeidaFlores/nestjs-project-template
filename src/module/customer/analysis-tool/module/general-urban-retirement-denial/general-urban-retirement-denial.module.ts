@@ -1,12 +1,15 @@
 import { Module } from '@nestjs/common';
 
 import { DatabaseModule } from '@infra/database/database.module';
+import { GenerativeIaModule } from '@infra/generative-ia/generative-ia.module';
 import { CnisAnalyzerModule } from '@lib/cnis-analyzer/cnis-analyzer.module';
+import { MarkdownConverterModule } from '@lib/markdown-converter/markdown-converter.module';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
 import { GeneralUrbanRetirementDenialController } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/general-urban-retirement-denial.controller';
 import { AnalyzeGeneralUrbanRetirementDenialPppUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/analyze-general-urban-retirement-denial-ppp.use-case';
 import { AnalyzeGeneralUrbanRetirementDenialTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/analyze-general-urban-retirement-denial-time-accelerator.use-case';
+import { CompareGeneralUrbanRetirementDenialCnisCtpsUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/compare-general-urban-retirement-denial-cnis-ctps.use-case';
 import { CreateGeneralUrbanRetirementDenialFirstAnalysisUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/create-general-urban-retirement-denial-first-analysis.use-case';
 import { CreateGeneralUrbanRetirementDenialInssDecisionAnalysisUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/create-general-urban-retirement-denial-inss-decision-analysis.use-case';
 import { CreateGeneralUrbanRetirementDenialUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/create-general-urban-retirement-denial.use-case';
@@ -25,12 +28,14 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
   imports: [
     AuthModule,
     DatabaseModule,
+    GenerativeIaModule,
     AnalysisProcessorModule,
     OrganizationSessionModule,
     OrganizationCreditModule,
     PaymentPlanModule,
     FileProcessorModule,
     CnisAnalyzerModule,
+    MarkdownConverterModule,
   ],
   controllers: [GeneralUrbanRetirementDenialController],
   providers: [
@@ -45,6 +50,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     UpdateGeneralUrbanRetirementDenialTimeAcceleratorUseCase,
     DeleteGeneralUrbanRetirementDenialTimeAcceleratorUseCase,
     AnalyzeGeneralUrbanRetirementDenialPppUseCase,
+    CompareGeneralUrbanRetirementDenialCnisCtpsUseCase,
   ],
 })
 export class GeneralUrbanRetirementDenialModule {

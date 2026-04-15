@@ -4,6 +4,7 @@ import { GeneralUrbanRetirementDenialId } from '@module/customer/analysis-tool/m
 import { GeneralUrbanRetirementDenialTimeAcceleratorId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-time-accelerator/value-object/general-urban-retirement-denial-time-accelerator-id/general-urban-retirement-denial-time-accelerator-id.value-object';
 import { AnalyzeGeneralUrbanRetirementDenialPppRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/analyze-general-urban-retirement-denial-ppp.request.dto';
 import { AnalyzeGeneralUrbanRetirementDenialTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/analyze-general-urban-retirement-denial-time-accelerator.request.dto';
+import { CompareGeneralUrbanRetirementDenialCnisCtpsRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/compare-general-urban-retirement-denial-cnis-ctps.request.dto';
 import { CreateGeneralUrbanRetirementDenialRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/create-general-urban-retirement-denial.request.dto';
 import { SaveGeneralUrbanRetirementDenialPeriodsRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/save-general-urban-retirement-denial-periods.request.dto';
 import { UpdateGeneralUrbanRetirementDenialTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/update-general-urban-retirement-denial-time-accelerator.request.dto';
@@ -11,6 +12,7 @@ import { UpdateGeneralUrbanRetirementDenialRequestDto } from '@module/customer/a
 import { UploadGeneralUrbanRetirementDenialDocumentsRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/upload-general-urban-retirement-denial-documents.request.dto';
 import { AnalyzeGeneralUrbanRetirementDenialPppResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/analyze-general-urban-retirement-denial-ppp.response.dto';
 import { AnalyzeGeneralUrbanRetirementDenialTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/analyze-general-urban-retirement-denial-time-accelerator.response.dto';
+import { CompareGeneralUrbanRetirementDenialCnisCtpsResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/compare-general-urban-retirement-denial-cnis-ctps.response.dto';
 import { CreateGeneralUrbanRetirementDenialFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/create-general-urban-retirement-denial-first-analysis.response.dto';
 import { CreateGeneralUrbanRetirementDenialInssDecisionAnalysisResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/create-general-urban-retirement-denial-inss-decision-analysis.response.dto';
 import { CreateGeneralUrbanRetirementDenialResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/create-general-urban-retirement-denial.response.dto';
@@ -22,6 +24,7 @@ import { UpdateGeneralUrbanRetirementDenialResponseDto } from '@module/customer/
 import { UploadGeneralUrbanRetirementDenialDocumentsResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/upload-general-urban-retirement-denial-documents.response.dto';
 import { AnalyzeGeneralUrbanRetirementDenialPppUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/analyze-general-urban-retirement-denial-ppp.use-case';
 import { AnalyzeGeneralUrbanRetirementDenialTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/analyze-general-urban-retirement-denial-time-accelerator.use-case';
+import { CompareGeneralUrbanRetirementDenialCnisCtpsUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/compare-general-urban-retirement-denial-cnis-ctps.use-case';
 import { CreateGeneralUrbanRetirementDenialFirstAnalysisUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/create-general-urban-retirement-denial-first-analysis.use-case';
 import { CreateGeneralUrbanRetirementDenialInssDecisionAnalysisUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/create-general-urban-retirement-denial-inss-decision-analysis.use-case';
 import { CreateGeneralUrbanRetirementDenialUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/create-general-urban-retirement-denial.use-case';
@@ -58,6 +61,7 @@ export class GeneralUrbanRetirementDenialController {
     private readonly updateGeneralUrbanRetirementDenialTimeAcceleratorUseCase: UpdateGeneralUrbanRetirementDenialTimeAcceleratorUseCase,
     private readonly deleteGeneralUrbanRetirementDenialTimeAcceleratorUseCase: DeleteGeneralUrbanRetirementDenialTimeAcceleratorUseCase,
     private readonly analyzeGeneralUrbanRetirementDenialPppUseCase: AnalyzeGeneralUrbanRetirementDenialPppUseCase,
+    private readonly compareGeneralUrbanRetirementDenialCnisCtpsUseCase: CompareGeneralUrbanRetirementDenialCnisCtpsUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -396,6 +400,39 @@ export class GeneralUrbanRetirementDenialController {
     return await this.analyzeGeneralUrbanRetirementDenialPppUseCase.execute(
       sessionData,
       organizationSessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Comparar CNIS e CTPS da análise de indeferimento de aposentadoria urbana comum',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':id/compare-cnis-ctps',
+      method: RequestMethod.POST,
+      type: CompareGeneralUrbanRetirementDenialCnisCtpsRequestDto,
+    },
+    tag: ['indeferimento-aposentadoria-urbana-geral'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Comparação CNIS x CTPS gerada com sucesso.',
+      type: CompareGeneralUrbanRetirementDenialCnisCtpsResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async compareCnisCtps(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('id', new ParseValueObjectPipe(GeneralUrbanRetirementDenialId))
+    generalUrbanRetirementDenialId: GeneralUrbanRetirementDenialId,
+    @Body() dto: CompareGeneralUrbanRetirementDenialCnisCtpsRequestDto,
+  ): Promise<CompareGeneralUrbanRetirementDenialCnisCtpsResponseDto> {
+    return await this.compareGeneralUrbanRetirementDenialCnisCtpsUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      generalUrbanRetirementDenialId,
       dto,
     );
   }
