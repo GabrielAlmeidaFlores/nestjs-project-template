@@ -4,6 +4,7 @@ import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema
 import { GeneralUrbanRetirementDenialDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-document.typeorm.entity';
 import { GeneralUrbanRetirementDenialPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-period.typeorm.entity';
 import { GeneralUrbanRetirementDenialResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-result.typeorm.entity';
+import { GeneralUrbanRetirementDenialTimeAcceleratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-time-accelerator.typeorm.entity';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 
 @Entity({ name: 'general_urban_retirement_denial' })
@@ -51,6 +52,12 @@ export class GeneralUrbanRetirementDenialTypeormEntity extends BaseTypeormEntity
     (entity) => entity.generalUrbanRetirementDenial,
   )
   public generalUrbanRetirementDenialPeriod?: GeneralUrbanRetirementDenialPeriodTypeormEntity[];
+
+  @OneToMany(
+    () => GeneralUrbanRetirementDenialTimeAcceleratorTypeormEntity,
+    (entity) => entity.generalUrbanRetirementDenial,
+  )
+  public generalUrbanRetirementDenialTimeAccelerator?: GeneralUrbanRetirementDenialTimeAcceleratorTypeormEntity[];
 
   protected override readonly _type =
     GeneralUrbanRetirementDenialTypeormEntity.name;

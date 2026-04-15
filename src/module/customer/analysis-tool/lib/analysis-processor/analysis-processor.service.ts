@@ -3276,6 +3276,33 @@ Análise processada do CNIS:
     );
   }
 
+  public async getGeneralUrbanRetirementDenialTimeAcceleratorAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Use exclusivamente os valores de enum fornecidos no schema para os campos de reconhecimento e viabilidade.
+- Cada item de \`timeAccelerators\` deve ser compatível com a criação de um período de acelerador de tempo.
+- Preencha \`technicalNote\`, \`startDate\`, \`endDate\` e \`institution\` quando essas informações estiverem disponíveis nos documentos analisados.
+- Não incluir tag <br> na resposta.
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getGeneralUrbanRetirementDenialTimeAcceleratorAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
   public async getGeneralUrbanRetirementDenialFirstAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
@@ -3497,6 +3524,73 @@ Análise processada do CNIS:
         },
       },
       required: ['clientData', 'timeSummary', 'periods'],
+    };
+  }
+
+  private getGeneralUrbanRetirementDenialTimeAcceleratorAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        timeAccelerators: {
+          type: 'array',
+          description:
+            'Lista de períodos de acelerador de tempo identificados nos documentos analisados',
+          items: {
+            type: 'object',
+            properties: {
+              recognitionInss: {
+                type: 'string',
+                enum: ['PROVAVEL', 'IMPROVAVEL'],
+                description: 'Probabilidade de reconhecimento no INSS',
+              },
+              recognitionJudicial: {
+                type: 'string',
+                enum: ['FAVORAVEL', 'DESFAVORAVEL', 'NAO'],
+                description: 'Probabilidade de reconhecimento judicial',
+              },
+              viability: {
+                type: 'string',
+                enum: ['ALTA', 'MEDIA', 'BAIXA'],
+                description: 'Nível de viabilidade do período analisado',
+              },
+              technicalNote: {
+                type: 'string',
+                description: 'Nota técnica resumindo os fundamentos do período',
+              },
+              startDate: {
+                type: 'string',
+                format: 'date-time',
+                description: 'Data de início do período no formato ISO 8601',
+              },
+              endDate: {
+                type: 'string',
+                format: 'date-time',
+                description: 'Data de fim do período no formato ISO 8601',
+              },
+              institution: {
+                type: 'string',
+                description: 'Instituição ou empregador relacionado ao período',
+              },
+              affectsQualifyingPeriod: {
+                type: 'boolean',
+                description:
+                  'Indica se o período afeta carência ou tempo qualificável',
+              },
+            },
+            required: [
+              'recognitionInss',
+              'recognitionJudicial',
+              'viability',
+              'technicalNote',
+              'startDate',
+              'endDate',
+              'institution',
+              'affectsQualifyingPeriod',
+            ],
+          },
+        },
+      },
+      required: ['timeAccelerators'],
     };
   }
 }

@@ -8,8 +8,10 @@ import { GeneralUrbanRetirementDenialPeriodDocumentTypeormEntity } from '@infra/
 import { GeneralUrbanRetirementDenialPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-period-earnings-history.typeorm.entity';
 import { GeneralUrbanRetirementDenialPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-period.typeorm.entity';
 import { GeneralUrbanRetirementDenialResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-result.typeorm.entity';
+import { GeneralUrbanRetirementDenialTimeAcceleratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-time-accelerator.typeorm.entity';
 import { GeneralUrbanRetirementDenialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial.typeorm.entity';
 import { GetGeneralUrbanRetirementDenialWithRelationsQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial/query/result/get-general-urban-retirement-denial-with-relations.query.result';
+import { GetGeneralUrbanRetirementDenialTimeAcceleratorQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial-time-accelerator/query/result/get-general-urban-retirement-denial-time-accelerator.query.result';
 import { GeneralUrbanRetirementDenialId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/value-object/general-urban-retirement-denial-id/general-urban-retirement-denial-id.value-object';
 import { GeneralUrbanRetirementDenialDocumentEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-document/general-urban-retirement-denial-document.entity';
 import { GeneralUrbanRetirementDenialDocumentId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-document/value-object/general-urban-retirement-denial-document-id/general-urban-retirement-denial-document-id.value-object';
@@ -21,6 +23,7 @@ import { GeneralUrbanRetirementDenialPeriodEarningsHistoryEntity } from '@module
 import { GeneralUrbanRetirementDenialPeriodEarningsHistoryId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period-earnings-history/value-object/general-urban-retirement-denial-period-earnings-history-id/general-urban-retirement-denial-period-earnings-history-id.value-object';
 import { GeneralUrbanRetirementDenialResultEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-result/general-urban-retirement-denial-result.entity';
 import { GeneralUrbanRetirementDenialResultId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-result/value-object/general-urban-retirement-denial-result-id/general-urban-retirement-denial-result-id.value-object';
+import { GeneralUrbanRetirementDenialTimeAcceleratorId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-time-accelerator/value-object/general-urban-retirement-denial-time-accelerator-id/general-urban-retirement-denial-time-accelerator-id.value-object';
 
 @Injectable()
 export class GetGeneralUrbanRetirementDenialWithRelationsQueryResultAutoMapperProfile {
@@ -71,6 +74,10 @@ export class GetGeneralUrbanRetirementDenialWithRelationsQueryResultAutoMapperPr
           ),
         );
 
+        const timeAccelerators = (
+          source.generalUrbanRetirementDenialTimeAccelerator ?? []
+        ).map((ta) => this.mapTimeAccelerator(ta));
+
         return GetGeneralUrbanRetirementDenialWithRelationsQueryResult.build({
           id: grantId,
           analysisName: source.analysisName,
@@ -85,6 +92,7 @@ export class GetGeneralUrbanRetirementDenialWithRelationsQueryResultAutoMapperPr
           generalUrbanRetirementDenialPeriodDocument: periodDocuments,
           generalUrbanRetirementDenialPeriodEarningsHistory:
             periodEarningsHistory,
+          generalUrbanRetirementDenialTimeAccelerator: timeAccelerators,
         });
       }),
     );
@@ -174,6 +182,26 @@ export class GetGeneralUrbanRetirementDenialWithRelationsQueryResultAutoMapperPr
       value: source.value,
       generalUrbanRetirementDenialPeriodId:
         new GeneralUrbanRetirementDenialPeriodId(periodId),
+      createdAt: source.createdAt,
+      updatedAt: source.updatedAt,
+      deletedAt: source.deletedAt,
+    });
+  }
+
+  private mapTimeAccelerator(
+    source: GeneralUrbanRetirementDenialTimeAcceleratorTypeormEntity,
+  ): GetGeneralUrbanRetirementDenialTimeAcceleratorQueryResult {
+    return GetGeneralUrbanRetirementDenialTimeAcceleratorQueryResult.build({
+      id: new GeneralUrbanRetirementDenialTimeAcceleratorId(source.id),
+      type: source.type,
+      recognitionInss: source.recognitionInss,
+      recognitionJudicial: source.recognitionJudicial,
+      viability: source.viability,
+      technicalNote: source.technicalNote,
+      startDate: source.startDate,
+      endDate: source.endDate,
+      institution: source.institution,
+      affectsQualifyingPeriod: source.affectsQualifyingPeriod,
       createdAt: source.createdAt,
       updatedAt: source.updatedAt,
       deletedAt: source.deletedAt,
