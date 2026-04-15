@@ -139,6 +139,7 @@ import { GeneralUrbanRetirementAnalysisRemunerationEntityAutoMapperProfile } fro
 import { GetGeneralUrbanRetirementAnalysisRemunerationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-analysis-remuneration/get-general-urban-retirement-analysis-remuneration-query-result.auto-mapper.profile';
 import { GeneralUrbanRetirementAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-analysis-result/general-urban-retirement-analysis-result-entity.auto-mapper.profile';
 import { GeneralUrbanRetirementDenialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-denial/general-urban-retirement-denial-entity.auto-mapper.profile';
+import { GeneralUrbanRetirementDenialInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-denial/general-urban-retirement-denial-inss-benefit-entity.auto-mapper.profile';
 import { GeneralUrbanRetirementDenialPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-denial/general-urban-retirement-denial-period-entity.auto-mapper.profile';
 import { GetGeneralUrbanRetirementDenialWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-denial/get-general-urban-retirement-denial-with-relations-query-result.auto-mapper.profile';
 import { GeneralUrbanRetirementDenialTimeAcceleratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-denial-time-accelerator/general-urban-retirement-denial-time-accelerator-entity.auto-mapper.profile';
@@ -681,6 +682,7 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetGeneralUrbanRetirementGrantWithRelationsQueryResultAutoMapperProfile,
     GeneralUrbanRetirementGrantEntityAutoMapperProfile,
     GeneralUrbanRetirementDenialEntityAutoMapperProfile,
+    GeneralUrbanRetirementDenialInssBenefitEntityAutoMapperProfile,
     GeneralUrbanRetirementDenialPeriodEntityAutoMapperProfile,
     GetGeneralUrbanRetirementDenialWithRelationsQueryResultAutoMapperProfile,
     GeneralUrbanRetirementDenialTimeAcceleratorEntityAutoMapperProfile,

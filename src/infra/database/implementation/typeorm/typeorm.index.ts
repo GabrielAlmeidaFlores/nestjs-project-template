@@ -96,6 +96,7 @@ import { GeneralUrbanRetirementAnalysisResultTypeormCommandRepository } from '@i
 import { GeneralUrbanRetirementDenialTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial/general-urban-retirement-denial.typeorm.command.repository';
 import { GeneralUrbanRetirementDenialTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial/general-urban-retirement-denial.typeorm.query.repository';
 import { GeneralUrbanRetirementDenialDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-document/general-urban-retirement-denial-document.typeorm.command.repository';
+import { GeneralUrbanRetirementDenialInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-inss-benefit/general-urban-retirement-denial-inss-benefit.typeorm.command.repository';
 import { GeneralUrbanRetirementDenialPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-period/general-urban-retirement-denial-period.typeorm.command.repository';
 import { GeneralUrbanRetirementDenialPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-period-document/general-urban-retirement-denial-period-document.typeorm.command.repository';
 import { GeneralUrbanRetirementDenialPeriodEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-period-earnings-history/general-urban-retirement-denial-period-earnings-history.typeorm.command.repository';
@@ -389,6 +390,7 @@ import { GeneralUrbanRetirementAnalysisRemunerationTypeormEntity } from '@infra/
 import { GeneralUrbanRetirementAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis-result.typeorm.entity';
 import { GeneralUrbanRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis.typeorm.entity';
 import { GeneralUrbanRetirementDenialDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-document.typeorm.entity';
+import { GeneralUrbanRetirementDenialInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-inss-benefit.typeorm.entity';
 import { GeneralUrbanRetirementDenialPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-period-document.typeorm.entity';
 import { GeneralUrbanRetirementDenialPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-period-earnings-history.typeorm.entity';
 import { GeneralUrbanRetirementDenialPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-period.typeorm.entity';
@@ -826,6 +828,7 @@ export class TypeormIndex {
     GeneralUrbanRetirementDenialTypeormEntity,
     GeneralUrbanRetirementDenialResultTypeormEntity,
     GeneralUrbanRetirementDenialDocumentTypeormEntity,
+    GeneralUrbanRetirementDenialInssBenefitTypeormEntity,
     GeneralUrbanRetirementDenialPeriodTypeormEntity,
     GeneralUrbanRetirementDenialPeriodDocumentTypeormEntity,
     GeneralUrbanRetirementDenialPeriodEarningsHistoryTypeormEntity,
@@ -1144,6 +1147,7 @@ export class TypeormIndex {
     GeneralUrbanRetirementDenialTypeormQueryRepository,
     GeneralUrbanRetirementDenialDocumentTypeormCommandRepository,
     GeneralUrbanRetirementDenialResultTypeormCommandRepository,
+    GeneralUrbanRetirementDenialInssBenefitTypeormCommandRepository,
     GeneralUrbanRetirementDenialPeriodTypeormCommandRepository,
     GeneralUrbanRetirementDenialPeriodDocumentTypeormCommandRepository,
     GeneralUrbanRetirementDenialPeriodEarningsHistoryTypeormCommandRepository,

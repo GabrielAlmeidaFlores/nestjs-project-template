@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { GeneralUrbanRetirementDenialDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-document.typeorm.entity';
+import { GeneralUrbanRetirementDenialInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-inss-benefit.typeorm.entity';
 import { GeneralUrbanRetirementDenialPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-period-document.typeorm.entity';
 import { GeneralUrbanRetirementDenialPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-period-earnings-history.typeorm.entity';
 import { GeneralUrbanRetirementDenialPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-period.typeorm.entity';
@@ -15,6 +16,8 @@ import { GetGeneralUrbanRetirementDenialTimeAcceleratorQueryResult } from '@modu
 import { GeneralUrbanRetirementDenialId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/value-object/general-urban-retirement-denial-id/general-urban-retirement-denial-id.value-object';
 import { GeneralUrbanRetirementDenialDocumentEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-document/general-urban-retirement-denial-document.entity';
 import { GeneralUrbanRetirementDenialDocumentId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-document/value-object/general-urban-retirement-denial-document-id/general-urban-retirement-denial-document-id.value-object';
+import { GeneralUrbanRetirementDenialInssBenefitEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-inss-benefit/general-urban-retirement-denial-inss-benefit.entity';
+import { GeneralUrbanRetirementDenialInssBenefitId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-inss-benefit/value-object/general-urban-retirement-denial-inss-benefit-id.value-object';
 import { GeneralUrbanRetirementDenialPeriodEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/general-urban-retirement-denial-period.entity';
 import { GeneralUrbanRetirementDenialPeriodId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/value-object/general-urban-retirement-denial-period-id/general-urban-retirement-denial-period-id.value-object';
 import { GeneralUrbanRetirementDenialPeriodDocumentEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period-document/general-urban-retirement-denial-period-document.entity';
@@ -78,11 +81,17 @@ export class GetGeneralUrbanRetirementDenialWithRelationsQueryResultAutoMapperPr
           source.generalUrbanRetirementDenialTimeAccelerator ?? []
         ).map((ta) => this.mapTimeAccelerator(ta));
 
+        const inssBenefits = (
+          source.generalUrbanRetirementDenialInssBenefit ?? []
+        ).map((b) => this.mapInssBenefit(b, grantId));
+
         return GetGeneralUrbanRetirementDenialWithRelationsQueryResult.build({
           id: grantId,
           analysisName: source.analysisName,
           requestEntryDate: source.requestEntryDate,
           denialDate: source.denialDate,
+          requestedBenefitType: source.requestedBenefitType,
+          category: source.category,
           createdAt: source.createdAt,
           updatedAt: source.updatedAt,
           deletedAt: source.deletedAt,
@@ -93,6 +102,7 @@ export class GetGeneralUrbanRetirementDenialWithRelationsQueryResultAutoMapperPr
           generalUrbanRetirementDenialPeriodEarningsHistory:
             periodEarningsHistory,
           generalUrbanRetirementDenialTimeAccelerator: timeAccelerators,
+          generalUrbanRetirementDenialInssBenefit: inssBenefits,
         });
       }),
     );
@@ -202,6 +212,20 @@ export class GetGeneralUrbanRetirementDenialWithRelationsQueryResultAutoMapperPr
       endDate: source.endDate,
       institution: source.institution,
       affectsQualifyingPeriod: source.affectsQualifyingPeriod,
+      createdAt: source.createdAt,
+      updatedAt: source.updatedAt,
+      deletedAt: source.deletedAt,
+    });
+  }
+
+  private mapInssBenefit(
+    source: GeneralUrbanRetirementDenialInssBenefitTypeormEntity,
+    grantId: GeneralUrbanRetirementDenialId,
+  ): GeneralUrbanRetirementDenialInssBenefitEntity {
+    return new GeneralUrbanRetirementDenialInssBenefitEntity({
+      id: new GeneralUrbanRetirementDenialInssBenefitId(source.id),
+      inssBenefit: source.inssBenefit,
+      generalUrbanRetirementDenialId: grantId,
       createdAt: source.createdAt,
       updatedAt: source.updatedAt,
       deletedAt: source.deletedAt,

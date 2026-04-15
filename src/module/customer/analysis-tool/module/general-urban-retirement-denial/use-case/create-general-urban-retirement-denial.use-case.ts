@@ -13,7 +13,9 @@ import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/sc
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { GeneralUrbanRetirementDenialCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial/command/general-urban-retirement-denial.command.repository.gateway';
+import { GeneralUrbanRetirementDenialInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial-inss-benefit/command/general-urban-retirement-denial-inss-benefit.command.repository.gateway';
 import { GeneralUrbanRetirementDenialEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/general-urban-retirement-denial.entity';
+import { GeneralUrbanRetirementDenialInssBenefitEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-inss-benefit/general-urban-retirement-denial-inss-benefit.entity';
 import { CreateGeneralUrbanRetirementDenialRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/create-general-urban-retirement-denial.request.dto';
 import { CreateGeneralUrbanRetirementDenialResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/create-general-urban-retirement-denial.response.dto';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -30,6 +32,8 @@ export class CreateGeneralUrbanRetirementDenialUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(GeneralUrbanRetirementDenialCommandRepositoryGateway)
     private readonly generalUrbanRetirementDenialCommandRepositoryGateway: GeneralUrbanRetirementDenialCommandRepositoryGateway,
+    @Inject(GeneralUrbanRetirementDenialInssBenefitCommandRepositoryGateway)
+    private readonly generalUrbanRetirementDenialInssBenefitCommandRepositoryGateway: GeneralUrbanRetirementDenialInssBenefitCommandRepositoryGateway,
     @Inject(AnalysisToolClientQueryRepositoryGateway)
     private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
     @Inject(AnalysisToolRecordQueryRepositoryGateway)
@@ -65,10 +69,23 @@ export class CreateGeneralUrbanRetirementDenialUseCase {
         analysisName: dto.analysisName ?? null,
         requestEntryDate: dto.requestEntryDate ?? null,
         denialDate: dto.denialDate ?? null,
+        requestedBenefitType: dto.requestedBenefitType ?? null,
+        category: dto.category ?? null,
       },
     );
 
-    await this.createOnDatabase(generalUrbanRetirementDenial);
+    const inssBenefitEntities = (dto.inssBenefitNumber ?? []).map(
+      (inssBenefit) =>
+        new GeneralUrbanRetirementDenialInssBenefitEntity({
+          inssBenefit,
+          generalUrbanRetirementDenialId: generalUrbanRetirementDenial.id,
+        }),
+    );
+
+    await this.createOnDatabase(
+      generalUrbanRetirementDenial,
+      inssBenefitEntities,
+    );
 
     const countRecords =
       await this.analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAuthIdentityId(
@@ -102,14 +119,22 @@ export class CreateGeneralUrbanRetirementDenialUseCase {
 
   private async createOnDatabase(
     generalUrbanRetirementDenial: GeneralUrbanRetirementDenialEntity,
+    inssBenefitEntities: GeneralUrbanRetirementDenialInssBenefitEntity[],
   ): Promise<void> {
     const grantTransaction =
       this.generalUrbanRetirementDenialCommandRepositoryGateway.createGeneralUrbanRetirementDenial(
         generalUrbanRetirementDenial,
       );
 
+    const inssBenefitTransactions = inssBenefitEntities.map((entity) =>
+      this.generalUrbanRetirementDenialInssBenefitCommandRepositoryGateway.createGeneralUrbanRetirementDenialInssBenefit(
+        entity,
+      ),
+    );
+
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       grantTransaction,
+      ...inssBenefitTransactions,
     ]);
 
     await transaction.commit();
