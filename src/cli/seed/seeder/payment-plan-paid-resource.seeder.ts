@@ -342,6 +342,33 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise simplificada de atividade especial com IA. Identifica principais agentes nocivos expostos, valida se há enquadramento legal básico, calcula tempo especial total reconhecível e ganho estimado com conversão. Versão resumida para avaliação inicial de viabilidade.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('2b1c7e6a-0f3d-4a9d-8b2e-8f1a6c3d5e90'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_GRANT_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title: 'CONCESSÃO APOSENTADORIA ESPECIAL - ANÁLISE COMPLETA',
+      description:
+        'Análise completa da concessão de aposentadoria especial com IA. Examina CNIS e PPPs, aponta pendências (PEXT, competências abaixo do mínimo, vínculos sem data fim) e entrega recomendações estratégicas para requerimento administrativo e/ou ação judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b2c1a6f4-7d3e-4c2b-9a1e-0f3d4a9d8b2e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_GRANT_FIRST_ANALYSIS,
+      creditCost: 5,
+      title: 'CONCESSÃO APOSENTADORIA ESPECIAL - FIRST ANALYSIS',
+      description:
+        'First analysis da concessão de aposentadoria especial com IA. Gera resumo de tempo e carência, períodos com remunerações e agentes, diagnóstico técnico e linha do tempo integrada com base em CNIS e documentos anexados.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('6f4a2c1d-9b7e-4d1a-8c3f-1a2b3c4d5e6f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_GRANT_SIMPLIFIED_ANALYSIS,
+      creditCost: 5,
+      title: 'CONCESSÃO APOSENTADORIA ESPECIAL - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada da concessão de aposentadoria especial com IA. Resume elegibilidade, principais pendências e próximos passos recomendados, baseada em CNIS e PPPs.',
+    }),
 
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('0a308887-2dc9-4194-a9dd-b2b94c3ab820'),
@@ -889,6 +916,105 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise do Perfil Profissiográfico Previdenciário (PPP) com IA para identificação e estruturação de períodos contributivos na concessão de aposentadoria da pessoa com deficiência. Extrai e organiza os dados do PPP em períodos prontos para inserção na análise, com categoria, status de deficiência, média de contribuição e origem do vínculo.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d1f2a3b4-c5e6-4a7b-8c9d-e0f1a2b3c401'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DEATH_BENEFIT_GRANT_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title: 'PENSÃO POR MORTE (CONCESSÃO) - ANÁLISE COMPLETA',
+      description:
+        'Análise completa de concessão de pensão por morte com IA. Consolida os dados do instituidor, dependentes, períodos contributivos, benefícios, processos judiciais e documentos apresentados, gerando parecer técnico detalhado sobre enquadramento legal, viabilidade da concessão, qualidade de dependente, carência e estratégia recomendada.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d1f2a3b4-c5e6-4a7b-8c9d-e0f1a2b3c402'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DEATH_BENEFIT_GRANT_SIMPLIFIED_ANALYSIS,
+      creditCost: 3,
+      title: 'PENSÃO POR MORTE (CONCESSÃO) - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada de concessão de pensão por morte com IA. Resume os principais pontos sobre a qualidade de segurado do instituidor, a condição dos dependentes, os documentos apresentados e a viabilidade geral do benefício, com orientação objetiva para tomada de decisão rápida.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d1f2a3b4-c5e6-4a7b-8c9d-e0f1a2b3c403'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DEATH_BENEFIT_GRANT_FIRST_ANALYSIS,
+      creditCost: 5,
+      title: 'PENSÃO POR MORTE (CONCESSÃO) - PRIMEIRO STEP',
+      description:
+        'Primeira análise da concessão de pensão por morte com IA, cruzando os dados estruturados do caso com a análise processada do CNIS do instituidor. Gera parecer inicial técnico sobre qualidade de segurado, carência, relação de dependência, documentação existente e viabilidade preliminar do benefício.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d1f2a3b4-c5e6-4a7b-8c9d-e0f1a2b3c404'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DEATH_BENEFIT_GRANT_RURAL_TIME_ANALYSIS,
+      creditCost: 4,
+      title: 'PENSÃO POR MORTE (CONCESSÃO) - ANÁLISE DE TEMPO RURAL',
+      description:
+        'Análise de períodos de atividade rural com IA para reconhecimento previdenciário na concessão de pensão por morte. Examina documentos comprobatórios do instituidor, valida início de prova material, calcula tempo rural computável e orienta sobre reconhecimento administrativo ou judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d1f2a3b4-c5e6-4a7b-8c9d-e0f1a2b3c405'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DEATH_BENEFIT_GRANT_MILITARY_SERVICE_ANALYSIS,
+      creditCost: 4,
+      title: 'PENSÃO POR MORTE (CONCESSÃO) - ANÁLISE DE SERVIÇO MILITAR',
+      description:
+        'Análise de tempo de serviço militar obrigatório do instituidor com IA para cômputo previdenciário na concessão de pensão por morte. Valida certificados e certidões, calcula o período computável, verifica sobreposição com outros vínculos e orienta sobre averbação.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d1f2a3b4-c5e6-4a7b-8c9d-e0f1a2b3c406'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DEATH_BENEFIT_GRANT_PUBLIC_SERVICE_ANALYSIS,
+      creditCost: 5,
+      title: 'PENSÃO POR MORTE (CONCESSÃO) - ANÁLISE DE SERVIÇO PÚBLICO',
+      description:
+        'Análise de tempo de serviço público do instituidor com IA para averbação no RGPS na concessão de pensão por morte. Examina CTC, valida períodos computáveis, identifica riscos de contagem em duplicidade e orienta sobre averbação administrativa ou judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d1f2a3b4-c5e6-4a7b-8c9d-e0f1a2b3c407'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DEATH_BENEFIT_GRANT_CTPS_OUTSIDE_CNIS_ANALYSIS,
+      creditCost: 4,
+      title: 'PENSÃO POR MORTE (CONCESSÃO) - ANÁLISE DE CTPS FORA DO CNIS',
+      description:
+        'Análise de vínculos anotados na CTPS do instituidor mas ausentes no CNIS usando IA para concessão de pensão por morte. Identifica períodos omissos, avalia a força probatória dos documentos e orienta sobre regularização no INSS.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d1f2a3b4-c5e6-4a7b-8c9d-e0f1a2b3c408'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DEATH_BENEFIT_GRANT_STUDENT_APPRENTICE_ANALYSIS,
+      creditCost: 3,
+      title: 'PENSÃO POR MORTE (CONCESSÃO) - ANÁLISE DE ESTUDANTE APRENDIZ',
+      description:
+        'Análise de tempo como estudante aprendiz do instituidor com IA para reconhecimento previdenciário na concessão de pensão por morte. Valida documentos escolares, contraprestação e elementos probatórios necessários ao cômputo do período.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d1f2a3b4-c5e6-4a7b-8c9d-e0f1a2b3c409'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DEATH_BENEFIT_GRANT_WORK_ABROAD_ANALYSIS,
+      creditCost: 5,
+      title: 'PENSÃO POR MORTE (CONCESSÃO) - ANÁLISE DE TRABALHO NO EXTERIOR',
+      description:
+        'Análise de períodos de trabalho no exterior do instituidor com IA para reconhecimento no RGPS na concessão de pensão por morte. Examina acordos internacionais de previdência social, valida documentação estrangeira e orienta sobre totalização e formalidades documentais.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d1f2a3b4-c5e6-4a7b-8c9d-e0f1a2b3c40a'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DEATH_BENEFIT_GRANT_INFORMAL_WORK_ANALYSIS,
+      creditCost: 4,
+      title: 'PENSÃO POR MORTE (CONCESSÃO) - ANÁLISE DE TRABALHO INFORMAL',
+      description:
+        'Análise de períodos de trabalho informal do instituidor com IA para concessão de pensão por morte. Examina provas da atividade, recolhimentos existentes, necessidade de indenização e impacto do período no tempo de contribuição e na carência.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d1f2a3b4-c5e6-4a7b-8c9d-e0f1a2b3c40b'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DEATH_BENEFIT_GRANT_LABOR_COURT_DECISION_ANALYSIS,
+      creditCost: 6,
+      title: 'PENSÃO POR MORTE (CONCESSÃO) - ANÁLISE DE DECISÃO TRABALHISTA',
+      description:
+        'Análise de sentenças e acordos trabalhistas do instituidor com IA para reconhecimento previdenciário na concessão de pensão por morte. Examina robustez da decisão, períodos reconhecidos, remunerações e a melhor estratégia de aproveitamento perante o INSS.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4890-abcd-ef1234567890'),
       resource:
         PaymentPlanPaidResourceTypeEnum.SPECIAL_CATEGORY_RETIREMENT_COMPLETE_ANALYSIS,
@@ -979,6 +1105,51 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       title: 'ATUALIZAÇÕES NORMATIVAS',
       description:
         'Acompanhamento semanal automático de atualizações normativas previdenciárias brasileiras via IA. Exibe lista e detalhe de normas publicadas (portarias, instruções normativas, resoluções) com resumo, principais alterações, status de implementação e impacto para os beneficiários.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b2c3d4e5-f6a7-4901-bcde-f01234567891'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SURVIVOR_PENSION_ANALYSIS_COMPLETE_ANALYSIS,
+      creditCost: 8,
+      title: 'ANÁLISE DE PENSÃO POR MORTE - RESULTADO PRINCIPAL',
+      description:
+        'Gera o resultado principal da análise de pensão por morte: confirma qualidade de segurado do falecido, avalia direito à aposentadoria e produz análise completa e simplificada do caso.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c3d4e5f6-a7b8-4012-8def-012345678912'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SURVIVOR_PENSION_ANALYSIS_RETIREMENT_RULES,
+      creditCost: 0,
+      title: 'ANÁLISE DE PENSÃO POR MORTE - REGRAS DE APOSENTADORIA',
+      description:
+        'Analisa cada regra de aposentadoria aplicável ao falecido, estimando RMI, data de direito e identificando a melhor regra.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d4e5f6a7-b8c9-4123-9ef0-123456789023'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SURVIVOR_PENSION_ANALYSIS_DEPENDENT_PENSION_ANALYSES,
+      creditCost: 0,
+      title: 'ANÁLISE DE PENSÃO POR MORTE - ANÁLISE POR DEPENDENTE',
+      description:
+        'Avalia o direito à pensão de cada dependente identificado, estimando início e duração do benefício conforme art. 77 da Lei 8.213/91.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e5f6a7b8-c9d0-4234-af01-234567890134'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SURVIVOR_PENSION_ANALYSIS_COMPLETE_ANALYSIS_TEXT,
+      creditCost: 5,
+      title: 'ANÁLISE DE PENSÃO POR MORTE - ANÁLISE COMPLETA',
+      description:
+        'Gera o documento de análise completa e detalhada da pensão por morte, com fundamentação jurídica, para uso profissional.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f6a7b8c9-d0e1-4345-b012-345678901245'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SURVIVOR_PENSION_ANALYSIS_SIMPLIFIED_ANALYSIS_TEXT,
+      creditCost: 2,
+      title: 'ANÁLISE DE PENSÃO POR MORTE - ANÁLISE SIMPLIFICADA',
+      description:
+        'Gera o documento de análise simplificada da pensão por morte, com linguagem acessível para apresentação ao cliente.',
     }),
   ];
 
