@@ -15,7 +15,11 @@ import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/
 import { AnalysisActivityTrackerGateway } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.gateway';
 import { AnalysisActivityActionEnum } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/enum/analysis-activity-action.enum';
 import { BpcElderlyAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis/command/bpc-elderly-analysis.command.repository.gateway';
+import { BpcElderlyAnalysisInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-inss-benefit/command/bpc-elderly-analysis-inss-benefit.command.repository.gateway';
+import { BpcElderlyAnalysisLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-legal-proceeding/command/bpc-elderly-analysis-legal-proceeding.command.repository.gateway';
 import { BpcElderlyAnalysisEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/bpc-elderly-analysis.entity';
+import { BpcElderlyAnalysisInssBenefitEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-inss-benefit/bpc-elderly-analysis-inss-benefit.entity';
+import { BpcElderlyAnalysisLegalProceedingEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-legal-proceeding/bpc-elderly-analysis-legal-proceeding.entity';
 import { CreateBpcElderlyAnalysisRequestDto } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/dto/request/create-bpc-elderly-analysis.request.dto';
 import { CreateBpcElderlyAnalysisResponseDto } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/dto/response/create-bpc-elderly-analysis.response.dto';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -36,6 +40,10 @@ export class CreateBpcElderlyAnalysisUseCase {
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(AnalysisToolRecordCommandRepositoryGateway)
     private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
+    @Inject(BpcElderlyAnalysisInssBenefitCommandRepositoryGateway)
+    private readonly bpcElderlyAnalysisInssBenefitCommandRepositoryGateway: BpcElderlyAnalysisInssBenefitCommandRepositoryGateway,
+    @Inject(BpcElderlyAnalysisLegalProceedingCommandRepositoryGateway)
+    private readonly bpcElderlyAnalysisLegalProceedingCommandRepositoryGateway: BpcElderlyAnalysisLegalProceedingCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(AnalysisActivityTrackerGateway)
@@ -71,7 +79,7 @@ export class CreateBpcElderlyAnalysisUseCase {
     });
 
     const bpcElderlyAnalysis = new BpcElderlyAnalysisEntity({
-      name: dto.name !== undefined ? dto.name : null,
+      name: dto.name ?? null,
       createdBy: organizationMember.id,
       updatedBy: organizationMember.id,
     });
@@ -102,9 +110,31 @@ export class CreateBpcElderlyAnalysisUseCase {
         analysisToolRecord,
       );
 
+    const inssBenefitTransactions = (dto.inssBenefitNumbers ?? []).map(
+      (inssBenefitNumber) =>
+        this.bpcElderlyAnalysisInssBenefitCommandRepositoryGateway.createBpcElderlyAnalysisInssBenefit(
+          new BpcElderlyAnalysisInssBenefitEntity({
+            inssBenefitNumber,
+            bpcElderlyAnalysisId: bpcElderlyAnalysis.id,
+          }),
+        ),
+    );
+
+    const legalProceedingTransactions = (dto.legalProceedingNumbers ?? []).map(
+      (legalProceedingNumber) =>
+        this.bpcElderlyAnalysisLegalProceedingCommandRepositoryGateway.createBpcElderlyAnalysisLegalProceeding(
+          new BpcElderlyAnalysisLegalProceedingEntity({
+            legalProceedingNumber,
+            bpcElderlyAnalysisId: bpcElderlyAnalysis.id,
+          }),
+        ),
+    );
+
     const transactions = [
       createBpcElderlyAnalysisTransaction,
       createAnalysisToolRecordTransaction,
+      ...inssBenefitTransactions,
+      ...legalProceedingTransactions,
     ];
 
     const transactionsWithActivity =

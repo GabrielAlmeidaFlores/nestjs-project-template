@@ -48,17 +48,12 @@ export class BpcElderlyAnalysisFamilyMemberTypeormCommandRepository
       BpcElderlyAnalysisFamilyMemberTypeormEntity,
     );
 
-    return this.update(
-      bpcElderlyAnalysisFamilyMemberId.toString(),
-      mappedData,
-    );
+    return this.update(bpcElderlyAnalysisFamilyMemberId.toString(), mappedData);
   }
 
   public deleteBpcElderlyAnalysisFamilyMember(
     bpcElderlyAnalysisFamilyMemberId: BpcElderlyAnalysisFamilyMemberId,
   ): TransactionType {
-    return this.delete(
-      bpcElderlyAnalysisFamilyMemberId.toString(),
-    );
+    return this.delete(bpcElderlyAnalysisFamilyMemberId.toString());
   }
 }

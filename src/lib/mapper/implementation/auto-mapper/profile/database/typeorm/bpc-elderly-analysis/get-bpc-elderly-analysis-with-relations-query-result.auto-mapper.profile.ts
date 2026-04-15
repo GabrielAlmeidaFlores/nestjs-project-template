@@ -4,6 +4,8 @@ import { Injectable } from '@nestjs/common';
 
 import { BpcElderlyAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-document.typeorm.entity';
 import { BpcElderlyAnalysisFamilyMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-family-member.typeorm.entity';
+import { BpcElderlyAnalysisInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-inss-benefit.typeorm.entity';
+import { BpcElderlyAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-legal-proceeding.typeorm.entity';
 import { BpcElderlyAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-result.typeorm.entity';
 import { BpcElderlyAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
@@ -12,6 +14,8 @@ import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/cu
 import { GetBpcElderlyAnalysisDocumentQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis/query/result/get-bpc-elderly-analysis-document.query.result';
 import { GetBpcElderlyAnalysisFamilyMemberQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis/query/result/get-bpc-elderly-analysis-family-member.query.result';
 import { GetBpcElderlyAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis/query/result/get-bpc-elderly-analysis-with-relations.query.result';
+import { GetBpcElderlyAnalysisInssBenefitQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-inss-benefit/query/result/get-bpc-elderly-analysis-inss-benefit.query.result';
+import { GetBpcElderlyAnalysisLegalProceedingQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-legal-proceeding/query/result/get-bpc-elderly-analysis-legal-proceeding.query.result';
 import { GetBpcElderlyAnalysisResultQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-result/query/result/get-bpc-elderly-analysis-result.query.result';
 import { BpcElderlyAnalysisId } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/value-object/bpc-elderly-analysis-id/bpc-elderly-analysis-id.value-object';
 
@@ -65,6 +69,24 @@ export class GetBpcElderlyAnalysisWithRelationsQueryResultAutoMapperProfile {
           ),
         ) ?? [];
 
+      const bpcElderlyAnalysisInssBenefit =
+        source.bpcElderlyAnalysisInssBenefit?.map((item) =>
+          this.mapper.map(
+            item,
+            BpcElderlyAnalysisInssBenefitTypeormEntity,
+            GetBpcElderlyAnalysisInssBenefitQueryResult,
+          ),
+        ) ?? [];
+
+      const bpcElderlyAnalysisLegalProceeding =
+        source.bpcElderlyAnalysisLegalProceeding?.map((item) =>
+          this.mapper.map(
+            item,
+            BpcElderlyAnalysisLegalProceedingTypeormEntity,
+            GetBpcElderlyAnalysisLegalProceedingQueryResult,
+          ),
+        ) ?? [];
+
       const createdBy = this.mapper.map(
         source.createdBy,
         OrganizationMemberTypeormEntity,
@@ -82,6 +104,8 @@ export class GetBpcElderlyAnalysisWithRelationsQueryResultAutoMapperProfile {
         bpcElderlyAnalysisResult,
         bpcElderlyAnalysisFamilyMember,
         bpcElderlyAnalysisDocument,
+        bpcElderlyAnalysisInssBenefit,
+        bpcElderlyAnalysisLegalProceeding,
         createdBy,
         updatedBy,
         createdAt: source.createdAt,

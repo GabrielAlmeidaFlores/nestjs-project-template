@@ -12,5 +12,11 @@ export class CreateBpcElderlyAnalysisRequestDto extends BaseBuildableDtoObject {
   @RequestDtoStringProperty({ required: false })
   public readonly name?: string;
 
+  @RequestDtoStringProperty({ required: false, isArray: true })
+  public readonly inssBenefitNumbers?: string[];
+
+  @RequestDtoStringProperty({ required: false, isArray: true })
+  public readonly legalProceedingNumbers?: string[];
+
   protected override readonly _type = CreateBpcElderlyAnalysisRequestDto.name;
 }
