@@ -9,6 +9,7 @@ export class GeneralUrbanRetirementDenialResultEntity extends BaseEntity<General
   public readonly firstAnalysis: string | null;
   public readonly completeAnalysis: string | null;
   public readonly completeAnalysisDownload: string | null;
+  public readonly simplifiedAnalysis: string | null;
 
   protected readonly _type = GeneralUrbanRetirementDenialResultEntity.name;
 
@@ -20,5 +21,6 @@ export class GeneralUrbanRetirementDenialResultEntity extends BaseEntity<General
     this.firstAnalysis = props.firstAnalysis ?? null;
     this.completeAnalysis = props.completeAnalysis ?? null;
     this.completeAnalysisDownload = props.completeAnalysisDownload ?? null;
+    this.simplifiedAnalysis = props.simplifiedAnalysis ?? null;
   }
 }

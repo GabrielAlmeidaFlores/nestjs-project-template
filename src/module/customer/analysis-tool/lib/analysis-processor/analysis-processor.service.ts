@@ -3841,4 +3841,16 @@ Análise processada do CNIS:
       ],
     };
   }
+
+  public async getGeneralUrbanRetirementDenialSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
 }
