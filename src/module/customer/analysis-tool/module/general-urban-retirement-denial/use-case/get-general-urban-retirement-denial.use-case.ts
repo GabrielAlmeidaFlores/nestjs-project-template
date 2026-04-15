@@ -24,6 +24,7 @@ import {
   GeneralUrbanRetirementDenialFirstAnalysisModel,
   GeneralUrbanRetirementDenialFirstAnalysisPeriodModel,
   GeneralUrbanRetirementDenialFirstAnalysisTimeSummaryModel,
+  GeneralUrbanRetirementDenialFirstAnalysisTimeSummaryScenarioModel,
 } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/model/generic/general-urban-retirement-denial-first-analysis.model';
 import { GeneralUrbanRetirementDenialFirstAnalysisInterface } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/model/interface/general-urban-retirement-denial-first-analysis.interface';
 
@@ -206,33 +207,51 @@ export class GetGeneralUrbanRetirementDenialUseCase {
           }),
         timeSummary:
           GeneralUrbanRetirementDenialFirstAnalysisTimeSummaryModel.build({
-            contributedMonths: raw.timeSummary.contributedMonths,
-            ...(raw.timeSummary.remainingMonths !== null && {
-              remainingMonths: raw.timeSummary.remainingMonths,
-            }),
-            analysis: raw.timeSummary.analysis,
+            contributionTime:
+              GeneralUrbanRetirementDenialFirstAnalysisTimeSummaryScenarioModel.build(
+                {
+                  withoutResolvingPendencies:
+                    raw.timeSummary.contributionTime.withoutResolvingPendencies,
+                  resolvingPendencies:
+                    raw.timeSummary.contributionTime.resolvingPendencies,
+                  withTimeAccelerators:
+                    raw.timeSummary.contributionTime.withTimeAccelerators,
+                },
+              ),
+            gracePeriod:
+              GeneralUrbanRetirementDenialFirstAnalysisTimeSummaryScenarioModel.build(
+                {
+                  withoutResolvingPendencies:
+                    raw.timeSummary.gracePeriod.withoutResolvingPendencies,
+                  resolvingPendencies:
+                    raw.timeSummary.gracePeriod.resolvingPendencies,
+                  withTimeAccelerators:
+                    raw.timeSummary.gracePeriod.withTimeAccelerators,
+                },
+              ),
           }),
         periods: raw.periods.map((period) =>
           GeneralUrbanRetirementDenialFirstAnalysisPeriodModel.build({
             name: period.name,
             startDate: period.startDate,
             ...(period.endDate !== null && { endDate: period.endDate }),
+            ...(period.category !== null && { category: period.category }),
             workType: period.workType,
             isPendency: period.isPendency,
             competenceBelowTheMinimum: period.competenceBelowTheMinimum,
             ...(period.pendencyReason !== null && {
               pendencyReason: period.pendencyReason,
             }),
+            ...(period.impact !== null && { impact: period.impact }),
             ...(period.periodConsideration !== null && {
               periodConsideration: period.periodConsideration,
             }),
-            ...(period.contributionAverage !== null &&
-              period.contributionAverage !== undefined && {
-                contributionAverage: new DecimalValue(
-                  period.contributionAverage.toString(),
-                ),
-              }),
-            earningsHistory: (period.earningsHistory ?? []).map((item) =>
+            ...(period.contributionAverage !== null && {
+              contributionAverage: new DecimalValue(
+                period.contributionAverage.toString(),
+              ),
+            }),
+            earningsHistory: period.earningsHistory.map((item) =>
               GeneralUrbanRetirementDenialFirstAnalysisEarningsHistoryItemModel.build(
                 {
                   ...(item.competence !== null && {

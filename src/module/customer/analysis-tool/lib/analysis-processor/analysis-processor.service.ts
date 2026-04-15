@@ -3343,24 +3343,64 @@ Análise processada do CNIS:
         },
         timeSummary: {
           type: 'object',
-          description: 'Resumo do tempo de contribuição apurado.',
+          description:
+            'Resumo do tempo de contribuição e carência apurados por cenário.',
           properties: {
-            contributedMonths: {
-              type: 'number',
-              description: 'Total de meses de contribuição computados.',
+            contributionTime: {
+              type: 'object',
+              description: 'Tempo de contribuição em cada cenário.',
+              properties: {
+                withoutResolvingPendencies: {
+                  type: 'string',
+                  description:
+                    'Tempo sem resolver pendências. Ex: 23 anos e 4 meses.',
+                },
+                resolvingPendencies: {
+                  type: 'string',
+                  description:
+                    'Tempo resolvendo todas as pendências. Ex: 27 anos e 8 meses.',
+                },
+                withTimeAccelerators: {
+                  type: 'string',
+                  description:
+                    'Tempo com aceleradores de tempo. Ex: 30 anos e 2 meses.',
+                },
+              },
+              required: [
+                'withoutResolvingPendencies',
+                'resolvingPendencies',
+                'withTimeAccelerators',
+              ],
             },
-            remainingMonths: {
-              type: 'number',
+            gracePeriod: {
+              type: 'object',
               description:
-                'Meses restantes para atingir o requisito de tempo. Null se já atingido.',
-            },
-            analysis: {
-              type: 'string',
-              description:
-                'Análise textual do tempo de contribuição e situação da aposentadoria.',
+                'Carência (número de contribuições) em cada cenário.',
+              properties: {
+                withoutResolvingPendencies: {
+                  type: 'string',
+                  description:
+                    'Contribuições sem resolver pendências. Ex: 156 contribuições.',
+                },
+                resolvingPendencies: {
+                  type: 'string',
+                  description:
+                    'Contribuições resolvendo todas as pendências. Ex: 172 contribuições.',
+                },
+                withTimeAccelerators: {
+                  type: 'string',
+                  description:
+                    'Contribuições com aceleradores de tempo. Ex: 180 contribuições.',
+                },
+              },
+              required: [
+                'withoutResolvingPendencies',
+                'resolvingPendencies',
+                'withTimeAccelerators',
+              ],
             },
           },
-          required: ['contributedMonths', 'remainingMonths', 'analysis'],
+          required: ['contributionTime', 'gracePeriod'],
         },
         periods: {
           type: 'array',
@@ -3374,12 +3414,21 @@ Análise processada do CNIS:
               },
               startDate: {
                 type: 'string',
+                format: 'date-time',
                 description: 'Data de início do período no formato YYYY-MM-DD.',
               },
               endDate: {
                 type: 'string',
+                format: 'date-time',
                 description:
                   'Data de fim do período no formato YYYY-MM-DD. Null se ainda em aberto.',
+              },
+              category: {
+                type: 'string',
+                enum: Object.values(
+                  DisabilityRetirementPlanningGrantCategoryEnum,
+                ),
+                description: 'Categoria do per�odo',
               },
               workType: {
                 type: 'string',
@@ -3397,13 +3446,14 @@ Análise processada do CNIS:
               },
               pendencyReason: {
                 type: 'string',
-                enum: [
-                  'LEAVE_DATE',
-                  'COMPETENCE_BELOW_MINIMUM',
-                  'INCONSISTENT_COMPETENCE',
-                ],
-                description:
-                  'Razão da pendência. Null se não houver pendência.',
+                enum: Object.values(
+                  DisabilityRetirementPlanningGrantPeriodPendencyReasonEnum,
+                ),
+                description: 'Motivo da pend�ncia, se houver',
+              },
+              impact: {
+                type: 'string',
+                description: 'Impacto em tempo. Ex: 2 anos e 3 meses.',
               },
               periodConsideration: {
                 type: 'string',

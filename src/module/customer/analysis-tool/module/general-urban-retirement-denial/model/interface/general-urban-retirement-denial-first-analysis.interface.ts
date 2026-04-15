@@ -11,19 +11,26 @@ export interface GeneralUrbanRetirementDenialFirstAnalysisPeriodInterface {
   name: string;
   startDate: string;
   endDate: string | null;
+  category: string | null;
   workType: GeneralUrbanRetirementDenialPeriodWorkTypeEnum;
   isPendency: boolean;
   competenceBelowTheMinimum: boolean;
   pendencyReason: GeneralUrbanRetirementDenialPeriodPendencyReasonEnum | null;
+  impact: string | null;
   periodConsideration: GeneralUrbanRetirementDenialPeriodConsiderationEnum | null;
   contributionAverage: number | string | null;
   earningsHistory: GeneralUrbanRetirementDenialFirstAnalysisEarningsHistoryItemInterface[];
 }
 
+export interface GeneralUrbanRetirementDenialFirstAnalysisTimeSummaryScenarioInterface {
+  withoutResolvingPendencies: string;
+  resolvingPendencies: string;
+  withTimeAccelerators: string;
+}
+
 export interface GeneralUrbanRetirementDenialFirstAnalysisTimeSummaryInterface {
-  contributedMonths: number;
-  remainingMonths: number | null;
-  analysis: string;
+  contributionTime: GeneralUrbanRetirementDenialFirstAnalysisTimeSummaryScenarioInterface;
+  gracePeriod: GeneralUrbanRetirementDenialFirstAnalysisTimeSummaryScenarioInterface;
 }
 
 export interface GeneralUrbanRetirementDenialFirstAnalysisClientDataInterface {
