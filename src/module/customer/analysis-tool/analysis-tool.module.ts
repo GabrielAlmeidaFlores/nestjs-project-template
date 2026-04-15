@@ -14,6 +14,7 @@ import { RemunerationCalculatorModule } from '@module/customer/analysis-tool/lib
 import { AdministrativeProcedureInssAnalysisModule } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.module';
 import { AudienceQuestionGeneratorModule } from '@module/customer/analysis-tool/module/audience-question-generator/audience-question-generator.module';
 import { CnisFastAnalysisModule } from '@module/customer/analysis-tool/module/cnis-fast-analysis/cnis-fast-analysis.module';
+import { DeathBenefitGrantModule } from '@module/customer/analysis-tool/module/death-benefit-grant/death-benefit-grant.module';
 import { DisabilityAssessmentForBpcAnalysisModule } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.module';
 import { DisabilityRetirementPlanningModule } from '@module/customer/analysis-tool/module/disability-retirement-planning/disability-retirement-planning.module';
 import { DisabilityRetirementPlanningGrantModule } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/disability-retirement-planning-grant.module';
@@ -31,7 +32,9 @@ import { RuralOrHybridRetirementRejectionModule } from '@module/customer/analysi
 import { RuralTimelineAnalysisModule } from '@module/customer/analysis-tool/module/rural-timeline-analysis/rural-timeline-analysis.module';
 import { SpecialActivityAnalysisModule } from '@module/customer/analysis-tool/module/special-activity-analysis/special-activity-analysis.module';
 import { SpecialCategoryRetirementAnalysisModule } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/special-category-retirement-analysis.module';
+import { SpecialRetirementGrantModule } from '@module/customer/analysis-tool/module/special-retirement-grant/special-retirement-grant.module';
 import { SpeechGeneratorModule } from '@module/customer/analysis-tool/module/speech-generator/speech-generator.module';
+import { SurvivorPensionAnalysisModule } from '@module/customer/analysis-tool/module/survivor-pension-analysis/survivor-pension-analysis.module';
 import { TeacherRetirementPlanningModule } from '@module/customer/analysis-tool/module/teacher-retirement-planning/teacher-retirement-planning.module';
 import { TemporaryDisabilityBenefitsGrantModule } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/temporary-disability-benefits-grant.module';
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
@@ -85,12 +88,15 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     RuralOrHybridRetirementRejectionModule,
     RetirementPlanningRgpsModule,
     RetirementPlanningRppsModule,
+    SpecialRetirementGrantModule,
     TeacherRetirementPlanningModule,
     DisabilityRetirementPlanningModule,
     DisabilityRetirementPlanningGrantModule,
     GeneralUrbanRetirementGrantModule,
     GeneralUrbanRetirementModule,
     SpecialCategoryRetirementAnalysisModule,
+    DeathBenefitGrantModule,
+    SurvivorPensionAnalysisModule,
     TemporaryDisabilityBenefitsGrantModule,
   ],
   controllers: [AnalysisToolController],
