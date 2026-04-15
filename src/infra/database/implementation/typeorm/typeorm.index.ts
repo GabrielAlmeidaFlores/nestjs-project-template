@@ -100,6 +100,8 @@ import { GeneralUrbanRetirementDenialPeriodTypeormCommandRepository } from '@inf
 import { GeneralUrbanRetirementDenialPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-period-document/general-urban-retirement-denial-period-document.typeorm.command.repository';
 import { GeneralUrbanRetirementDenialPeriodEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-period-earnings-history/general-urban-retirement-denial-period-earnings-history.typeorm.command.repository';
 import { GeneralUrbanRetirementDenialResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-result/general-urban-retirement-denial-result.typeorm.command.repository';
+import { GeneralUrbanRetirementDenialTimeAcceleratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-time-accelerator/general-urban-retirement-denial-time-accelerator.typeorm.command.repository';
+import { GeneralUrbanRetirementDenialTimeAcceleratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-time-accelerator/general-urban-retirement-denial-time-accelerator.typeorm.query.repository';
 import { GeneralUrbanRetirementGrantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant/general-urban-retirement-grant.typeorm.command.repository';
 import { GeneralUrbanRetirementGrantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant/general-urban-retirement-grant.typeorm.query.repository';
 import { GeneralUrbanRetirementGrantAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant-analysis-result/general-urban-retirement-grant-analysis-result.typeorm.command.repository';
@@ -391,6 +393,7 @@ import { GeneralUrbanRetirementDenialPeriodDocumentTypeormEntity } from '@infra/
 import { GeneralUrbanRetirementDenialPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-period-earnings-history.typeorm.entity';
 import { GeneralUrbanRetirementDenialPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-period.typeorm.entity';
 import { GeneralUrbanRetirementDenialResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-result.typeorm.entity';
+import { GeneralUrbanRetirementDenialTimeAcceleratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-time-accelerator.typeorm.entity';
 import { GeneralUrbanRetirementDenialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial.typeorm.entity';
 import { GeneralUrbanRetirementGrantAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant-analysis-result.typeorm.entity';
 import { GeneralUrbanRetirementGrantEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant-earnings-history.typeorm.entity';
@@ -826,6 +829,7 @@ export class TypeormIndex {
     GeneralUrbanRetirementDenialPeriodTypeormEntity,
     GeneralUrbanRetirementDenialPeriodDocumentTypeormEntity,
     GeneralUrbanRetirementDenialPeriodEarningsHistoryTypeormEntity,
+    GeneralUrbanRetirementDenialTimeAcceleratorTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [
@@ -1143,6 +1147,8 @@ export class TypeormIndex {
     GeneralUrbanRetirementDenialPeriodTypeormCommandRepository,
     GeneralUrbanRetirementDenialPeriodDocumentTypeormCommandRepository,
     GeneralUrbanRetirementDenialPeriodEarningsHistoryTypeormCommandRepository,
+    GeneralUrbanRetirementDenialTimeAcceleratorTypeormCommandRepository,
+    GeneralUrbanRetirementDenialTimeAcceleratorTypeormQueryRepository,
   ];
 
   public static readonly dynamicModule = TypeOrmModule.forFeature(

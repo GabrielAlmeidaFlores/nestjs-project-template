@@ -1,22 +1,31 @@
 import { Body, HttpStatus, Param, RequestMethod } from '@nestjs/common';
 
 import { GeneralUrbanRetirementDenialId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/value-object/general-urban-retirement-denial-id/general-urban-retirement-denial-id.value-object';
+import { GeneralUrbanRetirementDenialTimeAcceleratorId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-time-accelerator/value-object/general-urban-retirement-denial-time-accelerator-id/general-urban-retirement-denial-time-accelerator-id.value-object';
+import { AnalyzeGeneralUrbanRetirementDenialTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/analyze-general-urban-retirement-denial-time-accelerator.request.dto';
 import { CreateGeneralUrbanRetirementDenialRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/create-general-urban-retirement-denial.request.dto';
 import { SaveGeneralUrbanRetirementDenialPeriodsRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/save-general-urban-retirement-denial-periods.request.dto';
+import { UpdateGeneralUrbanRetirementDenialTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/update-general-urban-retirement-denial-time-accelerator.request.dto';
 import { UpdateGeneralUrbanRetirementDenialRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/update-general-urban-retirement-denial.request.dto';
 import { UploadGeneralUrbanRetirementDenialDocumentsRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/upload-general-urban-retirement-denial-documents.request.dto';
+import { AnalyzeGeneralUrbanRetirementDenialTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/analyze-general-urban-retirement-denial-time-accelerator.response.dto';
 import { CreateGeneralUrbanRetirementDenialFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/create-general-urban-retirement-denial-first-analysis.response.dto';
 import { CreateGeneralUrbanRetirementDenialInssDecisionAnalysisResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/create-general-urban-retirement-denial-inss-decision-analysis.response.dto';
 import { CreateGeneralUrbanRetirementDenialResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/create-general-urban-retirement-denial.response.dto';
+import { DeleteGeneralUrbanRetirementDenialTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/delete-general-urban-retirement-denial-time-accelerator.response.dto';
 import { GetGeneralUrbanRetirementDenialResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/get-general-urban-retirement-denial.response.dto';
 import { SaveGeneralUrbanRetirementDenialPeriodsResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/save-general-urban-retirement-denial-periods.response.dto';
+import { UpdateGeneralUrbanRetirementDenialTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/update-general-urban-retirement-denial-time-accelerator.response.dto';
 import { UpdateGeneralUrbanRetirementDenialResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/update-general-urban-retirement-denial.response.dto';
 import { UploadGeneralUrbanRetirementDenialDocumentsResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/upload-general-urban-retirement-denial-documents.response.dto';
+import { AnalyzeGeneralUrbanRetirementDenialTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/analyze-general-urban-retirement-denial-time-accelerator.use-case';
 import { CreateGeneralUrbanRetirementDenialFirstAnalysisUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/create-general-urban-retirement-denial-first-analysis.use-case';
 import { CreateGeneralUrbanRetirementDenialInssDecisionAnalysisUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/create-general-urban-retirement-denial-inss-decision-analysis.use-case';
 import { CreateGeneralUrbanRetirementDenialUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/create-general-urban-retirement-denial.use-case';
+import { DeleteGeneralUrbanRetirementDenialTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/delete-general-urban-retirement-denial-time-accelerator.use-case';
 import { GetGeneralUrbanRetirementDenialUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/get-general-urban-retirement-denial.use-case';
 import { SaveGeneralUrbanRetirementDenialPeriodsUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/save-general-urban-retirement-denial-periods.use-case';
+import { UpdateGeneralUrbanRetirementDenialTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/update-general-urban-retirement-denial-time-accelerator.use-case';
 import { UpdateGeneralUrbanRetirementDenialUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/update-general-urban-retirement-denial.use-case';
 import { UploadGeneralUrbanRetirementDenialDocumentsUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/upload-general-urban-retirement-denial-documents.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -42,6 +51,9 @@ export class GeneralUrbanRetirementDenialController {
     private readonly createGeneralUrbanRetirementDenialFirstAnalysisUseCase: CreateGeneralUrbanRetirementDenialFirstAnalysisUseCase,
     private readonly saveGeneralUrbanRetirementDenialPeriodsUseCase: SaveGeneralUrbanRetirementDenialPeriodsUseCase,
     private readonly updateGeneralUrbanRetirementDenialUseCase: UpdateGeneralUrbanRetirementDenialUseCase,
+    private readonly analyzeGeneralUrbanRetirementDenialTimeAcceleratorUseCase: AnalyzeGeneralUrbanRetirementDenialTimeAcceleratorUseCase,
+    private readonly updateGeneralUrbanRetirementDenialTimeAcceleratorUseCase: UpdateGeneralUrbanRetirementDenialTimeAcceleratorUseCase,
+    private readonly deleteGeneralUrbanRetirementDenialTimeAcceleratorUseCase: DeleteGeneralUrbanRetirementDenialTimeAcceleratorUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -252,6 +264,105 @@ export class GeneralUrbanRetirementDenialController {
       organizationSessionData,
       generalUrbanRetirementDenialId,
       dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Analisar documentos de acelerador de tempo de indeferimento de aposentadoria urbana comum',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'analyze-time-accelerator-documents',
+      method: RequestMethod.POST,
+      type: AnalyzeGeneralUrbanRetirementDenialTimeAcceleratorRequestDto,
+    },
+    tag: ['indeferimento-aposentadoria-urbana-geral'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Análise de acelerador de tempo gerada com sucesso.',
+      type: AnalyzeGeneralUrbanRetirementDenialTimeAcceleratorResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async analyzeTimeAccelerator(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Body() dto: AnalyzeGeneralUrbanRetirementDenialTimeAcceleratorRequestDto,
+  ): Promise<AnalyzeGeneralUrbanRetirementDenialTimeAcceleratorResponseDto> {
+    return await this.analyzeGeneralUrbanRetirementDenialTimeAcceleratorUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Atualizar aceleradores de tempo da análise de indeferimento de aposentadoria urbana comum',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':id/time-accelerator',
+      method: RequestMethod.PATCH,
+      type: UpdateGeneralUrbanRetirementDenialTimeAcceleratorRequestDto,
+    },
+    tag: ['indeferimento-aposentadoria-urbana-geral'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Aceleradores de tempo atualizados com sucesso.',
+      type: UpdateGeneralUrbanRetirementDenialTimeAcceleratorResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateTimeAccelerator(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('id', new ParseValueObjectPipe(GeneralUrbanRetirementDenialId))
+    generalUrbanRetirementDenialId: GeneralUrbanRetirementDenialId,
+    @Body() dto: UpdateGeneralUrbanRetirementDenialTimeAcceleratorRequestDto,
+  ): Promise<UpdateGeneralUrbanRetirementDenialTimeAcceleratorResponseDto> {
+    return await this.updateGeneralUrbanRetirementDenialTimeAcceleratorUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      generalUrbanRetirementDenialId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Excluir acelerador de tempo da análise de indeferimento de aposentadoria urbana comum',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':id/time-accelerator/:timeAcceleratorId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['indeferimento-aposentadoria-urbana-geral'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Acelerador de tempo excluído com sucesso.',
+      type: DeleteGeneralUrbanRetirementDenialTimeAcceleratorResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async deleteTimeAccelerator(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('id', new ParseValueObjectPipe(GeneralUrbanRetirementDenialId))
+    generalUrbanRetirementDenialId: GeneralUrbanRetirementDenialId,
+    @Param(
+      'timeAcceleratorId',
+      new ParseValueObjectPipe(GeneralUrbanRetirementDenialTimeAcceleratorId),
+    )
+    generalUrbanRetirementDenialTimeAcceleratorId: GeneralUrbanRetirementDenialTimeAcceleratorId,
+  ): Promise<DeleteGeneralUrbanRetirementDenialTimeAcceleratorResponseDto> {
+    return await this.deleteGeneralUrbanRetirementDenialTimeAcceleratorUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      generalUrbanRetirementDenialId,
+      generalUrbanRetirementDenialTimeAcceleratorId,
     );
   }
 }

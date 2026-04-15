@@ -112,6 +112,8 @@ import { GeneralUrbanRetirementDenialPeriodTypeormCommandRepository } from '@inf
 import { GeneralUrbanRetirementDenialPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-period-document/general-urban-retirement-denial-period-document.typeorm.command.repository';
 import { GeneralUrbanRetirementDenialPeriodEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-period-earnings-history/general-urban-retirement-denial-period-earnings-history.typeorm.command.repository';
 import { GeneralUrbanRetirementDenialResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-result/general-urban-retirement-denial-result.typeorm.command.repository';
+import { GeneralUrbanRetirementDenialTimeAcceleratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-time-accelerator/general-urban-retirement-denial-time-accelerator.typeorm.command.repository';
+import { GeneralUrbanRetirementDenialTimeAcceleratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-time-accelerator/general-urban-retirement-denial-time-accelerator.typeorm.query.repository';
 import { GeneralUrbanRetirementGrantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant/general-urban-retirement-grant.typeorm.command.repository';
 import { GeneralUrbanRetirementGrantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant/general-urban-retirement-grant.typeorm.query.repository';
 import { GeneralUrbanRetirementGrantAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant-analysis-result/general-urban-retirement-grant-analysis-result.typeorm.command.repository';
@@ -491,6 +493,8 @@ import { GeneralUrbanRetirementDenialPeriodCommandRepositoryGateway } from '@mod
 import { GeneralUrbanRetirementDenialPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial-period-document/command/general-urban-retirement-denial-period-document.command.repository.gateway';
 import { GeneralUrbanRetirementDenialPeriodEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial-period-earnings-history/command/general-urban-retirement-denial-period-earnings-history.command.repository.gateway';
 import { GeneralUrbanRetirementDenialResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial-result/command/general-urban-retirement-denial-result.command.repository.gateway';
+import { GeneralUrbanRetirementDenialTimeAcceleratorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial-time-accelerator/command/general-urban-retirement-denial-time-accelerator.command.repository.gateway';
+import { GeneralUrbanRetirementDenialTimeAcceleratorQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial-time-accelerator/query/general-urban-retirement-denial-time-accelerator.query.repository.gateway';
 import { GeneralUrbanRetirementGrantCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant/command/general-urban-retirement-grant.command.repository.gateway';
 import { GeneralUrbanRetirementGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant/query/general-urban-retirement-grant.query.repository.gateway';
 import { GeneralUrbanRetirementGrantAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-analysis-result/command/general-urban-retirement-grant-analysis-result.command.repository.gateway';
@@ -2491,6 +2495,16 @@ const classProvider: ClassProvider[] = [
       GeneralUrbanRetirementDenialPeriodEarningsHistoryCommandRepositoryGateway,
     useClass:
       GeneralUrbanRetirementDenialPeriodEarningsHistoryTypeormCommandRepository,
+  },
+  {
+    provide:
+      GeneralUrbanRetirementDenialTimeAcceleratorCommandRepositoryGateway,
+    useClass:
+      GeneralUrbanRetirementDenialTimeAcceleratorTypeormCommandRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementDenialTimeAcceleratorQueryRepositoryGateway,
+    useClass: GeneralUrbanRetirementDenialTimeAcceleratorTypeormQueryRepository,
   },
 ];
 

@@ -1,5 +1,6 @@
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
+import type { GetGeneralUrbanRetirementDenialTimeAcceleratorQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial-time-accelerator/query/result/get-general-urban-retirement-denial-time-accelerator.query.result';
 import type { GeneralUrbanRetirementDenialId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/value-object/general-urban-retirement-denial-id/general-urban-retirement-denial-id.value-object';
 import type { GeneralUrbanRetirementDenialDocumentEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-document/general-urban-retirement-denial-document.entity';
 import type { GeneralUrbanRetirementDenialPeriodEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/general-urban-retirement-denial-period.entity';
@@ -27,6 +28,9 @@ export class GetGeneralUrbanRetirementDenialWithRelationsQueryResult extends Bas
     | null;
   public readonly generalUrbanRetirementDenialPeriodEarningsHistory:
     | GeneralUrbanRetirementDenialPeriodEarningsHistoryEntity[]
+    | null;
+  public readonly generalUrbanRetirementDenialTimeAccelerator:
+    | GetGeneralUrbanRetirementDenialTimeAcceleratorQueryResult[]
     | null;
 
   protected override readonly _type =

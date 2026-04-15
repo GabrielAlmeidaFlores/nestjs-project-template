@@ -5,11 +5,14 @@ import { CnisAnalyzerModule } from '@lib/cnis-analyzer/cnis-analyzer.module';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
 import { GeneralUrbanRetirementDenialController } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/general-urban-retirement-denial.controller';
+import { AnalyzeGeneralUrbanRetirementDenialTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/analyze-general-urban-retirement-denial-time-accelerator.use-case';
 import { CreateGeneralUrbanRetirementDenialFirstAnalysisUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/create-general-urban-retirement-denial-first-analysis.use-case';
 import { CreateGeneralUrbanRetirementDenialInssDecisionAnalysisUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/create-general-urban-retirement-denial-inss-decision-analysis.use-case';
 import { CreateGeneralUrbanRetirementDenialUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/create-general-urban-retirement-denial.use-case';
+import { DeleteGeneralUrbanRetirementDenialTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/delete-general-urban-retirement-denial-time-accelerator.use-case';
 import { GetGeneralUrbanRetirementDenialUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/get-general-urban-retirement-denial.use-case';
 import { SaveGeneralUrbanRetirementDenialPeriodsUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/save-general-urban-retirement-denial-periods.use-case';
+import { UpdateGeneralUrbanRetirementDenialTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/update-general-urban-retirement-denial-time-accelerator.use-case';
 import { UpdateGeneralUrbanRetirementDenialUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/update-general-urban-retirement-denial.use-case';
 import { UploadGeneralUrbanRetirementDenialDocumentsUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/upload-general-urban-retirement-denial-documents.use-case';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
@@ -37,6 +40,9 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateGeneralUrbanRetirementDenialFirstAnalysisUseCase,
     SaveGeneralUrbanRetirementDenialPeriodsUseCase,
     UpdateGeneralUrbanRetirementDenialUseCase,
+    AnalyzeGeneralUrbanRetirementDenialTimeAcceleratorUseCase,
+    UpdateGeneralUrbanRetirementDenialTimeAcceleratorUseCase,
+    DeleteGeneralUrbanRetirementDenialTimeAcceleratorUseCase,
   ],
 })
 export class GeneralUrbanRetirementDenialModule {
