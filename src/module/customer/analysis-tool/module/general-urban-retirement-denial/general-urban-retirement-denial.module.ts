@@ -5,6 +5,7 @@ import { CnisAnalyzerModule } from '@lib/cnis-analyzer/cnis-analyzer.module';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
 import { GeneralUrbanRetirementDenialController } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/general-urban-retirement-denial.controller';
+import { AnalyzeGeneralUrbanRetirementDenialPppUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/analyze-general-urban-retirement-denial-ppp.use-case';
 import { AnalyzeGeneralUrbanRetirementDenialTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/analyze-general-urban-retirement-denial-time-accelerator.use-case';
 import { CreateGeneralUrbanRetirementDenialFirstAnalysisUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/create-general-urban-retirement-denial-first-analysis.use-case';
 import { CreateGeneralUrbanRetirementDenialInssDecisionAnalysisUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/create-general-urban-retirement-denial-inss-decision-analysis.use-case';
@@ -43,6 +44,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     AnalyzeGeneralUrbanRetirementDenialTimeAcceleratorUseCase,
     UpdateGeneralUrbanRetirementDenialTimeAcceleratorUseCase,
     DeleteGeneralUrbanRetirementDenialTimeAcceleratorUseCase,
+    AnalyzeGeneralUrbanRetirementDenialPppUseCase,
   ],
 })
 export class GeneralUrbanRetirementDenialModule {

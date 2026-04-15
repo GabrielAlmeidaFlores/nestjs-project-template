@@ -318,4 +318,9 @@ export abstract class AnalysisProcessorGateway {
     files: Buffer[],
     asJson?: boolean,
   ): Promise<string | null>;
+
+  public abstract getGeneralUrbanRetirementDenialPppAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
 }
