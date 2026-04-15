@@ -4,4 +4,6 @@ import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/b
 export interface GeneralUrbanRetirementDenialResultEntityPropsInterface extends BaseEntityPropsInterface<GeneralUrbanRetirementDenialResultId> {
   inssDecisionAnalysis?: string | null;
   firstAnalysis?: string | null;
+  completeAnalysis?: string | null;
+  completeAnalysisDownload?: string | null;
 }

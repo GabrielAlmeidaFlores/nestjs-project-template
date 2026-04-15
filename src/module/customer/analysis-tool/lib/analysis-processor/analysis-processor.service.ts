@@ -3705,4 +3705,140 @@ Análise processada do CNIS:
       required: ['timeAccelerators'],
     };
   }
+
+  public async getGeneralUrbanRetirementDenialResultAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- O campo \`completeAnalysisDownload\` deve conter HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.
+- O campo \`analysisResult\` deve conter um texto explicativo completo sobre o resultado da análise e as perspectivas processuais do caso.
+- Não incluir tag <br> na resposta no campo \`analysisResult\`.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getGeneralUrbanRetirementDenialResultAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  private getGeneralUrbanRetirementDenialResultAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        clientData: {
+          type: 'object',
+          description: 'Dados do segurado extraídos do CNIS.',
+          properties: {
+            name: {
+              type: 'string',
+              description: 'Nome completo do segurado.',
+            },
+            federalDocument: {
+              type: 'string',
+              description: 'CPF do segurado no formato XXX.XXX.XXX-XX.',
+            },
+            lastAffiliationDate: {
+              type: 'string',
+              format: 'date',
+              description:
+                'Data da última filiação no formato YYYY-MM-DD. Null se não encontrada.',
+            },
+            birthDate: {
+              type: 'string',
+              format: 'date',
+              description:
+                'Data de nascimento no formato YYYY-MM-DD. Null se não encontrada.',
+            },
+            gender: {
+              type: 'string',
+              description: 'Sexo do segurado. Ex: Masculino ou Feminino.',
+            },
+          },
+          required: ['name', 'federalDocument', 'gender'],
+        },
+        retirementRules: {
+          type: 'array',
+          description:
+            'Resumo de regras aplicáveis para aposentadoria urbana comum (RGPS).',
+          items: {
+            type: 'object',
+            properties: {
+              retirementRuleName: {
+                type: 'string',
+                description: 'Nome da regra de aposentadoria.',
+              },
+              isEligible: {
+                type: 'boolean',
+                description: 'Indica se o segurado atingiu o direito.',
+              },
+              eligibilityAvailableAt: {
+                type: 'string',
+                format: 'date',
+                description:
+                  'Data do direito no formato YYYY-MM-DD. Null se não atingido ou não calculável.',
+              },
+              expectedMonthlyBenefit: {
+                type: 'number',
+                description: 'RMI prevista em reais.',
+              },
+              isBestRmi: {
+                type: 'boolean',
+                description: 'Indica se esta regra possui a melhor RMI.',
+              },
+              isHighestCauseValue: {
+                type: 'boolean',
+                description:
+                  'Indica se esta regra possui o maior valor de causa.',
+              },
+              retirementAnalysis: {
+                type: 'string',
+                description:
+                  'Análise detalhada desta regra de aposentadoria, incluindo requisitos, cálculo da RMI e valor da causa.',
+              },
+            },
+            required: [
+              'retirementRuleName',
+              'isEligible',
+              'expectedMonthlyBenefit',
+              'isBestRmi',
+              'isHighestCauseValue',
+              'retirementAnalysis',
+            ],
+          },
+        },
+        analysisResult: {
+          type: 'string',
+          description:
+            'Texto explicativo completo sobre o resultado da análise, perspectivas processuais e recomendações para o caso de indeferimento.',
+        },
+        completeAnalysisDownload: {
+          type: 'string',
+          description:
+            'Conteúdo HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.',
+        },
+      },
+      required: [
+        'clientData',
+        'retirementRules',
+        'analysisResult',
+        'completeAnalysisDownload',
+      ],
+    };
+  }
 }
