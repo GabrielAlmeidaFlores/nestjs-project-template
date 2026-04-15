@@ -6,8 +6,7 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @RequestDto()
 export class UpdateRuralOrHybridRetirementRejectionTestimonialWitnessRequestDto extends BaseBuildableDtoObject {
   @RequestDtoObjectProperty(
-    () =>
-      RuralOrHybridRetirementRejectionTestimonialWitnessItemRequestDto,
+    () => RuralOrHybridRetirementRejectionTestimonialWitnessItemRequestDto,
     { isArray: true },
   )
   public testimonialWitnesses: RuralOrHybridRetirementRejectionTestimonialWitnessItemRequestDto[];

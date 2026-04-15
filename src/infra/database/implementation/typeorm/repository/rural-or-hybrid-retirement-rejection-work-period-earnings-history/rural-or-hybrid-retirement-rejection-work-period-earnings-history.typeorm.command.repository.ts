@@ -13,13 +13,16 @@ import { RuralOrHybridRetirementRejectionWorkPeriodEarningsHistoryId } from '@mo
 @Injectable()
 export class RuralOrHybridRetirementRejectionWorkPeriodEarningsHistoryTypeormCommandRepository
   extends BaseTypeormCommandRepository<RuralOrHybridRetirementRejectionWorkPeriodEarningsHistoryTypeormEntity>
-  implements RuralOrHybridRetirementRejectionWorkPeriodEarningsHistoryCommandRepositoryGateway
+  implements
+    RuralOrHybridRetirementRejectionWorkPeriodEarningsHistoryCommandRepositoryGateway
 {
   protected readonly _type =
     RuralOrHybridRetirementRejectionWorkPeriodEarningsHistoryTypeormCommandRepository.name;
 
   public constructor(
-    @InjectRepository(RuralOrHybridRetirementRejectionWorkPeriodEarningsHistoryTypeormEntity)
+    @InjectRepository(
+      RuralOrHybridRetirementRejectionWorkPeriodEarningsHistoryTypeormEntity,
+    )
     repository: Repository<RuralOrHybridRetirementRejectionWorkPeriodEarningsHistoryTypeormEntity>,
   ) {
     super(repository);

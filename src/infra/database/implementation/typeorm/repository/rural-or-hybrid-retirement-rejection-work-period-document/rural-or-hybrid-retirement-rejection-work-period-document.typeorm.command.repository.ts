@@ -13,13 +13,16 @@ import { RuralOrHybridRetirementRejectionWorkPeriodDocumentId } from '@module/cu
 @Injectable()
 export class RuralOrHybridRetirementRejectionWorkPeriodDocumentTypeormCommandRepository
   extends BaseTypeormCommandRepository<RuralOrHybridRetirementRejectionWorkPeriodDocumentTypeormEntity>
-  implements RuralOrHybridRetirementRejectionWorkPeriodDocumentCommandRepositoryGateway
+  implements
+    RuralOrHybridRetirementRejectionWorkPeriodDocumentCommandRepositoryGateway
 {
   protected readonly _type =
     RuralOrHybridRetirementRejectionWorkPeriodDocumentTypeormCommandRepository.name;
 
   public constructor(
-    @InjectRepository(RuralOrHybridRetirementRejectionWorkPeriodDocumentTypeormEntity)
+    @InjectRepository(
+      RuralOrHybridRetirementRejectionWorkPeriodDocumentTypeormEntity,
+    )
     repository: Repository<RuralOrHybridRetirementRejectionWorkPeriodDocumentTypeormEntity>,
   ) {
     super(repository);
@@ -28,8 +31,8 @@ export class RuralOrHybridRetirementRejectionWorkPeriodDocumentTypeormCommandRep
   public createRuralOrHybridRetirementRejectionWorkPeriodDocument(
     props: RuralOrHybridRetirementRejectionWorkPeriodDocumentEntity,
   ): TransactionType {
-    const mappedData = RuralOrHybridRetirementRejectionWorkPeriodDocumentTypeormEntity.build(
-      {
+    const mappedData =
+      RuralOrHybridRetirementRejectionWorkPeriodDocumentTypeormEntity.build({
         id: props.id.toString(),
         document: props.document,
         type: props.type,
@@ -40,8 +43,7 @@ export class RuralOrHybridRetirementRejectionWorkPeriodDocumentTypeormCommandRep
         createdAt: props.createdAt,
         updatedAt: props.updatedAt,
         deletedAt: props.deletedAt,
-      } as RuralOrHybridRetirementRejectionWorkPeriodDocumentTypeormEntity,
-    );
+      } as RuralOrHybridRetirementRejectionWorkPeriodDocumentTypeormEntity);
 
     return this.create(mappedData);
   }

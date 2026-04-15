@@ -12,20 +12,21 @@ import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-pr
 import { CnisDocumentIsNotValidError } from '@module/customer/analysis-tool/module/cnis-fast-analysis/error/cnis-document-is-not-valid.error';
 import { RuralOrHybridRetirementRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection/query/rural-or-hybrid-retirement-rejection.query.repository.gateway';
 import { RuralOrHybridRetirementRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-result/command/rural-or-hybrid-retirement-rejection-result.command.repository.gateway';
-import { RuralOrHybridRetirementRejectionDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-document/enum/rural-or-hybrid-retirement-rejection-document-type.enum';
 import { RuralOrHybridRetirementRejectionId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id.value-object';
+import { RuralOrHybridRetirementRejectionDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-document/enum/rural-or-hybrid-retirement-rejection-document-type.enum';
 import { RuralOrHybridRetirementRejectionResultEntity } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-result/rural-or-hybrid-retirement-rejection-result.entity';
 import { CreateRuralOrHybridRetirementRejectionResultResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/response/create-rural-or-hybrid-retirement-rejection-result.response.dto';
 import { InvalidRuralOrHybridRetirementRejectionResultJsonError } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/error/invalid-rural-or-hybrid-retirement-rejection-result-json.error';
 import { RuralOrHybridRetirementRejectionCnisDocumentNotFoundError } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/error/rural-or-hybrid-retirement-rejection-cnis-document-not-found.error';
 import { RuralOrHybridRetirementRejectionNotFoundError } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/error/rural-or-hybrid-retirement-rejection-not-found.error';
 import { RuralOrHybridRetirementRejectionResultNotFoundError } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/error/rural-or-hybrid-retirement-rejection-result-not-found.error';
-import type { RuralOrHybridRetirementRejectionResultInterface } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/model/interface/rural-or-hybrid-retirement-rejection-result.interface';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+
+import type { RuralOrHybridRetirementRejectionResultInterface } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/model/interface/rural-or-hybrid-retirement-rejection-result.interface';
 
 @Injectable()
 export class CreateRuralOrHybridRetirementRejectionResultUseCase {
@@ -235,12 +236,15 @@ export class CreateRuralOrHybridRetirementRejectionResultUseCase {
     const testimonialWitnesses =
       rejection.ruralOrHybridRetirementRejectionTestimonialWitness ?? [];
     const testimonialWitnessDocuments =
-      rejection.ruralOrHybridRetirementRejectionTestimonialWitnessDocument ?? [];
-    const workPeriods = rejection.ruralOrHybridRetirementRejectionWorkPeriod ?? [];
+      rejection.ruralOrHybridRetirementRejectionTestimonialWitnessDocument ??
+      [];
+    const workPeriods =
+      rejection.ruralOrHybridRetirementRejectionWorkPeriod ?? [];
     const workPeriodDocuments =
       rejection.ruralOrHybridRetirementRejectionWorkPeriodDocument ?? [];
     const workPeriodDocumentAnalyses =
-      rejection.ruralOrHybridRetirementRejectionWorkPeriodDocumentAnalysis ?? [];
+      rejection.ruralOrHybridRetirementRejectionWorkPeriodDocumentAnalysis ??
+      [];
     const workPeriodEarningsHistory =
       rejection.ruralOrHybridRetirementRejectionWorkPeriodEarningsHistory ?? [];
 
@@ -296,8 +300,7 @@ export class CreateRuralOrHybridRetirementRejectionResultUseCase {
           incomeBesidesRuralProductionDescription:
             period.incomeBesidesRuralProductionDescription,
           clientHasOrHadCnpj: period.clientHasOrHadCnpj,
-          clientHasOrHadCnpjDescription:
-            period.clientHasOrHadCnpjDescription,
+          clientHasOrHadCnpjDescription: period.clientHasOrHadCnpjDescription,
           clientLivesInUrbanArea: period.clientLivesInUrbanArea,
           clientMunicipality: period.clientMunicipality,
           clientState: period.clientState,
@@ -410,7 +413,6 @@ export class CreateRuralOrHybridRetirementRejectionResultUseCase {
         timeType: item.timeType,
         institution: item.institution,
         recognitionInss: item.recognitionInss,
-        recognitionJudicial: item.recognitionJudicial,
         viability: item.viability,
         technicalNote: item.technicalNote,
         startDate: item.startDate,
@@ -420,14 +422,17 @@ export class CreateRuralOrHybridRetirementRejectionResultUseCase {
       currentResult: {
         id: rejection.ruralOrHybridRetirementRejectionResult?.id.toString(),
         firstAnalysis:
-          rejection.ruralOrHybridRetirementRejectionResult?.firstAnalysis ?? null,
-        secondAnalysis:
-          rejection.ruralOrHybridRetirementRejectionResult?.secondAnalysis ?? null,
-        completeAnalysis:
-          rejection.ruralOrHybridRetirementRejectionResult?.completeAnalysis ?? null,
-        simplifiedAnalysis:
-          rejection.ruralOrHybridRetirementRejectionResult?.simplifiedAnalysis ??
+          rejection.ruralOrHybridRetirementRejectionResult?.firstAnalysis ??
           null,
+        secondAnalysis:
+          rejection.ruralOrHybridRetirementRejectionResult?.secondAnalysis ??
+          null,
+        completeAnalysis:
+          rejection.ruralOrHybridRetirementRejectionResult?.completeAnalysis ??
+          null,
+        simplifiedAnalysis:
+          rejection.ruralOrHybridRetirementRejectionResult
+            ?.simplifiedAnalysis ?? null,
       },
     };
 
@@ -455,16 +460,25 @@ export class CreateRuralOrHybridRetirementRejectionResultUseCase {
         ...(rejection.ruralOrHybridRetirementRejectionPeriodDocument ?? [])
           .filter((document) => document.document !== null)
           .map((document) => document.document),
-        ...(rejection.ruralOrHybridRetirementRejectionPeriodMemberDocument ?? [])
+        ...(
+          rejection.ruralOrHybridRetirementRejectionPeriodMemberDocument ?? []
+        )
           .filter((document) => document.document !== null)
           .map((document) => document.document),
-        ...(rejection.ruralOrHybridRetirementRejectionTestimonialWitnessDocument ?? [])
+        ...(
+          rejection.ruralOrHybridRetirementRejectionTestimonialWitnessDocument ??
+          []
+        )
           .filter((document) => document.document !== null)
           .map((document) => document.document),
         ...(rejection.ruralOrHybridRetirementRejectionWorkPeriodDocument ?? [])
           .filter((document) => document.document !== null)
           .map((document) => document.document),
-      ].map((documentPath) => this.fileProcessorGateway.getFileBuffer(documentPath)),
+      ]
+        .filter((documentPath): documentPath is string => documentPath !== null)
+        .map((documentPath) =>
+          this.fileProcessorGateway.getFileBuffer(documentPath),
+        ),
     );
 
     return [cnisBuffer, ...buffers];

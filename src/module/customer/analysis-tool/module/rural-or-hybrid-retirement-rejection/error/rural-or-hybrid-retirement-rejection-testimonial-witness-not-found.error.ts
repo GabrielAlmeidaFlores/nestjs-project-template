@@ -5,6 +5,8 @@ export class RuralOrHybridRetirementRejectionTestimonialWitnessNotFoundError ext
     RuralOrHybridRetirementRejectionTestimonialWitnessNotFoundError.name;
 
   public constructor() {
-    super('Testemunha da análise de indeferimento de aposentadoria rural ou híbrida não encontrada.');
+    super(
+      'Testemunha da análise de indeferimento de aposentadoria rural ou híbrida não encontrada.',
+    );
   }
 }

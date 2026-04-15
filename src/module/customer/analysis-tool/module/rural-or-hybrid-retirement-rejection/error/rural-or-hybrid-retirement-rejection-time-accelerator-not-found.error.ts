@@ -5,6 +5,8 @@ export class RuralOrHybridRetirementRejectionTimeAcceleratorNotFoundError extend
     RuralOrHybridRetirementRejectionTimeAcceleratorNotFoundError.name;
 
   public constructor() {
-    super('Acelerador de tempo da análise de indeferimento de aposentadoria rural ou híbrida não encontrado.');
+    super(
+      'Acelerador de tempo da análise de indeferimento de aposentadoria rural ou híbrida não encontrado.',
+    );
   }
 }

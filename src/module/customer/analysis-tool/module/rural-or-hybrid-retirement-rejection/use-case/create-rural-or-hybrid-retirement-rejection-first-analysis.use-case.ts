@@ -13,20 +13,21 @@ import { CnisDocumentIsNotValidError } from '@module/customer/analysis-tool/modu
 import { RuralOrHybridRetirementRejectionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection/command/rural-or-hybrid-retirement-rejection.command.repository.gateway';
 import { RuralOrHybridRetirementRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection/query/rural-or-hybrid-retirement-rejection.query.repository.gateway';
 import { RuralOrHybridRetirementRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-result/command/rural-or-hybrid-retirement-rejection-result.command.repository.gateway';
-import { RuralOrHybridRetirementRejectionDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-document/enum/rural-or-hybrid-retirement-rejection-document-type.enum';
 import { RuralOrHybridRetirementRejectionId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id.value-object';
+import { RuralOrHybridRetirementRejectionDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-document/enum/rural-or-hybrid-retirement-rejection-document-type.enum';
 import { RuralOrHybridRetirementRejectionResultEntity } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-result/rural-or-hybrid-retirement-rejection-result.entity';
 import { RuralOrHybridRetirementRejectionResultId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-result/value-object/rural-or-hybrid-retirement-rejection-result-id.value-object';
 import { CreateRuralOrHybridRetirementRejectionFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/response/create-rural-or-hybrid-retirement-rejection-first-analysis.response.dto';
+import { InvalidRuralOrHybridRetirementRejectionFirstAnalysisJsonError } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/error/invalid-rural-or-hybrid-retirement-rejection-first-analysis-json.error';
 import { RuralOrHybridRetirementRejectionCnisDocumentNotFoundError } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/error/rural-or-hybrid-retirement-rejection-cnis-document-not-found.error';
 import { RuralOrHybridRetirementRejectionNotFoundError } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/error/rural-or-hybrid-retirement-rejection-not-found.error';
-import { InvalidRuralOrHybridRetirementRejectionFirstAnalysisJsonError } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/error/invalid-rural-or-hybrid-retirement-rejection-first-analysis-json.error';
-import type { RuralOrHybridRetirementRejectionFirstAnalysisInterface } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/model/interface/rural-or-hybrid-retirement-rejection-first-analysis.interface';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+
+import type { RuralOrHybridRetirementRejectionFirstAnalysisInterface } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/model/interface/rural-or-hybrid-retirement-rejection-first-analysis.interface';
 
 @Injectable()
 export class CreateRuralOrHybridRetirementRejectionFirstAnalysisUseCase {
@@ -147,7 +148,8 @@ export class CreateRuralOrHybridRetirementRejectionFirstAnalysisUseCase {
       throw new InvalidRuralOrHybridRetirementRejectionFirstAnalysisJsonError();
     }
 
-    const parsedFirstAnalysis = this.parseFirstAnalysisOrThrow(firstAnalysisJson);
+    const parsedFirstAnalysis =
+      this.parseFirstAnalysisOrThrow(firstAnalysisJson);
 
     const resultEntity = new RuralOrHybridRetirementRejectionResultEntity({
       ...(existingResult !== null && { id: existingResult.id }),
@@ -155,7 +157,8 @@ export class CreateRuralOrHybridRetirementRejectionFirstAnalysisUseCase {
       secondAnalysis: existingResult?.secondAnalysis ?? null,
       completeAnalysis: existingResult?.completeAnalysis ?? null,
       simplifiedAnalysis: existingResult?.simplifiedAnalysis ?? null,
-      completeAnalysisDownload: existingResult?.completeAnalysisDownload ?? null,
+      completeAnalysisDownload:
+        existingResult?.completeAnalysisDownload ?? null,
       simplifiedAnalysisDownload:
         existingResult?.simplifiedAnalysisDownload ?? null,
       ruralOrHybridRetirementRejectionId,
@@ -176,7 +179,7 @@ export class CreateRuralOrHybridRetirementRejectionFirstAnalysisUseCase {
       transactionOperations.push(
         this.ruralOrHybridRetirementRejectionCommandRepositoryGateway.updateRuralOrHybridRetirementRejectionResultId(
           ruralOrHybridRetirementRejectionId,
-          resultEntity.id as RuralOrHybridRetirementRejectionResultId,
+          resultEntity.id,
         ),
       );
     }
@@ -189,7 +192,8 @@ export class CreateRuralOrHybridRetirementRejectionFirstAnalysisUseCase {
 
     return CreateRuralOrHybridRetirementRejectionFirstAnalysisResponseDto.build(
       {
-        ruralOrHybridRetirementRejectionFirstAnalysis: parsedFirstAnalysis.model,
+        ruralOrHybridRetirementRejectionFirstAnalysis:
+          parsedFirstAnalysis.model,
       },
     );
   }
@@ -243,24 +247,23 @@ export class CreateRuralOrHybridRetirementRejectionFirstAnalysisUseCase {
         timeType: item.timeType,
         institution: item.institution,
         recognitionInss: item.recognitionInss,
-        recognitionJudicial: item.recognitionJudicial,
         viability: item.viability,
         technicalNote: item.technicalNote,
         startDate: item.startDate,
         endDate: item.endDate,
         affectsQualifyingPeriod: item.affectsQualifyingPeriod,
       })),
-      periods: (
-        rejection.ruralOrHybridRetirementRejectionPeriod ?? []
-      ).map((period) => ({
-        id: period.id.toString(),
-        startDate: period.startDate,
-        endDate: period.endDate,
-        workerType: period.workerType,
-        workSchedule: period.workSchedule,
-        propertyName: period.propertyName,
-        productionDestination: period.productionDestination,
-      })),
+      periods: (rejection.ruralOrHybridRetirementRejectionPeriod ?? []).map(
+        (period) => ({
+          id: period.id.toString(),
+          startDate: period.startDate,
+          endDate: period.endDate,
+          workerType: period.workerType,
+          workSchedule: period.workSchedule,
+          propertyName: period.propertyName,
+          productionDestination: period.productionDestination,
+        }),
+      ),
       workPeriods: (
         rejection.ruralOrHybridRetirementRejectionWorkPeriod ?? []
       ).map((workPeriod) => ({
@@ -270,11 +273,10 @@ export class CreateRuralOrHybridRetirementRejectionFirstAnalysisUseCase {
         endDate: workPeriod.endDate,
         category: workPeriod.category,
         status: workPeriod.status,
-        isPendency: workPeriod.isPendency,
         pendencyReason: workPeriod.pendencyReason,
         competenceBelowTheMinimum: workPeriod.competenceBelowTheMinimum,
         periodConsideration: workPeriod.periodConsideration,
-        typeOfContribution: workPeriod.typeOfContribution,
+        jobType: workPeriod.jobType,
         gracePeriod: workPeriod.gracePeriod,
         ...(workPeriod.contributionAverage !== null && {
           contributionAverage: workPeriod.contributionAverage.toString(),

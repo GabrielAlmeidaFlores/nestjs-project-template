@@ -5,6 +5,8 @@ export class RuralOrHybridRetirementRejectionPeriodMemberNotFoundError extends N
     RuralOrHybridRetirementRejectionPeriodMemberNotFoundError.name;
 
   public constructor() {
-    super('Membro do período da análise de indeferimento de aposentadoria rural ou híbrida não encontrado.');
+    super(
+      'Membro do período da análise de indeferimento de aposentadoria rural ou híbrida não encontrado.',
+    );
   }
 }

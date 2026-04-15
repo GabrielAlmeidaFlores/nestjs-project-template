@@ -18,13 +18,27 @@ export class RuralOrHybridRetirementRejectionPeriodMemberTypeormEntity extends B
   })
   public kinship: RuralOrHybridRetirementRejectionKinshipEnum | null;
 
-  @Column({ name: 'federal_document', type: 'varchar', length: 20, nullable: true })
+  @Column({
+    name: 'federal_document',
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+  })
   public federalDocument: string | null;
 
-  @Column({ name: 'has_received_rural_benefit', type: 'boolean', nullable: true })
+  @Column({
+    name: 'has_received_rural_benefit',
+    type: 'boolean',
+    nullable: true,
+  })
   public hasReceivedRuralBenefit: boolean | null;
 
-  @Column({ name: 'benefit_number', type: 'varchar', length: 255, nullable: true })
+  @Column({
+    name: 'benefit_number',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
   public benefitNumber: string | null;
 
   @ManyToOne(

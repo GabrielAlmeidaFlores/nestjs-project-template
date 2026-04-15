@@ -28,7 +28,9 @@ export class CreateRuralOrHybridRetirementRejectionTimeAcceleratorUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(RuralOrHybridRetirementRejectionQueryRepositoryGateway)
     private readonly ruralOrHybridRetirementRejectionQueryRepositoryGateway: RuralOrHybridRetirementRejectionQueryRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionTimeAcceleratorCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionTimeAcceleratorCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionTimeAcceleratorCommandRepositoryGateway: RuralOrHybridRetirementRejectionTimeAcceleratorCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,

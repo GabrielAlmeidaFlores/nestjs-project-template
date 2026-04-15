@@ -19,8 +19,7 @@ export class DataAnalyzeRuralOrHybridRetirementRejectionTimeAcceleratorRequestDt
 @RequestDto()
 export class AnalyzeRuralOrHybridRetirementRejectionTimeAcceleratorRequestDto extends BaseBuildableDtoObject {
   @RequestDtoObjectProperty(
-    () =>
-      DataAnalyzeRuralOrHybridRetirementRejectionTimeAcceleratorRequestDto,
+    () => DataAnalyzeRuralOrHybridRetirementRejectionTimeAcceleratorRequestDto,
   )
   public json: DataAnalyzeRuralOrHybridRetirementRejectionTimeAcceleratorRequestDto;
 

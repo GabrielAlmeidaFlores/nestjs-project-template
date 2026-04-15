@@ -99,7 +99,8 @@ export class DownloadRuralOrHybridRetirementRejectionSimplifiedAnalysisUseCase {
     }
 
     let responseAi =
-      currentResult.simplifiedAnalysisDownload ?? currentResult.simplifiedAnalysis;
+      currentResult.simplifiedAnalysisDownload ??
+      currentResult.simplifiedAnalysis;
 
     if (responseAi === null) {
       const simplifiedAnalysis =
@@ -129,9 +130,8 @@ export class DownloadRuralOrHybridRetirementRejectionSimplifiedAnalysisUseCase {
       throw new RuralOrHybridRetirementRejectionSimplifiedAnalysisNotFoundError();
     }
 
-    const htmlContent = await this.exportDocumentGateway.convertMarkdownToHtml(
-      responseAi,
-    );
+    const htmlContent =
+      await this.exportDocumentGateway.convertMarkdownToHtml(responseAi);
 
     return this.exportDocumentGateway.downloadFileAsStreamable(
       htmlContent,

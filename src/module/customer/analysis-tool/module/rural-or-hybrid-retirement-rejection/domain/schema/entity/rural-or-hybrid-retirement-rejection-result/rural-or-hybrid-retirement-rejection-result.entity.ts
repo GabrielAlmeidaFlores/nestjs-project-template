@@ -1,9 +1,8 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
-
 import { RuralOrHybridRetirementRejectionResultId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-result/value-object/rural-or-hybrid-retirement-rejection-result-id.value-object';
 
-import type { RuralOrHybridRetirementRejectionResultEntityPropsInterface } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-result/rural-or-hybrid-retirement-rejection-result.entity.props.interface';
 import type { RuralOrHybridRetirementRejectionId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id.value-object';
+import type { RuralOrHybridRetirementRejectionResultEntityPropsInterface } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-result/rural-or-hybrid-retirement-rejection-result.entity.props.interface';
 
 export class RuralOrHybridRetirementRejectionResultEntity extends BaseEntity<RuralOrHybridRetirementRejectionResultId> {
   public readonly firstAnalysis: string | null;
@@ -14,8 +13,7 @@ export class RuralOrHybridRetirementRejectionResultEntity extends BaseEntity<Rur
   public readonly simplifiedAnalysisDownload: string | null;
   public readonly ruralOrHybridRetirementRejectionId: RuralOrHybridRetirementRejectionId;
 
-  protected readonly _type =
-    RuralOrHybridRetirementRejectionResultEntity.name;
+  protected readonly _type = RuralOrHybridRetirementRejectionResultEntity.name;
 
   public constructor(
     props: RuralOrHybridRetirementRejectionResultEntityPropsInterface,

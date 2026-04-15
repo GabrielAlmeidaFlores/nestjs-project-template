@@ -13,13 +13,16 @@ import { RuralOrHybridRetirementRejectionLegalProceedingId } from '@module/custo
 @Injectable()
 export class RuralOrHybridRetirementRejectionLegalProceedingTypeormCommandRepository
   extends BaseTypeormCommandRepository<RuralOrHybridRetirementRejectionLegalProceedingTypeormEntity>
-  implements RuralOrHybridRetirementRejectionLegalProceedingCommandRepositoryGateway
+  implements
+    RuralOrHybridRetirementRejectionLegalProceedingCommandRepositoryGateway
 {
   protected readonly _type =
     RuralOrHybridRetirementRejectionLegalProceedingTypeormCommandRepository.name;
 
   public constructor(
-    @InjectRepository(RuralOrHybridRetirementRejectionLegalProceedingTypeormEntity)
+    @InjectRepository(
+      RuralOrHybridRetirementRejectionLegalProceedingTypeormEntity,
+    )
     repository: Repository<RuralOrHybridRetirementRejectionLegalProceedingTypeormEntity>,
   ) {
     super(repository);

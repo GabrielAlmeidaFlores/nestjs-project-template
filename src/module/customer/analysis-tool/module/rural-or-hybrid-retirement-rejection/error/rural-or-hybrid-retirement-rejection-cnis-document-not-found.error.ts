@@ -5,6 +5,8 @@ export class RuralOrHybridRetirementRejectionCnisDocumentNotFoundError extends N
     RuralOrHybridRetirementRejectionCnisDocumentNotFoundError.name;
 
   public constructor() {
-    super('Documento CNIS da análise de indeferimento de aposentadoria rural ou híbrida não encontrado.');
+    super(
+      'Documento CNIS da análise de indeferimento de aposentadoria rural ou híbrida não encontrado.',
+    );
   }
 }

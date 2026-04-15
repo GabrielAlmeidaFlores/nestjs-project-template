@@ -28,8 +28,8 @@ export class RuralOrHybridRetirementRejectionInssBenefitTypeormCommandRepository
   public createRuralOrHybridRetirementRejectionInssBenefit(
     props: RuralOrHybridRetirementRejectionInssBenefitEntity,
   ): TransactionType {
-    const mappedData = RuralOrHybridRetirementRejectionInssBenefitTypeormEntity.build(
-      {
+    const mappedData =
+      RuralOrHybridRetirementRejectionInssBenefitTypeormEntity.build({
         id: props.id.toString(),
         inssBenefit: props.inssBenefit,
         ruralOrHybridRetirementRejection:
@@ -39,8 +39,7 @@ export class RuralOrHybridRetirementRejectionInssBenefitTypeormCommandRepository
         createdAt: props.createdAt,
         updatedAt: props.updatedAt,
         deletedAt: props.deletedAt,
-      } as RuralOrHybridRetirementRejectionInssBenefitTypeormEntity,
-    );
+      } as RuralOrHybridRetirementRejectionInssBenefitTypeormEntity);
 
     return this.create(mappedData);
   }

@@ -1,9 +1,9 @@
-import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
-import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
-import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
-import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
-import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 import { RuralOrHybridRetirementRejectionId } from '@module/customer/rural-or-hybrid-retirement-rejection-analysis/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id/rural-or-hybrid-retirement-rejection-id.value-object';
+import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
+import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
+import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
+import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
+import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
 export class CreateRuralOrHybridRetirementRejectionResponseDto extends BaseBuildableDtoObject {
@@ -13,7 +13,8 @@ export class CreateRuralOrHybridRetirementRejectionResponseDto extends BaseBuild
   @ResponseDtoStringProperty()
   public analysisName: string;
 
-  protected override readonly _type = CreateRuralOrHybridRetirementRejectionResponseDto.name;
+  protected override readonly _type =
+    CreateRuralOrHybridRetirementRejectionResponseDto.name;
 }
 
 @ResponseDto()
@@ -51,7 +52,8 @@ export class GetRuralOrHybridRetirementRejectionResponseDto extends BaseBuildabl
   @ResponseDtoDateProperty()
   public updatedAt: Date;
 
-  protected override readonly _type = GetRuralOrHybridRetirementRejectionResponseDto.name;
+  protected override readonly _type =
+    GetRuralOrHybridRetirementRejectionResponseDto.name;
 }
 
 @ResponseDto()
@@ -59,7 +61,8 @@ export class UpdateRuralOrHybridRetirementRejectionResponseDto extends BaseBuild
   @ResponseDtoValueObjectProperty(RuralOrHybridRetirementRejectionId)
   public id: RuralOrHybridRetirementRejectionId;
 
-  protected override readonly _type = UpdateRuralOrHybridRetirementRejectionResponseDto.name;
+  protected override readonly _type =
+    UpdateRuralOrHybridRetirementRejectionResponseDto.name;
 }
 
 @ResponseDto()
@@ -67,5 +70,6 @@ export class DeleteRuralOrHybridRetirementRejectionResponseDto extends BaseBuild
   @ResponseDtoValueObjectProperty(RuralOrHybridRetirementRejectionId)
   public id: RuralOrHybridRetirementRejectionId;
 
-  protected override readonly _type = DeleteRuralOrHybridRetirementRejectionResponseDto.name;
+  protected override readonly _type =
+    DeleteRuralOrHybridRetirementRejectionResponseDto.name;
 }

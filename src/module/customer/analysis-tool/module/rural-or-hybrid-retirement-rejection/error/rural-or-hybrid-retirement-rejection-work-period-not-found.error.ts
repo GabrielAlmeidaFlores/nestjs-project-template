@@ -5,6 +5,8 @@ export class RuralOrHybridRetirementRejectionWorkPeriodNotFoundError extends Not
     RuralOrHybridRetirementRejectionWorkPeriodNotFoundError.name;
 
   public constructor() {
-    super('Período de trabalho da análise de indeferimento de aposentadoria rural ou híbrida não encontrado.');
+    super(
+      'Período de trabalho da análise de indeferimento de aposentadoria rural ou híbrida não encontrado.',
+    );
   }
 }

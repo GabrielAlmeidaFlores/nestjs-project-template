@@ -5,6 +5,8 @@ export class UnsupportedRuralOrHybridRetirementRejectionTimeAcceleratorTypeError
     UnsupportedRuralOrHybridRetirementRejectionTimeAcceleratorTypeError.name;
 
   public constructor() {
-    super('O tipo de acelerador de tempo de indeferimento de aposentadoria rural ou híbrida não é suportado.');
+    super(
+      'O tipo de acelerador de tempo de indeferimento de aposentadoria rural ou híbrida não é suportado.',
+    );
   }
 }

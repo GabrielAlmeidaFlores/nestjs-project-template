@@ -19,6 +19,9 @@ import { DisabilityRetirementPlanningGrantPeriodPendencyReasonEnum } from '@modu
 import { DisabilityRetirementPlanningGrantTimeAcceleratorRecognitionInssEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-time-accelerator/enum/disability-retirement-planning-grant-time-accelerator-recognition-inss.enum';
 import { DisabilityRetirementPlanningGrantTimeAcceleratorRecognitionJudicialEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-time-accelerator/enum/disability-retirement-planning-grant-time-accelerator-recognition-judicial.enum';
 import { DisabilityRetirementPlanningGrantViabilityEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-time-accelerator/enum/disability-retirement-planning-grant-viability.enum';
+import { RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-time-accelerator/enum/rural-or-hybrid-retirement-rejection-time-accelerator-analysis-type.enum';
+import { RuralOrHybridRetirementRejectionTimeAcceleratorRecognitionInssEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-time-accelerator/enum/rural-or-hybrid-retirement-rejection-time-accelerator-recognition-inss.enum';
+import { RuralOrHybridRetirementRejectionViabilityEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-time-accelerator/enum/rural-or-hybrid-retirement-rejection-viability.enum';
 import { MiniAdvisorAnalysisTypeEnum } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor-result/enum/mini-advisor-analysis-type.enum';
 
 @Injectable()
@@ -1514,6 +1517,105 @@ Análise processada do CNIS:
     );
   }
 
+  public async getRuralOrHybridRetirementRejectionFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson = true,
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANT
+- Base the technical analysis primarily on the already processed CNIS analysis in JSON format.
+- Calculate only values that are not already present in the provided CNIS analysis.
+- Return strictly a JSON object compatible with the requested schema.
+
+Processed CNIS analysis:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: asJson
+          ? ResponseConfigInputModel.build({
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema:
+                this.getRuralOrHybridRetirementRejectionFirstAnalysisJsonSchema(),
+            })
+          : null,
+      }),
+    );
+  }
+
+  public async getRuralOrHybridRetirementRejectionCompleteAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANT
+- Base the technical analysis primarily on the already processed CNIS analysis in JSON format.
+- Calculate only values that are not already present in the provided CNIS analysis.
+- Return strictly a JSON object compatible with the requested schema.
+
+Processed CNIS analysis:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getRuralOrHybridRetirementRejectionCompleteAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getRuralOrHybridRetirementRejectionSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getRuralOrHybridRetirementRejectionTimeAcceleratorAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANT
+- Return strictly a JSON object compatible with the requested schema.
+- Use only enum values provided by the schema for recognition and viability fields.
+- Each item in timeAccelerators must be compatible with creating a time accelerator period.
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getRuralOrHybridRetirementRejectionTimeAcceleratorAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
   public async getSurvivorPensionAnalysisResult(
     systemInstruction: string,
     files: Buffer[],
@@ -1799,6 +1901,150 @@ Análise processada do CNIS:
         'graceExtensionDueToInvoluntaryUnemployment',
         'requestToExtendGracePeriod',
       ],
+    };
+  }
+
+  private getRuralOrHybridRetirementRejectionFirstAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        summary: { type: 'string', nullable: true },
+        workPeriods: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              bondOrigin: { type: 'string', nullable: true },
+              startDate: { type: 'string', nullable: true },
+              endDate: { type: 'string', nullable: true },
+              category: { type: 'string', nullable: true },
+              competenceBelowTheMinimum: { type: 'boolean', nullable: true },
+              pendencyReason: { type: 'string', nullable: true },
+              periodConsideration: { type: 'string', nullable: true },
+              contributionAverage: { type: 'string', nullable: true },
+              status: { type: 'string', nullable: true },
+              gracePeriod: { type: 'string', nullable: true },
+            },
+            required: [
+              'bondOrigin',
+              'startDate',
+              'endDate',
+              'category',
+              'competenceBelowTheMinimum',
+              'pendencyReason',
+              'periodConsideration',
+              'contributionAverage',
+              'status',
+              'gracePeriod',
+            ],
+          },
+        },
+        periods: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              startDate: { type: 'string', nullable: true },
+              endDate: { type: 'string', nullable: true },
+              workerType: { type: 'string', nullable: true },
+              workSchedule: { type: 'string', nullable: true },
+              propertyName: { type: 'string', nullable: true },
+              productionDestination: { type: 'string', nullable: true },
+            },
+            required: [
+              'startDate',
+              'endDate',
+              'workerType',
+              'workSchedule',
+              'propertyName',
+              'productionDestination',
+            ],
+          },
+        },
+        totalContributionTime: { type: 'string', nullable: true },
+        eligibilityConclusion: { type: 'string', nullable: true },
+      },
+      required: [
+        'summary',
+        'workPeriods',
+        'periods',
+        'totalContributionTime',
+        'eligibilityConclusion',
+      ],
+    };
+  }
+
+  private getRuralOrHybridRetirementRejectionCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        summary: { type: 'string', nullable: true },
+        legalBasis: { type: 'string', nullable: true },
+        strategyRecommendation: { type: 'string', nullable: true },
+        evidenceAnalysis: { type: 'string', nullable: true },
+        timelineCompliance: { type: 'string', nullable: true },
+        conclusion: { type: 'string', nullable: true },
+      },
+      required: [
+        'summary',
+        'legalBasis',
+        'strategyRecommendation',
+        'evidenceAnalysis',
+        'timelineCompliance',
+        'conclusion',
+      ],
+    };
+  }
+
+  private getRuralOrHybridRetirementRejectionTimeAcceleratorAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        timeAccelerators: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              timeType: {
+                type: 'string',
+                enum: Object.values(
+                  RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum,
+                ),
+              },
+              recognitionInss: {
+                type: 'string',
+                enum: Object.values(
+                  RuralOrHybridRetirementRejectionTimeAcceleratorRecognitionInssEnum,
+                ),
+              },
+              viability: {
+                type: 'string',
+                enum: Object.values(
+                  RuralOrHybridRetirementRejectionViabilityEnum,
+                ),
+              },
+              technicalNote: { type: 'string', nullable: true },
+              startDate: { type: 'string', nullable: true },
+              endDate: { type: 'string', nullable: true },
+              gracePeriod: { type: 'string', nullable: true },
+              institution: { type: 'string', nullable: true },
+              affectsQualifyingPeriod: { type: 'boolean' },
+            },
+            required: [
+              'timeType',
+              'recognitionInss',
+              'viability',
+              'technicalNote',
+              'startDate',
+              'endDate',
+              'gracePeriod',
+              'institution',
+              'affectsQualifyingPeriod',
+            ],
+          },
+        },
+      },
+      required: ['timeAccelerators'],
     };
   }
 

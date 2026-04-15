@@ -13,13 +13,16 @@ import { RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisId } from '@m
 @Injectable()
 export class RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisTypeormCommandRepository
   extends BaseTypeormCommandRepository<RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisTypeormEntity>
-  implements RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisCommandRepositoryGateway
+  implements
+    RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisCommandRepositoryGateway
 {
   protected readonly _type =
     RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisTypeormCommandRepository.name;
 
   public constructor(
-    @InjectRepository(RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisTypeormEntity)
+    @InjectRepository(
+      RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisTypeormEntity,
+    )
     repository: Repository<RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisTypeormEntity>,
   ) {
     super(repository);

@@ -5,7 +5,12 @@ import { RuralOrHybridRetirementRejectionTypeormEntity } from '@infra/database/i
 
 @Entity({ name: 'rural_or_hybrid_retirement_rejection_legal_proceeding' })
 export class RuralOrHybridRetirementRejectionLegalProceedingTypeormEntity extends BaseTypeormEntity {
-  @Column({ name: 'legal_proceeding_number', type: 'varchar', length: 255, nullable: true })
+  @Column({
+    name: 'legal_proceeding_number',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
   public legalProceedingNumber: string | null;
 
   @ManyToOne(

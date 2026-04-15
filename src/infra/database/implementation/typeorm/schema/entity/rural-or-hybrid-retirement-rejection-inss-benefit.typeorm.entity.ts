@@ -5,7 +5,12 @@ import { RuralOrHybridRetirementRejectionTypeormEntity } from '@infra/database/i
 
 @Entity({ name: 'rural_or_hybrid_retirement_rejection_inss_benefit' })
 export class RuralOrHybridRetirementRejectionInssBenefitTypeormEntity extends BaseTypeormEntity {
-  @Column({ name: 'inss_benefit', type: 'varchar', length: 255, nullable: true })
+  @Column({
+    name: 'inss_benefit',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
   public inssBenefit: string | null;
 
   @ManyToOne(

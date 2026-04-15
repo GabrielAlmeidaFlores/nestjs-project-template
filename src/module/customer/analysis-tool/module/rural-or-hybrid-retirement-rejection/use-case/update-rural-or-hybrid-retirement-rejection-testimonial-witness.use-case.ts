@@ -31,9 +31,13 @@ export class UpdateRuralOrHybridRetirementRejectionTestimonialWitnessUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(RuralOrHybridRetirementRejectionQueryRepositoryGateway)
     private readonly ruralOrHybridRetirementRejectionQueryRepositoryGateway: RuralOrHybridRetirementRejectionQueryRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionTestimonialWitnessCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionTestimonialWitnessCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionTestimonialWitnessCommandRepositoryGateway: RuralOrHybridRetirementRejectionTestimonialWitnessCommandRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionTestimonialWitnessDocumentCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionTestimonialWitnessDocumentCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionTestimonialWitnessDocumentCommandRepositoryGateway: RuralOrHybridRetirementRejectionTestimonialWitnessDocumentCommandRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
@@ -64,7 +68,8 @@ export class UpdateRuralOrHybridRetirementRejectionTestimonialWitnessUseCase {
       );
 
     const existingTestimonialWitnesses =
-      existingRejection.ruralOrHybridRetirementRejectionTestimonialWitness ?? [];
+      existingRejection.ruralOrHybridRetirementRejectionTestimonialWitness ??
+      [];
     const existingTestimonialWitnessDocuments =
       existingRejection.ruralOrHybridRetirementRejectionTestimonialWitnessDocument ??
       [];
@@ -122,7 +127,8 @@ export class UpdateRuralOrHybridRetirementRejectionTestimonialWitnessUseCase {
               encoding: '7bit',
             });
 
-            const document = await this.fileProcessorGateway.uploadFile(fileModel);
+            const document =
+              await this.fileProcessorGateway.uploadFile(fileModel);
 
             return this.ruralOrHybridRetirementRejectionTestimonialWitnessDocumentCommandRepositoryGateway.createRuralOrHybridRetirementRejectionTestimonialWitnessDocument(
               new RuralOrHybridRetirementRejectionTestimonialWitnessDocumentEntity(

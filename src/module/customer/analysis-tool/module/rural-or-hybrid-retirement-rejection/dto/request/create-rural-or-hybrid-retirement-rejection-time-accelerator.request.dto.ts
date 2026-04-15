@@ -41,10 +41,9 @@ export class RuralOrHybridRetirementRejectionTimeAcceleratorItemRequestDto exten
   @RequestDtoStringProperty({ required: false })
   public gracePeriod?: string;
 
-  @RequestDtoEnumProperty(
-    RuralOrHybridRetirementRejectionViabilityEnum,
-    { required: false },
-  )
+  @RequestDtoEnumProperty(RuralOrHybridRetirementRejectionViabilityEnum, {
+    required: false,
+  })
   public viability?: RuralOrHybridRetirementRejectionViabilityEnum;
 
   protected override readonly _type =
@@ -54,8 +53,7 @@ export class RuralOrHybridRetirementRejectionTimeAcceleratorItemRequestDto exten
 @RequestDto()
 export class CreateRuralOrHybridRetirementRejectionTimeAcceleratorRequestDto extends BaseBuildableDtoObject {
   @RequestDtoObjectProperty(
-    () =>
-      RuralOrHybridRetirementRejectionTimeAcceleratorItemRequestDto,
+    () => RuralOrHybridRetirementRejectionTimeAcceleratorItemRequestDto,
     { isArray: true },
   )
   public timeAccelerators: RuralOrHybridRetirementRejectionTimeAcceleratorItemRequestDto[];

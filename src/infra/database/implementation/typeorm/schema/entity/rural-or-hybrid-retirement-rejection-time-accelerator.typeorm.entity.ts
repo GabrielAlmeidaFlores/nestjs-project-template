@@ -9,31 +9,65 @@ import { RuralOrHybridRetirementRejectionViabilityEnum } from '@module/customer/
 
 @Entity({ name: 'rural_or_hybrid_retirement_rejection_time_accelerator' })
 export class RuralOrHybridRetirementRejectionTimeAcceleratorTypeormEntity extends BaseTypeormEntity {
-  @Column({ name: 'time_type', type: 'simple-enum', enum: RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum, nullable: true })
+  @Column({
+    name: 'time_type',
+    type: 'simple-enum',
+    enum: RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum,
+    nullable: true,
+  })
   public timeType: RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum | null;
 
   @Column({ name: 'institution', type: 'varchar', length: 255, nullable: true })
   public institution: string | null;
 
-  @Column({ name: 'recognition_inss', type: 'simple-enum', enum: RuralOrHybridRetirementRejectionTimeAcceleratorRecognitionInssEnum, nullable: true })
+  @Column({
+    name: 'recognition_inss',
+    type: 'simple-enum',
+    enum: RuralOrHybridRetirementRejectionTimeAcceleratorRecognitionInssEnum,
+    nullable: true,
+  })
   public recognitionInss: RuralOrHybridRetirementRejectionTimeAcceleratorRecognitionInssEnum | null;
 
-  @Column({ name: 'affects_qualifying_period', type: 'boolean', nullable: true })
+  @Column({
+    name: 'affects_qualifying_period',
+    type: 'boolean',
+    nullable: true,
+  })
   public affectsQualifyingPeriod: boolean | null;
 
   @Column({ name: 'technical_note', type: 'longtext', nullable: true })
   public technicalNote: string | null;
 
-  @Column({ name: 'start_date', type: 'date', transformer: DateOnlyTransformer, nullable: true })
+  @Column({
+    name: 'start_date',
+    type: 'date',
+    transformer: DateOnlyTransformer,
+    nullable: true,
+  })
   public startDate: Date | null;
 
-  @Column({ name: 'end_date', type: 'date', transformer: DateOnlyTransformer, nullable: true })
+  @Column({
+    name: 'end_date',
+    type: 'date',
+    transformer: DateOnlyTransformer,
+    nullable: true,
+  })
   public endDate: Date | null;
 
-  @Column({ name: 'grace_period', type: 'varchar', length: 255, nullable: true })
+  @Column({
+    name: 'grace_period',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
   public gracePeriod: string | null;
 
-  @Column({ name: 'viability', type: 'simple-enum', enum: RuralOrHybridRetirementRejectionViabilityEnum, nullable: true })
+  @Column({
+    name: 'viability',
+    type: 'simple-enum',
+    enum: RuralOrHybridRetirementRejectionViabilityEnum,
+    nullable: true,
+  })
   public viability: RuralOrHybridRetirementRejectionViabilityEnum | null;
 
   @ManyToOne(

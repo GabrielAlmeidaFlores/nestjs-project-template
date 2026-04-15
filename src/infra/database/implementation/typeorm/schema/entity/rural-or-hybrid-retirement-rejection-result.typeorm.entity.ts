@@ -17,10 +17,18 @@ export class RuralOrHybridRetirementRejectionResultTypeormEntity extends BaseTyp
   @Column({ name: 'simplified_analysis', type: 'longtext', nullable: true })
   public simplifiedAnalysis: string | null;
 
-  @Column({ name: 'complete_analysis_download', type: 'longtext', nullable: true })
+  @Column({
+    name: 'complete_analysis_download',
+    type: 'longtext',
+    nullable: true,
+  })
   public completeAnalysisDownload: string | null;
 
-  @Column({ name: 'simplified_analysis_download', type: 'longtext', nullable: true })
+  @Column({
+    name: 'simplified_analysis_download',
+    type: 'longtext',
+    nullable: true,
+  })
   public simplifiedAnalysisDownload: string | null;
 
   @OneToOne(

@@ -186,9 +186,7 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
 
   @ManyToOne(() => RuralOrHybridRetirementRejectionTypeormEntity)
   @JoinColumn({ name: 'rural_or_hybrid_retirement_rejection_id' })
-  public ruralOrHybridRetirementRejection?:
-    | RuralOrHybridRetirementRejectionTypeormEntity
-    | null;
+  public ruralOrHybridRetirementRejection?: RuralOrHybridRetirementRejectionTypeormEntity | null;
 
   @OneToOne(
     () => InsuranceQualityAnalysisTypeormEntity,

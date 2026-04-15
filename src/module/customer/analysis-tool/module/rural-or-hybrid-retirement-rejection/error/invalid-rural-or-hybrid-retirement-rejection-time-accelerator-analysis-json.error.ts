@@ -5,6 +5,8 @@ export class InvalidRuralOrHybridRetirementRejectionTimeAcceleratorAnalysisJsonE
     InvalidRuralOrHybridRetirementRejectionTimeAcceleratorAnalysisJsonError.name;
 
   public constructor() {
-    super('O JSON da análise de acelerador de tempo de indeferimento de aposentadoria rural ou híbrida é inválido.');
+    super(
+      'O JSON da análise de acelerador de tempo de indeferimento de aposentadoria rural ou híbrida é inválido.',
+    );
   }
 }

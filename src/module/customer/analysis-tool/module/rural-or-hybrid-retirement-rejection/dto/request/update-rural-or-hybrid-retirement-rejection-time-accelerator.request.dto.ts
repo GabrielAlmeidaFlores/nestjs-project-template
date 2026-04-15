@@ -6,8 +6,7 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @RequestDto()
 export class UpdateRuralOrHybridRetirementRejectionTimeAcceleratorRequestDto extends BaseBuildableDtoObject {
   @RequestDtoObjectProperty(
-    () =>
-      RuralOrHybridRetirementRejectionTimeAcceleratorItemRequestDto,
+    () => RuralOrHybridRetirementRejectionTimeAcceleratorItemRequestDto,
     { isArray: true },
   )
   public timeAccelerators: RuralOrHybridRetirementRejectionTimeAcceleratorItemRequestDto[];

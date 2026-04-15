@@ -11,7 +11,12 @@ export class RuralOrHybridRetirementRejectionTestimonialWitnessTypeormEntity ext
   @Column({ name: 'full_name', type: 'varchar', length: 255, nullable: true })
   public fullName: string | null;
 
-  @Column({ name: 'federal_document', type: 'varchar', length: 20, nullable: true })
+  @Column({
+    name: 'federal_document',
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+  })
   public federalDocument: string | null;
 
   @Column({
@@ -48,7 +53,8 @@ export class RuralOrHybridRetirementRejectionTestimonialWitnessTypeormEntity ext
     | undefined;
 
   @OneToMany(
-    () => RuralOrHybridRetirementRejectionTestimonialWitnessDocumentTypeormEntity,
+    () =>
+      RuralOrHybridRetirementRejectionTestimonialWitnessDocumentTypeormEntity,
     (entity) => entity.ruralOrHybridRetirementRejectionTestimonialWitness,
   )
   public ruralOrHybridRetirementRejectionTestimonialWitnessDocument?:

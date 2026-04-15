@@ -26,9 +26,13 @@ export class DeleteRuralOrHybridRetirementRejectionPeriodMemberUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(RuralOrHybridRetirementRejectionQueryRepositoryGateway)
     private readonly ruralOrHybridRetirementRejectionQueryRepositoryGateway: RuralOrHybridRetirementRejectionQueryRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway: RuralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway,
-    @Inject(RuralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway)
+    @Inject(
+      RuralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway,
+    )
     private readonly ruralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway: RuralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
@@ -61,7 +65,8 @@ export class DeleteRuralOrHybridRetirementRejectionPeriodMemberUseCase {
       existingRejection.ruralOrHybridRetirementRejectionPeriod ?? []
     ).find(
       (period) =>
-        period.id.toString() === ruralOrHybridRetirementRejectionPeriodId.toString(),
+        period.id.toString() ===
+        ruralOrHybridRetirementRejectionPeriodId.toString(),
     );
 
     if (!existingPeriod) {
@@ -72,7 +77,8 @@ export class DeleteRuralOrHybridRetirementRejectionPeriodMemberUseCase {
       existingRejection.ruralOrHybridRetirementRejectionPeriodMember ?? []
     ).find(
       (member) =>
-        member.id.toString() === ruralOrHybridRetirementRejectionPeriodMemberId.toString() &&
+        member.id.toString() ===
+          ruralOrHybridRetirementRejectionPeriodMemberId.toString() &&
         member.ruralOrHybridRetirementRejectionPeriodId.toString() ===
           ruralOrHybridRetirementRejectionPeriodId.toString(),
     );
@@ -82,7 +88,8 @@ export class DeleteRuralOrHybridRetirementRejectionPeriodMemberUseCase {
     }
 
     const memberDocuments = (
-      existingRejection.ruralOrHybridRetirementRejectionPeriodMemberDocument ?? []
+      existingRejection.ruralOrHybridRetirementRejectionPeriodMemberDocument ??
+      []
     ).filter(
       (document) =>
         document.ruralOrHybridRetirementRejectionPeriodMemberId.toString() ===
@@ -102,10 +109,8 @@ export class DeleteRuralOrHybridRetirementRejectionPeriodMemberUseCase {
 
     await transaction.commit();
 
-    return DeleteRuralOrHybridRetirementRejectionPeriodMemberResponseDto.build(
-      {
-        ruralOrHybridRetirementRejectionId,
-      },
-    );
+    return DeleteRuralOrHybridRetirementRejectionPeriodMemberResponseDto.build({
+      ruralOrHybridRetirementRejectionId,
+    });
   }
 }

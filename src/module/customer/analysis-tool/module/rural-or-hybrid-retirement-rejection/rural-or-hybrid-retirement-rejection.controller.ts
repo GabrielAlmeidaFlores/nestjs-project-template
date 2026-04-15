@@ -9,13 +9,13 @@ import {
 } from '@nestjs/common';
 
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
+import { RuralOrHybridRetirementRejectionId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id.value-object';
 import { RuralOrHybridRetirementRejectionPeriodId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period/value-object/rural-or-hybrid-retirement-rejection-period-id.value-object';
 import { RuralOrHybridRetirementRejectionPeriodMemberId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period-member/value-object/rural-or-hybrid-retirement-rejection-period-member-id.value-object';
 import { RuralOrHybridRetirementRejectionTestimonialWitnessId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-testimonial-witness/value-object/rural-or-hybrid-retirement-rejection-testimonial-witness-id.value-object';
 import { RuralOrHybridRetirementRejectionTimeAcceleratorId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-time-accelerator/value-object/rural-or-hybrid-retirement-rejection-time-accelerator-id.value-object';
-import { RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-work-period-document-analysis/value-object/rural-or-hybrid-retirement-rejection-work-period-document-analysis-id.value-object';
 import { RuralOrHybridRetirementRejectionWorkPeriodId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-work-period/value-object/rural-or-hybrid-retirement-rejection-work-period-id.value-object';
-import { RuralOrHybridRetirementRejectionId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id.value-object';
+import { RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-work-period-document-analysis/value-object/rural-or-hybrid-retirement-rejection-work-period-document-analysis-id.value-object';
 import { AnalyzeRuralOrHybridRetirementRejectionTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/request/analyze-rural-or-hybrid-retirement-rejection-time-accelerator.request.dto';
 import { CreateRuralOrHybridRetirementRejectionPeriodMemberRequestDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/request/create-rural-or-hybrid-retirement-rejection-period-member.request.dto';
 import { CreateRuralOrHybridRetirementRejectionPeriodRequestDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/request/create-rural-or-hybrid-retirement-rejection-period.request.dto';
@@ -617,7 +617,9 @@ export class RuralOrHybridRetirementRejectionController {
     ruralOrHybridRetirementRejectionId: RuralOrHybridRetirementRejectionId,
     @Param(
       'ruralOrHybridRetirementRejectionTestimonialWitnessId',
-      new ParseValueObjectPipe(RuralOrHybridRetirementRejectionTestimonialWitnessId),
+      new ParseValueObjectPipe(
+        RuralOrHybridRetirementRejectionTestimonialWitnessId,
+      ),
     )
     ruralOrHybridRetirementRejectionTestimonialWitnessId: RuralOrHybridRetirementRejectionTestimonialWitnessId,
   ): Promise<DeleteRuralOrHybridRetirementRejectionTestimonialWitnessResponseDto> {
@@ -780,8 +782,7 @@ export class RuralOrHybridRetirementRejectionController {
   }
 
   @BuildEndpointSpecification({
-    summary:
-      'Atualizar análise de documento do período de trabalho da análise',
+    summary: 'Atualizar análise de documento do período de trabalho da análise',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':ruralOrHybridRetirementRejectionId/work-period/:ruralOrHybridRetirementRejectionWorkPeriodId/document-analysis',
@@ -823,8 +824,7 @@ export class RuralOrHybridRetirementRejectionController {
   }
 
   @BuildEndpointSpecification({
-    summary:
-      'Excluir análise de documento do período de trabalho da análise',
+    summary: 'Excluir análise de documento do período de trabalho da análise',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':ruralOrHybridRetirementRejectionId/work-period/:ruralOrHybridRetirementRejectionWorkPeriodId/document-analysis/:ruralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisId',
@@ -894,7 +894,8 @@ export class RuralOrHybridRetirementRejectionController {
       new ParseValueObjectPipe(RuralOrHybridRetirementRejectionId),
     )
     ruralOrHybridRetirementRejectionId: RuralOrHybridRetirementRejectionId,
-    @Body() dto: CreateRuralOrHybridRetirementRejectionTimeAcceleratorRequestDto,
+    @Body()
+    dto: CreateRuralOrHybridRetirementRejectionTimeAcceleratorRequestDto,
   ): Promise<CreateRuralOrHybridRetirementRejectionTimeAcceleratorResponseDto> {
     return this.createRuralOrHybridRetirementRejectionTimeAcceleratorUseCase.execute(
       sessionData,
@@ -929,7 +930,8 @@ export class RuralOrHybridRetirementRejectionController {
       new ParseValueObjectPipe(RuralOrHybridRetirementRejectionId),
     )
     ruralOrHybridRetirementRejectionId: RuralOrHybridRetirementRejectionId,
-    @Body() dto: UpdateRuralOrHybridRetirementRejectionTimeAcceleratorRequestDto,
+    @Body()
+    dto: UpdateRuralOrHybridRetirementRejectionTimeAcceleratorRequestDto,
   ): Promise<UpdateRuralOrHybridRetirementRejectionTimeAcceleratorResponseDto> {
     return this.updateRuralOrHybridRetirementRejectionTimeAcceleratorUseCase.execute(
       sessionData,
@@ -965,7 +967,9 @@ export class RuralOrHybridRetirementRejectionController {
     ruralOrHybridRetirementRejectionId: RuralOrHybridRetirementRejectionId,
     @Param(
       'ruralOrHybridRetirementRejectionTimeAcceleratorId',
-      new ParseValueObjectPipe(RuralOrHybridRetirementRejectionTimeAcceleratorId),
+      new ParseValueObjectPipe(
+        RuralOrHybridRetirementRejectionTimeAcceleratorId,
+      ),
     )
     ruralOrHybridRetirementRejectionTimeAcceleratorId: RuralOrHybridRetirementRejectionTimeAcceleratorId,
   ): Promise<DeleteRuralOrHybridRetirementRejectionTimeAcceleratorResponseDto> {
