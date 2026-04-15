@@ -5,7 +5,7 @@ import { RuralOrHybridRetirementRejectionWorkPeriodTypeormEntity } from '@infra/
 import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
 
 @Entity({
-  name: 'rural_or_hybrid_retirement_rejection_work_period_earnings_history',
+  name: 'rural_or_hybrid_retirement_rejection_work_period_earnings_hist',
 })
 export class RuralOrHybridRetirementRejectionWorkPeriodEarningsHistoryTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'competence', type: 'varchar', length: 255, nullable: true })

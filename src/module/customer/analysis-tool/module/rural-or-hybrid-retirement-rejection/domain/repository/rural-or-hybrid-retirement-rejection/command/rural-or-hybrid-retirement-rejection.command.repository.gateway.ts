@@ -17,4 +17,8 @@ export abstract class RuralOrHybridRetirementRejectionCommandRepositoryGateway {
     id: RuralOrHybridRetirementRejectionId,
     resultId: RuralOrHybridRetirementRejectionResultId,
   ): TransactionType;
+
+  public abstract deleteRuralOrHybridRetirementRejection(
+    id: RuralOrHybridRetirementRejectionId,
+  ): TransactionType;
 }
