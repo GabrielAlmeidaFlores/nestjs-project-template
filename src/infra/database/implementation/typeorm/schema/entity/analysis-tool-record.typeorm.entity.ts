@@ -9,6 +9,7 @@ import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database
 import { DisabilityRetirementPlanningGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-grant.typeorm.entity';
 import { DisabilityRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning.typeorm.entity';
 import { GeneralUrbanRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis.typeorm.entity';
+import { GeneralUrbanRetirementDenialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial.typeorm.entity';
 import { GeneralUrbanRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant.typeorm.entity';
 import { InsuranceQualityAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis.typeorm.entity';
 import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis.typeorm.entity';
@@ -253,6 +254,10 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   )
   @JoinColumn({ name: 'special_retirement_grant_id' })
   public specialRetirementGrant?: SpecialRetirementGrantTypeormEntity | null;
+
+  @ManyToOne(() => GeneralUrbanRetirementDenialTypeormEntity)
+  @JoinColumn({ name: 'general_urban_retirement_denial_id' })
+  public generalUrbanRetirementDenial?: GeneralUrbanRetirementDenialTypeormEntity | null;
 
   @ManyToOne(
     () => AnalysisToolClientTypeormEntity,
