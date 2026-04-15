@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
@@ -12,8 +13,10 @@ import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { GeneralUrbanRetirementDenialCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial/command/general-urban-retirement-denial.command.repository.gateway';
 import { GeneralUrbanRetirementDenialQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial/query/general-urban-retirement-denial.query.repository.gateway';
+import { GeneralUrbanRetirementDenialInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial-inss-benefit/command/general-urban-retirement-denial-inss-benefit.command.repository.gateway';
 import { GeneralUrbanRetirementDenialEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/general-urban-retirement-denial.entity';
 import { GeneralUrbanRetirementDenialId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/value-object/general-urban-retirement-denial-id/general-urban-retirement-denial-id.value-object';
+import { GeneralUrbanRetirementDenialInssBenefitEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-inss-benefit/general-urban-retirement-denial-inss-benefit.entity';
 import { UpdateGeneralUrbanRetirementDenialRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/update-general-urban-retirement-denial.request.dto';
 import { UpdateGeneralUrbanRetirementDenialResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/update-general-urban-retirement-denial.response.dto';
 import { GeneralUrbanRetirementDenialNotFoundError } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/error/general-urban-retirement-denial-not-found.error';
@@ -33,6 +36,8 @@ export class UpdateGeneralUrbanRetirementDenialUseCase {
     private readonly generalUrbanRetirementDenialCommandRepositoryGateway: GeneralUrbanRetirementDenialCommandRepositoryGateway,
     @Inject(GeneralUrbanRetirementDenialQueryRepositoryGateway)
     private readonly generalUrbanRetirementDenialQueryRepositoryGateway: GeneralUrbanRetirementDenialQueryRepositoryGateway,
+    @Inject(GeneralUrbanRetirementDenialInssBenefitCommandRepositoryGateway)
+    private readonly generalUrbanRetirementDenialInssBenefitCommandRepositoryGateway: GeneralUrbanRetirementDenialInssBenefitCommandRepositoryGateway,
     @Inject(AnalysisToolClientQueryRepositoryGateway)
     private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
     @Inject(AnalysisToolRecordQueryRepositoryGateway)
@@ -105,6 +110,11 @@ export class UpdateGeneralUrbanRetirementDenialUseCase {
         generalUrbanRetirementDenialResultId:
           generalUrbanRetirementDenialQueryResult
             .generalUrbanRetirementDenialResult?.id ?? null,
+        requestedBenefitType:
+          dto.requestedBenefitType ??
+          generalUrbanRetirementDenialQueryResult.requestedBenefitType,
+        category:
+          dto.category ?? generalUrbanRetirementDenialQueryResult.category,
       },
     );
 
@@ -135,9 +145,18 @@ export class UpdateGeneralUrbanRetirementDenialUseCase {
         analysisToolRecord,
       );
 
+    const inssBenefitTransactions =
+      dto.inssBenefitNumber !== undefined
+        ? this.buildInssBenefitUpdateTransactions(
+            generalUrbanRetirementDenialId,
+            dto.inssBenefitNumber,
+          )
+        : [];
+
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       updateDenialTransaction,
       updateAnalysisToolRecordTransaction,
+      ...inssBenefitTransactions,
     ]);
 
     await transaction.commit();
@@ -145,5 +164,26 @@ export class UpdateGeneralUrbanRetirementDenialUseCase {
     return UpdateGeneralUrbanRetirementDenialResponseDto.build({
       generalUrbanRetirementDenialId,
     });
+  }
+
+  private buildInssBenefitUpdateTransactions(
+    generalUrbanRetirementDenialId: GeneralUrbanRetirementDenialId,
+    inssBenefitNumbers: string[],
+  ): TransactionType[] {
+    const deleteTransaction =
+      this.generalUrbanRetirementDenialInssBenefitCommandRepositoryGateway.deleteAllByGeneralUrbanRetirementDenialId(
+        generalUrbanRetirementDenialId,
+      );
+
+    const createTransactions = inssBenefitNumbers.map((inssBenefit) =>
+      this.generalUrbanRetirementDenialInssBenefitCommandRepositoryGateway.createGeneralUrbanRetirementDenialInssBenefit(
+        new GeneralUrbanRetirementDenialInssBenefitEntity({
+          inssBenefit,
+          generalUrbanRetirementDenialId,
+        }),
+      ),
+    );
+
+    return [deleteTransaction, ...createTransactions];
   }
 }

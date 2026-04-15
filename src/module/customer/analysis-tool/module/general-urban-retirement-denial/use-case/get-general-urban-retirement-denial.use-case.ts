@@ -69,6 +69,16 @@ export class GetGeneralUrbanRetirementDenialUseCase {
         requestEntryDate: denial.requestEntryDate,
       }),
       ...(denial.denialDate !== null && { denialDate: denial.denialDate }),
+      ...(denial.requestedBenefitType !== null && {
+        requestedBenefitType: denial.requestedBenefitType,
+      }),
+      ...(denial.category !== null && { category: denial.category }),
+      ...(denial.generalUrbanRetirementDenialInssBenefit !== null &&
+        denial.generalUrbanRetirementDenialInssBenefit.length > 0 && {
+          inssBenefitNumber: denial.generalUrbanRetirementDenialInssBenefit.map(
+            (b) => b.inssBenefit,
+          ),
+        }),
       ...(denial.generalUrbanRetirementDenialResult !== null && {
         generalUrbanRetirementDenialResult: this.buildResultResponseDto(
           denial.generalUrbanRetirementDenialResult,

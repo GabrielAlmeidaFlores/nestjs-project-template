@@ -1,4 +1,5 @@
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { GeneralUrbanRetirementDenialCategoryEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/enum/general-urban-retirement-denial-category.enum';
 import { GeneralUrbanRetirementDenialId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/value-object/general-urban-retirement-denial-id/general-urban-retirement-denial-id.value-object';
 import { GeneralUrbanRetirementDenialDocumentTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-document/enum/general-urban-retirement-denial-document-type.enum';
 import { GeneralUrbanRetirementDenialPeriodCategoryEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-category.enum';
@@ -141,6 +142,17 @@ export class GetGeneralUrbanRetirementDenialResponseDto extends BaseBuildableDto
 
   @ResponseDtoDateProperty({ required: false })
   public denialDate?: Date;
+
+  @ResponseDtoStringProperty({ required: false })
+  public requestedBenefitType?: string;
+
+  @ResponseDtoEnumProperty(GeneralUrbanRetirementDenialCategoryEnum, {
+    required: false,
+  })
+  public category?: GeneralUrbanRetirementDenialCategoryEnum;
+
+  @ResponseDtoStringProperty({ required: false, isArray: true })
+  public inssBenefitNumber?: string[];
 
   @ResponseDtoObjectProperty(
     () => GetGeneralUrbanRetirementDenialResultResponseDto,

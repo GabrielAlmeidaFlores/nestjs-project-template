@@ -1,8 +1,10 @@
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
 import type { GetGeneralUrbanRetirementDenialTimeAcceleratorQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial-time-accelerator/query/result/get-general-urban-retirement-denial-time-accelerator.query.result';
+import type { GeneralUrbanRetirementDenialCategoryEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/enum/general-urban-retirement-denial-category.enum';
 import type { GeneralUrbanRetirementDenialId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/value-object/general-urban-retirement-denial-id/general-urban-retirement-denial-id.value-object';
 import type { GeneralUrbanRetirementDenialDocumentEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-document/general-urban-retirement-denial-document.entity';
+import type { GeneralUrbanRetirementDenialInssBenefitEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-inss-benefit/general-urban-retirement-denial-inss-benefit.entity';
 import type { GeneralUrbanRetirementDenialPeriodEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/general-urban-retirement-denial-period.entity';
 import type { GeneralUrbanRetirementDenialPeriodDocumentEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period-document/general-urban-retirement-denial-period-document.entity';
 import type { GeneralUrbanRetirementDenialPeriodEarningsHistoryEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period-earnings-history/general-urban-retirement-denial-period-earnings-history.entity';
@@ -13,6 +15,8 @@ export class GetGeneralUrbanRetirementDenialWithRelationsQueryResult extends Bas
   public readonly analysisName: string | null;
   public readonly requestEntryDate: Date | null;
   public readonly denialDate: Date | null;
+  public readonly requestedBenefitType: string | null;
+  public readonly category: GeneralUrbanRetirementDenialCategoryEnum | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;
@@ -31,6 +35,9 @@ export class GetGeneralUrbanRetirementDenialWithRelationsQueryResult extends Bas
     | null;
   public readonly generalUrbanRetirementDenialTimeAccelerator:
     | GetGeneralUrbanRetirementDenialTimeAcceleratorQueryResult[]
+    | null;
+  public readonly generalUrbanRetirementDenialInssBenefit:
+    | GeneralUrbanRetirementDenialInssBenefitEntity[]
     | null;
 
   protected override readonly _type =

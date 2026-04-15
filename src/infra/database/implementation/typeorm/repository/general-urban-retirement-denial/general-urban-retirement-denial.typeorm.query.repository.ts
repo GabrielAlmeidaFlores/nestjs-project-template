@@ -42,6 +42,7 @@ export class GeneralUrbanRetirementDenialTypeormQueryRepository
             generalUrbanRetirementDenialPeriodEarningsHistory: true,
           },
           generalUrbanRetirementDenialTimeAccelerator: true,
+          generalUrbanRetirementDenialInssBenefit: true,
         },
       },
       err,
