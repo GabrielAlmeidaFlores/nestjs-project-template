@@ -5,7 +5,6 @@ import { GeneralUrbanRetirementDenialPeriodWorkTypeEnum } from '@module/customer
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-boolean-property/response-dto-boolean-property.decorator';
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
-import { ResponseDtoNumberProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-number-property/response-dto-number-property.decorator';
 import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
@@ -34,6 +33,9 @@ export class GeneralUrbanRetirementDenialFirstAnalysisPeriodModel extends BaseBu
   @ResponseDtoStringProperty({ required: false })
   public endDate?: string;
 
+  @ResponseDtoStringProperty({ required: false })
+  public category?: string;
+
   @ResponseDtoEnumProperty(GeneralUrbanRetirementDenialPeriodWorkTypeEnum)
   public workType: GeneralUrbanRetirementDenialPeriodWorkTypeEnum;
 
@@ -48,6 +50,9 @@ export class GeneralUrbanRetirementDenialFirstAnalysisPeriodModel extends BaseBu
     { required: false },
   )
   public pendencyReason?: GeneralUrbanRetirementDenialPeriodPendencyReasonEnum;
+
+  @ResponseDtoStringProperty({ required: false })
+  public impact?: string;
 
   @ResponseDtoEnumProperty(
     GeneralUrbanRetirementDenialPeriodConsiderationEnum,
@@ -69,15 +74,31 @@ export class GeneralUrbanRetirementDenialFirstAnalysisPeriodModel extends BaseBu
 }
 
 @ResponseDto()
-export class GeneralUrbanRetirementDenialFirstAnalysisTimeSummaryModel extends BaseBuildableDtoObject {
-  @ResponseDtoNumberProperty()
-  public contributedMonths: number;
-
-  @ResponseDtoNumberProperty({ required: false })
-  public remainingMonths?: number;
+export class GeneralUrbanRetirementDenialFirstAnalysisTimeSummaryScenarioModel extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty()
+  public withoutResolvingPendencies: string;
 
   @ResponseDtoStringProperty()
-  public analysis: string;
+  public resolvingPendencies: string;
+
+  @ResponseDtoStringProperty()
+  public withTimeAccelerators: string;
+
+  protected override readonly _type =
+    GeneralUrbanRetirementDenialFirstAnalysisTimeSummaryScenarioModel.name;
+}
+
+@ResponseDto()
+export class GeneralUrbanRetirementDenialFirstAnalysisTimeSummaryModel extends BaseBuildableDtoObject {
+  @ResponseDtoObjectProperty(
+    () => GeneralUrbanRetirementDenialFirstAnalysisTimeSummaryScenarioModel,
+  )
+  public contributionTime: GeneralUrbanRetirementDenialFirstAnalysisTimeSummaryScenarioModel;
+
+  @ResponseDtoObjectProperty(
+    () => GeneralUrbanRetirementDenialFirstAnalysisTimeSummaryScenarioModel,
+  )
+  public gracePeriod: GeneralUrbanRetirementDenialFirstAnalysisTimeSummaryScenarioModel;
 
   protected override readonly _type =
     GeneralUrbanRetirementDenialFirstAnalysisTimeSummaryModel.name;
