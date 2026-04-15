@@ -138,6 +138,9 @@ import { GeneralUrbanRetirementAnalysisPeriodEntityAutoMapperProfile } from '@li
 import { GeneralUrbanRetirementAnalysisRemunerationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-analysis-remuneration/general-urban-retirement-analysis-remuneration-entity.auto-mapper.profile';
 import { GetGeneralUrbanRetirementAnalysisRemunerationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-analysis-remuneration/get-general-urban-retirement-analysis-remuneration-query-result.auto-mapper.profile';
 import { GeneralUrbanRetirementAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-analysis-result/general-urban-retirement-analysis-result-entity.auto-mapper.profile';
+import { GeneralUrbanRetirementDenialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-denial/general-urban-retirement-denial-entity.auto-mapper.profile';
+import { GeneralUrbanRetirementDenialPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-denial/general-urban-retirement-denial-period-entity.auto-mapper.profile';
+import { GetGeneralUrbanRetirementDenialWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-denial/get-general-urban-retirement-denial-with-relations-query-result.auto-mapper.profile';
 import { GeneralUrbanRetirementGrantEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-grant/general-urban-retirement-grant-entity.auto-mapper.profile';
 import { GetGeneralUrbanRetirementGrantQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-grant/get-general-urban-retirement-grant-query-result.auto-mapper.profile';
 import { GetGeneralUrbanRetirementGrantWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-grant/get-general-urban-retirement-grant-with-relations-query-result.auto-mapper.profile';
@@ -675,6 +678,9 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetGeneralUrbanRetirementGrantTimeAcceleratorQueryResultAutoMapperProfile,
     GetGeneralUrbanRetirementGrantWithRelationsQueryResultAutoMapperProfile,
     GeneralUrbanRetirementGrantEntityAutoMapperProfile,
+    GeneralUrbanRetirementDenialEntityAutoMapperProfile,
+    GeneralUrbanRetirementDenialPeriodEntityAutoMapperProfile,
+    GetGeneralUrbanRetirementDenialWithRelationsQueryResultAutoMapperProfile,
     DisabilityRetirementPlanningGrantResultEntityAutoMapperProfile,
     DisabilityRetirementPlanningGrantInssBenefitEntityAutoMapperProfile,
     DisabilityRetirementPlanningGrantLegalProceedingEntityAutoMapperProfile,

@@ -3263,4 +3263,190 @@ Análise processada do CNIS:
       ],
     };
   }
+
+  public async getGeneralUrbanRetirementDenialInssDecisionAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getGeneralUrbanRetirementDenialFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson = true,
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON;
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize cálculos salariais além do que for necessário; use estritamente os fornecidos.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Para cada item de \`periods\`, use prioritariamente os dados estruturados já enviados nos arquivos do prompt; não invente valores.
+- O campo \`contributionAverage\` representa a média das remunerações do período já informada nos dados estruturados; quando esse valor estiver disponível, reutilize exatamente esse valor.
+- Quando o valor de \`contributionAverage\` não estiver presente nos dados estruturados do período, omita esse campo.
+- O campo \`competenceBelowTheMinimum\` deve ser \`true\` somente quando houver competências abaixo do mínimo no histórico de remunerações.
+- O campo \`isPendency\` deve indicar se o período possui qualquer pendência relevante.
+- O campo \`pendencyReason\` só deve ser preenchido quando realmente existir pendência no período.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: asJson
+          ? ResponseConfigInputModel.build({
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema:
+                this.getGeneralUrbanRetirementDenialFirstAnalysisJsonSchema(),
+            })
+          : null,
+      }),
+    );
+  }
+
+  private getGeneralUrbanRetirementDenialFirstAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        clientData: {
+          type: 'object',
+          description: 'Dados do segurado extraídos do CNIS.',
+          properties: {
+            name: { type: 'string', description: 'Nome completo do segurado.' },
+            cpf: {
+              type: 'string',
+              description: 'CPF do segurado. Null se não encontrado.',
+            },
+            nit: {
+              type: 'string',
+              description: 'NIT/PIS do segurado. Null se não encontrado.',
+            },
+            birthDate: {
+              type: 'string',
+              description:
+                'Data de nascimento no formato YYYY-MM-DD. Null se não encontrada.',
+            },
+          },
+          required: ['name', 'cpf', 'nit', 'birthDate'],
+        },
+        timeSummary: {
+          type: 'object',
+          description: 'Resumo do tempo de contribuição apurado.',
+          properties: {
+            contributedMonths: {
+              type: 'number',
+              description: 'Total de meses de contribuição computados.',
+            },
+            remainingMonths: {
+              type: 'number',
+              description:
+                'Meses restantes para atingir o requisito de tempo. Null se já atingido.',
+            },
+            analysis: {
+              type: 'string',
+              description:
+                'Análise textual do tempo de contribuição e situação da aposentadoria.',
+            },
+          },
+          required: ['contributedMonths', 'remainingMonths', 'analysis'],
+        },
+        periods: {
+          type: 'array',
+          description: 'Lista de períodos de contribuição analisados.',
+          items: {
+            type: 'object',
+            properties: {
+              name: {
+                type: 'string',
+                description: 'Nome do vínculo ou empregador.',
+              },
+              startDate: {
+                type: 'string',
+                description: 'Data de início do período no formato YYYY-MM-DD.',
+              },
+              endDate: {
+                type: 'string',
+                description:
+                  'Data de fim do período no formato YYYY-MM-DD. Null se ainda em aberto.',
+              },
+              workType: {
+                type: 'string',
+                enum: ['URBAN', 'RURAL'],
+                description: 'Tipo de trabalho do período.',
+              },
+              isPendency: {
+                type: 'boolean',
+                description: 'Indica se o período possui pendência.',
+              },
+              competenceBelowTheMinimum: {
+                type: 'boolean',
+                description:
+                  'Indica se há competências com valor abaixo do mínimo.',
+              },
+              pendencyReason: {
+                type: 'string',
+                enum: [
+                  'LEAVE_DATE',
+                  'COMPETENCE_BELOW_MINIMUM',
+                  'INCONSISTENT_COMPETENCE',
+                ],
+                description:
+                  'Razão da pendência. Null se não houver pendência.',
+              },
+              periodConsideration: {
+                type: 'string',
+                enum: ['SIM', 'NAO', 'PROVISORIO'],
+                description: 'Indicação de consideração do período.',
+              },
+              contributionAverage: {
+                type: 'number',
+                description:
+                  'Média de contribuição do período. Omitir quando não disponível.',
+              },
+              earningsHistory: {
+                type: 'array',
+                description: 'Histórico de remunerações do período.',
+                items: {
+                  type: 'object',
+                  properties: {
+                    competence: {
+                      type: 'string',
+                      description: 'Competência no formato YYYY-MM-DD.',
+                    },
+                    value: {
+                      type: 'string',
+                      description: 'Valor da remuneração como string.',
+                    },
+                  },
+                  required: ['competence', 'value'],
+                },
+              },
+            },
+            required: [
+              'name',
+              'startDate',
+              'endDate',
+              'workType',
+              'isPendency',
+              'competenceBelowTheMinimum',
+              'earningsHistory',
+            ],
+          },
+        },
+      },
+      required: ['clientData', 'timeSummary', 'periods'],
+    };
+  }
 }
