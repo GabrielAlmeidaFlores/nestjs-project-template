@@ -250,6 +250,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const deathBenefitGrant = null;
       const specialRetirementGrant =
         source.specialRetirementGrant !== undefined
           ? this.mapper.map(
@@ -308,6 +309,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         disabilityRetirementPlanning,
         generalUrbanRetirementAnalysis,
         specialCategoryRetirementAnalysis,
+        deathBenefitGrant,
         specialRetirementGrant,
         temporaryDisabilityBenefitsGrant,
         survivorPensionAnalysis,
