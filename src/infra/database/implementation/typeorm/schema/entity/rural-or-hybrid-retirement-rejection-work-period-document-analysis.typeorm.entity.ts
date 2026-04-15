@@ -4,7 +4,7 @@ import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema
 import { RuralOrHybridRetirementRejectionWorkPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-rejection-work-period.typeorm.entity';
 
 @Entity({
-  name: 'rural_or_hybrid_retirement_rejection_work_period_document_analysis',
+  name: 'rural_or_hybrid_retirement_rejection_work_period_doc_analysis',
 })
 export class RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisTypeormEntity extends BaseTypeormEntity {
   @Column({

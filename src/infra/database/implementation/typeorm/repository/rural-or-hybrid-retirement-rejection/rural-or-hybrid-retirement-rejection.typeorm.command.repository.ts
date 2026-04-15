@@ -55,6 +55,12 @@ export class RuralOrHybridRetirementRejectionTypeormCommandRepository
     });
   }
 
+  public deleteRuralOrHybridRetirementRejection(
+    id: RuralOrHybridRetirementRejectionId,
+  ): TransactionType {
+    return this.delete(id.toString());
+  }
+
   private mapToTypeormEntity(
     props: RuralOrHybridRetirementRejectionEntity,
   ): RuralOrHybridRetirementRejectionTypeormEntity {

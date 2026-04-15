@@ -4,7 +4,7 @@ import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema
 import { RuralOrHybridRetirementRejectionTestimonialWitnessTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-rejection-testimonial-witness.typeorm.entity';
 
 @Entity({
-  name: 'rural_or_hybrid_retirement_rejection_testimonial_witness_document',
+  name: 'rural_or_hybrid_retirement_rejection_testimonial_witness_doc',
 })
 export class RuralOrHybridRetirementRejectionTestimonialWitnessDocumentTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'document', type: 'varchar', length: 255, nullable: true })
