@@ -46,6 +46,7 @@ import { MedicalQuestionGeneratorId } from '@module/customer/analysis-tool/modul
 import { PerCapitaIncomeForBpcAnalysisId } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/value-object/per-capita-income-for-bpc-analysis-id/per-capita-income-for-bpc-analysis-id.value-object';
 import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
 import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
+import { RuralOrHybridRetirementRejectionId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id.value-object';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { SpecialActivityId } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/value-object/special-activity-id.value-object';
 import { SpeechGeneratorId } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/value-object/speech-generator-id/speech-generator-id.value-object';
@@ -1325,6 +1326,85 @@ export class AnalysisToolRecordTypeormQueryRepository
               ruralTimelineCnisContributionPeriodUnderMinimum: true,
               ruralTimelineCnisContributionPeriodOverdueContribution: true,
             },
+          },
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
+  public async findWithRelationsByRuralOrHybridRetirementRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    ruralOrHybridRetirementRejectionId: RuralOrHybridRetirementRejectionId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          ruralOrHybridRetirementRejection: {
+            id: ruralOrHybridRetirementRejectionId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          ruralOrHybridRetirementRejection: {
+            ruralOrHybridRetirementRejectionResult: true,
+            ruralOrHybridRetirementRejectionDocument: true,
+            ruralOrHybridRetirementRejectionInssBenefit: true,
+            ruralOrHybridRetirementRejectionLegalProceeding: true,
+            ruralOrHybridRetirementRejectionPeriod: {
+              ruralOrHybridRetirementRejectionPeriodDocument: true,
+              ruralOrHybridRetirementRejectionPeriodMember: {
+                ruralOrHybridRetirementRejectionPeriodMemberDocument: true,
+              },
+            },
+            ruralOrHybridRetirementRejectionTestimonialWitness: {
+              ruralOrHybridRetirementRejectionTestimonialWitnessDocument: true,
+            },
+            ruralOrHybridRetirementRejectionWorkPeriod: {
+              ruralOrHybridRetirementRejectionWorkPeriodDocument: true,
+              ruralOrHybridRetirementRejectionWorkPeriodDocumentAnalysis: true,
+              ruralOrHybridRetirementRejectionWorkPeriodEarningsHistory: true,
+            },
+            ruralOrHybridRetirementRejectionTimeAccelerator: true,
           },
           createdBy: {
             customer: true,
