@@ -2,12 +2,14 @@ import { Body, HttpStatus, Param, RequestMethod } from '@nestjs/common';
 
 import { GeneralUrbanRetirementDenialId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/value-object/general-urban-retirement-denial-id/general-urban-retirement-denial-id.value-object';
 import { GeneralUrbanRetirementDenialTimeAcceleratorId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-time-accelerator/value-object/general-urban-retirement-denial-time-accelerator-id/general-urban-retirement-denial-time-accelerator-id.value-object';
+import { AnalyzeGeneralUrbanRetirementDenialPppRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/analyze-general-urban-retirement-denial-ppp.request.dto';
 import { AnalyzeGeneralUrbanRetirementDenialTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/analyze-general-urban-retirement-denial-time-accelerator.request.dto';
 import { CreateGeneralUrbanRetirementDenialRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/create-general-urban-retirement-denial.request.dto';
 import { SaveGeneralUrbanRetirementDenialPeriodsRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/save-general-urban-retirement-denial-periods.request.dto';
 import { UpdateGeneralUrbanRetirementDenialTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/update-general-urban-retirement-denial-time-accelerator.request.dto';
 import { UpdateGeneralUrbanRetirementDenialRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/update-general-urban-retirement-denial.request.dto';
 import { UploadGeneralUrbanRetirementDenialDocumentsRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/upload-general-urban-retirement-denial-documents.request.dto';
+import { AnalyzeGeneralUrbanRetirementDenialPppResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/analyze-general-urban-retirement-denial-ppp.response.dto';
 import { AnalyzeGeneralUrbanRetirementDenialTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/analyze-general-urban-retirement-denial-time-accelerator.response.dto';
 import { CreateGeneralUrbanRetirementDenialFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/create-general-urban-retirement-denial-first-analysis.response.dto';
 import { CreateGeneralUrbanRetirementDenialInssDecisionAnalysisResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/create-general-urban-retirement-denial-inss-decision-analysis.response.dto';
@@ -18,6 +20,7 @@ import { SaveGeneralUrbanRetirementDenialPeriodsResponseDto } from '@module/cust
 import { UpdateGeneralUrbanRetirementDenialTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/update-general-urban-retirement-denial-time-accelerator.response.dto';
 import { UpdateGeneralUrbanRetirementDenialResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/update-general-urban-retirement-denial.response.dto';
 import { UploadGeneralUrbanRetirementDenialDocumentsResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/upload-general-urban-retirement-denial-documents.response.dto';
+import { AnalyzeGeneralUrbanRetirementDenialPppUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/analyze-general-urban-retirement-denial-ppp.use-case';
 import { AnalyzeGeneralUrbanRetirementDenialTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/analyze-general-urban-retirement-denial-time-accelerator.use-case';
 import { CreateGeneralUrbanRetirementDenialFirstAnalysisUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/create-general-urban-retirement-denial-first-analysis.use-case';
 import { CreateGeneralUrbanRetirementDenialInssDecisionAnalysisUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/use-case/create-general-urban-retirement-denial-inss-decision-analysis.use-case';
@@ -54,6 +57,7 @@ export class GeneralUrbanRetirementDenialController {
     private readonly analyzeGeneralUrbanRetirementDenialTimeAcceleratorUseCase: AnalyzeGeneralUrbanRetirementDenialTimeAcceleratorUseCase,
     private readonly updateGeneralUrbanRetirementDenialTimeAcceleratorUseCase: UpdateGeneralUrbanRetirementDenialTimeAcceleratorUseCase,
     private readonly deleteGeneralUrbanRetirementDenialTimeAcceleratorUseCase: DeleteGeneralUrbanRetirementDenialTimeAcceleratorUseCase,
+    private readonly analyzeGeneralUrbanRetirementDenialPppUseCase: AnalyzeGeneralUrbanRetirementDenialPppUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -363,6 +367,36 @@ export class GeneralUrbanRetirementDenialController {
       organizationSessionData,
       generalUrbanRetirementDenialId,
       generalUrbanRetirementDenialTimeAcceleratorId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Analisar PPP da análise de indeferimento de aposentadoria urbana comum',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'ppp',
+      method: RequestMethod.POST,
+      type: AnalyzeGeneralUrbanRetirementDenialPppRequestDto,
+    },
+    tag: ['indeferimento-aposentadoria-urbana-geral'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Análise de PPP gerada com sucesso.',
+      type: AnalyzeGeneralUrbanRetirementDenialPppResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async analyzePpp(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Body() dto: AnalyzeGeneralUrbanRetirementDenialPppRequestDto,
+  ): Promise<AnalyzeGeneralUrbanRetirementDenialPppResponseDto> {
+    return await this.analyzeGeneralUrbanRetirementDenialPppUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
     );
   }
 }

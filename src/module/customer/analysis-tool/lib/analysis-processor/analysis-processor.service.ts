@@ -14,6 +14,9 @@ import { DisabilityRetirementPlanningGrantPeriodPendencyReasonEnum } from '@modu
 import { DisabilityRetirementPlanningGrantTimeAcceleratorRecognitionInssEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-time-accelerator/enum/disability-retirement-planning-grant-time-accelerator-recognition-inss.enum';
 import { DisabilityRetirementPlanningGrantTimeAcceleratorRecognitionJudicialEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-time-accelerator/enum/disability-retirement-planning-grant-time-accelerator-recognition-judicial.enum';
 import { DisabilityRetirementPlanningGrantViabilityEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-time-accelerator/enum/disability-retirement-planning-grant-viability.enum';
+import { GeneralUrbanRetirementDenialPeriodCategoryEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-category.enum';
+import { GeneralUrbanRetirementDenialPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-consideration.enum';
+import { GeneralUrbanRetirementDenialPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-pendency-reason.enum';
 import { MiniAdvisorAnalysisTypeEnum } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor-result/enum/mini-advisor-analysis-type.enum';
 
 @Injectable()
@@ -3341,6 +3344,115 @@ Análise processada do CNIS:
           : null,
       }),
     );
+  }
+
+  public async getGeneralUrbanRetirementDenialPppAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Use exclusivamente os valores de enum fornecidos no schema para os campos de categoria, motivo de pendência e consideração do período.
+- Cada item do array \`periods\` deve ser compatível com a criação de um período na análise de indeferimento de aposentadoria urbana comum.
+- Preencha \`endDate\`, \`pendencyReason\`, \`typeOfContribution\`, \`contributionAverage\` e \`periodConsideration\` somente quando essas informações estiverem disponíveis nos documentos analisados.
+- Não incluir tag <br> na resposta.
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getGeneralUrbanRetirementDenialPppAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  private getGeneralUrbanRetirementDenialPppAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        periods: {
+          type: 'array',
+          description:
+            'Lista de períodos identificados nos documentos PPP analisados',
+          items: {
+            type: 'object',
+            properties: {
+              startDate: {
+                type: 'string',
+                format: 'date-time',
+                description: 'Data de início do período no formato ISO 8601',
+              },
+              endDate: {
+                type: 'string',
+                format: 'date-time',
+                description: 'Data de fim do período no formato ISO 8601',
+              },
+              category: {
+                type: 'string',
+                enum: Object.values(
+                  GeneralUrbanRetirementDenialPeriodCategoryEnum,
+                ),
+                description: 'Categoria do período',
+              },
+              isPendency: {
+                type: 'boolean',
+                description: 'Indica se o período possui pendência',
+              },
+              competenceBelowTheMinimum: {
+                type: 'boolean',
+                description: 'Indica se a competência está abaixo do mínimo',
+              },
+              pendencyReason: {
+                type: 'string',
+                enum: Object.values(
+                  GeneralUrbanRetirementDenialPeriodPendencyReasonEnum,
+                ),
+                description: 'Motivo da pendência, se houver',
+              },
+              typeOfContribution: {
+                type: 'string',
+                description: 'Tipo de contribuição, se aplicável',
+              },
+              status: {
+                type: 'boolean',
+                description: 'Status do período (ativo/inativo)',
+              },
+              contributionAverage: {
+                type: 'string',
+                description:
+                  'Média de contribuição como string decimal, se disponível',
+              },
+              periodConsideration: {
+                type: 'string',
+                enum: Object.values(
+                  GeneralUrbanRetirementDenialPeriodConsiderationEnum,
+                ),
+                description: 'Consideração do período para o benefício',
+              },
+              bondOrigin: {
+                type: 'string',
+                description: 'Origem do vínculo empregatício, se identificada',
+              },
+            },
+            required: [
+              'startDate',
+              'category',
+              'isPendency',
+              'competenceBelowTheMinimum',
+              'status',
+            ],
+          },
+        },
+      },
+      required: ['periods'],
+    };
   }
 
   private getGeneralUrbanRetirementDenialFirstAnalysisJsonSchema(): object {
