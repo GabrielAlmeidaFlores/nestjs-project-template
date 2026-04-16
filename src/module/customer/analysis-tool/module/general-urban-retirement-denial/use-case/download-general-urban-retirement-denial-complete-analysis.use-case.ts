@@ -12,8 +12,6 @@ import { GeneralUrbanRetirementDenialNotFoundError } from '@module/customer/anal
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
-import type { GeneralUrbanRetirementDenialResultInterface } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/model/interface/general-urban-retirement-denial-result.interface';
-
 @Injectable()
 export class DownloadGeneralUrbanRetirementDenialCompleteAnalysisUseCase {
   protected readonly _type =
@@ -59,47 +57,23 @@ export class DownloadGeneralUrbanRetirementDenialCompleteAnalysisUseCase {
         GeneralUrbanRetirementDenialNotFoundError,
       );
 
-    const completeAnalysisJson =
+    const completeAnalysisHtml =
       analysisQueryResult.generalUrbanRetirementDenialResult
-        ?.completeAnalysis ?? null;
+        ?.completeAnalysisDownload ?? null;
 
-    if (completeAnalysisJson === null) {
-      throw new GeneralUrbanRetirementDenialCompleteAnalysisDownloadNotFoundError();
-    }
-
-    const analysisResult = this.extractAnalysisResult(completeAnalysisJson);
-
-    if (analysisResult === null) {
+    if (completeAnalysisHtml === null) {
       throw new GeneralUrbanRetirementDenialCompleteAnalysisDownloadNotFoundError();
     }
 
     const htmlContent =
-      await this.exportDocumentGateway.convertMarkdownToHtml(analysisResult);
+      await this.exportDocumentGateway.convertMarkdownToHtml(
+        completeAnalysisHtml,
+      );
 
     return this.exportDocumentGateway.downloadFileAsStreamable(
       htmlContent,
       format,
       'analise_completa_indeferimento_aposentadoria_urbana_comum',
     );
-  }
-
-  private extractAnalysisResult(raw: string): string | null {
-    try {
-      let cleanedJson = raw;
-
-      if (cleanedJson.startsWith('"') && cleanedJson.endsWith('"')) {
-        cleanedJson = JSON.parse(cleanedJson) as string;
-      }
-
-      const parsed = JSON.parse(
-        cleanedJson,
-      ) as GeneralUrbanRetirementDenialResultInterface;
-
-      return typeof parsed.analysisResult === 'string'
-        ? parsed.analysisResult
-        : null;
-    } catch {
-      return null;
-    }
   }
 }

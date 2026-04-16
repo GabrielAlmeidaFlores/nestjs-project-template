@@ -5,6 +5,8 @@ export class GeneralUrbanRetirementDenialNotFoundError extends NotFoundError {
     GeneralUrbanRetirementDenialNotFoundError.name;
 
   public constructor() {
-    super('Análise de indeferimento de aposentadoria urbana comum não encontrada.');
+    super(
+      'Análise de indeferimento de aposentadoria urbana comum não encontrada.',
+    );
   }
 }

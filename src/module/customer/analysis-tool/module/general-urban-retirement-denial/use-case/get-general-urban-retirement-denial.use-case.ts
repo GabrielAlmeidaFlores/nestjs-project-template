@@ -209,9 +209,13 @@ export class GetGeneralUrbanRetirementDenialUseCase {
         clientData:
           GeneralUrbanRetirementDenialFirstAnalysisClientDataModel.build({
             name: raw.clientData.name,
-            ...(raw.clientData.cpf !== null && { cpf: raw.clientData.cpf }),
-            ...(raw.clientData.nit !== null && { nit: raw.clientData.nit }),
-            ...(raw.clientData.birthDate !== null && {
+            ...(this.hasValue(raw.clientData.cpf) && {
+              cpf: raw.clientData.cpf,
+            }),
+            ...(this.hasValue(raw.clientData.nit) && {
+              nit: raw.clientData.nit,
+            }),
+            ...(this.hasValue(raw.clientData.birthDate) && {
               birthDate: raw.clientData.birthDate,
             }),
           }),
@@ -240,34 +244,61 @@ export class GetGeneralUrbanRetirementDenialUseCase {
                 },
               ),
           }),
-        periods: raw.periods.map((period) =>
+        periods: (this.hasValue(raw.periods) ? raw.periods : []).map((period) =>
           GeneralUrbanRetirementDenialFirstAnalysisPeriodModel.build({
-            name: period.name,
+            ...(this.hasValue(period.bondOrigin) && {
+              bondOrigin: period.bondOrigin,
+            }),
+            ...(this.hasValue(period.category) && {
+              category: period.category,
+            }),
+            ...(this.hasValue(period.activityDescription) && {
+              activityDescription: period.activityDescription,
+            }),
             startDate: period.startDate,
-            ...(period.endDate !== null && { endDate: period.endDate }),
-            ...(period.category !== null && { category: period.category }),
+            ...(this.hasValue(period.endDate) && {
+              endDate: period.endDate,
+            }),
             workType: period.workType,
+            ...(this.hasValue(period.impactMonths) && {
+              impactMonths: period.impactMonths,
+            }),
+            ...(this.hasValue(period.graceMonths) && {
+              graceMonths: period.graceMonths,
+            }),
             isPendency: period.isPendency,
             competenceBelowTheMinimum: period.competenceBelowTheMinimum,
-            ...(period.pendencyReason !== null && {
-              pendencyReason: period.pendencyReason,
-            }),
-            ...(period.impact !== null && { impact: period.impact }),
-            ...(period.periodConsideration !== null && {
-              periodConsideration: period.periodConsideration,
-            }),
-            ...(period.contributionAverage !== null && {
+            ...(this.hasValue(period.contributionAverage) && {
               contributionAverage: new DecimalValue(
                 period.contributionAverage.toString(),
               ),
             }),
-            earningsHistory: period.earningsHistory.map((item) =>
+            ...(this.hasValue(period.pendencyReason) && {
+              pendencyReason: period.pendencyReason,
+            }),
+            ...(this.hasValue(period.periodConsideration) && {
+              periodConsideration: period.periodConsideration,
+            }),
+            ...(this.hasValue(period.wantsToComplementViaMeuINSS) && {
+              wantsToComplementViaMeuINSS: period.wantsToComplementViaMeuINSS,
+            }),
+            status: period.status,
+            earningsHistory: (this.hasValue(period.earningsHistory)
+              ? period.earningsHistory
+              : []
+            ).map((item) =>
               GeneralUrbanRetirementDenialFirstAnalysisEarningsHistoryItemModel.build(
                 {
-                  ...(item.competence !== null && {
+                  ...(this.hasValue(item.competence) && {
                     competence: item.competence,
                   }),
-                  ...(item.value !== null && { value: item.value }),
+                  ...(this.hasValue(item.value) && { value: item.value }),
+                  ...(this.hasValue(item.pendencyType) && {
+                    pendencyType: item.pendencyType,
+                  }),
+                  ...(this.hasValue(item.collectedAt) && {
+                    collectedAt: item.collectedAt,
+                  }),
                 },
               ),
             ),
@@ -277,5 +308,9 @@ export class GetGeneralUrbanRetirementDenialUseCase {
     } catch {
       throw new InvalidGeneralUrbanRetirementDenialFirstAnalysisJsonError();
     }
+  }
+
+  private hasValue<T>(value: T | null | undefined): value is T {
+    return value !== null && value !== undefined;
   }
 }

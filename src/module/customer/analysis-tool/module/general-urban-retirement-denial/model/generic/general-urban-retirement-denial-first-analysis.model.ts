@@ -1,10 +1,12 @@
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { GeneralUrbanRetirementDenialPeriodCategoryEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-category.enum';
 import { GeneralUrbanRetirementDenialPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-consideration.enum';
 import { GeneralUrbanRetirementDenialPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-pendency-reason.enum';
 import { GeneralUrbanRetirementDenialPeriodWorkTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-work-type.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-boolean-property/response-dto-boolean-property.decorator';
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
+import { ResponseDtoNumberProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-number-property/response-dto-number-property.decorator';
 import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
@@ -18,14 +20,31 @@ export class GeneralUrbanRetirementDenialFirstAnalysisEarningsHistoryItemModel e
   @ResponseDtoStringProperty({ required: false })
   public value?: string;
 
+  @ResponseDtoEnumProperty(
+    GeneralUrbanRetirementDenialPeriodPendencyReasonEnum,
+    { required: false },
+  )
+  public pendencyType?: GeneralUrbanRetirementDenialPeriodPendencyReasonEnum;
+
+  @ResponseDtoStringProperty({ required: false })
+  public collectedAt?: string;
+
   protected override readonly _type =
     GeneralUrbanRetirementDenialFirstAnalysisEarningsHistoryItemModel.name;
 }
 
 @ResponseDto()
 export class GeneralUrbanRetirementDenialFirstAnalysisPeriodModel extends BaseBuildableDtoObject {
-  @ResponseDtoStringProperty()
-  public name: string;
+  @ResponseDtoStringProperty({ required: false })
+  public bondOrigin?: string;
+
+  @ResponseDtoEnumProperty(GeneralUrbanRetirementDenialPeriodCategoryEnum, {
+    required: false,
+  })
+  public category?: GeneralUrbanRetirementDenialPeriodCategoryEnum;
+
+  @ResponseDtoStringProperty({ required: false })
+  public activityDescription?: string;
 
   @ResponseDtoStringProperty()
   public startDate: string;
@@ -33,11 +52,14 @@ export class GeneralUrbanRetirementDenialFirstAnalysisPeriodModel extends BaseBu
   @ResponseDtoStringProperty({ required: false })
   public endDate?: string;
 
-  @ResponseDtoStringProperty({ required: false })
-  public category?: string;
-
   @ResponseDtoEnumProperty(GeneralUrbanRetirementDenialPeriodWorkTypeEnum)
   public workType: GeneralUrbanRetirementDenialPeriodWorkTypeEnum;
+
+  @ResponseDtoNumberProperty({ required: false })
+  public impactMonths?: number;
+
+  @ResponseDtoNumberProperty({ required: false })
+  public graceMonths?: number;
 
   @ResponseDtoBooleanProperty()
   public isPendency: boolean;
@@ -45,14 +67,14 @@ export class GeneralUrbanRetirementDenialFirstAnalysisPeriodModel extends BaseBu
   @ResponseDtoBooleanProperty()
   public competenceBelowTheMinimum: boolean;
 
+  @ResponseDtoValueObjectProperty(DecimalValue, { required: false })
+  public contributionAverage?: DecimalValue;
+
   @ResponseDtoEnumProperty(
     GeneralUrbanRetirementDenialPeriodPendencyReasonEnum,
     { required: false },
   )
   public pendencyReason?: GeneralUrbanRetirementDenialPeriodPendencyReasonEnum;
-
-  @ResponseDtoStringProperty({ required: false })
-  public impact?: string;
 
   @ResponseDtoEnumProperty(
     GeneralUrbanRetirementDenialPeriodConsiderationEnum,
@@ -60,8 +82,11 @@ export class GeneralUrbanRetirementDenialFirstAnalysisPeriodModel extends BaseBu
   )
   public periodConsideration?: GeneralUrbanRetirementDenialPeriodConsiderationEnum;
 
-  @ResponseDtoValueObjectProperty(DecimalValue, { required: false })
-  public contributionAverage?: DecimalValue;
+  @ResponseDtoBooleanProperty({ required: false })
+  public wantsToComplementViaMeuINSS?: boolean;
+
+  @ResponseDtoBooleanProperty()
+  public status: boolean;
 
   @ResponseDtoObjectProperty(
     () => GeneralUrbanRetirementDenialFirstAnalysisEarningsHistoryItemModel,
