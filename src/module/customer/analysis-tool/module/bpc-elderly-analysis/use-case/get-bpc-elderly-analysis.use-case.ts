@@ -227,6 +227,16 @@ export class GetBpcElderlyAnalysisUseCase {
         benefitStartDate: parsed.benefitStartDate,
       }),
       ...(parsed.amount !== null && { amount: parsed.amount }),
+      ...(parsed.legalRequirementsMet !== null && {
+        legalRequirementsMet: parsed.legalRequirementsMet,
+      }),
+      ...(parsed.perCapitaIncomeBelowQuarterMinimumWage !== null && {
+        perCapitaIncomeBelowQuarterMinimumWage:
+          parsed.perCapitaIncomeBelowQuarterMinimumWage,
+      }),
+      ...(parsed.ageEqualOrAbove65Years !== null && {
+        ageEqualOrAbove65Years: parsed.ageEqualOrAbove65Years,
+      }),
       createdAt: result.createdAt,
       updatedAt: result.updatedAt,
     });
@@ -240,6 +250,9 @@ export class GetBpcElderlyAnalysisUseCase {
     type: string | null;
     benefitStartDate: string | null;
     amount: number | null;
+    legalRequirementsMet: string | null;
+    perCapitaIncomeBelowQuarterMinimumWage: string | null;
+    ageEqualOrAbove65Years: string | null;
   } {
     const empty = {
       diagnosis: null,
@@ -249,6 +262,9 @@ export class GetBpcElderlyAnalysisUseCase {
       type: null,
       benefitStartDate: null,
       amount: null,
+      legalRequirementsMet: null,
+      perCapitaIncomeBelowQuarterMinimumWage: null,
+      ageEqualOrAbove65Years: null,
     };
 
     if (raw === null) {
@@ -268,6 +284,10 @@ export class GetBpcElderlyAnalysisUseCase {
         type: parsed.type ?? null,
         benefitStartDate: parsed.benefitStartDate ?? null,
         amount: parsed.amount ?? null,
+        legalRequirementsMet: parsed.legalRequirementsMet ?? null,
+        perCapitaIncomeBelowQuarterMinimumWage:
+          parsed.perCapitaIncomeBelowQuarterMinimumWage ?? null,
+        ageEqualOrAbove65Years: parsed.ageEqualOrAbove65Years ?? null,
       };
     } catch {
       return empty;
