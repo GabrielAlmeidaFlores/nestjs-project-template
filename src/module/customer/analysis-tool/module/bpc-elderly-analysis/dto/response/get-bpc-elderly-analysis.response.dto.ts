@@ -78,6 +78,15 @@ export class GetBpcElderlyAnalysisResultResponseDto extends BaseBuildableDtoObje
   @ResponseDtoNumberProperty({ required: false })
   public amount?: number;
 
+  @ResponseDtoStringProperty({ required: false })
+  public legalRequirementsMet?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public perCapitaIncomeBelowQuarterMinimumWage?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public ageEqualOrAbove65Years?: string;
+
   @ResponseDtoDateProperty()
   public createdAt: Date;
 
