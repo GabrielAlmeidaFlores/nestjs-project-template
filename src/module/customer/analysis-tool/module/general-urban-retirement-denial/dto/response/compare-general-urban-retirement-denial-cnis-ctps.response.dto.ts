@@ -1,58 +1,73 @@
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { GeneralUrbanRetirementDenialPeriodCategoryEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-category.enum';
+import { GeneralUrbanRetirementDenialPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-consideration.enum';
+import { GeneralUrbanRetirementDenialPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-pendency-reason.enum';
+import { GeneralUrbanRetirementDenialPeriodWorkTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-work-type.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-boolean-property/response-dto-boolean-property.decorator';
+import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
+import { ResponseDtoNumberProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-number-property/response-dto-number-property.decorator';
 import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
+import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
 export class CompareGeneralUrbanRetirementDenialCnisCtpsPeriodItemResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoStringProperty()
-  public tipo: string;
+  @ResponseDtoStringProperty({ required: false })
+  public bondOrigin?: string;
+
+  @ResponseDtoEnumProperty(GeneralUrbanRetirementDenialPeriodCategoryEnum, {
+    required: false,
+  })
+  public category?: GeneralUrbanRetirementDenialPeriodCategoryEnum;
+
+  @ResponseDtoStringProperty({ required: false })
+  public activityDescription?: string;
 
   @ResponseDtoStringProperty()
-  public empresa: string;
+  public startDate: string;
 
-  @ResponseDtoStringProperty()
-  public periodoInicio: string;
+  @ResponseDtoStringProperty({ required: false })
+  public endDate?: string;
 
-  @ResponseDtoStringProperty()
-  public periodoFim: string;
+  @ResponseDtoEnumProperty(GeneralUrbanRetirementDenialPeriodWorkTypeEnum)
+  public workType: GeneralUrbanRetirementDenialPeriodWorkTypeEnum;
 
-  @ResponseDtoStringProperty()
-  public viabilidade: string;
+  @ResponseDtoNumberProperty({ required: false })
+  public impactMonths?: number;
 
-  @ResponseDtoStringProperty()
-  public reconhecimentoINSS: string;
+  @ResponseDtoNumberProperty({ required: false })
+  public graceMonths?: number;
 
   @ResponseDtoBooleanProperty()
-  public impactoCarencia: boolean;
+  public isPendency: boolean;
 
-  @ResponseDtoStringProperty()
-  public reconhecimentoJudicial: string;
+  @ResponseDtoBooleanProperty()
+  public competenceBelowTheMinimum: boolean;
 
-  @ResponseDtoStringProperty()
-  public tempoContribuicao: string;
+  @ResponseDtoValueObjectProperty(DecimalValue, { required: false })
+  public contributionAverage?: DecimalValue;
 
-  @ResponseDtoStringProperty()
-  public observacaoTecnica: string;
+  @ResponseDtoEnumProperty(
+    GeneralUrbanRetirementDenialPeriodPendencyReasonEnum,
+    {
+      required: false,
+    },
+  )
+  public pendencyReason?: GeneralUrbanRetirementDenialPeriodPendencyReasonEnum;
 
-  @ResponseDtoStringProperty()
-  public contribuicaoMedia: string;
+  @ResponseDtoEnumProperty(
+    GeneralUrbanRetirementDenialPeriodConsiderationEnum,
+    { required: false },
+  )
+  public periodConsideration?: GeneralUrbanRetirementDenialPeriodConsiderationEnum;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public wantsToComplementViaMeuINSS?: boolean;
 
   @ResponseDtoBooleanProperty()
   public status: boolean;
-
-  @ResponseDtoStringProperty()
-  public tipoDeTrabalho: string;
-
-  @ResponseDtoBooleanProperty()
-  public competenciaAbaixoDoMinimo: boolean;
-
-  @ResponseDtoStringProperty()
-  public categoria: string;
-
-  @ResponseDtoStringProperty()
-  public carencia: string;
 
   protected override readonly _type =
     CompareGeneralUrbanRetirementDenialCnisCtpsPeriodItemResponseDto.name;

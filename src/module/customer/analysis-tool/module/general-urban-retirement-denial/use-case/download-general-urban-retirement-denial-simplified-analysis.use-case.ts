@@ -106,7 +106,8 @@ export class DownloadGeneralUrbanRetirementDenialSimplifiedAnalysisUseCase {
           promptResponse.prompt,
           [
             Buffer.from(
-              generalUrbanRetirementDenialResult.completeAnalysis,
+              generalUrbanRetirementDenialResult.completeAnalysisDownload ??
+                generalUrbanRetirementDenialResult.completeAnalysis,
               'utf-8',
             ),
           ],

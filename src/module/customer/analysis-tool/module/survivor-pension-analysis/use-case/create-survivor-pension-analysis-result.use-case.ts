@@ -9,7 +9,6 @@ import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
-import { SurvivorPensionAnalysisEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis/survivor-pension-analysis.entity';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { GetSurvivorPensionAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis/query/result/get-survivor-pension-analysis-with-relations.query.result';
@@ -18,6 +17,7 @@ import { SurvivorPensionAnalysisResultCommandRepositoryGateway } from '@module/c
 import { SurvivorPensionAnalysisResultQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-result/query/survivor-pension-analysis-result.query.repository.gateway';
 import { SurvivorPensionAnalysisResultDependentPensionAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-result-dependent-pension-analysis/command/survivor-pension-analysis-result-dependent-pension-analysis.command.repository.gateway';
 import { SurvivorPensionAnalysisResultRetirementRuleCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-result-retirement-rule/command/survivor-pension-analysis-result-retirement-rule.command.repository.gateway';
+import { SurvivorPensionAnalysisEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis/survivor-pension-analysis.entity';
 import { SurvivorPensionAnalysisId } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis/value-object/survivor-pension-analysis-id/survivor-pension-analysis-id.value-object';
 import { SurvivorPensionAnalysisResultEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-result/survivor-pension-analysis-result.entity';
 import { SurvivorPensionAnalysisResultDependentPensionAnalysisEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-result-dependent-pension-analysis/survivor-pension-analysis-result-dependent-pension-analysis.entity';
@@ -113,11 +113,11 @@ export class CreateSurvivorPensionAnalysisResultUseCase {
 
     const analysisToolRecordQueryResult =
       await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsBySurvivorPensionAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
-      survivorPensionAnalysisId,
-      organizationSessionData.organizationId,
-      sessionData.authIdentityId,
-      SurvivorPensionAnalysisNotFoundError,
-    );
+        survivorPensionAnalysisId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+        SurvivorPensionAnalysisNotFoundError,
+      );
 
     const [spaData, prompts] = await Promise.all([
       this.survivorPensionAnalysisQueryRepositoryGateway.findOneByIdOrFail(
@@ -287,10 +287,8 @@ export class CreateSurvivorPensionAnalysisResultUseCase {
 
     const analysisToolClient = new AnalysisToolClientEntity({
       ...analysisToolRecordQueryResult.analysisToolClient,
-      createdBy:
-        analysisToolRecordQueryResult.analysisToolClient.createdBy.id,
-      updatedBy:
-        analysisToolRecordQueryResult.analysisToolClient.updatedBy.id,
+      createdBy: analysisToolRecordQueryResult.analysisToolClient.createdBy.id,
+      updatedBy: analysisToolRecordQueryResult.analysisToolClient.updatedBy.id,
     });
 
     const survivorPensionAnalysisEntity = new SurvivorPensionAnalysisEntity({

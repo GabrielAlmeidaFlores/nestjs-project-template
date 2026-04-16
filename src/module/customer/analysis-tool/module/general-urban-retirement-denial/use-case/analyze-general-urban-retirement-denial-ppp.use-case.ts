@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
@@ -84,28 +85,46 @@ export class AnalyzeGeneralUrbanRetirementDenialPppUseCase {
     return AnalyzeGeneralUrbanRetirementDenialPppResponseDto.build({
       periods: parsedResult.periods.map((period) =>
         AnalyzeGeneralUrbanRetirementDenialPppPeriodItemResponseDto.build({
-          startDate: new Date(period.startDate),
-          ...(period.endDate !== null && { endDate: new Date(period.endDate) }),
+          ...(this.hasValue(period.bondOrigin) && {
+            bondOrigin: period.bondOrigin,
+          }),
           category: period.category,
+          ...(this.hasValue(period.activityDescription) && {
+            activityDescription: period.activityDescription,
+          }),
+          startDate: new Date(period.startDate),
+          ...(this.hasValue(period.endDate) && {
+            endDate: new Date(period.endDate),
+          }),
+          workType: period.workType,
+          ...(this.hasValue(period.impactMonths) && {
+            impactMonths: period.impactMonths,
+          }),
+          ...(this.hasValue(period.graceMonths) && {
+            graceMonths: period.graceMonths,
+          }),
           isPendency: period.isPendency,
           competenceBelowTheMinimum: period.competenceBelowTheMinimum,
-          ...(period.pendencyReason !== null && {
+          ...(this.hasValue(period.contributionAverage) && {
+            contributionAverage: new DecimalValue(period.contributionAverage),
+          }),
+          ...(this.hasValue(period.pendencyReason) && {
             pendencyReason: period.pendencyReason,
           }),
-          ...(period.typeOfContribution !== null && {
-            typeOfContribution: period.typeOfContribution,
-          }),
-          status: period.status,
-          ...(period.contributionAverage !== null && {
-            contributionAverage: period.contributionAverage,
-          }),
-          ...(period.periodConsideration !== null && {
+          ...(this.hasValue(period.periodConsideration) && {
             periodConsideration: period.periodConsideration,
           }),
-          ...(period.bondOrigin !== null && { bondOrigin: period.bondOrigin }),
+          ...(this.hasValue(period.wantsToComplementViaMeuINSS) && {
+            wantsToComplementViaMeuINSS: period.wantsToComplementViaMeuINSS,
+          }),
+          status: period.status,
         }),
       ),
     });
+  }
+
+  private hasValue<T>(value: T | null | undefined): value is T {
+    return value !== null && value !== undefined;
   }
 
   private parseAnalysisResult(

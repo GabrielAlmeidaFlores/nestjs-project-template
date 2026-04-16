@@ -1,17 +1,21 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { GenerativeIaResponseMimeTypeEnum } from '@infra/generative-ia/enum/generative-ia-response-mime-type.enum';
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
 import { ResponseConfigInputModel } from '@infra/generative-ia/model/input/response-config.input.model';
-import { MarkdownConverterGateway } from '@lib/markdown-converter/markdown-converter.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { GeneralUrbanRetirementDenialQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial/query/general-urban-retirement-denial.query.repository.gateway';
 import { GeneralUrbanRetirementDenialId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/value-object/general-urban-retirement-denial-id/general-urban-retirement-denial-id.value-object';
 import { GeneralUrbanRetirementDenialDocumentTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-document/enum/general-urban-retirement-denial-document-type.enum';
+import { GeneralUrbanRetirementDenialPeriodCategoryEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-category.enum';
+import { GeneralUrbanRetirementDenialPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-consideration.enum';
+import { GeneralUrbanRetirementDenialPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-pendency-reason.enum';
+import { GeneralUrbanRetirementDenialPeriodWorkTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-work-type.enum';
 import { CompareGeneralUrbanRetirementDenialCnisCtpsRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/request/compare-general-urban-retirement-denial-cnis-ctps.request.dto';
 import {
   CompareGeneralUrbanRetirementDenialCnisCtpsPeriodItemResponseDto,
@@ -25,22 +29,27 @@ import { OrganizationSessionDataModel } from '@shared/api/util/decorator/propert
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 interface CompareCnisCtpsResultItemInterface {
-  tipo: string;
-  empresa: string;
-  periodoInicio: string;
-  periodoFim: string;
-  viabilidade: string;
-  reconhecimentoINSS: string;
-  impactoCarencia: boolean;
-  reconhecimentoJudicial: string;
-  tempoContribuicao: string;
-  observacaoTecnica?: string;
-  contribuicaoMedia: string;
+  bondOrigin: string | null | undefined;
+  category: GeneralUrbanRetirementDenialPeriodCategoryEnum | null | undefined;
+  activityDescription: string | null | undefined;
+  startDate: string;
+  endDate: string | null | undefined;
+  workType: GeneralUrbanRetirementDenialPeriodWorkTypeEnum;
+  impactMonths: number | null | undefined;
+  graceMonths: number | null | undefined;
+  isPendency: boolean;
+  competenceBelowTheMinimum: boolean;
+  contributionAverage: string | null | undefined;
+  pendencyReason:
+    | GeneralUrbanRetirementDenialPeriodPendencyReasonEnum
+    | null
+    | undefined;
+  periodConsideration:
+    | GeneralUrbanRetirementDenialPeriodConsiderationEnum
+    | null
+    | undefined;
+  wantsToComplementViaMeuINSS: boolean | null | undefined;
   status: boolean;
-  tipoDeTrabalho: string;
-  competenciaAbaixoDoMinimo: boolean;
-  categoria: string;
-  carencia: string;
 }
 
 @Injectable()
@@ -57,8 +66,6 @@ export class CompareGeneralUrbanRetirementDenialCnisCtpsUseCase {
     private readonly generativeIaGateway: GenerativeIaGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
-    @Inject(MarkdownConverterGateway)
-    private readonly markdownConverterGateway: MarkdownConverterGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(ConsumeOrganizationCreditUseCaseGateway)
@@ -137,7 +144,7 @@ export class CompareGeneralUrbanRetirementDenialCnisCtpsUseCase {
 
     await transaction.commit();
 
-    const periods = await this.buildFilteredPeriods(
+    const periods = this.buildFilteredPeriods(
       result,
       generalUrbanRetirementDenial,
     );
@@ -147,42 +154,34 @@ export class CompareGeneralUrbanRetirementDenialCnisCtpsUseCase {
     });
   }
 
-  private async buildFilteredPeriods(
+  private buildFilteredPeriods(
     result: string,
     generalUrbanRetirementDenial: Awaited<
       ReturnType<
         typeof this.generalUrbanRetirementDenialQueryRepositoryGateway.findOneByGeneralUrbanRetirementDenialIdOrFailWithRelations
       >
     >,
-  ): Promise<
-    CompareGeneralUrbanRetirementDenialCnisCtpsPeriodItemResponseDto[]
-  > {
+  ): CompareGeneralUrbanRetirementDenialCnisCtpsPeriodItemResponseDto[] {
     try {
       const parsedResult = JSON.parse(
         result,
       ) as CompareCnisCtpsResultItemInterface[];
 
-      for (const item of parsedResult) {
-        if (item.observacaoTecnica !== undefined) {
-          item.observacaoTecnica =
-            await this.markdownConverterGateway.convertToHtml(
-              item.observacaoTecnica,
-            );
-        }
-      }
-
       const existingPeriods =
         generalUrbanRetirementDenial.generalUrbanRetirementDenialPeriod ?? [];
 
       const filtered = parsedResult.filter((aiPeriod) => {
-        const aiDateStr = aiPeriod.periodoInicio.replace(/\//g, '-');
+        const aiDateStr = aiPeriod.startDate.replace(/\//g, '-');
         return !existingPeriods.some((existing) => {
-          if (existing.bondOrigin === null) {
+          if (
+            !this.hasValue(existing.bondOrigin) ||
+            !this.hasValue(aiPeriod.bondOrigin)
+          ) {
             return false;
           }
           const nameMatch =
             existing.bondOrigin.trim().toLowerCase() ===
-            aiPeriod.empresa.trim().toLowerCase();
+            aiPeriod.bondOrigin.trim().toLowerCase();
           const dbDateStr =
             existing.startDate.toISOString().split('T')[0] ?? '';
           return nameMatch && aiDateStr === dbDateStr;
@@ -191,27 +190,46 @@ export class CompareGeneralUrbanRetirementDenialCnisCtpsUseCase {
 
       return filtered.map((period) =>
         CompareGeneralUrbanRetirementDenialCnisCtpsPeriodItemResponseDto.build({
-          tipo: period.tipo,
-          empresa: period.empresa,
-          periodoInicio: period.periodoInicio,
-          periodoFim: period.periodoFim,
-          viabilidade: period.viabilidade,
-          reconhecimentoINSS: period.reconhecimentoINSS,
-          impactoCarencia: period.impactoCarencia,
-          reconhecimentoJudicial: period.reconhecimentoJudicial,
-          tempoContribuicao: period.tempoContribuicao,
-          observacaoTecnica: period.observacaoTecnica ?? '',
-          contribuicaoMedia: period.contribuicaoMedia,
+          ...(this.hasValue(period.bondOrigin) && {
+            bondOrigin: period.bondOrigin,
+          }),
+          ...(this.hasValue(period.category) && { category: period.category }),
+          ...(this.hasValue(period.activityDescription) && {
+            activityDescription: period.activityDescription,
+          }),
+          startDate: period.startDate,
+          ...(this.hasValue(period.endDate) && { endDate: period.endDate }),
+          workType: period.workType,
+          ...(this.hasValue(period.impactMonths) && {
+            impactMonths: period.impactMonths,
+          }),
+          ...(this.hasValue(period.graceMonths) && {
+            graceMonths: period.graceMonths,
+          }),
+          isPendency: period.isPendency,
+          competenceBelowTheMinimum: period.competenceBelowTheMinimum,
+          ...(this.hasValue(period.contributionAverage) && {
+            contributionAverage: new DecimalValue(period.contributionAverage),
+          }),
+          ...(this.hasValue(period.pendencyReason) && {
+            pendencyReason: period.pendencyReason,
+          }),
+          ...(this.hasValue(period.periodConsideration) && {
+            periodConsideration: period.periodConsideration,
+          }),
+          ...(this.hasValue(period.wantsToComplementViaMeuINSS) && {
+            wantsToComplementViaMeuINSS: period.wantsToComplementViaMeuINSS,
+          }),
           status: period.status,
-          tipoDeTrabalho: period.tipoDeTrabalho,
-          competenciaAbaixoDoMinimo: period.competenciaAbaixoDoMinimo,
-          categoria: period.categoria,
-          carencia: period.carencia,
         }),
       );
     } catch {
       return [];
     }
+  }
+
+  private hasValue<T>(value: T | null | undefined): value is T {
+    return value !== null && value !== undefined;
   }
 
   private buildJsonSchema(): object {
@@ -220,116 +238,94 @@ export class CompareGeneralUrbanRetirementDenialCnisCtpsUseCase {
       items: {
         type: 'object',
         properties: {
-          tipo: {
+          bondOrigin: {
             type: 'string',
             description:
-              'Tipo de vínculo analisado, neste caso sempre será VINCULO_FALTANTE_CNIS',
+              'Nome da empresa empregadora, retorne null se não houver.',
           },
-          empresa: {
+          category: {
+            type: 'string',
+            enum: Object.values(GeneralUrbanRetirementDenialPeriodCategoryEnum),
+            description:
+              'Categoria do vínculo que consta no CTPS mas não no CNIS.',
+          },
+          activityDescription: {
             type: 'string',
             description:
-              'Nome da empresa empregadora, retorne vazio se não houver.',
+              'Descrição da atividade exercida no período, retorne null se não houver.',
           },
-          periodoInicio: {
+          startDate: {
             type: 'string',
             description:
-              'Data de início do vínculo, retorne vazio se não houver, formate em AAAA/MM/DD, ex: 2020/01/15.',
+              'Data de início do vínculo, formate em AAAA/MM/DD, ex: 2020/01/15.',
           },
-          periodoFim: {
+          endDate: {
             type: 'string',
             description:
-              'Data de término do vínculo, retorne vazio se não houver, formate em AAAA/MM/DD, ex: 2020/01/15, e caso não tenha data de saída, informe "".',
+              'Data de término do vínculo, formate em AAAA/MM/DD, ex: 2020/01/15. Retorne null se não houver data de saída.',
           },
-          viabilidade: {
+          workType: {
             type: 'string',
-            enum: ['BAIXA', 'MÉDIA', 'ALTA'],
-            description: 'Viabilidade do reconhecimento.',
+            enum: Object.values(GeneralUrbanRetirementDenialPeriodWorkTypeEnum),
+            description:
+              'Tipo de trabalho realizado no vínculo. Por padrão retorne URBAN.',
           },
-          reconhecimentoINSS: {
-            type: 'string',
-            enum: ['PROVÁVEL', 'PARCIAL', 'IMPROVÁVEL'],
-            description: 'Análise do INSS.',
+          impactMonths: {
+            type: 'number',
+            description:
+              'Número de meses de impacto do período. Retorne null se não disponível.',
           },
-          impactoCarencia: {
+          graceMonths: {
+            type: 'number',
+            description:
+              'Número de meses de carência que o vínculo representa. Retorne 0 se não houver.',
+          },
+          isPendency: {
             type: 'boolean',
-            description: 'Indica se há impacto na carência.',
+            description: 'Indica se o período possui pendência.',
           },
-          reconhecimentoJudicial: {
-            type: 'string',
-            enum: ['FAVORÁVEL', 'DESFAVORÁVEL', 'INDEFINIDO'],
-            description: 'Análise judicial do vínculo.',
+          competenceBelowTheMinimum: {
+            type: 'boolean',
+            description:
+              'Indica se há competências com valor de contribuição abaixo do mínimo legal.',
           },
-          tempoContribuicao: {
-            type: 'string',
-            description: 'Tempo de contribuição reconhecido.',
-          },
-          observacaoTecnica: {
+          contributionAverage: {
             type: 'string',
             description:
-              'Observações técnicas detalhadas sobre a análise realizada. Use formatação markdown: ## para títulos de seções, **texto** para negrito, - para listas com marcadores. Estruture em seções claras com títulos descritivos.',
+              'Valor da contribuição média mensal como string decimal. Retorne null se não houver.',
           },
-          contribuicaoMedia: {
+          pendencyReason: {
             type: 'string',
+            enum: Object.values(
+              GeneralUrbanRetirementDenialPeriodPendencyReasonEnum,
+            ),
             description:
-              'Valor da contribuição média mensal, retorne vazio se não houver.',
+              'Motivo da pendência, se houver. Retorne null se não houver.',
+          },
+          periodConsideration: {
+            type: 'string',
+            enum: Object.values(
+              GeneralUrbanRetirementDenialPeriodConsiderationEnum,
+            ),
+            description: 'Consideração do período para o benefício.',
+          },
+          wantsToComplementViaMeuINSS: {
+            type: 'boolean',
+            description:
+              'Indica se o segurado deseja complementar o período via Meu INSS.',
           },
           status: {
             type: 'boolean',
             description:
-              'Indica se o vínculo é favorável ou não para o segurado, considerando todos os aspectos analisados.',
-          },
-          tipoDeTrabalho: {
-            type: 'string',
-            enum: ['URBANO', 'RURAL'],
-            description:
-              'Tipo de trabalho realizado no vínculo, se aplicável. Por padrão retorne URBANO.',
-          },
-          competenciaAbaixoDoMinimo: {
-            type: 'boolean',
-            description:
-              'Indica se há competências com valor de contribuição abaixo do mínimo legal, considerando o ano de referência é o salário mínimo vigente na época do Brasil.',
-          },
-          categoria: {
-            type: 'string',
-            enum: [
-              'AUTONOMO',
-              'MEI',
-              'CONTRIBUINTE_INDIVIDUAL',
-              'TRABALHADOR_AVULSO',
-              'TEMPORARIO',
-              'ESTAGIARIO',
-              'APRENDIZ',
-              'SERVIDOR_PUBLICO',
-              'TRABALHADOR_RURAL',
-              'SEGURADO_ESPECIAL',
-              'MILITAR',
-            ],
-            description:
-              'Categoria do vínculo, que encontra-se no CTPS que não consta no CNIS.',
-          },
-          carencia: {
-            type: 'string',
-            description:
-              'Número de meses distinto de carência que o vínculo representa, retorne 0 se não houver. Considere carência como o número de meses que o vínculo contribui para a aposentadoria. Exemplo: Se o vínculo é de 6 meses, retorne 6.',
+              'Indica se o vínculo é favorável ou não para o segurado.',
           },
         },
         required: [
-          'tipo',
-          'empresa',
-          'periodoInicio',
-          'periodoFim',
-          'viabilidade',
-          'reconhecimentoINSS',
-          'impactoCarencia',
-          'reconhecimentoJudicial',
-          'tempoContribuicao',
-          'observacaoTecnica',
-          'contribuicaoMedia',
+          'startDate',
+          'workType',
+          'isPendency',
+          'competenceBelowTheMinimum',
           'status',
-          'tipoDeTrabalho',
-          'competenciaAbaixoDoMinimo',
-          'categoria',
-          'carencia',
         ],
       },
     };
