@@ -89,9 +89,13 @@ export class DownloadRuralOrHybridRetirementRejectionCompleteAnalysisUseCase {
         throw new RuralOrHybridRetirementRejectionCompleteAnalysisDownloadNotFoundError();
       }
 
-      const updatedResult = this.buildUpdatedResultEntity(currentResult, {
-        completeAnalysisDownload: downloadContent,
-      });
+      const updatedResult = this.buildUpdatedResultEntity(
+        currentResult,
+        {
+          completeAnalysisDownload: downloadContent,
+        },
+        ruralOrHybridRetirementRejectionId,
+      );
 
       const transaction = await this.baseTransactionRepositoryGateway.execute([
         this.ruralOrHybridRetirementRejectionResultCommandRepositoryGateway.updateRuralOrHybridRetirementRejectionResult(
@@ -131,37 +135,11 @@ export class DownloadRuralOrHybridRetirementRejectionCompleteAnalysisUseCase {
   private buildCompleteAnalysisDownload(
     parsedResult: RuralOrHybridRetirementRejectionResultInterface,
   ): string | null {
-    const sections = [
-      this.buildSection('Resumo', parsedResult.summary),
-      this.buildSection('Fundamentacao juridica', parsedResult.legalBasis),
-      this.buildSection(
-        'Recomendacao de estrategia',
-        parsedResult.strategyRecommendation,
-      ),
-      this.buildSection(
-        'Analise das evidencias',
-        parsedResult.evidenceAnalysis,
-      ),
-      this.buildSection(
-        'Conformidade cronologica',
-        parsedResult.timelineCompliance,
-      ),
-      this.buildSection('Conclusao', parsedResult.conclusion),
-    ].filter((section): section is string => section !== null);
-
-    if (sections.length === 0) {
+    if (parsedResult.analysisResult.trim() === '') {
       return null;
     }
 
-    return sections.join('\n\n');
-  }
-
-  private buildSection(title: string, content: string | null): string | null {
-    if (content === null || content.trim() === '') {
-      return null;
-    }
-
-    return `# ${title}\n\n${content}`;
+    return parsedResult.analysisResult;
   }
 
   private buildUpdatedResultEntity(
@@ -171,6 +149,7 @@ export class DownloadRuralOrHybridRetirementRejectionCompleteAnalysisUseCase {
       simplifiedAnalysis?: string | null;
       simplifiedAnalysisDownload?: string | null;
     },
+    ruralOrHybridRetirementRejectionId: RuralOrHybridRetirementRejectionId,
   ): RuralOrHybridRetirementRejectionResultEntity {
     return new RuralOrHybridRetirementRejectionResultEntity({
       id: currentResult.id,
@@ -185,8 +164,7 @@ export class DownloadRuralOrHybridRetirementRejectionCompleteAnalysisUseCase {
       simplifiedAnalysisDownload:
         overrides.simplifiedAnalysisDownload ??
         currentResult.simplifiedAnalysisDownload,
-      ruralOrHybridRetirementRejectionId:
-        currentResult.ruralOrHybridRetirementRejectionId,
+      ruralOrHybridRetirementRejectionId,
       createdAt: currentResult.createdAt,
       updatedAt: currentResult.updatedAt,
       deletedAt: currentResult.deletedAt,

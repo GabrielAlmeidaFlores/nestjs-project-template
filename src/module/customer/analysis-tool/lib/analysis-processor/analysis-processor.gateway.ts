@@ -318,8 +318,14 @@ export abstract class AnalysisProcessorGateway {
     files: Buffer[],
   ): Promise<string | null>;
 
-  public abstract getRuralOrHybridRetirementRejectionTimeAcceleratorAnalysis(
+  public abstract getTimeAcceleratorAnalysis(
     systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getRuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysis(
+    systemInstruction: string,
+    customerName: string,
     files: Buffer[],
   ): Promise<string | null>;
 

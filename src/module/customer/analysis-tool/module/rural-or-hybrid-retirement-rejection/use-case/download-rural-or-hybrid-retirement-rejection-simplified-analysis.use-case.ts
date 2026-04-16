@@ -109,10 +109,14 @@ export class DownloadRuralOrHybridRetirementRejectionSimplifiedAnalysisUseCase {
           [Buffer.from(currentResult.completeAnalysis, 'utf-8')],
         );
 
-      const updatedResult = this.buildUpdatedResultEntity(currentResult, {
-        simplifiedAnalysis,
-        simplifiedAnalysisDownload: simplifiedAnalysis,
-      });
+      const updatedResult = this.buildUpdatedResultEntity(
+        currentResult,
+        {
+          simplifiedAnalysis,
+          simplifiedAnalysisDownload: simplifiedAnalysis,
+        },
+        ruralOrHybridRetirementRejectionId,
+      );
 
       const transaction = await this.baseTransactionRepositoryGateway.execute([
         consumeCreditTransaction,
@@ -146,6 +150,7 @@ export class DownloadRuralOrHybridRetirementRejectionSimplifiedAnalysisUseCase {
       simplifiedAnalysis?: string | null;
       simplifiedAnalysisDownload?: string | null;
     },
+    ruralOrHybridRetirementRejectionId: RuralOrHybridRetirementRejectionId,
   ): RuralOrHybridRetirementRejectionResultEntity {
     return new RuralOrHybridRetirementRejectionResultEntity({
       id: currentResult.id,
@@ -158,8 +163,7 @@ export class DownloadRuralOrHybridRetirementRejectionSimplifiedAnalysisUseCase {
       simplifiedAnalysisDownload:
         overrides.simplifiedAnalysisDownload ??
         currentResult.simplifiedAnalysisDownload,
-      ruralOrHybridRetirementRejectionId:
-        currentResult.ruralOrHybridRetirementRejectionId,
+      ruralOrHybridRetirementRejectionId,
       createdAt: currentResult.createdAt,
       updatedAt: currentResult.updatedAt,
       deletedAt: currentResult.deletedAt,

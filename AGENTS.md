@@ -1005,6 +1005,43 @@ return AnalysisEntity.build({
 });
 ```
 
+#### ⚠️ CRITICAL: Domain→ORM Relation Mapping — ALWAYS use `this.mapper.map()`
+
+**NEVER use the `{ id: ... } as TypeormEntity` cast pattern** to map relations in the Domain→ORM direction. Always delegate to `this.mapper.map()` so the registered profile handles the conversion correctly.
+
+```typescript
+// ❌ WRONG — casting with only the ID (bypasses the registered mapper profile)
+const ruralOrHybridRetirementRejection =
+  source.ruralOrHybridRetirementRejection !== null
+    ? ({
+        id: source.ruralOrHybridRetirementRejection.id.toString(),
+      } as RuralOrHybridRetirementRejectionTypeormEntity)
+    : null;
+
+// ✅ CORRECT — delegate to the registered mapper profile
+const ruralOrHybridRetirementRejection =
+  source.ruralOrHybridRetirementRejection !== null
+    ? this.mapper.map(
+        source.ruralOrHybridRetirementRejection,
+        RuralOrHybridRetirementRejectionEntity,
+        RuralOrHybridRetirementRejectionTypeormEntity,
+      )
+    : null;
+```
+
+**Why this matters:**
+
+1. **Correctness**: TypeORM uses the full relation object (not just an ID stub) to resolve FK columns correctly
+2. **Consistency**: All relation mappings follow the same pattern regardless of direction
+3. **Maintainability**: The registered profile is the single source of truth for the transformation
+
+**Rules:**
+
+- ✅ Always use `this.mapper.map(source.field, DomainEntity, TypeormEntity)` for nullable relations in the Domain→ORM converter
+- ✅ Import both the Domain entity and the TypeORM entity in the mapper profile file
+- ❌ NO `{ id: source.field.id.toString() } as SomeTypeormEntity` casts
+- ❌ NO manually constructing partial TypeORM entities as relation stubs
+
 ---
 
 ## Mandatory Code Patterns
@@ -3213,8 +3250,26 @@ The schema **must exactly match** the corresponding `*Interface` file under `mod
 - ✅ Use `required: [...]` in the schema so the AI is forced to return all mandatory fields
 - ✅ Prompt text describes only the analysis instructions (no JSON structure)
 - ✅ Seeder prompt is kept clear and concise — no JSON examples or schema
-- ❌ NO JSON structure in prompts or seeders
+- ❌ NO JSON structure in prompts or seeders — the prompt **NEVER** mentions field names, JSON objects, or example values
 - ❌ NO mismatch between schema keys and interface fields
+
+---
+
+### 13. Seeder Completeness Rules ⚠️ MANDATORY
+
+**RULE 1 — Seed ALL enum values, not just the one that triggered an error.**
+
+When a `PaymentPlanPaidResourceIaConfigNotFoundError` (or similar) occurs for one resource type, always check whether **all** other values of the same enum family are also seeded. A missing entry for one type strongly implies other types are missing too.
+
+**RULE 2 — Time Accelerators are generic resource types shared across features.**
+
+`TIME_ACCELERATOR_*` resource types (e.g. `TIME_ACCELERATOR_RURAL_TIME_ANALYSIS`, `TIME_ACCELERATOR_MILITARY_SERVICE_ANALYSIS`) are **generic** and already seeded once for the whole platform. When implementing a new analysis feature that uses time accelerators, do **NOT** create new `PaymentPlanPaidResource` seed entries for them — they reuse the existing ones.
+
+Only the analysis-specific types (e.g. `RURAL_OR_HYBRID_RETIREMENT_REJECTION_FIRST_ANALYSIS`, `RURAL_OR_HYBRID_RETIREMENT_REJECTION_COMPLETE_ANALYSIS`, `RURAL_OR_HYBRID_RETIREMENT_REJECTION_SIMPLIFIED_ANALYSIS`) need their own seed entries.
+
+**RULE 3 — Seeder prompt never mentions JSON.**
+
+This is a duplicate of Rule 12 above and applies specifically to the `payment-plan-paid-resource-ia-config.seeder.ts` file. The `prompt` field stored in the DB is for **instructions only**. The JSON schema shape is exclusively the responsibility of the `get*JsonSchema()` method in `AnalysisProcessorService`.
 
 ---
 

@@ -114,6 +114,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { specialCategoryRetirementAnalysis: Not(IsNull()) },
         { insuranceQualityAnalysis: Not(IsNull()) },
         { ruralTimeline: Not(IsNull()) },
+        { ruralOrHybridRetirementRejection: Not(IsNull()) },
         { audienceQuestionGenerator: Not(IsNull()) },
         { disabilityRetirementPlanning: Not(IsNull()) },
         { disabilityRetirementPlanningGrant: Not(IsNull()) },
@@ -1504,6 +1505,52 @@ export class AnalysisToolRecordTypeormQueryRepository
     return mappedData;
   }
 
+  public async findWithRelationsByRuralOrHybridRetirementRejectionIdOrFail(
+    ruralOrHybridRetirementRejectionId: RuralOrHybridRetirementRejectionId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          ruralOrHybridRetirementRejection: {
+            id: ruralOrHybridRetirementRejectionId.toString(),
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
   public async findWithRelationsByPerCapitaIncomeForBpcAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
     perCapitaIncomeForBpcAnalysisId: PerCapitaIncomeForBpcAnalysisId,
     organizationId: OrganizationId,
@@ -1814,6 +1861,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { specialCategoryRetirementAnalysis: Not(IsNull()) },
         { insuranceQualityAnalysis: Not(IsNull()) },
         { ruralTimeline: Not(IsNull()) },
+        { ruralOrHybridRetirementRejection: Not(IsNull()) },
         { audienceQuestionGenerator: Not(IsNull()) },
         { disabilityRetirementPlanning: Not(IsNull()) },
         { disabilityRetirementPlanningGrant: Not(IsNull()) },
@@ -2437,6 +2485,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       'disabilityAssessmentForBpcAnalysis',
       'perCapitaIncomeForBpcAnalysis',
       'insuranceQualityAnalysis',
+      'ruralOrHybridRetirementRejection',
       'audienceQuestionGenerator',
       'disabilityRetirementPlanning',
       'disabilityRetirementPlanningGrant',
