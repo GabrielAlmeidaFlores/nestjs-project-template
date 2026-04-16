@@ -169,7 +169,7 @@ export class CreateBpcElderlyAnalysisResultUseCase {
     const bpcElderlyAnalysisResult = new BpcElderlyAnalysisResultEntity({
       ...(existingResult !== null && { id: existingResult.id }),
       completeAnalysis: completeAnalysisRaw,
-      completeAnalysisDownload: parsedAnalysis.analysisDetails,
+      completeAnalysisDownload: parsedAnalysis.completeAnalysisDownload,
       simplifiedAnalysis: null,
     });
 
@@ -313,6 +313,7 @@ export class CreateBpcElderlyAnalysisResultUseCase {
     legalRequirementsMet: string | null;
     perCapitaIncomeBelowQuarterMinimumWage: string | null;
     ageEqualOrAbove65Years: string | null;
+    completeAnalysisDownload: string | null;
   } {
     const empty = {
       diagnosis: null,
@@ -327,6 +328,7 @@ export class CreateBpcElderlyAnalysisResultUseCase {
       legalRequirementsMet: null,
       perCapitaIncomeBelowQuarterMinimumWage: null,
       ageEqualOrAbove65Years: null,
+      completeAnalysisDownload: null,
     };
 
     if (raw === null) {
@@ -352,6 +354,7 @@ export class CreateBpcElderlyAnalysisResultUseCase {
         perCapitaIncomeBelowQuarterMinimumWage:
           parsed.perCapitaIncomeBelowQuarterMinimumWage ?? null,
         ageEqualOrAbove65Years: parsed.ageEqualOrAbove65Years ?? null,
+        completeAnalysisDownload: parsed.completeAnalysisDownload ?? null,
       };
     } catch {
       return empty;

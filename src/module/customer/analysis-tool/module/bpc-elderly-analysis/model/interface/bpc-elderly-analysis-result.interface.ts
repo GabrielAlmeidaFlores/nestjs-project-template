@@ -13,4 +13,5 @@ export interface BpcElderlyAnalysisResultInterface {
   legalRequirementsMet: string;
   perCapitaIncomeBelowQuarterMinimumWage: string;
   ageEqualOrAbove65Years: string;
+  completeAnalysisDownload: string;
 }
