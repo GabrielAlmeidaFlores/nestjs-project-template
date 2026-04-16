@@ -1,9 +1,9 @@
+import { BpcElderlyAnalysisCategoryEnum } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/enum/bpc-elderly-analysis-category.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
 import { ResponseDtoNumberProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-number-property/response-dto-number-property.decorator';
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
-import { BpcElderlyAnalysisResultCategoryEnum } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-result/enum/bpc-elderly-analysis-result-category.enum';
 
 @ResponseDto()
 export class CreateBpcElderlyAnalysisResultResponseDto extends BaseBuildableDtoObject {
@@ -28,11 +28,20 @@ export class CreateBpcElderlyAnalysisResultResponseDto extends BaseBuildableDtoO
   @ResponseDtoNumberProperty({ required: false })
   public readonly amount?: number;
 
-  @ResponseDtoEnumProperty(BpcElderlyAnalysisResultCategoryEnum, { required: false })
-  public readonly category?: BpcElderlyAnalysisResultCategoryEnum;
+  @ResponseDtoEnumProperty(BpcElderlyAnalysisCategoryEnum, { required: false })
+  public readonly category?: BpcElderlyAnalysisCategoryEnum;
 
   @ResponseDtoStringProperty({ required: false })
   public readonly bpcElderlyCompleteAnalysisResult?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly legalRequirementsMet?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly perCapitaIncomeBelowQuarterMinimumWage?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly ageEqualOrAbove65Years?: string;
 
   protected override readonly _type =
     CreateBpcElderlyAnalysisResultResponseDto.name;

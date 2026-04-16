@@ -1,4 +1,4 @@
-import { BpcElderlyAnalysisResultCategoryEnum } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-result/enum/bpc-elderly-analysis-result-category.enum';
+import type { BpcElderlyAnalysisCategoryEnum } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/enum/bpc-elderly-analysis-category.enum';
 
 export interface BpcElderlyAnalysisResultInterface {
   diagnosis: string;
@@ -9,5 +9,8 @@ export interface BpcElderlyAnalysisResultInterface {
   benefitStartDate: string;
   amount: number;
   analysisDetails: string;
-  category: BpcElderlyAnalysisResultCategoryEnum;
+  category: BpcElderlyAnalysisCategoryEnum;
+  legalRequirementsMet: string;
+  perCapitaIncomeBelowQuarterMinimumWage: string;
+  ageEqualOrAbove65Years: string;
 }

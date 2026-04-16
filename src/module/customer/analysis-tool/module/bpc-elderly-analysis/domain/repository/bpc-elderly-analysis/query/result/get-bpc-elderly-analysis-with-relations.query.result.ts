@@ -5,12 +5,12 @@ import type { GetBpcElderlyAnalysisFamilyMemberQueryResult } from '@module/custo
 import type { GetBpcElderlyAnalysisInssBenefitQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-inss-benefit/query/result/get-bpc-elderly-analysis-inss-benefit.query.result';
 import type { GetBpcElderlyAnalysisLegalProceedingQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-legal-proceeding/query/result/get-bpc-elderly-analysis-legal-proceeding.query.result';
 import type { GetBpcElderlyAnalysisResultQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-result/query/result/get-bpc-elderly-analysis-result.query.result';
-import type { BpcElderlyAnalysisResultCategoryEnum } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-result/enum/bpc-elderly-analysis-result-category.enum';
+import type { BpcElderlyAnalysisCategoryEnum } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/enum/bpc-elderly-analysis-category.enum';
 import type { BpcElderlyAnalysisId } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/value-object/bpc-elderly-analysis-id/bpc-elderly-analysis-id.value-object';
 
 export class GetBpcElderlyAnalysisWithRelationsQueryResult extends BaseBuildableObject {
   public readonly id: BpcElderlyAnalysisId;
-  public readonly category: BpcElderlyAnalysisResultCategoryEnum | null;
+  public readonly category: BpcElderlyAnalysisCategoryEnum | null;
   public readonly bpcElderlyAnalysisResult: GetBpcElderlyAnalysisResultQueryResult | null;
   public readonly bpcElderlyAnalysisFamilyMember: GetBpcElderlyAnalysisFamilyMemberQueryResult[];
   public readonly bpcElderlyAnalysisDocument: GetBpcElderlyAnalysisDocumentQueryResult[];

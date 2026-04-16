@@ -1,6 +1,6 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { BpcElderlyAnalysisCategoryEnum } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/enum/bpc-elderly-analysis-category.enum';
 import { BpcElderlyAnalysisId } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/value-object/bpc-elderly-analysis-id/bpc-elderly-analysis-id.value-object';
-import { BpcElderlyAnalysisResultCategoryEnum } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-result/enum/bpc-elderly-analysis-result-category.enum';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
@@ -17,7 +17,7 @@ export class BpcElderlyAnalysisEntity extends BaseEntity<BpcElderlyAnalysisId> {
   public readonly name: string | null;
 
   @Description('Categoria do trabalhador para o BPC ao Idoso.')
-  public readonly category: BpcElderlyAnalysisResultCategoryEnum | null;
+  public readonly category: BpcElderlyAnalysisCategoryEnum | null;
 
   @Description('Resultado da análise de BPC ao Idoso.')
   public readonly bpcElderlyAnalysisResult: BpcElderlyAnalysisResultEntity | null;

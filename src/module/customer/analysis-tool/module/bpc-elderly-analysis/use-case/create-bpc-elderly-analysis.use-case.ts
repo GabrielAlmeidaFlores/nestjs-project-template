@@ -80,6 +80,7 @@ export class CreateBpcElderlyAnalysisUseCase {
 
     const bpcElderlyAnalysis = new BpcElderlyAnalysisEntity({
       name: dto.name ?? null,
+      category: dto.category ?? null,
       createdBy: organizationMember.id,
       updatedBy: organizationMember.id,
     });
