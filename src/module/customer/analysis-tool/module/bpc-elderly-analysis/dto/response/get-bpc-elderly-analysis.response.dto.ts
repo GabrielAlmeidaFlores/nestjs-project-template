@@ -11,6 +11,7 @@ import { BpcElderlyAnalysisDocumentTypeEnum } from '@module/customer/analysis-to
 import { BpcElderlyAnalysisFamilyMemberIncomeTypeEnum } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-family-member/enum/bpc-elderly-analysis-family-member-income-type.enum';
 import { BpcElderlyAnalysisFamilyMemberKinshipEnum } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-family-member/enum/bpc-elderly-analysis-family-member-kinship.enum';
 import { BpcElderlyAnalysisFamilyMemberDocumentTypeEnum } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-family-member-document/enum/bpc-elderly-analysis-family-member-document-type.enum';
+import { BpcElderlyAnalysisResultCategoryEnum } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-result/enum/bpc-elderly-analysis-result-category.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-boolean-property/response-dto-boolean-property.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
@@ -55,6 +56,27 @@ export class GetBpcElderlyAnalysisClientResponseDto extends BaseBuildableDtoObje
 export class GetBpcElderlyAnalysisResultResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty({ required: false })
   public completeAnalysis?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public diagnosis?: string;
+
+  @ResponseDtoNumberProperty({ required: false })
+  public totalHouseholdIncome?: number;
+
+  @ResponseDtoNumberProperty({ required: false })
+  public perCapitaIncome?: number;
+
+  @ResponseDtoStringProperty({ required: false })
+  public eligibilityJustification?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public type?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public benefitStartDate?: string;
+
+  @ResponseDtoNumberProperty({ required: false })
+  public amount?: number;
 
   @ResponseDtoDateProperty()
   public createdAt: Date;
@@ -179,6 +201,11 @@ export class GetBpcElderlyAnalysisResponseDto extends BaseBuildableDtoObject {
     required: false,
   })
   public bpcElderlyAnalysisResult?: GetBpcElderlyAnalysisResultResponseDto;
+
+  @ResponseDtoEnumProperty(BpcElderlyAnalysisResultCategoryEnum, {
+    required: false,
+  })
+  public category?: BpcElderlyAnalysisResultCategoryEnum;
 
   @ResponseDtoObjectProperty(() => GetBpcElderlyAnalysisResponsibleResponseDto)
   public createdBy: GetBpcElderlyAnalysisResponsibleResponseDto;

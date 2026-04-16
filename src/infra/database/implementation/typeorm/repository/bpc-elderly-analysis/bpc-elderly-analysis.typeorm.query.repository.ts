@@ -41,14 +41,6 @@ export class BpcElderlyAnalysisTypeormQueryRepository
           },
         },
         relations: {
-          createdBy: {
-            customer: true,
-            organization: true,
-          },
-          updatedBy: {
-            customer: true,
-            organization: true,
-          },
           bpcElderlyAnalysisFamilyMember: {
             bpcElderlyAnalysisFamilyMemberDocument: true,
           },

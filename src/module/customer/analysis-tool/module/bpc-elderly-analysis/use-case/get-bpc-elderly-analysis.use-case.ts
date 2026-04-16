@@ -9,6 +9,7 @@ import { BpcElderlyAnalysisQueryRepositoryGateway } from '@module/customer/analy
 import { GetBpcElderlyAnalysisDocumentQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis/query/result/get-bpc-elderly-analysis-document.query.result';
 import { GetBpcElderlyAnalysisFamilyMemberDocumentQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis/query/result/get-bpc-elderly-analysis-family-member-document.query.result';
 import { GetBpcElderlyAnalysisFamilyMemberQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis/query/result/get-bpc-elderly-analysis-family-member.query.result';
+import { GetBpcElderlyAnalysisResultQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-result/query/result/get-bpc-elderly-analysis-result.query.result';
 import { BpcElderlyAnalysisId } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/value-object/bpc-elderly-analysis-id/bpc-elderly-analysis-id.value-object';
 import {
   GetBpcElderlyAnalysisResponseDto,
@@ -20,6 +21,7 @@ import {
   GetBpcElderlyAnalysisFamilyMemberDocumentResponseDto,
 } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/dto/response/get-bpc-elderly-analysis.response.dto';
 import { BpcElderlyAnalysisNotFoundError } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/error/bpc-elderly-analysis-not-found.error';
+import { BpcElderlyAnalysisResultInterface } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/model/interface/bpc-elderly-analysis-result.interface';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -119,19 +121,16 @@ export class GetBpcElderlyAnalysisUseCase {
       status: analysisToolRecordQueryResult.status,
       updatedAt: analysisToolRecordQueryResult.updatedAt,
       createdAt: analysisToolRecordQueryResult.createdAt,
+      ...(bpcElderlyAnalysisQueryResult.category !== null && {
+        category: bpcElderlyAnalysisQueryResult.category,
+      }),
       analysisToolClient: GetBpcElderlyAnalysisClientResponseDto.build({
         ...analysisToolRecordQueryResult.analysisToolClient,
       }),
       ...(bpcElderlyAnalysisQueryResult.bpcElderlyAnalysisResult !== null && {
-        bpcElderlyAnalysisResult: GetBpcElderlyAnalysisResultResponseDto.build({
-          ...bpcElderlyAnalysisQueryResult.bpcElderlyAnalysisResult,
-          ...(bpcElderlyAnalysisQueryResult.bpcElderlyAnalysisResult
-            .completeAnalysis !== null && {
-            completeAnalysis:
-              bpcElderlyAnalysisQueryResult.bpcElderlyAnalysisResult
-                .completeAnalysis,
-          }),
-        }),
+        bpcElderlyAnalysisResult: this.buildResultResponseDto(
+          bpcElderlyAnalysisQueryResult.bpcElderlyAnalysisResult,
+        ),
       }),
       familyMembers,
       createdBy: GetBpcElderlyAnalysisResponsibleResponseDto.build({
@@ -188,5 +187,76 @@ export class GetBpcElderlyAnalysisUseCase {
     }
 
     return response;
+  }
+
+  private buildResultResponseDto(
+    result: GetBpcElderlyAnalysisResultQueryResult,
+  ): GetBpcElderlyAnalysisResultResponseDto {
+    const parsed = this.parseCompleteAnalysis(result.completeAnalysis);
+
+    return GetBpcElderlyAnalysisResultResponseDto.build({
+      ...(result.completeAnalysis !== null && {
+        completeAnalysis: result.completeAnalysis,
+      }),
+      ...(parsed.diagnosis !== null && { diagnosis: parsed.diagnosis }),
+      ...(parsed.totalHouseholdIncome !== null && {
+        totalHouseholdIncome: parsed.totalHouseholdIncome,
+      }),
+      ...(parsed.perCapitaIncome !== null && {
+        perCapitaIncome: parsed.perCapitaIncome,
+      }),
+      ...(parsed.eligibilityJustification !== null && {
+        eligibilityJustification: parsed.eligibilityJustification,
+      }),
+      ...(parsed.type !== null && { type: parsed.type }),
+      ...(parsed.benefitStartDate !== null && {
+        benefitStartDate: parsed.benefitStartDate,
+      }),
+      ...(parsed.amount !== null && { amount: parsed.amount }),
+      createdAt: result.createdAt,
+      updatedAt: result.updatedAt,
+    });
+  }
+
+  private parseCompleteAnalysis(raw: string | null): {
+    diagnosis: string | null;
+    totalHouseholdIncome: number | null;
+    perCapitaIncome: number | null;
+    eligibilityJustification: string | null;
+    type: string | null;
+    benefitStartDate: string | null;
+    amount: number | null;
+  } {
+    const empty = {
+      diagnosis: null,
+      totalHouseholdIncome: null,
+      perCapitaIncome: null,
+      eligibilityJustification: null,
+      type: null,
+      benefitStartDate: null,
+      amount: null,
+    };
+
+    if (raw === null) {
+      return empty;
+    }
+
+    try {
+      const parsed = JSON.parse(
+        raw,
+      ) as Partial<BpcElderlyAnalysisResultInterface>;
+
+      return {
+        diagnosis: parsed.diagnosis ?? null,
+        totalHouseholdIncome: parsed.totalHouseholdIncome ?? null,
+        perCapitaIncome: parsed.perCapitaIncome ?? null,
+        eligibilityJustification: parsed.eligibilityJustification ?? null,
+        type: parsed.type ?? null,
+        benefitStartDate: parsed.benefitStartDate ?? null,
+        amount: parsed.amount ?? null,
+      };
+    } catch {
+      return empty;
+    }
   }
 }

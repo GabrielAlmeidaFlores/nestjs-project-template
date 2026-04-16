@@ -8,6 +8,13 @@ export class BpcElderlyAnalysisResultTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'complete_analysis', type: 'longtext', nullable: true })
   public completeAnalysis: string | null;
 
+  @Column({
+    name: 'complete_analysis_download',
+    type: 'longtext',
+    nullable: true,
+  })
+  public completeAnalysisDownload: string | null;
+
   @Column({ name: 'simplified_analysis', type: 'text', nullable: true })
   public simplifiedAnalysis: string | null;
 

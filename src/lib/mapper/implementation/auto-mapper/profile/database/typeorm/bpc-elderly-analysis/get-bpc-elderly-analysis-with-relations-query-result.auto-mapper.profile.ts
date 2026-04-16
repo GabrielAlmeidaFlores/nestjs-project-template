@@ -8,9 +8,6 @@ import { BpcElderlyAnalysisInssBenefitTypeormEntity } from '@infra/database/impl
 import { BpcElderlyAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-legal-proceeding.typeorm.entity';
 import { BpcElderlyAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-result.typeorm.entity';
 import { BpcElderlyAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis.typeorm.entity';
-import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
-import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
-import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
 import { GetBpcElderlyAnalysisDocumentQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis/query/result/get-bpc-elderly-analysis-document.query.result';
 import { GetBpcElderlyAnalysisFamilyMemberQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis/query/result/get-bpc-elderly-analysis-family-member.query.result';
 import { GetBpcElderlyAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis/query/result/get-bpc-elderly-analysis-with-relations.query.result';
@@ -36,13 +33,6 @@ export class GetBpcElderlyAnalysisWithRelationsQueryResultAutoMapperProfile {
     const convertOrmEntityToQueryResult = (
       source: BpcElderlyAnalysisTypeormEntity,
     ): GetBpcElderlyAnalysisWithRelationsQueryResult => {
-      if (!source.createdBy || !source.updatedBy) {
-        throw new IncompleteSourceDataForMappingError({
-          destinationClass: GetBpcElderlyAnalysisWithRelationsQueryResult.name,
-          sourceClass: BpcElderlyAnalysisTypeormEntity.name,
-        });
-      }
-
       const bpcElderlyAnalysisResult = source.bpcElderlyAnalysisResult
         ? this.mapper.map(
             source.bpcElderlyAnalysisResult,
@@ -87,27 +77,14 @@ export class GetBpcElderlyAnalysisWithRelationsQueryResultAutoMapperProfile {
           ),
         ) ?? [];
 
-      const createdBy = this.mapper.map(
-        source.createdBy,
-        OrganizationMemberTypeormEntity,
-        GetOrganizationMemberWithCustomerRelationQueryResult,
-      );
-
-      const updatedBy = this.mapper.map(
-        source.updatedBy,
-        OrganizationMemberTypeormEntity,
-        GetOrganizationMemberWithCustomerRelationQueryResult,
-      );
-
       return GetBpcElderlyAnalysisWithRelationsQueryResult.build({
         id: new BpcElderlyAnalysisId(source.id),
+        category: source.category ?? null,
         bpcElderlyAnalysisResult,
         bpcElderlyAnalysisFamilyMember,
         bpcElderlyAnalysisDocument,
         bpcElderlyAnalysisInssBenefit,
         bpcElderlyAnalysisLegalProceeding,
-        createdBy,
-        updatedBy,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt ?? null,

@@ -56,7 +56,8 @@ export class DownloadBpcElderlyAnalysisCompleteAnalysisUseCase {
     }
 
     const completeAnalysis =
-      bpcElderlyAnalysisQueryResult.bpcElderlyAnalysisResult.completeAnalysis;
+      bpcElderlyAnalysisQueryResult.bpcElderlyAnalysisResult
+        .completeAnalysisDownload;
 
     if (completeAnalysis === null) {
       throw new BpcElderlyAnalysisDoesNotContainCompleteAnalysisError();

@@ -1487,6 +1487,18 @@ Análise processada do CNIS:
     );
   }
 
+  public async getBpcElderlyAnalysisSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
   private getSurvivorPensionAnalysisResultJsonSchema(): object {
     return {
       type: 'object',
@@ -3323,10 +3335,10 @@ Análise processada do CNIS:
           description:
             'Detalhamento completo da análise, incluindo a avaliação de cada documento apresentado, a situação socioeconômica do idoso, a aplicação dos critérios legais e a conclusão sobre a elegibilidade para o BPC ao Idoso. Esta seção deve fornecer uma visão abrangente do processo de análise, destacando os pontos fortes e as possíveis fragilidades do caso.',
         },
-        simplifiedAnalysisDetails: {
+        completeAnalysisDownload: {
           type: 'string',
           description:
-            'Resumo simplificado da análise de BPC ao Idoso, destinado ao cliente final. Deve ser escrito em linguagem clara e acessível, sem termos técnicos jurídicos complexos, apresentando de forma objetiva o diagnóstico, os principais pontos considerados e a conclusão sobre a elegibilidade. Máximo de 500 palavras.',
+            'A analise técnica deve ser formatada em Markdown, pronta para exportação em PDF/DOCX. Deve conter todas as seções: Diagnóstico, Renda Familiar Total, Renda per capita, Justificativa de Elegibilidade, Tipo de Análise, Data de Início do Benefício, Valor do Benefício e Detalhes da Análise. Formate com títulos (##), listas e tabelas em Markdown quando aplicável. Detalhamento completo da análise, incluindo a avaliação de cada documento apresentado, a situação socioeconômica do idoso, a aplicação dos critérios legais e a conclusão sobre a elegibilidade para o BPC ao Idoso. Esta seção deve fornecer uma visão abrangente do processo de análise, destacando os pontos fortes e as possíveis fragilidades do caso.  ',
         },
       },
       required: [
@@ -3338,7 +3350,7 @@ Análise processada do CNIS:
         'benefitStartDate',
         'amount',
         'analysisDetails',
-        'simplifiedAnalysisDetails',
+        'completeAnalysisDownload',
       ],
     };
   }

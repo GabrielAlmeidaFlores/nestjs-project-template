@@ -3,5 +3,6 @@ import type { BpcElderlyAnalysisResultId } from '@module/customer/analysis-tool/
 
 export interface BpcElderlyAnalysisResultEntityPropsInterface extends BaseEntityPropsInterface<BpcElderlyAnalysisResultId> {
   completeAnalysis?: string | null;
+  completeAnalysisDownload?: string | null;
   simplifiedAnalysis?: string | null;
 }

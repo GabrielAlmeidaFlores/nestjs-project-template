@@ -5,6 +5,7 @@ import type { BpcElderlyAnalysisResultId } from '@module/customer/analysis-tool/
 export class GetBpcElderlyAnalysisResultQueryResult extends BaseBuildableObject {
   public readonly id: BpcElderlyAnalysisResultId;
   public readonly completeAnalysis: string | null;
+  public readonly completeAnalysisDownload: string | null;
   public readonly simplifiedAnalysis: string | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
