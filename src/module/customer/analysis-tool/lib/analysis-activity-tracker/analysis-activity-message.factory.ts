@@ -56,6 +56,8 @@ export class AnalysisActivityMessageFactory {
       'Concessão de benefício por incapacidade temporária',
     [AnalysisToolRecordTypeEnum.SURVIVOR_PENSION_ANALYSIS]:
       'Análise de pensão por morte',
+    [AnalysisToolRecordTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL]:
+      'Indeferimento de aposentadoria urbana geral',
   };
 
   private static readonly actionLabelMap: Record<
