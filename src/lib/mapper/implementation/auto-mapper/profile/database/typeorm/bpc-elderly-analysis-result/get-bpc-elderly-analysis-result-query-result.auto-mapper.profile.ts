@@ -26,6 +26,7 @@ export class GetBpcElderlyAnalysisResultQueryResultAutoMapperProfile {
       return GetBpcElderlyAnalysisResultQueryResult.build({
         id: new BpcElderlyAnalysisResultId(source.id),
         completeAnalysis: source.completeAnalysis,
+        completeAnalysisDownload: source.completeAnalysisDownload,
         simplifiedAnalysis: source.simplifiedAnalysis,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,

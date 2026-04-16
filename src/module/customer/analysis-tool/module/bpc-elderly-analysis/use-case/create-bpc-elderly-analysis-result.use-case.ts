@@ -13,13 +13,15 @@ import { AnalysisActivityActionEnum } from '@module/customer/analysis-tool/lib/a
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
-import { BpcElderlyAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis/command/bpc-elderly-analysis.command.repository.gateway';
 import { BpcElderlyAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-result/command/bpc-elderly-analysis-result.command.repository.gateway';
+import { BpcElderlyAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis/command/bpc-elderly-analysis.command.repository.gateway';
 import { BpcElderlyAnalysisEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/bpc-elderly-analysis.entity';
 import { BpcElderlyAnalysisId } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/value-object/bpc-elderly-analysis-id/bpc-elderly-analysis-id.value-object';
 import { BpcElderlyAnalysisResultEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-result/bpc-elderly-analysis-result.entity';
+import { BpcElderlyAnalysisResultCategoryEnum } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-result/enum/bpc-elderly-analysis-result-category.enum';
 import { CreateBpcElderlyAnalysisResultResponseDto } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/dto/response/create-bpc-elderly-analysis-result.response.dto';
 import { BpcElderlyAnalysisNotFoundError } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/error/bpc-elderly-analysis-not-found.error';
+import { BpcElderlyAnalysisResultInterface } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/model/interface/bpc-elderly-analysis-result.interface';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
@@ -35,10 +37,10 @@ export class CreateBpcElderlyAnalysisResultUseCase {
     private readonly fileProcessorGateway: FileProcessorGateway,
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
-    @Inject(BpcElderlyAnalysisCommandRepositoryGateway)
-    private readonly bpcElderlyAnalysisCommandRepositoryGateway: BpcElderlyAnalysisCommandRepositoryGateway,
     @Inject(BpcElderlyAnalysisResultCommandRepositoryGateway)
     private readonly bpcElderlyAnalysisResultCommandRepositoryGateway: BpcElderlyAnalysisResultCommandRepositoryGateway,
+    @Inject(BpcElderlyAnalysisCommandRepositoryGateway)
+    private readonly bpcElderlyAnalysisCommandRepositoryGateway: BpcElderlyAnalysisCommandRepositoryGateway,
     @Inject(AnalysisToolRecordQueryRepositoryGateway)
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(AnalysisToolRecordCommandRepositoryGateway)
@@ -161,24 +163,30 @@ export class CreateBpcElderlyAnalysisResultUseCase {
 
     const parsedAnalysis = this.parseAnalysisResult(completeAnalysisRaw);
 
-    const bpcElderlyAnalysisResult = new BpcElderlyAnalysisResultEntity({
-      completeAnalysis: parsedAnalysis.analysisDetails,
-      simplifiedAnalysis: parsedAnalysis.simplifiedAnalysisDetails,
-    });
+    const existingResult =
+      bpcElderlyAnalysisQueryResult.bpcElderlyAnalysisResult;
 
-    const bpcElderlyAnalysis = new BpcElderlyAnalysisEntity({
-      id: bpcElderlyAnalysisQueryResult.id,
-      bpcElderlyAnalysisResult,
-      bpcElderlyAnalysisFamilyMember: [],
-      bpcElderlyAnalysisDocument: [],
-      createdBy: analysisToolRecordQueryResult.createdBy.id,
-      updatedBy: analysisToolRecordQueryResult.updatedBy.id,
+    const bpcElderlyAnalysisResult = new BpcElderlyAnalysisResultEntity({
+      ...(existingResult !== null && { id: existingResult.id }),
+      completeAnalysis: completeAnalysisRaw,
+      completeAnalysisDownload: parsedAnalysis.analysisDetails,
+      simplifiedAnalysis: null,
     });
 
     const analysisToolClient = new AnalysisToolClientEntity({
       ...analysisToolRecordQueryResult.analysisToolClient,
       createdBy: analysisToolRecordQueryResult.analysisToolClient.createdBy.id,
       updatedBy: analysisToolRecordQueryResult.analysisToolClient.updatedBy.id,
+    });
+
+    const bpcElderlyAnalysis = new BpcElderlyAnalysisEntity({
+      id: bpcElderlyAnalysisQueryResult.id,
+      ...(parsedAnalysis.category !== null && { category: parsedAnalysis.category }),
+      bpcElderlyAnalysisResult,
+      bpcElderlyAnalysisFamilyMember: [],
+      bpcElderlyAnalysisDocument: [],
+      createdBy: analysisToolRecordQueryResult.createdBy.id,
+      updatedBy: analysisToolRecordQueryResult.updatedBy.id,
     });
 
     const analysisToolRecord = new AnalysisToolRecordEntity({
@@ -200,17 +208,16 @@ export class CreateBpcElderlyAnalysisResultUseCase {
       disabilityAssessmentForBpcAnalysis: null,
     });
 
-    const updateAnalysisToolRecordTransaction =
-      this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecord(
-        analysisToolRecord.id,
-        analysisToolRecord,
-      );
-
-    const createBpcElderlyAnalysisResultTransaction =
-      this.bpcElderlyAnalysisResultCommandRepositoryGateway.createBpcElderlyAnalysisResult(
-        bpcElderlyAnalysisResult,
-        bpcElderlyAnalysis.id,
-      );
+    const createOrUpdateBpcElderlyAnalysisResultTransaction =
+      existingResult !== null
+        ? this.bpcElderlyAnalysisResultCommandRepositoryGateway.updateBpcElderlyAnalysisResult(
+            existingResult.id,
+            bpcElderlyAnalysisResult,
+          )
+        : this.bpcElderlyAnalysisResultCommandRepositoryGateway.createBpcElderlyAnalysisResult(
+            bpcElderlyAnalysisResult,
+            bpcElderlyAnalysis.id,
+          );
 
     const updateBpcElderlyAnalysisTransaction =
       this.bpcElderlyAnalysisCommandRepositoryGateway.updateBpcElderlyAnalysis(
@@ -218,9 +225,15 @@ export class CreateBpcElderlyAnalysisResultUseCase {
         bpcElderlyAnalysis,
       );
 
+    const updateAnalysisToolRecordTransaction =
+      this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecord(
+        analysisToolRecord.id,
+        analysisToolRecord,
+      );
+
     const transactions = [
       consumeCompleteCreditTransaction,
-      createBpcElderlyAnalysisResultTransaction,
+      createOrUpdateBpcElderlyAnalysisResultTransaction,
       updateBpcElderlyAnalysisTransaction,
       updateAnalysisToolRecordTransaction,
     ];
@@ -241,40 +254,83 @@ export class CreateBpcElderlyAnalysisResultUseCase {
     );
     await transaction.commit();
 
-    const completeAnalysisAsHtml =
-      bpcElderlyAnalysisResult.completeAnalysis !== null
+    const completeAnalysisDownloadAsHtml =
+      bpcElderlyAnalysisResult.completeAnalysisDownload !== null
         ? await this.exportDocumentGateway.convertMarkdownToHtml(
-            bpcElderlyAnalysisResult.completeAnalysis,
+            bpcElderlyAnalysisResult.completeAnalysisDownload,
           )
         : null;
 
     return CreateBpcElderlyAnalysisResultResponseDto.build({
-      ...(completeAnalysisAsHtml !== null && {
-        bpcElderlyCompleteAnalysisResult: completeAnalysisAsHtml,
+      ...(parsedAnalysis.diagnosis !== null && {
+        diagnosis: parsedAnalysis.diagnosis,
+      }),
+      ...(parsedAnalysis.totalHouseholdIncome !== null && {
+        totalHouseholdIncome: parsedAnalysis.totalHouseholdIncome,
+      }),
+      ...(parsedAnalysis.perCapitaIncome !== null && {
+        perCapitaIncome: parsedAnalysis.perCapitaIncome,
+      }),
+      ...(parsedAnalysis.eligibilityJustification !== null && {
+        eligibilityJustification: parsedAnalysis.eligibilityJustification,
+      }),
+      ...(parsedAnalysis.type !== null && { type: parsedAnalysis.type }),
+      ...(parsedAnalysis.benefitStartDate !== null && {
+        benefitStartDate: parsedAnalysis.benefitStartDate,
+      }),
+      ...(parsedAnalysis.amount !== null && { amount: parsedAnalysis.amount }),
+      ...(parsedAnalysis.category !== null && { category: parsedAnalysis.category }),
+      ...(completeAnalysisDownloadAsHtml !== null && {
+        bpcElderlyCompleteAnalysisResult: completeAnalysisDownloadAsHtml,
       }),
     });
   }
 
   private parseAnalysisResult(raw: string | null): {
+    diagnosis: string | null;
+    totalHouseholdIncome: number | null;
+    perCapitaIncome: number | null;
+    eligibilityJustification: string | null;
+    type: string | null;
+    benefitStartDate: string | null;
+    amount: number | null;
     analysisDetails: string | null;
-    simplifiedAnalysisDetails: string | null;
+    category: BpcElderlyAnalysisResultCategoryEnum | null;
   } {
+    const empty = {
+      diagnosis: null,
+      totalHouseholdIncome: null,
+      perCapitaIncome: null,
+      eligibilityJustification: null,
+      type: null,
+      benefitStartDate: null,
+      amount: null,
+      analysisDetails: null,
+      category: null,
+    };
+
     if (raw === null) {
-      return { analysisDetails: null, simplifiedAnalysisDetails: null };
+      return empty;
     }
 
     try {
-      const parsed = JSON.parse(raw) as {
-        analysisDetails?: string;
-        simplifiedAnalysisDetails?: string;
-      };
+      const parsed = JSON.parse(
+        raw,
+      ) as Partial<BpcElderlyAnalysisResultInterface>;
 
       return {
+        diagnosis: parsed.diagnosis ?? null,
+        totalHouseholdIncome: parsed.totalHouseholdIncome ?? null,
+        perCapitaIncome: parsed.perCapitaIncome ?? null,
+        eligibilityJustification: parsed.eligibilityJustification ?? null,
+        type: parsed.type ?? null,
+        benefitStartDate: parsed.benefitStartDate ?? null,
+        amount: parsed.amount ?? null,
         analysisDetails: parsed.analysisDetails ?? null,
-        simplifiedAnalysisDetails: parsed.simplifiedAnalysisDetails ?? null,
+        category: parsed.category ?? null,
       };
     } catch {
-      return { analysisDetails: raw, simplifiedAnalysisDetails: null };
+      return empty;
     }
   }
 }

@@ -93,6 +93,7 @@ export class BpcElderlyAnalysisEntityAutoMapperProfile {
       return new BpcElderlyAnalysisEntity({
         id: new BpcElderlyAnalysisId(source.id),
         name: source.name ?? null,
+        category: source.category ?? null,
         bpcElderlyAnalysisResult,
         bpcElderlyAnalysisFamilyMember,
         bpcElderlyAnalysisDocument,
@@ -178,6 +179,7 @@ export class BpcElderlyAnalysisEntityAutoMapperProfile {
       return BpcElderlyAnalysisTypeormEntity.build({
         id: source.id.toString(),
         name: source.name,
+        category: source.category,
         analysisToolRecord,
         bpcElderlyAnalysisResult,
         bpcElderlyAnalysisFamilyMember,

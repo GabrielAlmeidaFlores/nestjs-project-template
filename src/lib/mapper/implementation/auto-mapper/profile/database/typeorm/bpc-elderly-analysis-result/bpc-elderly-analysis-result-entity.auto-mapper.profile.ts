@@ -3,7 +3,6 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { BpcElderlyAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-result.typeorm.entity';
-import { BpcElderlyAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis.typeorm.entity';
 import { BpcElderlyAnalysisResultEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-result/bpc-elderly-analysis-result.entity';
 import { BpcElderlyAnalysisResultId } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-result/value-object/bpc-elderly-analysis-result-id/bpc-elderly-analysis-result-id.value-object';
 
@@ -28,6 +27,7 @@ export class BpcElderlyAnalysisResultEntityAutoMapperProfile {
       return new BpcElderlyAnalysisResultEntity({
         id: new BpcElderlyAnalysisResultId(source.id),
         completeAnalysis: source.completeAnalysis,
+        completeAnalysisDownload: source.completeAnalysisDownload,
         simplifiedAnalysis: source.simplifiedAnalysis,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
@@ -50,10 +50,8 @@ export class BpcElderlyAnalysisResultEntityAutoMapperProfile {
       return BpcElderlyAnalysisResultTypeormEntity.build({
         id: source.id.toString(),
         completeAnalysis: source.completeAnalysis,
+        completeAnalysisDownload: source.completeAnalysisDownload,
         simplifiedAnalysis: source.simplifiedAnalysis,
-        bpcElderlyAnalysis: {
-          id: source.id.toString(),
-        } as BpcElderlyAnalysisTypeormEntity,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,

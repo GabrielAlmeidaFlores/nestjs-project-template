@@ -4,8 +4,11 @@ import { BpcElderlyAnalysisResultId } from '@module/customer/analysis-tool/modul
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 export class BpcElderlyAnalysisResultEntity extends BaseEntity<BpcElderlyAnalysisResultId> {
-  @Description('Análise completa do BPC ao Idoso.')
+  @Description('Análise completa do BPC ao Idoso em formato JSON.')
   public readonly completeAnalysis: string | null;
+
+  @Description('Texto da análise completa do BPC ao Idoso para download.')
+  public readonly completeAnalysisDownload: string | null;
 
   @Description('Análise simplificada do BPC ao Idoso.')
   public readonly simplifiedAnalysis: string | null;
@@ -16,6 +19,7 @@ export class BpcElderlyAnalysisResultEntity extends BaseEntity<BpcElderlyAnalysi
     super(BpcElderlyAnalysisResultId, props);
 
     this.completeAnalysis = props.completeAnalysis ?? null;
+    this.completeAnalysisDownload = props.completeAnalysisDownload ?? null;
     this.simplifiedAnalysis = props.simplifiedAnalysis ?? null;
   }
 }

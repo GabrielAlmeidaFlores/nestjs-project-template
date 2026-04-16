@@ -7,9 +7,11 @@ import type { BpcElderlyAnalysisFamilyMemberEntity } from '@module/customer/anal
 import type { BpcElderlyAnalysisInssBenefitEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-inss-benefit/bpc-elderly-analysis-inss-benefit.entity';
 import type { BpcElderlyAnalysisLegalProceedingEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-legal-proceeding/bpc-elderly-analysis-legal-proceeding.entity';
 import type { BpcElderlyAnalysisResultEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-result/bpc-elderly-analysis-result.entity';
+import type { BpcElderlyAnalysisResultCategoryEnum } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-result/enum/bpc-elderly-analysis-result-category.enum';
 
 export interface BpcElderlyAnalysisEntityPropsInterface extends BaseEntityPropsInterface<BpcElderlyAnalysisId> {
   name?: string | null;
+  category?: BpcElderlyAnalysisResultCategoryEnum | null;
   bpcElderlyAnalysisResult?: BpcElderlyAnalysisResultEntity | null;
   bpcElderlyAnalysisFamilyMember?:
     | BpcElderlyAnalysisFamilyMemberEntity[]
