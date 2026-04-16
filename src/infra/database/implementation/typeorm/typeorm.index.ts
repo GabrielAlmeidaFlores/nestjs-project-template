@@ -47,6 +47,22 @@ import { CustomerAddressTypeormQueryRepository } from '@infra/database/implement
 import { CustomerTermsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer-terms/customer-terms.typeorm.command.repository';
 import { CustomerTermsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/customer-terms/customer-terms.typeorm.query.repository';
 import { CustomerTermsAcceptanceTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/customer-terms-acceptance/customer-terms-acceptance.typeorm.query.repository';
+import { DeathBenefitGrantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant/death-benefit-grant.typeorm.command.repository';
+import { DeathBenefitGrantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant/death-benefit-grant.typeorm.query.repository';
+import { DeathBenefitGrantDependentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-dependent/death-benefit-grant-dependent.typeorm.command.repository';
+import { DeathBenefitGrantDependentDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-dependent-document/death-benefit-grant-dependent-document.typeorm.command.repository';
+import { DeathBenefitGrantDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-document/death-benefit-grant-document.typeorm.command.repository';
+import { DeathBenefitGrantInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-inss-benefit/death-benefit-grant-inss-benefit.typeorm.command.repository';
+import { DeathBenefitGrantInstitorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-institutor/death-benefit-grant-institutor.typeorm.command.repository';
+import { DeathBenefitGrantLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-legal-proceeding/death-benefit-grant-legal-proceeding.typeorm.command.repository';
+import { DeathBenefitGrantLegalRepresentativeTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-legal-representative/death-benefit-grant-legal-representative.typeorm.command.repository';
+import { DeathBenefitGrantPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-period/death-benefit-grant-period.typeorm.command.repository';
+import { DeathBenefitGrantPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-period/death-benefit-grant-period.typeorm.query.repository';
+import { DeathBenefitGrantPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-period-document/death-benefit-grant-period-document.typeorm.command.repository';
+import { DeathBenefitGrantPeriodEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-period-earnings-history/death-benefit-grant-period-earnings-history.typeorm.command.repository';
+import { DeathBenefitGrantResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-result/death-benefit-grant-result.typeorm.command.repository';
+import { DeathBenefitGrantTimeAcceleratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-time-accelerator/death-benefit-grant-time-accelerator.typeorm.command.repository';
+import { DeathBenefitGrantTimeAcceleratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-time-accelerator/death-benefit-grant-time-accelerator.typeorm.query.repository';
 import { DisabilityAssessmentForBpcAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.typeorm.command.repository';
 import { DisabilityAssessmentForBpcAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.typeorm.query.repository';
 import { DisabilityAssessmentForBpcAnalysisBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-assessment-for-bpc-analysis-benefit/disability-assessment-for-bpc-analysis-benefit.typeorm.command.repository';
@@ -93,6 +109,16 @@ import { GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormCommandRepository
 import { GeneralUrbanRetirementAnalysisRemunerationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-analysis-remuneration/general-urban-retirement-analysis-remuneration.typeorm.command.repository';
 import { GeneralUrbanRetirementAnalysisRemunerationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-analysis-remuneration/general-urban-retirement-analysis-remuneration.typeorm.query.repository';
 import { GeneralUrbanRetirementAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-analysis-result/general-urban-retirement-analysis-result.typeorm.command.repository';
+import { GeneralUrbanRetirementDenialTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial/general-urban-retirement-denial.typeorm.command.repository';
+import { GeneralUrbanRetirementDenialTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial/general-urban-retirement-denial.typeorm.query.repository';
+import { GeneralUrbanRetirementDenialDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-document/general-urban-retirement-denial-document.typeorm.command.repository';
+import { GeneralUrbanRetirementDenialInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-inss-benefit/general-urban-retirement-denial-inss-benefit.typeorm.command.repository';
+import { GeneralUrbanRetirementDenialPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-period/general-urban-retirement-denial-period.typeorm.command.repository';
+import { GeneralUrbanRetirementDenialPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-period-document/general-urban-retirement-denial-period-document.typeorm.command.repository';
+import { GeneralUrbanRetirementDenialPeriodEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-period-earnings-history/general-urban-retirement-denial-period-earnings-history.typeorm.command.repository';
+import { GeneralUrbanRetirementDenialResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-result/general-urban-retirement-denial-result.typeorm.command.repository';
+import { GeneralUrbanRetirementDenialTimeAcceleratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-time-accelerator/general-urban-retirement-denial-time-accelerator.typeorm.command.repository';
+import { GeneralUrbanRetirementDenialTimeAcceleratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-time-accelerator/general-urban-retirement-denial-time-accelerator.typeorm.query.repository';
 import { GeneralUrbanRetirementGrantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant/general-urban-retirement-grant.typeorm.command.repository';
 import { GeneralUrbanRetirementGrantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant/general-urban-retirement-grant.typeorm.query.repository';
 import { GeneralUrbanRetirementGrantAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant-analysis-result/general-urban-retirement-grant-analysis-result.typeorm.command.repository';
@@ -348,6 +374,19 @@ import { CustomerEmailSentTypeormEntity } from '@infra/database/implementation/t
 import { CustomerTermsAcceptanceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-terms-acceptance.typeorm.entity';
 import { CustomerTermsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-terms.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
+import { DeathBenefitGrantDependentDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-dependent-document.typeorm.entity';
+import { DeathBenefitGrantDependentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-dependent.typeorm.entity';
+import { DeathBenefitGrantDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-document.typeorm.entity';
+import { DeathBenefitGrantInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-inss-benefit.typeorm.entity';
+import { DeathBenefitGrantInstitorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-institutor.typeorm.entity';
+import { DeathBenefitGrantLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-legal-proceeding.typeorm.entity';
+import { DeathBenefitGrantLegalRepresentativeTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-legal-representative.typeorm.entity';
+import { DeathBenefitGrantPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-period-document.typeorm.entity';
+import { DeathBenefitGrantPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-period-earnings-history.typeorm.entity';
+import { DeathBenefitGrantPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-period.typeorm.entity';
+import { DeathBenefitGrantResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-result.typeorm.entity';
+import { DeathBenefitGrantTimeAcceleratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-time-accelerator.typeorm.entity';
+import { DeathBenefitGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant.typeorm.entity';
 import { DisabilityAssessmentForBpcAnalysisBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis-benefit.entity';
 import { DisabilityAssessmentForBpcAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis-document.entity';
 import { DisabilityAssessmentForBpcAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis-legal-proceeding.entity';
@@ -386,6 +425,14 @@ import { GeneralUrbanRetirementAnalysisPeriodTypeormEntity } from '@infra/databa
 import { GeneralUrbanRetirementAnalysisRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis-remuneration.typeorm.entity';
 import { GeneralUrbanRetirementAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis-result.typeorm.entity';
 import { GeneralUrbanRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis.typeorm.entity';
+import { GeneralUrbanRetirementDenialDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-document.typeorm.entity';
+import { GeneralUrbanRetirementDenialInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-inss-benefit.typeorm.entity';
+import { GeneralUrbanRetirementDenialPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-period-document.typeorm.entity';
+import { GeneralUrbanRetirementDenialPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-period-earnings-history.typeorm.entity';
+import { GeneralUrbanRetirementDenialPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-period.typeorm.entity';
+import { GeneralUrbanRetirementDenialResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-result.typeorm.entity';
+import { GeneralUrbanRetirementDenialTimeAcceleratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial-time-accelerator.typeorm.entity';
+import { GeneralUrbanRetirementDenialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial.typeorm.entity';
 import { GeneralUrbanRetirementGrantAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant-analysis-result.typeorm.entity';
 import { GeneralUrbanRetirementGrantEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant-earnings-history.typeorm.entity';
 import { GeneralUrbanRetirementGrantInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant-inss-benefit.typeorm.entity';
@@ -801,6 +848,19 @@ export class TypeormIndex {
     SupportTicketTypeormEntity,
     SupportTicketAttachmentTypeormEntity,
     SupportTicketMessageTypeormEntity,
+    DeathBenefitGrantTypeormEntity,
+    DeathBenefitGrantResultTypeormEntity,
+    DeathBenefitGrantDocumentTypeormEntity,
+    DeathBenefitGrantInssBenefitTypeormEntity,
+    DeathBenefitGrantLegalProceedingTypeormEntity,
+    DeathBenefitGrantLegalRepresentativeTypeormEntity,
+    DeathBenefitGrantInstitorTypeormEntity,
+    DeathBenefitGrantDependentTypeormEntity,
+    DeathBenefitGrantDependentDocumentTypeormEntity,
+    DeathBenefitGrantPeriodTypeormEntity,
+    DeathBenefitGrantPeriodEarningsHistoryTypeormEntity,
+    DeathBenefitGrantPeriodDocumentTypeormEntity,
+    DeathBenefitGrantTimeAcceleratorTypeormEntity,
     SurvivorPensionAnalysisTypeormEntity,
     SurvivorPensionAnalysisCustomerProfileIdentificationTypeormEntity,
     SurvivorPensionAnalysisCustomerProfileIdentificationDocumentTypeormEntity,
@@ -814,6 +874,14 @@ export class TypeormIndex {
     SurvivorPensionAnalysisResultTypeormEntity,
     SurvivorPensionAnalysisResultRetirementRuleTypeormEntity,
     SurvivorPensionAnalysisResultDependentPensionAnalysisTypeormEntity,
+    GeneralUrbanRetirementDenialTypeormEntity,
+    GeneralUrbanRetirementDenialResultTypeormEntity,
+    GeneralUrbanRetirementDenialDocumentTypeormEntity,
+    GeneralUrbanRetirementDenialInssBenefitTypeormEntity,
+    GeneralUrbanRetirementDenialPeriodTypeormEntity,
+    GeneralUrbanRetirementDenialPeriodDocumentTypeormEntity,
+    GeneralUrbanRetirementDenialPeriodEarningsHistoryTypeormEntity,
+    GeneralUrbanRetirementDenialTimeAcceleratorTypeormEntity,
     BpcElderlyAnalysisTypeormEntity,
     BpcElderlyAnalysisDocumentTypeormEntity,
     BpcElderlyAnalysisFamilyMemberTypeormEntity,
@@ -1109,6 +1177,22 @@ export class TypeormIndex {
     RegulatoryUpdateEmailPreferenceTypeormCommandRepository,
     RegulatoryUpdateMonitoredSourceTypeormQueryRepository,
     RegulatoryUpdateMonitoredSourceTypeormCommandRepository,
+    DeathBenefitGrantTypeormCommandRepository,
+    DeathBenefitGrantTypeormQueryRepository,
+    DeathBenefitGrantResultTypeormCommandRepository,
+    DeathBenefitGrantDocumentTypeormCommandRepository,
+    DeathBenefitGrantInssBenefitTypeormCommandRepository,
+    DeathBenefitGrantLegalProceedingTypeormCommandRepository,
+    DeathBenefitGrantLegalRepresentativeTypeormCommandRepository,
+    DeathBenefitGrantInstitorTypeormCommandRepository,
+    DeathBenefitGrantDependentTypeormCommandRepository,
+    DeathBenefitGrantDependentDocumentTypeormCommandRepository,
+    DeathBenefitGrantPeriodTypeormCommandRepository,
+    DeathBenefitGrantPeriodTypeormQueryRepository,
+    DeathBenefitGrantPeriodEarningsHistoryTypeormCommandRepository,
+    DeathBenefitGrantPeriodDocumentTypeormCommandRepository,
+    DeathBenefitGrantTimeAcceleratorTypeormCommandRepository,
+    DeathBenefitGrantTimeAcceleratorTypeormQueryRepository,
     SurvivorPensionAnalysisTypeormCommandRepository,
     SurvivorPensionAnalysisTypeormQueryRepository,
     SurvivorPensionAnalysisCustomerProfileIdentificationTypeormCommandRepository,
@@ -1131,6 +1215,16 @@ export class TypeormIndex {
     SurvivorPensionAnalysisResultRetirementRuleTypeormQueryRepository,
     SurvivorPensionAnalysisResultDependentPensionAnalysisTypeormCommandRepository,
     SurvivorPensionAnalysisResultDependentPensionAnalysisTypeormQueryRepository,
+    GeneralUrbanRetirementDenialTypeormCommandRepository,
+    GeneralUrbanRetirementDenialTypeormQueryRepository,
+    GeneralUrbanRetirementDenialDocumentTypeormCommandRepository,
+    GeneralUrbanRetirementDenialResultTypeormCommandRepository,
+    GeneralUrbanRetirementDenialInssBenefitTypeormCommandRepository,
+    GeneralUrbanRetirementDenialPeriodTypeormCommandRepository,
+    GeneralUrbanRetirementDenialPeriodDocumentTypeormCommandRepository,
+    GeneralUrbanRetirementDenialPeriodEarningsHistoryTypeormCommandRepository,
+    GeneralUrbanRetirementDenialTimeAcceleratorTypeormCommandRepository,
+    GeneralUrbanRetirementDenialTimeAcceleratorTypeormQueryRepository,
   ];
 
   public static readonly dynamicModule = TypeOrmModule.forFeature(

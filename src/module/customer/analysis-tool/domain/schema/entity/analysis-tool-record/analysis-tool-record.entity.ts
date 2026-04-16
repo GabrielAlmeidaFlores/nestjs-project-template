@@ -8,9 +8,11 @@ import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/sche
 import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
 import { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
+import { DeathBenefitGrantEntity } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant/death-benefit-grant.entity';
 import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.entity';
 import { DisabilityRetirementPlanningGrantEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant/disability-retirement-planning-grant.entity';
 import { GeneralUrbanRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/general-urban-retirement-analysis-entity';
+import { GeneralUrbanRetirementDenialEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/general-urban-retirement-denial.entity';
 import { GeneralUrbanRetirementGrantEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/general-urban-retirement-grant.entity';
 import { InsuranceQualityAnalysisEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/insurance-quality-analysis.entity';
 import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
@@ -154,9 +156,19 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly specialCategoryRetirementAnalysis: SpecialCategoryRetirementAnalysisEntity | null;
 
   @Description(
+    'Benefício de morte associado ao registro da ferramenta de análise',
+  )
+  public readonly deathBenefitGrant: DeathBenefitGrantEntity | null;
+
+  @Description(
     'Concessão de aposentadoria especial associada ao registro da ferramenta de análise',
   )
   public readonly specialRetirementGrant: SpecialRetirementGrantEntity | null;
+
+  @Description(
+    'Análise de indeferimento de aposentadoria urbana geral associada ao registro da ferramenta de análise',
+  )
+  public readonly generalUrbanRetirementDenial: GeneralUrbanRetirementDenialEntity | null;
 
   @Description(
     'Análise de BPC ao Idoso associada ao registro da ferramenta de análise',
@@ -217,7 +229,10 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     this.survivorPensionAnalysis = props.survivorPensionAnalysis ?? null;
     this.specialCategoryRetirementAnalysis =
       props.specialCategoryRetirementAnalysis ?? null;
+    this.deathBenefitGrant = props.deathBenefitGrant ?? null;
     this.specialRetirementGrant = props.specialRetirementGrant ?? null;
+    this.generalUrbanRetirementDenial =
+      props.generalUrbanRetirementDenial ?? null;
     this.bpcElderlyAnalysis = props.bpcElderlyAnalysis ?? null;
     this.status = props.status;
     this.analysisToolClient = props.analysisToolClient;
