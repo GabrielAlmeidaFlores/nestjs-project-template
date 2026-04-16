@@ -259,6 +259,13 @@ export abstract class AnalysisProcessorGateway {
     files: Buffer[],
   ): Promise<string | null>;
 
+  public abstract getDeathBenefitGrantFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson?: boolean,
+  ): Promise<string | null>;
+
   public abstract getTemporaryDisabilityBenefitsGrantFirstAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
@@ -266,9 +273,25 @@ export abstract class AnalysisProcessorGateway {
     asJson?: boolean,
   ): Promise<string | null>;
 
+  public abstract getDeathBenefitGrantTimeAcceleratorAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getDeathBenefitGrantResultAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
   public abstract getTemporaryDisabilityBenefitsGrantCompleteAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getDeathBenefitGrantSimplifiedAnalysis(
+    systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null>;
 
@@ -298,6 +321,39 @@ export abstract class AnalysisProcessorGateway {
   ): Promise<string | null>;
 
   public abstract getSurvivorPensionAnalysisSimplifiedAnalysisText(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getGeneralUrbanRetirementDenialInssDecisionAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getGeneralUrbanRetirementDenialTimeAcceleratorAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getGeneralUrbanRetirementDenialFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson?: boolean,
+  ): Promise<string | null>;
+
+  public abstract getGeneralUrbanRetirementDenialPppAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getGeneralUrbanRetirementDenialResultAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getGeneralUrbanRetirementDenialSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null>;

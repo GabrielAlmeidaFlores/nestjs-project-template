@@ -3387,3 +3387,83 @@ export class MyTypeormEntity extends BaseBuildableObject {
 ---
 
 **Remember**: Clean Architecture is about separation of concerns and dependency direction. The domain is the heart of your application, and everything else supports it.
+
+---
+
+## Novo tipo de análise: checklist obrigatório para aparecer na listagem ⚠️
+
+Ao criar um **novo tipo de análise** (novo módulo em `analysis-tool/module/`), são necessários **4 passos obrigatórios** para que ele apareça corretamente na listagem `/customer/analysis-tool/analysis-tool-record`.
+
+### 1. Enum `AnalysisToolRecordTypeEnum`
+Adicione o novo tipo em:
+`src/module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum.ts`
+
+```typescript
+MY_NEW_ANALYSIS = 'meu_novo_tipo',
+```
+
+---
+
+### 2. Relação na entidade `AnalysisToolRecordTypeormEntity`
+Adicione o campo `@OneToOne` correspondente em:
+`src/infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity.ts`
+
+```typescript
+@OneToOne(() => MyNewAnalysisTypeormEntity, { nullable: true, eager: false })
+@JoinColumn({ name: 'my_new_analysis_id' })
+public myNewAnalysis?: MyNewAnalysisTypeormEntity | null;
+```
+
+---
+
+### 3. `atLeastOneRelationNotNull` no query repository ❌ PONTO MAIS ESQUECIDO
+Arquivo: `src/infra/database/implementation/typeorm/repository/analysis-tool-record/analysis-tool-record.typeorm.query.repository.ts`
+
+Existem **dois** arrays `atLeastOneRelationNotNull` no arquivo (um no método `listByOrganizationIdAndAuthIdentityId`, outro no método de estatísticas por ano). Adicione a nova relação em **ambos**:
+
+```typescript
+{ myNewAnalysis: Not(IsNull()) },
+```
+
+Também adicione a relação no método `getEntityRelationsKey()` no mesmo arquivo:
+
+```typescript
+'myNewAnalysis',
+```
+
+> **Por que isso existe?** A query de listagem exige que o registro tenha ao menos uma relação não-nula para ser retornado. Sem isso, registros do novo tipo são silenciosamente omitidos da listagem — o BD tem os dados, mas a query não os retorna.
+
+---
+
+### 4. Chain de `analysis` no use case de listagem ❌ PONTO MAIS ESQUECIDO
+Arquivo: `src/module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case.ts`
+
+Adicione a nova análise na chain de `??` da variável `analysis`:
+
+```typescript
+const analysis =
+  analysisToolRecord.cnisFastAnalysis ??
+  // ... demais tipos ...
+  analysisToolRecord.myNewAnalysis; // ← adicionar aqui
+```
+
+> **Se o tipo tiver campo de ID customizado** (como `myNewAnalysisId` em vez de `.id`), adicione nos casos especiais de `analysisId` logo abaixo:
+> ```typescript
+> const analysisId =
+>   analysis?.id ??
+>   analysisToolRecord.myNewAnalysis?.myNewAnalysisId ?? // ← caso especial
+>   null;
+> ```
+
+> **Por que isso existe?** Mesmo que a query retorne o registro, o use case descarta qualquer item onde `analysisId === null`. Se a análise não estiver na chain, o `analysisId` nunca é preenchido e o registro é filtrado antes de chegar ao frontend.
+
+---
+
+### Resumo rápido
+
+| Arquivo | O que fazer |
+|--------|-------------|
+| `enum/analysis-tool-record-type.enum.ts` | Adicionar valor do enum |
+| `schema/entity/analysis-tool-record.typeorm.entity.ts` | Adicionar `@OneToOne` |
+| `repository/analysis-tool-record/...query.repository.ts` | Adicionar em **ambos** os `atLeastOneRelationNotNull` e em `getEntityRelationsKey()` |
+| `use-case/list-analysis-tool-record.use-case.ts` | Adicionar na chain `analysis ??` |
