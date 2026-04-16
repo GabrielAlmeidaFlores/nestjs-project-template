@@ -1,8 +1,13 @@
+export interface RuralOrHybridRetirementRejectionRetirementRuleInterface {
+  ruleName: string;
+  fulfilled: boolean;
+  retirementDate: string | null;
+  expectedRmi: number | null;
+  causeValue: number | null;
+  detaildAnalysis: string;
+}
+
 export interface RuralOrHybridRetirementRejectionResultInterface {
-  summary: string | null;
-  legalBasis: string | null;
-  strategyRecommendation: string | null;
-  evidenceAnalysis: string | null;
-  timelineCompliance: string | null;
-  conclusion: string | null;
+  retirementRules: RuralOrHybridRetirementRejectionRetirementRuleInterface[];
+  analysisResult: string;
 }

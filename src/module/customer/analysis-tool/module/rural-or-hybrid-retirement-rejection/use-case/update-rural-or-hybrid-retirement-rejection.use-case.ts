@@ -92,7 +92,8 @@ export class UpdateRuralOrHybridRetirementRejectionUseCase {
     ];
 
     if (dto.documents !== undefined) {
-      for (const doc of existing.ruralOrHybridRetirementRejectionDocument ?? []) {
+      for (const doc of existing.ruralOrHybridRetirementRejectionDocument ??
+        []) {
         transactions.push(
           this.ruralOrHybridRetirementRejectionDocumentCommandRepositoryGateway.deleteRuralOrHybridRetirementRejectionDocument(
             doc.id,
@@ -131,7 +132,8 @@ export class UpdateRuralOrHybridRetirementRejectionUseCase {
     }
 
     if (dto.inssBenefitNumber !== undefined) {
-      for (const benefit of existing.ruralOrHybridRetirementRejectionInssBenefit ?? []) {
+      for (const benefit of existing.ruralOrHybridRetirementRejectionInssBenefit ??
+        []) {
         transactions.push(
           this.ruralOrHybridRetirementRejectionInssBenefitCommandRepositoryGateway.deleteRuralOrHybridRetirementRejectionInssBenefit(
             benefit.id,
@@ -153,7 +155,8 @@ export class UpdateRuralOrHybridRetirementRejectionUseCase {
     }
 
     if (dto.legalProceedingNumber !== undefined) {
-      for (const lp of existing.ruralOrHybridRetirementRejectionLegalProceeding ?? []) {
+      for (const lp of existing.ruralOrHybridRetirementRejectionLegalProceeding ??
+        []) {
         transactions.push(
           this.ruralOrHybridRetirementRejectionLegalProceedingCommandRepositoryGateway.deleteRuralOrHybridRetirementRejectionLegalProceeding(
             lp.id,

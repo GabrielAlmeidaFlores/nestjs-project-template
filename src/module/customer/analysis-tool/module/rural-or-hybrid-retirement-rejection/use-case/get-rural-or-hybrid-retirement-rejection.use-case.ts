@@ -1,11 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { RuralOrHybridRetirementRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection/query/rural-or-hybrid-retirement-rejection.query.repository.gateway';
 import { RuralOrHybridRetirementRejectionId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id.value-object';
 import {
   GetRuralOrHybridRetirementRejectionResponseDto,
+  GetRuralOrHybridRetirementRejectionAnalysisToolClientResponseDto,
   GetRuralOrHybridRetirementRejectionCnisDocumentResponseDto,
   GetRuralOrHybridRetirementRejectionInssBenefitResponseDto,
   GetRuralOrHybridRetirementRejectionLegalProceedingResponseDto,
@@ -23,6 +25,7 @@ import {
   GetRuralOrHybridRetirementRejectionTimeAcceleratorResponseDto,
 } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/response/get-rural-or-hybrid-retirement-rejection.response.dto';
 import { RuralOrHybridRetirementRejectionNotFoundError } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/error/rural-or-hybrid-retirement-rejection-not-found.error';
+
 import type { RuralOrHybridRetirementRejectionFirstAnalysisInterface } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/model/interface/rural-or-hybrid-retirement-rejection-first-analysis.interface';
 import type { RuralOrHybridRetirementRejectionResultInterface } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/model/interface/rural-or-hybrid-retirement-rejection-result.interface';
 
@@ -33,6 +36,8 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
   public constructor(
     @Inject(RuralOrHybridRetirementRejectionQueryRepositoryGateway)
     private readonly ruralOrHybridRetirementRejectionQueryRepositoryGateway: RuralOrHybridRetirementRejectionQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
   ) {}
@@ -40,11 +45,16 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
   public async execute(
     ruralOrHybridRetirementRejectionId: RuralOrHybridRetirementRejectionId,
   ): Promise<GetRuralOrHybridRetirementRejectionResponseDto> {
-    const result =
-      await this.ruralOrHybridRetirementRejectionQueryRepositoryGateway.findOneByRuralOrHybridRetirementRejectionIdOrFailWithRelations(
+    const [result, analysisToolRecord] = await Promise.all([
+      this.ruralOrHybridRetirementRejectionQueryRepositoryGateway.findOneByRuralOrHybridRetirementRejectionIdOrFailWithRelations(
         ruralOrHybridRetirementRejectionId,
         RuralOrHybridRetirementRejectionNotFoundError,
-      );
+      ),
+      this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByRuralOrHybridRetirementRejectionIdOrFail(
+        ruralOrHybridRetirementRejectionId,
+        RuralOrHybridRetirementRejectionNotFoundError,
+      ),
+    ]);
 
     const cnisDocumentEntity =
       result.ruralOrHybridRetirementRejectionDocument?.[0] ?? null;
@@ -54,9 +64,89 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
         ? await this.buildCnisDocumentResponse(cnisDocumentEntity.document)
         : null;
 
+    const [
+      allPeriodDocuments,
+      allPeriodMemberDocuments,
+      allTestimonialWitnessDocuments,
+      allWorkPeriodDocuments,
+    ] = await Promise.all([
+      Promise.all(
+        (result.ruralOrHybridRetirementRejectionPeriodDocument ?? [])
+          .filter((doc) => doc.document !== null)
+          .map(async (doc) => ({
+            periodId: doc.ruralOrHybridRetirementRejectionPeriodId.toString(),
+            type: doc.type,
+            ...(await this.buildSubEntityDocumentData(doc.document as string)),
+          })),
+      ),
+      Promise.all(
+        (result.ruralOrHybridRetirementRejectionPeriodMemberDocument ?? [])
+          .filter((doc) => doc.document !== null)
+          .map(async (doc) => ({
+            memberId:
+              doc.ruralOrHybridRetirementRejectionPeriodMemberId.toString(),
+            type: doc.type,
+            ...(await this.buildSubEntityDocumentData(doc.document as string)),
+          })),
+      ),
+      Promise.all(
+        (
+          result.ruralOrHybridRetirementRejectionTestimonialWitnessDocument ??
+          []
+        )
+          .filter((doc) => doc.document !== null)
+          .map(async (doc) => ({
+            witnessId:
+              doc.ruralOrHybridRetirementRejectionTestimonialWitnessId.toString(),
+            ...(await this.buildSubEntityDocumentData(doc.document as string)),
+          })),
+      ),
+      Promise.all(
+        (result.ruralOrHybridRetirementRejectionWorkPeriodDocument ?? [])
+          .filter((doc) => doc.document !== null)
+          .map(async (doc) => ({
+            workPeriodId:
+              doc.ruralOrHybridRetirementRejectionWorkPeriodId.toString(),
+            type: doc.type,
+            ...(await this.buildSubEntityDocumentData(doc.document as string)),
+          })),
+      ),
+    ]);
+
     return GetRuralOrHybridRetirementRejectionResponseDto.build({
       ruralOrHybridRetirementRejectionId:
         result.ruralOrHybridRetirementRejectionId,
+      analysisToolClient:
+        GetRuralOrHybridRetirementRejectionAnalysisToolClientResponseDto.build({
+          analysisToolClientId: analysisToolRecord.analysisToolClient.id,
+          ...(analysisToolRecord.analysisToolClient.name !== null && {
+            name: analysisToolRecord.analysisToolClient.name,
+          }),
+          ...(analysisToolRecord.analysisToolClient.federalDocument !==
+            null && {
+            federalDocument:
+              analysisToolRecord.analysisToolClient.federalDocument,
+          }),
+          ...(analysisToolRecord.analysisToolClient.email !== null && {
+            email: analysisToolRecord.analysisToolClient.email,
+          }),
+          ...(analysisToolRecord.analysisToolClient.corporateEmail !== null && {
+            corporateEmail:
+              analysisToolRecord.analysisToolClient.corporateEmail,
+          }),
+          ...(analysisToolRecord.analysisToolClient.phoneNumber !== null && {
+            phoneNumber: analysisToolRecord.analysisToolClient.phoneNumber,
+          }),
+          ...(analysisToolRecord.analysisToolClient.birthDate !== null && {
+            birthDate: analysisToolRecord.analysisToolClient.birthDate,
+          }),
+          ...(analysisToolRecord.analysisToolClient.gender !== null && {
+            gender: analysisToolRecord.analysisToolClient.gender,
+          }),
+          ...(analysisToolRecord.analysisToolClient.clientType !== null && {
+            clientType: analysisToolRecord.analysisToolClient.clientType,
+          }),
+        }),
       ...(result.analysisName !== null && {
         analysisName: result.analysisName,
       }),
@@ -108,9 +198,7 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
         ruralOrHybridRetirementRejectionInssBenefit:
           result.ruralOrHybridRetirementRejectionInssBenefit
             .filter(
-              (
-                b,
-              ): b is typeof b & { inssBenefit: string } =>
+              (b): b is typeof b & { inssBenefit: string } =>
                 b.inssBenefit !== null,
             )
             .map((b) =>
@@ -123,9 +211,7 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
         ruralOrHybridRetirementRejectionLegalProceeding:
           result.ruralOrHybridRetirementRejectionLegalProceeding
             .filter(
-              (
-                p,
-              ): p is typeof p & { legalProceedingNumber: string } =>
+              (p): p is typeof p & { legalProceedingNumber: string } =>
                 p.legalProceedingNumber !== null,
             )
             .map((p) =>
@@ -147,15 +233,12 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
                 p.id.toString(),
             );
 
-            const periodDocuments = (
-              result.ruralOrHybridRetirementRejectionPeriodDocument ?? []
-            ).filter(
-              (d) =>
-                d.ruralOrHybridRetirementRejectionPeriodId.toString() ===
-                p.id.toString(),
+            const periodDocumentsForPeriod = allPeriodDocuments.filter(
+              (d) => d.periodId === p.id.toString(),
             );
 
             return GetRuralOrHybridRetirementRejectionPeriodResponseDto.build({
+              ruralOrHybridRetirementRejectionPeriodId: p.id,
               ...(p.startDate !== null && { startDate: p.startDate }),
               ...(p.endDate !== null && { endDate: p.endDate }),
               ...(p.workerType !== null && { workerType: p.workerType }),
@@ -220,10 +303,12 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
               }),
               ...(p.clientState !== null && { clientState: p.clientState }),
               ...(p.distance !== null && { distance: p.distance }),
-              ...(periodDocuments.length > 0 && {
-                documents: periodDocuments.map((d) =>
+              ...(periodDocumentsForPeriod.length > 0 && {
+                documents: periodDocumentsForPeriod.map((d) =>
                   GetRuralOrHybridRetirementRejectionPeriodDocumentResponseDto.build(
                     {
+                      document: d.document,
+                      originalFileName: d.originalFileName,
                       ...(d.type !== null && { type: d.type }),
                     },
                   ),
@@ -231,17 +316,14 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
               }),
               ...(periodMembers.length > 0 && {
                 members: periodMembers.map((m) => {
-                  const memberDocuments = (
-                    result.ruralOrHybridRetirementRejectionPeriodMemberDocument ??
-                    []
-                  ).filter(
-                    (md) =>
-                      md.ruralOrHybridRetirementRejectionPeriodMemberId.toString() ===
-                      m.id.toString(),
-                  );
+                  const memberDocumentsForMember =
+                    allPeriodMemberDocuments.filter(
+                      (md) => md.memberId === m.id.toString(),
+                    );
 
                   return GetRuralOrHybridRetirementRejectionPeriodMemberResponseDto.build(
                     {
+                      ruralOrHybridRetirementRejectionPeriodMemberId: m.id,
                       ...(m.name !== null && { name: m.name }),
                       ...(m.federalDocument !== null && {
                         federalDocument: m.federalDocument,
@@ -253,10 +335,12 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
                       ...(m.benefitNumber !== null && {
                         benefitNumber: m.benefitNumber,
                       }),
-                      ...(memberDocuments.length > 0 && {
-                        documents: memberDocuments.map((md) =>
+                      ...(memberDocumentsForMember.length > 0 && {
+                        documents: memberDocumentsForMember.map((md) =>
                           GetRuralOrHybridRetirementRejectionPeriodMemberDocumentResponseDto.build(
                             {
+                              document: md.document,
+                              originalFileName: md.originalFileName,
                               ...(md.type !== null && { type: md.type }),
                             },
                           ),
@@ -273,17 +357,14 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
         null && {
         ruralOrHybridRetirementRejectionTestimonialWitness:
           result.ruralOrHybridRetirementRejectionTestimonialWitness.map((w) => {
-            const witnessDocuments = (
-              result.ruralOrHybridRetirementRejectionTestimonialWitnessDocument ??
-              []
-            ).filter(
-              (wd) =>
-                wd.ruralOrHybridRetirementRejectionTestimonialWitnessId.toString() ===
-                w.id.toString(),
-            );
+            const witnessDocumentsForWitness =
+              allTestimonialWitnessDocuments.filter(
+                (wd) => wd.witnessId === w.id.toString(),
+              );
 
             return GetRuralOrHybridRetirementRejectionTestimonialWitnessResponseDto.build(
               {
+                ruralOrHybridRetirementRejectionTestimonialWitnessId: w.id,
                 ...(w.fullName !== null && { fullName: w.fullName }),
                 ...(w.federalDocument !== null && {
                   federalDocument: w.federalDocument,
@@ -297,10 +378,13 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
                 ...(w.canTestifyEndDate !== null && {
                   canTestifyEndDate: w.canTestifyEndDate,
                 }),
-                ...(witnessDocuments.length > 0 && {
-                  documents: witnessDocuments.map((_wd) =>
+                ...(witnessDocumentsForWitness.length > 0 && {
+                  documents: witnessDocumentsForWitness.map((wd) =>
                     GetRuralOrHybridRetirementRejectionTestimonialWitnessDocumentResponseDto.build(
-                      {},
+                      {
+                        document: wd.document,
+                        originalFileName: wd.originalFileName,
+                      },
                     ),
                   ),
                 }),
@@ -311,13 +395,10 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
       ...(result.ruralOrHybridRetirementRejectionWorkPeriod !== null && {
         ruralOrHybridRetirementRejectionWorkPeriod:
           result.ruralOrHybridRetirementRejectionWorkPeriod.map((wp) => {
-            const workPeriodDocuments = (
-              result.ruralOrHybridRetirementRejectionWorkPeriodDocument ?? []
-            ).filter(
-              (d) =>
-                d.ruralOrHybridRetirementRejectionWorkPeriodId.toString() ===
-                wp.id.toString(),
-            );
+            const workPeriodDocumentsForWorkPeriod =
+              allWorkPeriodDocuments.filter(
+                (d) => d.workPeriodId === wp.id.toString(),
+              );
 
             const workPeriodDocumentAnalyses = (
               result.ruralOrHybridRetirementRejectionWorkPeriodDocumentAnalysis ??
@@ -339,6 +420,7 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
 
             return GetRuralOrHybridRetirementRejectionWorkPeriodResponseDto.build(
               {
+                ruralOrHybridRetirementRejectionWorkPeriodId: wp.id,
                 ...(wp.bondOrigin !== null && { bondOrigin: wp.bondOrigin }),
                 ...(wp.startDate !== null && { startDate: wp.startDate }),
                 ...(wp.endDate !== null && { endDate: wp.endDate }),
@@ -361,10 +443,12 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
                 ...(wp.activityDescription !== null && {
                   activityDescription: wp.activityDescription,
                 }),
-                ...(workPeriodDocuments.length > 0 && {
-                  documents: workPeriodDocuments.map((d) =>
+                ...(workPeriodDocumentsForWorkPeriod.length > 0 && {
+                  documents: workPeriodDocumentsForWorkPeriod.map((d) =>
                     GetRuralOrHybridRetirementRejectionWorkPeriodDocumentResponseDto.build(
                       {
+                        document: d.document,
+                        originalFileName: d.originalFileName,
                         ...(d.type !== null && { type: d.type }),
                       },
                     ),
@@ -426,6 +510,7 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
           result.ruralOrHybridRetirementRejectionTimeAccelerator.map((ta) =>
             GetRuralOrHybridRetirementRejectionTimeAcceleratorResponseDto.build(
               {
+                ruralOrHybridRetirementRejectionTimeAcceleratorId: ta.id,
                 ...(ta.timeType !== null && { timeType: ta.timeType }),
                 ...(ta.institution !== null && { institution: ta.institution }),
                 ...(ta.recognitionInss !== null && {
@@ -459,5 +544,18 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
       document: Base64.encodeBuffer(fileBuffer),
       originalFileName,
     });
+  }
+
+  private async buildSubEntityDocumentData(
+    documentKey: string,
+  ): Promise<{ document: Base64; originalFileName: string }> {
+    const [fileBuffer, originalFileName] = await Promise.all([
+      this.fileProcessorGateway.getFileBuffer(documentKey),
+      this.fileProcessorGateway.getOriginalFileName(documentKey),
+    ]);
+    return {
+      document: Base64.encodeBuffer(fileBuffer),
+      originalFileName,
+    };
   }
 }

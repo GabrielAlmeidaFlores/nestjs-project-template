@@ -1223,6 +1223,43 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Gera o documento de análise simplificada da pensão por morte, com linguagem acessível para apresentação ao cliente.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c7d8e9f0-a1b2-4c3d-8e4f-5a6b7c8d9e0f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RURAL_OR_HYBRID_RETIREMENT_REJECTION_FIRST_ANALYSIS,
+      creditCost: 5,
+      title: 'INDEFERIMENTO APOSENTADORIA RURAL/HÍBRIDA - PRIMEIRO STEP',
+      description:
+        'Primeira análise do caso de indeferimento de aposentadoria rural ou híbrida com IA. Combina os dados do CNIS com os dados estruturados do processo de indeferimento para gerar parecer inicial técnico sobre os períodos urbanos, períodos rurais, carência e viabilidade de reversão do indeferimento.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d8e9f0a1-b2c3-4d5e-9f0a-6b7c8d9e0f1a'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RURAL_OR_HYBRID_RETIREMENT_REJECTION_COMPLETE_ANALYSIS,
+      creditCost: 8,
+      title: 'INDEFERIMENTO APOSENTADORIA RURAL/HÍBRIDA - ANÁLISE COMPLETA',
+      description:
+        'Análise completa do indeferimento de aposentadoria rural ou híbrida com IA. Examina CNIS, documentos do processo administrativo e dados do caso para gerar parecer técnico detalhado com fundamentação legal, análise de provas, conformidade da linha do tempo e recomendação estratégica para recurso administrativo ou ação judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e9f0a1b2-c3d4-4e5f-af1b-7c8d9e0f1a2b'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RURAL_OR_HYBRID_RETIREMENT_REJECTION_SIMPLIFIED_ANALYSIS,
+      creditCost: 3,
+      title: 'INDEFERIMENTO APOSENTADORIA RURAL/HÍBRIDA - ANÁLISE SIMPLIFICADA',
+      description:
+        'Geração do documento de análise simplificada do indeferimento de aposentadoria rural ou híbrida, com linguagem acessível para apresentação ao cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f0a1b2c3-d4e5-4f6a-b0c1-8d9e0f1a2b3c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RURAL_OR_HYBRID_RETIREMENT_REJECTION_WORK_PERIOD_DOCUMENT_ANALYSIS,
+      creditCost: 2,
+      title:
+        'INDEFERIMENTO APOSENTADORIA RURAL/HÍBRIDA - ANÁLISE DE DOCUMENTOS DO PERÍODO',
+      description:
+        'Análise individual de documentos probatórios de períodos de trabalho rural para o caso de indeferimento de aposentadoria rural ou híbrida. Identifica o tipo de documento, o nome do titular, o ano e emite nota técnica sobre a relevância probatória.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {

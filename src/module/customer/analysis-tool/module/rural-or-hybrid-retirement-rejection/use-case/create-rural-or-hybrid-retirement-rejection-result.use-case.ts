@@ -10,6 +10,7 @@ import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { CnisDocumentIsNotValidError } from '@module/customer/analysis-tool/module/cnis-fast-analysis/error/cnis-document-is-not-valid.error';
+import { RuralOrHybridRetirementRejectionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection/command/rural-or-hybrid-retirement-rejection.command.repository.gateway';
 import { RuralOrHybridRetirementRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection/query/rural-or-hybrid-retirement-rejection.query.repository.gateway';
 import { RuralOrHybridRetirementRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-result/command/rural-or-hybrid-retirement-rejection-result.command.repository.gateway';
 import { RuralOrHybridRetirementRejectionId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id.value-object';
@@ -19,7 +20,6 @@ import { CreateRuralOrHybridRetirementRejectionResultResponseDto } from '@module
 import { InvalidRuralOrHybridRetirementRejectionResultJsonError } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/error/invalid-rural-or-hybrid-retirement-rejection-result-json.error';
 import { RuralOrHybridRetirementRejectionCnisDocumentNotFoundError } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/error/rural-or-hybrid-retirement-rejection-cnis-document-not-found.error';
 import { RuralOrHybridRetirementRejectionNotFoundError } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/error/rural-or-hybrid-retirement-rejection-not-found.error';
-import { RuralOrHybridRetirementRejectionResultNotFoundError } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/error/rural-or-hybrid-retirement-rejection-result-not-found.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
@@ -44,6 +44,8 @@ export class CreateRuralOrHybridRetirementRejectionResultUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(AnalysisToolRecordQueryRepositoryGateway)
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
+    @Inject(RuralOrHybridRetirementRejectionCommandRepositoryGateway)
+    private readonly ruralOrHybridRetirementRejectionCommandRepositoryGateway: RuralOrHybridRetirementRejectionCommandRepositoryGateway,
     @Inject(RuralOrHybridRetirementRejectionQueryRepositoryGateway)
     private readonly ruralOrHybridRetirementRejectionQueryRepositoryGateway: RuralOrHybridRetirementRejectionQueryRepositoryGateway,
     @Inject(RuralOrHybridRetirementRejectionResultCommandRepositoryGateway)
@@ -84,15 +86,11 @@ export class CreateRuralOrHybridRetirementRejectionResultUseCase {
         document.type === RuralOrHybridRetirementRejectionDocumentTypeEnum.CNIS,
     );
 
-    if (!cnisDocument || cnisDocument.document === null) {
+    if (cnisDocument?.document === null || cnisDocument === undefined) {
       throw new RuralOrHybridRetirementRejectionCnisDocumentNotFoundError();
     }
 
     const rejectionResult = rejection.ruralOrHybridRetirementRejectionResult;
-
-    if (rejectionResult === null) {
-      throw new RuralOrHybridRetirementRejectionResultNotFoundError();
-    }
 
     const cnisBuffer = await this.fileProcessorGateway.getFileBuffer(
       cnisDocument.document,
@@ -152,22 +150,41 @@ export class CreateRuralOrHybridRetirementRejectionResultUseCase {
     const parsedResult = this.parseResultAnalysis(completeAnalysis);
 
     const resultEntity = new RuralOrHybridRetirementRejectionResultEntity({
-      id: rejectionResult.id,
-      firstAnalysis: rejectionResult.firstAnalysis,
-      secondAnalysis: rejectionResult.secondAnalysis,
+      ...(rejectionResult !== null && { id: rejectionResult.id }),
+      firstAnalysis: rejectionResult?.firstAnalysis ?? null,
+      secondAnalysis: rejectionResult?.secondAnalysis ?? null,
       completeAnalysis,
-      simplifiedAnalysis: rejectionResult.simplifiedAnalysis,
-      completeAnalysisDownload: rejectionResult.completeAnalysisDownload,
-      simplifiedAnalysisDownload: rejectionResult.simplifiedAnalysisDownload,
+      simplifiedAnalysis: rejectionResult?.simplifiedAnalysis ?? null,
+      completeAnalysisDownload:
+        rejectionResult?.completeAnalysisDownload ?? null,
+      simplifiedAnalysisDownload:
+        rejectionResult?.simplifiedAnalysisDownload ?? null,
       ruralOrHybridRetirementRejectionId,
     });
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute([
-      consumeCreditTransaction,
-      this.ruralOrHybridRetirementRejectionResultCommandRepositoryGateway.updateRuralOrHybridRetirementRejectionResult(
-        resultEntity,
-      ),
-    ]);
+    const resultTransaction =
+      rejectionResult !== null
+        ? this.ruralOrHybridRetirementRejectionResultCommandRepositoryGateway.updateRuralOrHybridRetirementRejectionResult(
+            resultEntity,
+          )
+        : this.ruralOrHybridRetirementRejectionResultCommandRepositoryGateway.createRuralOrHybridRetirementRejectionResult(
+            resultEntity,
+          );
+
+    const transactionOperations = [consumeCreditTransaction, resultTransaction];
+
+    if (rejectionResult === null) {
+      transactionOperations.push(
+        this.ruralOrHybridRetirementRejectionCommandRepositoryGateway.updateRuralOrHybridRetirementRejectionResultId(
+          ruralOrHybridRetirementRejectionId,
+          resultEntity.id,
+        ),
+      );
+    }
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute(
+      transactionOperations,
+    );
 
     await transaction.commit();
 
@@ -202,13 +219,31 @@ export class CreateRuralOrHybridRetirementRejectionResultUseCase {
     }
 
     return (
-      this.isNullableString(value['summary']) &&
-      this.isNullableString(value['legalBasis']) &&
-      this.isNullableString(value['strategyRecommendation']) &&
-      this.isNullableString(value['evidenceAnalysis']) &&
-      this.isNullableString(value['timelineCompliance']) &&
-      this.isNullableString(value['conclusion'])
+      Array.isArray(value['retirementRules']) &&
+      value['retirementRules'].every((item: unknown) =>
+        this.isRetirementRule(item),
+      ) &&
+      typeof value['analysisResult'] === 'string'
     );
+  }
+
+  private isRetirementRule(value: unknown): boolean {
+    if (!this.isRecord(value)) {
+      return false;
+    }
+
+    return (
+      typeof value['ruleName'] === 'string' &&
+      typeof value['fulfilled'] === 'boolean' &&
+      this.isNullableString(value['retirementDate']) &&
+      this.isNullableNumber(value['expectedRmi']) &&
+      this.isNullableNumber(value['causeValue']) &&
+      typeof value['detaildAnalysis'] === 'string'
+    );
+  }
+
+  private isNullableNumber(value: unknown): value is number | null {
+    return typeof value === 'number' || value === null;
   }
 
   private isNullableString(value: unknown): value is string | null {

@@ -272,6 +272,11 @@ export abstract class AnalysisToolRecordQueryRepositoryGateway {
     err: ConstructorType<NotFoundError>,
   ): Promise<GetAnalysisToolRecordWithRelationsQueryResult>;
 
+  public abstract findWithRelationsByRuralOrHybridRetirementRejectionIdOrFail(
+    ruralOrHybridRetirementRejectionId: RuralOrHybridRetirementRejectionId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult>;
+
   public abstract findWithRelationsBySurvivorPensionAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
     survivorPensionAnalysisId: SurvivorPensionAnalysisId,
     organizationId: OrganizationId,

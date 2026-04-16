@@ -1,11 +1,11 @@
-import type { RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-time-accelerator/enum/rural-or-hybrid-retirement-rejection-time-accelerator-analysis-type.enum';
-import type { RuralOrHybridRetirementRejectionTimeAcceleratorRecognitionInssEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-time-accelerator/enum/rural-or-hybrid-retirement-rejection-time-accelerator-recognition-inss.enum';
-import type { RuralOrHybridRetirementRejectionViabilityEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-time-accelerator/enum/rural-or-hybrid-retirement-rejection-viability.enum';
+import type { TimeAcceleratorAnalysisTypeEnum } from '@module/customer/analysis-tool/domain/schema/enum/time-accelerator-analysis-type.enum';
+import type { TimeAcceleratorRecognitionInssEnum } from '@module/customer/analysis-tool/domain/schema/enum/time-accelerator-recognition-inss.enum';
+import type { TimeAcceleratorViabilityEnum } from '@module/customer/analysis-tool/domain/schema/enum/time-accelerator-viability.enum';
 
 export interface RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisResultItemInterface {
-  timeType: RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum;
-  recognitionInss: RuralOrHybridRetirementRejectionTimeAcceleratorRecognitionInssEnum;
-  viability: RuralOrHybridRetirementRejectionViabilityEnum;
+  timeType: TimeAcceleratorAnalysisTypeEnum;
+  recognitionInss: TimeAcceleratorRecognitionInssEnum;
+  viability: TimeAcceleratorViabilityEnum;
   technicalNote: string | null;
   startDate: string | null;
   endDate: string | null;

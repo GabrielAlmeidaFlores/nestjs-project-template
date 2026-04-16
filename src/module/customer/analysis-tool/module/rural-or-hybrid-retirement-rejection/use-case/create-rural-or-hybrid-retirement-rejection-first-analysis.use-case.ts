@@ -86,7 +86,7 @@ export class CreateRuralOrHybridRetirementRejectionFirstAnalysisUseCase {
         document.type === RuralOrHybridRetirementRejectionDocumentTypeEnum.CNIS,
     );
 
-    if (!cnisDocument || cnisDocument.document === null) {
+    if (cnisDocument?.document === null || cnisDocument === undefined) {
       throw new RuralOrHybridRetirementRejectionCnisDocumentNotFoundError();
     }
 
@@ -193,6 +193,7 @@ export class CreateRuralOrHybridRetirementRejectionFirstAnalysisUseCase {
       {
         ruralOrHybridRetirementRejectionFirstAnalysis:
           parsedFirstAnalysis.model,
+        cnisAnalysis,
       },
     );
   }
@@ -295,32 +296,42 @@ export class CreateRuralOrHybridRetirementRejectionFirstAnalysisUseCase {
     cnisDocumentPath: string,
     cnisBuffer: Buffer,
   ): Promise<Buffer[]> {
+    const otherDocumentPaths = (
+      rejection.ruralOrHybridRetirementRejectionDocument ?? []
+    ).flatMap((document) =>
+      document.document !== null && document.document !== cnisDocumentPath
+        ? [document.document]
+        : [],
+    );
+
     const otherDocumentBuffers = await Promise.all(
-      (rejection.ruralOrHybridRetirementRejectionDocument ?? [])
-        .filter(
-          (document) =>
-            document.document !== null &&
-            document.document !== cnisDocumentPath,
-        )
-        .map((document) =>
-          this.fileProcessorGateway.getFileBuffer(document.document!),
-        ),
+      otherDocumentPaths.map((documentPath) =>
+        this.fileProcessorGateway.getFileBuffer(documentPath),
+      ),
+    );
+
+    const periodDocumentPaths = (
+      rejection.ruralOrHybridRetirementRejectionPeriodDocument ?? []
+    ).flatMap((document) =>
+      document.document !== null ? [document.document] : [],
     );
 
     const periodDocumentBuffers = await Promise.all(
-      (rejection.ruralOrHybridRetirementRejectionPeriodDocument ?? [])
-        .filter((document) => document.document !== null)
-        .map((document) =>
-          this.fileProcessorGateway.getFileBuffer(document.document!),
-        ),
+      periodDocumentPaths.map((documentPath) =>
+        this.fileProcessorGateway.getFileBuffer(documentPath),
+      ),
+    );
+
+    const workPeriodDocumentPaths = (
+      rejection.ruralOrHybridRetirementRejectionWorkPeriodDocument ?? []
+    ).flatMap((document) =>
+      document.document !== null ? [document.document] : [],
     );
 
     const workPeriodDocumentBuffers = await Promise.all(
-      (rejection.ruralOrHybridRetirementRejectionWorkPeriodDocument ?? [])
-        .filter((document) => document.document !== null)
-        .map((document) =>
-          this.fileProcessorGateway.getFileBuffer(document.document!),
-        ),
+      workPeriodDocumentPaths.map((documentPath) =>
+        this.fileProcessorGateway.getFileBuffer(documentPath),
+      ),
     );
 
     return [

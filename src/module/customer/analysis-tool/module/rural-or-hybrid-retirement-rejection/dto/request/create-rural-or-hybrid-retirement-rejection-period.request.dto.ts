@@ -3,6 +3,7 @@ import { RuralOrHybridRetirementRejectionProductionDestinationEnum } from '@modu
 import { RuralOrHybridRetirementRejectionWorkScheduleEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period/enum/rural-or-hybrid-retirement-rejection-work-schedule.enum';
 import { RuralOrHybridRetirementRejectionWorkerTypeEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period/enum/rural-or-hybrid-retirement-rejection-worker-type.enum';
 import { RuralOrHybridRetirementRejectionPeriodDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period-document/enum/rural-or-hybrid-retirement-rejection-period-document-type.enum';
+import { RuralOrHybridRetirementRejectionPeriodMemberItemRequestDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/request/create-rural-or-hybrid-retirement-rejection-period-member.request.dto';
 import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
 import { RequestDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-boolean-property/request-dto-boolean-property.decorator';
 import { RequestDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-date-property/request-dto-date-property.decorator';
@@ -125,6 +126,12 @@ export class RuralOrHybridRetirementRejectionPeriodItemRequestDto extends BaseBu
     { required: false, isArray: true },
   )
   public documents?: RuralOrHybridRetirementRejectionPeriodDocumentRequestDto[];
+
+  @RequestDtoObjectProperty(
+    () => RuralOrHybridRetirementRejectionPeriodMemberItemRequestDto,
+    { required: false, isArray: true },
+  )
+  public members?: RuralOrHybridRetirementRejectionPeriodMemberItemRequestDto[];
 
   protected override readonly _type =
     RuralOrHybridRetirementRejectionPeriodItemRequestDto.name;

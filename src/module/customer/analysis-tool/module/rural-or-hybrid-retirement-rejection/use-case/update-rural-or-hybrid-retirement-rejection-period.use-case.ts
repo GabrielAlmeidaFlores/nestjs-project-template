@@ -15,6 +15,11 @@ import { RuralOrHybridRetirementRejectionPeriodEntity } from '@module/customer/a
 import { RuralOrHybridRetirementRejectionPeriodId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period/value-object/rural-or-hybrid-retirement-rejection-period-id.value-object';
 import { RuralOrHybridRetirementRejectionPeriodDocumentEntity } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period-document/rural-or-hybrid-retirement-rejection-period-document.entity';
 import { RuralOrHybridRetirementRejectionPeriodDocumentId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period-document/value-object/rural-or-hybrid-retirement-rejection-period-document-id.value-object';
+import { RuralOrHybridRetirementRejectionPeriodMemberEntity } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period-member/rural-or-hybrid-retirement-rejection-period-member.entity';
+import { RuralOrHybridRetirementRejectionPeriodMemberId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period-member/value-object/rural-or-hybrid-retirement-rejection-period-member-id.value-object';
+import { RuralOrHybridRetirementRejectionPeriodMemberDocumentEntity } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period-member-document/rural-or-hybrid-retirement-rejection-period-member-document.entity';
+import { RuralOrHybridRetirementRejectionPeriodMemberDocumentId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period-member-document/value-object/rural-or-hybrid-retirement-rejection-period-member-document-id.value-object';
+import { RuralOrHybridRetirementRejectionPeriodMemberItemRequestDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/request/create-rural-or-hybrid-retirement-rejection-period-member.request.dto';
 import { RuralOrHybridRetirementRejectionPeriodItemRequestDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/request/create-rural-or-hybrid-retirement-rejection-period.request.dto';
 import { UpdateRuralOrHybridRetirementRejectionPeriodRequestDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/request/update-rural-or-hybrid-retirement-rejection-period.request.dto';
 import { UpdateRuralOrHybridRetirementRejectionPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/response/update-rural-or-hybrid-retirement-rejection-period.response.dto';
@@ -181,6 +186,49 @@ export class UpdateRuralOrHybridRetirementRejectionPeriodUseCase {
 
         transactions.push(...documentTransactions);
       }
+
+      if (periodDto.members && periodDto.members.length > 0) {
+        for (const memberDto of periodDto.members) {
+          const memberId = new RuralOrHybridRetirementRejectionPeriodMemberId();
+
+          transactions.push(
+            this.ruralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway.createRuralOrHybridRetirementRejectionPeriodMember(
+              this.buildMemberEntity(memberId, periodId, memberDto),
+            ),
+          );
+
+          if (memberDto.documents && memberDto.documents.length > 0) {
+            const memberDocumentTransactions = await Promise.all(
+              memberDto.documents.map(async (documentDto) => {
+                const buffer = documentDto.file.base64.decodeToBuffer();
+
+                const fileModel = FileModel.build({
+                  buffer,
+                  originalName: documentDto.file.originalFileName,
+                  size: buffer.length,
+                  encoding: '7bit',
+                });
+
+                const document =
+                  await this.fileProcessorGateway.uploadFile(fileModel);
+
+                return this.ruralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway.createRuralOrHybridRetirementRejectionPeriodMemberDocument(
+                  new RuralOrHybridRetirementRejectionPeriodMemberDocumentEntity(
+                    {
+                      id: new RuralOrHybridRetirementRejectionPeriodMemberDocumentId(),
+                      document,
+                      type: documentDto.type,
+                      ruralOrHybridRetirementRejectionPeriodMemberId: memberId,
+                    },
+                  ),
+                );
+              }),
+            );
+
+            transactions.push(...memberDocumentTransactions);
+          }
+        }
+      }
     }
 
     const transaction =
@@ -275,6 +323,22 @@ export class UpdateRuralOrHybridRetirementRejectionPeriodUseCase {
       clientState: periodDto.clientState ?? null,
       distance: periodDto.distance ?? null,
       ruralOrHybridRetirementRejectionId,
+    });
+  }
+
+  private buildMemberEntity(
+    memberId: RuralOrHybridRetirementRejectionPeriodMemberId,
+    ruralOrHybridRetirementRejectionPeriodId: RuralOrHybridRetirementRejectionPeriodId,
+    memberDto: RuralOrHybridRetirementRejectionPeriodMemberItemRequestDto,
+  ): RuralOrHybridRetirementRejectionPeriodMemberEntity {
+    return new RuralOrHybridRetirementRejectionPeriodMemberEntity({
+      id: memberId,
+      name: memberDto.name ?? null,
+      federalDocument: memberDto.federalDocument ?? null,
+      kinship: memberDto.kinship ?? null,
+      hasReceivedRuralBenefit: memberDto.hasReceivedRuralBenefit ?? null,
+      benefitNumber: memberDto.benefitNumber ?? null,
+      ruralOrHybridRetirementRejectionPeriodId,
     });
   }
 }

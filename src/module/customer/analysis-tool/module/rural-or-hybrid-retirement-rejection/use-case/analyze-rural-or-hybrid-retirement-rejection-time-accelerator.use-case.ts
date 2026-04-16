@@ -2,11 +2,11 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { TimeAcceleratorAnalysisTypeEnum } from '@module/customer/analysis-tool/domain/schema/enum/time-accelerator-analysis-type.enum';
+import { TimeAcceleratorRecognitionInssEnum } from '@module/customer/analysis-tool/domain/schema/enum/time-accelerator-recognition-inss.enum';
+import { TimeAcceleratorViabilityEnum } from '@module/customer/analysis-tool/domain/schema/enum/time-accelerator-viability.enum';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
-import { RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-time-accelerator/enum/rural-or-hybrid-retirement-rejection-time-accelerator-analysis-type.enum';
-import { RuralOrHybridRetirementRejectionTimeAcceleratorRecognitionInssEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-time-accelerator/enum/rural-or-hybrid-retirement-rejection-time-accelerator-recognition-inss.enum';
-import { RuralOrHybridRetirementRejectionViabilityEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-time-accelerator/enum/rural-or-hybrid-retirement-rejection-viability.enum';
 import { AnalyzeRuralOrHybridRetirementRejectionTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/request/analyze-rural-or-hybrid-retirement-rejection-time-accelerator.request.dto';
 import {
   AnalyzeRuralOrHybridRetirementRejectionTimeAcceleratorItemResponseDto,
@@ -57,7 +57,7 @@ export class AnalyzeRuralOrHybridRetirementRejectionTimeAcceleratorUseCase {
     }
 
     const paymentPlanPaidResourceType = this.getPaymentPlanPaidResourceType(
-      dto.json.timeType,
+      dto.timeType,
     );
 
     const promptResponse =
@@ -73,7 +73,7 @@ export class AnalyzeRuralOrHybridRetirementRejectionTimeAcceleratorUseCase {
       );
 
     const analysisResult =
-      await this.analysisProcessorGateway.getRuralOrHybridRetirementRejectionTimeAcceleratorAnalysis(
+      await this.analysisProcessorGateway.getTimeAcceleratorAnalysis(
         promptResponse.prompt,
         [dto.document.base64.decodeToBuffer()],
       );
@@ -175,39 +175,31 @@ export class AnalyzeRuralOrHybridRetirementRejectionTimeAcceleratorUseCase {
     );
   }
 
-  private isTimeType(
-    value: unknown,
-  ): value is RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum {
+  private isTimeType(value: unknown): value is TimeAcceleratorAnalysisTypeEnum {
     return (
       typeof value === 'string' &&
-      Object.values(
-        RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum,
-      ).includes(
-        value as RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum,
+      Object.values(TimeAcceleratorAnalysisTypeEnum).includes(
+        value as TimeAcceleratorAnalysisTypeEnum,
       )
     );
   }
 
   private isRecognitionInss(
     value: unknown,
-  ): value is RuralOrHybridRetirementRejectionTimeAcceleratorRecognitionInssEnum {
+  ): value is TimeAcceleratorRecognitionInssEnum {
     return (
       typeof value === 'string' &&
-      Object.values(
-        RuralOrHybridRetirementRejectionTimeAcceleratorRecognitionInssEnum,
-      ).includes(
-        value as RuralOrHybridRetirementRejectionTimeAcceleratorRecognitionInssEnum,
+      Object.values(TimeAcceleratorRecognitionInssEnum).includes(
+        value as TimeAcceleratorRecognitionInssEnum,
       )
     );
   }
 
-  private isViability(
-    value: unknown,
-  ): value is RuralOrHybridRetirementRejectionViabilityEnum {
+  private isViability(value: unknown): value is TimeAcceleratorViabilityEnum {
     return (
       typeof value === 'string' &&
-      Object.values(RuralOrHybridRetirementRejectionViabilityEnum).includes(
-        value as RuralOrHybridRetirementRejectionViabilityEnum,
+      Object.values(TimeAcceleratorViabilityEnum).includes(
+        value as TimeAcceleratorViabilityEnum,
       )
     );
   }
@@ -221,27 +213,27 @@ export class AnalyzeRuralOrHybridRetirementRejectionTimeAcceleratorUseCase {
   }
 
   private getPaymentPlanPaidResourceType(
-    timeType: RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum,
+    timeType: TimeAcceleratorAnalysisTypeEnum,
   ): PaymentPlanPaidResourceTypeEnum {
     const paymentPlanPaidResourceTypeByTimeType: Record<
-      RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum,
+      TimeAcceleratorAnalysisTypeEnum,
       PaymentPlanPaidResourceTypeEnum
     > = {
-      [RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum.TEMPO_RURAL]:
+      [TimeAcceleratorAnalysisTypeEnum.TEMPO_RURAL]:
         PaymentPlanPaidResourceTypeEnum.TIME_ACCELERATOR_RURAL_TIME_ANALYSIS,
-      [RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum.SERVICO_MILITAR]:
+      [TimeAcceleratorAnalysisTypeEnum.SERVICO_MILITAR]:
         PaymentPlanPaidResourceTypeEnum.TIME_ACCELERATOR_MILITARY_SERVICE_ANALYSIS,
-      [RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum.SERVICO_PUBLICO]:
+      [TimeAcceleratorAnalysisTypeEnum.SERVICO_PUBLICO]:
         PaymentPlanPaidResourceTypeEnum.TIME_ACCELERATOR_PUBLIC_SERVICE_ANALYSIS,
-      [RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum.CTPS]:
+      [TimeAcceleratorAnalysisTypeEnum.CTPS]:
         PaymentPlanPaidResourceTypeEnum.TIME_ACCELERATOR_CTPS_OUTSIDE_CNIS_ANALYSIS,
-      [RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum.ALUNO_APRENDIZ]:
+      [TimeAcceleratorAnalysisTypeEnum.ALUNO_APRENDIZ]:
         PaymentPlanPaidResourceTypeEnum.TIME_ACCELERATOR_STUDENT_APPRENTICE_ANALYSIS,
-      [RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum.TRABALHO_NO_EXTERIOR]:
+      [TimeAcceleratorAnalysisTypeEnum.TRABALHO_NO_EXTERIOR]:
         PaymentPlanPaidResourceTypeEnum.TIME_ACCELERATOR_WORK_ABROAD_ANALYSIS,
-      [RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum.TRABALHO_INFORMAL]:
+      [TimeAcceleratorAnalysisTypeEnum.TRABALHO_INFORMAL]:
         PaymentPlanPaidResourceTypeEnum.TIME_ACCELERATOR_INFORMAL_WORK_ANALYSIS,
-      [RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum.SENTENCA_TRABALHISTA]:
+      [TimeAcceleratorAnalysisTypeEnum.SENTENCA_TRABALHISTA]:
         PaymentPlanPaidResourceTypeEnum.TIME_ACCELERATOR_LABOR_COURT_DECISION_ANALYSIS,
     };
 

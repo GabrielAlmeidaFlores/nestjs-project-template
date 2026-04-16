@@ -1,17 +1,28 @@
+import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
 import { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
 import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
+import { Email } from '@core/domain/schema/value-object/email/email.value-object';
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
+import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
+import { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/enum/analysis-tool-client-type.enum';
+import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { RuralOrHybridRetirementRejectionActivityTypeEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/enum/rural-or-hybrid-retirement-rejection-activity-type.enum';
 import { RuralOrHybridRetirementRejectionRequestedBenefitEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/enum/rural-or-hybrid-retirement-rejection-requested-benefit.enum';
 import { RuralOrHybridRetirementRejectionId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id.value-object';
 import { RuralOrHybridRetirementRejectionProductionDestinationEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period/enum/rural-or-hybrid-retirement-rejection-production-destination.enum';
 import { RuralOrHybridRetirementRejectionWorkScheduleEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period/enum/rural-or-hybrid-retirement-rejection-work-schedule.enum';
 import { RuralOrHybridRetirementRejectionWorkerTypeEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period/enum/rural-or-hybrid-retirement-rejection-worker-type.enum';
+import { RuralOrHybridRetirementRejectionPeriodId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period/value-object/rural-or-hybrid-retirement-rejection-period-id.value-object';
 import { RuralOrHybridRetirementRejectionKinshipEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period-member/enum/rural-or-hybrid-retirement-rejection-kinship.enum';
+import { RuralOrHybridRetirementRejectionPeriodMemberId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period-member/value-object/rural-or-hybrid-retirement-rejection-period-member-id.value-object';
 import { RuralOrHybridRetirementRejectionInsuredRelationshipEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-testimonial-witness/enum/rural-or-hybrid-retirement-rejection-insured-relationship.enum';
+import { RuralOrHybridRetirementRejectionTestimonialWitnessId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-testimonial-witness/value-object/rural-or-hybrid-retirement-rejection-testimonial-witness-id.value-object';
 import { RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-time-accelerator/enum/rural-or-hybrid-retirement-rejection-time-accelerator-analysis-type.enum';
 import { RuralOrHybridRetirementRejectionTimeAcceleratorRecognitionInssEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-time-accelerator/enum/rural-or-hybrid-retirement-rejection-time-accelerator-recognition-inss.enum';
 import { RuralOrHybridRetirementRejectionViabilityEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-time-accelerator/enum/rural-or-hybrid-retirement-rejection-viability.enum';
+import { RuralOrHybridRetirementRejectionTimeAcceleratorId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-time-accelerator/value-object/rural-or-hybrid-retirement-rejection-time-accelerator-id.value-object';
 import { RuralOrHybridRetirementRejectionWorkPeriodJobTypeEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-work-period/enum/rural-or-hybrid-retirement-rejection-work-period-job-type.enum';
+import { RuralOrHybridRetirementRejectionWorkPeriodId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-work-period/value-object/rural-or-hybrid-retirement-rejection-work-period-id.value-object';
 import { RuralOrHybridRetirementRejectionFirstAnalysisInterface } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/model/interface/rural-or-hybrid-retirement-rejection-first-analysis.interface';
 import { RuralOrHybridRetirementRejectionResultInterface } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/model/interface/rural-or-hybrid-retirement-rejection-result.interface';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
@@ -83,6 +94,9 @@ export class GetRuralOrHybridRetirementRejectionPeriodDocumentResponseDto extend
   @ResponseDtoStringProperty({ required: false })
   public type?: string;
 
+  @ResponseDtoStringProperty({ required: false })
+  public originalFileName?: string;
+
   protected override readonly _type =
     GetRuralOrHybridRetirementRejectionPeriodDocumentResponseDto.name;
 }
@@ -98,12 +112,20 @@ export class GetRuralOrHybridRetirementRejectionPeriodMemberDocumentResponseDto 
   @ResponseDtoStringProperty({ required: false })
   public type?: string;
 
+  @ResponseDtoStringProperty({ required: false })
+  public originalFileName?: string;
+
   protected override readonly _type =
     GetRuralOrHybridRetirementRejectionPeriodMemberDocumentResponseDto.name;
 }
 
 @ResponseDto()
 export class GetRuralOrHybridRetirementRejectionPeriodMemberResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(
+    RuralOrHybridRetirementRejectionPeriodMemberId,
+  )
+  public ruralOrHybridRetirementRejectionPeriodMemberId: RuralOrHybridRetirementRejectionPeriodMemberId;
+
   @ResponseDtoStringProperty({ required: false })
   public name?: string;
 
@@ -133,6 +155,9 @@ export class GetRuralOrHybridRetirementRejectionPeriodMemberResponseDto extends 
 
 @ResponseDto()
 export class GetRuralOrHybridRetirementRejectionPeriodResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(RuralOrHybridRetirementRejectionPeriodId)
+  public ruralOrHybridRetirementRejectionPeriodId: RuralOrHybridRetirementRejectionPeriodId;
+
   @ResponseDtoDateProperty({ required: false })
   public startDate?: Date;
 
@@ -248,12 +273,20 @@ export class GetRuralOrHybridRetirementRejectionTestimonialWitnessDocumentRespon
   })
   public document?: Base64;
 
+  @ResponseDtoStringProperty({ required: false })
+  public originalFileName?: string;
+
   protected override readonly _type =
     GetRuralOrHybridRetirementRejectionTestimonialWitnessDocumentResponseDto.name;
 }
 
 @ResponseDto()
 export class GetRuralOrHybridRetirementRejectionTestimonialWitnessResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(
+    RuralOrHybridRetirementRejectionTestimonialWitnessId,
+  )
+  public ruralOrHybridRetirementRejectionTestimonialWitnessId: RuralOrHybridRetirementRejectionTestimonialWitnessId;
+
   @ResponseDtoStringProperty({ required: false })
   public fullName?: string;
 
@@ -339,12 +372,18 @@ export class GetRuralOrHybridRetirementRejectionWorkPeriodDocumentResponseDto ex
   @ResponseDtoStringProperty({ required: false })
   public type?: string;
 
+  @ResponseDtoStringProperty({ required: false })
+  public originalFileName?: string;
+
   protected override readonly _type =
     GetRuralOrHybridRetirementRejectionWorkPeriodDocumentResponseDto.name;
 }
 
 @ResponseDto()
 export class GetRuralOrHybridRetirementRejectionWorkPeriodResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(RuralOrHybridRetirementRejectionWorkPeriodId)
+  public ruralOrHybridRetirementRejectionWorkPeriodId: RuralOrHybridRetirementRejectionWorkPeriodId;
+
   @ResponseDtoStringProperty({ required: false })
   public bondOrigin?: string;
 
@@ -410,6 +449,11 @@ export class GetRuralOrHybridRetirementRejectionWorkPeriodResponseDto extends Ba
 
 @ResponseDto()
 export class GetRuralOrHybridRetirementRejectionTimeAcceleratorResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(
+    RuralOrHybridRetirementRejectionTimeAcceleratorId,
+  )
+  public ruralOrHybridRetirementRejectionTimeAcceleratorId: RuralOrHybridRetirementRejectionTimeAcceleratorId;
+
   @ResponseDtoEnumProperty(
     RuralOrHybridRetirementRejectionTimeAcceleratorAnalysisTypeEnum,
     { required: false },
@@ -450,9 +494,47 @@ export class GetRuralOrHybridRetirementRejectionTimeAcceleratorResponseDto exten
 }
 
 @ResponseDto()
+export class GetRuralOrHybridRetirementRejectionAnalysisToolClientResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(AnalysisToolClientId)
+  public analysisToolClientId: AnalysisToolClientId;
+
+  @ResponseDtoStringProperty({ required: false })
+  public name?: string;
+
+  @ResponseDtoValueObjectProperty(FederalDocument, { required: false })
+  public federalDocument?: FederalDocument;
+
+  @ResponseDtoValueObjectProperty(Email, { required: false })
+  public email?: Email;
+
+  @ResponseDtoValueObjectProperty(Email, { required: false })
+  public corporateEmail?: Email;
+
+  @ResponseDtoValueObjectProperty(PhoneNumber, { required: false })
+  public phoneNumber?: PhoneNumber;
+
+  @ResponseDtoDateProperty({ required: false })
+  public birthDate?: Date;
+
+  @ResponseDtoEnumProperty(GenderEnum, { required: false })
+  public gender?: GenderEnum;
+
+  @ResponseDtoEnumProperty(AnalysisToolClientTypeEnum, { required: false })
+  public clientType?: AnalysisToolClientTypeEnum;
+
+  protected override readonly _type =
+    GetRuralOrHybridRetirementRejectionAnalysisToolClientResponseDto.name;
+}
+
+@ResponseDto()
 export class GetRuralOrHybridRetirementRejectionResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(RuralOrHybridRetirementRejectionId)
   public ruralOrHybridRetirementRejectionId: RuralOrHybridRetirementRejectionId;
+
+  @ResponseDtoObjectProperty(
+    () => GetRuralOrHybridRetirementRejectionAnalysisToolClientResponseDto,
+  )
+  public analysisToolClient: GetRuralOrHybridRetirementRejectionAnalysisToolClientResponseDto;
 
   @ResponseDtoStringProperty({ required: false })
   public analysisName?: string;
