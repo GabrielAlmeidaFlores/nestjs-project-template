@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
 import { BpcElderlyAnalysisFamilyMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-family-member.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { BpcElderlyAnalysisFamilyMemberCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-family-member/command/bpc-elderly-analysis-family-member.command.repository.gateway';
+import { BpcElderlyAnalysisId } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/value-object/bpc-elderly-analysis-id/bpc-elderly-analysis-id.value-object';
 import { BpcElderlyAnalysisFamilyMemberEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-family-member/bpc-elderly-analysis-family-member.entity';
 import { BpcElderlyAnalysisFamilyMemberId } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-family-member/value-object/bpc-elderly-analysis-family-member-id/bpc-elderly-analysis-family-member-id.value-object';
 
@@ -55,5 +56,18 @@ export class BpcElderlyAnalysisFamilyMemberTypeormCommandRepository
     bpcElderlyAnalysisFamilyMemberId: BpcElderlyAnalysisFamilyMemberId,
   ): TransactionType {
     return this.delete(bpcElderlyAnalysisFamilyMemberId.toString());
+  }
+
+  public deleteAllByBpcElderlyAnalysisId(
+    bpcElderlyAnalysisId: BpcElderlyAnalysisId,
+  ): TransactionType {
+    return async (executor: unknown) => {
+      const manager = executor as EntityManager;
+      await manager
+        .getRepository(BpcElderlyAnalysisFamilyMemberTypeormEntity)
+        .softDelete({
+          bpcElderlyAnalysis: { id: bpcElderlyAnalysisId.toString() },
+        });
+    };
   }
 }

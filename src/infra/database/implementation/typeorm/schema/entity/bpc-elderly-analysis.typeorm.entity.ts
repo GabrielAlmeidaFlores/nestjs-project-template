@@ -15,7 +15,7 @@ import { BpcElderlyAnalysisInssBenefitTypeormEntity } from '@infra/database/impl
 import { BpcElderlyAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-legal-proceeding.typeorm.entity';
 import { BpcElderlyAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-result.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
-import { BpcElderlyAnalysisResultCategoryEnum } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-result/enum/bpc-elderly-analysis-result-category.enum';
+import { BpcElderlyAnalysisCategoryEnum } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/enum/bpc-elderly-analysis-category.enum';
 
 @Entity({ name: 'bpc_elderly_analysis' })
 export class BpcElderlyAnalysisTypeormEntity extends BaseTypeormEntity {
@@ -24,11 +24,11 @@ export class BpcElderlyAnalysisTypeormEntity extends BaseTypeormEntity {
 
   @Column({
     name: 'category',
-    type: 'varchar',
-    length: 100,
+    type: 'simple-enum',
+    enum: BpcElderlyAnalysisCategoryEnum,
     nullable: true,
   })
-  public category: BpcElderlyAnalysisResultCategoryEnum | null;
+  public category: BpcElderlyAnalysisCategoryEnum | null;
 
   @OneToOne(
     () => BpcElderlyAnalysisResultTypeormEntity,

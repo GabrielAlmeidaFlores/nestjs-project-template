@@ -14,6 +14,7 @@ import { CreateBpcElderlyAnalysisUseCase } from '@module/customer/analysis-tool/
 import { DownloadBpcElderlyAnalysisCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/use-case/download-bpc-elderly-analysis-complete-analysis.use-case';
 import { DownloadBpcElderlyAnalysisSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/use-case/download-bpc-elderly-analysis-simplified-analysis.use-case';
 import { GetBpcElderlyAnalysisUseCase } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/use-case/get-bpc-elderly-analysis.use-case';
+import { UpdateBpcElderlyAnalysisUseCase } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/use-case/update-bpc-elderly-analysis.use-case';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
 import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
@@ -41,6 +42,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     GetBpcElderlyAnalysisUseCase,
     DownloadBpcElderlyAnalysisCompleteAnalysisUseCase,
     DownloadBpcElderlyAnalysisSimplifiedAnalysisUseCase,
+    UpdateBpcElderlyAnalysisUseCase,
   ],
 })
 export class BpcElderlyAnalysisModule {

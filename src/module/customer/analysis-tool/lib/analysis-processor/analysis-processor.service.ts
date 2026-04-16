@@ -3338,7 +3338,28 @@ Análise processada do CNIS:
         completeAnalysisDownload: {
           type: 'string',
           description:
-            'A analise técnica deve ser formatada em Markdown, pronta para exportação em PDF/DOCX. Deve conter todas as seções: Diagnóstico, Renda Familiar Total, Renda per capita, Justificativa de Elegibilidade, Tipo de Análise, Data de Início do Benefício, Valor do Benefício e Detalhes da Análise. Formate com títulos (##), listas e tabelas em Markdown quando aplicável. Detalhamento completo da análise, incluindo a avaliação de cada documento apresentado, a situação socioeconômica do idoso, a aplicação dos critérios legais e a conclusão sobre a elegibilidade para o BPC ao Idoso. Esta seção deve fornecer uma visão abrangente do processo de análise, destacando os pontos fortes e as possíveis fragilidades do caso.  ',
+            'Detalhamento completo da análise, incluindo a avaliação de cada documento apresentado, a situação socioeconômica do idoso, a aplicação dos critérios legais e a conclusão sobre a elegibilidade para o BPC ao Idoso. Esta seção deve fornecer uma visão abrangente do processo de análise, destacando os pontos fortes e as possíveis fragilidades do caso. A analise técnica deve ser formatada em Markdown, pronta para exportação em PDF/DOCX. Deve conter todas as seções: Diagnóstico, Renda Familiar Total, Renda per capita, Justificativa de Elegibilidade, Tipo de Análise, Data de Início do Benefício, Valor do Benefício e Detalhes da Análise. Formate com títulos (##), listas e tabelas em Markdown quando aplicável. ',
+        },
+        legalRequirementsMet: {
+          type: 'string',
+          enum: [
+            'Preenchidos os requisitos legais para concessão do beneficio assistencial ao idoso',
+            'Não preenchidos os requisitos legais para concessão do beneficio assistencial ao idoso',
+          ],
+          description:
+            'Diagnóstico sobre o preenchimento dos requisitos legais para concessão do BPC ao Idoso.',
+        },
+        perCapitaIncomeBelowQuarterMinimumWage: {
+          type: 'string',
+          enum: ['Atende ao Critério Legal', 'Não Atende critério legal'],
+          description:
+            'Indica se a renda per capita familiar é inferior a 1/4 do salário mínimo, conforme exigido para o BPC ao Idoso.',
+        },
+        ageEqualOrAbove65Years: {
+          type: 'string',
+          enum: ['Atende ao Critério Legal', 'Não Atende critério legal'],
+          description:
+            'Indica se o requerente possui idade igual ou superior a 65 anos, conforme exigido para o BPC ao Idoso.',
         },
       },
       required: [
@@ -3351,6 +3372,9 @@ Análise processada do CNIS:
         'amount',
         'analysisDetails',
         'completeAnalysisDownload',
+        'legalRequirementsMet',
+        'perCapitaIncomeBelowQuarterMinimumWage',
+        'ageEqualOrAbove65Years',
       ],
     };
   }

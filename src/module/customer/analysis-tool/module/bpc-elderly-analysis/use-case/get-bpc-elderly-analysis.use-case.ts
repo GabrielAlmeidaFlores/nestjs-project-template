@@ -133,6 +133,20 @@ export class GetBpcElderlyAnalysisUseCase {
         ),
       }),
       familyMembers,
+      ...(bpcElderlyAnalysisQueryResult.bpcElderlyAnalysisInssBenefit.length >
+        0 && {
+        inssBenefitNumbers:
+          bpcElderlyAnalysisQueryResult.bpcElderlyAnalysisInssBenefit.map(
+            (benefit) => benefit.inssBenefitNumber,
+          ),
+      }),
+      ...(bpcElderlyAnalysisQueryResult.bpcElderlyAnalysisLegalProceeding
+        .length > 0 && {
+        legalProceedingNumbers:
+          bpcElderlyAnalysisQueryResult.bpcElderlyAnalysisLegalProceeding.map(
+            (proceeding) => proceeding.legalProceedingNumber,
+          ),
+      }),
       createdBy: GetBpcElderlyAnalysisResponsibleResponseDto.build({
         ...analysisToolRecordQueryResult.createdBy.customer,
       }),

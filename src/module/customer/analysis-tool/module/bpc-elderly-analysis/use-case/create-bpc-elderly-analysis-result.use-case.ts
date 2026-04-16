@@ -13,12 +13,12 @@ import { AnalysisActivityActionEnum } from '@module/customer/analysis-tool/lib/a
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
-import { BpcElderlyAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-result/command/bpc-elderly-analysis-result.command.repository.gateway';
 import { BpcElderlyAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis/command/bpc-elderly-analysis.command.repository.gateway';
+import { BpcElderlyAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-result/command/bpc-elderly-analysis-result.command.repository.gateway';
 import { BpcElderlyAnalysisEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/bpc-elderly-analysis.entity';
+import { BpcElderlyAnalysisCategoryEnum } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/enum/bpc-elderly-analysis-category.enum';
 import { BpcElderlyAnalysisId } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/value-object/bpc-elderly-analysis-id/bpc-elderly-analysis-id.value-object';
 import { BpcElderlyAnalysisResultEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-result/bpc-elderly-analysis-result.entity';
-import { BpcElderlyAnalysisResultCategoryEnum } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis-result/enum/bpc-elderly-analysis-result-category.enum';
 import { CreateBpcElderlyAnalysisResultResponseDto } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/dto/response/create-bpc-elderly-analysis-result.response.dto';
 import { BpcElderlyAnalysisNotFoundError } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/error/bpc-elderly-analysis-not-found.error';
 import { BpcElderlyAnalysisResultInterface } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/model/interface/bpc-elderly-analysis-result.interface';
@@ -181,7 +181,9 @@ export class CreateBpcElderlyAnalysisResultUseCase {
 
     const bpcElderlyAnalysis = new BpcElderlyAnalysisEntity({
       id: bpcElderlyAnalysisQueryResult.id,
-      ...(parsedAnalysis.category !== null && { category: parsedAnalysis.category }),
+      ...(parsedAnalysis.category !== null && {
+        category: parsedAnalysis.category,
+      }),
       bpcElderlyAnalysisResult,
       bpcElderlyAnalysisFamilyMember: [],
       bpcElderlyAnalysisDocument: [],
@@ -279,9 +281,21 @@ export class CreateBpcElderlyAnalysisResultUseCase {
         benefitStartDate: parsedAnalysis.benefitStartDate,
       }),
       ...(parsedAnalysis.amount !== null && { amount: parsedAnalysis.amount }),
-      ...(parsedAnalysis.category !== null && { category: parsedAnalysis.category }),
+      ...(parsedAnalysis.category !== null && {
+        category: parsedAnalysis.category,
+      }),
       ...(completeAnalysisDownloadAsHtml !== null && {
         bpcElderlyCompleteAnalysisResult: completeAnalysisDownloadAsHtml,
+      }),
+      ...(parsedAnalysis.legalRequirementsMet !== null && {
+        legalRequirementsMet: parsedAnalysis.legalRequirementsMet,
+      }),
+      ...(parsedAnalysis.perCapitaIncomeBelowQuarterMinimumWage !== null && {
+        perCapitaIncomeBelowQuarterMinimumWage:
+          parsedAnalysis.perCapitaIncomeBelowQuarterMinimumWage,
+      }),
+      ...(parsedAnalysis.ageEqualOrAbove65Years !== null && {
+        ageEqualOrAbove65Years: parsedAnalysis.ageEqualOrAbove65Years,
       }),
     });
   }
@@ -295,7 +309,10 @@ export class CreateBpcElderlyAnalysisResultUseCase {
     benefitStartDate: string | null;
     amount: number | null;
     analysisDetails: string | null;
-    category: BpcElderlyAnalysisResultCategoryEnum | null;
+    category: BpcElderlyAnalysisCategoryEnum | null;
+    legalRequirementsMet: string | null;
+    perCapitaIncomeBelowQuarterMinimumWage: string | null;
+    ageEqualOrAbove65Years: string | null;
   } {
     const empty = {
       diagnosis: null,
@@ -307,6 +324,9 @@ export class CreateBpcElderlyAnalysisResultUseCase {
       amount: null,
       analysisDetails: null,
       category: null,
+      legalRequirementsMet: null,
+      perCapitaIncomeBelowQuarterMinimumWage: null,
+      ageEqualOrAbove65Years: null,
     };
 
     if (raw === null) {
@@ -328,6 +348,10 @@ export class CreateBpcElderlyAnalysisResultUseCase {
         amount: parsed.amount ?? null,
         analysisDetails: parsed.analysisDetails ?? null,
         category: parsed.category ?? null,
+        legalRequirementsMet: parsed.legalRequirementsMet ?? null,
+        perCapitaIncomeBelowQuarterMinimumWage:
+          parsed.perCapitaIncomeBelowQuarterMinimumWage ?? null,
+        ageEqualOrAbove65Years: parsed.ageEqualOrAbove65Years ?? null,
       };
     } catch {
       return empty;

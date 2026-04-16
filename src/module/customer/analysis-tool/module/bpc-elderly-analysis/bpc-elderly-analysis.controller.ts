@@ -13,11 +13,13 @@ import { BpcElderlyAnalysisId } from '@module/customer/analysis-tool/module/bpc-
 import { CreateBpcElderlyAnalysisDocumentRequestDto } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/dto/request/create-bpc-elderly-analysis-document.request.dto';
 import { CreateBpcElderlyAnalysisFamilyMemberRequestDto } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/dto/request/create-bpc-elderly-analysis-family-member.request.dto';
 import { CreateBpcElderlyAnalysisRequestDto } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/dto/request/create-bpc-elderly-analysis.request.dto';
+import { UpdateBpcElderlyAnalysisRequestDto } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/dto/request/update-bpc-elderly-analysis.request.dto';
 import { CreateBpcElderlyAnalysisDocumentResponseDto } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/dto/response/create-bpc-elderly-analysis-document.response.dto';
 import { CreateBpcElderlyAnalysisFamilyMemberResponseDto } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/dto/response/create-bpc-elderly-analysis-family-member.response.dto';
 import { CreateBpcElderlyAnalysisResultResponseDto } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/dto/response/create-bpc-elderly-analysis-result.response.dto';
 import { CreateBpcElderlyAnalysisResponseDto } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/dto/response/create-bpc-elderly-analysis.response.dto';
 import { GetBpcElderlyAnalysisResponseDto } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/dto/response/get-bpc-elderly-analysis.response.dto';
+import { UpdateBpcElderlyAnalysisResponseDto } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/dto/response/update-bpc-elderly-analysis.response.dto';
 import { CreateBpcElderlyAnalysisDocumentUseCase } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/use-case/create-bpc-elderly-analysis-document.use-case';
 import { CreateBpcElderlyAnalysisFamilyMemberUseCase } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/use-case/create-bpc-elderly-analysis-family-member.use-case';
 import { CreateBpcElderlyAnalysisResultUseCase } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/use-case/create-bpc-elderly-analysis-result.use-case';
@@ -25,6 +27,7 @@ import { CreateBpcElderlyAnalysisUseCase } from '@module/customer/analysis-tool/
 import { DownloadBpcElderlyAnalysisCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/use-case/download-bpc-elderly-analysis-complete-analysis.use-case';
 import { DownloadBpcElderlyAnalysisSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/use-case/download-bpc-elderly-analysis-simplified-analysis.use-case';
 import { GetBpcElderlyAnalysisUseCase } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/use-case/get-bpc-elderly-analysis.use-case';
+import { UpdateBpcElderlyAnalysisUseCase } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/use-case/update-bpc-elderly-analysis.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
@@ -48,6 +51,7 @@ export class BpcElderlyAnalysisController {
     private readonly downloadBpcElderlyAnalysisSimplifiedAnalysisUseCase: DownloadBpcElderlyAnalysisSimplifiedAnalysisUseCase,
     private readonly createBpcElderlyAnalysisResultUseCase: CreateBpcElderlyAnalysisResultUseCase,
     private readonly getBpcElderlyAnalysisUseCase: GetBpcElderlyAnalysisUseCase,
+    private readonly updateBpcElderlyAnalysisUseCase: UpdateBpcElderlyAnalysisUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -212,6 +216,41 @@ export class BpcElderlyAnalysisController {
       sessionData,
       organizationSessionData,
       bpcElderlyAnalysisId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Atualizar análise de BPC ao Idoso',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':bpcElderlyAnalysisId',
+      method: RequestMethod.PATCH,
+      type: UpdateBpcElderlyAnalysisRequestDto,
+    },
+    tag: ['analise-bpc-ao-idoso'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Análise de BPC ao Idoso atualizada com sucesso.',
+      type: UpdateBpcElderlyAnalysisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateBpcElderlyAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'bpcElderlyAnalysisId',
+      new ParseValueObjectPipe(BpcElderlyAnalysisId),
+    )
+    bpcElderlyAnalysisId: BpcElderlyAnalysisId,
+    @Body() dto: UpdateBpcElderlyAnalysisRequestDto,
+  ): Promise<UpdateBpcElderlyAnalysisResponseDto> {
+    return await this.updateBpcElderlyAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      bpcElderlyAnalysisId,
+      dto,
     );
   }
 
