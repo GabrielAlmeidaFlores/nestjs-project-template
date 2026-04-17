@@ -11,6 +11,7 @@ import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database
 import { DisabilityRetirementPlanningGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-grant.typeorm.entity';
 import { DisabilityRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning.typeorm.entity';
 import { GeneralUrbanRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis.typeorm.entity';
+import { GeneralUrbanRetirementDenialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial.typeorm.entity';
 import { GeneralUrbanRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant.typeorm.entity';
 import { InsuranceQualityAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis.typeorm.entity';
 import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis.typeorm.entity';
@@ -42,6 +43,7 @@ import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analy
 import { DisabilityRetirementPlanningEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/disability-retirement-planning.entity';
 import { DisabilityRetirementPlanningGrantEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant/disability-retirement-planning-grant.entity';
 import { GeneralUrbanRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/general-urban-retirement-analysis-entity';
+import { GeneralUrbanRetirementDenialEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/general-urban-retirement-denial.entity';
 import { GeneralUrbanRetirementGrantEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/general-urban-retirement-grant.entity';
 import { InsuranceQualityAnalysisEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/insurance-quality-analysis.entity';
 import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
@@ -290,6 +292,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const generalUrbanRetirementDenial =
+        source.generalUrbanRetirementDenial !== undefined
+          ? this.mapper.map(
+              source.generalUrbanRetirementDenial,
+              GeneralUrbanRetirementDenialTypeormEntity,
+              GeneralUrbanRetirementDenialEntity,
+            )
+          : null;
+
       return new AnalysisToolRecordEntity({
         id: new AnalysisToolRecordId(source.id),
         code: new AnalysisToolRecordCode(source.code),
@@ -319,6 +330,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         insuranceQualityAnalysis,
         disabilityRetirementPlanning,
         generalUrbanRetirementAnalysis,
+        generalUrbanRetirementDenial,
         specialCategoryRetirementAnalysis,
         deathBenefitGrant,
         specialRetirementGrant,
@@ -442,6 +454,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
               source.generalUrbanRetirementGrant,
               GeneralUrbanRetirementGrantEntity,
               GeneralUrbanRetirementGrantTypeormEntity,
+            )
+          : null;
+
+      const generalUrbanRetirementDenial =
+        source.generalUrbanRetirementDenial !== null
+          ? this.mapper.map(
+              source.generalUrbanRetirementDenial,
+              GeneralUrbanRetirementDenialEntity,
+              GeneralUrbanRetirementDenialTypeormEntity,
             )
           : null;
 
@@ -582,6 +603,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         survivorPensionAnalysis,
         ruralOrHybridRetirementRejection,
         analysisToolClient,
+        generalUrbanRetirementDenial,
         createdBy: {
           id: source.createdBy.toString(),
         } as OrganizationMemberTypeormEntity,
