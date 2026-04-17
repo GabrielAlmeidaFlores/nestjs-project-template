@@ -1746,6 +1746,106 @@ AnÃ¡lise processada do CNIS:
     );
   }
 
+  public async getAccidentBenefitRejectionFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    useJson = true,
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: useJson
+          ? ResponseConfigInputModel.build({
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema:
+                this.getAccidentBenefitRejectionFirstAnalysisJsonSchema(),
+            })
+          : null,
+      }),
+    );
+  }
+
+  public async getAccidentBenefitRejectionSecondAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS.
+- Não incluir tag <br> na resposta.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getAccidentBenefitRejectionCompleteAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getAccidentBenefitRejectionCompleteAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getAccidentBenefitRejectionSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
   private getSurvivorPensionAnalysisResultJsonSchema(): object {
     return {
       type: 'object',
@@ -4445,6 +4545,107 @@ AnÃ¡lise processada do CNIS:
         },
       },
       required: ['timeAccelerators'],
+    };
+  }
+
+  private getAccidentBenefitRejectionFirstAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        insuredStatusMantained: {
+          type: 'boolean',
+          description:
+            'Indica se a qualidade de segurado foi mantida na data do acidente.',
+        },
+        insuredStatusAnalysisConclusion: {
+          type: 'string',
+          description:
+            'Conclusão técnica sobre a análise da qualidade de segurado.',
+        },
+        presenceOfPermanentSequelae: {
+          type: 'boolean',
+          description:
+            'Indica se há presença de sequelas permanentes decorrentes do acidente.',
+        },
+        compatibilityOfTheSequelaeWithAccident: {
+          type: 'boolean',
+          description:
+            'Indica se as sequelas são compatíveis com o acidente informado.',
+        },
+        sequelaeAnalysisConclusion: {
+          type: 'string',
+          description:
+            'Conclusão técnica sobre a análise das sequelas e sua compatibilidade com o acidente.',
+        },
+      },
+      required: [
+        'insuredStatusMantained',
+        'insuredStatusAnalysisConclusion',
+        'presenceOfPermanentSequelae',
+        'compatibilityOfTheSequelaeWithAccident',
+        'sequelaeAnalysisConclusion',
+      ],
+    };
+  }
+
+  private getAccidentBenefitRejectionCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        retirementRules: {
+          type: 'array',
+          description:
+            'Lista das regras de aposentadoria que o segurado pode ter direito.',
+          items: {
+            type: 'object',
+            properties: {
+              ruleName: {
+                type: 'string',
+                description: 'Nome da regra de aposentadoria.',
+              },
+              fulfilled: {
+                type: 'boolean',
+                description:
+                  'Indica se os requisitos da regra foram cumpridos.',
+              },
+              retirementDate: {
+                type: 'string',
+                description:
+                  'Data estimada de aposentadoria no formato DD/MM/AAAA, ou null se não aplicável.',
+              },
+              expectedRmi: {
+                type: 'number',
+                description:
+                  'RMI (Renda Mensal Inicial) estimada em reais para esta regra de aposentadoria.',
+              },
+              causeValue: {
+                type: 'number',
+                description:
+                  'Valor de causa estimado em reais para fins de eventual ação judicial.',
+              },
+              detailedAnalysis: {
+                type: 'string',
+                description:
+                  'Análise detalhada dos requisitos e resultado para esta regra específica.',
+              },
+            },
+            required: [
+              'ruleName',
+              'fulfilled',
+              'retirementDate',
+              'expectedRmi',
+              'causeValue',
+              'detailedAnalysis',
+            ],
+          },
+        },
+        analysisResult: {
+          type: 'string',
+          description:
+            'Parecer técnico conclusivo completo da análise do indeferimento de acidente, incluindo estratégia processual e recomendações. Retorne em formato Markdown.',
+        },
+      },
+      required: ['retirementRules', 'analysisResult'],
     };
   }
 
