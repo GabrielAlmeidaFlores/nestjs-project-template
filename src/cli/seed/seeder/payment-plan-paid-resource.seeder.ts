@@ -1288,7 +1288,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Comparação inteligente entre vínculos do CNIS e anotações da CTPS com IA para indeferimento de aposentadoria urbana comum. Identifica períodos divergentes, vínculos omissos no CNIS, inconsistências de datas e dados, gerando relatório de períodos que podem ser reconhecidos judicialmente ou administrativamente para reverter o indeferimento.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('b3c4d5e6-f7a8-4901-c2d3-e4f5a6b7c8d1'),
+      id: new PaymentPlanPaidResourceId('da60c3bc-c91d-4332-aae2-b3f30d1de126'),
       resource:
         PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION_COMPLETE_ANALYSIS,
       creditCost: 8,
@@ -1297,7 +1297,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise completa de indeferimento de aposentadoria da pessoa com deficiência com IA. Consolida o histórico contributivo, os períodos analisados, os aceleradores de tempo e a decisão do INSS, gerando parecer técnico detalhado com enquadramento nas regras aplicáveis, fundamentação jurídica, estratégia processual recomendada e perspectivas do caso.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('b3c4d5e6-f7a8-4901-c2d3-e4f5a6b7c8d2'),
+      id: new PaymentPlanPaidResourceId('da60c3bc-c91d-4332-aae2-b3f30d1de127'),
       resource:
         PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION_SIMPLIFIED_ANALYSIS,
       creditCost: 3,
@@ -1306,7 +1306,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise simplificada de indeferimento de aposentadoria da pessoa com deficiência com IA. Resume os principais achados da análise completa, indica a viabilidade geral do caso, os pontos críticos e os próximos passos recomendados, em linguagem acessível para apresentação ao cliente.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('b3c4d5e6-f7a8-4901-c2d3-e4f5a6b7c8d3'),
+      id: new PaymentPlanPaidResourceId('da60c3bc-c91d-4332-aae2-b3f30d1de128'),
       resource:
         PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION_INSS_DECISION_ANALYSIS,
       creditCost: 5,
@@ -1315,7 +1315,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise da carta de indeferimento e documentos do processo administrativo do INSS com IA. Examina o fundamento da negativa, identifica erros de cálculo ou enquadramento legal, aponta eventuais irregularidades processuais e orienta sobre a melhor estratégia de impugnação — administrativa ou judicial.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('b3c4d5e6-f7a8-4901-c2d3-e4f5a6b7c8d4'),
+      id: new PaymentPlanPaidResourceId('da60c3bc-c91d-4332-aae2-b3f30d1de129'),
       resource:
         PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION_FIRST_ANALYSIS,
       creditCost: 5,
@@ -1324,7 +1324,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Primeira análise de indeferimento de aposentadoria da pessoa com deficiência com IA, combinando os dados estruturados do caso com a leitura e interpretação do CNIS. Gera parecer inicial técnico sobre tempo de contribuição, carência, períodos relevantes, pontos de atenção e viabilidade preliminar de reversão do indeferimento.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('b3c4d5e6-f7a8-4901-c2d3-e4f5a6b7c8d5'),
+      id: new PaymentPlanPaidResourceId('da60c3bc-c91d-4332-aae2-b3f30d1de130'),
       resource:
         PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION_RURAL_TIME_ANALYSIS,
       creditCost: 4,
@@ -1333,7 +1333,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise de períodos de atividade rural com IA para reconhecimento previdenciário no contexto de indeferimento de aposentadoria da pessoa com deficiência. Examina documentos comprobatórios, valida início de prova material, calcula tempo rural computável e orienta sobre reconhecimento administrativo ou judicial.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('b3c4d5e6-f7a8-4901-c2d3-e4f5a6b7c8d6'),
+      id: new PaymentPlanPaidResourceId('da60c3bc-c91d-4332-aae2-b3f30d1de132'),
       resource:
         PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION_MILITARY_SERVICE_ANALYSIS,
       creditCost: 4,
@@ -1342,7 +1342,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise de tempo de serviço militar obrigatório com IA para cômputo previdenciário no contexto de indeferimento de aposentadoria da pessoa com deficiência. Valida certificados e certidões, calcula o período computável, verifica sobreposição com outros vínculos e orienta sobre averbação.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('b3c4d5e6-f7a8-4901-c2d3-e4f5a6b7c8d7'),
+      id: new PaymentPlanPaidResourceId('da60c3bc-c91d-4332-aae2-b3f30d1de133'),
       resource:
         PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION_PUBLIC_SERVICE_ANALYSIS,
       creditCost: 5,
@@ -1351,7 +1351,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise de tempo de serviço público com IA para averbação no RGPS no contexto de indeferimento de aposentadoria da pessoa com deficiência. Examina CTC, valida períodos computáveis, identifica riscos de contagem em duplicidade e orienta sobre averbação administrativa ou judicial.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('b3c4d5e6-f7a8-4901-c2d3-e4f5a6b7c8d8'),
+      id: new PaymentPlanPaidResourceId('da60c3bc-c91d-4332-aae2-b3f30d1de134'),
       resource:
         PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION_CTPS_OUTSIDE_CNIS_ANALYSIS,
       creditCost: 4,
@@ -1360,7 +1360,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise de vínculos anotados na CTPS mas ausentes no CNIS com IA para indeferimento de aposentadoria da pessoa com deficiência. Identifica períodos omissos, avalia a força probatória dos documentos e orienta sobre regularização no INSS.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('b3c4d5e6-f7a8-4901-c2d3-e4f5a6b7c8d9'),
+      id: new PaymentPlanPaidResourceId('da60c3bc-c91d-4332-aae2-b3f30d1de135'),
       resource:
         PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION_STUDENT_APPRENTICE_ANALYSIS,
       creditCost: 3,
@@ -1369,7 +1369,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise de tempo como estudante aprendiz com IA para reconhecimento previdenciário no contexto de indeferimento de aposentadoria da pessoa com deficiência. Valida documentos escolares, contraprestação e elementos probatórios necessários ao cômputo do período.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('b3c4d5e6-f7a8-4901-c2d3-e4f5a6b7c8da'),
+      id: new PaymentPlanPaidResourceId('da60c3bc-c91d-4332-aae2-b3f30d1de136'),
       resource:
         PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION_WORK_ABROAD_ANALYSIS,
       creditCost: 5,
@@ -1379,7 +1379,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise de períodos de trabalho no exterior com IA para reconhecimento no RGPS no contexto de indeferimento de aposentadoria da pessoa com deficiência. Examina acordos internacionais, valida documentação estrangeira e orienta sobre totalização e formalidades documentais.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('b3c4d5e6-f7a8-4901-c2d3-e4f5a6b7c8db'),
+      id: new PaymentPlanPaidResourceId('da60c3bc-c91d-4332-aae2-b3f30d1de137'),
       resource:
         PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION_INFORMAL_WORK_ANALYSIS,
       creditCost: 4,
@@ -1388,7 +1388,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise de períodos de trabalho informal com IA no contexto de indeferimento de aposentadoria da pessoa com deficiência. Examina provas da atividade, recolhimentos existentes, necessidade de indenização e impacto do período no tempo de contribuição e na carência.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('b3c4d5e6-f7a8-4901-c2d3-e4f5a6b7c8dc'),
+      id: new PaymentPlanPaidResourceId('da60c3bc-c91d-4332-aae2-b3f30d1de138'),
       resource:
         PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION_LABOR_COURT_DECISION_ANALYSIS,
       creditCost: 6,
@@ -1397,7 +1397,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise de sentenças e acordos trabalhistas com IA para reconhecimento previdenciário no contexto de indeferimento de aposentadoria da pessoa com deficiência. Examina robustez da decisão, períodos reconhecidos, remunerações e a melhor estratégia de aproveitamento perante o INSS.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('b3c4d5e6-f7a8-4901-c2d3-e4f5a6b7c8dd'),
+      id: new PaymentPlanPaidResourceId('da60c3bc-c91d-4332-aae2-b3f30d1de139'),
       resource:
         PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION_PPP_ANALYSIS,
       creditCost: 4,
