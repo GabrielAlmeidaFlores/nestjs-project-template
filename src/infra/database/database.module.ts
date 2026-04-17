@@ -39,6 +39,14 @@ import { BankPaymentTypeormQueryRepository } from '@infra/database/implementatio
 import { BankTransferTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bank-transfer/bank-transfer.typeorm.command.repository';
 import { BankTransferTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/bank-transfer/bank-transfer.typeorm.query.repository';
 import { BaseTypeormTransactionRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.transaction.repository';
+import { BpcElderlyAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-analysis/bpc-elderly-analysis.typeorm.command.repository';
+import { BpcElderlyAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-analysis/bpc-elderly-analysis.typeorm.query.repository';
+import { BpcElderlyAnalysisDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-analysis-document/bpc-elderly-analysis-document.typeorm.command.repository';
+import { BpcElderlyAnalysisFamilyMemberTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-analysis-family-member/bpc-elderly-analysis-family-member.typeorm.command.repository';
+import { BpcElderlyAnalysisFamilyMemberDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-analysis-family-member-document/bpc-elderly-analysis-family-member-document.typeorm.command.repository';
+import { BpcElderlyAnalysisInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-analysis-inss-benefit/bpc-elderly-analysis-inss-benefit.typeorm.command.repository';
+import { BpcElderlyAnalysisLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-analysis-legal-proceeding/bpc-elderly-analysis-legal-proceeding.typeorm.command.repository';
+import { BpcElderlyAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-analysis-result/bpc-elderly-analysis-result.typeorm.command.repository';
 import { CidTenTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cid-ten/cid-ten.typeorm.command.repository';
 import { CidTenTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/cid-ten/cid-ten.typeorm.query.repository';
 import { CnisFastAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis/cnis-fast-analysis.typeorm.command.repository';
@@ -451,6 +459,14 @@ import { AudienceQuestionGeneratorBenefitCommandRepositoryGateway } from '@modul
 import { AudienceQuestionGeneratorDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator-document/command/audience-question-generator-document.command.repository.gateway';
 import { AudienceQuestionGeneratorLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator-legal-proceeding/command/audience-question-generator-legal-proceeding.command.repository.gateway';
 import { AudienceQuestionGeneratorResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator-result/command/audience-question-generator-result.command.repository.gateway';
+import { BpcElderlyAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis/command/bpc-elderly-analysis.command.repository.gateway';
+import { BpcElderlyAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis/query/bpc-elderly-analysis.query.repository.gateway';
+import { BpcElderlyAnalysisDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-document/command/bpc-elderly-analysis-document.command.repository.gateway';
+import { BpcElderlyAnalysisFamilyMemberCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-family-member/command/bpc-elderly-analysis-family-member.command.repository.gateway';
+import { BpcElderlyAnalysisFamilyMemberDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-family-member-document/command/bpc-elderly-analysis-family-member-document.command.repository.gateway';
+import { BpcElderlyAnalysisInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-inss-benefit/command/bpc-elderly-analysis-inss-benefit.command.repository.gateway';
+import { BpcElderlyAnalysisLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-legal-proceeding/command/bpc-elderly-analysis-legal-proceeding.command.repository.gateway';
+import { BpcElderlyAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-result/command/bpc-elderly-analysis-result.command.repository.gateway';
 import { CnisFastAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/repository/cnis-fast-analysis/command/cnis-fast-analysis.command.repository.gateway';
 import { CnisFastAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/repository/cnis-fast-analysis/query/cnis-fast-analysis.query.repository.gateway';
 import { CnisFastAnalysisInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/repository/cnis-fast-analysis-inss-benefit/command/cnis-fast-analysis-inss-benefit.command.repository.gateway';
@@ -2335,6 +2351,38 @@ const classProvider: ClassProvider[] = [
   {
     provide: PerCapitaIncomeForBpcAnalysisResultCommandRepositoryGateway,
     useClass: PerCapitaIncomeForBpcAnalysisResultTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyAnalysisCommandRepositoryGateway,
+    useClass: BpcElderlyAnalysisTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyAnalysisQueryRepositoryGateway,
+    useClass: BpcElderlyAnalysisTypeormQueryRepository,
+  },
+  {
+    provide: BpcElderlyAnalysisDocumentCommandRepositoryGateway,
+    useClass: BpcElderlyAnalysisDocumentTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyAnalysisResultCommandRepositoryGateway,
+    useClass: BpcElderlyAnalysisResultTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyAnalysisFamilyMemberCommandRepositoryGateway,
+    useClass: BpcElderlyAnalysisFamilyMemberTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyAnalysisFamilyMemberDocumentCommandRepositoryGateway,
+    useClass: BpcElderlyAnalysisFamilyMemberDocumentTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyAnalysisInssBenefitCommandRepositoryGateway,
+    useClass: BpcElderlyAnalysisInssBenefitTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyAnalysisLegalProceedingCommandRepositoryGateway,
+    useClass: BpcElderlyAnalysisLegalProceedingTypeormCommandRepository,
   },
   {
     provide: MiniAdvisorCommandRepositoryGateway,

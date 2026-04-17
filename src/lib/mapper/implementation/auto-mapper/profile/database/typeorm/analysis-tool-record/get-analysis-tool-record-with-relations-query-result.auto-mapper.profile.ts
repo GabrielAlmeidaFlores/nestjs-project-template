@@ -7,6 +7,7 @@ import { AdministrativeProcedureInssAnalysisTypeormEntity } from '@infra/databas
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator.typeorm.entity';
+import { BpcElderlyAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { DeathBenefitGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant.typeorm.entity';
 import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis.entity';
@@ -38,6 +39,7 @@ import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/sc
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { GetAdministrativeProcedureInssAnalysisQueryResult } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/repository/administrative-procedure-inss-analysis/query/result/get-administrative-procedure-inss-analysis.query.result';
 import { GetAudienceQuestionGeneratorWithRelationsQueryResult } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator/query/result/get-audience-question-generator-with-relations.query.result';
+import { GetBpcElderlyAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis/query/result/get-bpc-elderly-analysis-with-relations.query.result';
 import { GetCnisFastAnalysisQueryResult } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis.query.result';
 import { GetDeathBenefitGrantWithRelationsQueryResult } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/repository/death-benefit-grant/query/result/get-death-benefit-grant-with-relations.query.result';
 import { GetDisabilityAssessmentForBpcAnalysisQueryResult } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/repository/disability-assessment-for-bpc-analysis/query/result/get-disability-assessment-for-bpc-analysis.query.result';
@@ -191,6 +193,16 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         PerCapitaIncomeForBpcAnalysisTypeormEntity,
         GetPerCapitaIncomeForBpcAnalysisWithRelationsQueryResult,
       );
+
+      const bpcElderlyAnalysis =
+        source.bpcElderlyAnalysis !== null &&
+        source.bpcElderlyAnalysis !== undefined
+          ? this.mapper.map(
+              source.bpcElderlyAnalysis,
+              BpcElderlyAnalysisTypeormEntity,
+              GetBpcElderlyAnalysisWithRelationsQueryResult,
+            )
+          : null;
 
       const ruralTimelineAnalysis =
         source.ruralTimeline !== null &&
@@ -372,6 +384,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         disabilityAssessmentForBpcAnalysis,
         audienceQuestionGenerator,
         perCapitaIncomeForBpcAnalysis,
+        bpcElderlyAnalysis,
         ruralTimelineAnalysis,
         insuranceQualityAnalysis,
         teacherRetirementPlanning,
@@ -500,6 +513,15 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         PerCapitaIncomeForBpcAnalysisTypeormEntity,
       );
 
+      const bpcElderlyAnalysis =
+        source.bpcElderlyAnalysis !== null
+          ? this.mapper.map(
+              source.bpcElderlyAnalysis,
+              GetBpcElderlyAnalysisWithRelationsQueryResult,
+              BpcElderlyAnalysisTypeormEntity,
+            )
+          : null;
+
       const ruralTimeline = this.mapper.map(
         source.ruralTimelineAnalysis,
         GetRuralTimelineAnalysisWithRelationsQueryResult,
@@ -618,6 +640,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         disabilityAssessmentForBpcAnalysis,
         audienceQuestionGenerator,
         perCapitaIncomeForBpcAnalysis,
+        bpcElderlyAnalysis,
         ruralTimeline,
         insuranceQualityAnalysis,
         disabilityRetirementPlanning,
