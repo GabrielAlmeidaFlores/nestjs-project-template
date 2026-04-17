@@ -357,4 +357,28 @@ export abstract class AnalysisProcessorGateway {
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null>;
+
+  public abstract getAccidentBenefitRejectionFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    useJson?: boolean,
+  ): Promise<string | null>;
+
+  public abstract getAccidentBenefitRejectionSecondAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getAccidentBenefitRejectionCompleteAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getAccidentBenefitRejectionSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
 }

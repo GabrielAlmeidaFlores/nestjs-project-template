@@ -1,5 +1,15 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { AccidentBenefitRejectionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection/accident-benefit-rejection.typeorm.command.repository';
+import { AccidentBenefitRejectionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection/accident-benefit-rejection.typeorm.query.repository';
+import { AccidentBenefitRejectionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection-document/accident-benefit-rejection-document.typeorm.command.repository';
+import { AccidentBenefitRejectionEventTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection-event/accident-benefit-rejection-event.typeorm.command.repository';
+import { AccidentBenefitRejectionEventDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection-event-document/accident-benefit-rejection-event-document.typeorm.command.repository';
+import { AccidentBenefitRejectionInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection-inss-benefit/accident-benefit-rejection-inss-benefit.typeorm.command.repository';
+import { AccidentBenefitRejectionResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection-result/accident-benefit-rejection-result.typeorm.command.repository';
+import { AccidentBenefitRejectionWorkPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection-work-period/accident-benefit-rejection-work-period.typeorm.command.repository';
+import { AccidentBenefitRejectionWorkPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection-work-period-document/accident-benefit-rejection-work-period-document.typeorm.command.repository';
+import { AccidentBenefitRejectionWorkPeriodEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection-work-period-earnings-history/accident-benefit-rejection-work-period-earnings-history.typeorm.command.repository';
 import { AdminTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/admin/admin.typeorm.command.repository';
 import { AdminTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/admin/admin.typeorm.query.repository';
 import { AdministrativeProcedureInssAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.typeorm.command.repository';
@@ -332,6 +342,15 @@ import { TemporaryDisabilityBenefitsGrantWorkPeriodsTypeormQueryRepository } fro
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-work-periods-earnings-history/temporary-disability-benefits-grant-work-periods-earnings-history.typeorm.command.repository';
 import { TutorialTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/tutorial/tutorial.typeorm.command.repository';
 import { TutorialTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/tutorial/tutorial.typeorm.query.repository';
+import { AccidentBenefitRejectionDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection-document.typeorm.entity';
+import { AccidentBenefitRejectionEventDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection-event-document.typeorm.entity';
+import { AccidentBenefitRejectionEventTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection-event.typeorm.entity';
+import { AccidentBenefitRejectionInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection-inss-benefit.typeorm.entity';
+import { AccidentBenefitRejectionResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection-result.typeorm.entity';
+import { AccidentBenefitRejectionWorkPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection-work-period-document.typeorm.entity';
+import { AccidentBenefitRejectionWorkPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection-work-period-earnings-history.typeorm.entity';
+import { AccidentBenefitRejectionWorkPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection-work-period.typeorm.entity';
+import { AccidentBenefitRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection.typeorm.entity';
 import { AdminTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/admin.typeorm.entity';
 import { AdministrativeProcedureInssAnalysisBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis-benefit.entity';
 import { AdministrativeProcedureInssAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis-document.entity';
@@ -875,6 +894,15 @@ export class TypeormIndex {
     GeneralUrbanRetirementDenialPeriodDocumentTypeormEntity,
     GeneralUrbanRetirementDenialPeriodEarningsHistoryTypeormEntity,
     GeneralUrbanRetirementDenialTimeAcceleratorTypeormEntity,
+    AccidentBenefitRejectionTypeormEntity,
+    AccidentBenefitRejectionResultTypeormEntity,
+    AccidentBenefitRejectionDocumentTypeormEntity,
+    AccidentBenefitRejectionInssBenefitTypeormEntity,
+    AccidentBenefitRejectionEventTypeormEntity,
+    AccidentBenefitRejectionEventDocumentTypeormEntity,
+    AccidentBenefitRejectionWorkPeriodTypeormEntity,
+    AccidentBenefitRejectionWorkPeriodDocumentTypeormEntity,
+    AccidentBenefitRejectionWorkPeriodEarningsHistoryTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [
@@ -1211,6 +1239,16 @@ export class TypeormIndex {
     GeneralUrbanRetirementDenialPeriodEarningsHistoryTypeormCommandRepository,
     GeneralUrbanRetirementDenialTimeAcceleratorTypeormCommandRepository,
     GeneralUrbanRetirementDenialTimeAcceleratorTypeormQueryRepository,
+    AccidentBenefitRejectionTypeormQueryRepository,
+    AccidentBenefitRejectionTypeormCommandRepository,
+    AccidentBenefitRejectionResultTypeormCommandRepository,
+    AccidentBenefitRejectionDocumentTypeormCommandRepository,
+    AccidentBenefitRejectionInssBenefitTypeormCommandRepository,
+    AccidentBenefitRejectionEventTypeormCommandRepository,
+    AccidentBenefitRejectionEventDocumentTypeormCommandRepository,
+    AccidentBenefitRejectionWorkPeriodTypeormCommandRepository,
+    AccidentBenefitRejectionWorkPeriodDocumentTypeormCommandRepository,
+    AccidentBenefitRejectionWorkPeriodEarningsHistoryTypeormCommandRepository,
   ];
 
   public static readonly dynamicModule = TypeOrmModule.forFeature(

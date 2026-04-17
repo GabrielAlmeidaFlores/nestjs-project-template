@@ -5,6 +5,7 @@ import type { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/s
 import type { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 import type { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import type { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
+import type { AccidentBenefitRejectionEntity } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection/accident-benefit-rejection.entity';
 import type { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
 import type { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
 import type { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
@@ -54,6 +55,7 @@ export interface AnalysisToolRecordEntityPropsInterface extends BaseEntityPropsI
   generalUrbanRetirementAnalysis?: GeneralUrbanRetirementAnalysisEntity | null;
   disabilityRetirementPlanningGrant?: DisabilityRetirementPlanningGrantEntity | null;
   temporaryDisabilityBenefitsGrant?: TemporaryDisabilityBenefitsGrantEntity | null;
+  accidentBenefitRejection?: AccidentBenefitRejectionEntity | null;
   survivorPensionAnalysis?: SurvivorPensionAnalysisEntity | null;
   generalUrbanRetirementDenial?: GeneralUrbanRetirementDenialEntity | null;
   specialCategoryRetirementAnalysis?: SpecialCategoryRetirementAnalysisEntity | null;
