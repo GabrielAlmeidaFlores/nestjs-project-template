@@ -1,6 +1,5 @@
 import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
-import { DisabilityRetirementPlanningRejectionInssBenefitId } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection-inss-benefit/value-object/disability-retirement-planning-rejection-inss-benefit-id/disability-retirement-planning-rejection-inss-benefit-id.value-object';
 import { Injectable } from '@nestjs/common';
 
 import { DisabilityRetirementPlanningRejectionInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-rejection-inss-benefit.typeorm.entity';
@@ -8,6 +7,7 @@ import { DisabilityRetirementPlanningRejectionTypeormEntity } from '@infra/datab
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { DisabilityRetirementPlanningRejectionId } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection/value-object/disability-retirement-planning-rejection-id/disability-retirement-planning-rejection-id.value-object';
 import { DisabilityRetirementPlanningRejectionInssBenefitEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection-inss-benefit/disability-retirement-planning-rejection-inss-benefit.entity';
+import { DisabilityRetirementPlanningRejectionInssBenefitId } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection-inss-benefit/value-object/disability-retirement-planning-rejection-inss-benefit-id.value-object';
 
 @Injectable()
 export class DisabilityRetirementPlanningRejectionInssBenefitEntityAutoMapperProfile {

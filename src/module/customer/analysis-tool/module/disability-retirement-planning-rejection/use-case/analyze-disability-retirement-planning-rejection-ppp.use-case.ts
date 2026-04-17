@@ -5,6 +5,11 @@ import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.v
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
+import { DisabilityRetirementPlanningRejectionPeriodCategoryEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection-period/enum/disability-retirement-planning-rejection-period-category.enum';
+import { DisabilityRetirementPlanningRejectionPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection-period/enum/disability-retirement-planning-rejection-period-consideration.enum';
+import { DisabilityRetirementPlanningRejectionPeriodPcdStatusEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection-period/enum/disability-retirement-planning-rejection-period-pcd-status.enum';
+import { DisabilityRetirementPlanningRejectionPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection-period/enum/disability-retirement-planning-rejection-period-pendency-reason.enum';
+import { DisabilityRetirementPlanningRejectionPeriodWorkTypeEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection-period/enum/disability-retirement-planning-rejection-period-work-type.enum';
 import { AnalyzeDisabilityRetirementPlanningRejectionPppRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/dto/request/analyze-disability-retirement-planning-rejection-ppp.request.dto';
 import {
   AnalyzeDisabilityRetirementPlanningRejectionPppPeriodItemResponseDto,
@@ -90,7 +95,10 @@ export class AnalyzeDisabilityRetirementPlanningRejectionPppUseCase {
             ...(this.hasValue(period.bondOrigin) && {
               bondOrigin: period.bondOrigin,
             }),
-            category: period.category,
+            category:
+              DisabilityRetirementPlanningRejectionPeriodCategoryEnum[
+                period.category as keyof typeof DisabilityRetirementPlanningRejectionPeriodCategoryEnum
+              ],
             ...(this.hasValue(period.activityDescription) && {
               activityDescription: period.activityDescription,
             }),
@@ -98,7 +106,10 @@ export class AnalyzeDisabilityRetirementPlanningRejectionPppUseCase {
             ...(this.hasValue(period.endDate) && {
               endDate: new Date(period.endDate),
             }),
-            workType: period.workType,
+            workType:
+              DisabilityRetirementPlanningRejectionPeriodWorkTypeEnum[
+                period.workType as keyof typeof DisabilityRetirementPlanningRejectionPeriodWorkTypeEnum
+              ],
             ...(this.hasValue(period.impactMonths) && {
               impactMonths: period.impactMonths,
             }),
@@ -111,17 +122,26 @@ export class AnalyzeDisabilityRetirementPlanningRejectionPppUseCase {
               contributionAverage: new DecimalValue(period.contributionAverage),
             }),
             ...(this.hasValue(period.pendencyReason) && {
-              pendencyReason: period.pendencyReason,
+              pendencyReason:
+                DisabilityRetirementPlanningRejectionPeriodPendencyReasonEnum[
+                  period.pendencyReason as keyof typeof DisabilityRetirementPlanningRejectionPeriodPendencyReasonEnum
+                ],
             }),
             ...(this.hasValue(period.periodConsideration) && {
-              periodConsideration: period.periodConsideration,
+              periodConsideration:
+                DisabilityRetirementPlanningRejectionPeriodConsiderationEnum[
+                  period.periodConsideration as keyof typeof DisabilityRetirementPlanningRejectionPeriodConsiderationEnum
+                ],
             }),
             ...(this.hasValue(period.wantsToComplementViaMeuINSS) && {
               wantsToComplementViaMeuINSS: period.wantsToComplementViaMeuINSS,
             }),
             status: period.status,
             ...(this.hasValue(period.pcdStatus) && {
-              pcdStatus: period.pcdStatus,
+              pcdStatus:
+                DisabilityRetirementPlanningRejectionPeriodPcdStatusEnum[
+                  period.pcdStatus as keyof typeof DisabilityRetirementPlanningRejectionPeriodPcdStatusEnum
+                ],
             }),
           },
         ),

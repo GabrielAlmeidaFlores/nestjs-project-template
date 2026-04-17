@@ -8,5 +8,6 @@ export class AnalyzeDisabilityRetirementPlanningRejectionPppRequestDto extends B
   @RequestDtoObjectProperty(() => Base64FileRequestDto)
   public document: Base64FileRequestDto;
 
-  protected override readonly _type = AnalyzeDisabilityRetirementPlanningRejectionPppRequestDto.name;
+  protected override readonly _type =
+    AnalyzeDisabilityRetirementPlanningRejectionPppRequestDto.name;
 }

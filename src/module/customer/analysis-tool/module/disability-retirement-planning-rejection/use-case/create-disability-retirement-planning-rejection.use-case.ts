@@ -88,11 +88,6 @@ export class CreateDisabilityRetirementPlanningRejectionUseCase {
         }),
     );
 
-    await this.createOnDatabase(
-      disabilityRetirementPlanningRejection,
-      inssBenefitEntities,
-    );
-
     const countRecords =
       await this.analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAuthIdentityId(
         organizationSessionData.organizationId,
@@ -116,7 +111,11 @@ export class CreateDisabilityRetirementPlanningRejectionUseCase {
       updatedBy: organizationMember.id,
     });
 
-    await this.createAnalysisToolRecordOnDatabase(analysisToolRecord);
+    await this.createOnDatabase(
+      disabilityRetirementPlanningRejection,
+      inssBenefitEntities,
+      analysisToolRecord,
+    );
 
     return CreateDisabilityRetirementPlanningRejectionResponseDto.build({
       disabilityRetirementPlanningRejectionId:
@@ -127,6 +126,7 @@ export class CreateDisabilityRetirementPlanningRejectionUseCase {
   private async createOnDatabase(
     disabilityRetirementPlanningRejection: DisabilityRetirementPlanningRejectionEntity,
     inssBenefitEntities: DisabilityRetirementPlanningRejectionInssBenefitEntity[],
+    analysisToolRecord: AnalysisToolRecordEntity,
   ): Promise<void> {
     const grantTransaction =
       this.disabilityRetirementPlanningRejectionCommandRepositoryGateway.createDisabilityRetirementPlanningRejection(
@@ -139,23 +139,14 @@ export class CreateDisabilityRetirementPlanningRejectionUseCase {
       ),
     );
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute([
-      grantTransaction,
-      ...inssBenefitTransactions,
-    ]);
-
-    await transaction.commit();
-  }
-
-  private async createAnalysisToolRecordOnDatabase(
-    analysisToolRecord: AnalysisToolRecordEntity,
-  ): Promise<void> {
     const analysisToolRecordTransaction =
       this.analysisToolRecordCommandRepositoryGateway.createAnalysisToolRecord(
         analysisToolRecord,
       );
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
+      grantTransaction,
+      ...inssBenefitTransactions,
       analysisToolRecordTransaction,
     ]);
 
