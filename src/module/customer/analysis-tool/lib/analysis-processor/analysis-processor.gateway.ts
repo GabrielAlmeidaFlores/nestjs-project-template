@@ -363,6 +363,11 @@ export abstract class AnalysisProcessorGateway {
     files: Buffer[],
   ): Promise<string | null>;
 
+  public abstract getBpcElderlyAnalysisCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
   public abstract getDisabilityRetirementPlanningRejectionTimeAcceleratorAnalysis(
     systemInstruction: string,
     files: Buffer[],
@@ -387,6 +392,11 @@ export abstract class AnalysisProcessorGateway {
   ): Promise<string | null>;
 
   public abstract getDisabilityRetirementPlanningRejectionSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getBpcElderlyAnalysisSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null>;

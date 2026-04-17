@@ -60,6 +60,8 @@ export class AnalysisActivityMessageFactory {
       'Indeferimento de aposentadoria urbana geral',
     [AnalysisToolRecordTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION]:
       'Indeferimento de aposentadoria para deficiente',
+    [AnalysisToolRecordTypeEnum.BPC_ELDERLY_ANALYSIS]:
+      'Análise de BPC ao Idoso',
   };
 
   private static readonly actionLabelMap: Record<
