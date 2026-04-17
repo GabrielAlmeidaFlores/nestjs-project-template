@@ -31,6 +31,7 @@ import { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysi
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { AnalysisToolRecordEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity.props.interface';
+import type { BpcElderlyAnalysisEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/bpc-elderly-analysis.entity';
 import type { DisabilityRetirementPlanningEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/disability-retirement-planning.entity';
 import type { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 
@@ -170,6 +171,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly generalUrbanRetirementDenial: GeneralUrbanRetirementDenialEntity | null;
 
   @Description(
+    'Análise de BPC ao Idoso associada ao registro da ferramenta de análise',
+  )
+  public readonly bpcElderlyAnalysis: BpcElderlyAnalysisEntity | null;
+
+  @Description(
     'Cliente da ferramenta de análise associado ao registro da ferramenta de análise',
   )
   public readonly analysisToolClient: AnalysisToolClientEntity;
@@ -227,6 +233,7 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     this.specialRetirementGrant = props.specialRetirementGrant ?? null;
     this.generalUrbanRetirementDenial =
       props.generalUrbanRetirementDenial ?? null;
+    this.bpcElderlyAnalysis = props.bpcElderlyAnalysis ?? null;
     this.status = props.status;
     this.analysisToolClient = props.analysisToolClient;
     this.createdBy = props.createdBy;
