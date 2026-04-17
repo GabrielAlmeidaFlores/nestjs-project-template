@@ -122,6 +122,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { temporaryDisabilityBenefitsGrant: Not(IsNull()) },
         { deathBenefitGrant: Not(IsNull()) },
         { survivorPensionAnalysis: Not(IsNull()) },
+        { generalUrbanRetirementDenial: Not(IsNull()) },
       ];
 
     const withUpdatedBy = {
@@ -1745,6 +1746,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { temporaryDisabilityBenefitsGrant: Not(IsNull()) },
         { deathBenefitGrant: Not(IsNull()) },
         { survivorPensionAnalysis: Not(IsNull()) },
+        { generalUrbanRetirementDenial: Not(IsNull()) },
       ];
 
     for (const relationalClause of atLeastOneRelationNotNull) {
@@ -2426,6 +2428,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       'deathBenefitGrant',
       'temporaryDisabilityBenefitsGrant',
       'survivorPensionAnalysis',
+      'generalUrbanRetirementDenial',
     ];
   }
 }
