@@ -162,6 +162,16 @@ import { GetGeneralUrbanRetirementDenialWithRelationsQueryResultAutoMapperProfil
 import { GeneralUrbanRetirementDenialDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-denial-document/general-urban-retirement-denial-document-entity.auto-mapper.profile';
 import { GeneralUrbanRetirementDenialTimeAcceleratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-denial-time-accelerator/general-urban-retirement-denial-time-accelerator-entity.auto-mapper.profile';
 import { GetGeneralUrbanRetirementDenialTimeAcceleratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-denial-time-accelerator/get-general-urban-retirement-denial-time-accelerator-query-result.auto-mapper.profile';
+import { MaternityPayGrantEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-grant/maternity-pay-grant-entity.auto-mapper.profile';
+import { GetMaternityPayGrantWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-grant/get-maternity-pay-grant-with-relations-query-result.auto-mapper.profile';
+import { MaternityPayGrantDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-grant-document/maternity-pay-grant-document-entity.auto-mapper.profile';
+import { MaternityPayGrantEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-grant-earnings-history/maternity-pay-grant-earnings-history-entity.auto-mapper.profile';
+import { MaternityPayGrantInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-grant-inss-benefit/maternity-pay-grant-inss-benefit-entity.auto-mapper.profile';
+import { MaternityPayGrantLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-grant-legal-proceeding/maternity-pay-grant-legal-proceeding-entity.auto-mapper.profile';
+import { MaternityPayGrantPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-grant-period/maternity-pay-grant-period-entity.auto-mapper.profile';
+import { GetMaternityPayGrantPeriodQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-grant-period/get-maternity-pay-grant-period-query-result.auto-mapper.profile';
+import { MaternityPayGrantPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-grant-period-document/maternity-pay-grant-period-document-entity.auto-mapper.profile';
+import { MaternityPayGrantResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-grant-result/maternity-pay-grant-result-entity.auto-mapper.profile';
 import { GeneralUrbanRetirementGrantEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-grant/general-urban-retirement-grant-entity.auto-mapper.profile';
 import { GetGeneralUrbanRetirementGrantQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-grant/get-general-urban-retirement-grant-query-result.auto-mapper.profile';
 import { GetGeneralUrbanRetirementGrantWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-grant/get-general-urban-retirement-grant-with-relations-query-result.auto-mapper.profile';
@@ -914,6 +924,16 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetSurvivorPensionAnalysisResultQueryResultAutoMapperProfile,
     GetSurvivorPensionAnalysisResultRetirementRuleQueryResultAutoMapperProfile,
     GetSurvivorPensionAnalysisResultDependentPensionAnalysisQueryResultAutoMapperProfile,
+    MaternityPayGrantEntityAutoMapperProfile,
+    GetMaternityPayGrantWithRelationsQueryResultAutoMapperProfile,
+    MaternityPayGrantDocumentEntityAutoMapperProfile,
+    MaternityPayGrantEarningsHistoryEntityAutoMapperProfile,
+    MaternityPayGrantInssBenefitEntityAutoMapperProfile,
+    MaternityPayGrantLegalProceedingEntityAutoMapperProfile,
+    MaternityPayGrantPeriodEntityAutoMapperProfile,
+    GetMaternityPayGrantPeriodQueryResultAutoMapperProfile,
+    MaternityPayGrantPeriodDocumentEntityAutoMapperProfile,
+    MaternityPayGrantResultEntityAutoMapperProfile,
   ],
   exports: [AutoMapperService],
 })

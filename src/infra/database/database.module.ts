@@ -131,6 +131,16 @@ import { GeneralUrbanRetirementDenialPeriodEarningsHistoryTypeormCommandReposito
 import { GeneralUrbanRetirementDenialResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-result/general-urban-retirement-denial-result.typeorm.command.repository';
 import { GeneralUrbanRetirementDenialTimeAcceleratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-time-accelerator/general-urban-retirement-denial-time-accelerator.typeorm.command.repository';
 import { GeneralUrbanRetirementDenialTimeAcceleratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-denial-time-accelerator/general-urban-retirement-denial-time-accelerator.typeorm.query.repository';
+import { MaternityPayGrantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant/maternity-pay-grant.typeorm.command.repository';
+import { MaternityPayGrantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant/maternity-pay-grant.typeorm.query.repository';
+import { MaternityPayGrantDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant-document/maternity-pay-grant-document.typeorm.command.repository';
+import { MaternityPayGrantEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant-earnings-history/maternity-pay-grant-earnings-history.typeorm.command.repository';
+import { MaternityPayGrantInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant-inss-benefit/maternity-pay-grant-inss-benefit.typeorm.command.repository';
+import { MaternityPayGrantLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant-legal-proceeding/maternity-pay-grant-legal-proceeding.typeorm.command.repository';
+import { MaternityPayGrantPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant-period/maternity-pay-grant-period.typeorm.command.repository';
+import { MaternityPayGrantPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant-period/maternity-pay-grant-period.typeorm.query.repository';
+import { MaternityPayGrantPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant-period-document/maternity-pay-grant-period-document.typeorm.command.repository';
+import { MaternityPayGrantResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant-result/maternity-pay-grant-result.typeorm.command.repository';
 import { GeneralUrbanRetirementGrantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant/general-urban-retirement-grant.typeorm.command.repository';
 import { GeneralUrbanRetirementGrantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant/general-urban-retirement-grant.typeorm.query.repository';
 import { GeneralUrbanRetirementGrantAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant-analysis-result/general-urban-retirement-grant-analysis-result.typeorm.command.repository';
@@ -529,6 +539,16 @@ import { GeneralUrbanRetirementDenialPeriodEarningsHistoryCommandRepositoryGatew
 import { GeneralUrbanRetirementDenialResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial-result/command/general-urban-retirement-denial-result.command.repository.gateway';
 import { GeneralUrbanRetirementDenialTimeAcceleratorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial-time-accelerator/command/general-urban-retirement-denial-time-accelerator.command.repository.gateway';
 import { GeneralUrbanRetirementDenialTimeAcceleratorQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial-time-accelerator/query/general-urban-retirement-denial-time-accelerator.query.repository.gateway';
+import { MaternityPayGrantCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant/command/maternity-pay-grant.command.repository.gateway';
+import { MaternityPayGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant/query/maternity-pay-grant.query.repository.gateway';
+import { MaternityPayGrantDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant-document/command/maternity-pay-grant-document.command.repository.gateway';
+import { MaternityPayGrantEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant-earnings-history/command/maternity-pay-grant-earnings-history.command.repository.gateway';
+import { MaternityPayGrantInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant-inss-benefit/command/maternity-pay-grant-inss-benefit.command.repository.gateway';
+import { MaternityPayGrantLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant-legal-proceeding/command/maternity-pay-grant-legal-proceeding.command.repository.gateway';
+import { MaternityPayGrantPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant-period/command/maternity-pay-grant-period.command.repository.gateway';
+import { MaternityPayGrantPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant-period/query/maternity-pay-grant-period.query.repository.gateway';
+import { MaternityPayGrantPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant-period-document/command/maternity-pay-grant-period-document.command.repository.gateway';
+import { MaternityPayGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant-result/command/maternity-pay-grant-result.command.repository.gateway';
 import { GeneralUrbanRetirementGrantCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant/command/general-urban-retirement-grant.command.repository.gateway';
 import { GeneralUrbanRetirementGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant/query/general-urban-retirement-grant.query.repository.gateway';
 import { GeneralUrbanRetirementGrantAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-analysis-result/command/general-urban-retirement-grant-analysis-result.command.repository.gateway';
@@ -2607,6 +2627,46 @@ const classProvider: ClassProvider[] = [
   {
     provide: GeneralUrbanRetirementDenialInssBenefitCommandRepositoryGateway,
     useClass: GeneralUrbanRetirementDenialInssBenefitTypeormCommandRepository,
+  },
+  {
+    provide: MaternityPayGrantCommandRepositoryGateway,
+    useClass: MaternityPayGrantTypeormCommandRepository,
+  },
+  {
+    provide: MaternityPayGrantQueryRepositoryGateway,
+    useClass: MaternityPayGrantTypeormQueryRepository,
+  },
+  {
+    provide: MaternityPayGrantDocumentCommandRepositoryGateway,
+    useClass: MaternityPayGrantDocumentTypeormCommandRepository,
+  },
+  {
+    provide: MaternityPayGrantEarningsHistoryCommandRepositoryGateway,
+    useClass: MaternityPayGrantEarningsHistoryTypeormCommandRepository,
+  },
+  {
+    provide: MaternityPayGrantInssBenefitCommandRepositoryGateway,
+    useClass: MaternityPayGrantInssBenefitTypeormCommandRepository,
+  },
+  {
+    provide: MaternityPayGrantLegalProceedingCommandRepositoryGateway,
+    useClass: MaternityPayGrantLegalProceedingTypeormCommandRepository,
+  },
+  {
+    provide: MaternityPayGrantPeriodCommandRepositoryGateway,
+    useClass: MaternityPayGrantPeriodTypeormCommandRepository,
+  },
+  {
+    provide: MaternityPayGrantPeriodQueryRepositoryGateway,
+    useClass: MaternityPayGrantPeriodTypeormQueryRepository,
+  },
+  {
+    provide: MaternityPayGrantPeriodDocumentCommandRepositoryGateway,
+    useClass: MaternityPayGrantPeriodDocumentTypeormCommandRepository,
+  },
+  {
+    provide: MaternityPayGrantResultCommandRepositoryGateway,
+    useClass: MaternityPayGrantResultTypeormCommandRepository,
   },
 ];
 

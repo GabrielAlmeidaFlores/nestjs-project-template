@@ -20,6 +20,7 @@ import { DisabilityRetirementPlanningModule } from '@module/customer/analysis-to
 import { DisabilityRetirementPlanningGrantModule } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/disability-retirement-planning-grant.module';
 import { GeneralUrbanRetirementModule } from '@module/customer/analysis-tool/module/general-urban-retirement/general-urban-retirement.module';
 import { GeneralUrbanRetirementDenialModule } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/general-urban-retirement-denial.module';
+import { MaternityPayGrantModule } from '@module/customer/analysis-tool/module/maternity-pay-grant/maternity-pay-grant.module';
 import { GeneralUrbanRetirementGrantModule } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/general-urban-retirement-grant.module';
 import { InsuranceQualityAnalysisModule } from '@module/customer/analysis-tool/module/insurance-quality-analysis/insurance-quality-analysis.module';
 import { JudicialCaseAnalysisModule } from '@module/customer/analysis-tool/module/judicial-case-analysis/judicial-case-analysis.module';
@@ -97,6 +98,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     DeathBenefitGrantModule,
     SurvivorPensionAnalysisModule,
     GeneralUrbanRetirementDenialModule,
+    MaternityPayGrantModule,
     TemporaryDisabilityBenefitsGrantModule,
   ],
   controllers: [AnalysisToolController],

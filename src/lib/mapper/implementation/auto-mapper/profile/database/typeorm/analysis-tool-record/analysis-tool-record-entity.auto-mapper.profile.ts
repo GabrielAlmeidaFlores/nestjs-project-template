@@ -12,6 +12,7 @@ import { DisabilityRetirementPlanningGrantTypeormEntity } from '@infra/database/
 import { DisabilityRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning.typeorm.entity';
 import { GeneralUrbanRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis.typeorm.entity';
 import { GeneralUrbanRetirementDenialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial.typeorm.entity';
+import { MaternityPayGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-grant.typeorm.entity';
 import { GeneralUrbanRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant.typeorm.entity';
 import { InsuranceQualityAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis.typeorm.entity';
 import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis.typeorm.entity';
@@ -58,6 +59,7 @@ import { SpecialRetirementGrantEntity } from '@module/customer/analysis-tool/mod
 import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
 import { SurvivorPensionAnalysisEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis/survivor-pension-analysis.entity';
 import { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/temporary-disability-benefits-grant.entity';
+import { MaternityPayGrantEntity } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/maternity-pay-grant.entity';
 
 @Injectable()
 export class AnalysisToolRecordEntityAutoMapperProfile {
@@ -290,6 +292,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const maternityPayGrant =
+        source.maternityPayGrant !== undefined
+          ? this.mapper.map(
+              source.maternityPayGrant,
+              MaternityPayGrantTypeormEntity,
+              MaternityPayGrantEntity,
+            )
+          : null;
+
       return new AnalysisToolRecordEntity({
         id: new AnalysisToolRecordId(source.id),
         code: new AnalysisToolRecordCode(source.code),
@@ -325,6 +336,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         specialRetirementGrant,
         temporaryDisabilityBenefitsGrant,
         survivorPensionAnalysis,
+        maternityPayGrant,
       });
     };
 
@@ -452,6 +464,13 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
               GeneralUrbanRetirementDenialEntity,
               GeneralUrbanRetirementDenialTypeormEntity,
             )
+          : null;
+
+      const maternityPayGrant =
+        source.maternityPayGrant !== null
+          ? ({
+              id: source.maternityPayGrant.id.toString(),
+            } as MaternityPayGrantTypeormEntity)
           : null;
 
       const perCapitaIncomeForBpcAnalysis = this.mapper.map(
@@ -582,6 +601,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         survivorPensionAnalysis,
         analysisToolClient,
         generalUrbanRetirementDenial,
+        maternityPayGrant,
         createdBy: {
           id: source.createdBy.toString(),
         } as OrganizationMemberTypeormEntity,
