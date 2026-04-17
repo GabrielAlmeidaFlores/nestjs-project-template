@@ -7,14 +7,13 @@ import { BaseTypeormCommandRepository } from '@infra/database/implementation/typ
 import { AccidentBenefitRejectionWorkPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection-work-period-earnings-history.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { AccidentBenefitRejectionWorkPeriodEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/repository/accident-benefit-rejection-work-period-earnings-history/command/accident-benefit-rejection-work-period-earnings-history.command.repository.gateway';
-import { AccidentBenefitRejectionWorkPeriodId } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection-work-period/value-object/accident-benefit-rejection-work-period-id.value-object';
 import { AccidentBenefitRejectionWorkPeriodEarningsHistoryEntity } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection-work-period-earnings-history/accident-benefit-rejection-work-period-earnings-history.entity';
+import { AccidentBenefitRejectionWorkPeriodId } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection-work-period/value-object/accident-benefit-rejection-work-period-id.value-object';
 
 @Injectable()
 export class AccidentBenefitRejectionWorkPeriodEarningsHistoryTypeormCommandRepository
   extends BaseTypeormCommandRepository<AccidentBenefitRejectionWorkPeriodEarningsHistoryTypeormEntity>
-  implements
-    AccidentBenefitRejectionWorkPeriodEarningsHistoryCommandRepositoryGateway
+  implements AccidentBenefitRejectionWorkPeriodEarningsHistoryCommandRepositoryGateway
 {
   protected readonly _type =
     AccidentBenefitRejectionWorkPeriodEarningsHistoryTypeormCommandRepository.name;
