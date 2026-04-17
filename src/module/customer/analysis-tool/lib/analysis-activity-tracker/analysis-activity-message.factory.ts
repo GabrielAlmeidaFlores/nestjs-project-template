@@ -58,6 +58,8 @@ export class AnalysisActivityMessageFactory {
       'Indeferimento de aposentadoria rural ou híbrida',
     [AnalysisToolRecordTypeEnum.SURVIVOR_PENSION_ANALYSIS]:
       'Análise de pensão por morte',
+    [AnalysisToolRecordTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL]:
+      'Indeferimento de aposentadoria urbana geral',
   };
 
   private static readonly actionLabelMap: Record<

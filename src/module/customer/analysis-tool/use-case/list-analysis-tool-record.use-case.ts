@@ -103,7 +103,9 @@ export class ListAnalysisToolRecordUseCase {
             analysisToolRecord.perCapitaIncomeForBpcAnalysis ??
             analysisToolRecord.insuranceQualityAnalysis ??
             analysisToolRecord.disabilityRetirementPlanning ??
-            analysisToolRecord.audienceQuestionGenerator;
+            analysisToolRecord.audienceQuestionGenerator ??
+            analysisToolRecord.survivorPensionAnalysis ??
+            analysisToolRecord.specialRetirementGrant;
 
           const analysisId =
             analysis?.id ??

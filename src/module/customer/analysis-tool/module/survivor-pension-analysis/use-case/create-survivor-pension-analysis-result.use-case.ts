@@ -3,7 +3,11 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
+import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
@@ -13,6 +17,7 @@ import { SurvivorPensionAnalysisResultCommandRepositoryGateway } from '@module/c
 import { SurvivorPensionAnalysisResultQueryRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-result/query/survivor-pension-analysis-result.query.repository.gateway';
 import { SurvivorPensionAnalysisResultDependentPensionAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-result-dependent-pension-analysis/command/survivor-pension-analysis-result-dependent-pension-analysis.command.repository.gateway';
 import { SurvivorPensionAnalysisResultRetirementRuleCommandRepositoryGateway } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-result-retirement-rule/command/survivor-pension-analysis-result-retirement-rule.command.repository.gateway';
+import { SurvivorPensionAnalysisEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis/survivor-pension-analysis.entity';
 import { SurvivorPensionAnalysisId } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis/value-object/survivor-pension-analysis-id/survivor-pension-analysis-id.value-object';
 import { SurvivorPensionAnalysisResultEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-result/survivor-pension-analysis-result.entity';
 import { SurvivorPensionAnalysisResultDependentPensionAnalysisEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-result-dependent-pension-analysis/survivor-pension-analysis-result-dependent-pension-analysis.entity';
@@ -65,6 +70,8 @@ export class CreateSurvivorPensionAnalysisResultUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(AnalysisToolRecordQueryRepositoryGateway)
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordCommandRepositoryGateway)
+    private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
     @Inject(SurvivorPensionAnalysisQueryRepositoryGateway)
     private readonly survivorPensionAnalysisQueryRepositoryGateway: SurvivorPensionAnalysisQueryRepositoryGateway,
     @Inject(SurvivorPensionAnalysisResultCommandRepositoryGateway)
@@ -104,12 +111,13 @@ export class CreateSurvivorPensionAnalysisResultUseCase {
       throw new OrganizationMemberNotFoundError();
     }
 
-    await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsBySurvivorPensionAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
-      survivorPensionAnalysisId,
-      organizationSessionData.organizationId,
-      sessionData.authIdentityId,
-      SurvivorPensionAnalysisNotFoundError,
-    );
+    const analysisToolRecordQueryResult =
+      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsBySurvivorPensionAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        survivorPensionAnalysisId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+        SurvivorPensionAnalysisNotFoundError,
+      );
 
     const [spaData, prompts] = await Promise.all([
       this.survivorPensionAnalysisQueryRepositoryGateway.findOneByIdOrFail(
@@ -277,12 +285,40 @@ export class CreateSurvivorPensionAnalysisResultUseCase {
       ),
     );
 
+    const analysisToolClient = new AnalysisToolClientEntity({
+      ...analysisToolRecordQueryResult.analysisToolClient,
+      createdBy: analysisToolRecordQueryResult.analysisToolClient.createdBy.id,
+      updatedBy: analysisToolRecordQueryResult.analysisToolClient.updatedBy.id,
+    });
+
+    const survivorPensionAnalysisEntity = new SurvivorPensionAnalysisEntity({
+      id: survivorPensionAnalysisId,
+    });
+
+    const analysisToolRecord = new AnalysisToolRecordEntity({
+      id: analysisToolRecordQueryResult.id,
+      code: analysisToolRecordQueryResult.code,
+      type: analysisToolRecordQueryResult.type,
+      survivorPensionAnalysis: survivorPensionAnalysisEntity,
+      analysisToolClient,
+      status: AnalysisStatusEnum.COMPLETED,
+      createdBy: analysisToolRecordQueryResult.createdBy.id,
+      updatedBy: organizationMember.id,
+    });
+
+    const updateAnalysisToolRecordTransaction =
+      this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecord(
+        analysisToolRecord.id,
+        analysisToolRecord,
+      );
+
     const txn = await this.baseTransactionRepositoryGateway.execute([
       consumeCreditTransaction,
       resultTransaction,
       ...deleteOldTransactions,
       ...rrTransactions,
       ...dpaTransactions,
+      updateAnalysisToolRecordTransaction,
     ]);
 
     await txn.commit();

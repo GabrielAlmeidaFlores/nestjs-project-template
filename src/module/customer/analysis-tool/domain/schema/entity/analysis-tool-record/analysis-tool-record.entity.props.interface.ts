@@ -13,6 +13,7 @@ import type { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/
 import type { DisabilityRetirementPlanningEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/disability-retirement-planning.entity';
 import type { DisabilityRetirementPlanningGrantEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant/disability-retirement-planning-grant.entity';
 import type { GeneralUrbanRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/general-urban-retirement-analysis-entity';
+import type { GeneralUrbanRetirementDenialEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/general-urban-retirement-denial.entity';
 import type { GeneralUrbanRetirementGrantEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/general-urban-retirement-grant.entity';
 import type { InsuranceQualityAnalysisEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/insurance-quality-analysis.entity';
 import type { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
@@ -56,6 +57,7 @@ export interface AnalysisToolRecordEntityPropsInterface extends BaseEntityPropsI
   temporaryDisabilityBenefitsGrant?: TemporaryDisabilityBenefitsGrantEntity | null;
   ruralOrHybridRetirementRejection?: RuralOrHybridRetirementRejectionEntity | null;
   survivorPensionAnalysis?: SurvivorPensionAnalysisEntity | null;
+  generalUrbanRetirementDenial?: GeneralUrbanRetirementDenialEntity | null;
   specialCategoryRetirementAnalysis?: SpecialCategoryRetirementAnalysisEntity | null;
   deathBenefitGrant?: DeathBenefitGrantEntity | null;
   specialRetirementGrant?: SpecialRetirementGrantEntity | null;
