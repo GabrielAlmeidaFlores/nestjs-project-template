@@ -38,6 +38,8 @@ export class MaternityPayGrantEntityAutoMapperProfile {
         triggeringEvent: source.triggeringEvent,
         triggeringEventDate: source.triggeringEventDate,
         cnisDocument: source.cnisDocument,
+        myInssPassword: source.myInssPassword,
+        isTriggeringEventDateValid: source.isTriggeringEventDateValid,
         isCurrentlyUnemployed: source.isCurrentlyUnemployed,
         isUnemployedAtTriggeringEventDate:
           source.isUnemployedAtTriggeringEventDate,
@@ -78,6 +80,8 @@ export class MaternityPayGrantEntityAutoMapperProfile {
         triggeringEvent: source.triggeringEvent,
         triggeringEventDate: source.triggeringEventDate,
         cnisDocument: source.cnisDocument,
+        myInssPassword: null,
+        isTriggeringEventDateValid: source.isTriggeringEventDateValid,
         isCurrentlyUnemployed: source.isCurrentlyUnemployed,
         isUnemployedAtTriggeringEventDate:
           source.isUnemployedAtTriggeringEventDate,
@@ -85,7 +89,6 @@ export class MaternityPayGrantEntityAutoMapperProfile {
         ruralPeriodStartDate: source.ruralPeriodStartDate,
         ruralPeriodEndDate: source.ruralPeriodEndDate,
         ruralPeriodDocumentDescription: source.ruralPeriodDocumentDescription,
-        myInssPassword: null,
         maternityPayGrantResult,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,

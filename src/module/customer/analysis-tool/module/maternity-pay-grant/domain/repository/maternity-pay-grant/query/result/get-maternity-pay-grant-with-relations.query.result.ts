@@ -18,6 +18,7 @@ export class GetMaternityPayGrantWithRelationsQueryResult extends BaseBuildableO
   public readonly triggeringEvent: MaternityPayGrantTriggeringEventEnum | null;
   public readonly triggeringEventDate: Date | null;
   public readonly cnisDocument: string | null;
+  public readonly isTriggeringEventDateValid: boolean | null;
   public readonly isCurrentlyUnemployed: boolean | null;
   public readonly isUnemployedAtTriggeringEventDate: boolean | null;
   public readonly isRuralInsured: boolean | null;

@@ -1,5 +1,3 @@
-import { CreateMaternityPayGrantRequestDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/request/create-maternity-pay-grant.request.dto';
-import { CreateMaternityPayGrantResponseDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/response/create-maternity-pay-grant.response.dto';
 import {
   Body,
   HttpStatus,
@@ -14,15 +12,17 @@ import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/exp
 import { MaternityPayGrantId } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/value-object/maternity-pay-grant-id.value-object';
 import { MaternityPayGrantPeriodId } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-period/value-object/maternity-pay-grant-period-id.value-object';
 import { CreateMaternityPayGrantPeriodRequestDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/request/create-maternity-pay-grant-period.request.dto';
+import { CreateMaternityPayGrantRequestDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/request/create-maternity-pay-grant.request.dto';
 import { UpdateMaternityPayGrantPeriodRequestDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/request/update-maternity-pay-grant-period.request.dto';
-import { UpdateMaternityPayGrantRequestDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/request/update-maternity-pay-grant.request.dto';
+import { UpdateMaternityPayGrantRequestDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/request/update-maternity-pay-grant.request.dto';import { UploadMaternityPayGrantDocumentsRequestDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/request/upload-maternity-pay-grant-documents.request.dto';import { ValidateTriggeringEventDateRequestDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/request/validate-triggering-event-date.request.dto';
 import { CreateMaternityPayGrantFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/response/create-maternity-pay-grant-first-analysis.response.dto';
 import { CreateMaternityPayGrantPeriodResponseDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/response/create-maternity-pay-grant-period.response.dto';
 import { CreateMaternityPayGrantResultResponseDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/response/create-maternity-pay-grant-result.response.dto';
+import { CreateMaternityPayGrantResponseDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/response/create-maternity-pay-grant.response.dto';
 import { DeleteMaternityPayGrantPeriodResponseDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/response/delete-maternity-pay-grant-period.response.dto';
 import { GetMaternityPayGrantResponseDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/response/get-maternity-pay-grant.response.dto';
 import { UpdateMaternityPayGrantPeriodResponseDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/response/update-maternity-pay-grant-period.response.dto';
-import { UpdateMaternityPayGrantResponseDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/response/update-maternity-pay-grant.response.dto';
+import { UpdateMaternityPayGrantResponseDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/response/update-maternity-pay-grant.response.dto';import { UploadMaternityPayGrantDocumentsResponseDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/response/upload-maternity-pay-grant-documents.response.dto';import { ValidateTriggeringEventDateResponseDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/response/validate-triggering-event-date.response.dto';
 import { CreateMaternityPayGrantFirstAnalysisUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/create-maternity-pay-grant-first-analysis.use-case';
 import { CreateMaternityPayGrantPeriodUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/create-maternity-pay-grant-period.use-case';
 import { CreateMaternityPayGrantResultUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/create-maternity-pay-grant-result.use-case';
@@ -33,6 +33,8 @@ import { DownloadMaternityPayGrantSimplifiedAnalysisUseCase } from '@module/cust
 import { GetMaternityPayGrantUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/get-maternity-pay-grant.use-case';
 import { UpdateMaternityPayGrantPeriodUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/update-maternity-pay-grant-period.use-case';
 import { UpdateMaternityPayGrantUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/update-maternity-pay-grant.use-case';
+import { UploadMaternityPayGrantDocumentsUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/upload-maternity-pay-grant-documents.use-case';
+import { ValidateTriggeringEventDateUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/validate-triggering-event-date.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
@@ -59,7 +61,30 @@ export class MaternityPayGrantController {
     private readonly createMaternityPayGrantResultUseCase: CreateMaternityPayGrantResultUseCase,
     private readonly downloadMaternityPayGrantCompleteAnalysisUseCase: DownloadMaternityPayGrantCompleteAnalysisUseCase,
     private readonly downloadMaternityPayGrantSimplifiedAnalysisUseCase: DownloadMaternityPayGrantSimplifiedAnalysisUseCase,
+    private readonly validateTriggeringEventDateUseCase: ValidateTriggeringEventDateUseCase,
+    private readonly uploadMaternityPayGrantDocumentsUseCase: UploadMaternityPayGrantDocumentsUseCase,
   ) {}
+
+  @BuildEndpointSpecification({
+    summary: 'Validar data do fator gerador',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'validate-triggering-event-date',
+      method: RequestMethod.GET,
+    },
+    tag: ['salario-maternidade'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Validação realizada com sucesso.',
+      type: ValidateTriggeringEventDateResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public validateTriggeringEventDate(
+    @Query() dto: ValidateTriggeringEventDateRequestDto,
+  ): ValidateTriggeringEventDateResponseDto {
+    return this.validateTriggeringEventDateUseCase.execute(dto);
+  }
 
   @BuildEndpointSpecification({
     summary: 'Criar análise de salário-maternidade',
@@ -344,6 +369,38 @@ export class MaternityPayGrantController {
       organizationSessionData,
       maternityPayGrantId,
       format,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Enviar documentos da análise de salário-maternidade',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':id/documents',
+      method: RequestMethod.PATCH,
+      type: UploadMaternityPayGrantDocumentsRequestDto,
+    },
+    tag: ['salario-maternidade'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Documentos enviados com sucesso.',
+      type: UploadMaternityPayGrantDocumentsResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async uploadDocuments(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('id', new ParseValueObjectPipe(MaternityPayGrantId))
+    maternityPayGrantId: MaternityPayGrantId,
+    @Body() dto: UploadMaternityPayGrantDocumentsRequestDto,
+  ): Promise<UploadMaternityPayGrantDocumentsResponseDto> {
+    return await this.uploadMaternityPayGrantDocumentsUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      maternityPayGrantId,
+      dto,
     );
   }
 }

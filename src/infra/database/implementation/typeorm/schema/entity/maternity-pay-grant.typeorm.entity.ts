@@ -64,6 +64,13 @@ export class MaternityPayGrantTypeormEntity extends BaseTypeormEntity {
   public myInssPassword: string | null;
 
   @Column({
+    name: 'is_triggering_event_date_valid',
+    type: 'boolean',
+    nullable: true,
+  })
+  public isTriggeringEventDateValid: boolean | null;
+
+  @Column({
     name: 'is_currently_unemployed',
     type: 'boolean',
     nullable: true,

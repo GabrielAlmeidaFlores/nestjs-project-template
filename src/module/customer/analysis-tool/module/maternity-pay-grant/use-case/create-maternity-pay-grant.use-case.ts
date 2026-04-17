@@ -1,5 +1,3 @@
-import { CreateMaternityPayGrantRequestDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/request/create-maternity-pay-grant.request.dto';
-import { CreateMaternityPayGrantResponseDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/response/create-maternity-pay-grant.response.dto';
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
@@ -20,6 +18,8 @@ import { MaternityPayGrantLegalProceedingCommandRepositoryGateway } from '@modul
 import { MaternityPayGrantEntity } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/maternity-pay-grant.entity';
 import { MaternityPayGrantInssBenefitEntity } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-inss-benefit/maternity-pay-grant-inss-benefit.entity';
 import { MaternityPayGrantLegalProceedingEntity } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-legal-proceeding/maternity-pay-grant-legal-proceeding.entity';
+import { CreateMaternityPayGrantRequestDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/request/create-maternity-pay-grant.request.dto';
+import { CreateMaternityPayGrantResponseDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/response/create-maternity-pay-grant.response.dto';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -73,14 +73,12 @@ export class CreateMaternityPayGrantUseCase {
       category: dto.category ?? null,
       triggeringEvent: dto.triggeringEvent ?? null,
       triggeringEventDate: dto.triggeringEventDate ?? null,
+      isTriggeringEventDateValid:
+        dto.triggeringEventDate !== undefined
+          ? this.isTriggeringEventDateWithinFiveYears(dto.triggeringEventDate)
+          : null,
+      myInssPassword: dto.myInssPassword ?? null,
       isCurrentlyUnemployed: dto.isCurrentlyUnemployed ?? null,
-      isUnemployedAtTriggeringEventDate:
-        dto.isUnemployedAtTriggeringEventDate ?? null,
-      isRuralInsured: dto.isRuralInsured ?? null,
-      ruralPeriodStartDate: dto.ruralPeriodStartDate ?? null,
-      ruralPeriodEndDate: dto.ruralPeriodEndDate ?? null,
-      ruralPeriodDocumentDescription:
-        dto.ruralPeriodDocumentDescription ?? null,
     });
 
     const inssBenefitEntities =
@@ -185,5 +183,14 @@ export class CreateMaternityPayGrantUseCase {
     ]);
 
     await transaction.commit();
+  }
+
+  private isTriggeringEventDateWithinFiveYears(date: Date): boolean {
+    const maxYears = 5;
+    const today = new Date();
+    const limitDate = new Date(today);
+    limitDate.setFullYear(today.getFullYear() - maxYears);
+
+    return date >= limitDate && date <= today;
   }
 }

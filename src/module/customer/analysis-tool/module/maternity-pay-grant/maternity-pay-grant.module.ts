@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { BucketModule } from '@infra/bucket/bucket.module';
 import { DatabaseModule } from '@infra/database/database.module';
 import { CnisAnalyzerModule } from '@lib/cnis-analyzer/cnis-analyzer.module';
+import { CnisProcessorModule } from '@lib/cnis-processor/cnis-processor.module';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
@@ -17,6 +18,8 @@ import { DownloadMaternityPayGrantSimplifiedAnalysisUseCase } from '@module/cust
 import { GetMaternityPayGrantUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/get-maternity-pay-grant.use-case';
 import { UpdateMaternityPayGrantPeriodUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/update-maternity-pay-grant-period.use-case';
 import { UpdateMaternityPayGrantUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/update-maternity-pay-grant.use-case';
+import { UploadMaternityPayGrantDocumentsUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/upload-maternity-pay-grant-documents.use-case';
+import { ValidateTriggeringEventDateUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/validate-triggering-event-date.use-case';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
 import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
@@ -34,6 +37,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     OrganizationCreditModule,
     PaymentPlanModule,
     CnisAnalyzerModule,
+    CnisProcessorModule,
   ],
   controllers: [MaternityPayGrantController],
   providers: [
@@ -47,6 +51,8 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateMaternityPayGrantResultUseCase,
     DownloadMaternityPayGrantCompleteAnalysisUseCase,
     DownloadMaternityPayGrantSimplifiedAnalysisUseCase,
+    ValidateTriggeringEventDateUseCase,
+    UploadMaternityPayGrantDocumentsUseCase,
   ],
 })
 export class MaternityPayGrantModule {
