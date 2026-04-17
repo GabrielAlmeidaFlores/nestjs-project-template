@@ -1746,6 +1746,89 @@ AnÃ¡lise processada do CNIS:
     );
   }
 
+  public async getMaternityPayGrantFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson = true,
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize cálculos como valores salariais, use estritamente os fornecidos.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Para cada item de \`periods\`, use prioritariamente os dados estruturados já enviados nos arquivos do prompt; não invente valores.
+- O campo \`contributionAverage\` representa a média das remunerações do período já informada nos dados estruturados; quando esse valor estiver disponível, reutilize exatamente esse valor e não retorne \`0\`.
+- Quando o valor de \`contributionAverage\` não estiver presente nos dados estruturados do período, omita esse campo em vez de retornar \`0\`.
+- O campo \`belowMinimumContributions\` deve conter somente as competências cujos valores ficaram abaixo do mínimo.
+- Quando não houver competências abaixo do mínimo, retorne \`belowMinimumContributions: []\`.
+- O campo \`competenceBelowTheMinimum\` deve ser \`true\` somente quando houver ao menos um item em \`belowMinimumContributions\`; caso contrário, deve ser \`false\`.
+- Analise a qualidade de segurado da requerente com base nos períodos e na data do evento gerador (parto/adoção/aborto).
+- Analise o cumprimento da carência necessária para o salário-maternidade.
+- Analise a elegibilidade para o benefício com base na categoria de segurada.
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: asJson
+          ? ResponseConfigInputModel.build({
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema: this.getMaternityPayGrantFirstAnalysisJsonSchema(),
+            })
+          : null,
+      }),
+    );
+  }
+
+  public async getMaternityPayGrantResultAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- O campo \`completeAnalysisDownload\` deve conter HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.
+- O campo \`analysisDescription\` deve conter um texto explicativo completo sobre o resultado da análise e as perspectivas do caso.
+- Não incluir tag <br> na resposta no campo \`analysisDescription\`.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: this.getMaternityPayGrantResultAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getMaternityPayGrantSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
   private getSurvivorPensionAnalysisResultJsonSchema(): object {
     return {
       type: 'object',
@@ -4568,6 +4651,230 @@ AnÃ¡lise processada do CNIS:
         'applicableRules',
         'dependentAnalysis',
         'analysisDescription',
+      ],
+    };
+  }
+
+  private getMaternityPayGrantFirstAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        insuredQualityAnalysis: {
+          type: 'object',
+          description:
+            'Análise da qualidade de segurada na data do evento gerador',
+          properties: {
+            isConfirmed: {
+              type: 'boolean',
+              description:
+                'Indica se a qualidade de segurada foi confirmada na data do evento gerador',
+            },
+            description: {
+              type: 'string',
+              description:
+                'Descrição detalhada da análise da qualidade de segurada',
+            },
+          },
+          required: ['isConfirmed', 'description'],
+        },
+        carenciaAnalysis: {
+          type: 'object',
+          description:
+            'Análise do cumprimento da carência para salário-maternidade',
+          properties: {
+            isConfirmed: {
+              type: 'boolean',
+              description: 'Indica se a carência necessária foi cumprida',
+            },
+            description: {
+              type: 'string',
+              description: 'Descrição detalhada da análise da carência',
+            },
+          },
+          required: ['isConfirmed', 'description'],
+        },
+        benefitEligibilityAnalysis: {
+          type: 'object',
+          description: 'Análise da elegibilidade para o salário-maternidade',
+          properties: {
+            isConfirmed: {
+              type: 'boolean',
+              description: 'Indica se há direito ao salário-maternidade',
+            },
+            description: {
+              type: 'string',
+              description:
+                'Descrição detalhada da elegibilidade para o benefício',
+            },
+          },
+          required: ['isConfirmed', 'description'],
+        },
+        periods: {
+          type: 'array',
+          description: 'Lista de períodos contributivos analisados',
+          items: {
+            type: 'object',
+            properties: {
+              name: {
+                type: 'string',
+                description: 'Nome ou identificação do período',
+              },
+              startDate: {
+                type: 'string',
+                format: 'date',
+                description: 'Data de início do período no formato YYYY-MM-DD',
+              },
+              endDate: {
+                type: 'string',
+                format: 'date',
+                description: 'Data de término do período no formato YYYY-MM-DD',
+              },
+              category: {
+                type: 'string',
+                description: 'Categoria do segurado para este período',
+              },
+              gracePeriod: {
+                type: 'number',
+                description: 'Período de graça calculado em meses',
+              },
+              status: {
+                type: 'boolean',
+                description: 'Indica se o período é válido para contagem',
+              },
+              isPendency: {
+                type: 'boolean',
+                description: 'Indica se o período possui pendências',
+              },
+              competenceBelowTheMinimum: {
+                type: 'boolean',
+                description:
+                  'Indica se há competências abaixo do salário mínimo neste período',
+              },
+              contributionAverage: {
+                type: 'string',
+                description:
+                  'Média das contribuições do período quando disponível nos dados estruturados',
+              },
+              belowMinimumContributions: {
+                type: 'array',
+                description:
+                  'Lista de competências com contribuições abaixo do mínimo',
+                items: {
+                  type: 'object',
+                  properties: {
+                    contributionDate: {
+                      type: 'string',
+                      format: 'date',
+                      description: 'Data da competência no formato YYYY-MM-DD',
+                    },
+                    contributionValue: {
+                      type: 'number',
+                      description: 'Valor da contribuição abaixo do mínimo',
+                    },
+                  },
+                  required: ['contributionDate', 'contributionValue'],
+                },
+              },
+              reasonPendency: {
+                type: 'string',
+                description: 'Motivo da pendência quando isPendency é true',
+              },
+              bondOrigin: {
+                type: 'string',
+                description: 'Origem do vínculo previdenciário',
+              },
+              impact: {
+                type: 'string',
+                description:
+                  'Impacto deste período na elegibilidade do benefício',
+              },
+              complementViaMyInss: {
+                type: 'boolean',
+                description:
+                  'Indica se há possibilidade de complementação via Meu INSS',
+              },
+            },
+            required: [
+              'name',
+              'startDate',
+              'endDate',
+              'category',
+              'gracePeriod',
+              'status',
+              'isPendency',
+              'competenceBelowTheMinimum',
+              'belowMinimumContributions',
+            ],
+          },
+        },
+      },
+      required: [
+        'insuredQualityAnalysis',
+        'carenciaAnalysis',
+        'benefitEligibilityAnalysis',
+        'periods',
+      ],
+    };
+  }
+
+  private getMaternityPayGrantResultAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        eligibilityStatus: {
+          type: 'string',
+          enum: ['ELIGIBLE', 'NOT_ELIGIBLE', 'ELIGIBLE_WITH_PENDENCIES'],
+          description: 'Status de elegibilidade para o salário-maternidade',
+        },
+        insuredQualityStatus: {
+          type: 'string',
+          enum: ['CONFIRMED', 'NOT_CONFIRMED', 'CONDITIONAL'],
+          description: 'Status da qualidade de segurada',
+        },
+        applicableRules: {
+          type: 'array',
+          description: 'Regras aplicáveis ao caso de salário-maternidade',
+          items: {
+            type: 'object',
+            properties: {
+              ruleName: {
+                type: 'string',
+                description: 'Nome da regra ou critério analisado',
+              },
+              result: {
+                type: 'string',
+                description: 'Resultado da análise desta regra',
+              },
+              estimatedBenefit: {
+                type: 'string',
+                description:
+                  'Valor estimado do benefício quando aplicável. Null se não calculável.',
+              },
+              detailedAnalysis: {
+                type: 'string',
+                description: 'Análise detalhada desta regra',
+              },
+            },
+            required: ['ruleName', 'result', 'detailedAnalysis'],
+          },
+        },
+        analysisDescription: {
+          type: 'string',
+          description:
+            'Texto explicativo completo sobre o resultado da análise e as perspectivas do caso',
+        },
+        completeAnalysisDownload: {
+          type: 'string',
+          description:
+            'Conteúdo HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.',
+        },
+      },
+      required: [
+        'eligibilityStatus',
+        'insuredQualityStatus',
+        'applicableRules',
+        'analysisDescription',
+        'completeAnalysisDownload',
       ],
     };
   }

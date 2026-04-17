@@ -58,6 +58,8 @@ export class AnalysisActivityMessageFactory {
       'Análise de pensão por morte',
     [AnalysisToolRecordTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL]:
       'Indeferimento de aposentadoria urbana geral',
+    [AnalysisToolRecordTypeEnum.MATERNITY_PAY_GRANT]:
+      'Concessão de salário maternidade',
   };
 
   private static readonly actionLabelMap: Record<
