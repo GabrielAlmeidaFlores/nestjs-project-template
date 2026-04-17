@@ -177,6 +177,7 @@ export class GetMaternityPayGrantWithRelationsQueryResultAutoMapperProfile {
         triggeringEvent: source.triggeringEvent,
         triggeringEventDate: source.triggeringEventDate,
         cnisDocument: source.cnisDocument,
+        isTriggeringEventDateValid: source.isTriggeringEventDateValid,
         isCurrentlyUnemployed: source.isCurrentlyUnemployed,
         isUnemployedAtTriggeringEventDate:
           source.isUnemployedAtTriggeringEventDate,
@@ -225,6 +226,8 @@ export class GetMaternityPayGrantWithRelationsQueryResultAutoMapperProfile {
         triggeringEvent: source.triggeringEvent,
         triggeringEventDate: source.triggeringEventDate,
         cnisDocument: source.cnisDocument,
+        myInssPassword: null,
+        isTriggeringEventDateValid: source.isTriggeringEventDateValid,
         isCurrentlyUnemployed: source.isCurrentlyUnemployed,
         isUnemployedAtTriggeringEventDate:
           source.isUnemployedAtTriggeringEventDate,
@@ -232,7 +235,6 @@ export class GetMaternityPayGrantWithRelationsQueryResultAutoMapperProfile {
         ruralPeriodStartDate: source.ruralPeriodStartDate,
         ruralPeriodEndDate: source.ruralPeriodEndDate,
         ruralPeriodDocumentDescription: source.ruralPeriodDocumentDescription,
-        myInssPassword: null,
         maternityPayGrantResult,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,

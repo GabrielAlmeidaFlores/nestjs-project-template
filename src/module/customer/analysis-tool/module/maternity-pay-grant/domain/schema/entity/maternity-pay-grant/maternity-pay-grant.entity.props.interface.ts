@@ -10,6 +10,8 @@ export interface MaternityPayGrantEntityPropsInterface extends BaseEntityPropsIn
   triggeringEvent?: MaternityPayGrantTriggeringEventEnum | null;
   triggeringEventDate?: Date | null;
   cnisDocument?: string | null;
+  myInssPassword?: string | null;
+  isTriggeringEventDateValid?: boolean | null;
   isCurrentlyUnemployed?: boolean | null;
   isUnemployedAtTriggeringEventDate?: boolean | null;
   isRuralInsured?: boolean | null;

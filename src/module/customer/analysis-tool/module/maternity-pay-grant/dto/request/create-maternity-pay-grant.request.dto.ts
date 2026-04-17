@@ -31,20 +31,8 @@ export class CreateMaternityPayGrantRequestDto extends BaseBuildableDtoObject {
   @RequestDtoBooleanProperty({ required: false })
   public isCurrentlyUnemployed?: boolean;
 
-  @RequestDtoBooleanProperty({ required: false })
-  public isUnemployedAtTriggeringEventDate?: boolean;
-
-  @RequestDtoBooleanProperty({ required: false })
-  public isRuralInsured?: boolean;
-
-  @RequestDtoDateProperty({ required: false })
-  public ruralPeriodStartDate?: Date;
-
-  @RequestDtoDateProperty({ required: false })
-  public ruralPeriodEndDate?: Date;
-
   @RequestDtoStringProperty({ required: false })
-  public ruralPeriodDocumentDescription?: string;
+  public myInssPassword?: string;
 
   @RequestDtoStringProperty({ required: false, isArray: true })
   public inssBenefitNumber?: string[];

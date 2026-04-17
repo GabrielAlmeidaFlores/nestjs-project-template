@@ -12,6 +12,8 @@ export class MaternityPayGrantEntity extends BaseEntity<MaternityPayGrantId> {
   public readonly triggeringEvent: MaternityPayGrantTriggeringEventEnum | null;
   public readonly triggeringEventDate: Date | null;
   public readonly cnisDocument: string | null;
+  public readonly myInssPassword: string | null;
+  public readonly isTriggeringEventDateValid: boolean | null;
   public readonly isCurrentlyUnemployed: boolean | null;
   public readonly isUnemployedAtTriggeringEventDate: boolean | null;
   public readonly isRuralInsured: boolean | null;
@@ -29,6 +31,8 @@ export class MaternityPayGrantEntity extends BaseEntity<MaternityPayGrantId> {
     this.triggeringEvent = props.triggeringEvent ?? null;
     this.triggeringEventDate = props.triggeringEventDate ?? null;
     this.cnisDocument = props.cnisDocument ?? null;
+    this.myInssPassword = props.myInssPassword ?? null;
+    this.isTriggeringEventDateValid = props.isTriggeringEventDateValid ?? null;
     this.isCurrentlyUnemployed = props.isCurrentlyUnemployed ?? null;
     this.isUnemployedAtTriggeringEventDate =
       props.isUnemployedAtTriggeringEventDate ?? null;
