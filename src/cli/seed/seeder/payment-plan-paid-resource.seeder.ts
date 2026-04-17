@@ -1404,8 +1404,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       title: 'INDEFERIMENTO APOSENTADORIA PCD - ANÁLISE DE PPP',
       description:
         'Análise do Perfil Profissiográfico Previdenciário (PPP) com IA para identificação e estruturação de períodos contributivos no contexto de indeferimento de aposentadoria da pessoa com deficiência. Extrai e organiza os dados do PPP em períodos prontos para inserção na análise, com categoria, status de deficiência, média de contribuição e origem do vínculo.',
-})
-    new PaymentPlanPaidResourceEntity({      
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('a1c2e3f4-b5d6-4a7b-8c9d-0e1f2a3b4c5d'),
       resource:
         PaymentPlanPaidResourceTypeEnum.BPC_ELDERLY_ANALYSIS_COMPLETE_ANALYSIS,
