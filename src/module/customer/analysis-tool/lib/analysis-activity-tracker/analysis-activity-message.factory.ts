@@ -58,6 +58,8 @@ export class AnalysisActivityMessageFactory {
       'Análise de pensão por morte',
     [AnalysisToolRecordTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL]:
       'Indeferimento de aposentadoria urbana geral',
+    [AnalysisToolRecordTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION]:
+      'Indeferimento de aposentadoria para deficiente',
   };
 
   private static readonly actionLabelMap: Record<
