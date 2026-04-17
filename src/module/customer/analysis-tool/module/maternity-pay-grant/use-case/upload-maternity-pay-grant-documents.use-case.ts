@@ -24,8 +24,8 @@ import { UploadMaternityPayGrantDocumentsRequestDto } from '@module/customer/ana
 import { UploadMaternityPayGrantDocumentsResponseDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/response/upload-maternity-pay-grant-documents.response.dto';
 import { MaternityPayGrantNotFoundError } from '@module/customer/analysis-tool/module/maternity-pay-grant/error/maternity-pay-grant-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
-import { Base64FileRequestDto } from '@shared/api/util/dto/request/base64-file.request.dto';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { Base64FileRequestDto } from '@shared/api/util/dto/request/base64-file.request.dto';
 import { FileModel } from '@shared/system/model/generic/file.model';
 
 @Injectable()
@@ -76,7 +76,8 @@ export class UploadMaternityPayGrantDocumentsUseCase {
       );
 
     const cnisBuffer = dto.cnis.base64.decodeToBuffer();
-    const cnisModel = await this.cnisProcessorGateway.parseCnisDocument(cnisBuffer);
+    const cnisModel =
+      await this.cnisProcessorGateway.parseCnisDocument(cnisBuffer);
 
     const [cnisFileName, documentFileNames, ruralDocumentFileNames] =
       await Promise.all([
