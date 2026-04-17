@@ -105,19 +105,28 @@ export class AnalyzeDisabilityRetirementPlanningRejectionTimeAcceleratorUseCase 
             AnalyzeDisabilityRetirementPlanningRejectionTimeAcceleratorItemResponseDto.build(
               {
                 type: dto.json.type,
-                recognitionInss: timeAccelerator.recognitionInss,
-                recognitionJudicial: timeAccelerator.recognitionJudicial,
-                viability: timeAccelerator.viability,
-                ...(timeAccelerator.technicalNote !== null && {
+                recognitionInss:
+                  DisabilityRetirementPlanningRejectionTimeAcceleratorRecognitionInssEnum[
+                    timeAccelerator.recognitionInss as keyof typeof DisabilityRetirementPlanningRejectionTimeAcceleratorRecognitionInssEnum
+                  ],
+                recognitionJudicial:
+                  DisabilityRetirementPlanningRejectionTimeAcceleratorRecognitionJudicialEnum[
+                    timeAccelerator.recognitionJudicial as keyof typeof DisabilityRetirementPlanningRejectionTimeAcceleratorRecognitionJudicialEnum
+                  ],
+                viability:
+                  DisabilityRetirementPlanningRejectionTimeAcceleratorViabilityEnum[
+                    timeAccelerator.viability as keyof typeof DisabilityRetirementPlanningRejectionTimeAcceleratorViabilityEnum
+                  ],
+                ...(this.hasValue(timeAccelerator.technicalNote) && {
                   technicalNote: timeAccelerator.technicalNote,
                 }),
-                ...(timeAccelerator.startDate !== null && {
+                ...(this.hasValue(timeAccelerator.startDate) && {
                   startDate: new Date(timeAccelerator.startDate),
                 }),
-                ...(timeAccelerator.endDate !== null && {
+                ...(this.hasValue(timeAccelerator.endDate) && {
                   endDate: new Date(timeAccelerator.endDate),
                 }),
-                ...(timeAccelerator.institution !== null && {
+                ...(this.hasValue(timeAccelerator.institution) && {
                   institution: timeAccelerator.institution,
                 }),
                 affectsQualifyingPeriod:
@@ -127,6 +136,10 @@ export class AnalyzeDisabilityRetirementPlanningRejectionTimeAcceleratorUseCase 
         ),
       },
     );
+  }
+
+  private hasValue<T>(value: T | null | undefined): value is T {
+    return value !== null && value !== undefined;
   }
 
   private parseAnalysisResult(

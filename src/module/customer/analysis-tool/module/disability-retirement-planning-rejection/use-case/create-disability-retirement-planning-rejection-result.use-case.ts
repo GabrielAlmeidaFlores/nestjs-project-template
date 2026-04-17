@@ -185,12 +185,12 @@ export class CreateDisabilityRetirementPlanningRejectionResultUseCase {
           {
             name: parsedResult.clientData.name,
             federalDocument: parsedResult.clientData.federalDocument,
-            ...(parsedResult.clientData.lastAffiliationDate !== null && {
+            ...(this.hasValue(parsedResult.clientData.lastAffiliationDate) && {
               lastAffiliationDate: new Date(
                 parsedResult.clientData.lastAffiliationDate,
               ),
             }),
-            ...(parsedResult.clientData.birthDate !== null && {
+            ...(this.hasValue(parsedResult.clientData.birthDate) && {
               birthDate: new Date(parsedResult.clientData.birthDate),
             }),
             gender: parsedResult.clientData.gender,
@@ -204,7 +204,7 @@ export class CreateDisabilityRetirementPlanningRejectionResultUseCase {
             {
               retirementRuleName: rule.retirementRuleName,
               isEligible: rule.isEligible,
-              ...(rule.eligibilityAvailableAt !== null && {
+              ...(this.hasValue(rule.eligibilityAvailableAt) && {
                 eligibilityAvailableAt: new Date(rule.eligibilityAvailableAt),
               }),
               expectedMonthlyBenefit: rule.expectedMonthlyBenefit,
@@ -216,6 +216,10 @@ export class CreateDisabilityRetirementPlanningRejectionResultUseCase {
       ),
       analysisResult: parsedResult.analysisResult,
     });
+  }
+
+  private hasValue<T>(value: T | null | undefined): value is T {
+    return value !== null && value !== undefined;
   }
 
   private parseResultAnalysis(
