@@ -93,8 +93,6 @@ export class MaternityPayGrantPeriodEntityAutoMapperProfile {
                 ? source.contributionAverage.toString()
                 : null,
             bondOrigin: source.bondOrigin,
-            impact: source.impact,
-            gracePeriod: source.gracePeriod,
             complementViaMyInss: source.complementViaMyInss,
             maternityPayGrant: MaternityPayGrantTypeormEntity.build({
               id: source.maternityPayGrantId.toString(),

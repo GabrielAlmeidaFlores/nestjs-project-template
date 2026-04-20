@@ -16,7 +16,7 @@ export interface MaternityPayGrantFirstAnalysisPeriodInterface {
   startDate: string;
   endDate: string;
   category: MaternityPayGrantCategoryEnum;
-  gracePeriod: number;
+  gracePeriod?: number;
   status: boolean;
   isPendency: boolean;
   competenceBelowTheMinimum: boolean;
@@ -24,7 +24,6 @@ export interface MaternityPayGrantFirstAnalysisPeriodInterface {
   belowMinimumContributions: MaternityPayGrantFirstAnalysisBelowMinimumContributionItemInterface[];
   reasonPendency?: MaternityPayGrantPeriodPendencyReasonEnum;
   bondOrigin?: string | null;
-  impact?: string | null;
   complementViaMyInss?: boolean | null;
 }
 

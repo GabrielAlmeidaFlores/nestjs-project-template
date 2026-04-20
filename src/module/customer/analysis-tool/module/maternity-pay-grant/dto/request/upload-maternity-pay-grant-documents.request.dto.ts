@@ -1,4 +1,4 @@
-import { MaternityPayGrantTriggeringEventEnum } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/enum/maternity-pay-grant-triggering-event.enum';
+import { MaternityPayGrantBenefitTriggeringEventEnum } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/enum/maternity-pay-grant-benefit-triggering-event.enum';
 import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
 import { RequestDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-boolean-property/request-dto-boolean-property.decorator';
 import { RequestDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-date-property/request-dto-date-property.decorator';
@@ -13,11 +13,11 @@ export class UploadMaternityPayGrantDocumentsRequestDto extends BaseBuildableDto
   @RequestDtoObjectProperty(() => Base64FileRequestDto)
   public cnis: Base64FileRequestDto;
 
-  @RequestDtoEnumProperty(MaternityPayGrantTriggeringEventEnum)
-  public triggeringEvent: MaternityPayGrantTriggeringEventEnum;
+  @RequestDtoEnumProperty(MaternityPayGrantBenefitTriggeringEventEnum)
+  public benefitTriggeringEvent: MaternityPayGrantBenefitTriggeringEventEnum;
 
   @RequestDtoDateProperty()
-  public triggeringEventDate: Date;
+  public benefitTriggeringEventDate: Date;
 
   @RequestDtoObjectProperty(() => Base64FileRequestDto, { isArray: true })
   public documents: Base64FileRequestDto[];

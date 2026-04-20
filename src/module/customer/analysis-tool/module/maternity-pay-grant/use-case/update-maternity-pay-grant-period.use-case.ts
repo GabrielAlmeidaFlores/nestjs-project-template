@@ -106,8 +106,6 @@ export class UpdateMaternityPayGrantPeriodUseCase {
             periodConsideration: periodDto.periodConsideration ?? null,
             contributionAverage: periodDto.contributionAverage ?? null,
             bondOrigin: periodDto.bondOrigin ?? null,
-            impact: periodDto.impact ?? null,
-            gracePeriod: periodDto.gracePeriod ?? null,
             complementViaMyInss: periodDto.complementViaMyInss ?? null,
             maternityPayGrantId,
           }),

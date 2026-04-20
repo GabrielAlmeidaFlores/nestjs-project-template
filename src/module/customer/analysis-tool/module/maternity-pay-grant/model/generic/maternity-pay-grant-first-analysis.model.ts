@@ -49,8 +49,8 @@ export class MaternityPayGrantFirstAnalysisPeriodModel extends BaseBuildableDtoO
   @ResponseDtoEnumProperty(MaternityPayGrantCategoryEnum)
   public readonly category: MaternityPayGrantCategoryEnum;
 
-  @ResponseDtoNumberProperty()
-  public readonly gracePeriod: number;
+  @ResponseDtoNumberProperty({ required: false })
+  public readonly gracePeriod?: number;
 
   @ResponseDtoBooleanProperty()
   public readonly status: boolean;
@@ -77,9 +77,6 @@ export class MaternityPayGrantFirstAnalysisPeriodModel extends BaseBuildableDtoO
 
   @ResponseDtoStringProperty({ required: false })
   public readonly bondOrigin?: string;
-
-  @ResponseDtoStringProperty({ required: false })
-  public readonly impact?: string;
 
   @ResponseDtoBooleanProperty({ required: false })
   public readonly complementViaMyInss?: boolean;

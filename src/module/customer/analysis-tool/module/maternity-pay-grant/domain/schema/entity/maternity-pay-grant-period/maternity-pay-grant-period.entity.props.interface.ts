@@ -18,8 +18,6 @@ export interface MaternityPayGrantPeriodEntityPropsInterface extends BaseEntityP
   periodConsideration?: MaternityPayGrantPeriodConsiderationEnum | null;
   bondOrigin?: string | null;
   contributionAverage?: DecimalValue | null;
-  impact?: string | null;
-  gracePeriod?: number | null;
   complementViaMyInss?: boolean | null;
   maternityPayGrantId: MaternityPayGrantId;
 }

@@ -1,4 +1,5 @@
 import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base.entity.props.interface';
+import type { MaternityPayGrantBenefitTriggeringEventEnum } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/enum/maternity-pay-grant-benefit-triggering-event.enum';
 import type { MaternityPayGrantTriggeringEventEnum } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/enum/maternity-pay-grant-triggering-event.enum';
 import type { MaternityPayGrantId } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/value-object/maternity-pay-grant-id.value-object';
 import type { MaternityPayGrantResultId } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-result/value-object/maternity-pay-grant-result-id.value-object';
@@ -18,5 +19,7 @@ export interface MaternityPayGrantEntityPropsInterface extends BaseEntityPropsIn
   ruralPeriodStartDate?: Date | null;
   ruralPeriodEndDate?: Date | null;
   ruralPeriodDocumentDescription?: string | null;
+  benefitTriggeringEvent?: MaternityPayGrantBenefitTriggeringEventEnum | null;
+  benefitTriggeringEventDate?: Date | null;
   maternityPayGrantResultId?: MaternityPayGrantResultId | null;
 }

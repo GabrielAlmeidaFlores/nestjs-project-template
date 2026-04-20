@@ -1,5 +1,6 @@
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
+import type { MaternityPayGrantBenefitTriggeringEventEnum } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/enum/maternity-pay-grant-benefit-triggering-event.enum';
 import type { MaternityPayGrantTriggeringEventEnum } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/enum/maternity-pay-grant-triggering-event.enum';
 import type { MaternityPayGrantId } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/value-object/maternity-pay-grant-id.value-object';
 import type { MaternityPayGrantDocumentEntity } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-document/maternity-pay-grant-document.entity';
@@ -25,6 +26,8 @@ export class GetMaternityPayGrantWithRelationsQueryResult extends BaseBuildableO
   public readonly ruralPeriodStartDate: Date | null;
   public readonly ruralPeriodEndDate: Date | null;
   public readonly ruralPeriodDocumentDescription: string | null;
+  public readonly benefitTriggeringEvent: MaternityPayGrantBenefitTriggeringEventEnum | null;
+  public readonly benefitTriggeringEventDate: Date | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;
