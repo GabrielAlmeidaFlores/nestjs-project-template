@@ -341,7 +341,7 @@ export class CreateDisabilityRetirementPlanningRejectionFirstAnalysisUseCase {
                   raw.disabilityAnalysis.moderateDisabilityPercentage,
                 severeDisabilityPercentage:
                   raw.disabilityAnalysis.severeDisabilityPercentage,
-                documents: (raw.disabilityAnalysis.documents ?? []).map((doc) =>
+                documents: raw.disabilityAnalysis.documents.map((doc) =>
                   DisabilityRetirementPlanningRejectionFirstAnalysisDocumentModel.build(
                     {
                       documentName: doc.documentName,
@@ -350,7 +350,7 @@ export class CreateDisabilityRetirementPlanningRejectionFirstAnalysisUseCase {
                       degree: doc.degree,
                       date: doc.date,
                       crm: doc.crm,
-                      observations: doc.observations ?? [],
+                      observations: doc.observations,
                     },
                   ),
                 ),
