@@ -12,6 +12,7 @@ import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/ty
 import { DeathBenefitGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant.typeorm.entity';
 import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis.entity';
 import { DisabilityRetirementPlanningGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-grant.typeorm.entity';
+import { DisabilityRetirementPlanningRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-rejection.typeorm.entity';
 import { DisabilityRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning.typeorm.entity';
 import { GeneralUrbanRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis.typeorm.entity';
 import { GeneralUrbanRetirementDenialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial.typeorm.entity';
@@ -344,6 +345,16 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
             )
           : null;
 
+      const disabilityRetirementPlanningRejection =
+        source.disabilityRetirementPlanningRejection !== undefined &&
+        source.disabilityRetirementPlanningRejection !== null
+          ? this.mapper.map(
+              source.disabilityRetirementPlanningRejection,
+              DisabilityRetirementPlanningRejectionTypeormEntity,
+              GetDisabilityRetirementPlanningWithRelationsQueryResult,
+            )
+          : null;
+
       const generalUrbanRetirementDenial =
         source.generalUrbanRetirementDenial !== undefined
           ? this.mapper.map(
@@ -382,6 +393,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         medicalAndSocialReportObjectionGeneratorAnalysis,
         speechGenerator,
         disabilityAssessmentForBpcAnalysis,
+        disabilityRetirementPlanningRejection,
         audienceQuestionGenerator,
         perCapitaIncomeForBpcAnalysis,
         bpcElderlyAnalysis,

@@ -61,6 +61,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResult extends BaseBuildable
   public readonly deathBenefitGrant: GetDeathBenefitGrantWithRelationsQueryResult | null;
   public readonly specialRetirementGrant: GetSpecialRetirementGrantWithRelationsQueryResult | null;
   public readonly disabilityRetirementPlanningGrant: GetDisabilityRetirementPlanningGrantWithRelationsQueryResult | null;
+  public readonly disabilityRetirementPlanningRejection: GetDisabilityRetirementPlanningWithRelationsQueryResult | null;
   public readonly temporaryDisabilityBenefitsGrant: GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResult | null;
   public readonly survivorPensionAnalysis: GetSurvivorPensionAnalysisQueryResult | null;
   public readonly createdAt: Date;
