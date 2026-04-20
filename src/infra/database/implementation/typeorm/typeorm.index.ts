@@ -95,6 +95,16 @@ import { DisabilityRetirementPlanningPeriodDisabilityTypeormCommandRepository } 
 import { DisabilityRetirementPlanningPeriodDisabilityDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-period-disability-document/disability-retirement-planning-period-disability-document.typeorm.command.repository';
 import { DisabilityRetirementPlanningPeriodSpecialTimeTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-period-special-time/disability-retirement-planning-period-special-time.typeorm.command.repository';
 import { DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-period-special-time-document/disability-retirement-planning-period-special-time-document.typeorm.command.repository';
+import { DisabilityRetirementPlanningRejectionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-rejection/disability-retirement-planning-rejection.typeorm.command.repository';
+import { DisabilityRetirementPlanningRejectionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-rejection/disability-retirement-planning-rejection.typeorm.query.repository';
+import { DisabilityRetirementPlanningRejectionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-rejection-document/disability-retirement-planning-rejection-document.typeorm.command.repository';
+import { DisabilityRetirementPlanningRejectionInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-rejection-inss-benefit/disability-retirement-planning-rejection-inss-benefit.typeorm.command.repository';
+import { DisabilityRetirementPlanningRejectionPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-rejection-period/disability-retirement-planning-rejection-period.typeorm.command.repository';
+import { DisabilityRetirementPlanningRejectionPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-rejection-period-document/disability-retirement-planning-rejection-period-document.typeorm.command.repository';
+import { DisabilityRetirementPlanningRejectionPeriodEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-rejection-period-earnings-history/disability-retirement-planning-rejection-period-earnings-history.typeorm.command.repository';
+import { DisabilityRetirementPlanningRejectionResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-rejection-result/disability-retirement-planning-rejection-result.typeorm.command.repository';
+import { DisabilityRetirementPlanningRejectionTimeAcceleratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-rejection-time-accelerator/disability-retirement-planning-rejection-time-accelerator.typeorm.command.repository';
+import { DisabilityRetirementPlanningRejectionTimeAcceleratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-rejection-time-accelerator/disability-retirement-planning-rejection-time-accelerator.typeorm.query.repository';
 import { DisabilityRetirementPlanningRemunerationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-remuneration/disability-retirement-planning-remuneration.typeorm.command.repository';
 import { DisabilityRetirementPlanningRemunerationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-remuneration/disability-retirement-planning-remuneration.typeorm.query.repository';
 import { DisabilityRetirementPlanningResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-result/disability-retirement-planning-result.typeorm.command.repository';
@@ -411,6 +421,14 @@ import { DisabilityRetirementPlanningPeriodDisabilityTypeormEntity } from '@infr
 import { DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period-special-time-document.typeorm.entity';
 import { DisabilityRetirementPlanningPeriodSpecialTimeTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period-special-time.typeorm.entity';
 import { DisabilityRetirementPlanningPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period.typeorm.entity';
+import { DisabilityRetirementPlanningRejectionDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-rejection-document.typeorm.entity';
+import { DisabilityRetirementPlanningRejectionInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-rejection-inss-benefit.typeorm.entity';
+import { DisabilityRetirementPlanningRejectionPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-rejection-period-document.typeorm.entity';
+import { DisabilityRetirementPlanningRejectionPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-rejection-period-earnings-history.typeorm.entity';
+import { DisabilityRetirementPlanningRejectionPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-rejection-period.typeorm.entity';
+import { DisabilityRetirementPlanningRejectionResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-rejection-result.typeorm.entity';
+import { DisabilityRetirementPlanningRejectionTimeAcceleratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-rejection-time-accelerator.typeorm.entity';
+import { DisabilityRetirementPlanningRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-rejection.typeorm.entity';
 import { DisabilityRetirementPlanningRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-remuneration.typeorm.entity';
 import { DisabilityRetirementPlanningResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-result.typeorm.entity';
 import { DisabilityRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning.typeorm.entity';
@@ -882,6 +900,14 @@ export class TypeormIndex {
     GeneralUrbanRetirementDenialPeriodDocumentTypeormEntity,
     GeneralUrbanRetirementDenialPeriodEarningsHistoryTypeormEntity,
     GeneralUrbanRetirementDenialTimeAcceleratorTypeormEntity,
+    DisabilityRetirementPlanningRejectionTypeormEntity,
+    DisabilityRetirementPlanningRejectionResultTypeormEntity,
+    DisabilityRetirementPlanningRejectionDocumentTypeormEntity,
+    DisabilityRetirementPlanningRejectionInssBenefitTypeormEntity,
+    DisabilityRetirementPlanningRejectionPeriodTypeormEntity,
+    DisabilityRetirementPlanningRejectionPeriodDocumentTypeormEntity,
+    DisabilityRetirementPlanningRejectionPeriodEarningsHistoryTypeormEntity,
+    DisabilityRetirementPlanningRejectionTimeAcceleratorTypeormEntity,
     BpcElderlyAnalysisTypeormEntity,
     BpcElderlyAnalysisDocumentTypeormEntity,
     BpcElderlyAnalysisFamilyMemberTypeormEntity,
@@ -1225,6 +1251,16 @@ export class TypeormIndex {
     GeneralUrbanRetirementDenialPeriodEarningsHistoryTypeormCommandRepository,
     GeneralUrbanRetirementDenialTimeAcceleratorTypeormCommandRepository,
     GeneralUrbanRetirementDenialTimeAcceleratorTypeormQueryRepository,
+    DisabilityRetirementPlanningRejectionTypeormCommandRepository,
+    DisabilityRetirementPlanningRejectionTypeormQueryRepository,
+    DisabilityRetirementPlanningRejectionResultTypeormCommandRepository,
+    DisabilityRetirementPlanningRejectionDocumentTypeormCommandRepository,
+    DisabilityRetirementPlanningRejectionInssBenefitTypeormCommandRepository,
+    DisabilityRetirementPlanningRejectionPeriodTypeormCommandRepository,
+    DisabilityRetirementPlanningRejectionPeriodDocumentTypeormCommandRepository,
+    DisabilityRetirementPlanningRejectionPeriodEarningsHistoryTypeormCommandRepository,
+    DisabilityRetirementPlanningRejectionTimeAcceleratorTypeormCommandRepository,
+    DisabilityRetirementPlanningRejectionTimeAcceleratorTypeormQueryRepository,
   ];
 
   public static readonly dynamicModule = TypeOrmModule.forFeature(
