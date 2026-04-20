@@ -20,8 +20,6 @@ export class MaternityPayGrantPeriodEntity extends BaseEntity<MaternityPayGrantP
   public readonly periodConsideration: MaternityPayGrantPeriodConsiderationEnum | null;
   public readonly bondOrigin: string | null;
   public readonly contributionAverage: DecimalValue | null;
-  public readonly impact: string | null;
-  public readonly gracePeriod: number | null;
   public readonly complementViaMyInss: boolean | null;
   public readonly maternityPayGrantId: MaternityPayGrantId;
 
@@ -40,8 +38,6 @@ export class MaternityPayGrantPeriodEntity extends BaseEntity<MaternityPayGrantP
     this.periodConsideration = props.periodConsideration ?? null;
     this.bondOrigin = props.bondOrigin ?? null;
     this.contributionAverage = props.contributionAverage ?? null;
-    this.impact = props.impact ?? null;
-    this.gracePeriod = props.gracePeriod ?? null;
     this.complementViaMyInss = props.complementViaMyInss ?? null;
     this.maternityPayGrantId = props.maternityPayGrantId;
   }

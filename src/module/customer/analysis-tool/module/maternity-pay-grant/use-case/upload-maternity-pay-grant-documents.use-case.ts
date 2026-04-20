@@ -2,6 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { TetoInssData } from '@lib/cnis-analyzer/data/teto.inss';
 import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
@@ -16,6 +18,7 @@ import { MaternityPayGrantId } from '@module/customer/analysis-tool/module/mater
 import { MaternityPayGrantDocumentEntity } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-document/maternity-pay-grant-document.entity';
 import { MaternityPayGrantEarningsHistoryEntity } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-earnings-history/maternity-pay-grant-earnings-history.entity';
 import { MaternityPayGrantEarningsHistoryId } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-earnings-history/value-object/maternity-pay-grant-earnings-history-id.value-object';
+import { MaternityPayGrantPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-period/enum/maternity-pay-grant-period-pendency-reason.enum';
 import { MaternityPayGrantPeriodEntity } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-period/maternity-pay-grant-period.entity';
 import { MaternityPayGrantPeriodId } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-period/value-object/maternity-pay-grant-period-id.value-object';
 import { MaternityPayGrantCategoryEnum } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/enum/maternity-pay-grant-category.enum';
@@ -100,6 +103,13 @@ export class UploadMaternityPayGrantDocumentsUseCase {
       ),
     ];
 
+    const earningHistories: MaternityPayGrantEarningsHistoryEntity[] = [];
+
+    interface PeriodWithFlagsInterface extends MaternityPayGrantPeriodEntity {
+      __carenciaDestravada: boolean;
+      __contaTempo: boolean;
+    }
+
     for (const relation of cnisModel.socialSecurityRelations ?? []) {
       const info = relation.socialSecurityAffiliationInfo;
 
@@ -109,43 +119,259 @@ export class UploadMaternityPayGrantDocumentsUseCase {
 
       const periodId = new MaternityPayGrantPeriodId();
 
+      const typeOfContribution =
+        info.origemDoVinculo === 'PERÍODO DE ATIVIDADE DE SEGURADO ESPECIAL' ||
+        info.origemDoVinculo === 'SEGURADO ESPECIAL'
+          ? 'Rural'
+          : 'Urbano';
+
+      const contributionTotal =
+        relation.socialSecurityAffiliationEarningsHistory
+          .map((earning) => {
+            const contributionSalary = this.parseRemunerationString(
+              earning.salarioContribuicao,
+            );
+            if (contributionSalary === null || isNaN(contributionSalary)) {
+              return 0;
+            }
+            return contributionSalary;
+          })
+          .reduce((acc, curr) => acc + curr, 0);
+
+      const contributionAverage =
+        relation.socialSecurityAffiliationEarningsHistory.length > 0
+          ? contributionTotal /
+            relation.socialSecurityAffiliationEarningsHistory.length
+          : 0;
+
+      const competenceBelowTheMinimum =
+        relation.socialSecurityAffiliationEarningsHistory.some((earning) => {
+          return TetoInssData.some((teto) => {
+            const competencia = earning.competencia;
+            if (!competencia) {
+              return false;
+            }
+            const competenciaYear = competencia.getFullYear();
+            if (teto.ano !== competenciaYear) {
+              return false;
+            }
+            const remuneration = this.parseRemunerationString(
+              earning.remuneracao,
+            );
+            if (remuneration === null || isNaN(remuneration)) {
+              return false;
+            }
+            return remuneration < teto.salarioMinimo;
+          });
+        });
+
+      const indicadorPendencia = ['PEXT'];
+
+      const delayPayment =
+        relation.socialSecurityAffiliationEarningsHistory.some((earning) => {
+          if (earning.indicadores === undefined || earning.indicadores === '') {
+            return false;
+          }
+          return indicadorPendencia.includes(earning.indicadores);
+        });
+
+      const pendencyReason =
+        info.dataFim === undefined
+          ? MaternityPayGrantPeriodPendencyReasonEnum.LEAVE_DATE
+          : competenceBelowTheMinimum
+            ? MaternityPayGrantPeriodPendencyReasonEnum.COMPETENCE_BELOW_MINIMUM
+            : delayPayment
+              ? MaternityPayGrantPeriodPendencyReasonEnum.INCONSISTENT_COMPETENCE
+              : '';
+
+      const period = new MaternityPayGrantPeriodEntity({
+        id: periodId,
+        startDate: info.dataInicio,
+        endDate: info.dataFim ?? null,
+        category: this.mapOrigemToCategory(info.origemDoVinculo),
+        bondOrigin: info.origemDoVinculo ?? null,
+        typeOfContribution,
+        isPendency: pendencyReason !== '',
+        competenceBelowTheMinimum,
+        contributionAverage: new DecimalValue(contributionAverage),
+        pendencyReason:
+          pendencyReason !== ''
+            ? (pendencyReason as MaternityPayGrantPeriodPendencyReasonEnum)
+            : null,
+        status: pendencyReason === '',
+        maternityPayGrantId,
+      }) as PeriodWithFlagsInterface;
+
+      const earnings = relation.socialSecurityAffiliationEarningsHistory;
+
+      const MESES_PARA_PERDA_CI = 15;
+
+      earnings.forEach((e, index) => {
+        const competenceBelowTheMinimumSalary =
+          relation.socialSecurityAffiliationEarningsHistory.some(() => {
+            if (!e.competencia) {
+              return false;
+            }
+            const year = e.competencia.getFullYear();
+            const findSalary = TetoInssData.find((teto) => teto.ano === year);
+            if (!findSalary) {
+              return false;
+            }
+            const remuneration = this.parseRemunerationString(e.remuneracao);
+            if (remuneration === null || isNaN(remuneration)) {
+              return false;
+            }
+            return remuneration < findSalary.salarioMinimo;
+          });
+
+        const data = e.competencia ?? new Date();
+        const ano = data.getFullYear();
+        const mes = data.getMonth() + 1;
+
+        const dataVencimento = this.calcularDataVencimento(mes, ano);
+
+        const paymentDate = e.dataPgto ?? new Date();
+
+        const pagamentoEmDia = this.checkPaymentOnTime(
+          paymentDate,
+          dataVencimento,
+        );
+
+        const tipoUpper = (info.origemDoVinculo ?? '').toUpperCase();
+
+        const isEmpregado =
+          tipoUpper.includes('EMPREGADO') ||
+          tipoUpper.includes('DOMÉSTICO') ||
+          tipoUpper.includes('DOMESTICO') ||
+          tipoUpper.includes('AVULSO') ||
+          tipoUpper.includes('PÚBLICO') ||
+          tipoUpper.includes('PUBLICO');
+
+        if (index === 0) {
+          period.__carenciaDestravada = false;
+          period.__contaTempo = true;
+        }
+
+        let carenciaDestravada = period.__carenciaDestravada;
+        let contaCarencia = false;
+        let valida = false;
+        let contribuicaoEmDia = false;
+        let contaTempo = period.__contaTempo;
+
+        const isContribuinteIndividual =
+          tipoUpper.includes('CONTRIBUINTE') ||
+          tipoUpper.includes('INDIVIDUAL');
+        const isFacultativo = tipoUpper.includes('FACULTATIVO');
+
+        const indicadores = info.indicadores ?? '';
+
+        const possuiIndicadorImped =
+          indicadores.includes('PEXT') || indicadores.includes('PREM-EXT');
+
+        if (possuiIndicadorImped) {
+          valida = false;
+          contaCarencia = false;
+          contaTempo = false;
+        } else {
+          if (isEmpregado) {
+            contribuicaoEmDia = true;
+            carenciaDestravada = true;
+            contaCarencia = true;
+            valida = true;
+          } else {
+            const fatalLimit = this.calcularLimiteFatal(
+              dataVencimento,
+              MESES_PARA_PERDA_CI,
+            );
+
+            if (pagamentoEmDia) {
+              carenciaDestravada = true;
+              contaCarencia = true;
+              valida = true;
+            } else {
+              if (!carenciaDestravada) {
+                if (isContribuinteIndividual) {
+                  contaCarencia = false;
+                  valida = true;
+                } else if (isFacultativo) {
+                  contaCarencia = false;
+                  valida = false;
+                  contaTempo = false;
+                } else {
+                  contaCarencia = false;
+                  valida = false;
+                }
+              } else {
+                if (paymentDate <= fatalLimit) {
+                  contaCarencia = true;
+                  valida = true;
+                } else {
+                  contaCarencia = false;
+                  valida = false;
+                  contaTempo = false;
+                  carenciaDestravada = false;
+                }
+              }
+            }
+          }
+        }
+
+        period.__carenciaDestravada = carenciaDestravada;
+        period.__contaTempo = contaTempo;
+
+        const analysisTextParts: string[] = [];
+        analysisTextParts.push(
+          pagamentoEmDia ? 'Pagamento em dia' : 'Pagamento em atraso',
+        );
+        analysisTextParts.push(
+          contaCarencia ? 'Conta para carência' : 'Não conta para carência',
+        );
+        analysisTextParts.push(
+          valida ? 'Competência válida' : 'Competência inválida',
+        );
+        analysisTextParts.push(
+          contribuicaoEmDia
+            ? 'Contribuição considerada em dia'
+            : 'Contribuição não considerada em dia',
+        );
+        analysisTextParts.push(
+          contaTempo
+            ? 'Conta para tempo de contribuição'
+            : 'Não conta para tempo de contribuição',
+        );
+
+        const analysisText = analysisTextParts.join('. ') + '.';
+
+        earningHistories.push(
+          new MaternityPayGrantEarningsHistoryEntity({
+            id: new MaternityPayGrantEarningsHistoryId(),
+            competence: e.competencia ?? null,
+            remuneration: e.remuneracao ?? null,
+            indicators: e.indicadores ?? null,
+            paymentDate: e.dataPgto ?? null,
+            contribution: e.contribuicao ?? null,
+            contributionSalary: e.salarioContribuicao ?? null,
+            competenceBelowTheMinimum: competenceBelowTheMinimumSalary,
+            analysis: analysisText,
+            maternityPayGrantId,
+            maternityPayGrantPeriodId: periodId,
+          }),
+        );
+      });
+
       transactions.push(
         this.maternityPayGrantPeriodCommandRepositoryGateway.createMaternityPayGrantPeriod(
-          new MaternityPayGrantPeriodEntity({
-            id: periodId,
-            startDate: info.dataInicio,
-            endDate: info.dataFim ?? null,
-            category: this.mapOrigemToCategory(info.origemDoVinculo),
-            bondOrigin: info.origemDoVinculo ?? null,
-            typeOfContribution: info.tipoFiliadoNoVinculo ?? null,
-            isPendency: false,
-            competenceBelowTheMinimum: false,
-            status: true,
-            maternityPayGrantId,
-          }),
+          period,
         ),
       );
+    }
 
-      for (const earning of relation.socialSecurityAffiliationEarningsHistory ??
-        []) {
-        transactions.push(
-          this.maternityPayGrantEarningsHistoryCommandRepositoryGateway.createMaternityPayGrantEarningsHistory(
-            new MaternityPayGrantEarningsHistoryEntity({
-              id: new MaternityPayGrantEarningsHistoryId(),
-              competence: earning.competencia ?? null,
-              remuneration: earning.remuneracao ?? null,
-              indicators: earning.indicadores ?? null,
-              paymentDate: earning.dataPgto ?? null,
-              contribution: earning.contribuicao ?? null,
-              contributionSalary: earning.salarioContribuicao ?? null,
-              analysis: null,
-              competenceBelowTheMinimum: null,
-              maternityPayGrantId,
-              maternityPayGrantPeriodId: periodId,
-            }),
-          ),
-        );
-      }
+    for (const earningHistory of earningHistories) {
+      transactions.push(
+        this.maternityPayGrantEarningsHistoryCommandRepositoryGateway.createMaternityPayGrantEarningsHistory(
+          earningHistory,
+        ),
+      );
     }
 
     for (const fileName of documentFileNames) {
@@ -172,8 +398,6 @@ export class UploadMaternityPayGrantDocumentsUseCase {
       );
     }
 
-    const triggeringEventDate = dto.triggeringEventDate;
-
     transactions.push(
       this.maternityPayGrantCommandRepositoryGateway.updateMaternityPayGrant(
         maternityPayGrantId,
@@ -182,10 +406,6 @@ export class UploadMaternityPayGrantDocumentsUseCase {
           analysisName: existingGrant.analysisName,
           category: existingGrant.category,
           cnisDocument: cnisFileName,
-          triggeringEvent: dto.triggeringEvent,
-          triggeringEventDate,
-          isTriggeringEventDateValid:
-            this.isTriggeringEventDateWithinFiveYears(triggeringEventDate),
           isUnemployedAtTriggeringEventDate: dto.wasUnemployedAtEventDate,
           isCurrentlyUnemployed: existingGrant.isCurrentlyUnemployed,
           isRuralInsured: dto.wasRuralInsuredAtEventDate,
@@ -195,6 +415,10 @@ export class UploadMaternityPayGrantDocumentsUseCase {
             dto.ruralPeriodDocumentDescription ?? null,
           maternityPayGrantResultId:
             existingGrant.maternityPayGrantResult?.id ?? null,
+          benefitTriggeringEvent: dto.benefitTriggeringEvent,
+          benefitTriggeringEventDate: dto.benefitTriggeringEventDate,
+          triggeringEvent: existingGrant.triggeringEvent,
+          triggeringEventDate: existingGrant.triggeringEventDate,
           createdAt: existingGrant.createdAt,
           updatedAt: existingGrant.updatedAt,
           deletedAt: existingGrant.deletedAt,
@@ -225,13 +449,127 @@ export class UploadMaternityPayGrantDocumentsUseCase {
     );
   }
 
-  private isTriggeringEventDateWithinFiveYears(date: Date): boolean {
-    const maxYears = 5;
-    const today = new Date();
-    const limitDate = new Date(today);
-    limitDate.setFullYear(today.getFullYear() - maxYears);
+  private parseRemunerationString(input?: string): number | null {
+    if (input === undefined) {
+      return null;
+    }
+    const raw = input.trim();
+    if (!raw) {
+      return null;
+    }
 
-    return date >= limitDate && date <= today;
+    let s = raw.replace(/[^\d.,-]/g, '').replace(/\s+/g, '');
+
+    const hasComma = s.includes(',');
+    const hasDot = s.includes('.');
+
+    const THOUSANDS_GROUP_LENGTH = 3;
+
+    if (hasComma && hasDot) {
+      s = s.replace(/\./g, '').replace(',', '.');
+    } else if (hasComma) {
+      s = s.replace(',', '.');
+    } else if (hasDot) {
+      const parts = s.split('.');
+
+      if (!parts.length) {
+        return null;
+      }
+
+      const lastPart = parts[parts.length - 1];
+      if (
+        parts.length > 2 ||
+        (typeof lastPart === 'string' &&
+          lastPart.length === THOUSANDS_GROUP_LENGTH)
+      ) {
+        s = s.replace(/\./g, '');
+      }
+    }
+
+    const n = Number(s);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  private calcularDataVencimento(month: number, year: number): Date {
+    const DAY_15 = 15;
+    const MONTHS_IN_YEAR = 12;
+    let mesVencimento = month + 1;
+    let anoVencimento = year;
+    if (mesVencimento > MONTHS_IN_YEAR) {
+      mesVencimento = 1;
+      anoVencimento++;
+    }
+    const dataBase = new Date(anoVencimento, mesVencimento - 1, DAY_15);
+    return this.nextBusinessDay(dataBase);
+  }
+
+  private nextBusinessDay(data: Date): Date {
+    const novaData = new Date(data);
+    while (!this.isDayUtil(novaData)) {
+      novaData.setDate(novaData.getDate() + 1);
+    }
+    return novaData;
+  }
+
+  private isDayUtil(data: Date): boolean {
+    const DAY_WEEKEND_SATURDAY = 6;
+    const DAY_WEEKEND_SUNDAY = 0;
+    const FERIADOS_NACIONAIS = [
+      '01/01',
+      '21/04',
+      '01/05',
+      '07/09',
+      '12/10',
+      '02/11',
+      '15/11',
+      '20/11',
+      '25/12',
+    ];
+
+    const diaSemana = data.getDay();
+    if (
+      diaSemana === DAY_WEEKEND_SUNDAY ||
+      diaSemana === DAY_WEEKEND_SATURDAY
+    ) {
+      return false;
+    }
+
+    const diaFormatado = `${String(data.getDate()).padStart(2, '0')}/${String(data.getMonth() + 1).padStart(2, '0')}`;
+    if (FERIADOS_NACIONAIS.includes(diaFormatado)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  private checkPaymentOnTime(paymentDate: Date, dueDate: Date): boolean {
+    const pag = new Date(
+      paymentDate.getFullYear(),
+      paymentDate.getMonth(),
+      paymentDate.getDate(),
+    );
+    const venc = new Date(
+      dueDate.getFullYear(),
+      dueDate.getMonth(),
+      dueDate.getDate(),
+    );
+    return pag <= venc;
+  }
+
+  private calcularLimiteFatal(dataBase: Date, mesesPeriodoGraca: number): Date {
+    const fimPeriodoGraca = new Date(
+      dataBase.getFullYear(),
+      dataBase.getMonth() + mesesPeriodoGraca,
+      1,
+    );
+
+    const DAY_16 = 16;
+
+    return new Date(
+      fimPeriodoGraca.getFullYear(),
+      fimPeriodoGraca.getMonth() + 1,
+      DAY_16,
+    );
   }
 
   private mapOrigemToCategory(

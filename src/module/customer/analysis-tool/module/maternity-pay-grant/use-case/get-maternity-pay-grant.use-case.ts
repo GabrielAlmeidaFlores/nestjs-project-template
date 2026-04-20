@@ -135,8 +135,6 @@ export class GetMaternityPayGrantUseCase {
               contributionAverage: p.contributionAverage,
             }),
             ...(p.bondOrigin !== null && { bondOrigin: p.bondOrigin }),
-            ...(p.impact !== null && { impact: p.impact }),
-            ...(p.gracePeriod !== null && { gracePeriod: p.gracePeriod }),
             ...(p.complementViaMyInss !== null && {
               complementViaMyInss: p.complementViaMyInss,
             }),

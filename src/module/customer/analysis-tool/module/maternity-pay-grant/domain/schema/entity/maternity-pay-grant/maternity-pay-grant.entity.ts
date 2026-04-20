@@ -1,6 +1,7 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { MaternityPayGrantId } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/value-object/maternity-pay-grant-id.value-object';
 
+import type { MaternityPayGrantBenefitTriggeringEventEnum } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/enum/maternity-pay-grant-benefit-triggering-event.enum';
 import type { MaternityPayGrantTriggeringEventEnum } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/enum/maternity-pay-grant-triggering-event.enum';
 import type { MaternityPayGrantEntityPropsInterface } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/maternity-pay-grant.entity.props.interface';
 import type { MaternityPayGrantResultId } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-result/value-object/maternity-pay-grant-result-id.value-object';
@@ -20,6 +21,8 @@ export class MaternityPayGrantEntity extends BaseEntity<MaternityPayGrantId> {
   public readonly ruralPeriodStartDate: Date | null;
   public readonly ruralPeriodEndDate: Date | null;
   public readonly ruralPeriodDocumentDescription: string | null;
+  public readonly benefitTriggeringEvent: MaternityPayGrantBenefitTriggeringEventEnum | null;
+  public readonly benefitTriggeringEventDate: Date | null;
   public readonly maternityPayGrantResultId: MaternityPayGrantResultId | null;
 
   protected readonly _type = MaternityPayGrantEntity.name;
@@ -41,6 +44,8 @@ export class MaternityPayGrantEntity extends BaseEntity<MaternityPayGrantId> {
     this.ruralPeriodEndDate = props.ruralPeriodEndDate ?? null;
     this.ruralPeriodDocumentDescription =
       props.ruralPeriodDocumentDescription ?? null;
+    this.benefitTriggeringEvent = props.benefitTriggeringEvent ?? null;
+    this.benefitTriggeringEventDate = props.benefitTriggeringEventDate ?? null;
     this.maternityPayGrantResultId = props.maternityPayGrantResultId ?? null;
   }
 }

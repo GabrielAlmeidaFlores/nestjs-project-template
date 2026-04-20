@@ -69,8 +69,6 @@ export class DeleteMaternityPayGrantPeriodUseCase {
       periodConsideration: existingPeriod.periodConsideration,
       contributionAverage: existingPeriod.contributionAverage,
       bondOrigin: existingPeriod.bondOrigin,
-      impact: existingPeriod.impact,
-      gracePeriod: existingPeriod.gracePeriod,
       complementViaMyInss: existingPeriod.complementViaMyInss,
       maternityPayGrantId,
       deletedAt: new Date(),

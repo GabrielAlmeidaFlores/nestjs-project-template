@@ -9,6 +9,7 @@ import { MaternityPayGrantPeriodTypeormEntity } from '@infra/database/implementa
 import { MaternityPayGrantResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-grant-result.typeorm.entity';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
+import { MaternityPayGrantBenefitTriggeringEventEnum } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/enum/maternity-pay-grant-benefit-triggering-event.enum';
 import { MaternityPayGrantTriggeringEventEnum } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/enum/maternity-pay-grant-triggering-event.enum';
 import { MaternityPayGrantCategoryEnum } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/enum/maternity-pay-grant-category.enum';
 
@@ -113,6 +114,22 @@ export class MaternityPayGrantTypeormEntity extends BaseTypeormEntity {
     nullable: true,
   })
   public ruralPeriodDocumentDescription: string | null;
+
+  @Column({
+    name: 'benefit_triggering_event',
+    type: 'simple-enum',
+    enum: MaternityPayGrantBenefitTriggeringEventEnum,
+    nullable: true,
+  })
+  public benefitTriggeringEvent: MaternityPayGrantBenefitTriggeringEventEnum | null;
+
+  @Column({
+    name: 'benefit_triggering_event_date',
+    type: 'date',
+    nullable: true,
+    transformer: DateOnlyTransformer,
+  })
+  public benefitTriggeringEventDate: Date | null;
 
   @OneToOne(
     () => MaternityPayGrantResultTypeormEntity,

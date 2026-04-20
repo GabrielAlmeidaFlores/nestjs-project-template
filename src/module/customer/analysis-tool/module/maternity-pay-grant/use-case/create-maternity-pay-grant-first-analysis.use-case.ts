@@ -247,7 +247,9 @@ export class CreateMaternityPayGrantFirstAnalysisUseCase {
               startDate: new Date(period.startDate),
               endDate: new Date(period.endDate),
               category: period.category,
-              gracePeriod: period.gracePeriod,
+              ...(period.gracePeriod !== undefined && {
+                gracePeriod: period.gracePeriod,
+              }),
               status: period.status,
               isPendency: period.isPendency,
               competenceBelowTheMinimum: period.competenceBelowTheMinimum,
@@ -273,10 +275,6 @@ export class CreateMaternityPayGrantFirstAnalysisUseCase {
               ...(period.bondOrigin !== undefined &&
                 period.bondOrigin !== null && {
                   bondOrigin: period.bondOrigin,
-                }),
-              ...(period.impact !== undefined &&
-                period.impact !== null && {
-                  impact: period.impact,
                 }),
               ...(period.complementViaMyInss !== undefined &&
                 period.complementViaMyInss !== null && {
