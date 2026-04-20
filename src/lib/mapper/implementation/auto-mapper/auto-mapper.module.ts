@@ -54,6 +54,21 @@ import { BankPaymentEntityAutoMapperProfile } from '@lib/mapper/implementation/a
 import { GetBankPaymentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bank-payment/get-bank-payment-query-result.auto-mapper.profile';
 import { BankTransferEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bank-transfer/bank-transfer-entity.auto-mapper.profile';
 import { GetBankTransferQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bank-transfer/get-bank-transfer-query-result.auto-mapper.profile';
+import { BpcElderlyAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis/bpc-elderly-analysis-entity.auto-mapper.profile';
+import { GetBpcElderlyAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis/get-bpc-elderly-analysis-query-result.auto-mapper.profile';
+import { GetBpcElderlyAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis/get-bpc-elderly-analysis-with-relations-query-result.auto-mapper.profile';
+import { BpcElderlyAnalysisDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-document/bpc-elderly-analysis-document-entity.auto-mapper.profile';
+import { GetBpcElderlyAnalysisDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-document/get-bpc-elderly-analysis-document-query-result.auto-mapper.profile';
+import { BpcElderlyAnalysisFamilyMemberEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-family-member/bpc-elderly-analysis-family-member-entity.auto-mapper.profile';
+import { GetBpcElderlyAnalysisFamilyMemberQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-family-member/get-bpc-elderly-analysis-family-member-query-result.auto-mapper.profile';
+import { BpcElderlyAnalysisFamilyMemberDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-family-member-document/bpc-elderly-analysis-family-member-document-entity.auto-mapper.profile';
+import { GetBpcElderlyAnalysisFamilyMemberDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-family-member-document/get-bpc-elderly-analysis-family-member-document-query-result.auto-mapper.profile';
+import { BpcElderlyAnalysisInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-inss-benefit/bpc-elderly-analysis-inss-benefit-entity.auto-mapper.profile';
+import { GetBpcElderlyAnalysisInssBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-inss-benefit/get-bpc-elderly-analysis-inss-benefit-query-result.auto-mapper.profile';
+import { BpcElderlyAnalysisLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-legal-proceeding/bpc-elderly-analysis-legal-proceeding-entity.auto-mapper.profile';
+import { GetBpcElderlyAnalysisLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-legal-proceeding/get-bpc-elderly-analysis-legal-proceeding-query-result.auto-mapper.profile';
+import { BpcElderlyAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-result/bpc-elderly-analysis-result-entity.auto-mapper.profile';
+import { GetBpcElderlyAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-result/get-bpc-elderly-analysis-result-query-result.auto-mapper.profile';
 import { CidTenEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cid-ten/cid-ten-entity.auto-mapper.profile';
 import { GetCidTenQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cid-ten/get-cid-ten-query-result.auto-mapper.profile';
 import { CnisFastAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis/cnis-fast-analysis-entity.auto-mapper.profile';
@@ -787,6 +802,21 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     PerCapitaIncomeForBpcAnalysisLegalProceedingEntityAutoMapperProfile,
     PerCapitaIncomeForBpcAnalysisResultEntityAutoMapperProfile,
     GetPerCapitaIncomeForBpcAnalysisResultQueryResultAutoMapperProfile,
+    BpcElderlyAnalysisEntityAutoMapperProfile,
+    GetBpcElderlyAnalysisQueryResultAutoMapperProfile,
+    GetBpcElderlyAnalysisWithRelationsQueryResultAutoMapperProfile,
+    BpcElderlyAnalysisDocumentEntityAutoMapperProfile,
+    GetBpcElderlyAnalysisDocumentQueryResultAutoMapperProfile,
+    BpcElderlyAnalysisResultEntityAutoMapperProfile,
+    GetBpcElderlyAnalysisResultQueryResultAutoMapperProfile,
+    BpcElderlyAnalysisInssBenefitEntityAutoMapperProfile,
+    GetBpcElderlyAnalysisInssBenefitQueryResultAutoMapperProfile,
+    BpcElderlyAnalysisLegalProceedingEntityAutoMapperProfile,
+    GetBpcElderlyAnalysisLegalProceedingQueryResultAutoMapperProfile,
+    BpcElderlyAnalysisFamilyMemberEntityAutoMapperProfile,
+    GetBpcElderlyAnalysisFamilyMemberQueryResultAutoMapperProfile,
+    BpcElderlyAnalysisFamilyMemberDocumentEntityAutoMapperProfile,
+    GetBpcElderlyAnalysisFamilyMemberDocumentQueryResultAutoMapperProfile,
     JudicialCaseAnalysisEntityAutoMapperProfile,
     GetJudicialCaseAnalysisQueryResultAutoMapperProfile,
     GetJudicialCaseAnalysisWithRelationsQueryResultAutoMapperProfile,
