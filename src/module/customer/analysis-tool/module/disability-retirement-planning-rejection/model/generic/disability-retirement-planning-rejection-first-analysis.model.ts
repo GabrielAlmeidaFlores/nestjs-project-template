@@ -1,6 +1,7 @@
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { DisabilityRetirementPlanningRejectionPeriodCategoryEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection-period/enum/disability-retirement-planning-rejection-period-category.enum';
 import { DisabilityRetirementPlanningRejectionPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection-period/enum/disability-retirement-planning-rejection-period-consideration.enum';
+import { DisabilityRetirementPlanningRejectionPeriodPcdStatusEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection-period/enum/disability-retirement-planning-rejection-period-pcd-status.enum';
 import { DisabilityRetirementPlanningRejectionPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection-period/enum/disability-retirement-planning-rejection-period-pendency-reason.enum';
 import { DisabilityRetirementPlanningRejectionPeriodWorkTypeEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection-period/enum/disability-retirement-planning-rejection-period-work-type.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
@@ -93,6 +94,15 @@ export class DisabilityRetirementPlanningRejectionFirstAnalysisPeriodModel exten
   @ResponseDtoBooleanProperty()
   public status: boolean;
 
+  @ResponseDtoEnumProperty(
+    DisabilityRetirementPlanningRejectionPeriodPcdStatusEnum,
+    { required: false },
+  )
+  public statusPCD?: DisabilityRetirementPlanningRejectionPeriodPcdStatusEnum;
+
+  @ResponseDtoStringProperty({ required: false })
+  public local?: string;
+
   @ResponseDtoObjectProperty(
     () =>
       DisabilityRetirementPlanningRejectionFirstAnalysisEarningsHistoryItemModel,
@@ -125,13 +135,37 @@ export class DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryModel 
     () =>
       DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioModel,
   )
-  public contributionTime: DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioModel;
+  public pcdTime: DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioModel;
 
   @ResponseDtoObjectProperty(
     () =>
       DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioModel,
   )
-  public gracePeriod: DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioModel;
+  public commonTime: DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioModel;
+
+  @ResponseDtoObjectProperty(
+    () =>
+      DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioModel,
+  )
+  public totalTime: DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioModel;
+
+  @ResponseDtoObjectProperty(
+    () =>
+      DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioModel,
+  )
+  public pcdGracePeriod: DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioModel;
+
+  @ResponseDtoObjectProperty(
+    () =>
+      DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioModel,
+  )
+  public commonGracePeriod: DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioModel;
+
+  @ResponseDtoObjectProperty(
+    () =>
+      DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioModel,
+  )
+  public totalGracePeriod: DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioModel;
 
   protected override readonly _type =
     DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryModel.name;
@@ -156,6 +190,57 @@ export class DisabilityRetirementPlanningRejectionFirstAnalysisClientDataModel e
 }
 
 @ResponseDto()
+export class DisabilityRetirementPlanningRejectionFirstAnalysisDocumentModel extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty()
+  public documentName: string;
+
+  @ResponseDtoStringProperty()
+  public viability: string;
+
+  @ResponseDtoStringProperty()
+  public cid: string;
+
+  @ResponseDtoStringProperty()
+  public degree: string;
+
+  @ResponseDtoStringProperty()
+  public date: string;
+
+  @ResponseDtoStringProperty()
+  public crm: string;
+
+  @ResponseDtoStringProperty({ isArray: true })
+  public observations: string[];
+
+  protected override readonly _type =
+    DisabilityRetirementPlanningRejectionFirstAnalysisDocumentModel.name;
+}
+
+@ResponseDto()
+export class DisabilityRetirementPlanningRejectionFirstAnalysisDisabilityAnalysisModel extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty()
+  public predominantDisabilityDegree: string;
+
+  @ResponseDtoNumberProperty()
+  public lightDisabilityPercentage: number;
+
+  @ResponseDtoNumberProperty()
+  public moderateDisabilityPercentage: number;
+
+  @ResponseDtoNumberProperty()
+  public severeDisabilityPercentage: number;
+
+  @ResponseDtoObjectProperty(
+    () => DisabilityRetirementPlanningRejectionFirstAnalysisDocumentModel,
+    { isArray: true },
+  )
+  public documents: DisabilityRetirementPlanningRejectionFirstAnalysisDocumentModel[];
+
+  protected override readonly _type =
+    DisabilityRetirementPlanningRejectionFirstAnalysisDisabilityAnalysisModel.name;
+}
+
+@ResponseDto()
 export class DisabilityRetirementPlanningRejectionFirstAnalysisModel extends BaseBuildableDtoObject {
   @ResponseDtoObjectProperty(
     () => DisabilityRetirementPlanningRejectionFirstAnalysisClientDataModel,
@@ -172,6 +257,12 @@ export class DisabilityRetirementPlanningRejectionFirstAnalysisModel extends Bas
     { isArray: true },
   )
   public periods: DisabilityRetirementPlanningRejectionFirstAnalysisPeriodModel[];
+
+  @ResponseDtoObjectProperty(
+    () =>
+      DisabilityRetirementPlanningRejectionFirstAnalysisDisabilityAnalysisModel,
+  )
+  public disabilityAnalysis: DisabilityRetirementPlanningRejectionFirstAnalysisDisabilityAnalysisModel;
 
   protected override readonly _type =
     DisabilityRetirementPlanningRejectionFirstAnalysisModel.name;

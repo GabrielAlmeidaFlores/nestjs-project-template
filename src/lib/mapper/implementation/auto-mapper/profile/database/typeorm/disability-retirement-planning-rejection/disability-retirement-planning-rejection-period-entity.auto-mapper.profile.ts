@@ -60,6 +60,7 @@ export class DisabilityRetirementPlanningRejectionPeriodEntityAutoMapperProfile 
           wantsToComplementViaMeuINSS: source.wantsToComplementViaMeuINSS,
           status: source.status,
           pcdStatus: source.pcdStatus,
+          local: source.local,
           disabilityRetirementPlanningRejectionId:
             new DisabilityRetirementPlanningRejectionId(
               source.disabilityRetirementPlanningRejection.id,
@@ -99,6 +100,7 @@ export class DisabilityRetirementPlanningRejectionPeriodEntityAutoMapperProfile 
           wantsToComplementViaMeuINSS: source.wantsToComplementViaMeuINSS,
           status: source.status,
           pcdStatus: source.pcdStatus,
+          local: source.local,
           disabilityRetirementPlanningRejection:
             DisabilityRetirementPlanningRejectionTypeormEntity.build({
               id: source.disabilityRetirementPlanningRejectionId.toString(),

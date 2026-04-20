@@ -4875,6 +4875,115 @@ Análise processada do CNIS:
   }
 
   private getDisabilityRetirementPlanningRejectionFirstAnalysisJsonSchema(): object {
+    const disabilityAnalysisSchema = {
+      type: 'object',
+      description: 'Análise da deficiência com base nos documentos médicos',
+      properties: {
+        predominantDisabilityDegree: {
+          type: 'string',
+          description: 'Grau preponderante da deficiência. Ex: Grave: 75%',
+        },
+        lightDisabilityPercentage: {
+          type: 'number',
+          description: 'Percentual de tempo com deficiência leve. Ex: 15',
+        },
+        moderateDisabilityPercentage: {
+          type: 'number',
+          description: 'Percentual de tempo com deficiência moderada. Ex: 15',
+        },
+        severeDisabilityPercentage: {
+          type: 'number',
+          description: 'Percentual de tempo com deficiência grave. Ex: 75',
+        },
+        documents: {
+          type: 'array',
+          description: 'Lista de documentos médicos analisados',
+          items: {
+            type: 'object',
+            properties: {
+              documentName: {
+                type: 'string',
+                description: 'Nome ou tipo do documento analisado',
+              },
+              viability: {
+                type: 'string',
+                enum: [
+                  'alta_viabilidade',
+                  'media_viabilidade',
+                  'baixa_viabilidade',
+                ],
+                description: 'Nível de viabilidade do documento',
+              },
+              cid: {
+                type: 'string',
+                description: 'Código e descrição do CID',
+              },
+              degree: {
+                type: 'string',
+                description: 'Grau da deficiência indicado no documento',
+              },
+              date: {
+                type: 'string',
+                format: 'date',
+                description: 'Data do documento no formato YYYY-MM-DD',
+              },
+              crm: {
+                type: 'string',
+                description: 'CRM do médico responsável',
+              },
+              observations: {
+                type: 'array',
+                items: { type: 'string' },
+                description: 'Observações sobre o documento',
+              },
+            },
+            required: [
+              'documentName',
+              'viability',
+              'cid',
+              'degree',
+              'date',
+              'crm',
+              'observations',
+            ],
+          },
+        },
+      },
+      required: [
+        'predominantDisabilityDegree',
+        'lightDisabilityPercentage',
+        'moderateDisabilityPercentage',
+        'severeDisabilityPercentage',
+        'documents',
+      ],
+    };
+
+    const timeSummaryScenarioSchema = {
+      type: 'object',
+      properties: {
+        withoutResolvingPendencies: {
+          type: 'string',
+          description:
+            'Valor sem resolver pendências. Ex: 23 anos e 4 meses ou 156 contribuições.',
+        },
+        resolvingPendencies: {
+          type: 'string',
+          description:
+            'Valor resolvendo todas as pendências. Ex: 27 anos e 8 meses ou 172 contribuições.',
+        },
+        withTimeAccelerators: {
+          type: 'string',
+          description:
+            'Valor com aceleradores de tempo. Ex: 30 anos e 2 meses ou 180 contribuições.',
+        },
+      },
+      required: [
+        'withoutResolvingPendencies',
+        'resolvingPendencies',
+        'withTimeAccelerators',
+      ],
+    };
+
     return {
       type: 'object',
       properties: {
@@ -4902,63 +5011,45 @@ Análise processada do CNIS:
         timeSummary: {
           type: 'object',
           description:
-            'Resumo do tempo de contribuição e carência apurados por cenário.',
+            'Resumo do tempo de contribuição e carência apurados por cenário, dividido em tempo como PCD, tempo comum (não PCD) e totais.',
           properties: {
-            contributionTime: {
-              type: 'object',
-              description: 'Tempo de contribuição em cada cenário.',
-              properties: {
-                withoutResolvingPendencies: {
-                  type: 'string',
-                  description:
-                    'Tempo sem resolver pendências. Ex: 23 anos e 4 meses.',
-                },
-                resolvingPendencies: {
-                  type: 'string',
-                  description:
-                    'Tempo resolvendo todas as pendências. Ex: 27 anos e 8 meses.',
-                },
-                withTimeAccelerators: {
-                  type: 'string',
-                  description:
-                    'Tempo com aceleradores de tempo. Ex: 30 anos e 2 meses.',
-                },
-              },
-              required: [
-                'withoutResolvingPendencies',
-                'resolvingPendencies',
-                'withTimeAccelerators',
-              ],
+            pcdTime: {
+              ...timeSummaryScenarioSchema,
+              description: 'Tempo de contribuição como PCD em cada cenário.',
             },
-            gracePeriod: {
-              type: 'object',
+            commonTime: {
+              ...timeSummaryScenarioSchema,
               description:
-                'Carência (número de contribuições) em cada cenário.',
-              properties: {
-                withoutResolvingPendencies: {
-                  type: 'string',
-                  description:
-                    'Contribuições sem resolver pendências. Ex: 156 contribuições.',
-                },
-                resolvingPendencies: {
-                  type: 'string',
-                  description:
-                    'Contribuições resolvendo todas as pendências. Ex: 172 contribuições.',
-                },
-                withTimeAccelerators: {
-                  type: 'string',
-                  description:
-                    'Contribuições com aceleradores de tempo. Ex: 180 contribuições.',
-                },
-              },
-              required: [
-                'withoutResolvingPendencies',
-                'resolvingPendencies',
-                'withTimeAccelerators',
-              ],
+                'Tempo de contribuição comum (não PCD) em cada cenário.',
+            },
+            totalTime: {
+              ...timeSummaryScenarioSchema,
+              description: 'Tempo de contribuição total em cada cenário.',
+            },
+            pcdGracePeriod: {
+              ...timeSummaryScenarioSchema,
+              description:
+                'Carência (número de contribuições) como PCD em cada cenário.',
+            },
+            commonGracePeriod: {
+              ...timeSummaryScenarioSchema,
+              description:
+                'Carência (número de contribuições) comum (não PCD) em cada cenário.',
+            },
+            totalGracePeriod: {
+              ...timeSummaryScenarioSchema,
+              description:
+                'Carência (número de contribuições) total em cada cenário.',
             },
           },
-          required: ['contributionTime', 'gracePeriod'],
+          required: [
+            'pcdTime',
+            'commonTime',
+            'totalTime',
+            'pcdGracePeriod',
+            'commonGracePeriod',
+            'totalGracePeriod',
+          ],
         },
         periods: {
           type: 'array',
@@ -5038,6 +5129,19 @@ Análise processada do CNIS:
                 description:
                   'Status do período (favorável/desfavorável para o segurado).',
               },
+              statusPCD: {
+                type: 'string',
+                enum: Object.values(
+                  DisabilityRetirementPlanningRejectionPeriodPcdStatusEnum,
+                ),
+                description:
+                  'Grau PCD considerado para o período. Só deve ser preenchido nos períodos em que houve deficiência reconhecida; nos demais, omita o campo.',
+              },
+              local: {
+                type: 'string',
+                description:
+                  'Localização do vínculo (rua, município, estado, etc).',
+              },
               contributionAverage: {
                 type: 'number',
                 description:
@@ -5077,6 +5181,8 @@ Análise processada do CNIS:
               },
             },
             required: [
+              'statusPCD',
+              'local',
               'startDate',
               'workType',
               'isPendency',
@@ -5086,8 +5192,9 @@ Análise processada do CNIS:
             ],
           },
         },
+        disabilityAnalysis: disabilityAnalysisSchema,
       },
-      required: ['clientData', 'timeSummary', 'periods'],
+      required: ['clientData', 'timeSummary', 'periods', 'disabilityAnalysis'],
     };
   }
 
