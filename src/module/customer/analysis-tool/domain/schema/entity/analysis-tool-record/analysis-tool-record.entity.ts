@@ -176,7 +176,7 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   )
   public readonly disabilityRetirementPlanningRejection: DisabilityRetirementPlanningRejectionEntity | null;
 
- @Description(  
+  @Description(
     'Análise de BPC ao Idoso associada ao registro da ferramenta de análise',
   )
   public readonly bpcElderlyAnalysis: BpcElderlyAnalysisEntity | null;
