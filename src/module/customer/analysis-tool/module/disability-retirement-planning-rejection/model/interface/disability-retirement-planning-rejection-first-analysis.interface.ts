@@ -1,5 +1,6 @@
 import type { DisabilityRetirementPlanningRejectionPeriodCategoryEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection-period/enum/disability-retirement-planning-rejection-period-category.enum';
 import type { DisabilityRetirementPlanningRejectionPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection-period/enum/disability-retirement-planning-rejection-period-consideration.enum';
+import type { DisabilityRetirementPlanningRejectionPeriodPcdStatusEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection-period/enum/disability-retirement-planning-rejection-period-pcd-status.enum';
 import type { DisabilityRetirementPlanningRejectionPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection-period/enum/disability-retirement-planning-rejection-period-pendency-reason.enum';
 import type { DisabilityRetirementPlanningRejectionPeriodWorkTypeEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection-period/enum/disability-retirement-planning-rejection-period-work-type.enum';
 
@@ -38,6 +39,11 @@ export interface DisabilityRetirementPlanningRejectionFirstAnalysisPeriodInterfa
     | undefined;
   wantsToComplementViaMeuINSS: boolean | null | undefined;
   status: boolean;
+  statusPCD:
+    | DisabilityRetirementPlanningRejectionPeriodPcdStatusEnum
+    | null
+    | undefined;
+  local: string | null | undefined;
   earningsHistory:
     | DisabilityRetirementPlanningRejectionFirstAnalysisEarningsHistoryItemInterface[]
     | undefined;
@@ -50,8 +56,12 @@ export interface DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummarySc
 }
 
 export interface DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryInterface {
-  contributionTime: DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioInterface;
-  gracePeriod: DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioInterface;
+  pcdTime: DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioInterface;
+  commonTime: DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioInterface;
+  totalTime: DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioInterface;
+  pcdGracePeriod: DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioInterface;
+  commonGracePeriod: DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioInterface;
+  totalGracePeriod: DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioInterface;
 }
 
 export interface DisabilityRetirementPlanningRejectionFirstAnalysisClientDataInterface {
@@ -61,10 +71,29 @@ export interface DisabilityRetirementPlanningRejectionFirstAnalysisClientDataInt
   birthDate: string | null | undefined;
 }
 
+export interface DisabilityRetirementPlanningRejectionFirstAnalysisDocumentInterface {
+  documentName: string;
+  viability: 'alta_viabilidade' | 'media_viabilidade' | 'baixa_viabilidade';
+  cid: string;
+  degree: string;
+  date: string;
+  crm: string;
+  observations: string[];
+}
+
+export interface DisabilityRetirementPlanningRejectionFirstAnalysisDisabilityAnalysisInterface {
+  predominantDisabilityDegree: string;
+  lightDisabilityPercentage: number;
+  moderateDisabilityPercentage: number;
+  severeDisabilityPercentage: number;
+  documents: DisabilityRetirementPlanningRejectionFirstAnalysisDocumentInterface[];
+}
+
 export interface DisabilityRetirementPlanningRejectionFirstAnalysisInterface {
   clientData: DisabilityRetirementPlanningRejectionFirstAnalysisClientDataInterface;
   timeSummary: DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryInterface;
   periods:
     | DisabilityRetirementPlanningRejectionFirstAnalysisPeriodInterface[]
     | undefined;
+  disabilityAnalysis: DisabilityRetirementPlanningRejectionFirstAnalysisDisabilityAnalysisInterface;
 }

@@ -25,5 +25,6 @@ export interface DisabilityRetirementPlanningRejectionPeriodEntityPropsInterface
   wantsToComplementViaMeuINSS?: boolean | null;
   status: boolean;
   pcdStatus?: DisabilityRetirementPlanningRejectionPeriodPcdStatusEnum | null;
+  local?: string | null;
   disabilityRetirementPlanningRejectionId: DisabilityRetirementPlanningRejectionId;
 }

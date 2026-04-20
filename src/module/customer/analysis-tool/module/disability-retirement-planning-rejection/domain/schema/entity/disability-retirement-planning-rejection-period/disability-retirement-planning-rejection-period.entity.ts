@@ -27,6 +27,7 @@ export class DisabilityRetirementPlanningRejectionPeriodEntity extends BaseEntit
   public readonly wantsToComplementViaMeuINSS: boolean | null;
   public readonly status: boolean;
   public readonly pcdStatus: DisabilityRetirementPlanningRejectionPeriodPcdStatusEnum | null;
+  public readonly local: string | null;
   public readonly disabilityRetirementPlanningRejectionId: DisabilityRetirementPlanningRejectionId;
 
   protected readonly _type =
@@ -53,6 +54,7 @@ export class DisabilityRetirementPlanningRejectionPeriodEntity extends BaseEntit
       props.wantsToComplementViaMeuINSS ?? null;
     this.status = props.status;
     this.pcdStatus = props.pcdStatus ?? null;
+    this.local = props.local ?? null;
     this.disabilityRetirementPlanningRejectionId =
       props.disabilityRetirementPlanningRejectionId;
   }

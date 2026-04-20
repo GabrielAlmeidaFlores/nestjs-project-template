@@ -303,6 +303,7 @@ export class CreateDisabilityRetirementPlanningRejectionResultUseCase {
         }),
         status: period.status,
         pcdStatus: period.pcdStatus,
+        ...(period.local !== null && { local: period.local }),
       })),
       timeAccelerators:
         disabilityRetirementPlanningRejection.disabilityRetirementPlanningRejectionTimeAccelerator ??

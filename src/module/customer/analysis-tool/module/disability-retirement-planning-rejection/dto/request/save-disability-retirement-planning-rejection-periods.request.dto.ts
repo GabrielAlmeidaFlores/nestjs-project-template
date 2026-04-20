@@ -100,6 +100,9 @@ export class DisabilityRetirementPlanningRejectionPeriodItemRequestDto extends B
   )
   public pcdStatus?: DisabilityRetirementPlanningRejectionPeriodPcdStatusEnum;
 
+  @RequestDtoStringProperty({ required: false })
+  public local?: string;
+
   @RequestDtoObjectProperty(
     () => DisabilityRetirementPlanningRejectionPeriodDocumentItemRequestDto,
     { isArray: true, required: false },

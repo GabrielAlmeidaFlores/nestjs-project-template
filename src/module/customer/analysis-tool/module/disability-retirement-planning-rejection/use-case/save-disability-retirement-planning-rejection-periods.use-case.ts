@@ -114,6 +114,7 @@ export class SaveDisabilityRetirementPlanningRejectionPeriodsUseCase {
               periodDto.wantsToComplementViaMeuINSS ?? null,
             status: periodDto.status,
             pcdStatus: periodDto.pcdStatus ?? null,
+            local: periodDto.local ?? null,
             disabilityRetirementPlanningRejectionId,
           }),
         ),

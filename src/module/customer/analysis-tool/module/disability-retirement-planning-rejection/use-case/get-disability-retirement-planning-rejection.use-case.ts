@@ -20,6 +20,8 @@ import { DisabilityRetirementPlanningRejectionNotFoundError } from '@module/cust
 import { InvalidDisabilityRetirementPlanningRejectionFirstAnalysisJsonError } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/error/invalid-disability-retirement-planning-rejection-first-analysis-json.error';
 import {
   DisabilityRetirementPlanningRejectionFirstAnalysisClientDataModel,
+  DisabilityRetirementPlanningRejectionFirstAnalysisDisabilityAnalysisModel,
+  DisabilityRetirementPlanningRejectionFirstAnalysisDocumentModel,
   DisabilityRetirementPlanningRejectionFirstAnalysisEarningsHistoryItemModel,
   DisabilityRetirementPlanningRejectionFirstAnalysisModel,
   DisabilityRetirementPlanningRejectionFirstAnalysisPeriodModel,
@@ -167,6 +169,7 @@ export class GetDisabilityRetirementPlanningRejectionUseCase {
         wantsToComplementViaMeuINSS: period.wantsToComplementViaMeuINSS,
       }),
       ...(period.pcdStatus !== null && { pcdStatus: period.pcdStatus }),
+      ...(period.local !== null && { local: period.local }),
       status: period.status,
       ...(periodDocuments.length > 0 && {
         disabilityRetirementPlanningRejectionPeriodDocument:
@@ -240,29 +243,22 @@ export class GetDisabilityRetirementPlanningRejectionUseCase {
         timeSummary:
           DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryModel.build(
             {
-              contributionTime:
-                DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioModel.build(
-                  {
-                    withoutResolvingPendencies:
-                      raw.timeSummary.contributionTime
-                        .withoutResolvingPendencies,
-                    resolvingPendencies:
-                      raw.timeSummary.contributionTime.resolvingPendencies,
-                    withTimeAccelerators:
-                      raw.timeSummary.contributionTime.withTimeAccelerators,
-                  },
-                ),
-              gracePeriod:
-                DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioModel.build(
-                  {
-                    withoutResolvingPendencies:
-                      raw.timeSummary.gracePeriod.withoutResolvingPendencies,
-                    resolvingPendencies:
-                      raw.timeSummary.gracePeriod.resolvingPendencies,
-                    withTimeAccelerators:
-                      raw.timeSummary.gracePeriod.withTimeAccelerators,
-                  },
-                ),
+              pcdTime: this.buildTimeSummaryScenario(raw.timeSummary.pcdTime),
+              commonTime: this.buildTimeSummaryScenario(
+                raw.timeSummary.commonTime,
+              ),
+              totalTime: this.buildTimeSummaryScenario(
+                raw.timeSummary.totalTime,
+              ),
+              pcdGracePeriod: this.buildTimeSummaryScenario(
+                raw.timeSummary.pcdGracePeriod,
+              ),
+              commonGracePeriod: this.buildTimeSummaryScenario(
+                raw.timeSummary.commonGracePeriod,
+              ),
+              totalGracePeriod: this.buildTimeSummaryScenario(
+                raw.timeSummary.totalGracePeriod,
+              ),
             },
           ),
         periods: (this.hasValue(raw.periods) ? raw.periods : []).map((period) =>
@@ -304,6 +300,12 @@ export class GetDisabilityRetirementPlanningRejectionUseCase {
               wantsToComplementViaMeuINSS: period.wantsToComplementViaMeuINSS,
             }),
             status: period.status,
+            ...(this.hasValue(period.statusPCD) && {
+              statusPCD: period.statusPCD,
+            }),
+            ...(this.hasValue(period.local) && {
+              local: period.local,
+            }),
             earningsHistory: (this.hasValue(period.earningsHistory)
               ? period.earningsHistory
               : []
@@ -325,10 +327,48 @@ export class GetDisabilityRetirementPlanningRejectionUseCase {
             ),
           }),
         ),
+        disabilityAnalysis:
+          DisabilityRetirementPlanningRejectionFirstAnalysisDisabilityAnalysisModel.build(
+            {
+              predominantDisabilityDegree:
+                raw.disabilityAnalysis.predominantDisabilityDegree,
+              lightDisabilityPercentage:
+                raw.disabilityAnalysis.lightDisabilityPercentage,
+              moderateDisabilityPercentage:
+                raw.disabilityAnalysis.moderateDisabilityPercentage,
+              severeDisabilityPercentage:
+                raw.disabilityAnalysis.severeDisabilityPercentage,
+              documents: (raw.disabilityAnalysis.documents ?? []).map((doc) =>
+                DisabilityRetirementPlanningRejectionFirstAnalysisDocumentModel.build(
+                  {
+                    documentName: doc.documentName,
+                    viability: doc.viability,
+                    cid: doc.cid,
+                    degree: doc.degree,
+                    date: doc.date,
+                    crm: doc.crm,
+                    observations: doc.observations ?? [],
+                  },
+                ),
+              ),
+            },
+          ),
       });
     } catch {
       throw new InvalidDisabilityRetirementPlanningRejectionFirstAnalysisJsonError();
     }
+  }
+
+  private buildTimeSummaryScenario(
+    scenario: DisabilityRetirementPlanningRejectionFirstAnalysisInterface['timeSummary']['pcdTime'],
+  ): DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioModel {
+    return DisabilityRetirementPlanningRejectionFirstAnalysisTimeSummaryScenarioModel.build(
+      {
+        withoutResolvingPendencies: scenario.withoutResolvingPendencies,
+        resolvingPendencies: scenario.resolvingPendencies,
+        withTimeAccelerators: scenario.withTimeAccelerators,
+      },
+    );
   }
 
   private hasValue<T>(value: T | null | undefined): value is T {

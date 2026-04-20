@@ -127,6 +127,9 @@ export class GetDisabilityRetirementPlanningRejectionPeriodResponseDto extends B
   )
   public pcdStatus?: DisabilityRetirementPlanningRejectionPeriodPcdStatusEnum;
 
+  @ResponseDtoStringProperty({ required: false })
+  public local?: string;
+
   @ResponseDtoObjectProperty(
     () => GetDisabilityRetirementPlanningRejectionPeriodDocumentResponseDto,
     { isArray: true, required: false },

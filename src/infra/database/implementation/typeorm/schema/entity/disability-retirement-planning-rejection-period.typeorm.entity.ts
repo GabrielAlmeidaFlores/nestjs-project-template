@@ -104,6 +104,9 @@ export class DisabilityRetirementPlanningRejectionPeriodTypeormEntity extends Ba
   })
   public pcdStatus: DisabilityRetirementPlanningRejectionPeriodPcdStatusEnum | null;
 
+  @Column({ name: 'local', type: 'varchar', length: 500, nullable: true })
+  public local: string | null;
+
   @ManyToOne(
     () => DisabilityRetirementPlanningRejectionTypeormEntity,
     (entity) => entity.disabilityRetirementPlanningRejectionPeriod,
