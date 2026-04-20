@@ -1746,6 +1746,42 @@ AnÃ¡lise processada do CNIS:
     );
   }
 
+  public async getBpcElderlyAnalysisCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente nos dados fornecidots
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- O campo \`completeAnalysisDownload\` deve conter HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.
+- Os demais campos deve ser respeitarem as descrições e orientações do schema, utilizando os dados fornecidos e evitando a inclusão de informações não suportadas pelos arquivos anexados.  
+`;
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: this.getBpcElderlyAnalysisCompleteAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getBpcElderlyAnalysisSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
   public async getMaternityPayGrantFirstAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
@@ -4651,6 +4687,93 @@ Análise processada do CNIS:
         'applicableRules',
         'dependentAnalysis',
         'analysisDescription',
+      ],
+    };
+  }
+
+  private getBpcElderlyAnalysisCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        diagnosis: {
+          enum: ['eligible', 'ineligible', 'pending'],
+          type: 'string',
+          description: 'Diagnóstico da análise de BPC ao Idoso.',
+        },
+        totalHouseholdIncome: {
+          type: 'number',
+          description: 'Renda Familiar Total',
+          example: 2500.75,
+        },
+        perCapitaIncome: {
+          type: 'number',
+          description: 'Renda per capita',
+          example: 833.58,
+        },
+        eligibilityJustification: {
+          type: 'string',
+          description:
+            'Justificativa detalhada do diagnóstico, considerando os critérios de elegibilidade do BPC ao Idoso e as especificidades do caso analisado. Deve conter uma análise fundamentada dos documentos apresentados, a situação socioeconômica do idoso e a aplicação da legislação pertinente.',
+        },
+        type: {
+          enum: ['BPC_IDOSO'],
+          type: 'string',
+          description: 'Tipo de análise realizada, que é BPC IDOSO.',
+        },
+        benefitStartDate: {
+          type: 'string',
+          description: 'Data de início do benefício, se houver',
+        },
+        amount: {
+          type: 'number',
+          description: 'Valor do benefício, se houver',
+          example: 606.78,
+        },
+        analysisDetails: {
+          type: 'string',
+          description:
+            'Detalhamento completo da análise, incluindo a avaliação de cada documento apresentado, a situação socioeconômica do idoso, a aplicação dos critérios legais e a conclusão sobre a elegibilidade para o BPC ao Idoso. Esta seção deve fornecer uma visão abrangente do processo de análise, destacando os pontos fortes e as possíveis fragilidades do caso.',
+        },
+        completeAnalysisDownload: {
+          type: 'string',
+          description:
+            'Detalhamento completo da análise, incluindo a avaliação de cada documento apresentado, a situação socioeconômica do idoso, a aplicação dos critérios legais e a conclusão sobre a elegibilidade para o BPC ao Idoso. Esta seção deve fornecer uma visão abrangente do processo de análise, destacando os pontos fortes e as possíveis fragilidades do caso. A analise técnica deve ser formatada em Markdown, pronta para exportação em PDF/DOCX. Deve conter todas as seções: Diagnóstico, Renda Familiar Total, Renda per capita, Justificativa de Elegibilidade, Tipo de Análise, Data de Início do Benefício, Valor do Benefício e Detalhes da Análise. Formate com títulos (##), listas e tabelas em Markdown quando aplicável. ',
+        },
+        legalRequirementsMet: {
+          type: 'string',
+          enum: [
+            'Preenchidos os requisitos legais para concessão do beneficio assistencial ao idoso',
+            'Não preenchidos os requisitos legais para concessão do beneficio assistencial ao idoso',
+          ],
+          description:
+            'Diagnóstico sobre o preenchimento dos requisitos legais para concessão do BPC ao Idoso.',
+        },
+        perCapitaIncomeBelowQuarterMinimumWage: {
+          type: 'string',
+          enum: ['Atende ao Critério Legal', 'Não Atende critério legal'],
+          description:
+            'Indica se a renda per capita familiar é inferior a 1/4 do salário mínimo, conforme exigido para o BPC ao Idoso.',
+        },
+        ageEqualOrAbove65Years: {
+          type: 'string',
+          enum: ['Atende ao Critério Legal', 'Não Atende critério legal'],
+          description:
+            'Indica se o requerente possui idade igual ou superior a 65 anos, conforme exigido para o BPC ao Idoso.',
+        },
+      },
+      required: [
+        'diagnosis',
+        'totalHouseholdIncome',
+        'perCapitaIncome',
+        'eligibilityJustification',
+        'type',
+        'benefitStartDate',
+        'amount',
+        'analysisDetails',
+        'completeAnalysisDownload',
+        'legalRequirementsMet',
+        'perCapitaIncomeBelowQuarterMinimumWage',
+        'ageEqualOrAbove65Years',
       ],
     };
   }
