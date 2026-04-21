@@ -614,6 +614,24 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const deathBenefitGrant =
+        source.deathBenefitGrant !== null
+          ? this.mapper.map(
+              source.deathBenefitGrant,
+              DeathBenefitGrantEntity,
+              DeathBenefitGrantTypeormEntity,
+            )
+          : null;
+
+      const deathBenefitRejection =
+        source.deathBenefitRejection !== null
+          ? this.mapper.map(
+              source.deathBenefitRejection,
+              DeathBenefitRejectionEntity,
+              DeathBenefitRejectionTypeormEntity,
+            )
+          : null;
+
       return AnalysisToolRecordTypeormEntity.build({
         id: source.id.toString(),
         code: source.code.toString(),
@@ -646,6 +664,8 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         specialRetirementGrant,
         temporaryDisabilityBenefitsGrant,
         survivorPensionAnalysis,
+        deathBenefitGrant,
+        deathBenefitRejection,
         analysisToolClient,
         generalUrbanRetirementDenial,
         disabilityRetirementPlanningRejection,

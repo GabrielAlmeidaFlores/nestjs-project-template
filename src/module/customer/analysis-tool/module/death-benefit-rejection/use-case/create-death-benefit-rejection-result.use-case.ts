@@ -172,12 +172,8 @@ export class CreateDeathBenefitRejectionResultUseCase {
     );
 
     const resultEntity = new DeathBenefitRejectionResultEntity({
-      id: deathBenefitRejectionResult.id,
-      deathBenefitRejectionFirstAnalysis:
-        deathBenefitRejectionResult.deathBenefitRejectionFirstAnalysis,
+      ...deathBenefitRejectionResult,
       deathBenefitRejectionCompleteAnalysis: completeAnalysis,
-      deathBenefitRejectionSimplifiedAnalysis:
-        deathBenefitRejectionResult.deathBenefitRejectionSimplifiedAnalysis,
       deathBenefitRejectionCompleteAnalysisDownload: htmlContent,
     });
 

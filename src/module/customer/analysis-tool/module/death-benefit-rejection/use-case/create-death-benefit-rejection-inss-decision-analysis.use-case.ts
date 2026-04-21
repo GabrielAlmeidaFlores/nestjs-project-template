@@ -10,7 +10,6 @@ import { DeathBenefitRejectionQueryRepositoryGateway } from '@module/customer/an
 import { DeathBenefitRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/death-benefit-rejection/domain/repository/death-benefit-rejection-result/command/death-benefit-rejection-result.command.repository.gateway';
 import { DeathBenefitRejectionId } from '@module/customer/analysis-tool/module/death-benefit-rejection/domain/schema/entity/death-benefit-rejection/value-object/death-benefit-rejection-id.value-object';
 import { DeathBenefitRejectionResultEntity } from '@module/customer/analysis-tool/module/death-benefit-rejection/domain/schema/entity/death-benefit-rejection-result/death-benefit-rejection-result.entity';
-import { DeathBenefitRejectionDocumentTypeEnum } from '@module/customer/analysis-tool/module/death-benefit-rejection/domain/schema/enum/death-benefit-rejection-document-type.enum';
 import { CreateDeathBenefitRejectionInssDecisionAnalysisResponseDto } from '@module/customer/analysis-tool/module/death-benefit-rejection/dto/response/create-death-benefit-rejection-inss-decision-analysis.response.dto';
 import { DeathBenefitRejectionNotFoundError } from '@module/customer/analysis-tool/module/death-benefit-rejection/error/death-benefit-rejection-not-found.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
@@ -142,17 +141,11 @@ export class CreateDeathBenefitRejectionInssDecisionAnalysisUseCase {
   private async buildDocumentBuffers(
     deathBenefitRejection: GetDeathBenefitRejectionWithRelationsQueryResult,
   ): Promise<Buffer[]> {
-    const documents = (
-      deathBenefitRejection.deathBenefitRejectionBenefitInstitutor
-        ?.deathBenefitRejectionDocument ?? []
-    ).filter(
-      (document) =>
-        document.type ===
-        DeathBenefitRejectionDocumentTypeEnum.ADMINISTRATIVE_PROCEDURE_DENIED,
-    );
-
     return Promise.all(
-      documents.map((document) =>
+      (
+        deathBenefitRejection.deathBenefitRejectionBenefitInstitutor
+          ?.deathBenefitRejectionDocument ?? []
+      ).map((document) =>
         this.fileProcessorGateway.getFileBuffer(document.document),
       ),
     );
