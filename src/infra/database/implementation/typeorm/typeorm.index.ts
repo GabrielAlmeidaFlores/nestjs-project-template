@@ -63,6 +63,22 @@ import { DeathBenefitGrantPeriodEarningsHistoryTypeormCommandRepository } from '
 import { DeathBenefitGrantResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-result/death-benefit-grant-result.typeorm.command.repository';
 import { DeathBenefitGrantTimeAcceleratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-time-accelerator/death-benefit-grant-time-accelerator.typeorm.command.repository';
 import { DeathBenefitGrantTimeAcceleratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-grant-time-accelerator/death-benefit-grant-time-accelerator.typeorm.query.repository';
+import { DeathBenefitRejectionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-rejection/death-benefit-rejection.typeorm.command.repository';
+import { DeathBenefitRejectionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-rejection/death-benefit-rejection.typeorm.query.repository';
+import { DeathBenefitRejectionDependentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-rejection-dependent/death-benefit-rejection-dependent.typeorm.command.repository';
+import { DeathBenefitRejectionDependentDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-rejection-dependent-document/death-benefit-rejection-dependent-document.typeorm.command.repository';
+import { DeathBenefitRejectionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-rejection-document/death-benefit-rejection-document.typeorm.command.repository';
+import { DeathBenefitRejectionInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-rejection-inss-benefit/death-benefit-rejection-inss-benefit.typeorm.command.repository';
+import { DeathBenefitRejectionInstitorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-rejection-institutor/death-benefit-rejection-institutor.typeorm.command.repository';
+import { DeathBenefitRejectionLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-rejection-legal-proceeding/death-benefit-rejection-legal-proceeding.typeorm.command.repository';
+import { DeathBenefitRejectionLegalRepresentativeTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-rejection-legal-representative/death-benefit-rejection-legal-representative.typeorm.command.repository';
+import { DeathBenefitRejectionPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-rejection-period/death-benefit-rejection-period.typeorm.command.repository';
+import { DeathBenefitRejectionPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-rejection-period/death-benefit-rejection-period.typeorm.query.repository';
+import { DeathBenefitRejectionPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-rejection-period-document/death-benefit-rejection-period-document.typeorm.command.repository';
+import { DeathBenefitRejectionPeriodEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-rejection-period-earnings-history/death-benefit-rejection-period-earnings-history.typeorm.command.repository';
+import { DeathBenefitRejectionResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-rejection-result/death-benefit-rejection-result.typeorm.command.repository';
+import { DeathBenefitRejectionTimeAcceleratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-rejection-time-accelerator/death-benefit-rejection-time-accelerator.typeorm.command.repository';
+import { DeathBenefitRejectionTimeAcceleratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/death-benefit-rejection-time-accelerator/death-benefit-rejection-time-accelerator.typeorm.query.repository';
 import { DisabilityAssessmentForBpcAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.typeorm.command.repository';
 import { DisabilityAssessmentForBpcAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.typeorm.query.repository';
 import { DisabilityAssessmentForBpcAnalysisBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-assessment-for-bpc-analysis-benefit/disability-assessment-for-bpc-analysis-benefit.typeorm.command.repository';
@@ -397,6 +413,19 @@ import { DeathBenefitGrantPeriodTypeormEntity } from '@infra/database/implementa
 import { DeathBenefitGrantResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-result.typeorm.entity';
 import { DeathBenefitGrantTimeAcceleratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant-time-accelerator.typeorm.entity';
 import { DeathBenefitGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant.typeorm.entity';
+import { DeathBenefitRejectionDependentDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-rejection-dependent-document.typeorm.entity';
+import { DeathBenefitRejectionDependentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-rejection-dependent.typeorm.entity';
+import { DeathBenefitRejectionDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-rejection-document.typeorm.entity';
+import { DeathBenefitRejectionInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-rejection-inss-benefit.typeorm.entity';
+import { DeathBenefitRejectionInstitorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-rejection-institutor.typeorm.entity';
+import { DeathBenefitRejectionLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-rejection-legal-proceeding.typeorm.entity';
+import { DeathBenefitRejectionLegalRepresentativeTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-rejection-legal-representative.typeorm.entity';
+import { DeathBenefitRejectionPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-rejection-period-document.typeorm.entity';
+import { DeathBenefitRejectionPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-rejection-period-earnings-history.typeorm.entity';
+import { DeathBenefitRejectionPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-rejection-period.typeorm.entity';
+import { DeathBenefitRejectionResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-rejection-result.typeorm.entity';
+import { DeathBenefitRejectionTimeAcceleratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-rejection-time-accelerator.typeorm.entity';
+import { DeathBenefitRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-rejection.typeorm.entity';
 import { DisabilityAssessmentForBpcAnalysisBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis-benefit.entity';
 import { DisabilityAssessmentForBpcAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis-document.entity';
 import { DisabilityAssessmentForBpcAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis-legal-proceeding.entity';
@@ -879,6 +908,19 @@ export class TypeormIndex {
     DeathBenefitGrantPeriodEarningsHistoryTypeormEntity,
     DeathBenefitGrantPeriodDocumentTypeormEntity,
     DeathBenefitGrantTimeAcceleratorTypeormEntity,
+    DeathBenefitRejectionTypeormEntity,
+    DeathBenefitRejectionResultTypeormEntity,
+    DeathBenefitRejectionDocumentTypeormEntity,
+    DeathBenefitRejectionInssBenefitTypeormEntity,
+    DeathBenefitRejectionLegalProceedingTypeormEntity,
+    DeathBenefitRejectionLegalRepresentativeTypeormEntity,
+    DeathBenefitRejectionInstitorTypeormEntity,
+    DeathBenefitRejectionDependentTypeormEntity,
+    DeathBenefitRejectionDependentDocumentTypeormEntity,
+    DeathBenefitRejectionPeriodTypeormEntity,
+    DeathBenefitRejectionPeriodEarningsHistoryTypeormEntity,
+    DeathBenefitRejectionPeriodDocumentTypeormEntity,
+    DeathBenefitRejectionTimeAcceleratorTypeormEntity,
     SurvivorPensionAnalysisTypeormEntity,
     SurvivorPensionAnalysisCustomerProfileIdentificationTypeormEntity,
     SurvivorPensionAnalysisCustomerProfileIdentificationDocumentTypeormEntity,
@@ -1219,6 +1261,22 @@ export class TypeormIndex {
     DeathBenefitGrantPeriodDocumentTypeormCommandRepository,
     DeathBenefitGrantTimeAcceleratorTypeormCommandRepository,
     DeathBenefitGrantTimeAcceleratorTypeormQueryRepository,
+    DeathBenefitRejectionTypeormCommandRepository,
+    DeathBenefitRejectionTypeormQueryRepository,
+    DeathBenefitRejectionDependentTypeormCommandRepository,
+    DeathBenefitRejectionDependentDocumentTypeormCommandRepository,
+    DeathBenefitRejectionDocumentTypeormCommandRepository,
+    DeathBenefitRejectionInssBenefitTypeormCommandRepository,
+    DeathBenefitRejectionInstitorTypeormCommandRepository,
+    DeathBenefitRejectionLegalProceedingTypeormCommandRepository,
+    DeathBenefitRejectionLegalRepresentativeTypeormCommandRepository,
+    DeathBenefitRejectionPeriodTypeormCommandRepository,
+    DeathBenefitRejectionPeriodTypeormQueryRepository,
+    DeathBenefitRejectionPeriodDocumentTypeormCommandRepository,
+    DeathBenefitRejectionPeriodEarningsHistoryTypeormCommandRepository,
+    DeathBenefitRejectionResultTypeormCommandRepository,
+    DeathBenefitRejectionTimeAcceleratorTypeormCommandRepository,
+    DeathBenefitRejectionTimeAcceleratorTypeormQueryRepository,
     SurvivorPensionAnalysisTypeormCommandRepository,
     SurvivorPensionAnalysisTypeormQueryRepository,
     SurvivorPensionAnalysisCustomerProfileIdentificationTypeormCommandRepository,

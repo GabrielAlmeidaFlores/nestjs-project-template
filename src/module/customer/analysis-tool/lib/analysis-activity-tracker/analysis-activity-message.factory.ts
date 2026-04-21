@@ -50,6 +50,8 @@ export class AnalysisActivityMessageFactory {
       'Concessão de aposentadoria para deficiente',
     [AnalysisToolRecordTypeEnum.DEATH_BENEFIT_GRANT]:
       'Concessão de pensão por morte',
+    [AnalysisToolRecordTypeEnum.DEATH_BENEFIT_REJECTION]:
+      'Indeferimento de pensão por morte',
     [AnalysisToolRecordTypeEnum.SPECIAL_RETIREMENT_GRANT]:
       'Concessão de aposentadoria especial',
     [AnalysisToolRecordTypeEnum.TEMPORARY_DISABILITY_BENEFITS_GRANT]:

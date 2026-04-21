@@ -36,6 +36,7 @@ import { AudienceQuestionGeneratorId } from '@module/customer/analysis-tool/modu
 import { BpcElderlyAnalysisId } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/value-object/bpc-elderly-analysis-id/bpc-elderly-analysis-id.value-object';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { DeathBenefitGrantId } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant/value-object/death-benefit-grant-id.value-object';
+import { DeathBenefitRejectionId } from '@module/customer/analysis-tool/module/death-benefit-rejection/domain/schema/entity/death-benefit-rejection/value-object/death-benefit-rejection-id.value-object';
 import { DisabilityAssessmentForBpcAnalysisId } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/value-object/disability-assessment-for-bpc-analysis-id/disability-assessment-for-bpc-analysis-id.value-object';
 import { DisabilityRetirementPlanningId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
 import { DisabilityRetirementPlanningGrantId } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant/value-object/disability-retirement-planning-grant-id.value-object';
@@ -123,6 +124,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { generalUrbanRetirementAnalysis: Not(IsNull()) },
         { temporaryDisabilityBenefitsGrant: Not(IsNull()) },
         { deathBenefitGrant: Not(IsNull()) },
+        { deathBenefitRejection: Not(IsNull()) },
         { survivorPensionAnalysis: Not(IsNull()) },
         { generalUrbanRetirementDenial: Not(IsNull()) },
         { disabilityRetirementPlanningRejection: Not(IsNull()) },
@@ -1814,6 +1816,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { generalUrbanRetirementAnalysis: Not(IsNull()) },
         { temporaryDisabilityBenefitsGrant: Not(IsNull()) },
         { deathBenefitGrant: Not(IsNull()) },
+        { deathBenefitRejection: Not(IsNull()) },
         { survivorPensionAnalysis: Not(IsNull()) },
         { generalUrbanRetirementDenial: Not(IsNull()) },
         { disabilityRetirementPlanningRejection: Not(IsNull()) },
@@ -2146,6 +2149,66 @@ export class AnalysisToolRecordTypeormQueryRepository
 
     return mappedData;
   }
+
+  public async findWithRelationsByDeathBenefitRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    deathBenefitRejectionId: DeathBenefitRejectionId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          deathBenefitRejection: {
+            id: deathBenefitRejectionId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          deathBenefitRejection: true,
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
   public async findWithRelationsByTemporaryDisabilityBenefitsGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
     temporaryDisabilityBenefitsGrantId: TemporaryDisabilityBenefitsGrantId,
     organizationId: OrganizationId,
@@ -2555,6 +2618,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       'disabilityRetirementPlanning',
       'disabilityRetirementPlanningGrant',
       'deathBenefitGrant',
+      'deathBenefitRejection',
       'temporaryDisabilityBenefitsGrant',
       'survivorPensionAnalysis',
       'generalUrbanRetirementDenial',
