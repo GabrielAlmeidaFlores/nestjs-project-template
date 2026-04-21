@@ -134,14 +134,6 @@ export class CreateDeathBenefitRejectionUseCase {
           )
         : [];
 
-    await this.createOnDatabase(
-      deathBenefitRejection,
-      institutorEntity,
-      legalRepresentativeEntity,
-      inssBenefitEntities,
-      legalProceedingEntities,
-    );
-
     const countRecords =
       await this.analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAuthIdentityId(
         organizationSessionData.organizationId,
@@ -165,7 +157,14 @@ export class CreateDeathBenefitRejectionUseCase {
       updatedBy: organizationMember.id,
     });
 
-    await this.createAnalysisToolRecordOnDatabase(analysisToolRecord);
+    await this.createOnDatabase(
+      deathBenefitRejection,
+      institutorEntity,
+      legalRepresentativeEntity,
+      inssBenefitEntities,
+      legalProceedingEntities,
+      analysisToolRecord,
+    );
 
     return CreateDeathBenefitRejectionResponseDto.build({
       deathBenefitRejectionId: deathBenefitRejection.id,
@@ -178,6 +177,7 @@ export class CreateDeathBenefitRejectionUseCase {
     legalRepresentativeEntity: DeathBenefitRejectionLegalRepresentativeEntity | null,
     inssBenefitEntities: DeathBenefitRejectionInssBenefitEntity[],
     legalProceedingEntities: DeathBenefitRejectionLegalProceedingEntity[],
+    analysisToolRecord: AnalysisToolRecordEntity,
   ): Promise<void> {
     const deathBenefitRejectionTransaction =
       this.deathBenefitRejectionCommandRepositoryGateway.createDeathBenefitRejection(
@@ -210,26 +210,17 @@ export class CreateDeathBenefitRejectionUseCase {
       ),
     );
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute([
-      deathBenefitRejectionTransaction,
-      institorTransaction,
-      ...legalRepresentativeTransactions,
-      ...inssBenefitTransactions,
-      ...legalProceedingTransactions,
-    ]);
-
-    await transaction.commit();
-  }
-
-  private async createAnalysisToolRecordOnDatabase(
-    analysisToolRecord: AnalysisToolRecordEntity,
-  ): Promise<void> {
     const analysisToolRecordTransaction =
       this.analysisToolRecordCommandRepositoryGateway.createAnalysisToolRecord(
         analysisToolRecord,
       );
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
+      deathBenefitRejectionTransaction,
+      institorTransaction,
+      ...legalRepresentativeTransactions,
+      ...inssBenefitTransactions,
+      ...legalProceedingTransactions,
       analysisToolRecordTransaction,
     ]);
 
