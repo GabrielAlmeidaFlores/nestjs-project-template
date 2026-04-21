@@ -9,6 +9,7 @@ import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/anal
 import { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { DeathBenefitGrantEntity } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant/death-benefit-grant.entity';
+import { DeathBenefitRejectionEntity } from '@module/customer/analysis-tool/module/death-benefit-rejection/domain/schema/entity/death-benefit-rejection/death-benefit-rejection.entity';
 import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.entity';
 import { DisabilityRetirementPlanningGrantEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant/disability-retirement-planning-grant.entity';
 import { DisabilityRetirementPlanningRejectionEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection/disability-retirement-planning-rejection.entity';
@@ -162,6 +163,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly deathBenefitGrant: DeathBenefitGrantEntity | null;
 
   @Description(
+    'Indeferimento de benefício de morte associado ao registro da ferramenta de análise',
+  )
+  public readonly deathBenefitRejection: DeathBenefitRejectionEntity | null;
+
+  @Description(
     'Concessão de aposentadoria especial associada ao registro da ferramenta de análise',
   )
   public readonly specialRetirementGrant: SpecialRetirementGrantEntity | null;
@@ -236,6 +242,7 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     this.specialCategoryRetirementAnalysis =
       props.specialCategoryRetirementAnalysis ?? null;
     this.deathBenefitGrant = props.deathBenefitGrant ?? null;
+    this.deathBenefitRejection = props.deathBenefitRejection ?? null;
     this.specialRetirementGrant = props.specialRetirementGrant ?? null;
     this.generalUrbanRetirementDenial =
       props.generalUrbanRetirementDenial ?? null;
