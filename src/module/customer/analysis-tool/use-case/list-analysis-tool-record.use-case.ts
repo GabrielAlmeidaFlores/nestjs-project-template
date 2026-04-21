@@ -108,7 +108,8 @@ export class ListAnalysisToolRecordUseCase {
             analysisToolRecord.generalUrbanRetirementDenial ??
             analysisToolRecord.disabilityRetirementPlanningRejection ??
             analysisToolRecord.deathBenefitGrant ??
-            analysisToolRecord.bpcElderlyAnalysis;
+            analysisToolRecord.bpcElderlyAnalysis ??
+            analysisToolRecord.temporaryIncapacityBenefitRejection;
 
           const analysisId =
             analysis?.id ??
@@ -116,6 +117,8 @@ export class ListAnalysisToolRecordUseCase {
               ?.specialCategoryRetirementAnalysisId ??
             analysisToolRecord.temporaryDisabilityBenefitsGrant
               ?.temporaryDisabilityBenefitsGrantId ??
+            analysisToolRecord.temporaryIncapacityBenefitRejection
+              ?.temporaryIncapacityBenefitRejectionId ??
             null;
 
           if (analysisId === null) {

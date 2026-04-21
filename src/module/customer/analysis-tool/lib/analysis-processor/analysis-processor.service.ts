@@ -1936,6 +1936,89 @@ Análise processada do CNIS:
     );
   }
 
+  public async getTemporaryIncapacityBenefitRejectionInssDecisionAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getTemporaryIncapacityBenefitRejectionFirstAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+    asJson = true,
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente nos dados fornecidos.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: asJson
+          ? ResponseConfigInputModel.build({
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema:
+                this.getTemporaryIncapacityBenefitRejectionFirstAnalysisJsonSchema(),
+            })
+          : null,
+      }),
+    );
+  }
+
+  public async getTemporaryIncapacityBenefitRejectionCompleteAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- O campo \`analysisResult\` deve conter um texto explicativo completo sobre o resultado da análise e as perspectivas processuais do caso.
+- Não incluir tag <br> na resposta no campo \`analysisResult\`.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getTemporaryIncapacityBenefitRejectionCompleteAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getTemporaryIncapacityBenefitRejectionSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
   private getSurvivorPensionAnalysisResultJsonSchema(): object {
     return {
       type: 'object',
@@ -5452,6 +5535,228 @@ Análise processada do CNIS:
         'legalRequirementsMet',
         'perCapitaIncomeBelowQuarterMinimumWage',
         'ageEqualOrAbove65Years',
+      ],
+    };
+  }
+
+  private getTemporaryIncapacityBenefitRejectionFirstAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        insuredStatus: {
+          type: 'boolean',
+          description:
+            'Indica se o segurado possui qualidade de segurado na Data de Início da Incapacidade (DII)',
+        },
+        gracePeriodStatus: {
+          type: 'string',
+          description:
+            'Indica a situação do período de graça do segurado na DII',
+        },
+        gracePeriods: {
+          type: 'array',
+          description:
+            'Lista de eventos que geraram ou sustentam o período de graça',
+          items: {
+            type: 'object',
+            properties: {
+              event: {
+                type: 'string',
+                description:
+                  'Nome do evento que gerou ou sustenta o período de graça. Ex: Último vínculo empregatício, Desemprego involuntário, Afastamento por doença',
+              },
+              date: {
+                type: 'string',
+                description: 'Data do evento no formato DD/MM/AAAA',
+              },
+              observation: {
+                type: 'string',
+                description:
+                  'Análise técnica sobre como esse evento impacta o período de graça',
+              },
+            },
+            required: ['event', 'date', 'observation'],
+          },
+        },
+        analysisConclusion: {
+          type: 'string',
+          description:
+            'Conclusão técnica completa da análise, incluindo carência, qualidade de segurado, pontos de atenção e viabilidade preliminar do benefício',
+        },
+        graceExtensionDueToInvoluntaryUnemployment: {
+          type: 'boolean',
+          description:
+            'Indica se há direito à extensão do período de graça em razão de desemprego involuntário (art. 15, §2º da Lei 8.213/91)',
+        },
+        requestToExtendGracePeriod: {
+          type: 'boolean',
+          description:
+            'Indica se é recomendável requerer prorrogação do período de graça administrativamente',
+        },
+        contributionTimeWithoutResolvingPendencies: {
+          type: 'string',
+          description: 'Tempo de contribuição total sem resolver pendências',
+        },
+        contributionTimeResolvingPendencies: {
+          type: 'string',
+          description: 'Tempo de contribuição total resolvendo pendências',
+        },
+        contributionTimeWithAccelerators: {
+          type: 'string',
+          description: 'Tempo de contribuição total com aceleradores',
+        },
+      },
+      required: [
+        'insuredStatus',
+        'gracePeriodStatus',
+        'gracePeriods',
+        'analysisConclusion',
+        'graceExtensionDueToInvoluntaryUnemployment',
+        'requestToExtendGracePeriod',
+        'contributionTimeWithoutResolvingPendencies',
+        'contributionTimeResolvingPendencies',
+        'contributionTimeWithAccelerators',
+      ],
+    };
+  }
+
+  private getTemporaryIncapacityBenefitRejectionCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        isEligibleForTemporaryIncapacityBenefit: {
+          type: 'boolean',
+          description:
+            'Indica se o segurado tem direito ao auxílio por incapacidade temporária',
+        },
+        gracePeriodAnalysis: {
+          type: 'object',
+          description: 'Análise da carência previdenciária',
+          properties: {
+            totalContribution: {
+              type: 'string',
+              description:
+                'Total de contribuições computadas para fins de carência. Ex: 36 contribuições',
+            },
+            minimumGracePeriodRequired: {
+              type: 'string',
+              description:
+                'Carência mínima exigida para o benefício. Ex: 12 contribuições',
+            },
+            status: {
+              type: 'boolean',
+              description: 'Indica se a carência foi cumprida',
+            },
+          },
+          required: [
+            'totalContribution',
+            'minimumGracePeriodRequired',
+            'status',
+          ],
+        },
+        insuredStatus: {
+          type: 'object',
+          description: 'Situação de segurado na Data de Início da Incapacidade',
+          properties: {
+            lastContributionDate: {
+              type: 'string',
+              description:
+                'Data da última contribuição encontrada no CNIS no formato DD/MM/AAAA',
+            },
+            disabilityStartDate: {
+              type: 'string',
+              description:
+                'Data de Início da Incapacidade (DII) informada no caso no formato DD/MM/AAAA',
+            },
+            gracePeriod: {
+              type: 'boolean',
+              description:
+                'Indica se o segurado está em período de graça na DII',
+            },
+            status: {
+              type: 'boolean',
+              description:
+                'Indica se o segurado possui qualidade de segurado na DII',
+            },
+          },
+          required: [
+            'lastContributionDate',
+            'disabilityStartDate',
+            'gracePeriod',
+            'status',
+          ],
+        },
+        disabilityAnalysis: {
+          type: 'object',
+          description:
+            'Análise da incapacidade com base nos documentos médicos',
+          properties: {
+            informedCids: {
+              type: 'array',
+              description:
+                'Lista dos CIDs informados no caso. Cada item deve conter o código CID seguido de hífen e descrição. Ex: ["M51.1 - Degeneração de disco intervertebral"]',
+              items: { type: 'string' },
+            },
+            preliminaryAnalysis: {
+              type: 'string',
+              description:
+                'Análise preliminar da incapacidade com base nos documentos e CIDs, avaliando gravidade, impacto laboral e perspectivas de concessão',
+            },
+          },
+          required: ['informedCids', 'preliminaryAnalysis'],
+        },
+        retirementRules: {
+          type: 'array',
+          description: 'Lista das regras de aposentadoria aplicáveis ao caso',
+          items: {
+            type: 'object',
+            properties: {
+              modality: {
+                type: 'string',
+                description: 'Nome da modalidade ou regra de aposentadoria',
+              },
+              isFulfilled: {
+                type: 'boolean',
+                description: 'Indica se os requisitos da regra foram cumpridos',
+              },
+              retirementDate: {
+                type: ['string', 'null'],
+                description:
+                  'Data estimada de aposentadoria no formato DD/MM/AAAA, ou null se não aplicável',
+              },
+              estimatedRmi: {
+                type: ['string', 'null'],
+                description:
+                  'RMI estimada em formato monetário, ou null se não aplicável',
+              },
+              estimatedCauseValue: {
+                type: ['string', 'null'],
+                description:
+                  'Valor de causa estimado em formato monetário, ou null se não aplicável',
+              },
+            },
+            required: [
+              'modality',
+              'isFulfilled',
+              'retirementDate',
+              'estimatedRmi',
+              'estimatedCauseValue',
+            ],
+          },
+        },
+        analysisResult: {
+          type: 'string',
+          description:
+            'Parecer técnico conclusivo completo da análise, incluindo verificação de carência, qualidade de segurado, análise de incapacidade e recomendações técnicas. Retorne em formato Markdown (use ##, ###, **negrito**, listas com - e parágrafos)',
+        },
+      },
+      required: [
+        'isEligibleForTemporaryIncapacityBenefit',
+        'gracePeriodAnalysis',
+        'insuredStatus',
+        'disabilityAnalysis',
+        'retirementRules',
+        'analysisResult',
       ],
     };
   }

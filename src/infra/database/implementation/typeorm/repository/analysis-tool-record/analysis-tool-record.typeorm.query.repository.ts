@@ -127,6 +127,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { generalUrbanRetirementDenial: Not(IsNull()) },
         { disabilityRetirementPlanningRejection: Not(IsNull()) },
         { bpcElderlyAnalysis: Not(IsNull()) },
+        { temporaryIncapacityBenefitRejection: Not(IsNull()) },
       ];
 
     const withUpdatedBy = {
@@ -1818,6 +1819,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { generalUrbanRetirementDenial: Not(IsNull()) },
         { disabilityRetirementPlanningRejection: Not(IsNull()) },
         { bpcElderlyAnalysis: Not(IsNull()) },
+        { temporaryIncapacityBenefitRejection: Not(IsNull()) },
       ];
 
     for (const relationalClause of atLeastOneRelationNotNull) {
@@ -2560,6 +2562,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       'generalUrbanRetirementDenial',
       'disabilityRetirementPlanningRejection',
       'bpcElderlyAnalysis',
+      'temporaryIncapacityBenefitRejection',
     ];
   }
 }
