@@ -240,7 +240,7 @@ export class CreateAccidentBenefitRejectionResultUseCase {
       events: (rejection.accidentBenefitRejectionEvent ?? []).map((e) => ({
         accidentDate: e.accidentDate,
         accidentDescription: e.accidentDescription,
-        cidTenId: e.cidTenId,
+        cidTenId: e.cidTenId?.toString() ?? null,
       })),
       workPeriods: (rejection.accidentBenefitRejectionWorkPeriod ?? []).map(
         (wp) => ({

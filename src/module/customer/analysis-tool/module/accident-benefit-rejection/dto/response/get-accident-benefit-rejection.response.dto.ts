@@ -6,6 +6,7 @@ import { FederalDocument } from '@core/domain/schema/value-object/federal-docume
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/enum/analysis-tool-client-type.enum';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
+import { CidTenId } from '@module/customer/analysis-tool/domain/schema/entity/cid-ten/value-object/cid-ten-id.value-object';
 import { AccidentBenefitRejectionCategoryEnum } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection/enum/accident-benefit-rejection-category.enum';
 import { AccidentBenefitRejectionMainReasonEnum } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection/enum/accident-benefit-rejection-main-reason.enum';
 import { AccidentBenefitRejectionRequestToExtendEnum } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection/enum/accident-benefit-rejection-request-to-extend.enum';
@@ -63,13 +64,13 @@ export class GetAccidentBenefitRejectionAnalysisToolClientResponseDto extends Ba
 
 @ResponseDto()
 export class GetAccidentBenefitRejectionResultResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty({ required: false })
+  public accidentBenefitRejectionFirstAnalysis?: string;
+
   @ResponseDtoObjectProperty(() => AccidentBenefitRejectionFirstAnalysisModel, {
     required: false,
   })
-  public accidentBenefitRejectionFirstAnalysis?: AccidentBenefitRejectionFirstAnalysisModel;
-
-  @ResponseDtoStringProperty({ required: false })
-  public accidentBenefitRejectionSecondAnalysis?: string;
+  public accidentBenefitRejectionSecondAnalysis?: AccidentBenefitRejectionFirstAnalysisModel;
 
   @ResponseDtoObjectProperty(() => Object, { required: false })
   public accidentBenefitRejectionCompleteAnalysis?: AccidentBenefitRejectionResultInterface;
@@ -100,8 +101,11 @@ export class GetAccidentBenefitRejectionCnisDocumentResponseDto extends BaseBuil
 
 @ResponseDto()
 export class GetAccidentBenefitRejectionDocumentInResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(Base64)
+  public document: Base64;
+
   @ResponseDtoStringProperty()
-  public fileName: string;
+  public originalFileName: string;
 
   @ResponseDtoEnumProperty(AccidentBenefitRejectionDocumentTypeEnum)
   public type: AccidentBenefitRejectionDocumentTypeEnum;
@@ -112,8 +116,11 @@ export class GetAccidentBenefitRejectionDocumentInResponseDto extends BaseBuilda
 
 @ResponseDto()
 export class GetAccidentBenefitRejectionEventDocumentInResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(Base64)
+  public document: Base64;
+
   @ResponseDtoStringProperty()
-  public fileName: string;
+  public originalFileName: string;
 
   @ResponseDtoEnumProperty(AccidentBenefitRejectionEventDocumentTypeEnum)
   public type: AccidentBenefitRejectionEventDocumentTypeEnum;
@@ -130,8 +137,8 @@ export class GetAccidentBenefitRejectionEventInResponseDto extends BaseBuildable
   @ResponseDtoStringProperty({ required: false })
   public accidentDescription?: string;
 
-  @ResponseDtoStringProperty({ required: false })
-  public cidTenId?: string;
+  @ResponseDtoValueObjectProperty(CidTenId, { required: false })
+  public cidTenId?: CidTenId;
 
   @ResponseDtoObjectProperty(
     () => GetAccidentBenefitRejectionEventDocumentInResponseDto,
@@ -145,8 +152,11 @@ export class GetAccidentBenefitRejectionEventInResponseDto extends BaseBuildable
 
 @ResponseDto()
 export class GetAccidentBenefitRejectionWorkPeriodDocumentInResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(Base64)
+  public document: Base64;
+
   @ResponseDtoStringProperty()
-  public fileName: string;
+  public originalFileName: string;
 
   @ResponseDtoEnumProperty(AccidentBenefitRejectionWorkPeriodDocumentTypeEnum)
   public type: AccidentBenefitRejectionWorkPeriodDocumentTypeEnum;

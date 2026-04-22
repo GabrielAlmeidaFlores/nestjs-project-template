@@ -26,6 +26,7 @@ import { AccidentBenefitRejectionWorkPeriodDocumentEntity } from '@module/custom
 import { AccidentBenefitRejectionWorkPeriodDocumentId } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection-work-period-document/value-object/accident-benefit-rejection-work-period-document-id.value-object';
 import { AccidentBenefitRejectionWorkPeriodEarningsHistoryEntity } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection-work-period-earnings-history/accident-benefit-rejection-work-period-earnings-history.entity';
 import { AccidentBenefitRejectionWorkPeriodEarningsHistoryId } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection-work-period-earnings-history/value-object/accident-benefit-rejection-work-period-earnings-history-id.value-object';
+import { CidTenId } from '@module/customer/analysis-tool/domain/schema/entity/cid-ten/value-object/cid-ten-id.value-object';
 
 import type { AccidentBenefitRejectionEventDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection-event-document.typeorm.entity';
 import type { AccidentBenefitRejectionWorkPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection-work-period-document.typeorm.entity';
@@ -102,7 +103,7 @@ export class GetAccidentBenefitRejectionWithRelationsQueryResultAutoMapperProfil
             id: new AccidentBenefitRejectionEventId(item.id),
             accidentDate: item.accidentDate,
             accidentDescription: item.accidentDescription,
-            cidTenId: item.cidTenId,
+            cidTenId: item.cidTen?.id ? new CidTenId(item.cidTen.id) : null,
             accidentBenefitRejectionId: analysisEntity.id,
             createdAt: item.createdAt,
             updatedAt: item.updatedAt,

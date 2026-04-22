@@ -4,7 +4,9 @@ import { Injectable } from '@nestjs/common';
 
 import { AccidentBenefitRejectionEventTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection-event.typeorm.entity';
 import { AccidentBenefitRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection.typeorm.entity';
+import { CidTenTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cid-ten.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
+import { CidTenId } from '@module/customer/analysis-tool/domain/schema/entity/cid-ten/value-object/cid-ten-id.value-object';
 import { AccidentBenefitRejectionId } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection/value-object/accident-benefit-rejection-id.value-object';
 import { AccidentBenefitRejectionEventEntity } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection-event/accident-benefit-rejection-event.entity';
 import { AccidentBenefitRejectionEventId } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection-event/value-object/accident-benefit-rejection-event-id.value-object';
@@ -38,7 +40,7 @@ export class AccidentBenefitRejectionEventEntityAutoMapperProfile {
         id: new AccidentBenefitRejectionEventId(source.id),
         accidentDate: source.accidentDate,
         accidentDescription: source.accidentDescription,
-        cidTenId: source.cidTenId,
+        cidTenId: source.cidTen?.id ? new CidTenId(source.cidTen.id) : null,
         accidentBenefitRejectionId: new AccidentBenefitRejectionId(
           source.accidentBenefitRejection.id,
         ),
@@ -67,11 +69,16 @@ export class AccidentBenefitRejectionEventEntityAutoMapperProfile {
             } as AccidentBenefitRejectionTypeormEntity)
           : null;
 
+      const cidTen =
+        source.cidTenId !== null
+          ? ({ id: source.cidTenId.toString() } as CidTenTypeormEntity)
+          : null;
+
       return AccidentBenefitRejectionEventTypeormEntity.build({
         id: source.id.toString(),
         accidentDate: source.accidentDate,
         accidentDescription: source.accidentDescription,
-        cidTenId: source.cidTenId,
+        cidTen,
         accidentBenefitRejection,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,

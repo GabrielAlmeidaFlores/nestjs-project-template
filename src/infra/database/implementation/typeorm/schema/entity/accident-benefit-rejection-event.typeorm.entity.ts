@@ -3,6 +3,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { AccidentBenefitRejectionEventDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection-event-document.typeorm.entity';
 import { AccidentBenefitRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { CidTenTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cid-ten.typeorm.entity';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 
 @Entity({ name: 'accident_benefit_rejection_event' })
@@ -22,13 +23,9 @@ export class AccidentBenefitRejectionEventTypeormEntity extends BaseTypeormEntit
   })
   public accidentDescription: string | null;
 
-  @Column({
-    name: 'cid_ten_id',
-    type: 'varchar',
-    length: 255,
-    nullable: true,
-  })
-  public cidTenId: string | null;
+  @ManyToOne(() => CidTenTypeormEntity, { nullable: true })
+  @JoinColumn({ name: 'cid_ten_id' })
+  public cidTen?: CidTenTypeormEntity | null;
 
   @ManyToOne(
     () => AccidentBenefitRejectionTypeormEntity,

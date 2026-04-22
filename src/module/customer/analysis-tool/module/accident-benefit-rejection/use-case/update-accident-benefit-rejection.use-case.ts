@@ -3,6 +3,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { CidTenQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cid-ten/query/cid-ten.query.repository.gateway';
+import { CidTenNotFoundError } from '@module/customer/analysis-tool/error/cid-ten-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { AccidentBenefitRejectionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/repository/accident-benefit-rejection/command/accident-benefit-rejection.command.repository.gateway';
@@ -60,6 +62,8 @@ export class UpdateAccidentBenefitRejectionUseCase {
     private readonly accidentBenefitRejectionEventDocumentCommandRepositoryGateway: AccidentBenefitRejectionEventDocumentCommandRepositoryGateway,
     @Inject(AccidentBenefitRejectionInssBenefitCommandRepositoryGateway)
     private readonly accidentBenefitRejectionInssBenefitCommandRepositoryGateway: AccidentBenefitRejectionInssBenefitCommandRepositoryGateway,
+    @Inject(CidTenQueryRepositoryGateway)
+    private readonly cidTenQueryRepositoryGateway: CidTenQueryRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -262,11 +266,20 @@ export class UpdateAccidentBenefitRejectionUseCase {
       events.map(async (eventDto) => {
         const eventId = new AccidentBenefitRejectionEventId();
 
+        const cidTenId = eventDto.cidTenId
+          ? (
+              await this.cidTenQueryRepositoryGateway.findOneByIdOrFail(
+                eventDto.cidTenId,
+                CidTenNotFoundError,
+              )
+            ).id
+          : null;
+
         const eventEntity = new AccidentBenefitRejectionEventEntity({
           id: eventId,
           accidentDate: eventDto.accidentDate ?? null,
           accidentDescription: eventDto.accidentDescription ?? null,
-          cidTenId: eventDto.cidTenId ?? null,
+          cidTenId,
           accidentBenefitRejectionId,
         });
 
