@@ -16,6 +16,7 @@ import { TemporaryIncapacityBenefitRejectionResultCommandRepositoryGateway } fro
 import { TemporaryIncapacityBenefitRejectionId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/value-object/temporary-incapacity-benefit-rejection-id.value-object';
 import { TemporaryIncapacityBenefitRejectionDocumentTypeEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-document/enum/temporary-incapacity-benefit-rejection-document-type.enum';
 import { TemporaryIncapacityBenefitRejectionResultEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-result/temporary-incapacity-benefit-rejection-result.entity';
+import { TemporaryIncapacityBenefitRejectionResultId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-result/value-object/temporary-incapacity-benefit-rejection-result-id.value-object';
 import { CreateTemporaryIncapacityBenefitRejectionFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/response/create-temporary-incapacity-benefit-rejection-first-analysis.response.dto';
 import { InvalidTemporaryIncapacityBenefitRejectionFirstAnalysisJsonError } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/error/invalid-temporary-incapacity-benefit-rejection-first-analysis-json.error';
 import { TemporaryIncapacityBenefitRejectionCnisDocumentNotFoundError } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/error/temporary-incapacity-benefit-rejection-cnis-document-not-found.error';
@@ -88,9 +89,7 @@ export class CreateTemporaryIncapacityBenefitRejectionFirstAnalysisUseCase {
         TemporaryIncapacityBenefitRejectionNotFoundError,
       );
 
-    const cnisDocument = (
-      temporaryIncapacityBenefitRejection.documents ?? []
-    ).find(
+    const cnisDocument = temporaryIncapacityBenefitRejection.documents.find(
       (doc) =>
         doc.type === TemporaryIncapacityBenefitRejectionDocumentTypeEnum.CNIS,
     );
@@ -161,6 +160,10 @@ export class CreateTemporaryIncapacityBenefitRejectionFirstAnalysisUseCase {
 
     const resultEntity = new TemporaryIncapacityBenefitRejectionResultEntity({
       ...(existingResult !== null && { id: existingResult.id }),
+      id:
+        existingResult !== null
+          ? new TemporaryIncapacityBenefitRejectionResultId(existingResult.id)
+          : new TemporaryIncapacityBenefitRejectionResultId(),
       inssDecisionAnalysis: existingResult?.inssDecisionAnalysis ?? null,
       firstAnalysis: parsedFirstAnalysis.cleanedJson,
       completeAnalysis: existingResult?.completeAnalysis ?? null,
@@ -268,28 +271,26 @@ export class CreateTemporaryIncapacityBenefitRejectionFirstAnalysisUseCase {
       denialReasonDescription: rejection.denialReasonDescription,
       condition: rejection.condition,
       conditionDescription: rejection.conditionDescription,
-      documents: (rejection.documents ?? []).map((document) => ({
+      documents: rejection.documents.map((document) => ({
         id: document.id,
         type: document.type,
       })),
-      disabilityAnalysis: (rejection.disabilityAnalysis ?? []).map(
-        (analysis) => ({
-          id: analysis.id,
-          estimatedDisabilityStartDate: analysis.estimatedDisabilityStartDate,
-          shortDisabilityDescription: analysis.shortDisabilityDescription,
-          disabilityFromAccident: analysis.disabilityFromAccident,
-          disablingConditionDescription: analysis.disablingConditionDescription,
-          disabilityFromSevereDisease: analysis.disabilityFromSevereDisease,
-          severeDisease: analysis.severeDisease,
-          diseaseStartDate: analysis.diseaseStartDate,
-          needsConstantAssistanceFromAnotherPerson:
-            analysis.needsConstantAssistanceFromAnotherPerson,
-          previousDisabilityBenefit: analysis.previousDisabilityBenefit,
-          previousBenefitNumber: analysis.previousBenefitNumber,
-          cids: analysis.cids,
-        }),
-      ),
-      insuredStatus: (rejection.insuredStatus ?? []).map((item) => ({
+      disabilityAnalysis: rejection.disabilityAnalysis.map((analysis) => ({
+        id: analysis.id,
+        estimatedDisabilityStartDate: analysis.estimatedDisabilityStartDate,
+        shortDisabilityDescription: analysis.shortDisabilityDescription,
+        disabilityFromAccident: analysis.disabilityFromAccident,
+        disablingConditionDescription: analysis.disablingConditionDescription,
+        disabilityFromSevereDisease: analysis.disabilityFromSevereDisease,
+        severeDisease: analysis.severeDisease,
+        diseaseStartDate: analysis.diseaseStartDate,
+        needsConstantAssistanceFromAnotherPerson:
+          analysis.needsConstantAssistanceFromAnotherPerson,
+        previousDisabilityBenefit: analysis.previousDisabilityBenefit,
+        previousBenefitNumber: analysis.previousBenefitNumber,
+        cids: analysis.cids,
+      })),
+      insuredStatus: rejection.insuredStatus.map((item) => ({
         id: item.id,
         involuntaryUnemployment: item.involuntaryUnemployment,
         intentionToProveInvoluntaryUnemployment:
@@ -299,7 +300,7 @@ export class CreateTemporaryIncapacityBenefitRejectionFirstAnalysisUseCase {
         ruralPeriodEndDate: item.ruralPeriodEndDate,
         documentsDescription: item.documentsDescription,
       })),
-      workPeriods: (rejection.workPeriods ?? []).map((wp) => ({
+      workPeriods: rejection.workPeriods.map((wp) => ({
         id: wp.id,
         bondOrigin: wp.bondOrigin,
         startDate: wp.startDate,
@@ -329,22 +330,22 @@ export class CreateTemporaryIncapacityBenefitRejectionFirstAnalysisUseCase {
     cnisBuffer: Buffer,
   ): Promise<Buffer[]> {
     const otherDocumentBuffers = await Promise.all(
-      (rejection.documents ?? [])
+      rejection.documents
         .filter((doc) => doc.fileName !== cnisDocumentPath)
         .map((doc) => this.fileProcessorGateway.getFileBuffer(doc.fileName)),
     );
 
     const disabilityAnalysisDocumentBuffers = await Promise.all(
-      (rejection.disabilityAnalysis ?? []).flatMap((analysis) =>
-        (analysis.documents ?? []).map((doc) =>
+      rejection.disabilityAnalysis.flatMap((analysis) =>
+        analysis.documents.map((doc) =>
           this.fileProcessorGateway.getFileBuffer(doc.fileName),
         ),
       ),
     );
 
     const insuredStatusDocumentBuffers = await Promise.all(
-      (rejection.insuredStatus ?? []).flatMap((status) =>
-        (status.documents ?? []).map((doc) =>
+      rejection.insuredStatus.flatMap((status) =>
+        status.documents.map((doc) =>
           this.fileProcessorGateway.getFileBuffer(doc.fileName),
         ),
       ),

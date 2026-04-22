@@ -47,7 +47,7 @@ export class TemporaryIncapacityBenefitRejectionInsuredStatusTypeormEntity exten
 
   @OneToMany(
     () => TemporaryIncapacityBenefitRejectionInsuredStatusDocumentTypeormEntity,
-    (entity) => entity.insuredStatus,
+    (entity) => entity.temporaryIncapacityBenefitRejectionInsuredStatus,
   )
   public documents?: TemporaryIncapacityBenefitRejectionInsuredStatusDocumentTypeormEntity[];
 

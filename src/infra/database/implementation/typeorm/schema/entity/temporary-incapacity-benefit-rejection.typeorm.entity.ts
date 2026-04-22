@@ -82,7 +82,7 @@ export class TemporaryIncapacityBenefitRejectionTypeormEntity extends BaseTypeor
     eager: false,
   })
   @JoinColumn({ name: 'temporary_incapacity_benefit_rejection_result_id' })
-  public result?: TemporaryIncapacityBenefitRejectionResultTypeormEntity | null;
+  public temporaryIncapacityBenefitRejectionResult?: TemporaryIncapacityBenefitRejectionResultTypeormEntity | null;
 
   @OneToMany(
     () => TemporaryIncapacityBenefitRejectionDocumentTypeormEntity,

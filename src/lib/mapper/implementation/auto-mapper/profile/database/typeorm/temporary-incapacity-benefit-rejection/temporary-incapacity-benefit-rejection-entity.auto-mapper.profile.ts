@@ -27,8 +27,11 @@ export class TemporaryIncapacityBenefitRejectionEntityAutoMapperProfile {
       source: TemporaryIncapacityBenefitRejectionTypeormEntity,
     ): TemporaryIncapacityBenefitRejectionEntity => {
       const resultId =
-        source.result !== null && source.result !== undefined
-          ? new TemporaryIncapacityBenefitRejectionResultId(source.result.id)
+        source.temporaryIncapacityBenefitRejectionResult !== null &&
+        source.temporaryIncapacityBenefitRejectionResult !== undefined
+          ? new TemporaryIncapacityBenefitRejectionResultId(
+              source.temporaryIncapacityBenefitRejectionResult.id,
+            )
           : null;
 
       return new TemporaryIncapacityBenefitRejectionEntity({
@@ -66,7 +69,7 @@ export class TemporaryIncapacityBenefitRejectionEntityAutoMapperProfile {
           ? TemporaryIncapacityBenefitRejectionResultTypeormEntity.build({
               id: source.temporaryIncapacityBenefitRejectionResultId.toString(),
             } as TemporaryIncapacityBenefitRejectionResultTypeormEntity)
-          : undefined;
+          : null;
 
       return TemporaryIncapacityBenefitRejectionTypeormEntity.build({
         id: source.id.toString(),
@@ -79,7 +82,7 @@ export class TemporaryIncapacityBenefitRejectionEntityAutoMapperProfile {
         denialReasonDescription: source.denialReasonDescription,
         condition: source.condition,
         conditionDescription: source.conditionDescription,
-        result,
+        temporaryIncapacityBenefitRejectionResult: result,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,

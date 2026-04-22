@@ -26,7 +26,7 @@ export class TemporaryIncapacityBenefitRejectionResultTypeormEntity extends Base
 
   @OneToOne(
     () => TemporaryIncapacityBenefitRejectionTypeormEntity,
-    (entity) => entity.result,
+    (entity) => entity.temporaryIncapacityBenefitRejectionResult,
   )
   public temporaryIncapacityBenefitRejection?: TemporaryIncapacityBenefitRejectionTypeormEntity;
 

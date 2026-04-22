@@ -87,14 +87,14 @@ export class TemporaryIncapacityBenefitRejectionDisabilityAnalysisTypeormEntity 
 
   @OneToMany(
     () => TemporaryIncapacityBenefitRejectionDisabilityAnalysisCidTypeormEntity,
-    (entity) => entity.disabilityAnalysis,
+    (entity) => entity.temporaryIncapacityBenefitRejectionDisabilityAnalysis,
   )
   public cids?: TemporaryIncapacityBenefitRejectionDisabilityAnalysisCidTypeormEntity[];
 
   @OneToMany(
     () =>
       TemporaryIncapacityBenefitRejectionDisabilityAnalysisDocumentTypeormEntity,
-    (entity) => entity.disabilityAnalysis,
+    (entity) => entity.temporaryIncapacityBenefitRejectionDisabilityAnalysis,
   )
   public documents?: TemporaryIncapacityBenefitRejectionDisabilityAnalysisDocumentTypeormEntity[];
 

@@ -1950,6 +1950,7 @@ Análise processada do CNIS:
 
   public async getTemporaryIncapacityBenefitRejectionFirstAnalysis(
     systemInstruction: string,
+    cnisAnalysisJson: string,
     files: Buffer[],
     asJson = true,
   ): Promise<string | null> {
@@ -1958,6 +1959,9 @@ Análise processada do CNIS:
 - A análise técnica deve se basear prioritariamente nos dados fornecidos.
 - Não incluir tag <br> na resposta.
 - Retorne estritamente um objeto JSON compatível com o schema solicitado.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
 `;
 
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(

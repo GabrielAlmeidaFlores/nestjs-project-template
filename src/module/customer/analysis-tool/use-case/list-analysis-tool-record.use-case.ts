@@ -111,15 +111,7 @@ export class ListAnalysisToolRecordUseCase {
             analysisToolRecord.bpcElderlyAnalysis ??
             analysisToolRecord.temporaryIncapacityBenefitRejection;
 
-          const analysisId =
-            analysis?.id ??
-            analysisToolRecord.specialCategoryRetirementAnalysis
-              ?.specialCategoryRetirementAnalysisId ??
-            analysisToolRecord.temporaryDisabilityBenefitsGrant
-              ?.temporaryDisabilityBenefitsGrantId ??
-            analysisToolRecord.temporaryIncapacityBenefitRejection
-              ?.temporaryIncapacityBenefitRejectionId ??
-            null;
+          const analysisId = analysis?.id ?? null;
 
           if (analysisId === null) {
             return null;

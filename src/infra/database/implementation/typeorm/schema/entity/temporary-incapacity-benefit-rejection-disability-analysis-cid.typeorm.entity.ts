@@ -17,7 +17,7 @@ export class TemporaryIncapacityBenefitRejectionDisabilityAnalysisCidTypeormEnti
   @JoinColumn({
     name: 'temporary_incapacity_benefit_rejection_disability_analysis_id',
   })
-  public disabilityAnalysis?: TemporaryIncapacityBenefitRejectionDisabilityAnalysisTypeormEntity;
+  public temporaryIncapacityBenefitRejectionDisabilityAnalysis?: TemporaryIncapacityBenefitRejectionDisabilityAnalysisTypeormEntity;
 
   protected override readonly _type =
     TemporaryIncapacityBenefitRejectionDisabilityAnalysisCidTypeormEntity.name;
