@@ -263,47 +263,61 @@ export class CreateMaternityPayGrantFirstAnalysisUseCase {
           applicationDeadlineAnalysis:
             MaternityPayGrantFirstAnalysisApplicationDeadlineModel.build({
               status: normalizedRaw.applicationDeadlineAnalysis.status,
-              ...(normalizedRaw.applicationDeadlineAnalysis.duration !=
+              ...(normalizedRaw.applicationDeadlineAnalysis.duration !==
                 null && {
                 duration: normalizedRaw.applicationDeadlineAnalysis.duration,
               }),
-              ...(normalizedRaw.applicationDeadlineAnalysis.startDate !=
-                null && {
-                startDate: new Date(
-                  normalizedRaw.applicationDeadlineAnalysis.startDate,
-                ),
-              }),
-              ...(normalizedRaw.applicationDeadlineAnalysis.terminationDate !=
-                null && {
-                terminationDate: new Date(
-                  normalizedRaw.applicationDeadlineAnalysis.terminationDate,
-                ),
-              }),
-              ...(normalizedRaw.applicationDeadlineAnalysis.startLeaveDate !=
-                null && {
-                startLeaveDate: new Date(
-                  normalizedRaw.applicationDeadlineAnalysis.startLeaveDate,
-                ),
-              }),
-              ...(normalizedRaw.applicationDeadlineAnalysis.endLeaveDate !=
-                null && {
-                endLeaveDate: new Date(
-                  normalizedRaw.applicationDeadlineAnalysis.endLeaveDate,
-                ),
-              }),
-              ...(normalizedRaw.applicationDeadlineAnalysis.total != null && {
-                total: normalizedRaw.applicationDeadlineAnalysis.total,
-              }),
-              ...(normalizedRaw.applicationDeadlineAnalysis.amountBenefit !=
-                null && {
-                amountBenefit:
-                  normalizedRaw.applicationDeadlineAnalysis.amountBenefit,
-              }),
-              ...(normalizedRaw.applicationDeadlineAnalysis.calculationBasis !=
-                null && {
-                calculationBasis:
-                  normalizedRaw.applicationDeadlineAnalysis.calculationBasis,
-              }),
+              ...(normalizedRaw.applicationDeadlineAnalysis.startDate !==
+                null &&
+                normalizedRaw.applicationDeadlineAnalysis.startDate !==
+                  undefined && {
+                  startDate: new Date(
+                    normalizedRaw.applicationDeadlineAnalysis.startDate,
+                  ),
+                }),
+              ...(normalizedRaw.applicationDeadlineAnalysis.terminationDate !==
+                null &&
+                normalizedRaw.applicationDeadlineAnalysis.terminationDate !==
+                  undefined && {
+                  terminationDate: new Date(
+                    normalizedRaw.applicationDeadlineAnalysis.terminationDate,
+                  ),
+                }),
+              ...(normalizedRaw.applicationDeadlineAnalysis.startLeaveDate !==
+                null &&
+                normalizedRaw.applicationDeadlineAnalysis.startLeaveDate !==
+                  undefined && {
+                  startLeaveDate: new Date(
+                    normalizedRaw.applicationDeadlineAnalysis.startLeaveDate,
+                  ),
+                }),
+              ...(normalizedRaw.applicationDeadlineAnalysis.endLeaveDate !==
+                null &&
+                normalizedRaw.applicationDeadlineAnalysis.endLeaveDate !==
+                  undefined && {
+                  endLeaveDate: new Date(
+                    normalizedRaw.applicationDeadlineAnalysis.endLeaveDate,
+                  ),
+                }),
+              ...(normalizedRaw.applicationDeadlineAnalysis.total !== null &&
+                normalizedRaw.applicationDeadlineAnalysis.total !==
+                  undefined && {
+                  total: normalizedRaw.applicationDeadlineAnalysis.total,
+                }),
+              ...(normalizedRaw.applicationDeadlineAnalysis.amountBenefit !==
+                null &&
+                normalizedRaw.applicationDeadlineAnalysis.amountBenefit !==
+                  undefined && {
+                  amountBenefit:
+                    normalizedRaw.applicationDeadlineAnalysis.amountBenefit,
+                }),
+              ...(normalizedRaw.applicationDeadlineAnalysis.calculationBasis !==
+                null &&
+                normalizedRaw.applicationDeadlineAnalysis.calculationBasis !==
+                  undefined && {
+                  calculationBasis:
+                    normalizedRaw.applicationDeadlineAnalysis.calculationBasis,
+                }),
             }),
           benefitEligibilityAnalysis:
             MaternityPayGrantFirstAnalysisAnalysisSectionModel.build(
@@ -329,37 +343,38 @@ export class CreateMaternityPayGrantFirstAnalysisUseCase {
                     },
                   ),
               ),
-              ...(period.gracePeriod != null && {
+              ...(period.gracePeriod !== undefined && {
                 gracePeriod: period.gracePeriod,
               }),
-              ...(period.contributionAverage != null && {
+              ...(period.contributionAverage !== undefined && {
                 contributionAverage: String(period.contributionAverage),
               }),
-              ...(period.reasonPendency != null && {
+              ...(period.reasonPendency !== undefined && {
                 reasonPendency: period.reasonPendency,
               }),
-              ...(period.bondOrigin != null && {
+              ...(period.bondOrigin !== undefined && {
                 bondOrigin: period.bondOrigin,
               }),
-              ...(period.complementViaMyInss != null && {
+              ...(period.complementViaMyInss !== undefined && {
                 complementViaMyInss: period.complementViaMyInss,
               }),
-              ...(period.impact != null && { impact: period.impact }),
-              ...(period.typeOfContribution != null && {
+              ...(period.impact !== undefined && { impact: period.impact }),
+              ...(period.typeOfContribution !== undefined && {
                 typeOfContribution: period.typeOfContribution,
               }),
-              ...(period.periodConsideration != null && {
+              ...(period.periodConsideration !== undefined && {
                 periodConsideration: period.periodConsideration,
               }),
             }),
           ),
-          ...(normalizedRaw.lastContribution != null && {
-            lastContribution: new Date(normalizedRaw.lastContribution),
-          }),
-          ...(normalizedRaw.categoryAtDfg != null && {
+          ...(normalizedRaw.lastContribution !== null &&
+            normalizedRaw.lastContribution !== undefined && {
+              lastContribution: new Date(normalizedRaw.lastContribution),
+            }),
+          ...(normalizedRaw.categoryAtDfg !== undefined && {
             categoryAtDfg: normalizedRaw.categoryAtDfg,
           }),
-          ...(normalizedRaw.employmentBondStatus != null && {
+          ...(normalizedRaw.employmentBondStatus !== undefined && {
             employmentBondStatus: normalizedRaw.employmentBondStatus,
           }),
         }),

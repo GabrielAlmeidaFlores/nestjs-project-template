@@ -16,9 +16,11 @@ import { AudienceQuestionGeneratorModule } from '@module/customer/analysis-tool/
 import { BpcElderlyAnalysisModule } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/bpc-elderly-analysis.module';
 import { CnisFastAnalysisModule } from '@module/customer/analysis-tool/module/cnis-fast-analysis/cnis-fast-analysis.module';
 import { DeathBenefitGrantModule } from '@module/customer/analysis-tool/module/death-benefit-grant/death-benefit-grant.module';
+import { DeathBenefitRejectionModule } from '@module/customer/analysis-tool/module/death-benefit-rejection/death-benefit-rejection.module';
 import { DisabilityAssessmentForBpcAnalysisModule } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.module';
 import { DisabilityRetirementPlanningModule } from '@module/customer/analysis-tool/module/disability-retirement-planning/disability-retirement-planning.module';
 import { DisabilityRetirementPlanningGrantModule } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/disability-retirement-planning-grant.module';
+import { DisabilityRetirementPlanningRejectionModule } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/disability-retirement-planning-rejection.module';
 import { GeneralUrbanRetirementModule } from '@module/customer/analysis-tool/module/general-urban-retirement/general-urban-retirement.module';
 import { GeneralUrbanRetirementDenialModule } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/general-urban-retirement-denial.module';
 import { GeneralUrbanRetirementGrantModule } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/general-urban-retirement-grant.module';
@@ -98,9 +100,11 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     GeneralUrbanRetirementModule,
     SpecialCategoryRetirementAnalysisModule,
     DeathBenefitGrantModule,
+    DeathBenefitRejectionModule,
     SurvivorPensionAnalysisModule,
     GeneralUrbanRetirementDenialModule,
     MaternityPayGrantModule,
+    DisabilityRetirementPlanningRejectionModule,
     TemporaryDisabilityBenefitsGrantModule,
   ],
   controllers: [AnalysisToolController],
