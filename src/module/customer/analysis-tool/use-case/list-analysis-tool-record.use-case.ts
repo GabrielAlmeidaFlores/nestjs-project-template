@@ -108,6 +108,9 @@ export class ListAnalysisToolRecordUseCase {
             analysisToolRecord.maternityPayGrant ??
             analysisToolRecord.deathBenefitGrant ??
             analysisToolRecord.generalUrbanRetirementDenial ??
+            analysisToolRecord.disabilityRetirementPlanningRejection ??
+            analysisToolRecord.deathBenefitGrant ??
+            analysisToolRecord.deathBenefitRejection ??
             analysisToolRecord.bpcElderlyAnalysis;
 
           const analysisId =

@@ -73,18 +73,13 @@ export class ResolveMaternityPayGrantPeriodPendencyUseCase {
       return;
     }
 
-    if (
-      dto.action ===
-      ResolveMaternityPayGrantPeriodPendencyActionEnum.UPDATE_PERIOD_END
-    ) {
-      await this.updatePeriodEnd(
-        maternityPayGrantId,
-        maternityPayGrantPeriodId,
-        period,
-        dto.periodEnd,
-      );
-      return;
-    }
+    await this.updatePeriodEnd(
+      maternityPayGrantId,
+      maternityPayGrantPeriodId,
+      period,
+      dto.periodEnd,
+    );
+    return;
   }
 
   private async ignorePeriod(
