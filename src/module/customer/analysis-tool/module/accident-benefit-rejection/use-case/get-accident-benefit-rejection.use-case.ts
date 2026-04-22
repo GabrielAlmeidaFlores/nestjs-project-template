@@ -83,9 +83,7 @@ export class GetAccidentBenefitRejectionUseCase {
     const secondAnalysis =
       result.accidentBenefitRejectionResult !== null &&
       rawStoredSecondAnalysis !== null
-        ? this.tryParseStoredSecondAnalysis(
-            rawStoredSecondAnalysis,
-          )
+        ? this.tryParseStoredSecondAnalysis(rawStoredSecondAnalysis)
         : null;
 
     const firstAnalysis =
@@ -105,150 +103,150 @@ export class GetAccidentBenefitRejectionUseCase {
     const events = await Promise.all(
       (result.accidentBenefitRejectionEvent ?? []).map(
         async (event: AccidentBenefitRejectionEventEntity) => {
-        const eventDocuments = (
-          result.accidentBenefitRejectionEventDocument ?? []
-        ).filter(
-          (doc: AccidentBenefitRejectionEventDocumentEntity) =>
-            doc.accidentBenefitRejectionEventId !== null &&
-            doc.accidentBenefitRejectionEventId.toString() ===
-              event.id.toString() &&
-            doc.document !== null &&
-            doc.type !== null,
-        );
+          const eventDocuments = (
+            result.accidentBenefitRejectionEventDocument ?? []
+          ).filter(
+            (doc: AccidentBenefitRejectionEventDocumentEntity) =>
+              doc.accidentBenefitRejectionEventId !== null &&
+              doc.accidentBenefitRejectionEventId.toString() ===
+                event.id.toString() &&
+              doc.document !== null &&
+              doc.type !== null,
+          );
 
-        const eventDocumentDtos = await Promise.all(
-          eventDocuments.map(
-            async (doc: AccidentBenefitRejectionEventDocumentEntity) =>
-              this.buildEventDocumentResponse(
-                doc.document as string,
-                doc.type as NonNullable<typeof doc.type>,
-              ),
-          ),
-        );
+          const eventDocumentDtos = await Promise.all(
+            eventDocuments.map(
+              async (doc: AccidentBenefitRejectionEventDocumentEntity) =>
+                this.buildEventDocumentResponse(
+                  doc.document as string,
+                  doc.type as NonNullable<typeof doc.type>,
+                ),
+            ),
+          );
 
-        return GetAccidentBenefitRejectionEventInResponseDto.build({
-          ...(event.accidentDate !== null && {
-            accidentDate: event.accidentDate,
-          }),
-          ...(event.accidentDescription !== null && {
-            accidentDescription: event.accidentDescription,
-          }),
-          ...(event.cidTenId !== null && {
-            cidTenId: event.cidTenId,
-          }),
-          ...(eventDocumentDtos.length > 0 && {
-            eventDocuments: eventDocumentDtos,
-          }),
-        });
-      },
+          return GetAccidentBenefitRejectionEventInResponseDto.build({
+            ...(event.accidentDate !== null && {
+              accidentDate: event.accidentDate,
+            }),
+            ...(event.accidentDescription !== null && {
+              accidentDescription: event.accidentDescription,
+            }),
+            ...(event.cidTenId !== null && {
+              cidTenId: event.cidTenId,
+            }),
+            ...(eventDocumentDtos.length > 0 && {
+              eventDocuments: eventDocumentDtos,
+            }),
+          });
+        },
       ),
     );
 
     const workPeriods = await Promise.all(
       (result.accidentBenefitRejectionWorkPeriod ?? []).map(
         async (wp: AccidentBenefitRejectionWorkPeriodEntity) => {
-        const wpDocuments = (
-          result.accidentBenefitRejectionWorkPeriodDocument ?? []
-        ).filter(
-          (doc: AccidentBenefitRejectionWorkPeriodDocumentEntity) =>
-            doc.accidentBenefitRejectionWorkPeriodId !== null &&
-            doc.accidentBenefitRejectionWorkPeriodId.toString() ===
-              wp.id.toString() &&
-            doc.document !== null &&
-            doc.type !== null,
-        );
+          const wpDocuments = (
+            result.accidentBenefitRejectionWorkPeriodDocument ?? []
+          ).filter(
+            (doc: AccidentBenefitRejectionWorkPeriodDocumentEntity) =>
+              doc.accidentBenefitRejectionWorkPeriodId !== null &&
+              doc.accidentBenefitRejectionWorkPeriodId.toString() ===
+                wp.id.toString() &&
+              doc.document !== null &&
+              doc.type !== null,
+          );
 
-        const wpDocumentDtos = await Promise.all(
-          wpDocuments.map(
-            async (doc: AccidentBenefitRejectionWorkPeriodDocumentEntity) =>
-              this.buildWorkPeriodDocumentResponse(
-                doc.document as string,
-                doc.type as NonNullable<typeof doc.type>,
-              ),
-          ),
-        );
-
-        const earningsHistory = (
-          result.accidentBenefitRejectionWorkPeriodEarningsHistory ?? []
-        ).filter(
-          (eh: AccidentBenefitRejectionWorkPeriodEarningsHistoryEntity) =>
-            eh.accidentBenefitRejectionWorkPeriodId !== null &&
-            eh.accidentBenefitRejectionWorkPeriodId.toString() ===
-              wp.id.toString(),
-        );
-
-        const parsedGracePeriod =
-          wp.gracePeriod !== null ? Number(wp.gracePeriod) : null;
-
-        const parsedCategory =
-          wp.category !== null &&
-          Object.values(AccidentBenefitRejectionCategoryEnum).includes(
-            wp.category as AccidentBenefitRejectionCategoryEnum,
-          )
-            ? (wp.category as AccidentBenefitRejectionCategoryEnum)
-            : null;
-
-        return GetAccidentBenefitRejectionWorkPeriodInResponseDto.build({
-          ...(wp.bondOrigin !== null && { bondOrigin: wp.bondOrigin }),
-          ...(wp.startDate !== null && { startDate: wp.startDate }),
-          ...(wp.endDate !== null && { endDate: wp.endDate }),
-          ...(parsedCategory !== null && { category: parsedCategory }),
-          ...(wp.competenceBelowTheMinimum !== null && {
-            competenceBelowTheMinimum: wp.competenceBelowTheMinimum,
-          }),
-          ...(wp.pendencyReason !== null && {
-            pendencyReason: wp.pendencyReason,
-          }),
-          ...(wp.periodConsideration !== null && {
-            periodConsideration: wp.periodConsideration,
-          }),
-          ...(wp.contributionAverage !== null && {
-            contributionAverage: new DecimalValue(wp.contributionAverage),
-          }),
-          ...(wp.status !== null && { status: wp.status === 'true' }),
-          ...(parsedGracePeriod !== null &&
-            !Number.isNaN(parsedGracePeriod) && {
-              gracePeriod: parsedGracePeriod,
-            }),
-          ...(wp.jobType !== null && { jobType: wp.jobType }),
-          ...(wp.activityDescription !== null && {
-            activityDescription: wp.activityDescription,
-          }),
-          ...(wpDocumentDtos.length > 0 && {
-            documents: wpDocumentDtos,
-          }),
-          ...(earningsHistory.length > 0 && {
-            earningsHistory: earningsHistory.map(
-              (eh: AccidentBenefitRejectionWorkPeriodEarningsHistoryEntity) =>
-                GetAccidentBenefitRejectionWorkPeriodEarningsHistoryItemInResponseDto.build(
-                  {
-                    ...(eh.competence !== null && {
-                      competence: eh.competence,
-                    }),
-                    ...(eh.remuneration !== null && {
-                      remuneration: eh.remuneration,
-                    }),
-                    ...(eh.indicators !== null && {
-                      indicators: eh.indicators,
-                    }),
-                    ...(eh.paymentDate !== null && {
-                      paymentDate: eh.paymentDate,
-                    }),
-                    ...(eh.contribution !== null && {
-                      contribution: eh.contribution,
-                    }),
-                    ...(eh.contributionSalary !== null && {
-                      contributionSalary: eh.contributionSalary,
-                    }),
-                    ...(eh.competenceBelowTheMinimum !== null && {
-                      competenceBelowTheMinimum: eh.competenceBelowTheMinimum,
-                    }),
-                  },
+          const wpDocumentDtos = await Promise.all(
+            wpDocuments.map(
+              async (doc: AccidentBenefitRejectionWorkPeriodDocumentEntity) =>
+                this.buildWorkPeriodDocumentResponse(
+                  doc.document as string,
+                  doc.type as NonNullable<typeof doc.type>,
                 ),
             ),
-          }),
-        });
-      },
+          );
+
+          const earningsHistory = (
+            result.accidentBenefitRejectionWorkPeriodEarningsHistory ?? []
+          ).filter(
+            (eh: AccidentBenefitRejectionWorkPeriodEarningsHistoryEntity) =>
+              eh.accidentBenefitRejectionWorkPeriodId !== null &&
+              eh.accidentBenefitRejectionWorkPeriodId.toString() ===
+                wp.id.toString(),
+          );
+
+          const parsedGracePeriod =
+            wp.gracePeriod !== null ? Number(wp.gracePeriod) : null;
+
+          const parsedCategory =
+            wp.category !== null &&
+            Object.values(AccidentBenefitRejectionCategoryEnum).includes(
+              wp.category as AccidentBenefitRejectionCategoryEnum,
+            )
+              ? (wp.category as AccidentBenefitRejectionCategoryEnum)
+              : null;
+
+          return GetAccidentBenefitRejectionWorkPeriodInResponseDto.build({
+            ...(wp.bondOrigin !== null && { bondOrigin: wp.bondOrigin }),
+            ...(wp.startDate !== null && { startDate: wp.startDate }),
+            ...(wp.endDate !== null && { endDate: wp.endDate }),
+            ...(parsedCategory !== null && { category: parsedCategory }),
+            ...(wp.competenceBelowTheMinimum !== null && {
+              competenceBelowTheMinimum: wp.competenceBelowTheMinimum,
+            }),
+            ...(wp.pendencyReason !== null && {
+              pendencyReason: wp.pendencyReason,
+            }),
+            ...(wp.periodConsideration !== null && {
+              periodConsideration: wp.periodConsideration,
+            }),
+            ...(wp.contributionAverage !== null && {
+              contributionAverage: new DecimalValue(wp.contributionAverage),
+            }),
+            ...(wp.status !== null && { status: wp.status === 'true' }),
+            ...(parsedGracePeriod !== null &&
+              !Number.isNaN(parsedGracePeriod) && {
+                gracePeriod: parsedGracePeriod,
+              }),
+            ...(wp.jobType !== null && { jobType: wp.jobType }),
+            ...(wp.activityDescription !== null && {
+              activityDescription: wp.activityDescription,
+            }),
+            ...(wpDocumentDtos.length > 0 && {
+              documents: wpDocumentDtos,
+            }),
+            ...(earningsHistory.length > 0 && {
+              earningsHistory: earningsHistory.map(
+                (eh: AccidentBenefitRejectionWorkPeriodEarningsHistoryEntity) =>
+                  GetAccidentBenefitRejectionWorkPeriodEarningsHistoryItemInResponseDto.build(
+                    {
+                      ...(eh.competence !== null && {
+                        competence: eh.competence,
+                      }),
+                      ...(eh.remuneration !== null && {
+                        remuneration: eh.remuneration,
+                      }),
+                      ...(eh.indicators !== null && {
+                        indicators: eh.indicators,
+                      }),
+                      ...(eh.paymentDate !== null && {
+                        paymentDate: eh.paymentDate,
+                      }),
+                      ...(eh.contribution !== null && {
+                        contribution: eh.contribution,
+                      }),
+                      ...(eh.contributionSalary !== null && {
+                        contributionSalary: eh.contributionSalary,
+                      }),
+                      ...(eh.competenceBelowTheMinimum !== null && {
+                        competenceBelowTheMinimum: eh.competenceBelowTheMinimum,
+                      }),
+                    },
+                  ),
+              ),
+            }),
+          });
+        },
       ),
     );
 
@@ -274,12 +272,10 @@ export class GetAccidentBenefitRejectionUseCase {
       result.accidentBenefitRejectionResult !== null
         ? GetAccidentBenefitRejectionResultResponseDto.build({
             ...(firstAnalysis !== null && {
-              accidentBenefitRejectionFirstAnalysis:
-                firstAnalysis,
+              accidentBenefitRejectionFirstAnalysis: firstAnalysis,
             }),
             ...(secondAnalysis !== null && {
-              accidentBenefitRejectionSecondAnalysis:
-                secondAnalysis,
+              accidentBenefitRejectionSecondAnalysis: secondAnalysis,
             }),
             ...(completeAnalysis !== null && {
               accidentBenefitRejectionCompleteAnalysis: completeAnalysis,
@@ -441,8 +437,7 @@ export class GetAccidentBenefitRejectionUseCase {
 
       return AccidentBenefitRejectionFirstAnalysisModel.build({
         insuredStatusMantained: parsed.insuredStatusMantained,
-        insuredStatusAnalysisConclusion:
-          parsed.insuredStatusAnalysisConclusion,
+        insuredStatusAnalysisConclusion: parsed.insuredStatusAnalysisConclusion,
         presenceOfPermanentSequelae: parsed.presenceOfPermanentSequelae,
         compatibilityOfTheSequelaeWithAccident:
           parsed.compatibilityOfTheSequelaeWithAccident,

@@ -40,7 +40,10 @@ export class AccidentBenefitRejectionEventEntityAutoMapperProfile {
         id: new AccidentBenefitRejectionEventId(source.id),
         accidentDate: source.accidentDate,
         accidentDescription: source.accidentDescription,
-        cidTenId: source.cidTen?.id ? new CidTenId(source.cidTen.id) : null,
+        cidTenId:
+          source.cidTen !== null && source.cidTen !== undefined
+            ? new CidTenId(source.cidTen.id)
+            : null,
         accidentBenefitRejectionId: new AccidentBenefitRejectionId(
           source.accidentBenefitRejection.id,
         ),
