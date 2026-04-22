@@ -107,7 +107,7 @@ export class MaternityPayGrantPeriodItemWithDocumentsRequestDto extends Maternit
     },
   )
   public documents?: FileDocumentMaternityPayGrantPeriodRequestDto[];
-  
+
   protected override readonly _type =
     MaternityPayGrantPeriodItemWithDocumentsRequestDto.name;
 }
