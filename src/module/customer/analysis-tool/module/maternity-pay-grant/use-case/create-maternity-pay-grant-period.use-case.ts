@@ -6,12 +6,9 @@ import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/accou
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { MaternityPayGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant/query/maternity-pay-grant.query.repository.gateway';
-import { MaternityPayGrantEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant-earnings-history/command/maternity-pay-grant-earnings-history.command.repository.gateway';
 import { MaternityPayGrantPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant-period/command/maternity-pay-grant-period.command.repository.gateway';
 import { MaternityPayGrantPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant-period-document/command/maternity-pay-grant-period-document.command.repository.gateway';
 import { MaternityPayGrantId } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/value-object/maternity-pay-grant-id.value-object';
-import { MaternityPayGrantEarningsHistoryEntity } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-earnings-history/maternity-pay-grant-earnings-history.entity';
-import { MaternityPayGrantEarningsHistoryId } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-earnings-history/value-object/maternity-pay-grant-earnings-history-id.value-object';
 import { MaternityPayGrantPeriodEntity } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-period/maternity-pay-grant-period.entity';
 import { MaternityPayGrantPeriodId } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-period/value-object/maternity-pay-grant-period-id.value-object';
 import { MaternityPayGrantPeriodDocumentEntity } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-period-document/maternity-pay-grant-period-document.entity';
@@ -36,8 +33,6 @@ export class CreateMaternityPayGrantPeriodUseCase {
     private readonly maternityPayGrantPeriodCommandRepositoryGateway: MaternityPayGrantPeriodCommandRepositoryGateway,
     @Inject(MaternityPayGrantPeriodDocumentCommandRepositoryGateway)
     private readonly maternityPayGrantPeriodDocumentCommandRepositoryGateway: MaternityPayGrantPeriodDocumentCommandRepositoryGateway,
-    @Inject(MaternityPayGrantEarningsHistoryCommandRepositoryGateway)
-    private readonly maternityPayGrantEarningsHistoryCommandRepositoryGateway: MaternityPayGrantEarningsHistoryCommandRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -118,30 +113,6 @@ export class CreateMaternityPayGrantPeriodUseCase {
         );
 
         transactions.push(...documentTransactions);
-      }
-
-      if (periodDto.earningsHistory && periodDto.earningsHistory.length > 0) {
-        const earningsHistoryTransactions = periodDto.earningsHistory.map(
-          (item) =>
-            this.maternityPayGrantEarningsHistoryCommandRepositoryGateway.createMaternityPayGrantEarningsHistory(
-              new MaternityPayGrantEarningsHistoryEntity({
-                id: new MaternityPayGrantEarningsHistoryId(),
-                competence: item.competence ?? null,
-                remuneration: item.remuneration ?? null,
-                indicators: item.indicators ?? null,
-                paymentDate: item.paymentDate ?? null,
-                contribution: item.contribution ?? null,
-                contributionSalary: item.contributionSalary ?? null,
-                analysis: item.analysis ?? null,
-                competenceBelowTheMinimum:
-                  item.competenceBelowTheMinimum ?? null,
-                maternityPayGrantId,
-                maternityPayGrantPeriodId: periodId,
-              }),
-            ),
-        );
-
-        transactions.push(...earningsHistoryTransactions);
       }
     }
 

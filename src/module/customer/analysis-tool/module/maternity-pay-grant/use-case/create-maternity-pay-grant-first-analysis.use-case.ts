@@ -15,6 +15,7 @@ import { MaternityPayGrantCommandRepositoryGateway } from '@module/customer/anal
 import { MaternityPayGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant/query/maternity-pay-grant.query.repository.gateway';
 import { MaternityPayGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant-result/command/maternity-pay-grant-result.command.repository.gateway';
 import { MaternityPayGrantId } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/value-object/maternity-pay-grant-id.value-object';
+import { MaternityPayGrantPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-period/enum/maternity-pay-grant-period-consideration.enum';
 import { MaternityPayGrantResultEntity } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-result/maternity-pay-grant-result.entity';
 import { CreateMaternityPayGrantFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/response/create-maternity-pay-grant-first-analysis.response.dto';
 import { InvalidMaternityPayGrantFirstAnalysisJsonError } from '@module/customer/analysis-tool/module/maternity-pay-grant/error/invalid-maternity-pay-grant-first-analysis-json.error';
@@ -22,9 +23,11 @@ import { MaternityPayGrantCnisDocumentNotFoundError } from '@module/customer/ana
 import { MaternityPayGrantNotFoundError } from '@module/customer/analysis-tool/module/maternity-pay-grant/error/maternity-pay-grant-not-found.error';
 import {
   MaternityPayGrantFirstAnalysisAnalysisSectionModel,
+  MaternityPayGrantFirstAnalysisApplicationDeadlineModel,
   MaternityPayGrantFirstAnalysisBelowMinimumContributionItemModel,
   MaternityPayGrantFirstAnalysisModel,
   MaternityPayGrantFirstAnalysisPeriodModel,
+  MaternityPayGrantFirstAnalysisRequirementAnalysisModel,
 } from '@module/customer/analysis-tool/module/maternity-pay-grant/model/generic/maternity-pay-grant-first-analysis.model';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
@@ -136,6 +139,7 @@ export class CreateMaternityPayGrantFirstAnalysisUseCase {
         promptResponse.prompt,
         JSON.stringify(cnisAnalysis),
         [this.buildGrantDataBuffer(maternityPayGrant), cnisBuffer],
+        analysisToolClient.gender,
         true,
       );
 
@@ -216,10 +220,25 @@ export class CreateMaternityPayGrantFirstAnalysisUseCase {
             period.bondOrigin ??
             this.findBondOriginByPeriod(period, sourcePeriods);
 
+          const typeOfContribution: string | null | undefined =
+            period.typeOfContribution ??
+            this.findTypeOfContributionByPeriod(period, sourcePeriods);
+
+          const periodConsideration:
+            | MaternityPayGrantPeriodConsiderationEnum
+            | null
+            | undefined =
+            period.periodConsideration ??
+            this.findPeriodConsiderationByPeriod(period, sourcePeriods);
+
           return {
             ...period,
             ...(contributionAverage !== undefined && { contributionAverage }),
             ...(bondOrigin !== undefined && { bondOrigin }),
+            ...(typeOfContribution !== null &&
+              typeOfContribution !== undefined && { typeOfContribution }),
+            ...(periodConsideration !== null &&
+              periodConsideration !== undefined && { periodConsideration }),
           };
         }),
       };
@@ -237,6 +256,55 @@ export class CreateMaternityPayGrantFirstAnalysisUseCase {
             MaternityPayGrantFirstAnalysisAnalysisSectionModel.build(
               normalizedRaw.carenciaAnalysis,
             ),
+          requirementAnalysis:
+            MaternityPayGrantFirstAnalysisRequirementAnalysisModel.build(
+              normalizedRaw.requirementAnalysis,
+            ),
+          applicationDeadlineAnalysis:
+            MaternityPayGrantFirstAnalysisApplicationDeadlineModel.build({
+              status: normalizedRaw.applicationDeadlineAnalysis.status,
+              ...(normalizedRaw.applicationDeadlineAnalysis.duration !=
+                null && {
+                duration: normalizedRaw.applicationDeadlineAnalysis.duration,
+              }),
+              ...(normalizedRaw.applicationDeadlineAnalysis.startDate !=
+                null && {
+                startDate: new Date(
+                  normalizedRaw.applicationDeadlineAnalysis.startDate,
+                ),
+              }),
+              ...(normalizedRaw.applicationDeadlineAnalysis.terminationDate !=
+                null && {
+                terminationDate: new Date(
+                  normalizedRaw.applicationDeadlineAnalysis.terminationDate,
+                ),
+              }),
+              ...(normalizedRaw.applicationDeadlineAnalysis.startLeaveDate !=
+                null && {
+                startLeaveDate: new Date(
+                  normalizedRaw.applicationDeadlineAnalysis.startLeaveDate,
+                ),
+              }),
+              ...(normalizedRaw.applicationDeadlineAnalysis.endLeaveDate !=
+                null && {
+                endLeaveDate: new Date(
+                  normalizedRaw.applicationDeadlineAnalysis.endLeaveDate,
+                ),
+              }),
+              ...(normalizedRaw.applicationDeadlineAnalysis.total != null && {
+                total: normalizedRaw.applicationDeadlineAnalysis.total,
+              }),
+              ...(normalizedRaw.applicationDeadlineAnalysis.amountBenefit !=
+                null && {
+                amountBenefit:
+                  normalizedRaw.applicationDeadlineAnalysis.amountBenefit,
+              }),
+              ...(normalizedRaw.applicationDeadlineAnalysis.calculationBasis !=
+                null && {
+                calculationBasis:
+                  normalizedRaw.applicationDeadlineAnalysis.calculationBasis,
+              }),
+            }),
           benefitEligibilityAnalysis:
             MaternityPayGrantFirstAnalysisAnalysisSectionModel.build(
               normalizedRaw.benefitEligibilityAnalysis,
@@ -247,41 +315,53 @@ export class CreateMaternityPayGrantFirstAnalysisUseCase {
               startDate: new Date(period.startDate),
               endDate: new Date(period.endDate),
               category: period.category,
-              ...(period.gracePeriod !== undefined && {
-                gracePeriod: period.gracePeriod,
-              }),
               status: period.status,
               isPendency: period.isPendency,
               competenceBelowTheMinimum: period.competenceBelowTheMinimum,
-              ...(period.contributionAverage !== undefined && {
-                contributionAverage: new DecimalValue(
-                  period.contributionAverage.toString(),
-                ),
-              }),
               belowMinimumContributions: period.belowMinimumContributions.map(
                 (item) =>
                   MaternityPayGrantFirstAnalysisBelowMinimumContributionItemModel.build(
                     {
                       contributionDate: new Date(item.contributionDate),
                       contributionValue: new DecimalValue(
-                        item.contributionValue.toString(),
+                        String(item.contributionValue),
                       ),
                     },
                   ),
               ),
-              ...(period.reasonPendency !== undefined && {
+              ...(period.gracePeriod != null && {
+                gracePeriod: period.gracePeriod,
+              }),
+              ...(period.contributionAverage != null && {
+                contributionAverage: String(period.contributionAverage),
+              }),
+              ...(period.reasonPendency != null && {
                 reasonPendency: period.reasonPendency,
               }),
-              ...(period.bondOrigin !== undefined &&
-                period.bondOrigin !== null && {
-                  bondOrigin: period.bondOrigin,
-                }),
-              ...(period.complementViaMyInss !== undefined &&
-                period.complementViaMyInss !== null && {
-                  complementViaMyInss: period.complementViaMyInss,
-                }),
+              ...(period.bondOrigin != null && {
+                bondOrigin: period.bondOrigin,
+              }),
+              ...(period.complementViaMyInss != null && {
+                complementViaMyInss: period.complementViaMyInss,
+              }),
+              ...(period.impact != null && { impact: period.impact }),
+              ...(period.typeOfContribution != null && {
+                typeOfContribution: period.typeOfContribution,
+              }),
+              ...(period.periodConsideration != null && {
+                periodConsideration: period.periodConsideration,
+              }),
             }),
           ),
+          ...(normalizedRaw.lastContribution != null && {
+            lastContribution: new Date(normalizedRaw.lastContribution),
+          }),
+          ...(normalizedRaw.categoryAtDfg != null && {
+            categoryAtDfg: normalizedRaw.categoryAtDfg,
+          }),
+          ...(normalizedRaw.employmentBondStatus != null && {
+            employmentBondStatus: normalizedRaw.employmentBondStatus,
+          }),
         }),
       };
     } catch {
@@ -339,6 +419,56 @@ export class CreateMaternityPayGrantFirstAnalysisUseCase {
     return sourcePeriod?.bondOrigin ?? undefined;
   }
 
+  private findTypeOfContributionByPeriod(
+    period: MaternityPayGrantFirstAnalysisInterface['periods'][number],
+    sourcePeriods: MaternityPayGrantFirstAnalysisSourcePeriodInterface[],
+  ): string | null | undefined {
+    const exactMatch = sourcePeriods.find(
+      (sourcePeriod) =>
+        this.normalizeDate(sourcePeriod.startDate) ===
+          this.normalizeDate(period.startDate) &&
+        this.normalizeDate(sourcePeriod.endDate) ===
+          this.normalizeDate(period.endDate) &&
+        sourcePeriod.category === period.category,
+    );
+
+    const sourcePeriod =
+      exactMatch ??
+      sourcePeriods.find(
+        (currentSourcePeriod) =>
+          this.normalizeDate(currentSourcePeriod.startDate) ===
+            this.normalizeDate(period.startDate) &&
+          currentSourcePeriod.category === period.category,
+      );
+
+    return sourcePeriod?.typeOfContribution ?? null;
+  }
+
+  private findPeriodConsiderationByPeriod(
+    period: MaternityPayGrantFirstAnalysisInterface['periods'][number],
+    sourcePeriods: MaternityPayGrantFirstAnalysisSourcePeriodInterface[],
+  ): MaternityPayGrantPeriodConsiderationEnum | null | undefined {
+    const exactMatch = sourcePeriods.find(
+      (sourcePeriod) =>
+        this.normalizeDate(sourcePeriod.startDate) ===
+          this.normalizeDate(period.startDate) &&
+        this.normalizeDate(sourcePeriod.endDate) ===
+          this.normalizeDate(period.endDate) &&
+        sourcePeriod.category === period.category,
+    );
+
+    const sourcePeriod =
+      exactMatch ??
+      sourcePeriods.find(
+        (currentSourcePeriod) =>
+          this.normalizeDate(currentSourcePeriod.startDate) ===
+            this.normalizeDate(period.startDate) &&
+          currentSourcePeriod.category === period.category,
+      );
+
+    return sourcePeriod?.periodConsideration ?? null;
+  }
+
   private normalizeDate(date: Date | string | null): string | null {
     if (date === null) {
       return null;
@@ -382,6 +512,8 @@ export class CreateMaternityPayGrantFirstAnalysisUseCase {
         category: p.category,
         isPendency: p.isPendency,
         competenceBelowTheMinimum: p.competenceBelowTheMinimum,
+        typeOfContribution: p.typeOfContribution,
+        periodConsideration: p.periodConsideration,
       })),
     };
 

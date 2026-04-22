@@ -1,5 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
+import { AnalysisToolRecordNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-record-not-found.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { MaternityPayGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant/query/maternity-pay-grant.query.repository.gateway';
 import { MaternityPayGrantId } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/value-object/maternity-pay-grant-id.value-object';
@@ -13,6 +16,23 @@ import {
   GetMaternityPayGrantResultResponseDto,
 } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/response/get-maternity-pay-grant.response.dto';
 import { MaternityPayGrantNotFoundError } from '@module/customer/analysis-tool/module/maternity-pay-grant/error/maternity-pay-grant-not-found.error';
+import {
+  MaternityPayGrantCompleteAnalysisApplicableRuleModel,
+  MaternityPayGrantCompleteAnalysisModel,
+} from '@module/customer/analysis-tool/module/maternity-pay-grant/model/generic/maternity-pay-grant-complete-analysis.model';
+import {
+  MaternityPayGrantFirstAnalysisAnalysisSectionModel,
+  MaternityPayGrantFirstAnalysisApplicationDeadlineModel,
+  MaternityPayGrantFirstAnalysisBelowMinimumContributionItemModel,
+  MaternityPayGrantFirstAnalysisModel,
+  MaternityPayGrantFirstAnalysisPeriodModel,
+  MaternityPayGrantFirstAnalysisRequirementAnalysisModel,
+} from '@module/customer/analysis-tool/module/maternity-pay-grant/model/generic/maternity-pay-grant-first-analysis.model';
+import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+
+import type { MaternityPayGrantFirstAnalysisInterface } from '@module/customer/analysis-tool/module/maternity-pay-grant/model/interface/maternity-pay-grant-first-analysis.interface';
+import type { MaternityPayGrantResultInterface } from '@module/customer/analysis-tool/module/maternity-pay-grant/model/interface/maternity-pay-grant-result.interface';
 
 @Injectable()
 export class GetMaternityPayGrantUseCase {
@@ -23,20 +43,47 @@ export class GetMaternityPayGrantUseCase {
     private readonly maternityPayGrantQueryRepositoryGateway: MaternityPayGrantQueryRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
   ) {}
 
   public async execute(
+    sessionData: SessionDataModel,
+    organizationSessionData: OrganizationSessionDataModel,
     maternityPayGrantId: MaternityPayGrantId,
   ): Promise<GetMaternityPayGrantResponseDto> {
-    const result =
-      await this.maternityPayGrantQueryRepositoryGateway.findOneByMaternityPayGrantIdOrFailWithRelations(
+    const [result, analysisToolRecord] = await Promise.all([
+      this.maternityPayGrantQueryRepositoryGateway.findOneByMaternityPayGrantIdOrFailWithRelations(
         maternityPayGrantId,
         MaternityPayGrantNotFoundError,
-      );
+      ),
+      this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByMaternityPayGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        maternityPayGrantId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+        AnalysisToolRecordNotFoundError,
+      ),
+    ]);
+
+    const client = analysisToolRecord.analysisToolClient;
 
     const cnisDocument =
       result.cnisDocument !== null
         ? await this.buildCnisDocumentResponse(result.cnisDocument)
+        : null;
+
+    const firstAnalysisModel =
+      result.maternityPayGrantResult?.firstAnalysis !== null &&
+      result.maternityPayGrantResult?.firstAnalysis !== undefined
+        ? this.parseFirstAnalysis(result.maternityPayGrantResult.firstAnalysis)
+        : null;
+
+    const completeAnalysisModel =
+      result.maternityPayGrantResult?.completeAnalysis !== null &&
+      result.maternityPayGrantResult?.completeAnalysis !== undefined
+        ? this.parseCompleteAnalysis(
+            result.maternityPayGrantResult.completeAnalysis,
+          )
         : null;
 
     return GetMaternityPayGrantResponseDto.build({
@@ -73,11 +120,11 @@ export class GetMaternityPayGrantUseCase {
       ...(cnisDocument !== null && { cnisDocument }),
       ...(result.maternityPayGrantResult !== null && {
         maternityPayGrantResult: GetMaternityPayGrantResultResponseDto.build({
-          ...(result.maternityPayGrantResult.firstAnalysis !== null && {
-            firstAnalysis: result.maternityPayGrantResult.firstAnalysis,
+          ...(firstAnalysisModel !== null && {
+            firstAnalysis: firstAnalysisModel,
           }),
-          ...(result.maternityPayGrantResult.completeAnalysis !== null && {
-            completeAnalysis: result.maternityPayGrantResult.completeAnalysis,
+          ...(completeAnalysisModel !== null && {
+            completeAnalysis: completeAnalysisModel,
           }),
           ...(result.maternityPayGrantResult.simplifiedAnalysis !== null && {
             simplifiedAnalysis:
@@ -167,7 +214,177 @@ export class GetMaternityPayGrantUseCase {
       }),
       createdAt: result.createdAt,
       updatedAt: result.updatedAt,
+      ...(client.name !== null && { clientName: client.name }),
+      ...(client.federalDocument !== null && {
+        clientFederalDocument: client.federalDocument,
+      }),
+      ...(client.email !== null && { clientEmail: client.email }),
+      ...(client.corporateEmail !== null && {
+        clientCorporateEmail: client.corporateEmail,
+      }),
+      ...(client.phoneNumber !== null && {
+        clientPhoneNumber: client.phoneNumber,
+      }),
+      ...(client.birthDate !== null && { clientBirthDate: client.birthDate }),
+      ...(client.gender !== null && { clientGender: client.gender }),
+      ...(client.clientType !== null && { clientType: client.clientType }),
     });
+  }
+
+  private parseFirstAnalysis(
+    firstAnalysisJson: string,
+  ): MaternityPayGrantFirstAnalysisModel | null {
+    try {
+      const raw = JSON.parse(
+        firstAnalysisJson,
+      ) as MaternityPayGrantFirstAnalysisInterface;
+
+      const deadline = raw.applicationDeadlineAnalysis;
+
+      return MaternityPayGrantFirstAnalysisModel.build({
+        insuredQualityAnalysis:
+          MaternityPayGrantFirstAnalysisAnalysisSectionModel.build(
+            raw.insuredQualityAnalysis,
+          ),
+        carenciaAnalysis:
+          MaternityPayGrantFirstAnalysisAnalysisSectionModel.build(
+            raw.carenciaAnalysis,
+          ),
+        requirementAnalysis:
+          MaternityPayGrantFirstAnalysisRequirementAnalysisModel.build(
+            raw.requirementAnalysis,
+          ),
+        applicationDeadlineAnalysis:
+          MaternityPayGrantFirstAnalysisApplicationDeadlineModel.build({
+            status: deadline.status,
+            ...(deadline.duration !== null &&
+              deadline.duration !== undefined && {
+                duration: deadline.duration,
+              }),
+            ...(deadline.startDate !== null &&
+              deadline.startDate !== undefined && {
+                startDate: new Date(deadline.startDate),
+              }),
+            ...(deadline.terminationDate !== null &&
+              deadline.terminationDate !== undefined && {
+                terminationDate: new Date(deadline.terminationDate),
+              }),
+            ...(deadline.startLeaveDate !== null &&
+              deadline.startLeaveDate !== undefined && {
+                startLeaveDate: new Date(deadline.startLeaveDate),
+              }),
+            ...(deadline.endLeaveDate !== null &&
+              deadline.endLeaveDate !== undefined && {
+                endLeaveDate: new Date(deadline.endLeaveDate),
+              }),
+            ...(deadline.total !== null &&
+              deadline.total !== undefined && { total: deadline.total }),
+            ...(deadline.amountBenefit !== null &&
+              deadline.amountBenefit !== undefined && {
+                amountBenefit: deadline.amountBenefit,
+              }),
+            ...(deadline.calculationBasis !== null &&
+              deadline.calculationBasis !== undefined && {
+                calculationBasis: deadline.calculationBasis,
+              }),
+          }),
+        benefitEligibilityAnalysis:
+          MaternityPayGrantFirstAnalysisAnalysisSectionModel.build(
+            raw.benefitEligibilityAnalysis,
+          ),
+        periods: raw.periods.map((period) =>
+          MaternityPayGrantFirstAnalysisPeriodModel.build({
+            name: period.name,
+            startDate: new Date(period.startDate),
+            endDate: new Date(period.endDate),
+            category: period.category,
+            status: period.status,
+            isPendency: period.isPendency,
+            competenceBelowTheMinimum: period.competenceBelowTheMinimum,
+            belowMinimumContributions: period.belowMinimumContributions.map(
+              (item) =>
+                MaternityPayGrantFirstAnalysisBelowMinimumContributionItemModel.build(
+                  {
+                    contributionDate: new Date(item.contributionDate),
+                    contributionValue: new DecimalValue(
+                      String(item.contributionValue),
+                    ),
+                  },
+                ),
+            ),
+            ...(period.gracePeriod !== undefined && {
+              gracePeriod: period.gracePeriod,
+            }),
+            ...(period.contributionAverage !== undefined && {
+              contributionAverage: String(period.contributionAverage),
+            }),
+            ...(period.reasonPendency !== undefined && {
+              reasonPendency: period.reasonPendency,
+            }),
+            ...(period.bondOrigin !== null &&
+              period.bondOrigin !== undefined && {
+                bondOrigin: period.bondOrigin,
+              }),
+            ...(period.complementViaMyInss !== null &&
+              period.complementViaMyInss !== undefined && {
+                complementViaMyInss: period.complementViaMyInss,
+              }),
+            ...(period.impact !== null &&
+              period.impact !== undefined && { impact: period.impact }),
+            ...(period.typeOfContribution !== null &&
+              period.typeOfContribution !== undefined && {
+                typeOfContribution: period.typeOfContribution,
+              }),
+            ...(period.periodConsideration !== null &&
+              period.periodConsideration !== undefined && {
+                periodConsideration: period.periodConsideration,
+              }),
+          }),
+        ),
+        ...(raw.lastContribution !== null &&
+          raw.lastContribution !== undefined && {
+            lastContribution: new Date(raw.lastContribution),
+          }),
+        ...(raw.categoryAtDfg !== null &&
+          raw.categoryAtDfg !== undefined && {
+            categoryAtDfg: raw.categoryAtDfg,
+          }),
+        ...(raw.employmentBondStatus !== null &&
+          raw.employmentBondStatus !== undefined && {
+            employmentBondStatus: raw.employmentBondStatus,
+          }),
+      });
+    } catch {
+      return null;
+    }
+  }
+
+  private parseCompleteAnalysis(
+    completeAnalysisJson: string,
+  ): MaternityPayGrantCompleteAnalysisModel | null {
+    try {
+      const raw = JSON.parse(
+        completeAnalysisJson,
+      ) as MaternityPayGrantResultInterface;
+
+      return MaternityPayGrantCompleteAnalysisModel.build({
+        eligibilityStatus: raw.eligibilityStatus,
+        insuredQualityStatus: raw.insuredQualityStatus,
+        applicableRules: raw.applicableRules.map((rule) =>
+          MaternityPayGrantCompleteAnalysisApplicableRuleModel.build({
+            ruleName: rule.ruleName,
+            result: rule.result,
+            detailedAnalysis: rule.detailedAnalysis,
+            ...(rule.estimatedBenefit !== null && {
+              estimatedBenefit: rule.estimatedBenefit,
+            }),
+          }),
+        ),
+        analysisDescription: raw.analysisDescription,
+      });
+    } catch {
+      return null;
+    }
   }
 
   private async buildCnisDocumentResponse(

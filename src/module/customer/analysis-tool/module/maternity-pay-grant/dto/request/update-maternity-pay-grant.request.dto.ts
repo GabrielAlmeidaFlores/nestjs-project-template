@@ -1,3 +1,4 @@
+import { MaternityPayGrantBenefitTriggeringEventEnum } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/enum/maternity-pay-grant-benefit-triggering-event.enum';
 import { MaternityPayGrantTriggeringEventEnum } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/enum/maternity-pay-grant-triggering-event.enum';
 import { MaternityPayGrantCategoryEnum } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/enum/maternity-pay-grant-category.enum';
 import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
@@ -46,6 +47,14 @@ export class UpdateMaternityPayGrantRequestDto extends BaseBuildableDtoObject {
 
   @RequestDtoStringProperty({ required: false, isArray: true })
   public legalProceedingNumber?: string[];
+
+  @RequestDtoEnumProperty(MaternityPayGrantBenefitTriggeringEventEnum, {
+    required: false,
+  })
+  public benefitTriggeringEvent?: MaternityPayGrantBenefitTriggeringEventEnum;
+
+  @RequestDtoDateProperty({ required: false })
+  public benefitTriggeringEventDate?: Date;
 
   protected override readonly _type = UpdateMaternityPayGrantRequestDto.name;
 }

@@ -1305,6 +1305,33 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise simplificada do direito ao BPC/LOAS para idosos com IA. Verifica critério de idade (65 anos), calcula renda per capita familiar e compara com o limite legal de 1/4 do salário mínimo, informando de forma objetiva sobre a elegibilidade. Versão resumida e acessível para apresentação ao cliente.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c3d4e5f6-a7b8-4c9d-8e1f-2a3b4c5d6e7f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_GRANT_FIRST_ANALYSIS,
+      creditCost: 2,
+      title: 'CONCESSÃO SALÁRIO MATERNIDADE - PRIMEIRA ANÁLISE',
+      description:
+        'Primeira análise do direito ao Salário Maternidade com IA. Verifica o evento gerador informado, a carência necessária, a qualidade de segurada no período e identifica os pontos críticos que determinam o direito ao benefício. Indicado para um diagnóstico inicial rápido sobre a viabilidade do pedido.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d4e5f6a7-b8c9-4d0e-9f2a-3b4c5d6e7f8a'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_GRANT_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title: 'CONCESSÃO SALÁRIO MATERNIDADE - ANÁLISE COMPLETA',
+      description:
+        'Análise completa do direito ao Salário Maternidade com IA. Examina o evento gerador, verifica a carência exigida por categoria de segurada, analisa a qualidade de segurada na data do fato gerador, avalia o histórico contributivo e os documentos apresentados, identifica possíveis impedimentos e emite parecer técnico conclusivo com fundamentação legal e jurisprudencial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e5f6a7b8-c9d0-4e1f-ab3b-4c5d6e7f8a9b'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_GRANT_SIMPLIFIED_ANALYSIS,
+      creditCost: 2,
+      title: 'CONCESSÃO SALÁRIO MATERNIDADE - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada do direito ao Salário Maternidade com IA. Verifica o evento gerador, a carência e a qualidade de segurada, informando de forma objetiva sobre a elegibilidade ao benefício. Versão resumida e acessível para apresentação ao cliente.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {

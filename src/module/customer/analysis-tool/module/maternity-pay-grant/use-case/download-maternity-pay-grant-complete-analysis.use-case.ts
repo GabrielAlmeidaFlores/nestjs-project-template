@@ -97,8 +97,8 @@ export class DownloadMaternityPayGrantCompleteAnalysisUseCase {
         cleanedJson,
       ) as MaternityPayGrantResultInterface;
 
-      return typeof parsed.analysisDescription === 'string'
-        ? parsed.analysisDescription
+      return typeof parsed.completeAnalysisDownload === 'string'
+        ? parsed.completeAnalysisDownload
         : null;
     } catch {
       return null;

@@ -16,6 +16,7 @@ import { DeleteMaternityPayGrantPeriodUseCase } from '@module/customer/analysis-
 import { DownloadMaternityPayGrantCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/download-maternity-pay-grant-complete-analysis.use-case';
 import { DownloadMaternityPayGrantSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/download-maternity-pay-grant-simplified-analysis.use-case';
 import { GetMaternityPayGrantUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/get-maternity-pay-grant.use-case';
+import { ResolveMaternityPayGrantPeriodPendencyUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/resolve-maternity-pay-grant-period-pendency.use-case';
 import { UpdateMaternityPayGrantPeriodUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/update-maternity-pay-grant-period.use-case';
 import { UpdateMaternityPayGrantUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/update-maternity-pay-grant.use-case';
 import { UploadMaternityPayGrantDocumentsUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/upload-maternity-pay-grant-documents.use-case';
@@ -53,6 +54,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     DownloadMaternityPayGrantSimplifiedAnalysisUseCase,
     ValidateTriggeringEventDateUseCase,
     UploadMaternityPayGrantDocumentsUseCase,
+    ResolveMaternityPayGrantPeriodPendencyUseCase,
   ],
 })
 export class MaternityPayGrantModule {

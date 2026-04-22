@@ -13,6 +13,7 @@ import { MaternityPayGrantId } from '@module/customer/analysis-tool/module/mater
 import { MaternityPayGrantPeriodId } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-period/value-object/maternity-pay-grant-period-id.value-object';
 import { CreateMaternityPayGrantPeriodRequestDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/request/create-maternity-pay-grant-period.request.dto';
 import { CreateMaternityPayGrantRequestDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/request/create-maternity-pay-grant.request.dto';
+import { ResolveMaternityPayGrantPeriodPendencyRequestDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/request/resolve-maternity-pay-grant-period-pendency.request.dto';
 import { UpdateMaternityPayGrantPeriodRequestDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/request/update-maternity-pay-grant-period.request.dto';
 import { UpdateMaternityPayGrantRequestDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/request/update-maternity-pay-grant.request.dto';
 import { UploadMaternityPayGrantDocumentsRequestDto } from '@module/customer/analysis-tool/module/maternity-pay-grant/dto/request/upload-maternity-pay-grant-documents.request.dto';
@@ -35,6 +36,7 @@ import { DeleteMaternityPayGrantPeriodUseCase } from '@module/customer/analysis-
 import { DownloadMaternityPayGrantCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/download-maternity-pay-grant-complete-analysis.use-case';
 import { DownloadMaternityPayGrantSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/download-maternity-pay-grant-simplified-analysis.use-case';
 import { GetMaternityPayGrantUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/get-maternity-pay-grant.use-case';
+import { ResolveMaternityPayGrantPeriodPendencyUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/resolve-maternity-pay-grant-period-pendency.use-case';
 import { UpdateMaternityPayGrantPeriodUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/update-maternity-pay-grant-period.use-case';
 import { UpdateMaternityPayGrantUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/update-maternity-pay-grant.use-case';
 import { UploadMaternityPayGrantDocumentsUseCase } from '@module/customer/analysis-tool/module/maternity-pay-grant/use-case/upload-maternity-pay-grant-documents.use-case';
@@ -67,6 +69,7 @@ export class MaternityPayGrantController {
     private readonly downloadMaternityPayGrantSimplifiedAnalysisUseCase: DownloadMaternityPayGrantSimplifiedAnalysisUseCase,
     private readonly validateTriggeringEventDateUseCase: ValidateTriggeringEventDateUseCase,
     private readonly uploadMaternityPayGrantDocumentsUseCase: UploadMaternityPayGrantDocumentsUseCase,
+    private readonly resolveMaternityPayGrantPeriodPendencyUseCase: ResolveMaternityPayGrantPeriodPendencyUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -132,10 +135,17 @@ export class MaternityPayGrantController {
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async getById(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Param('id', new ParseValueObjectPipe(MaternityPayGrantId))
     maternityPayGrantId: MaternityPayGrantId,
   ): Promise<GetMaternityPayGrantResponseDto> {
-    return await this.getMaternityPayGrantUseCase.execute(maternityPayGrantId);
+    return await this.getMaternityPayGrantUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      maternityPayGrantId,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -404,6 +414,35 @@ export class MaternityPayGrantController {
       sessionData,
       organizationSessionData,
       maternityPayGrantId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Resolver pendência de um período de salário-maternidade',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':id/period/:periodId/resolve-pendency',
+      method: RequestMethod.POST,
+      type: ResolveMaternityPayGrantPeriodPendencyRequestDto,
+    },
+    tag: ['salario-maternidade'],
+    successResponse: {
+      statusCode: HttpStatus.NO_CONTENT,
+      description: 'Pendência do período resolvida com sucesso.',
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async resolvePeriodPendency(
+    @Param('id', new ParseValueObjectPipe(MaternityPayGrantId))
+    maternityPayGrantId: MaternityPayGrantId,
+    @Param('periodId', new ParseValueObjectPipe(MaternityPayGrantPeriodId))
+    maternityPayGrantPeriodId: MaternityPayGrantPeriodId,
+    @Body() dto: ResolveMaternityPayGrantPeriodPendencyRequestDto,
+  ): Promise<void> {
+    await this.resolveMaternityPayGrantPeriodPendencyUseCase.execute(
+      maternityPayGrantId,
+      maternityPayGrantPeriodId,
       dto,
     );
   }

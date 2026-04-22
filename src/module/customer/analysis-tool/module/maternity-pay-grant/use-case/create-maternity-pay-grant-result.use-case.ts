@@ -149,7 +149,7 @@ export class CreateMaternityPayGrantResultUseCase {
     const parsedResult = this.parseResultAnalysisOrThrow(completeAnalysis);
 
     const htmlContent = await this.exportDocumentGateway.convertMarkdownToHtml(
-      parsedResult.analysisDescription,
+      parsedResult.completeAnalysisDownload,
     );
 
     const resultEntity = new MaternityPayGrantResultEntity({
@@ -216,7 +216,7 @@ export class CreateMaternityPayGrantResultUseCase {
       typeof value['eligibilityStatus'] === 'string' &&
       typeof value['insuredQualityStatus'] === 'string' &&
       Array.isArray(value['applicableRules']) &&
-      typeof value['analysisDescription'] === 'string'
+      typeof value['completeAnalysisDownload'] === 'string'
     );
   }
 
