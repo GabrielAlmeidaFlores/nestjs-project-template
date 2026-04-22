@@ -32,6 +32,21 @@ export class MaternityPayGrantFirstAnalysisRequirementAnalysisModel extends Base
   @ResponseDtoStringProperty()
   public readonly status: string;
 
+  @ResponseDtoStringProperty({ required: false })
+  public readonly eventDate?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly requirementDate?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly statutoryPeriod?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly details?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly rationale?: string;
+
   protected override readonly _type =
     MaternityPayGrantFirstAnalysisRequirementAnalysisModel.name;
 }
