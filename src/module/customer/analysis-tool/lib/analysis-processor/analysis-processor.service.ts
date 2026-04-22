@@ -6319,7 +6319,7 @@ Análise processada do CNIS:
             total: {
               type: 'number',
               description:
-                'Total de dias consecutivos entre a data do evento e a data do requerimento',
+                'Total de dias entre a data de início do afastamento e a data de término do afastamento',
             },
             amountBenefit: {
               type: 'string',
