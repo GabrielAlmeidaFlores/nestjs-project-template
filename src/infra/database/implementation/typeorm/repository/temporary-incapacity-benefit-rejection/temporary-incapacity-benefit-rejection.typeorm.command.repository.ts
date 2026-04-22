@@ -58,9 +58,10 @@ export class TemporaryIncapacityBenefitRejectionTypeormCommandRepository
     resultId: TemporaryIncapacityBenefitRejectionResultId,
   ): TransactionType {
     return this.update(id.toString(), {
-      result: TemporaryIncapacityBenefitRejectionResultTypeormEntity.build({
-        id: resultId.toString(),
-      } as TemporaryIncapacityBenefitRejectionResultTypeormEntity),
+      temporaryIncapacityBenefitRejectionResult:
+        TemporaryIncapacityBenefitRejectionResultTypeormEntity.build({
+          id: resultId.toString(),
+        } as TemporaryIncapacityBenefitRejectionResultTypeormEntity),
     });
   }
 }

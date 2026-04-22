@@ -35,7 +35,7 @@ export class TemporaryIncapacityBenefitRejectionTypeormQueryRepository
       {
         where: { id: id.toString() },
         relations: {
-          result: true,
+          temporaryIncapacityBenefitRejectionResult: true,
           documents: true,
           insuredStatus: {
             documents: true,

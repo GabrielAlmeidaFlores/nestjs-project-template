@@ -52,7 +52,7 @@ export class TemporaryIncapacityBenefitRejectionDisabilityAnalysisDocumentTypeor
           TemporaryIncapacityBenefitRejectionDisabilityAnalysisDocumentTypeormEntity,
         )
         .softDelete({
-          disabilityAnalysis: {
+          temporaryIncapacityBenefitRejectionDisabilityAnalysis: {
             id: temporaryIncapacityBenefitRejectionDisabilityAnalysisId.toString(),
           },
         });
