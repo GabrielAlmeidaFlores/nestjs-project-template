@@ -21,6 +21,7 @@ export enum AnalysisToolRecordTypeEnum {
   SPECIAL_RETIREMENT_GRANT = 'concessao_aposentadoria_especial',
   DISABILITY_RETIREMENT_PLANNING_GRANT = 'concessao_aposentadoria_para_deficiente',
   DEATH_BENEFIT_GRANT = 'concessao_pensao_por_morte',
+  DEATH_BENEFIT_REJECTION = 'indeferimento_pensao_por_morte',
   TEMPORARY_DISABILITY_BENEFITS_GRANT = 'auxilio_incapacidade_temporaria',
   SURVIVOR_PENSION_ANALYSIS = 'pensao_por_morte',
   GENERAL_URBAN_RETIREMENT_DENIAL = 'indeferimento_aposentadoria_urbana_geral',
