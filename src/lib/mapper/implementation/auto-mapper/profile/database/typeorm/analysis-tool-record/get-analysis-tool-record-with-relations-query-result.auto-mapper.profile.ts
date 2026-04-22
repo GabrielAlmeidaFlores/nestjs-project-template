@@ -7,10 +7,13 @@ import { AdministrativeProcedureInssAnalysisTypeormEntity } from '@infra/databas
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator.typeorm.entity';
+import { BpcElderlyAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { DeathBenefitGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant.typeorm.entity';
+import { DeathBenefitRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-rejection.typeorm.entity';
 import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis.entity';
 import { DisabilityRetirementPlanningGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-grant.typeorm.entity';
+import { DisabilityRetirementPlanningRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-rejection.typeorm.entity';
 import { DisabilityRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning.typeorm.entity';
 import { GeneralUrbanRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis.typeorm.entity';
 import { GeneralUrbanRetirementDenialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial.typeorm.entity';
@@ -38,8 +41,10 @@ import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/sc
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { GetAdministrativeProcedureInssAnalysisQueryResult } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/repository/administrative-procedure-inss-analysis/query/result/get-administrative-procedure-inss-analysis.query.result';
 import { GetAudienceQuestionGeneratorWithRelationsQueryResult } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator/query/result/get-audience-question-generator-with-relations.query.result';
+import { GetBpcElderlyAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis/query/result/get-bpc-elderly-analysis-with-relations.query.result';
 import { GetCnisFastAnalysisQueryResult } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis.query.result';
 import { GetDeathBenefitGrantWithRelationsQueryResult } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/repository/death-benefit-grant/query/result/get-death-benefit-grant-with-relations.query.result';
+import { GetDeathBenefitRejectionWithRelationsQueryResult } from '@module/customer/analysis-tool/module/death-benefit-rejection/domain/repository/death-benefit-rejection/query/result/get-death-benefit-rejection-with-relations.query.result';
 import { GetDisabilityAssessmentForBpcAnalysisQueryResult } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/repository/disability-assessment-for-bpc-analysis/query/result/get-disability-assessment-for-bpc-analysis.query.result';
 import { GetDisabilityRetirementPlanningWithRelationsQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning/query/result/get-disability-retirement-planning-with-relations.query.result';
 import { GetDisabilityRetirementPlanningGrantWithRelationsQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/repository/disability-retirement-planning-grant/query/result/get-disability-retirement-planning-grant-with-relations.query.result';
@@ -192,6 +197,16 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         GetPerCapitaIncomeForBpcAnalysisWithRelationsQueryResult,
       );
 
+      const bpcElderlyAnalysis =
+        source.bpcElderlyAnalysis !== null &&
+        source.bpcElderlyAnalysis !== undefined
+          ? this.mapper.map(
+              source.bpcElderlyAnalysis,
+              BpcElderlyAnalysisTypeormEntity,
+              GetBpcElderlyAnalysisWithRelationsQueryResult,
+            )
+          : null;
+
       const ruralTimelineAnalysis =
         source.ruralTimeline !== null &&
         source.ruralTimeline?.ruralTimelineAnalysisInssBenefit !== undefined &&
@@ -332,6 +347,16 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
             )
           : null;
 
+      const disabilityRetirementPlanningRejection =
+        source.disabilityRetirementPlanningRejection !== undefined &&
+        source.disabilityRetirementPlanningRejection !== null
+          ? this.mapper.map(
+              source.disabilityRetirementPlanningRejection,
+              DisabilityRetirementPlanningRejectionTypeormEntity,
+              GetDisabilityRetirementPlanningWithRelationsQueryResult,
+            )
+          : null;
+
       const generalUrbanRetirementDenial =
         source.generalUrbanRetirementDenial !== undefined
           ? this.mapper.map(
@@ -348,6 +373,16 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
               source.deathBenefitGrant,
               DeathBenefitGrantTypeormEntity,
               GetDeathBenefitGrantWithRelationsQueryResult,
+            )
+          : null;
+
+      const deathBenefitRejection =
+        source.deathBenefitRejection !== undefined &&
+        source.deathBenefitRejection !== null
+          ? this.mapper.map(
+              source.deathBenefitRejection,
+              DeathBenefitRejectionTypeormEntity,
+              GetDeathBenefitRejectionWithRelationsQueryResult,
             )
           : null;
 
@@ -370,8 +405,10 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         medicalAndSocialReportObjectionGeneratorAnalysis,
         speechGenerator,
         disabilityAssessmentForBpcAnalysis,
+        disabilityRetirementPlanningRejection,
         audienceQuestionGenerator,
         perCapitaIncomeForBpcAnalysis,
+        bpcElderlyAnalysis,
         ruralTimelineAnalysis,
         insuranceQualityAnalysis,
         teacherRetirementPlanning,
@@ -384,6 +421,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         survivorPensionAnalysis,
         generalUrbanRetirementDenial,
         deathBenefitGrant,
+        deathBenefitRejection,
         analysisToolClient,
         createdBy,
         updatedBy,
@@ -499,6 +537,15 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         GetPerCapitaIncomeForBpcAnalysisWithRelationsQueryResult,
         PerCapitaIncomeForBpcAnalysisTypeormEntity,
       );
+
+      const bpcElderlyAnalysis =
+        source.bpcElderlyAnalysis !== null
+          ? this.mapper.map(
+              source.bpcElderlyAnalysis,
+              GetBpcElderlyAnalysisWithRelationsQueryResult,
+              BpcElderlyAnalysisTypeormEntity,
+            )
+          : null;
 
       const ruralTimeline = this.mapper.map(
         source.ruralTimelineAnalysis,
@@ -618,6 +665,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         disabilityAssessmentForBpcAnalysis,
         audienceQuestionGenerator,
         perCapitaIncomeForBpcAnalysis,
+        bpcElderlyAnalysis,
         ruralTimeline,
         insuranceQualityAnalysis,
         disabilityRetirementPlanning,

@@ -50,6 +50,8 @@ export class AnalysisActivityMessageFactory {
       'Concessão de aposentadoria para deficiente',
     [AnalysisToolRecordTypeEnum.DEATH_BENEFIT_GRANT]:
       'Concessão de pensão por morte',
+    [AnalysisToolRecordTypeEnum.DEATH_BENEFIT_REJECTION]:
+      'Indeferimento de pensão por morte',
     [AnalysisToolRecordTypeEnum.SPECIAL_RETIREMENT_GRANT]:
       'Concessão de aposentadoria especial',
     [AnalysisToolRecordTypeEnum.TEMPORARY_DISABILITY_BENEFITS_GRANT]:
@@ -60,6 +62,10 @@ export class AnalysisActivityMessageFactory {
       'Indeferimento de aposentadoria urbana geral',
     [AnalysisToolRecordTypeEnum.ACCIDENT_BENEFIT_REJECTION]:
       'Indeferimento de auxílio-acidente',
+    [AnalysisToolRecordTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION]:
+      'Indeferimento de aposentadoria para deficiente',
+    [AnalysisToolRecordTypeEnum.BPC_ELDERLY_ANALYSIS]:
+      'Análise de BPC ao Idoso',
   };
 
   private static readonly actionLabelMap: Record<
