@@ -408,6 +408,7 @@ export abstract class AnalysisProcessorGateway {
 
   public abstract getTemporaryIncapacityBenefitRejectionFirstAnalysis(
     systemInstruction: string,
+    cnisAnalysisJson: string,
     files: Buffer[],
     asJson?: boolean,
   ): Promise<string | null>;

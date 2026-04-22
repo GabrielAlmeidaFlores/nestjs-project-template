@@ -32,7 +32,7 @@ export class TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryEntity
         (
           source: TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryTypeormEntity,
         ): TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryEntity => {
-          if (!source.workPeriods) {
+          if (!source.temporaryIncapacityBenefitRejectionWorkPeriods) {
             throw new IncompleteSourceDataForMappingError({
               destinationClass:
                 TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryEntity.name,
@@ -55,7 +55,7 @@ export class TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryEntity
               competenceBelowTheMinimum: source.competenceBelowTheMinimum,
               temporaryIncapacityBenefitRejectionWorkPeriodsId:
                 new TemporaryIncapacityBenefitRejectionWorkPeriodsId(
-                  source.workPeriods.id,
+                  source.temporaryIncapacityBenefitRejectionWorkPeriods.id,
                 ),
               createdAt: source.createdAt,
               updatedAt: source.updatedAt,
@@ -86,7 +86,7 @@ export class TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryEntity
               contribution: source.contribution,
               contributionSalary: source.contributionSalary,
               competenceBelowTheMinimum: source.competenceBelowTheMinimum,
-              workPeriods:
+              temporaryIncapacityBenefitRejectionWorkPeriods:
                 TemporaryIncapacityBenefitRejectionWorkPeriodsTypeormEntity.build(
                   {
                     id: source.temporaryIncapacityBenefitRejectionWorkPeriodsId.toString(),

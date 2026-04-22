@@ -71,10 +71,7 @@ export class GetTemporaryIncapacityBenefitRejectionUseCase {
     const workPeriodsList = this.buildWorkPeriodsResponse(result);
 
     return GetTemporaryIncapacityBenefitRejectionResponseDto.build({
-      temporaryIncapacityBenefitRejectionId:
-        new TemporaryIncapacityBenefitRejectionId(
-          result.temporaryIncapacityBenefitRejectionId,
-        ),
+      temporaryIncapacityBenefitRejectionId: result.id,
       analysisToolClient:
         GetTemporaryIncapacityBenefitRejectionAnalysisToolClientResponseDto.build(
           {

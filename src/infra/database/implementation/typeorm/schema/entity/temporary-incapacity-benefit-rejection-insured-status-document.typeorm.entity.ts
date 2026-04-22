@@ -20,7 +20,7 @@ export class TemporaryIncapacityBenefitRejectionInsuredStatusDocumentTypeormEnti
   @JoinColumn({
     name: 'temporary_incapacity_benefit_rejection_insured_status_id',
   })
-  public insuredStatus?: TemporaryIncapacityBenefitRejectionInsuredStatusTypeormEntity;
+  public temporaryIncapacityBenefitRejectionInsuredStatus?: TemporaryIncapacityBenefitRejectionInsuredStatusTypeormEntity;
 
   protected override readonly _type =
     TemporaryIncapacityBenefitRejectionInsuredStatusDocumentTypeormEntity.name;

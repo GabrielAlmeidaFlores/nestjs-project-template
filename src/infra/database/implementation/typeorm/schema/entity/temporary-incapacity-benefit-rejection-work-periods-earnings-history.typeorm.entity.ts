@@ -50,7 +50,7 @@ export class TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryTypeor
   @JoinColumn({
     name: 'temporary_incapacity_benefit_rejection_work_periods_id',
   })
-  public workPeriods?: TemporaryIncapacityBenefitRejectionWorkPeriodsTypeormEntity;
+  public temporaryIncapacityBenefitRejectionWorkPeriods?: TemporaryIncapacityBenefitRejectionWorkPeriodsTypeormEntity;
 
   protected override readonly _type =
     TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryTypeormEntity.name;

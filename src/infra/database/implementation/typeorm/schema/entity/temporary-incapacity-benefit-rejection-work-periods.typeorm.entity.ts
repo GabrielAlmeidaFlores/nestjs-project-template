@@ -76,7 +76,7 @@ export class TemporaryIncapacityBenefitRejectionWorkPeriodsTypeormEntity extends
   @OneToMany(
     () =>
       TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryTypeormEntity,
-    (entity) => entity.workPeriods,
+    (entity) => entity.temporaryIncapacityBenefitRejectionWorkPeriods,
   )
   public earningsHistory?: TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryTypeormEntity[];
 

@@ -2,6 +2,7 @@ import type { DecimalValue } from '@core/domain/schema/value-object/decimal/deci
 import type { TemporaryIncapacityBenefitRejectionCategoryEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/enum/temporary-incapacity-benefit-rejection-category.enum';
 import type { TemporaryIncapacityBenefitRejectionConditionEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/enum/temporary-incapacity-benefit-rejection-condition.enum';
 import type { TemporaryIncapacityBenefitRejectionDenialReasonEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/enum/temporary-incapacity-benefit-rejection-denial-reason.enum';
+import type { TemporaryIncapacityBenefitRejectionId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/value-object/temporary-incapacity-benefit-rejection-id.value-object';
 import type { TemporaryIncapacityBenefitRejectionSevereDiseaseEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-disability-analysis/enum/temporary-incapacity-benefit-rejection-severe-disease.enum';
 import type { TemporaryIncapacityBenefitRejectionDisabilityAnalysisDocumentTypeEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-disability-analysis-document/enum/temporary-incapacity-benefit-rejection-disability-analysis-document-type.enum';
 import type { TemporaryIncapacityBenefitRejectionDocumentTypeEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-document/enum/temporary-incapacity-benefit-rejection-document-type.enum';
@@ -10,7 +11,7 @@ import type { TemporaryIncapacityBenefitRejectionWorkPeriodsPendencyReasonEnum }
 import type { TemporaryIncapacityBenefitRejectionWorkPeriodsPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-work-periods/enum/temporary-incapacity-benefit-rejection-work-periods-period-consideration.enum';
 
 export class GetTemporaryIncapacityBenefitRejectionWithRelationsQueryResult {
-  public readonly temporaryIncapacityBenefitRejectionId: string;
+  public readonly id: TemporaryIncapacityBenefitRejectionId;
   public readonly analysisName: string | null;
   public readonly requestEntryDate: Date | null;
   public readonly denialDate: Date | null;
@@ -24,6 +25,7 @@ export class GetTemporaryIncapacityBenefitRejectionWithRelationsQueryResult {
   public readonly updatedAt: Date;
 
   public readonly result: {
+    id: string;
     inssDecisionAnalysis: string | null;
     firstAnalysis: string | null;
     completeAnalysis: string | null;
@@ -121,8 +123,7 @@ export class GetTemporaryIncapacityBenefitRejectionWithRelationsQueryResult {
   public constructor(
     props: GetTemporaryIncapacityBenefitRejectionWithRelationsQueryResult,
   ) {
-    this.temporaryIncapacityBenefitRejectionId =
-      props.temporaryIncapacityBenefitRejectionId;
+    this.id = props.id;
     this.analysisName = props.analysisName;
     this.requestEntryDate = props.requestEntryDate;
     this.denialDate = props.denialDate;

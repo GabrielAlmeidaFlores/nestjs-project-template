@@ -32,7 +32,7 @@ export class TemporaryIncapacityBenefitRejectionInsuredStatusDocumentEntityAutoM
         (
           source: TemporaryIncapacityBenefitRejectionInsuredStatusDocumentTypeormEntity,
         ): TemporaryIncapacityBenefitRejectionInsuredStatusDocumentEntity => {
-          if (!source.insuredStatus) {
+          if (!source.temporaryIncapacityBenefitRejectionInsuredStatus) {
             throw new IncompleteSourceDataForMappingError({
               destinationClass:
                 TemporaryIncapacityBenefitRejectionInsuredStatusDocumentEntity.name,
@@ -50,7 +50,7 @@ export class TemporaryIncapacityBenefitRejectionInsuredStatusDocumentEntityAutoM
               type: source.type,
               temporaryIncapacityBenefitRejectionInsuredStatusId:
                 new TemporaryIncapacityBenefitRejectionInsuredStatusId(
-                  source.insuredStatus.id,
+                  source.temporaryIncapacityBenefitRejectionInsuredStatus.id,
                 ),
               createdAt: source.createdAt,
               updatedAt: source.updatedAt,
@@ -76,7 +76,7 @@ export class TemporaryIncapacityBenefitRejectionInsuredStatusDocumentEntityAutoM
               id: source.id.toString(),
               fileName: source.fileName,
               type: source.type,
-              insuredStatus:
+              temporaryIncapacityBenefitRejectionInsuredStatus:
                 TemporaryIncapacityBenefitRejectionInsuredStatusTypeormEntity.build(
                   {
                     id: source.temporaryIncapacityBenefitRejectionInsuredStatusId.toString(),

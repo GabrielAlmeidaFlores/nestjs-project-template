@@ -10,6 +10,7 @@ import { TemporaryIncapacityBenefitRejectionQueryRepositoryGateway } from '@modu
 import { TemporaryIncapacityBenefitRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-result/command/temporary-incapacity-benefit-rejection-result.command.repository.gateway';
 import { TemporaryIncapacityBenefitRejectionId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/value-object/temporary-incapacity-benefit-rejection-id.value-object';
 import { TemporaryIncapacityBenefitRejectionResultEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-result/temporary-incapacity-benefit-rejection-result.entity';
+import { TemporaryIncapacityBenefitRejectionResultId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-result/value-object/temporary-incapacity-benefit-rejection-result-id.value-object';
 import { CreateTemporaryIncapacityBenefitRejectionInssDecisionAnalysisResponseDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/response/create-temporary-incapacity-benefit-rejection-inss-decision-analysis.response.dto';
 import { TemporaryIncapacityBenefitRejectionNotFoundError } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/error/temporary-incapacity-benefit-rejection-not-found.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
@@ -90,9 +91,14 @@ export class CreateTemporaryIncapacityBenefitRejectionInssDecisionAnalysisUseCas
       );
 
     const inssDecisionAnalysisText = inssDecisionAnalysis ?? '';
+    const resultId =
+      existingResult !== null
+        ? new TemporaryIncapacityBenefitRejectionResultId(existingResult.id)
+        : new TemporaryIncapacityBenefitRejectionResultId();
 
     const resultEntity = new TemporaryIncapacityBenefitRejectionResultEntity({
       ...(existingResult !== null && { id: existingResult.id }),
+      id: resultId,
       inssDecisionAnalysis: inssDecisionAnalysisText,
       firstAnalysis: existingResult?.firstAnalysis ?? null,
       completeAnalysis: existingResult?.completeAnalysis ?? null,
@@ -142,7 +148,7 @@ export class CreateTemporaryIncapacityBenefitRejectionInssDecisionAnalysisUseCas
     >,
   ): Promise<Buffer[]> {
     return Promise.all(
-      (temporaryIncapacityBenefitRejection.documents ?? []).map((document) =>
+      temporaryIncapacityBenefitRejection.documents.map((document) =>
         this.fileProcessorGateway.getFileBuffer(document.fileName),
       ),
     );

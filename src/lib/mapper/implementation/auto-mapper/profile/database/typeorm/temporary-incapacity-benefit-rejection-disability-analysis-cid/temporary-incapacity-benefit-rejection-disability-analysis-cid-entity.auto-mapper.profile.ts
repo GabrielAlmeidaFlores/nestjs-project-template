@@ -32,7 +32,7 @@ export class TemporaryIncapacityBenefitRejectionDisabilityAnalysisCidEntityAutoM
         (
           source: TemporaryIncapacityBenefitRejectionDisabilityAnalysisCidTypeormEntity,
         ): TemporaryIncapacityBenefitRejectionDisabilityAnalysisCidEntity => {
-          if (!source.disabilityAnalysis) {
+          if (!source.temporaryIncapacityBenefitRejectionDisabilityAnalysis) {
             throw new IncompleteSourceDataForMappingError({
               destinationClass:
                 TemporaryIncapacityBenefitRejectionDisabilityAnalysisCidEntity.name,
@@ -49,7 +49,8 @@ export class TemporaryIncapacityBenefitRejectionDisabilityAnalysisCidEntityAutoM
               cidTenId: source.cidTenId,
               temporaryIncapacityBenefitRejectionDisabilityAnalysisId:
                 new TemporaryIncapacityBenefitRejectionDisabilityAnalysisId(
-                  source.disabilityAnalysis.id,
+                  source.temporaryIncapacityBenefitRejectionDisabilityAnalysis
+                    .id,
                 ),
               createdAt: source.createdAt,
               updatedAt: source.updatedAt,
@@ -74,7 +75,7 @@ export class TemporaryIncapacityBenefitRejectionDisabilityAnalysisCidEntityAutoM
             {
               id: source.id.toString(),
               cidTenId: source.cidTenId,
-              disabilityAnalysis:
+              temporaryIncapacityBenefitRejectionDisabilityAnalysis:
                 TemporaryIncapacityBenefitRejectionDisabilityAnalysisTypeormEntity.build(
                   {
                     id: source.temporaryIncapacityBenefitRejectionDisabilityAnalysisId.toString(),

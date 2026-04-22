@@ -11,6 +11,7 @@ import { TemporaryIncapacityBenefitRejectionQueryRepositoryGateway } from '@modu
 import { TemporaryIncapacityBenefitRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-result/command/temporary-incapacity-benefit-rejection-result.command.repository.gateway';
 import { TemporaryIncapacityBenefitRejectionId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/value-object/temporary-incapacity-benefit-rejection-id.value-object';
 import { TemporaryIncapacityBenefitRejectionResultEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-result/temporary-incapacity-benefit-rejection-result.entity';
+import { TemporaryIncapacityBenefitRejectionResultId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-result/value-object/temporary-incapacity-benefit-rejection-result-id.value-object';
 import { TemporaryIncapacityBenefitRejectionCompleteAnalysisDownloadNotFoundError } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/error/temporary-incapacity-benefit-rejection-complete-analysis-download-not-found.error';
 import { TemporaryIncapacityBenefitRejectionNotFoundError } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/error/temporary-incapacity-benefit-rejection-not-found.error';
 import { TemporaryIncapacityBenefitRejectionSimplifiedAnalysisNotFoundError } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/error/temporary-incapacity-benefit-rejection-simplified-analysis-not-found.error';
@@ -116,6 +117,9 @@ export class CreateTemporaryIncapacityBenefitRejectionSimplifiedAnalysisDownload
       const updatedResultEntity =
         new TemporaryIncapacityBenefitRejectionResultEntity({
           ...temporaryIncapacityBenefitRejectionResult,
+          id: new TemporaryIncapacityBenefitRejectionResultId(
+            temporaryIncapacityBenefitRejectionResult.id,
+          ),
           simplifiedAnalysis,
         });
 

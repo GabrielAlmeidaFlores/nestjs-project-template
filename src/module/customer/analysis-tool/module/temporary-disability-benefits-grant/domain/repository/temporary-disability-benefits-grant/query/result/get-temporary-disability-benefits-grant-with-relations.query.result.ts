@@ -16,7 +16,7 @@ import type { TemporaryDisabilityBenefitsGrantWorkPeriodsEntity } from '@module/
 import type { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-work-periods-earnings-history/temporary-disability-benefits-grant-work-periods-earnings-history.entity';
 
 export class GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResult extends BaseBuildableObject {
-  public readonly temporaryDisabilityBenefitsGrantId: TemporaryDisabilityBenefitsGrantId;
+  public readonly id: TemporaryDisabilityBenefitsGrantId;
   public readonly category: TemporaryDisabilityBenefitsGrantCategoryEnum;
   public readonly analysisName: string | null;
   public readonly createdAt: Date;
