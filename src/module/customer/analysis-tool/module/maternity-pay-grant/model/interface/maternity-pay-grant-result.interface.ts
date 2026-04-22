@@ -13,4 +13,5 @@ export interface MaternityPayGrantResultInterface {
   insuredQualityStatus: MaternityPayGrantInsuredQualityStatusEnum;
   applicableRules: MaternityPayGrantResultApplicableRuleInterface[];
   analysisDescription: string;
+  completeAnalysisDownload: string;
 }

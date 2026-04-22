@@ -107,13 +107,7 @@ export class MaternityPayGrantPeriodItemWithDocumentsRequestDto extends Maternit
     },
   )
   public documents?: FileDocumentMaternityPayGrantPeriodRequestDto[];
-
-  @RequestDtoObjectProperty(
-    () => MaternityPayGrantPeriodEarningsHistoryItemRequestDto,
-    { required: false, isArray: true },
-  )
-  public earningsHistory?: MaternityPayGrantPeriodEarningsHistoryItemRequestDto[];
-
+  
   protected override readonly _type =
     MaternityPayGrantPeriodItemWithDocumentsRequestDto.name;
 }

@@ -1,5 +1,6 @@
 ﻿import { Inject, Injectable } from '@nestjs/common';
 
+import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
 import { GenerativeIaResponseMimeTypeEnum } from '@infra/generative-ia/enum/generative-ia-response-mime-type.enum';
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
@@ -1786,8 +1787,16 @@ AnÃ¡lise processada do CNIS:
     systemInstruction: string,
     cnisAnalysisJson: string,
     files: Buffer[],
+    contributorGender: GenderEnum | null,
     asJson = true,
   ): Promise<string | null> {
+    const genderLabel =
+      contributorGender === GenderEnum.FEMALE
+        ? 'Feminino'
+        : contributorGender === GenderEnum.MALE
+          ? 'Masculino'
+          : 'Não informado';
+
     const prompt = `
 # IMPORTANTE
 - A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
@@ -1803,6 +1812,10 @@ AnÃ¡lise processada do CNIS:
 - Analise a qualidade de segurado da requerente com base nos períodos e na data do evento gerador (parto/adoção/aborto).
 - Analise o cumprimento da carência necessária para o salário-maternidade.
 - Analise a elegibilidade para o benefício com base na categoria de segurada.
+- O campo \`lastContribution\` deve conter a data da última contribuição identificada no CNIS no formato YYYY-MM-DD, ou null se não identificada.
+- O campo \`categoryAtDfg\` deve descrever a categoria contributiva do segurado na data do fato gerador (DFG), ex: "desempregada (ex-empregada)".
+- O campo \`employmentBondStatus\` deve descrever o status do vínculo contributivo na data do fato gerador, ex: "Inativo - desempregada há 7 meses na DFG".
+Sexo do contribuinte: ${genderLabel}
 Análise processada do CNIS:
   ${cnisAnalysisJson}
 `;
@@ -1832,7 +1845,7 @@ Análise processada do CNIS:
 # IMPORTANTE
 - A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
 - Retorne estritamente um objeto JSON compatível com o schema solicitado.
-- O campo \`completeAnalysisDownload\` deve conter HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.
+- O campo \`completeAnalysisDownload\` deve conter HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF. Deve conter todos os dados analisados, e uma explicação técnica de todos os dados
 - O campo \`analysisDescription\` deve conter um texto explicativo completo sobre o resultado da análise e as perspectivas do caso.
 - Não incluir tag <br> na resposta no campo \`analysisDescription\`.
 
@@ -4792,19 +4805,37 @@ Análise processada do CNIS:
               description:
                 'Indica se a qualidade de segurada foi confirmada na data do evento gerador',
             },
+            status: {
+              type: 'string',
+              description:
+                'Status da qualidade de segurada: CONFIRMADA (a qualidade de segurada foi confirmada na data do evento gerador), NÃO CONFIRMADA (a qualidade de segurada não foi confirmada na data do evento gerador), PENDENTE (há pendências ou informações insuficientes para confirmar a qualidade de segurada na data do evento gerador, ou seja, existem indícios que sugerem que a qualidade de segurada pode estar presente, mas ainda é necessário resolver pendências ou obter informações adicionais para uma confirmação definitiva).',
+              enum: [
+                'QUALIDADE_DE_SEGURADO_MANTIDA',
+                'QUALIDADE_DE_SEGURADO_NAO_CONFIRMADA',
+              ],
+            },
             description: {
               type: 'string',
               description:
                 'Descrição detalhada da análise da qualidade de segurada',
             },
           },
-          required: ['isConfirmed', 'description'],
+          required: ['isConfirmed', 'description', 'status'],
         },
         carenciaAnalysis: {
           type: 'object',
           description:
             'Análise do cumprimento da carência para salário-maternidade',
           properties: {
+            status: {
+              type: 'string',
+              description:
+                'Status do cumprimento da carência: CUMPRIDA (a carência necessária foi cumprida), NÃO CUMPRIDA (a carência necessária não foi cumprida), PARCIALMENTE CUMPRIDA (a carência necessária foi parcialmente cumprida, ou seja, o segurado possui algumas contribuições, mas não atinge o total necessário para cumprir a carência, ou há pendências que precisam ser resolvidas para comprovar o cumprimento total da carência).',
+              enum: [
+                'Isento_de_Carencia_Base_Artigo_25_Lei_8213',
+                'Nao_Isento_de_Carencia_Base_Artigo_25_Lei_8213',
+              ],
+            },
             isConfirmed: {
               type: 'boolean',
               description: 'Indica se a carência necessária foi cumprida',
@@ -4814,7 +4845,98 @@ Análise processada do CNIS:
               description: 'Descrição detalhada da análise da carência',
             },
           },
-          required: ['isConfirmed', 'description'],
+          required: ['isConfirmed', 'description', 'status'],
+        },
+        requirementAnalysis: {
+          type: 'object',
+          description:
+            'Análise do cumprimento dos requisitos para salário-maternidade',
+          properties: {
+            status: {
+              type: 'string',
+              description:
+                'Status do cumprimento dos requisitos: CUMPRIDOS (todos os requisitos foram cumpridos), NÃO CUMPRIDOS (um ou mais requisitos não foram cumpridos), PARCIALMENTE CUMPRIDOS (alguns requisitos foram cumpridos, mas outros não, ou há pendências que precisam ser resolvidas para comprovar o cumprimento total dos requisitos).',
+              enum: [
+                'Dentro_do_prazo_de_requiremento',
+                'Fora_do_prazo_de_requiremento',
+              ],
+            },
+          },
+          required: ['status'],
+        },
+        applicationDeadlineAnalysis: {
+          type: 'object',
+          description:
+            'Análise do cumprimento do prazo de requerimento para salário-maternidade',
+          properties: {
+            status: {
+              type: 'string',
+              description:
+                'Parto normal ou aborto espontâneo: Prazo de requerimento é de até 28 dias após a data do evento gerador. Parto prematuro: Prazo de requerimento é de até 28 dias após a data prevista para o parto. Aborto induzido legal: Prazo de requerimento é de até 28 dias após a data do evento gerador. Nascimento de natimorto: Prazo de requerimento é de até 28 dias após a data do evento gerador.',
+              enum: [
+                'PARTO_NORMAL',
+                'PARTO_PREMATURO',
+                'ABORTO_ESPONTANEO',
+                'ABORTO_INDUZIDO_LEGAL',
+                'NASCIMENTO_NATIMORTO',
+              ],
+            },
+            duration: {
+              type: 'string',
+              description:
+                'Duração entre a data do evento gerador e a data do requerimento, apresentada em formato textual (ex: 45 dias). Null se não calculável.',
+            },
+            startDate: {
+              type: 'string',
+              format: 'date',
+              description:
+                'Data de início de inicio do beneficio, se aplicável, no formato YYYY-MM-DD',
+            },
+            terminationDate: {
+              type: 'string',
+              format: 'date',
+              description:
+                'Data de cessação do benefício, se aplicável, no formato YYYY-MM-DD',
+            },
+            startLeaveDate: {
+              type: 'string',
+              format: 'date',
+              description:
+                'Data de início do afastamento, se aplicável, no formato YYYY-MM-DD',
+            },
+            endLeaveDate: {
+              type: 'string',
+              format: 'date',
+              description:
+                'Data de término do afastamento, se aplicável, no formato YYYY-MM-DD',
+            },
+            total: {
+              type: 'number',
+              description:
+                'Total de dias consecutivos entre a data do evento e a data do requerimento',
+            },
+            amountBenefit: {
+              type: 'string',
+              description:
+                'Valor estimado do benefício quando aplicável, em formato textual (ex: R$ 3.218,45). Null se não calculável.',
+            },
+            calculationBasis: {
+              type: 'string',
+              description:
+                'Base de cálculo utilizada para estimar o valor do benefício,média das ultimas contribuições ou salário de contribuição, quando disponível nos dados estruturados. Null se não calculável.',
+            },
+          },
+          required: [
+            'status',
+            'duration',
+            'startDate',
+            'terminationDate',
+            'startLeaveDate',
+            'endLeaveDate',
+            'total',
+            'amountBenefit',
+            'calculationBasis',
+          ],
         },
         benefitEligibilityAnalysis: {
           type: 'object',
@@ -4855,6 +4977,17 @@ Análise processada do CNIS:
               category: {
                 type: 'string',
                 description: 'Categoria do segurado para este período',
+                enum: [
+                  'EMPREGADO_URBANO',
+                  'EMPREGADO_RURAL',
+                  'EMPREGO_DOMESTICO',
+                  'TRABALHADOR_AVULSO',
+                  'CONTRIBUINTE_INDIVIDUAL_AUTONOMO',
+                  'CONTRIBUINTE_INDIVIDUAL_PRESTADOR',
+                  'MEI',
+                  'SEGURADO_ESPECIAL',
+                  'SEGURADO_FACULTATIVO',
+                ],
               },
               gracePeriod: {
                 type: 'number',
@@ -4901,6 +5034,11 @@ Análise processada do CNIS:
               reasonPendency: {
                 type: 'string',
                 description: 'Motivo da pendência quando isPendency é true',
+                enum: [
+                  'LEAVE_DATE',
+                  'COMPETENCE_BELOW_MINIMUM',
+                  'INCONSISTENT_COMPETENCE',
+                ],
               },
               bondOrigin: {
                 type: 'string',
@@ -4930,12 +5068,34 @@ Análise processada do CNIS:
             ],
           },
         },
+        lastContribution: {
+          type: 'string',
+          format: 'date',
+          description:
+            'Data da última contribuição identificada no CNIS no formato YYYY-MM-DD. Null se não identificada.',
+          nullable: true,
+        },
+        categoryAtDfg: {
+          type: 'string',
+          description:
+            'Categoria contributiva do segurado na data do fato gerador (DFG), ex: "desempregada (ex-empregada)".',
+        },
+        employmentBondStatus: {
+          type: 'string',
+          description:
+            'Status do vínculo contributivo na data do fato gerador, ex: "Inativo - desempregada há 7 meses na DFG".',
+        },
       },
       required: [
         'insuredQualityAnalysis',
         'carenciaAnalysis',
+        'requirementAnalysis',
+        'applicationDeadlineAnalysis',
         'benefitEligibilityAnalysis',
         'periods',
+        'lastContribution',
+        'categoryAtDfg',
+        'employmentBondStatus',
       ],
     };
   }
@@ -4989,7 +5149,7 @@ Análise processada do CNIS:
         completeAnalysisDownload: {
           type: 'string',
           description:
-            'Conteúdo HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.',
+            'Detalhamento completo da análise, incluindo a avaliação de cada documento e uma explicação detalhada de cada caso. Conteúdo HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.',
         },
       },
       required: [

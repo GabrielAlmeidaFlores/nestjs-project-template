@@ -88,6 +88,17 @@ export class UpdateMaternityPayGrantUseCase {
         existingMaternityPayGrant.ruralPeriodDocumentDescription,
       maternityPayGrantResultId:
         existingMaternityPayGrant.maternityPayGrantResult?.id ?? null,
+      benefitTriggeringEvent:
+        dto.benefitTriggeringEvent ??
+        existingMaternityPayGrant.benefitTriggeringEvent,
+      benefitTriggeringEventDate:
+        dto.benefitTriggeringEventDate ??
+        existingMaternityPayGrant.benefitTriggeringEventDate,
+      cnisDocument: existingMaternityPayGrant.cnisDocument,
+      isTriggeringEventDateValid:
+        dto.triggeringEventDate !== undefined
+          ? this.isTriggeringEventDateWithinFiveYears(dto.triggeringEventDate)
+          : existingMaternityPayGrant.isTriggeringEventDateValid,
     });
 
     const transactions: TransactionType[] = [
@@ -143,5 +154,14 @@ export class UpdateMaternityPayGrantUseCase {
     await transaction.commit();
 
     return UpdateMaternityPayGrantResponseDto.build({ maternityPayGrantId });
+  }
+
+  private isTriggeringEventDateWithinFiveYears(date: Date): boolean {
+    const maxYears = 5;
+    const today = new Date();
+    const limitDate = new Date(today);
+    limitDate.setFullYear(today.getFullYear() - maxYears);
+
+    return date >= limitDate && date <= today;
   }
 }

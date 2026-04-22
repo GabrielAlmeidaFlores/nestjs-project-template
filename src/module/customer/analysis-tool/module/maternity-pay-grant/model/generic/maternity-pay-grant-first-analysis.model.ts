@@ -1,4 +1,5 @@
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { MaternityPayGrantPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-period/enum/maternity-pay-grant-period-consideration.enum';
 import { MaternityPayGrantPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-period/enum/maternity-pay-grant-period-pendency-reason.enum';
 import { MaternityPayGrantCategoryEnum } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/enum/maternity-pay-grant-category.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
@@ -19,8 +20,53 @@ export class MaternityPayGrantFirstAnalysisAnalysisSectionModel extends BaseBuil
   @ResponseDtoStringProperty()
   public readonly description: string;
 
+  @ResponseDtoStringProperty({ required: false })
+  public readonly status?: string;
+
   protected override readonly _type =
     MaternityPayGrantFirstAnalysisAnalysisSectionModel.name;
+}
+
+@ResponseDto()
+export class MaternityPayGrantFirstAnalysisRequirementAnalysisModel extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty()
+  public readonly status: string;
+
+  protected override readonly _type =
+    MaternityPayGrantFirstAnalysisRequirementAnalysisModel.name;
+}
+
+@ResponseDto()
+export class MaternityPayGrantFirstAnalysisApplicationDeadlineModel extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty()
+  public readonly status: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly duration?: string;
+
+  @ResponseDtoDateProperty({ required: false })
+  public readonly startDate?: Date;
+
+  @ResponseDtoDateProperty({ required: false })
+  public readonly terminationDate?: Date;
+
+  @ResponseDtoDateProperty({ required: false })
+  public readonly startLeaveDate?: Date;
+
+  @ResponseDtoDateProperty({ required: false })
+  public readonly endLeaveDate?: Date;
+
+  @ResponseDtoNumberProperty({ required: false })
+  public readonly total?: number;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly amountBenefit?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly calculationBasis?: string;
+
+  protected override readonly _type =
+    MaternityPayGrantFirstAnalysisApplicationDeadlineModel.name;
 }
 
 @ResponseDto()
@@ -61,14 +107,14 @@ export class MaternityPayGrantFirstAnalysisPeriodModel extends BaseBuildableDtoO
   @ResponseDtoBooleanProperty()
   public readonly competenceBelowTheMinimum: boolean;
 
-  @ResponseDtoValueObjectProperty(DecimalValue, { required: false })
-  public readonly contributionAverage?: DecimalValue;
-
   @ResponseDtoObjectProperty(
     () => MaternityPayGrantFirstAnalysisBelowMinimumContributionItemModel,
     { isArray: true },
   )
   public readonly belowMinimumContributions: MaternityPayGrantFirstAnalysisBelowMinimumContributionItemModel[];
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly contributionAverage?: string;
 
   @ResponseDtoEnumProperty(MaternityPayGrantPeriodPendencyReasonEnum, {
     required: false,
@@ -80,6 +126,17 @@ export class MaternityPayGrantFirstAnalysisPeriodModel extends BaseBuildableDtoO
 
   @ResponseDtoBooleanProperty({ required: false })
   public readonly complementViaMyInss?: boolean;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly impact?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly typeOfContribution?: string;
+
+  @ResponseDtoEnumProperty(MaternityPayGrantPeriodConsiderationEnum, {
+    required: false,
+  })
+  public readonly periodConsideration?: MaternityPayGrantPeriodConsiderationEnum;
 
   protected override readonly _type =
     MaternityPayGrantFirstAnalysisPeriodModel.name;
@@ -98,6 +155,16 @@ export class MaternityPayGrantFirstAnalysisModel extends BaseBuildableDtoObject 
   public readonly carenciaAnalysis: MaternityPayGrantFirstAnalysisAnalysisSectionModel;
 
   @ResponseDtoObjectProperty(
+    () => MaternityPayGrantFirstAnalysisRequirementAnalysisModel,
+  )
+  public readonly requirementAnalysis: MaternityPayGrantFirstAnalysisRequirementAnalysisModel;
+
+  @ResponseDtoObjectProperty(
+    () => MaternityPayGrantFirstAnalysisApplicationDeadlineModel,
+  )
+  public readonly applicationDeadlineAnalysis: MaternityPayGrantFirstAnalysisApplicationDeadlineModel;
+
+  @ResponseDtoObjectProperty(
     () => MaternityPayGrantFirstAnalysisAnalysisSectionModel,
   )
   public readonly benefitEligibilityAnalysis: MaternityPayGrantFirstAnalysisAnalysisSectionModel;
@@ -106,6 +173,15 @@ export class MaternityPayGrantFirstAnalysisModel extends BaseBuildableDtoObject 
     isArray: true,
   })
   public readonly periods: MaternityPayGrantFirstAnalysisPeriodModel[];
+
+  @ResponseDtoDateProperty({ required: false })
+  public readonly lastContribution?: Date;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly categoryAtDfg?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly employmentBondStatus?: string;
 
   protected override readonly _type = MaternityPayGrantFirstAnalysisModel.name;
 }
