@@ -64,6 +64,21 @@ import { BankPaymentEntityAutoMapperProfile } from '@lib/mapper/implementation/a
 import { GetBankPaymentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bank-payment/get-bank-payment-query-result.auto-mapper.profile';
 import { BankTransferEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bank-transfer/bank-transfer-entity.auto-mapper.profile';
 import { GetBankTransferQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bank-transfer/get-bank-transfer-query-result.auto-mapper.profile';
+import { BpcElderlyAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis/bpc-elderly-analysis-entity.auto-mapper.profile';
+import { GetBpcElderlyAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis/get-bpc-elderly-analysis-query-result.auto-mapper.profile';
+import { GetBpcElderlyAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis/get-bpc-elderly-analysis-with-relations-query-result.auto-mapper.profile';
+import { BpcElderlyAnalysisDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-document/bpc-elderly-analysis-document-entity.auto-mapper.profile';
+import { GetBpcElderlyAnalysisDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-document/get-bpc-elderly-analysis-document-query-result.auto-mapper.profile';
+import { BpcElderlyAnalysisFamilyMemberEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-family-member/bpc-elderly-analysis-family-member-entity.auto-mapper.profile';
+import { GetBpcElderlyAnalysisFamilyMemberQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-family-member/get-bpc-elderly-analysis-family-member-query-result.auto-mapper.profile';
+import { BpcElderlyAnalysisFamilyMemberDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-family-member-document/bpc-elderly-analysis-family-member-document-entity.auto-mapper.profile';
+import { GetBpcElderlyAnalysisFamilyMemberDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-family-member-document/get-bpc-elderly-analysis-family-member-document-query-result.auto-mapper.profile';
+import { BpcElderlyAnalysisInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-inss-benefit/bpc-elderly-analysis-inss-benefit-entity.auto-mapper.profile';
+import { GetBpcElderlyAnalysisInssBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-inss-benefit/get-bpc-elderly-analysis-inss-benefit-query-result.auto-mapper.profile';
+import { BpcElderlyAnalysisLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-legal-proceeding/bpc-elderly-analysis-legal-proceeding-entity.auto-mapper.profile';
+import { GetBpcElderlyAnalysisLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-legal-proceeding/get-bpc-elderly-analysis-legal-proceeding-query-result.auto-mapper.profile';
+import { BpcElderlyAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-result/bpc-elderly-analysis-result-entity.auto-mapper.profile';
+import { GetBpcElderlyAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-result/get-bpc-elderly-analysis-result-query-result.auto-mapper.profile';
 import { CidTenEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cid-ten/cid-ten-entity.auto-mapper.profile';
 import { GetCidTenQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cid-ten/get-cid-ten-query-result.auto-mapper.profile';
 import { CnisFastAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis/cnis-fast-analysis-entity.auto-mapper.profile';
@@ -106,6 +121,22 @@ import { DeathBenefitGrantPeriodEarningsHistoryEntityAutoMapperProfile } from '@
 import { DeathBenefitGrantResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-grant-result/death-benefit-grant-result-entity.auto-mapper.profile';
 import { DeathBenefitGrantTimeAcceleratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-grant-time-accelerator/death-benefit-grant-time-accelerator-entity.auto-mapper.profile';
 import { GetDeathBenefitGrantTimeAcceleratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-grant-time-accelerator/get-death-benefit-grant-time-accelerator-query-result.auto-mapper.profile';
+import { DeathBenefitRejectionEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-rejection/death-benefit-rejection-entity.auto-mapper.profile';
+import { GetDeathBenefitRejectionWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-rejection/get-death-benefit-rejection-with-relations-query-result.auto-mapper.profile';
+import { DeathBenefitRejectionDependentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-rejection-dependent/death-benefit-rejection-dependent-entity.auto-mapper.profile';
+import { DeathBenefitRejectionDependentDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-rejection-dependent-document/death-benefit-rejection-dependent-document-entity.auto-mapper.profile';
+import { DeathBenefitRejectionDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-rejection-document/death-benefit-rejection-document-entity.auto-mapper.profile';
+import { DeathBenefitRejectionInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-rejection-inss-benefit/death-benefit-rejection-inss-benefit-entity.auto-mapper.profile';
+import { DeathBenefitRejectionInstitorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-rejection-institutor/death-benefit-rejection-institutor-entity.auto-mapper.profile';
+import { DeathBenefitRejectionLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-rejection-legal-proceeding/death-benefit-rejection-legal-proceeding-entity.auto-mapper.profile';
+import { DeathBenefitRejectionLegalRepresentativeEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-rejection-legal-representative/death-benefit-rejection-legal-representative-entity.auto-mapper.profile';
+import { DeathBenefitRejectionPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-rejection-period/death-benefit-rejection-period-entity.auto-mapper.profile';
+import { GetDeathBenefitRejectionPeriodQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-rejection-period/get-death-benefit-rejection-period-query-result.auto-mapper.profile';
+import { DeathBenefitRejectionPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-rejection-period-document/death-benefit-rejection-period-document-entity.auto-mapper.profile';
+import { DeathBenefitRejectionPeriodEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-rejection-period-earnings-history/death-benefit-rejection-period-earnings-history-entity.auto-mapper.profile';
+import { DeathBenefitRejectionResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-rejection-result/death-benefit-rejection-result-entity.auto-mapper.profile';
+import { DeathBenefitRejectionTimeAcceleratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-rejection-time-accelerator/death-benefit-rejection-time-accelerator-entity.auto-mapper.profile';
+import { GetDeathBenefitRejectionTimeAcceleratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/death-benefit-rejection-time-accelerator/get-death-benefit-rejection-time-accelerator-query-result.auto-mapper.profile';
 import { DisabilityAssessmentForBpcAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis-entity.auto-mapper.profile';
 import { GetDisabilityAssessmentForBpcAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-assessment-for-bpc-analysis/get-disability-assessment-for-bpc-analysis-query-result.auto-mapper.profile';
 import { GetDisabilityAssessmentForBpcAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-assessment-for-bpc-analysis/get-disability-assessment-for-bpc-analysis-with-relations-query-result.auto-mapper.profile';
@@ -150,6 +181,15 @@ import { DisabilityRetirementPlanningPeriodSpecialTimeEntityAutoMapperProfile } 
 import { GetDisabilityRetirementPlanningPeriodSpecialTimeQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-period-special-time/get-disability-retirement-planning-period-special-time-query-result.auto-mapper.profile';
 import { DisabilityRetirementPlanningPeriodSpecialTimeDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-period-special-time-document/disability-retirement-planning-period-special-time-document-entity.auto-mapper.profile';
 import { GetDisabilityRetirementPlanningPeriodSpecialTimeDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-period-special-time-document/get-disability-retirement-planning-period-special-time-document-query-result.auto-mapper.profile';
+import { DisabilityRetirementPlanningRejectionEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-rejection/disability-retirement-planning-rejection-entity.auto-mapper.profile';
+import { DisabilityRetirementPlanningRejectionInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-rejection/disability-retirement-planning-rejection-inss-benefit-entity.auto-mapper.profile';
+import { DisabilityRetirementPlanningRejectionPeriodEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-rejection/disability-retirement-planning-rejection-period-earnings-history-entity.auto-mapper.profile';
+import { DisabilityRetirementPlanningRejectionPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-rejection/disability-retirement-planning-rejection-period-entity.auto-mapper.profile';
+import { DisabilityRetirementPlanningRejectionResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-rejection/disability-retirement-planning-rejection-result-entity.auto-mapper.profile';
+import { GetDisabilityRetirementPlanningRejectionWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-rejection/get-disability-retirement-planning-rejection-with-relations-query-result.auto-mapper.profile';
+import { DisabilityRetirementPlanningRejectionDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-rejection-document/disability-retirement-planning-rejection-document-entity.auto-mapper.profile';
+import { DisabilityRetirementPlanningRejectionTimeAcceleratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-rejection-time-accelerator/disability-retirement-planning-rejection-time-accelerator-entity.auto-mapper.profile';
+import { GetDisabilityRetirementPlanningRejectionTimeAcceleratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-rejection-time-accelerator/get-disability-retirement-planning-rejection-time-accelerator-query-result.auto-mapper.profile';
 import { DisabilityRetirementPlanningRemunerationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-remuneration/disability-retirement-planning-remuneration-entity.auto-mapper.profile';
 import { GetDisabilityRetirementPlanningRemunerationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-remuneration/get-disability-retirement-planning-remuneration-query-result.auto-mapper.profile';
 import { DisabilityRetirementPlanningResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-result/disability-retirement-planning-result-entity.auto-mapper.profile';
@@ -727,6 +767,15 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     AccidentBenefitRejectionWorkPeriodDocumentEntityAutoMapperProfile,
     AccidentBenefitRejectionWorkPeriodEarningsHistoryEntityAutoMapperProfile,
     GetAccidentBenefitRejectionWithRelationsQueryResultAutoMapperProfile,
+    DisabilityRetirementPlanningRejectionEntityAutoMapperProfile,
+    DisabilityRetirementPlanningRejectionResultEntityAutoMapperProfile,
+    DisabilityRetirementPlanningRejectionPeriodEntityAutoMapperProfile,
+    DisabilityRetirementPlanningRejectionPeriodEarningsHistoryEntityAutoMapperProfile,
+    DisabilityRetirementPlanningRejectionInssBenefitEntityAutoMapperProfile,
+    GetDisabilityRetirementPlanningRejectionWithRelationsQueryResultAutoMapperProfile,
+    DisabilityRetirementPlanningRejectionDocumentEntityAutoMapperProfile,
+    DisabilityRetirementPlanningRejectionTimeAcceleratorEntityAutoMapperProfile,
+    GetDisabilityRetirementPlanningRejectionTimeAcceleratorQueryResultAutoMapperProfile,
     DisabilityRetirementPlanningGrantResultEntityAutoMapperProfile,
     DisabilityRetirementPlanningGrantInssBenefitEntityAutoMapperProfile,
     DisabilityRetirementPlanningGrantLegalProceedingEntityAutoMapperProfile,
@@ -758,6 +807,22 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     DeathBenefitGrantPeriodDocumentEntityAutoMapperProfile,
     DeathBenefitGrantTimeAcceleratorEntityAutoMapperProfile,
     GetDeathBenefitGrantTimeAcceleratorQueryResultAutoMapperProfile,
+    DeathBenefitRejectionEntityAutoMapperProfile,
+    GetDeathBenefitRejectionWithRelationsQueryResultAutoMapperProfile,
+    DeathBenefitRejectionResultEntityAutoMapperProfile,
+    DeathBenefitRejectionDocumentEntityAutoMapperProfile,
+    DeathBenefitRejectionInssBenefitEntityAutoMapperProfile,
+    DeathBenefitRejectionInstitorEntityAutoMapperProfile,
+    DeathBenefitRejectionLegalProceedingEntityAutoMapperProfile,
+    DeathBenefitRejectionLegalRepresentativeEntityAutoMapperProfile,
+    DeathBenefitRejectionDependentEntityAutoMapperProfile,
+    DeathBenefitRejectionDependentDocumentEntityAutoMapperProfile,
+    DeathBenefitRejectionPeriodEntityAutoMapperProfile,
+    GetDeathBenefitRejectionPeriodQueryResultAutoMapperProfile,
+    DeathBenefitRejectionPeriodEarningsHistoryEntityAutoMapperProfile,
+    DeathBenefitRejectionPeriodDocumentEntityAutoMapperProfile,
+    DeathBenefitRejectionTimeAcceleratorEntityAutoMapperProfile,
+    GetDeathBenefitRejectionTimeAcceleratorQueryResultAutoMapperProfile,
     TemporaryDisabilityBenefitsGrantEntityAutoMapperProfile,
     GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResultAutoMapperProfile,
     TemporaryDisabilityBenefitsGrantResultEntityAutoMapperProfile,
@@ -797,6 +862,21 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     PerCapitaIncomeForBpcAnalysisLegalProceedingEntityAutoMapperProfile,
     PerCapitaIncomeForBpcAnalysisResultEntityAutoMapperProfile,
     GetPerCapitaIncomeForBpcAnalysisResultQueryResultAutoMapperProfile,
+    BpcElderlyAnalysisEntityAutoMapperProfile,
+    GetBpcElderlyAnalysisQueryResultAutoMapperProfile,
+    GetBpcElderlyAnalysisWithRelationsQueryResultAutoMapperProfile,
+    BpcElderlyAnalysisDocumentEntityAutoMapperProfile,
+    GetBpcElderlyAnalysisDocumentQueryResultAutoMapperProfile,
+    BpcElderlyAnalysisResultEntityAutoMapperProfile,
+    GetBpcElderlyAnalysisResultQueryResultAutoMapperProfile,
+    BpcElderlyAnalysisInssBenefitEntityAutoMapperProfile,
+    GetBpcElderlyAnalysisInssBenefitQueryResultAutoMapperProfile,
+    BpcElderlyAnalysisLegalProceedingEntityAutoMapperProfile,
+    GetBpcElderlyAnalysisLegalProceedingQueryResultAutoMapperProfile,
+    BpcElderlyAnalysisFamilyMemberEntityAutoMapperProfile,
+    GetBpcElderlyAnalysisFamilyMemberQueryResultAutoMapperProfile,
+    BpcElderlyAnalysisFamilyMemberDocumentEntityAutoMapperProfile,
+    GetBpcElderlyAnalysisFamilyMemberDocumentQueryResultAutoMapperProfile,
     JudicialCaseAnalysisEntityAutoMapperProfile,
     GetJudicialCaseAnalysisQueryResultAutoMapperProfile,
     GetJudicialCaseAnalysisWithRelationsQueryResultAutoMapperProfile,
