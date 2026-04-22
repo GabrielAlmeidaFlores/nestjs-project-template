@@ -17909,7 +17909,7 @@ REGRAS IMPORTANTES
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
-        PaymentPlanPaidResourceTypeEnum.ACCIDENT_BENEFIT_REJECTION_FIRST_ANALYSIS,
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_BENEFIT_REJECTION_SECOND_ANALYSIS,
       ),
       prompt: `Você é ELOY, especialista em Direito Previdenciário e análise de indeferimentos de auxílio-acidente. Sua missão é produzir a primeira análise técnica do caso com base prioritária na análise processada do CNIS em JSON, nos dados estruturados da análise e na documentação médica apresentada.
 
@@ -17928,7 +17928,7 @@ REGRAS IMPORTANTES
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
-        PaymentPlanPaidResourceTypeEnum.ACCIDENT_BENEFIT_REJECTION_SECOND_ANALYSIS,
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_BENEFIT_REJECTION_FIRST_ANALYSIS,
       ),
       prompt: `Você é ELOY, especialista em Direito Previdenciário, medicina legal previdenciária e análise de indeferimentos de auxílio-acidente. Sua missão é produzir a segunda análise técnica do caso, aprofundando os aspectos médico-funcionais e a estratégia de reversão.
 

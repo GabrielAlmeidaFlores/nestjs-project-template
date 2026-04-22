@@ -77,13 +77,22 @@ export class GetAccidentBenefitRejectionUseCase {
         ? await this.buildCnisDocumentResponse(cnisDoc.document)
         : null;
 
-    const firstAnalysis =
+    const rawStoredSecondAnalysis =
+      result.accidentBenefitRejectionResult?.secondAnalysis ?? null;
+
+    const secondAnalysis =
       result.accidentBenefitRejectionResult !== null &&
-      result.accidentBenefitRejectionResult.firstAnalysis !== null
-        ? this.parseStoredFirstAnalysis(
-            result.accidentBenefitRejectionResult.firstAnalysis,
+      rawStoredSecondAnalysis !== null
+        ? this.tryParseStoredSecondAnalysis(
+            rawStoredSecondAnalysis,
           )
         : null;
+
+    const firstAnalysis =
+      result.accidentBenefitRejectionResult?.firstAnalysis ??
+      (rawStoredSecondAnalysis !== null && secondAnalysis === null
+        ? rawStoredSecondAnalysis
+        : null);
 
     const completeAnalysis =
       result.accidentBenefitRejectionResult !== null &&
@@ -93,8 +102,9 @@ export class GetAccidentBenefitRejectionUseCase {
           )
         : null;
 
-    const events = (result.accidentBenefitRejectionEvent ?? []).map(
-      (event: AccidentBenefitRejectionEventEntity) => {
+    const events = await Promise.all(
+      (result.accidentBenefitRejectionEvent ?? []).map(
+        async (event: AccidentBenefitRejectionEventEntity) => {
         const eventDocuments = (
           result.accidentBenefitRejectionEventDocument ?? []
         ).filter(
@@ -106,6 +116,16 @@ export class GetAccidentBenefitRejectionUseCase {
             doc.type !== null,
         );
 
+        const eventDocumentDtos = await Promise.all(
+          eventDocuments.map(
+            async (doc: AccidentBenefitRejectionEventDocumentEntity) =>
+              this.buildEventDocumentResponse(
+                doc.document as string,
+                doc.type as NonNullable<typeof doc.type>,
+              ),
+          ),
+        );
+
         return GetAccidentBenefitRejectionEventInResponseDto.build({
           ...(event.accidentDate !== null && {
             accidentDate: event.accidentDate,
@@ -113,22 +133,20 @@ export class GetAccidentBenefitRejectionUseCase {
           ...(event.accidentDescription !== null && {
             accidentDescription: event.accidentDescription,
           }),
-          ...(event.cidTenId !== null && { cidTenId: event.cidTenId }),
-          ...(eventDocuments.length > 0 && {
-            eventDocuments: eventDocuments.map(
-              (doc: AccidentBenefitRejectionEventDocumentEntity) =>
-                GetAccidentBenefitRejectionEventDocumentInResponseDto.build({
-                  fileName: doc.document as string,
-                  type: doc.type as NonNullable<typeof doc.type>,
-                }),
-            ),
+          ...(event.cidTenId !== null && {
+            cidTenId: event.cidTenId,
+          }),
+          ...(eventDocumentDtos.length > 0 && {
+            eventDocuments: eventDocumentDtos,
           }),
         });
       },
+      ),
     );
 
-    const workPeriods = (result.accidentBenefitRejectionWorkPeriod ?? []).map(
-      (wp: AccidentBenefitRejectionWorkPeriodEntity) => {
+    const workPeriods = await Promise.all(
+      (result.accidentBenefitRejectionWorkPeriod ?? []).map(
+        async (wp: AccidentBenefitRejectionWorkPeriodEntity) => {
         const wpDocuments = (
           result.accidentBenefitRejectionWorkPeriodDocument ?? []
         ).filter(
@@ -138,6 +156,16 @@ export class GetAccidentBenefitRejectionUseCase {
               wp.id.toString() &&
             doc.document !== null &&
             doc.type !== null,
+        );
+
+        const wpDocumentDtos = await Promise.all(
+          wpDocuments.map(
+            async (doc: AccidentBenefitRejectionWorkPeriodDocumentEntity) =>
+              this.buildWorkPeriodDocumentResponse(
+                doc.document as string,
+                doc.type as NonNullable<typeof doc.type>,
+              ),
+          ),
         );
 
         const earningsHistory = (
@@ -186,16 +214,8 @@ export class GetAccidentBenefitRejectionUseCase {
           ...(wp.activityDescription !== null && {
             activityDescription: wp.activityDescription,
           }),
-          ...(wpDocuments.length > 0 && {
-            documents: wpDocuments.map(
-              (doc: AccidentBenefitRejectionWorkPeriodDocumentEntity) =>
-                GetAccidentBenefitRejectionWorkPeriodDocumentInResponseDto.build(
-                  {
-                    fileName: doc.document as string,
-                    type: doc.type as NonNullable<typeof doc.type>,
-                  },
-                ),
-            ),
+          ...(wpDocumentDtos.length > 0 && {
+            documents: wpDocumentDtos,
           }),
           ...(earningsHistory.length > 0 && {
             earningsHistory: earningsHistory.map(
@@ -229,39 +249,37 @@ export class GetAccidentBenefitRejectionUseCase {
           }),
         });
       },
+      ),
     );
 
-    const documents = (result.accidentBenefitRejectionDocument ?? []).map(
-      (doc: AccidentBenefitRejectionDocumentEntity) =>
-        doc.document !== null && doc.type !== null
-          ? GetAccidentBenefitRejectionDocumentInResponseDto.build({
-              fileName: doc.document,
-              type: doc.type,
-            })
-          : null,
+    const documents = await Promise.all(
+      (result.accidentBenefitRejectionDocument ?? [])
+        .filter(
+          (doc: AccidentBenefitRejectionDocumentEntity) =>
+            doc.document !== null && doc.type !== null,
+        )
+        .map(async (doc: AccidentBenefitRejectionDocumentEntity) =>
+          this.buildDocumentResponse(
+            doc.document as string,
+            doc.type as NonNullable<typeof doc.type>,
+          ),
+        ),
     );
 
     const inssBenefits = (result.accidentBenefitRejectionInssBenefit ?? [])
       .map((ib: AccidentBenefitRejectionInssBenefitEntity) => ib.inssBenefit)
       .filter((inssBenefit): inssBenefit is string => inssBenefit !== null);
 
-    const validDocuments = documents.filter(
-      (
-        document,
-      ): document is GetAccidentBenefitRejectionDocumentInResponseDto =>
-        document !== null,
-    );
-
     const resultDto =
       result.accidentBenefitRejectionResult !== null
         ? GetAccidentBenefitRejectionResultResponseDto.build({
             ...(firstAnalysis !== null && {
-              accidentBenefitRejectionFirstAnalysis: firstAnalysis,
+              accidentBenefitRejectionFirstAnalysis:
+                firstAnalysis,
             }),
-            ...(result.accidentBenefitRejectionResult.secondAnalysis !==
-              null && {
+            ...(secondAnalysis !== null && {
               accidentBenefitRejectionSecondAnalysis:
-                result.accidentBenefitRejectionResult.secondAnalysis,
+                secondAnalysis,
             }),
             ...(completeAnalysis !== null && {
               accidentBenefitRejectionCompleteAnalysis: completeAnalysis,
@@ -342,7 +360,7 @@ export class GetAccidentBenefitRejectionUseCase {
           result.requestToExtendTemporaryDisabilityBenefit,
       }),
       ...(inssBenefits.length > 0 && { inssBenefits }),
-      ...(validDocuments.length > 0 && { documents: validDocuments }),
+      ...(documents.length > 0 && { documents }),
       ...(events.length > 0 && { events }),
       ...(workPeriods.length > 0 && { workPeriods }),
       ...(resultDto !== null && { result: resultDto }),
@@ -365,21 +383,74 @@ export class GetAccidentBenefitRejectionUseCase {
     });
   }
 
-  private parseStoredFirstAnalysis(
-    json: string,
-  ): AccidentBenefitRejectionFirstAnalysisModel {
-    const parsed = JSON.parse(
-      json,
-    ) as AccidentBenefitRejectionFirstAnalysisInterface;
+  private async buildDocumentResponse(
+    fileName: string,
+    type: AccidentBenefitRejectionDocumentTypeEnum,
+  ): Promise<GetAccidentBenefitRejectionDocumentInResponseDto> {
+    const [buffer, originalFileName] = await Promise.all([
+      this.fileProcessorGateway.getFileBuffer(fileName),
+      this.fileProcessorGateway.getOriginalFileName(fileName),
+    ]);
 
-    return AccidentBenefitRejectionFirstAnalysisModel.build({
-      insuredStatusMantained: parsed.insuredStatusMantained,
-      insuredStatusAnalysisConclusion: parsed.insuredStatusAnalysisConclusion,
-      presenceOfPermanentSequelae: parsed.presenceOfPermanentSequelae,
-      compatibilityOfTheSequelaeWithAccident:
-        parsed.compatibilityOfTheSequelaeWithAccident,
-      sequelaeAnalysisConclusion: parsed.sequelaeAnalysisConclusion,
+    return GetAccidentBenefitRejectionDocumentInResponseDto.build({
+      document: new Base64(buffer.toString('base64')),
+      originalFileName,
+      type,
     });
+  }
+
+  private async buildEventDocumentResponse(
+    fileName: string,
+    type: NonNullable<AccidentBenefitRejectionEventDocumentEntity['type']>,
+  ): Promise<GetAccidentBenefitRejectionEventDocumentInResponseDto> {
+    const [buffer, originalFileName] = await Promise.all([
+      this.fileProcessorGateway.getFileBuffer(fileName),
+      this.fileProcessorGateway.getOriginalFileName(fileName),
+    ]);
+
+    return GetAccidentBenefitRejectionEventDocumentInResponseDto.build({
+      document: new Base64(buffer.toString('base64')),
+      originalFileName,
+      type,
+    });
+  }
+
+  private async buildWorkPeriodDocumentResponse(
+    fileName: string,
+    type: NonNullable<AccidentBenefitRejectionWorkPeriodDocumentEntity['type']>,
+  ): Promise<GetAccidentBenefitRejectionWorkPeriodDocumentInResponseDto> {
+    const [buffer, originalFileName] = await Promise.all([
+      this.fileProcessorGateway.getFileBuffer(fileName),
+      this.fileProcessorGateway.getOriginalFileName(fileName),
+    ]);
+
+    return GetAccidentBenefitRejectionWorkPeriodDocumentInResponseDto.build({
+      document: new Base64(buffer.toString('base64')),
+      originalFileName,
+      type,
+    });
+  }
+
+  private tryParseStoredSecondAnalysis(
+    json: string,
+  ): AccidentBenefitRejectionFirstAnalysisModel | null {
+    try {
+      const parsed = JSON.parse(
+        json,
+      ) as AccidentBenefitRejectionFirstAnalysisInterface;
+
+      return AccidentBenefitRejectionFirstAnalysisModel.build({
+        insuredStatusMantained: parsed.insuredStatusMantained,
+        insuredStatusAnalysisConclusion:
+          parsed.insuredStatusAnalysisConclusion,
+        presenceOfPermanentSequelae: parsed.presenceOfPermanentSequelae,
+        compatibilityOfTheSequelaeWithAccident:
+          parsed.compatibilityOfTheSequelaeWithAccident,
+        sequelaeAnalysisConclusion: parsed.sequelaeAnalysisConclusion,
+      });
+    } catch {
+      return null;
+    }
   }
 
   private parseStoredCompleteAnalysis(

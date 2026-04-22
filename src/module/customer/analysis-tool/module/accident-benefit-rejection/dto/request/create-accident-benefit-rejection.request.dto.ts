@@ -1,4 +1,5 @@
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
+import { CidTenId } from '@module/customer/analysis-tool/domain/schema/entity/cid-ten/value-object/cid-ten-id.value-object';
 import { AccidentBenefitRejectionCategoryEnum } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection/enum/accident-benefit-rejection-category.enum';
 import { AccidentBenefitRejectionMainReasonEnum } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection/enum/accident-benefit-rejection-main-reason.enum';
 import { AccidentBenefitRejectionRequestToExtendEnum } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection/enum/accident-benefit-rejection-request-to-extend.enum';
@@ -46,8 +47,8 @@ export class CreateAccidentBenefitRejectionEventRequestDto extends BaseBuildable
   @RequestDtoStringProperty({ required: false })
   public accidentDescription?: string;
 
-  @RequestDtoStringProperty({ required: false })
-  public cidTenId?: string;
+  @RequestDtoValueObjectProperty(CidTenId, { required: false })
+  public cidTenId?: CidTenId;
 
   @RequestDtoObjectProperty(
     () => CreateAccidentBenefitRejectionEventDocumentRequestDto,

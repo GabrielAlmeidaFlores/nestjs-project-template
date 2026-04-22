@@ -1,4 +1,5 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { CidTenId } from '@module/customer/analysis-tool/domain/schema/entity/cid-ten/value-object/cid-ten-id.value-object';
 import { AccidentBenefitRejectionEventId } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection-event/value-object/accident-benefit-rejection-event-id.value-object';
 
 import type { AccidentBenefitRejectionId } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection/value-object/accident-benefit-rejection-id.value-object';
@@ -7,7 +8,7 @@ import type { AccidentBenefitRejectionEventEntityPropsInterface } from '@module/
 export class AccidentBenefitRejectionEventEntity extends BaseEntity<AccidentBenefitRejectionEventId> {
   public readonly accidentDate: Date | null;
   public readonly accidentDescription: string | null;
-  public readonly cidTenId: string | null;
+  public readonly cidTenId: CidTenId | null;
   public readonly accidentBenefitRejectionId: AccidentBenefitRejectionId | null;
 
   protected readonly _type = AccidentBenefitRejectionEventEntity.name;

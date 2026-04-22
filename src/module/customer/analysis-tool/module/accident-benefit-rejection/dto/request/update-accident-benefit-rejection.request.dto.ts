@@ -1,3 +1,4 @@
+import { CidTenId } from '@module/customer/analysis-tool/domain/schema/entity/cid-ten/value-object/cid-ten-id.value-object';
 import { AccidentBenefitRejectionCategoryEnum } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection/enum/accident-benefit-rejection-category.enum';
 import { AccidentBenefitRejectionMainReasonEnum } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection/enum/accident-benefit-rejection-main-reason.enum';
 import { AccidentBenefitRejectionRequestToExtendEnum } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection/enum/accident-benefit-rejection-request-to-extend.enum';
@@ -9,6 +10,7 @@ import { RequestDtoDateProperty } from '@shared/api/util/decorator/property/dto-
 import { RequestDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-enum-property/request-dto-enum-property.decorator';
 import { RequestDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-object-property/request-dto-object-property.decorator';
 import { RequestDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-string-property/request-dto-string-property.decorator';
+import { RequestDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-value-object-property/request-dto-value-object-property.decorator';
 import { Base64FileRequestDto } from '@shared/api/util/dto/request/base64-file.request.dto';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
@@ -44,8 +46,8 @@ export class UpdateAccidentBenefitRejectionEventRequestDto extends BaseBuildable
   @RequestDtoStringProperty({ required: false })
   public accidentDescription?: string;
 
-  @RequestDtoStringProperty({ required: false })
-  public cidTenId?: string;
+  @RequestDtoValueObjectProperty(CidTenId, { required: false })
+  public cidTenId?: CidTenId;
 
   @RequestDtoObjectProperty(
     () => UpdateAccidentBenefitRejectionEventDocumentRequestDto,

@@ -39,6 +39,7 @@ export class AccidentBenefitRejectionTypeormQueryRepository
           accidentBenefitRejectionDocument: true,
           accidentBenefitRejectionInssBenefit: true,
           accidentBenefitRejectionEvent: {
+            cidTen: true,
             accidentBenefitRejectionEventDocument: true,
           },
           accidentBenefitRejectionWorkPeriod: {

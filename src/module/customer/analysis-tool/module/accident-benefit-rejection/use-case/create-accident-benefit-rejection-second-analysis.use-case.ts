@@ -17,12 +17,21 @@ import { AccidentBenefitRejectionResultEntity } from '@module/customer/analysis-
 import { CreateAccidentBenefitRejectionSecondAnalysisResponseDto } from '@module/customer/analysis-tool/module/accident-benefit-rejection/dto/response/create-accident-benefit-rejection-second-analysis.response.dto';
 import { AccidentBenefitRejectionCnisDocumentNotFoundError } from '@module/customer/analysis-tool/module/accident-benefit-rejection/error/accident-benefit-rejection-cnis-document-not-found.error';
 import { AccidentBenefitRejectionNotFoundError } from '@module/customer/analysis-tool/module/accident-benefit-rejection/error/accident-benefit-rejection-not-found.error';
+import { InvalidAccidentBenefitRejectionSecondAnalysisJsonError } from '@module/customer/analysis-tool/module/accident-benefit-rejection/error/invalid-accident-benefit-rejection-second-analysis-json.error';
+import { AccidentBenefitRejectionFirstAnalysisModel } from '@module/customer/analysis-tool/module/accident-benefit-rejection/model/generic/accident-benefit-rejection-first-analysis.model';
 import { CnisDocumentIsNotValidError } from '@module/customer/analysis-tool/module/cnis-fast-analysis/error/cnis-document-is-not-valid.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+
+import type { AccidentBenefitRejectionFirstAnalysisInterface } from '@module/customer/analysis-tool/module/accident-benefit-rejection/model/interface/accident-benefit-rejection-first-analysis.interface';
+
+interface ParsedSecondAnalysisInterface {
+  cleanedJson: string;
+  model: AccidentBenefitRejectionFirstAnalysisModel;
+}
 
 @Injectable()
 export class CreateAccidentBenefitRejectionSecondAnalysisUseCase {
@@ -125,7 +134,7 @@ export class CreateAccidentBenefitRejectionSecondAnalysisUseCase {
 
     const promptResponse =
       await this.getPaymentPlanPaidResourcePromptUseCase.execute(
-        PaymentPlanPaidResourceTypeEnum.ACCIDENT_BENEFIT_REJECTION_SECOND_ANALYSIS,
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_BENEFIT_REJECTION_FIRST_ANALYSIS,
       );
 
     const consumeCreditTransaction =
@@ -136,22 +145,27 @@ export class CreateAccidentBenefitRejectionSecondAnalysisUseCase {
       );
 
     const secondAnalysisResponse =
-      await this.analysisProcessorGateway.getAccidentBenefitRejectionSecondAnalysis(
+      await this.analysisProcessorGateway.getAccidentBenefitRejectionFirstAnalysis(
         promptResponse.prompt,
         JSON.stringify(cnisAnalysis),
         [this.buildRejectionDataBuffer(rejection), ...allDocumentBuffers],
+        true,
       );
 
     if (secondAnalysisResponse === null) {
       throw new AccidentBenefitRejectionNotFoundError();
     }
 
+    const parsedSecondAnalysis = this.parseSecondAnalysisOrThrow(
+      secondAnalysisResponse,
+    );
+
     const existingResult = rejection.accidentBenefitRejectionResult;
 
     const resultEntity = new AccidentBenefitRejectionResultEntity({
       ...(existingResult !== null && { id: existingResult.id }),
       firstAnalysis: existingResult?.firstAnalysis ?? null,
-      secondAnalysis: secondAnalysisResponse,
+      secondAnalysis: parsedSecondAnalysis.cleanedJson,
       completeAnalysis: existingResult?.completeAnalysis ?? null,
       simplifiedAnalysis: existingResult?.simplifiedAnalysis ?? null,
       completeAnalysisDownload:
@@ -185,8 +199,40 @@ export class CreateAccidentBenefitRejectionSecondAnalysisUseCase {
     await transaction.commit();
 
     return CreateAccidentBenefitRejectionSecondAnalysisResponseDto.build({
-      accidentBenefitRejectionSecondAnalysis: secondAnalysisResponse,
+      accidentBenefitRejectionSecondAnalysis: parsedSecondAnalysis.model,
     });
+  }
+
+  private parseSecondAnalysisOrThrow(
+    secondAnalysis: string,
+  ): ParsedSecondAnalysisInterface {
+    try {
+      let cleanedJson = secondAnalysis;
+
+      if (cleanedJson.startsWith('"') && cleanedJson.endsWith('"')) {
+        cleanedJson = JSON.parse(cleanedJson) as string;
+      }
+
+      const raw = JSON.parse(
+        cleanedJson,
+      ) as AccidentBenefitRejectionFirstAnalysisInterface;
+
+      cleanedJson = JSON.stringify(raw);
+
+      return {
+        cleanedJson,
+        model: AccidentBenefitRejectionFirstAnalysisModel.build({
+          insuredStatusMantained: raw.insuredStatusMantained,
+          insuredStatusAnalysisConclusion: raw.insuredStatusAnalysisConclusion,
+          presenceOfPermanentSequelae: raw.presenceOfPermanentSequelae,
+          compatibilityOfTheSequelaeWithAccident:
+            raw.compatibilityOfTheSequelaeWithAccident,
+          sequelaeAnalysisConclusion: raw.sequelaeAnalysisConclusion,
+        }),
+      };
+    } catch {
+      throw new InvalidAccidentBenefitRejectionSecondAnalysisJsonError();
+    }
   }
 
   private buildRejectionDataBuffer(
@@ -217,7 +263,7 @@ export class CreateAccidentBenefitRejectionSecondAnalysisUseCase {
       events: (rejection.accidentBenefitRejectionEvent ?? []).map((e) => ({
         accidentDate: e.accidentDate,
         accidentDescription: e.accidentDescription,
-        cidTenId: e.cidTenId,
+        cidTenId: e.cidTenId?.toString() ?? null,
       })),
       workPeriods: (rejection.accidentBenefitRejectionWorkPeriod ?? []).map(
         (wp) => ({
