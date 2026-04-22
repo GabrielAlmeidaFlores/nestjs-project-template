@@ -34,6 +34,11 @@ export interface MaternityPayGrantFirstAnalysisPeriodInterface {
 
 export interface MaternityPayGrantFirstAnalysisRequirementAnalysisInterface {
   status: string;
+  eventDate?: string | null;
+  requirementDate?: string | null;
+  statutoryPeriod?: string | null;
+  details?: string | null;
+  rationale?: string | null;
 }
 
 export interface MaternityPayGrantFirstAnalysisApplicationDeadlineInterface {

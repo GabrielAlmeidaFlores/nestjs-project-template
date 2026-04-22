@@ -6267,8 +6267,41 @@ Análise processada do CNIS:
                 'Fora_do_prazo_de_requiremento',
               ],
             },
+            eventDate: {
+              type: 'string',
+              description:
+                'Data do evento gerador no formato YYYY-MM-DD. Null se não identificada.',
+            },
+            requirementDate: {
+              type: 'string',
+              description:
+                'Data do requerimento no formato YYYY-MM-DD. Null se não identificada.',
+            },
+            statutoryPeriod: {
+              type: 'string',
+              description:
+                'Prazo legal para requerimento do benefício, que varia de acordo com o tipo de evento gerador',
+            },
+            details: {
+              type: 'string',
+              description:
+                'Descrição detalhada da análise do cumprimento dos requisitos, incluindo quais requisitos foram cumpridos ou não cumpridos, e quais pendências existem para comprovar o cumprimento total dos requisitos',
+            },
+            rationale: {
+              type: 'string',
+              description:
+                'Fundamentação detalhada para a conclusão sobre o cumprimento dos requisitos, baseada na legislação vigente, na jurisprudência aplicável e nos dados analisados',
+            },
           },
-          required: ['status'],
+          required: [
+            'status',
+            'description',
+            'eventDate',
+            'requirementDate',
+            'statutoryPeriod',
+            'details',
+            'rationale',
+          ],
         },
         applicationDeadlineAnalysis: {
           type: 'object',
