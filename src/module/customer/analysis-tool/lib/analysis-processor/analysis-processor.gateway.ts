@@ -328,6 +328,35 @@ export abstract class AnalysisProcessorGateway {
     files: Buffer[],
   ): Promise<string | null>;
 
+  public abstract getRuralOrHybridRetirementRejectionFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson?: boolean,
+  ): Promise<string | null>;
+
+  public abstract getRuralOrHybridRetirementRejectionCompleteAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getRuralOrHybridRetirementRejectionSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getTimeAcceleratorAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getRuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysis(
+    systemInstruction: string,
+    customerName: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
   public abstract getSurvivorPensionAnalysisResult(
     systemInstruction: string,
     files: Buffer[],

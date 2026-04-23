@@ -26,6 +26,7 @@ import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/
 import { PerCapitaIncomeForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
+import { RuralOrHybridRetirementRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-rejection.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
 import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
 import { SpecialCategoryRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis.typeorm.entity';
@@ -61,6 +62,7 @@ import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/m
 import { PerCapitaIncomeForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.entity';
 import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
+import { RuralOrHybridRetirementRejectionEntity } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/rural-or-hybrid-retirement-rejection.entity';
 import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
 import { SpecialActivityEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/special-activity-entity';
 import { SpecialCategoryRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/special-category-retirement-analysis.entity';
@@ -328,6 +330,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const ruralOrHybridRetirementRejection =
+        source.ruralOrHybridRetirementRejection !== null
+          ? this.mapper.map(
+              source.ruralOrHybridRetirementRejection,
+              RuralOrHybridRetirementRejectionTypeormEntity,
+              RuralOrHybridRetirementRejectionEntity,
+            )
+          : null;
+
       const generalUrbanRetirementDenial =
         source.generalUrbanRetirementDenial !== undefined
           ? this.mapper.map(
@@ -385,6 +396,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         temporaryDisabilityBenefitsGrant,
         accidentBenefitRejection,
         survivorPensionAnalysis,
+        ruralOrHybridRetirementRejection,
       });
     };
 
@@ -551,6 +563,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             } as TemporaryDisabilityBenefitsGrantTypeormEntity)
           : null;
 
+      const ruralOrHybridRetirementRejection =
+        source.ruralOrHybridRetirementRejection !== null
+          ? this.mapper.map(
+              source.ruralOrHybridRetirementRejection,
+              RuralOrHybridRetirementRejectionEntity,
+              RuralOrHybridRetirementRejectionTypeormEntity,
+            )
+          : null;
+
       const accidentBenefitRejection =
         source.accidentBenefitRejection !== null
           ? ({
@@ -685,6 +706,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         temporaryDisabilityBenefitsGrant,
         accidentBenefitRejection,
         survivorPensionAnalysis,
+        ruralOrHybridRetirementRejection,
         deathBenefitGrant,
         deathBenefitRejection,
         analysisToolClient,

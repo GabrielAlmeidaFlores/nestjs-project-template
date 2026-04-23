@@ -6,6 +6,9 @@ import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/gen
 import { ResponseConfigInputModel } from '@infra/generative-ia/model/input/response-config.input.model';
 import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway';
 import { CnisModel } from '@lib/cnis-processor/model/generic/cnis.model';
+import { TimeAcceleratorAnalysisTypeEnum } from '@module/customer/analysis-tool/domain/schema/enum/time-accelerator-analysis-type.enum';
+import { TimeAcceleratorRecognitionInssEnum } from '@module/customer/analysis-tool/domain/schema/enum/time-accelerator-recognition-inss.enum';
+import { TimeAcceleratorViabilityEnum } from '@module/customer/analysis-tool/domain/schema/enum/time-accelerator-viability.enum';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { DeathBenefitGrantCategoryEnum } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-period/enum/death-benefit-grant-category.enum';
 import { DeathBenefitGrantPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant-period/enum/death-benefit-grant-period-pendency-reason.enum';
@@ -1660,6 +1663,130 @@ Análise processada do CNIS:
     );
   }
 
+  public async getRuralOrHybridRetirementRejectionFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson = true,
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANT
+- Base the technical analysis primarily on the already processed CNIS analysis in JSON format.
+- Calculate only values that are not already present in the provided CNIS analysis.
+- Return strictly a JSON object compatible with the requested schema.
+
+Processed CNIS analysis:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: asJson
+          ? ResponseConfigInputModel.build({
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema:
+                this.getRuralOrHybridRetirementRejectionFirstAnalysisJsonSchema(),
+            })
+          : null,
+      }),
+    );
+  }
+
+  public async getRuralOrHybridRetirementRejectionCompleteAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANT
+- Base the technical analysis primarily on the already processed CNIS analysis in JSON format.
+- Calculate only values that are not already present in the provided CNIS analysis.
+- Return strictly a JSON object compatible with the requested schema.
+
+Processed CNIS analysis:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getRuralOrHybridRetirementRejectionCompleteAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getRuralOrHybridRetirementRejectionSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getTimeAcceleratorAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANT
+- Return strictly a JSON object compatible with the requested schema.
+- Use only enum values provided by the schema for recognition and viability fields.
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: this.getTimeAcceleratorAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getRuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysis(
+    systemInstruction: string,
+    customerName: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+Analyze the uploaded documents and verify if the holder name in each document matches the customer name exactly or with clear equivalent variation.
+
+Customer name: ${customerName}
+
+Set ownName as true when the document holder belongs to this customer, otherwise false.
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getRuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
   public async getSurvivorPensionAnalysisResult(
     systemInstruction: string,
     files: Buffer[],
@@ -2381,6 +2508,306 @@ Análise processada do CNIS:
         'graceExtensionDueToInvoluntaryUnemployment',
         'requestToExtendGracePeriod',
       ],
+    };
+  }
+
+  private getRuralOrHybridRetirementRejectionFirstAnalysisJsonSchema(): object {
+    const timeBreakdownSchema = (label: string): object => ({
+      type: 'object',
+      properties: {
+        withoutResolvingPendingIssues: {
+          type: 'string',
+          nullable: true,
+          description: `${label} sem resolver pendências. Ex: 12 anos e 3 meses`,
+        },
+        resolvingPendingIssues: {
+          type: 'string',
+          nullable: true,
+          description: `${label} resolvendo todas as pendências documentais. Ex: 14 anos e 1 mês`,
+        },
+        withAccelerators: {
+          type: 'string',
+          nullable: true,
+          description: `${label} resolvendo pendências e computando aceleradores de tempo. Ex: 15 anos e 6 meses`,
+        },
+      },
+      required: [
+        'withoutResolvingPendingIssues',
+        'resolvingPendingIssues',
+        'withAccelerators',
+      ],
+    });
+
+    const gracePeriodBreakdownSchema = (label: string): object => ({
+      type: 'object',
+      properties: {
+        withoutResolvingPendingIssues: {
+          type: 'number',
+          nullable: true,
+          description: `Quantidade de ${label} sem resolver pendências. Ex: 153`,
+        },
+        resolvingPendingIssues: {
+          type: 'number',
+          nullable: true,
+          description: `Quantidade de ${label} resolvendo todas as pendências documentais. Ex: 168`,
+        },
+        withAccelerators: {
+          type: 'number',
+          nullable: true,
+          description: `Quantidade de ${label} resolvendo pendências e computando aceleradores de tempo. Ex: 180`,
+        },
+      },
+      required: [
+        'withoutResolvingPendingIssues',
+        'resolvingPendingIssues',
+        'withAccelerators',
+      ],
+    });
+
+    return {
+      type: 'object',
+      properties: {
+        decisionAnalysis: {
+          type: 'string',
+          nullable: true,
+          description:
+            'Análise técnica da decisão de indeferimento em formato Markdown. Deve avaliar a fundamentação do INSS, os pontos contestáveis e a viabilidade de reversão.',
+        },
+        ruralTime: {
+          ...timeBreakdownSchema('Tempo de contribuição rural'),
+          description: 'Tempo de atividade rural apurado em cada cenário',
+        },
+        urbanTime: {
+          ...timeBreakdownSchema('Tempo de contribuição urbana'),
+          description: 'Tempo de contribuição urbana apurado em cada cenário',
+        },
+        ruralGracePeriod: {
+          ...gracePeriodBreakdownSchema('meses de carência rural'),
+          description: 'Carência acumulada pelo tempo rural em cada cenário',
+        },
+        urbanGracePeriod: {
+          ...gracePeriodBreakdownSchema('meses de carência urbana'),
+          description: 'Carência acumulada pelo tempo urbano em cada cenário',
+        },
+        totalGracePeriod: {
+          ...gracePeriodBreakdownSchema('meses de carência total'),
+          description:
+            'Carência total acumulada (rural + urbana) em cada cenário',
+        },
+        totalTime: {
+          ...timeBreakdownSchema('Tempo de contribuição total'),
+          description:
+            'Tempo total de contribuição (rural + urbano) em cada cenário',
+        },
+        timeline: {
+          type: 'object',
+          description:
+            'Linha do tempo cronológica de todas as atividades do segurado',
+          properties: {
+            periods: {
+              type: 'array',
+              description:
+                'Lista de períodos identificados na linha do tempo, ordenados cronologicamente',
+              items: {
+                type: 'object',
+                properties: {
+                  startDate: {
+                    type: 'string',
+                    nullable: true,
+                    description:
+                      'Data de início do período no formato YYYY-MM-DD',
+                  },
+                  endDate: {
+                    type: 'string',
+                    nullable: true,
+                    description: 'Data de fim do período no formato YYYY-MM-DD',
+                  },
+                  type: {
+                    type: 'string',
+                    description:
+                      'Tipo do período: atividade_urbana, atividade_rural, pendencia ou periodo_sem_atividade',
+                    enum: [
+                      'atividade_urbana',
+                      'atividade_rural',
+                      'pendencia',
+                      'periodo_sem_atividade',
+                    ],
+                  },
+                  nome: {
+                    type: 'string',
+                    nullable: true,
+                    description:
+                      'Nome da atividade ou vínculo. Ex: Agricultura familiar - cultivo de hortaliças, CLT - Empresa Exemplo Ltda',
+                  },
+                  local: {
+                    type: 'string',
+                    nullable: true,
+                    description:
+                      'Descrição do local de trabalho ou situação do período. Ex: Assentamento Nova Vida, Município de Araraquara/SP',
+                  },
+                },
+                required: ['startDate', 'endDate', 'type', 'nome', 'local'],
+              },
+            },
+            ruralTime: {
+              type: 'string',
+              nullable: true,
+              description:
+                'Tempo total de atividade rural identificado na linha do tempo. Ex: 8 anos e 4 meses',
+            },
+            urbanTime: {
+              type: 'string',
+              nullable: true,
+              description:
+                'Tempo total de atividade urbana identificado na linha do tempo. Ex: 5 anos e 2 meses',
+            },
+            overlapTime: {
+              type: 'string',
+              nullable: true,
+              description:
+                'Tempo em que houve sobreposição de atividade rural e urbana simultaneamente. Ex: 1 ano e 3 meses',
+            },
+            pendencyTime: {
+              type: 'string',
+              nullable: true,
+              description:
+                'Tempo total com pendências documentais que impedem o reconhecimento do período. Ex: 2 anos e 7 meses',
+            },
+          },
+          required: [
+            'periods',
+            'ruralTime',
+            'urbanTime',
+            'overlapTime',
+            'pendencyTime',
+          ],
+        },
+      },
+      required: [
+        'decisionAnalysis',
+        'ruralTime',
+        'urbanTime',
+        'ruralGracePeriod',
+        'urbanGracePeriod',
+        'totalGracePeriod',
+        'totalTime',
+        'timeline',
+      ],
+    };
+  }
+
+  private getRuralOrHybridRetirementRejectionCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        retirementRules: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              ruleName: { type: 'string' },
+              fulfilled: { type: 'boolean' },
+              retirementDate: {
+                type: 'string',
+                nullable: true,
+                description: 'Data no formato YYYY-MM-DD',
+              },
+              expectedRmi: { type: 'number', nullable: true },
+              causeValue: { type: 'number', nullable: true },
+              detaildAnalysis: { type: 'string' },
+            },
+            required: [
+              'ruleName',
+              'fulfilled',
+              'retirementDate',
+              'expectedRmi',
+              'causeValue',
+              'detaildAnalysis',
+            ],
+          },
+        },
+        analysisResult: { type: 'string' },
+      },
+      required: ['retirementRules', 'analysisResult'],
+    };
+  }
+
+  private getTimeAcceleratorAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        timeAccelerators: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              timeType: {
+                type: 'string',
+                enum: Object.values(TimeAcceleratorAnalysisTypeEnum),
+              },
+              recognitionInss: {
+                type: 'string',
+                enum: Object.values(TimeAcceleratorRecognitionInssEnum),
+              },
+              viability: {
+                type: 'string',
+                enum: Object.values(TimeAcceleratorViabilityEnum),
+              },
+              technicalNote: { type: 'string', nullable: true },
+              startDate: { type: 'string', nullable: true },
+              endDate: { type: 'string', nullable: true },
+              gracePeriod: { type: 'string', nullable: true },
+              institution: { type: 'string', nullable: true },
+              affectsQualifyingPeriod: { type: 'boolean' },
+            },
+            required: [
+              'timeType',
+              'recognitionInss',
+              'viability',
+              'technicalNote',
+              'startDate',
+              'endDate',
+              'gracePeriod',
+              'institution',
+              'affectsQualifyingPeriod',
+            ],
+          },
+        },
+      },
+      required: ['timeAccelerators'],
+    };
+  }
+
+  private getRuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisJsonSchema(): object {
+    return {
+      type: 'array',
+      description: 'Lista de documentos identificados e analisados',
+      items: {
+        type: 'object',
+        properties: {
+          documentType: {
+            type: 'string',
+            description:
+              'Tipo do documento identificado. Ex: DAP/CAF, ITR, Contrato de Arrendamento Rural, CTPS, Declaração do Sindicato Rural, Bloco de Produtor Rural, Nota Fiscal de Venda de Produtos Rurais',
+          },
+          ownName: {
+            type: 'boolean',
+            description:
+              'Indica se o documento está em nome do cliente informado na requisição',
+          },
+          documentYear: {
+            type: 'string',
+            format: 'date',
+            description: 'Data do documento no formato YYYY-MM-DD',
+          },
+          technicalNote: {
+            type: 'string',
+            description:
+              'Nota técnica sobre a relevância e a força probatória do documento para comprovação de atividade rural no contexto de recurso ao INSS',
+          },
+        },
+        required: ['documentType', 'ownName', 'documentYear', 'technicalNote'],
+      },
     };
   }
 
