@@ -1787,6 +1787,54 @@ Set ownName as true when the document holder belongs to this customer, otherwise
     );
   }
 
+  public async getRuralOrHybridRetirementAnalysisFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson = true,
+  ): Promise<string | null> {
+    return this.getRuralOrHybridRetirementRejectionFirstAnalysis(
+      systemInstruction,
+      cnisAnalysisJson,
+      files,
+      asJson,
+    );
+  }
+
+  public async getRuralOrHybridRetirementAnalysisCompleteAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return this.getRuralOrHybridRetirementRejectionCompleteAnalysis(
+      systemInstruction,
+      cnisAnalysisJson,
+      files,
+    );
+  }
+
+  public async getRuralOrHybridRetirementAnalysisSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return this.getRuralOrHybridRetirementRejectionSimplifiedAnalysis(
+      systemInstruction,
+      files,
+    );
+  }
+
+  public async getRuralOrHybridRetirementAnalysisWorkPeriodDocumentAnalysis(
+    systemInstruction: string,
+    customerName: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return this.getRuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysis(
+      systemInstruction,
+      customerName,
+      files,
+    );
+  }
+
   public async getSurvivorPensionAnalysisResult(
     systemInstruction: string,
     files: Buffer[],
