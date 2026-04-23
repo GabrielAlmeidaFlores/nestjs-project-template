@@ -2798,6 +2798,123 @@ Análise processada do CNIS:
           type: 'number',
           description: 'Percentual de tempo com deficiï¿½ncia grave. Ex: 75',
         },
+        summaryTable: {
+          type: 'object',
+          description:
+            'Summary table with time and grace period breakdowns across different scenarios',
+          properties: {
+            timeAsDisabledWithoutResolvingPendencies: {
+              type: 'string',
+              description:
+                'Total time as disabled without resolving pendencies. Ex: 23 years and 4 months',
+            },
+            timeAsDisabledResolvingPendencies: {
+              type: 'string',
+              description:
+                'Total time as disabled resolving pendencies. Ex: 23 years and 4 months',
+            },
+            timeAsDisabledWithAccelerators: {
+              type: 'string',
+              description:
+                'Total time as disabled with accelerators. Ex: 23 years and 4 months',
+            },
+            commonTimeWithoutResolvingPendencies: {
+              type: 'string',
+              description:
+                'Common time without resolving pendencies. Ex: 23 years and 4 months',
+            },
+            commonTimeResolvingPendencies: {
+              type: 'string',
+              description:
+                'Common time resolving pendencies. Ex: 23 years and 4 months',
+            },
+            commonTimeWithAccelerators: {
+              type: 'string',
+              description:
+                'Common time with accelerators. Ex: 23 years and 4 months',
+            },
+            totalTimeWithoutResolvingPendencies: {
+              type: 'string',
+              description:
+                'Total contribution time without resolving pendencies. Ex: 23 years and 4 months',
+            },
+            totalTimeResolvingPendencies: {
+              type: 'string',
+              description:
+                'Total contribution time resolving pendencies. Ex: 23 years and 4 months',
+            },
+            totalTimeWithAccelerators: {
+              type: 'string',
+              description:
+                'Total contribution time with accelerators. Ex: 23 years and 4 months',
+            },
+            gracePeriodAsDisabledWithoutResolvingPendencies: {
+              type: 'string',
+              description:
+                'Grace period as disabled without resolving pendencies. Ex: 156 contributions',
+            },
+            gracePeriodAsDisabledResolvingPendencies: {
+              type: 'string',
+              description:
+                'Grace period as disabled resolving pendencies. Ex: 156 contributions',
+            },
+            gracePeriodAsDisabledWithAccelerators: {
+              type: 'string',
+              description:
+                'Grace period as disabled with accelerators. Ex: 156 contributions',
+            },
+            commonGracePeriodWithoutResolvingPendencies: {
+              type: 'string',
+              description:
+                'Common grace period without resolving pendencies. Ex: 156 contributions',
+            },
+            commonGracePeriodResolvingPendencies: {
+              type: 'string',
+              description:
+                'Common grace period resolving pendencies. Ex: 156 contributions',
+            },
+            commonGracePeriodWithAccelerators: {
+              type: 'string',
+              description:
+                'Common grace period with accelerators. Ex: 156 contributions',
+            },
+            totalGracePeriodWithoutResolvingPendencies: {
+              type: 'string',
+              description:
+                'Total grace period without resolving pendencies. Ex: 156 contributions',
+            },
+            totalGracePeriodResolvingPendencies: {
+              type: 'string',
+              description:
+                'Total grace period resolving pendencies. Ex: 156 contributions',
+            },
+            totalGracePeriodWithAccelerators: {
+              type: 'string',
+              description:
+                'Total grace period with accelerators. Ex: 156 contributions',
+            },
+          },
+          required: [
+            'timeAsDisabledWithoutResolvingPendencies',
+            'timeAsDisabledResolvingPendencies',
+            'timeAsDisabledWithAccelerators',
+            'commonTimeWithoutResolvingPendencies',
+            'commonTimeResolvingPendencies',
+            'commonTimeWithAccelerators',
+            'totalTimeWithoutResolvingPendencies',
+            'totalTimeResolvingPendencies',
+            'totalTimeWithAccelerators',
+            'gracePeriodAsDisabledWithoutResolvingPendencies',
+            'gracePeriodAsDisabledResolvingPendencies',
+            'gracePeriodAsDisabledWithAccelerators',
+            'commonGracePeriodWithoutResolvingPendencies',
+            'commonGracePeriodResolvingPendencies',
+            'commonGracePeriodWithAccelerators',
+            'totalGracePeriodWithoutResolvingPendencies',
+            'totalGracePeriodResolvingPendencies',
+            'totalGracePeriodWithAccelerators',
+          ],
+        },
         documents: {
           type: 'array',
           description: 'Lista de documentos mï¿½dicos analisados',
@@ -2857,6 +2974,7 @@ Análise processada do CNIS:
         'lightDisabilityPercentage',
         'moderateDisabilityPercentage',
         'severeDisabilityPercentage',
+        'summaryTable',
         'documents',
       ],
     };
