@@ -3,6 +3,16 @@ import { Module } from '@nestjs/common';
 
 import { AutoMapperService } from '@lib/mapper/implementation/auto-mapper/auto-mapper.service';
 import { noopStrategy } from '@lib/mapper/implementation/auto-mapper/noop-strategy';
+import { AccidentBenefitRejectionEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-benefit-rejection/accident-benefit-rejection-entity.auto-mapper.profile';
+import { GetAccidentBenefitRejectionWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-benefit-rejection/get-accident-benefit-rejection-with-relations-query-result.auto-mapper.profile';
+import { AccidentBenefitRejectionDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-benefit-rejection-document/accident-benefit-rejection-document-entity.auto-mapper.profile';
+import { AccidentBenefitRejectionEventEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-benefit-rejection-event/accident-benefit-rejection-event-entity.auto-mapper.profile';
+import { AccidentBenefitRejectionEventDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-benefit-rejection-event-document/accident-benefit-rejection-event-document-entity.auto-mapper.profile';
+import { AccidentBenefitRejectionInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-benefit-rejection-inss-benefit/accident-benefit-rejection-inss-benefit-entity.auto-mapper.profile';
+import { AccidentBenefitRejectionResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-benefit-rejection-result/accident-benefit-rejection-result-entity.auto-mapper.profile';
+import { AccidentBenefitRejectionWorkPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-benefit-rejection-work-period/accident-benefit-rejection-work-period-entity.auto-mapper.profile';
+import { AccidentBenefitRejectionWorkPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-benefit-rejection-work-period-document/accident-benefit-rejection-work-period-document-entity.auto-mapper.profile';
+import { AccidentBenefitRejectionWorkPeriodEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-benefit-rejection-work-period-earnings-history/accident-benefit-rejection-work-period-earnings-history-entity.auto-mapper.profile';
 import { AdminEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/admin/admin-entity.auto-mapper.profile';
 import { GetAdminQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/admin/get-admin-query-result.auto-mapper.profile';
 import { AdministrativeProcedureInssAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis-entity.auto-mapper.profile';
@@ -747,6 +757,16 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetGeneralUrbanRetirementDenialWithRelationsQueryResultAutoMapperProfile,
     GeneralUrbanRetirementDenialTimeAcceleratorEntityAutoMapperProfile,
     GetGeneralUrbanRetirementDenialTimeAcceleratorQueryResultAutoMapperProfile,
+    AccidentBenefitRejectionEntityAutoMapperProfile,
+    AccidentBenefitRejectionResultEntityAutoMapperProfile,
+    AccidentBenefitRejectionDocumentEntityAutoMapperProfile,
+    AccidentBenefitRejectionInssBenefitEntityAutoMapperProfile,
+    AccidentBenefitRejectionEventEntityAutoMapperProfile,
+    AccidentBenefitRejectionEventDocumentEntityAutoMapperProfile,
+    AccidentBenefitRejectionWorkPeriodEntityAutoMapperProfile,
+    AccidentBenefitRejectionWorkPeriodDocumentEntityAutoMapperProfile,
+    AccidentBenefitRejectionWorkPeriodEarningsHistoryEntityAutoMapperProfile,
+    GetAccidentBenefitRejectionWithRelationsQueryResultAutoMapperProfile,
     DisabilityRetirementPlanningRejectionEntityAutoMapperProfile,
     DisabilityRetirementPlanningRejectionResultEntityAutoMapperProfile,
     DisabilityRetirementPlanningRejectionPeriodEntityAutoMapperProfile,

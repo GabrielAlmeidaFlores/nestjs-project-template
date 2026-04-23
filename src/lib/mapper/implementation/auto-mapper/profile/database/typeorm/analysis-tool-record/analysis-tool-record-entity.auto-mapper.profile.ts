@@ -2,6 +2,7 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { AccidentBenefitRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection.typeorm.entity';
 import { AdministrativeProcedureInssAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis.entity';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
@@ -39,6 +40,7 @@ import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
+import { AccidentBenefitRejectionEntity } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection/accident-benefit-rejection.entity';
 import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
 import { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
 import { BpcElderlyAnalysisEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/bpc-elderly-analysis.entity';
@@ -307,6 +309,16 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const accidentBenefitRejection =
+        source.accidentBenefitRejection !== null &&
+        source.accidentBenefitRejection !== undefined
+          ? this.mapper.map(
+              source.accidentBenefitRejection,
+              AccidentBenefitRejectionTypeormEntity,
+              AccidentBenefitRejectionEntity,
+            )
+          : null;
+
       const survivorPensionAnalysis =
         source.survivorPensionAnalysis !== undefined
           ? this.mapper.map(
@@ -371,6 +383,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         deathBenefitRejection,
         specialRetirementGrant,
         temporaryDisabilityBenefitsGrant,
+        accidentBenefitRejection,
         survivorPensionAnalysis,
       });
     };
@@ -538,6 +551,13 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             } as TemporaryDisabilityBenefitsGrantTypeormEntity)
           : null;
 
+      const accidentBenefitRejection =
+        source.accidentBenefitRejection !== null
+          ? ({
+              id: source.accidentBenefitRejection.id.toString(),
+            } as AccidentBenefitRejectionTypeormEntity)
+          : null;
+
       const survivorPensionAnalysis =
         source.survivorPensionAnalysis !== null
           ? ({
@@ -663,6 +683,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         specialCategoryRetirementAnalysis,
         specialRetirementGrant,
         temporaryDisabilityBenefitsGrant,
+        accidentBenefitRejection,
         survivorPensionAnalysis,
         deathBenefitGrant,
         deathBenefitRejection,
