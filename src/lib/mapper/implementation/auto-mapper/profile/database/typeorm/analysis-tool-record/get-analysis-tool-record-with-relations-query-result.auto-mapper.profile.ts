@@ -645,6 +645,15 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         SpecialRetirementGrantTypeormEntity,
       );
 
+      const temporaryDisabilityBenefitsGrant =
+        source.temporaryDisabilityBenefitsGrant !== null
+          ? this.mapper.map(
+              source.temporaryDisabilityBenefitsGrant,
+              GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResult,
+              TemporaryDisabilityBenefitsGrantTypeormEntity,
+            )
+          : null;
+
       return AnalysisToolRecordTypeormEntity.build({
         id: source.id.toString(),
         code: source.code.toString(),
@@ -672,6 +681,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         generalUrbanRetirementGrant,
         generalUrbanRetirementAnalysis,
         specialRetirementGrant,
+        temporaryDisabilityBenefitsGrant,
         analysisToolClient,
         specialActivity,
         createdBy,
