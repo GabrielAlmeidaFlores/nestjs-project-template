@@ -3055,7 +3055,7 @@ Análise processada do CNIS:
                         'Data da contribuiï¿½ï¿½o no formato YYYY-MM-DD',
                     },
                     contributionValue: {
-                      type: 'number',
+                      type: 'string',
                       description:
                         'Valor da contribuiï¿½ï¿½o abaixo do mï¿½nimo',
                     },
