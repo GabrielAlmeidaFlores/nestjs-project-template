@@ -146,6 +146,66 @@ export class DisabilityRetirementPlanningGrantFirstAnalysisDocumentModel extends
 }
 
 @ResponseDto()
+export class DisabilityRetirementPlanningGrantFirstAnalysisSummaryTableModel extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty()
+  public readonly timeAsDisabledWithoutResolvingPendencies: string;
+
+  @ResponseDtoStringProperty()
+  public readonly timeAsDisabledResolvingPendencies: string;
+
+  @ResponseDtoStringProperty()
+  public readonly timeAsDisabledWithAccelerators: string;
+
+  @ResponseDtoStringProperty()
+  public readonly commonTimeWithoutResolvingPendencies: string;
+
+  @ResponseDtoStringProperty()
+  public readonly commonTimeResolvingPendencies: string;
+
+  @ResponseDtoStringProperty()
+  public readonly commonTimeWithAccelerators: string;
+
+  @ResponseDtoStringProperty()
+  public readonly totalTimeWithoutResolvingPendencies: string;
+
+  @ResponseDtoStringProperty()
+  public readonly totalTimeResolvingPendencies: string;
+
+  @ResponseDtoStringProperty()
+  public readonly totalTimeWithAccelerators: string;
+
+  @ResponseDtoStringProperty()
+  public readonly gracePeriodAsDisabledWithoutResolvingPendencies: string;
+
+  @ResponseDtoStringProperty()
+  public readonly gracePeriodAsDisabledResolvingPendencies: string;
+
+  @ResponseDtoStringProperty()
+  public readonly gracePeriodAsDisabledWithAccelerators: string;
+
+  @ResponseDtoStringProperty()
+  public readonly commonGracePeriodWithoutResolvingPendencies: string;
+
+  @ResponseDtoStringProperty()
+  public readonly commonGracePeriodResolvingPendencies: string;
+
+  @ResponseDtoStringProperty()
+  public readonly commonGracePeriodWithAccelerators: string;
+
+  @ResponseDtoStringProperty()
+  public readonly totalGracePeriodWithoutResolvingPendencies: string;
+
+  @ResponseDtoStringProperty()
+  public readonly totalGracePeriodResolvingPendencies: string;
+
+  @ResponseDtoStringProperty()
+  public readonly totalGracePeriodWithAccelerators: string;
+
+  protected override readonly _type =
+    DisabilityRetirementPlanningGrantFirstAnalysisSummaryTableModel.name;
+}
+
+@ResponseDto()
 export class DisabilityRetirementPlanningGrantFirstAnalysisDisabilityAnalysisModel extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
   public readonly predominantDisabilityDegree: string;
@@ -158,6 +218,11 @@ export class DisabilityRetirementPlanningGrantFirstAnalysisDisabilityAnalysisMod
 
   @ResponseDtoNumberProperty()
   public readonly severeDisabilityPercentage: number;
+
+  @ResponseDtoObjectProperty(
+    () => DisabilityRetirementPlanningGrantFirstAnalysisSummaryTableModel,
+  )
+  public readonly summaryTable: DisabilityRetirementPlanningGrantFirstAnalysisSummaryTableModel;
 
   @ResponseDtoObjectProperty(
     () => DisabilityRetirementPlanningGrantFirstAnalysisDocumentModel,

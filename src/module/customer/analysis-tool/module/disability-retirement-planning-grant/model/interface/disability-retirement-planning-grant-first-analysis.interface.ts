@@ -28,8 +28,10 @@ export interface DisabilityRetirementPlanningGrantFirstAnalysisPeriodInterface {
   status: boolean;
   isPendency: boolean;
   competenceBelowTheMinimum: boolean;
-  contributionAverage?: number | string;
-  belowMinimumContributions: DisabilityRetirementPlanningGrantFirstAnalysisBelowMinimumContributionItemInterface[];
+  contributionAverage?: number | string | null;
+  belowMinimumContributions:
+    | DisabilityRetirementPlanningGrantFirstAnalysisBelowMinimumContributionItemInterface[]
+    | null;
   earningsHistory: DisabilityRetirementPlanningGrantFirstAnalysisEarningsHistoryItemInterface[];
   reasonPendency?: DisabilityRetirementPlanningGrantPeriodPendencyReasonEnum;
   bondOrigin?: string | null;
@@ -45,12 +47,36 @@ export interface DisabilityRetirementPlanningGrantFirstAnalysisDocumentInterface
   observations: string[];
 }
 
+export interface DisabilityRetirementPlanningGrantFirstAnalysisSummaryTableInterface {
+  timeAsDisabledWithoutResolvingPendencies: string;
+  timeAsDisabledResolvingPendencies: string;
+  timeAsDisabledWithAccelerators: string;
+  commonTimeWithoutResolvingPendencies: string;
+  commonTimeResolvingPendencies: string;
+  commonTimeWithAccelerators: string;
+  totalTimeWithoutResolvingPendencies: string;
+  totalTimeResolvingPendencies: string;
+  totalTimeWithAccelerators: string;
+  gracePeriodAsDisabledWithoutResolvingPendencies: string;
+  gracePeriodAsDisabledResolvingPendencies: string;
+  gracePeriodAsDisabledWithAccelerators: string;
+  commonGracePeriodWithoutResolvingPendencies: string;
+  commonGracePeriodResolvingPendencies: string;
+  commonGracePeriodWithAccelerators: string;
+  totalGracePeriodWithoutResolvingPendencies: string;
+  totalGracePeriodResolvingPendencies: string;
+  totalGracePeriodWithAccelerators: string;
+}
+
 export interface DisabilityRetirementPlanningGrantFirstAnalysisDisabilityAnalysisInterface {
   predominantDisabilityDegree: string;
   lightDisabilityPercentage: number;
   moderateDisabilityPercentage: number;
   severeDisabilityPercentage: number;
-  documents: DisabilityRetirementPlanningGrantFirstAnalysisDocumentInterface[];
+  summaryTable: DisabilityRetirementPlanningGrantFirstAnalysisSummaryTableInterface | null;
+  documents:
+    | DisabilityRetirementPlanningGrantFirstAnalysisDocumentInterface[]
+    | null;
 }
 
 export interface DisabilityRetirementPlanningGrantFirstAnalysisInterface {
