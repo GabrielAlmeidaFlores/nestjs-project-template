@@ -260,6 +260,21 @@ import { RetirementPlanningRgpsEarningsHistoryTypeormCommandRepository } from '@
 import { RetirementPlanningRgpsEarningsHistoryTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-earnings-history/retirement-planning-rgps-earnings-history.typeorm.query.repository';
 import { RetirementPlanningRppsInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rpps-inss-benefit/retirement-planning-rpps-inss-benefit.typeorm.command.repository';
 import { RetirementPlanningRppsLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rpps-legal-proceeding/retirement-planning-rpps-legal-proceeding.typeorm.command.repository';
+import { RuralOrHybridRetirementAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-analysis/rural-or-hybrid-retirement-analysis.typeorm.command.repository';
+import { RuralOrHybridRetirementAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-analysis/rural-or-hybrid-retirement-analysis.typeorm.query.repository';
+import { RuralOrHybridRetirementAnalysisDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-analysis-document/rural-or-hybrid-retirement-analysis-document.typeorm.command.repository';
+import { RuralOrHybridRetirementAnalysisPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-analysis-period/rural-or-hybrid-retirement-analysis-period.typeorm.command.repository';
+import { RuralOrHybridRetirementAnalysisPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-analysis-period-document/rural-or-hybrid-retirement-analysis-period-document.typeorm.command.repository';
+import { RuralOrHybridRetirementAnalysisPeriodMemberTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-analysis-period-member/rural-or-hybrid-retirement-analysis-period-member.typeorm.command.repository';
+import { RuralOrHybridRetirementAnalysisPeriodMemberDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-analysis-period-member-document/rural-or-hybrid-retirement-analysis-period-member-document.typeorm.command.repository';
+import { RuralOrHybridRetirementAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-analysis-result/rural-or-hybrid-retirement-analysis-result.typeorm.command.repository';
+import { RuralOrHybridRetirementAnalysisTestimonialWitnessTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-analysis-testimonial-witness/rural-or-hybrid-retirement-analysis-testimonial-witness.typeorm.command.repository';
+import { RuralOrHybridRetirementAnalysisTestimonialWitnessDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-analysis-testimonial-witness-document/rural-or-hybrid-retirement-analysis-testimonial-witness-document.typeorm.command.repository';
+import { RuralOrHybridRetirementAnalysisTimeAcceleratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-analysis-time-accelerator/rural-or-hybrid-retirement-analysis-time-accelerator.typeorm.command.repository';
+import { RuralOrHybridRetirementAnalysisWorkPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-analysis-work-period/rural-or-hybrid-retirement-analysis-work-period.typeorm.command.repository';
+import { RuralOrHybridRetirementAnalysisWorkPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-analysis-work-period-document/rural-or-hybrid-retirement-analysis-work-period-document.typeorm.command.repository';
+import { RuralOrHybridRetirementAnalysisWorkPeriodDocumentAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-analysis-work-period-document-analysis/rural-or-hybrid-retirement-analysis-work-period-document-analysis.typeorm.command.repository';
+import { RuralOrHybridRetirementAnalysisWorkPeriodEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-analysis-work-period-earnings-history/rural-or-hybrid-retirement-analysis-work-period-earnings-history.typeorm.command.repository';
 import { RuralOrHybridRetirementRejectionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-rejection/rural-or-hybrid-retirement-rejection.typeorm.command.repository';
 import { RuralOrHybridRetirementRejectionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-rejection/rural-or-hybrid-retirement-rejection.typeorm.query.repository';
 import { RuralOrHybridRetirementRejectionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-rejection-document/rural-or-hybrid-retirement-rejection-document.typeorm.command.repository';
@@ -603,6 +618,20 @@ import { RetirementPlanningRppsRemunerationCalculationTypeormEntity } from '@inf
 import { RetirementPlanningRppsRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-remuneration.typeorm.entity';
 import { RetirementPlanningRppsResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-result.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
+import { RuralOrHybridRetirementAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-analysis-document.typeorm.entity';
+import { RuralOrHybridRetirementAnalysisPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-analysis-period-document.typeorm.entity';
+import { RuralOrHybridRetirementAnalysisPeriodMemberDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-analysis-period-member-document.typeorm.entity';
+import { RuralOrHybridRetirementAnalysisPeriodMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-analysis-period-member.typeorm.entity';
+import { RuralOrHybridRetirementAnalysisPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-analysis-period.typeorm.entity';
+import { RuralOrHybridRetirementAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-analysis-result.typeorm.entity';
+import { RuralOrHybridRetirementAnalysisTestimonialWitnessDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-analysis-testimonial-witness-document.typeorm.entity';
+import { RuralOrHybridRetirementAnalysisTestimonialWitnessTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-analysis-testimonial-witness.typeorm.entity';
+import { RuralOrHybridRetirementAnalysisTimeAcceleratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-analysis-time-accelerator.typeorm.entity';
+import { RuralOrHybridRetirementAnalysisWorkPeriodDocumentAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-analysis-work-period-document-analysis.typeorm.entity';
+import { RuralOrHybridRetirementAnalysisWorkPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-analysis-work-period-document.typeorm.entity';
+import { RuralOrHybridRetirementAnalysisWorkPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-analysis-work-period-earnings-history.typeorm.entity';
+import { RuralOrHybridRetirementAnalysisWorkPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-analysis-work-period.typeorm.entity';
+import { RuralOrHybridRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-analysis.typeorm.entity';
 import { RuralOrHybridRetirementRejectionDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-rejection-document.typeorm.entity';
 import { RuralOrHybridRetirementRejectionInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-rejection-inss-benefit.typeorm.entity';
 import { RuralOrHybridRetirementRejectionLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-rejection-legal-proceeding.typeorm.entity';
@@ -876,6 +905,20 @@ export class TypeormIndex {
     RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisTypeormEntity,
     RuralOrHybridRetirementRejectionWorkPeriodEarningsHistoryTypeormEntity,
     RuralOrHybridRetirementRejectionTimeAcceleratorTypeormEntity,
+    RuralOrHybridRetirementAnalysisTypeormEntity,
+    RuralOrHybridRetirementAnalysisDocumentTypeormEntity,
+    RuralOrHybridRetirementAnalysisPeriodTypeormEntity,
+    RuralOrHybridRetirementAnalysisPeriodDocumentTypeormEntity,
+    RuralOrHybridRetirementAnalysisPeriodMemberTypeormEntity,
+    RuralOrHybridRetirementAnalysisPeriodMemberDocumentTypeormEntity,
+    RuralOrHybridRetirementAnalysisResultTypeormEntity,
+    RuralOrHybridRetirementAnalysisTestimonialWitnessTypeormEntity,
+    RuralOrHybridRetirementAnalysisTestimonialWitnessDocumentTypeormEntity,
+    RuralOrHybridRetirementAnalysisTimeAcceleratorTypeormEntity,
+    RuralOrHybridRetirementAnalysisWorkPeriodTypeormEntity,
+    RuralOrHybridRetirementAnalysisWorkPeriodDocumentTypeormEntity,
+    RuralOrHybridRetirementAnalysisWorkPeriodDocumentAnalysisTypeormEntity,
+    RuralOrHybridRetirementAnalysisWorkPeriodEarningsHistoryTypeormEntity,
     InsuranceQualityAnalysisTypeormEntity,
     InsuranceQualityAnalysisDocumentTypeormEntity,
     InsuranceQualityAnalysisResultTypeormEntity,
@@ -1249,6 +1292,21 @@ export class TypeormIndex {
     RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisTypeormCommandRepository,
     RuralOrHybridRetirementRejectionWorkPeriodEarningsHistoryTypeormCommandRepository,
     RuralOrHybridRetirementRejectionTimeAcceleratorTypeormCommandRepository,
+    RuralOrHybridRetirementAnalysisTypeormCommandRepository,
+    RuralOrHybridRetirementAnalysisTypeormQueryRepository,
+    RuralOrHybridRetirementAnalysisResultTypeormCommandRepository,
+    RuralOrHybridRetirementAnalysisDocumentTypeormCommandRepository,
+    RuralOrHybridRetirementAnalysisPeriodTypeormCommandRepository,
+    RuralOrHybridRetirementAnalysisPeriodDocumentTypeormCommandRepository,
+    RuralOrHybridRetirementAnalysisPeriodMemberTypeormCommandRepository,
+    RuralOrHybridRetirementAnalysisPeriodMemberDocumentTypeormCommandRepository,
+    RuralOrHybridRetirementAnalysisTestimonialWitnessTypeormCommandRepository,
+    RuralOrHybridRetirementAnalysisTestimonialWitnessDocumentTypeormCommandRepository,
+    RuralOrHybridRetirementAnalysisWorkPeriodTypeormCommandRepository,
+    RuralOrHybridRetirementAnalysisWorkPeriodDocumentTypeormCommandRepository,
+    RuralOrHybridRetirementAnalysisWorkPeriodDocumentAnalysisTypeormCommandRepository,
+    RuralOrHybridRetirementAnalysisWorkPeriodEarningsHistoryTypeormCommandRepository,
+    RuralOrHybridRetirementAnalysisTimeAcceleratorTypeormCommandRepository,
     InsuranceQualityAnalysisTypeormCommandRepository,
     InsuranceQualityAnalysisDocumentTypeormCommandRepository,
     InsuranceQualityAnalysisInssBenefitTypeormCommandRepository,
