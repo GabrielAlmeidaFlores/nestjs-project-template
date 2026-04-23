@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
@@ -41,10 +41,6 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 export class CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase {
   protected readonly _type =
     CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase.name;
-
-  private readonly logger = new Logger(
-    CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase.name,
-  );
 
   public constructor(
     @Inject(AnalysisProcessorGateway)
@@ -345,8 +341,7 @@ export class CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase {
             ),
         }),
       };
-    } catch (error) {
-      this.logger.error('Failed to parse first analysis JSON', error);
+    } catch {
       throw new InvalidDisabilityRetirementPlanningGrantFirstAnalysisJsonError();
     }
   }
