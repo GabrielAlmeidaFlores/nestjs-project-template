@@ -26,6 +26,7 @@ import {
   DisabilityRetirementPlanningGrantFirstAnalysisDocumentModel,
   DisabilityRetirementPlanningGrantFirstAnalysisModel,
   DisabilityRetirementPlanningGrantFirstAnalysisPeriodModel,
+  DisabilityRetirementPlanningGrantFirstAnalysisSummaryTableModel,
 } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/generic/disability-retirement-planning-grant-first-analysis.model';
 import { DisabilityRetirementPlanningGrantFirstAnalysisSourcePeriodInterface } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/disability-retirement-planning-grant-first-analysis-source-period.interface';
 import { DisabilityRetirementPlanningGrantFirstAnalysisInterface } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/disability-retirement-planning-grant-first-analysis.interface';
@@ -270,21 +271,21 @@ export class CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase {
               status: period.status,
               isPendency: period.isPendency,
               competenceBelowTheMinimum: period.competenceBelowTheMinimum,
-              ...(period.contributionAverage !== undefined && {
-                contributionAverage: new DecimalValue(
-                  period.contributionAverage.toString(),
-                ),
-              }),
-              belowMinimumContributions: period.belowMinimumContributions.map(
-                (item) =>
-                  DisabilityRetirementPlanningGrantFirstAnalysisBelowMinimumContributionItemModel.build(
-                    {
-                      contributionDate: new Date(item.contributionDate),
-                      contributionValue: new DecimalValue(
-                        item.contributionValue.toString(),
-                      ),
-                    },
+              ...(period.contributionAverage !== undefined &&
+                period.contributionAverage !== null && {
+                  contributionAverage: new DecimalValue(
+                    period.contributionAverage.toString(),
                   ),
+                }),
+              belowMinimumContributions: (
+                period.belowMinimumContributions ?? []
+              ).map((item) =>
+                DisabilityRetirementPlanningGrantFirstAnalysisBelowMinimumContributionItemModel.build(
+                  {
+                    contributionDate: new Date(item.contributionDate),
+                    contributionValue: item.contributionValue,
+                  },
+                ),
               ),
               ...(period.reasonPendency !== undefined && {
                 reasonPendency: period.reasonPendency,
@@ -306,11 +307,35 @@ export class CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase {
                   normalizedRaw.disabilityAnalysis.moderateDisabilityPercentage,
                 severeDisabilityPercentage:
                   normalizedRaw.disabilityAnalysis.severeDisabilityPercentage,
-                documents: normalizedRaw.disabilityAnalysis.documents.map(
-                  (document) =>
-                    DisabilityRetirementPlanningGrantFirstAnalysisDocumentModel.build(
-                      document,
-                    ),
+                summaryTable:
+                  DisabilityRetirementPlanningGrantFirstAnalysisSummaryTableModel.build(
+                    normalizedRaw.disabilityAnalysis.summaryTable ?? {
+                      timeAsDisabledWithoutResolvingPendencies: '',
+                      timeAsDisabledResolvingPendencies: '',
+                      timeAsDisabledWithAccelerators: '',
+                      commonTimeWithoutResolvingPendencies: '',
+                      commonTimeResolvingPendencies: '',
+                      commonTimeWithAccelerators: '',
+                      totalTimeWithoutResolvingPendencies: '',
+                      totalTimeResolvingPendencies: '',
+                      totalTimeWithAccelerators: '',
+                      gracePeriodAsDisabledWithoutResolvingPendencies: '',
+                      gracePeriodAsDisabledResolvingPendencies: '',
+                      gracePeriodAsDisabledWithAccelerators: '',
+                      commonGracePeriodWithoutResolvingPendencies: '',
+                      commonGracePeriodResolvingPendencies: '',
+                      commonGracePeriodWithAccelerators: '',
+                      totalGracePeriodWithoutResolvingPendencies: '',
+                      totalGracePeriodResolvingPendencies: '',
+                      totalGracePeriodWithAccelerators: '',
+                    },
+                  ),
+                documents: (
+                  normalizedRaw.disabilityAnalysis.documents ?? []
+                ).map((document) =>
+                  DisabilityRetirementPlanningGrantFirstAnalysisDocumentModel.build(
+                    document,
+                  ),
                 ),
               },
             ),
