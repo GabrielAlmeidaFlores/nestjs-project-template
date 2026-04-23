@@ -105,7 +105,12 @@ export class ListAnalysisToolRecordUseCase {
             analysisToolRecord.disabilityRetirementPlanning ??
             analysisToolRecord.audienceQuestionGenerator ??
             analysisToolRecord.survivorPensionAnalysis ??
-            analysisToolRecord.specialRetirementGrant;
+            analysisToolRecord.specialRetirementGrant ??
+            analysisToolRecord.generalUrbanRetirementDenial ??
+            analysisToolRecord.disabilityRetirementPlanningRejection ??
+            analysisToolRecord.deathBenefitGrant ??
+            analysisToolRecord.deathBenefitRejection ??
+            analysisToolRecord.bpcElderlyAnalysis;
 
           const analysisId =
             analysis?.id ??
