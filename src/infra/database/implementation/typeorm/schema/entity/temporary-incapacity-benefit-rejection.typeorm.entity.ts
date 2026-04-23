@@ -1,16 +1,7 @@
-import {
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-  Column,
-} from 'typeorm';
+import { Entity, JoinColumn, OneToMany, OneToOne, Column } from 'typeorm';
 
-import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
-import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-rejection-disability-analysis.typeorm.entity';
 import { TemporaryIncapacityBenefitRejectionDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-rejection-document.typeorm.entity';
 import { TemporaryIncapacityBenefitRejectionInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-rejection-inss-benefit.typeorm.entity';
@@ -113,14 +104,6 @@ export class TemporaryIncapacityBenefitRejectionTypeormEntity extends BaseTypeor
     (entity) => entity.temporaryIncapacityBenefitRejection,
   )
   public workPeriods?: TemporaryIncapacityBenefitRejectionWorkPeriodsTypeormEntity[];
-
-  @ManyToOne(() => OrganizationMemberTypeormEntity)
-  @JoinColumn({ name: 'organization_member_id' })
-  public organizationMember?: OrganizationMemberTypeormEntity;
-
-  @ManyToOne(() => AnalysisToolClientTypeormEntity)
-  @JoinColumn({ name: 'analysis_tool_client_id' })
-  public analysisToolClient?: AnalysisToolClientTypeormEntity;
 
   @OneToOne(() => AnalysisToolRecordTypeormEntity, {
     nullable: true,

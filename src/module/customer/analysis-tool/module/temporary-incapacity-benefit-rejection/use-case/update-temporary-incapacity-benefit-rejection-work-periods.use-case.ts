@@ -89,6 +89,7 @@ export class UpdateTemporaryIncapacityBenefitRejectionWorkPeriodsUseCase {
             pendencyReason: workPeriodDto.pendencyReason ?? null,
             periodConsideration: workPeriodDto.periodConsideration ?? null,
             contributionAverage: workPeriodDto.contributionAverage ?? null,
+            isPendency: false,
             status: workPeriodDto.status,
             gracePeriod: workPeriodDto.gracePeriod,
             temporaryIncapacityBenefitRejectionId,

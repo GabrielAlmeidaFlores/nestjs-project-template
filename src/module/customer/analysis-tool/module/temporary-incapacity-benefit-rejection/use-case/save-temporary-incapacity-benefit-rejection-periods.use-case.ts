@@ -12,16 +12,16 @@ import { TemporaryIncapacityBenefitRejectionWorkPeriodsEntity } from '@module/cu
 import { TemporaryIncapacityBenefitRejectionWorkPeriodsId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-work-periods/value-object/temporary-incapacity-benefit-rejection-work-periods-id.value-object';
 import { TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-work-periods-earnings-history/temporary-incapacity-benefit-rejection-work-periods-earnings-history.entity';
 import { TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-work-periods-earnings-history/value-object/temporary-incapacity-benefit-rejection-work-periods-earnings-history-id.value-object';
-import { CreateTemporaryIncapacityBenefitRejectionWorkPeriodsRequestDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/request/create-temporary-incapacity-benefit-rejection-work-periods.request.dto';
-import { CreateTemporaryIncapacityBenefitRejectionWorkPeriodsResponseDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/response/create-temporary-incapacity-benefit-rejection-work-periods.response.dto';
+import { SaveTemporaryIncapacityBenefitRejectionPeriodsRequestDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/request/save-temporary-incapacity-benefit-rejection-periods.request.dto';
+import { SaveTemporaryIncapacityBenefitRejectionPeriodsResponseDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/response/save-temporary-incapacity-benefit-rejection-periods.response.dto';
 import { TemporaryIncapacityBenefitRejectionNotFoundError } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/error/temporary-incapacity-benefit-rejection-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 @Injectable()
-export class CreateTemporaryIncapacityBenefitRejectionWorkPeriodsUseCase {
+export class SaveTemporaryIncapacityBenefitRejectionPeriodsUseCase {
   protected readonly _type =
-    CreateTemporaryIncapacityBenefitRejectionWorkPeriodsUseCase.name;
+    SaveTemporaryIncapacityBenefitRejectionPeriodsUseCase.name;
 
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
@@ -44,8 +44,8 @@ export class CreateTemporaryIncapacityBenefitRejectionWorkPeriodsUseCase {
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
     temporaryIncapacityBenefitRejectionId: TemporaryIncapacityBenefitRejectionId,
-    dto: CreateTemporaryIncapacityBenefitRejectionWorkPeriodsRequestDto,
-  ): Promise<CreateTemporaryIncapacityBenefitRejectionWorkPeriodsResponseDto> {
+    dto: SaveTemporaryIncapacityBenefitRejectionPeriodsRequestDto,
+  ): Promise<SaveTemporaryIncapacityBenefitRejectionPeriodsResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
@@ -67,7 +67,7 @@ export class CreateTemporaryIncapacityBenefitRejectionWorkPeriodsUseCase {
       ),
     ];
 
-    for (const workPeriodDto of dto.workPeriods) {
+    for (const periodDto of dto.periods) {
       const workPeriodsId =
         new TemporaryIncapacityBenefitRejectionWorkPeriodsId();
 
@@ -75,48 +75,49 @@ export class CreateTemporaryIncapacityBenefitRejectionWorkPeriodsUseCase {
         this.temporaryIncapacityBenefitRejectionWorkPeriodsCommandRepositoryGateway.createTemporaryIncapacityBenefitRejectionWorkPeriods(
           new TemporaryIncapacityBenefitRejectionWorkPeriodsEntity({
             id: workPeriodsId,
-            bondOrigin: workPeriodDto.bondOrigin,
-            startDate: workPeriodDto.startDate,
-            endDate: workPeriodDto.endDate ?? null,
-            category: workPeriodDto.category,
-            competenceBelowTheMinimum: workPeriodDto.competenceBelowTheMinimum,
-            pendencyReason: workPeriodDto.pendencyReason ?? null,
-            periodConsideration: workPeriodDto.periodConsideration ?? null,
-            contributionAverage: workPeriodDto.contributionAverage ?? null,
-            isPendency: false,
-            status: workPeriodDto.status,
-            gracePeriod: workPeriodDto.gracePeriod,
+            bondOrigin: periodDto.bondOrigin ?? null,
+            startDate: this.parseDateString(periodDto.startDate),
+            endDate:
+              periodDto.endDate !== undefined
+                ? this.parseDateString(periodDto.endDate)
+                : null,
+            category: periodDto.category ?? null,
+            activityDescription: periodDto.activityDescription ?? null,
+            competenceBelowTheMinimum: periodDto.competenceBelowTheMinimum,
+            pendencyReason: periodDto.pendencyReason ?? null,
+            periodConsideration: periodDto.periodConsideration ?? null,
+            contributionAverage: periodDto.contributionAverage ?? null,
+            impactMonths: periodDto.impactMonths ?? null,
+            gracePeriod: periodDto.graceMonths ?? null,
+            isPendency: periodDto.isPendency,
+            wantsToComplementViaMeuINSS:
+              periodDto.wantsToComplementViaMeuINSS ?? null,
+            status: periodDto.status,
             temporaryIncapacityBenefitRejectionId,
           }),
         ),
       );
 
-      if (
-        workPeriodDto.earningsHistory &&
-        workPeriodDto.earningsHistory.length > 0
-      ) {
-        const earningsHistoryTransactions = workPeriodDto.earningsHistory.map(
-          (item) =>
+      if (periodDto.earningsHistory && periodDto.earningsHistory.length > 0) {
+        for (const item of periodDto.earningsHistory) {
+          transactions.push(
             this.temporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryCommandRepositoryGateway.createTemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistory(
               new TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryEntity(
                 {
                   id: new TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryId(),
-                  competence: item.competence ?? null,
-                  remuneration: item.remuneration ?? null,
-                  indicators: item.indicators ?? null,
-                  paymentDate: item.paymentDate ?? null,
-                  contribution: item.contribution ?? null,
-                  contributionSalary: item.contributionSalary ?? null,
-                  competenceBelowTheMinimum:
-                    item.competenceBelowTheMinimum ?? null,
                   temporaryIncapacityBenefitRejectionWorkPeriodsId:
                     workPeriodsId,
+                  ...(item.competence !== undefined && {
+                    competence: this.parseDateString(item.competence),
+                  }),
+                  ...(item.value !== undefined && {
+                    remuneration: item.value,
+                  }),
                 },
               ),
             ),
-        );
-
-        transactions.push(...earningsHistoryTransactions);
+          );
+        }
       }
     }
 
@@ -125,10 +126,14 @@ export class CreateTemporaryIncapacityBenefitRejectionWorkPeriodsUseCase {
 
     await transaction.commit();
 
-    return CreateTemporaryIncapacityBenefitRejectionWorkPeriodsResponseDto.build(
-      {
-        temporaryIncapacityBenefitRejectionId,
-      },
-    );
+    return SaveTemporaryIncapacityBenefitRejectionPeriodsResponseDto.build({
+      temporaryIncapacityBenefitRejectionId,
+    });
+  }
+
+  private parseDateString(dateString: string): Date {
+    const [day, month, year] = dateString.split('/');
+
+    return new Date(`${year}-${month}-${day}T00:00:00`);
   }
 }

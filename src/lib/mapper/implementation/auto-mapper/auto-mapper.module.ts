@@ -476,6 +476,7 @@ import { TemporaryDisabilityBenefitsGrantPreviousBenefitsDocumentEntityAutoMappe
 import { TemporaryDisabilityBenefitsGrantResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-result/temporary-disability-benefits-grant-result-entity.auto-mapper.profile';
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-work-periods/temporary-disability-benefits-grant-work-periods-entity.auto-mapper.profile';
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-work-periods-earnings-history/temporary-disability-benefits-grant-work-periods-earnings-history-entity.auto-mapper.profile';
+import { GetTemporaryIncapacityBenefitRejectionWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-rejection/get-temporary-incapacity-benefit-rejection-with-relations-query-result.auto-mapper.profile';
 import { TemporaryIncapacityBenefitRejectionEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection-entity.auto-mapper.profile';
 import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-rejection-disability-analysis/temporary-incapacity-benefit-rejection-disability-analysis-entity.auto-mapper.profile';
 import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisCidEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-rejection-disability-analysis-cid/temporary-incapacity-benefit-rejection-disability-analysis-cid-entity.auto-mapper.profile';
@@ -807,6 +808,7 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     TemporaryIncapacityBenefitRejectionInsuredStatusDocumentEntityAutoMapperProfile,
     TemporaryIncapacityBenefitRejectionWorkPeriodsEntityAutoMapperProfile,
     TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryEntityAutoMapperProfile,
+    GetTemporaryIncapacityBenefitRejectionWithRelationsQueryResultAutoMapperProfile,
     GeneralUrbanRetirementAnalysisEntityAutoMapperProfile,
     GetGeneralUrbanRetirementAnalysisDocumentQueryResultAutoMapperProfile,
     GetGeneralUrbanRetirementAnalysisLegalProceedingQueryResultAutoMapperProfile,

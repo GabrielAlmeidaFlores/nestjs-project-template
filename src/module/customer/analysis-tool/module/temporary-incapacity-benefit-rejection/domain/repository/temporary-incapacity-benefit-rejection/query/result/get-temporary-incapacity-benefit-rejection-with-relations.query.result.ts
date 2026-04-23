@@ -85,16 +85,20 @@ export class GetTemporaryIncapacityBenefitRejectionWithRelationsQueryResult {
 
   public readonly workPeriods: Array<{
     id: string;
-    bondOrigin: string;
+    bondOrigin: string | null;
     startDate: Date;
     endDate: Date | null;
-    category: TemporaryIncapacityBenefitRejectionCategoryEnum;
+    category: TemporaryIncapacityBenefitRejectionCategoryEnum | null;
+    activityDescription: string | null;
     competenceBelowTheMinimum: boolean;
     pendencyReason: TemporaryIncapacityBenefitRejectionWorkPeriodsPendencyReasonEnum | null;
     periodConsideration: TemporaryIncapacityBenefitRejectionWorkPeriodsPeriodConsiderationEnum | null;
     contributionAverage: DecimalValue | null;
+    impactMonths: number | null;
+    gracePeriod: number | null;
+    isPendency: boolean;
+    wantsToComplementViaMeuINSS: boolean | null;
     status: boolean;
-    gracePeriod: number;
     earningsHistory: Array<{
       id: string;
       competence: Date | null;

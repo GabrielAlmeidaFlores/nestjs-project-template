@@ -136,6 +136,7 @@ export class CreateTemporaryIncapacityBenefitRejectionInssDecisionAnalysisUseCas
     return CreateTemporaryIncapacityBenefitRejectionInssDecisionAnalysisResponseDto.build(
       {
         temporaryIncapacityBenefitRejectionId,
+        inssDecisionAnalysis: inssDecisionAnalysisText,
       },
     );
   }

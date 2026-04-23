@@ -48,6 +48,7 @@ export class TemporaryIncapacityBenefitRejectionWorkPeriodsEntityAutoMapperProfi
             startDate: source.startDate,
             endDate: source.endDate,
             category: source.category,
+            activityDescription: source.activityDescription,
             competenceBelowTheMinimum: source.competenceBelowTheMinimum,
             pendencyReason: source.pendencyReason,
             periodConsideration: source.periodConsideration,
@@ -55,8 +56,11 @@ export class TemporaryIncapacityBenefitRejectionWorkPeriodsEntityAutoMapperProfi
               source.contributionAverage !== null
                 ? new DecimalValue(source.contributionAverage)
                 : null,
-            status: source.status,
+            impactMonths: source.impactMonths,
             gracePeriod: source.gracePeriod,
+            isPendency: source.isPendency,
+            wantsToComplementViaMeuINSS: source.wantsToComplementViaMeuINSS,
+            status: source.status,
             temporaryIncapacityBenefitRejectionId:
               new TemporaryIncapacityBenefitRejectionId(
                 source.temporaryIncapacityBenefitRejection.id,
@@ -85,6 +89,7 @@ export class TemporaryIncapacityBenefitRejectionWorkPeriodsEntityAutoMapperProfi
             startDate: source.startDate,
             endDate: source.endDate,
             category: source.category,
+            activityDescription: source.activityDescription,
             competenceBelowTheMinimum: source.competenceBelowTheMinimum,
             pendencyReason: source.pendencyReason,
             periodConsideration: source.periodConsideration,
@@ -92,8 +97,11 @@ export class TemporaryIncapacityBenefitRejectionWorkPeriodsEntityAutoMapperProfi
               source.contributionAverage !== null
                 ? source.contributionAverage.toString()
                 : null,
-            status: source.status,
+            impactMonths: source.impactMonths,
             gracePeriod: source.gracePeriod,
+            isPendency: source.isPendency,
+            wantsToComplementViaMeuINSS: source.wantsToComplementViaMeuINSS,
+            status: source.status,
             temporaryIncapacityBenefitRejection:
               TemporaryIncapacityBenefitRejectionTypeormEntity.build({
                 id: source.temporaryIncapacityBenefitRejectionId.toString(),

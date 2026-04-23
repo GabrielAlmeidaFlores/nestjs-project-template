@@ -7,15 +7,19 @@ import type { TemporaryIncapacityBenefitRejectionWorkPeriodsPeriodConsiderationE
 import type { TemporaryIncapacityBenefitRejectionWorkPeriodsId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-work-periods/value-object/temporary-incapacity-benefit-rejection-work-periods-id.value-object';
 
 export interface TemporaryIncapacityBenefitRejectionWorkPeriodsEntityPropsInterface extends BaseEntityPropsInterface<TemporaryIncapacityBenefitRejectionWorkPeriodsId> {
-  bondOrigin: string;
+  bondOrigin?: string | null;
   startDate: Date;
   endDate?: Date | null;
-  category: TemporaryIncapacityBenefitRejectionCategoryEnum;
+  category?: TemporaryIncapacityBenefitRejectionCategoryEnum | null;
+  activityDescription?: string | null;
   competenceBelowTheMinimum: boolean;
   pendencyReason?: TemporaryIncapacityBenefitRejectionWorkPeriodsPendencyReasonEnum | null;
   periodConsideration?: TemporaryIncapacityBenefitRejectionWorkPeriodsPeriodConsiderationEnum | null;
   contributionAverage?: DecimalValue | null;
+  impactMonths?: number | null;
+  gracePeriod?: number | null;
+  isPendency: boolean;
+  wantsToComplementViaMeuINSS?: boolean | null;
   status: boolean;
-  gracePeriod: number;
   temporaryIncapacityBenefitRejectionId: TemporaryIncapacityBenefitRejectionId;
 }

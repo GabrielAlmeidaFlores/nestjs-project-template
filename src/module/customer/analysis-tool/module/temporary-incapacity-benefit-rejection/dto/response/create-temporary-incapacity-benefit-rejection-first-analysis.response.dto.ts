@@ -1,4 +1,3 @@
-import { CnisAnalysisResultModel } from '@lib/cnis-analyzer/model/generic/cnis-analysis-result.model';
 import { TemporaryIncapacityBenefitRejectionId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/value-object/temporary-incapacity-benefit-rejection-id.value-object';
 import { TemporaryIncapacityBenefitRejectionFirstAnalysisModel } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/model/generic/temporary-incapacity-benefit-rejection-first-analysis.model';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
@@ -15,11 +14,6 @@ export class CreateTemporaryIncapacityBenefitRejectionFirstAnalysisResponseDto e
     () => TemporaryIncapacityBenefitRejectionFirstAnalysisModel,
   )
   public firstAnalysis: TemporaryIncapacityBenefitRejectionFirstAnalysisModel;
-
-  @ResponseDtoObjectProperty(() => CnisAnalysisResultModel, {
-    required: false,
-  })
-  public cnisAnalysis?: CnisAnalysisResultModel;
 
   protected override readonly _type =
     CreateTemporaryIncapacityBenefitRejectionFirstAnalysisResponseDto.name;
