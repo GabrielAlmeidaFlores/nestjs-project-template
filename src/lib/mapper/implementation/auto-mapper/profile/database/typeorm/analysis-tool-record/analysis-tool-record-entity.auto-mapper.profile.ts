@@ -6,6 +6,7 @@ import { AdministrativeProcedureInssAnalysisTypeormEntity } from '@infra/databas
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator.typeorm.entity';
+import { BpcDisabilityDenialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-denial.typeorm.entity';
 import { BpcElderlyAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis.entity';
@@ -39,6 +40,7 @@ import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/sc
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
 import { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
+import { BpcDisabilityDenialEntity } from '@module/customer/analysis-tool/module/bpc-disability-denial/domain/schema/entity/bpc-disability-denial/bpc-disability-denial.entity';
 import { BpcElderlyAnalysisEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/bpc-elderly-analysis.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.entity';
@@ -202,6 +204,16 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         PerCapitaIncomeForBpcAnalysisEntity,
       );
 
+      const bpcDisabilityDenial =
+        source.bpcDisabilityDenial !== null &&
+        source.bpcDisabilityDenial !== undefined
+          ? this.mapper.map(
+              source.bpcDisabilityDenial,
+              BpcDisabilityDenialTypeormEntity,
+              BpcDisabilityDenialEntity,
+            )
+          : null;
+
       const bpcElderlyAnalysis =
         source.bpcElderlyAnalysis !== null &&
         source.bpcElderlyAnalysis !== undefined
@@ -338,6 +350,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         disabilityAssessmentForBpcAnalysis,
         audienceQuestionGenerator,
         perCapitaIncomeForBpcAnalysis,
+        bpcDisabilityDenial,
         bpcElderlyAnalysis,
         ruralTimelineAnalysis,
         insuranceQualityAnalysis,
@@ -494,6 +507,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         PerCapitaIncomeForBpcAnalysisTypeormEntity,
       );
 
+      const bpcDisabilityDenial =
+        source.bpcDisabilityDenial !== null
+          ? this.mapper.map(
+              source.bpcDisabilityDenial,
+              BpcDisabilityDenialEntity,
+              BpcDisabilityDenialTypeormEntity,
+            )
+          : null;
+
       const bpcElderlyAnalysis =
         source.bpcElderlyAnalysis !== null
           ? this.mapper.map(
@@ -614,6 +636,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         speechGenerator,
         disabilityAssessmentForBpcAnalysis,
         perCapitaIncomeForBpcAnalysis,
+        bpcDisabilityDenial,
         bpcElderlyAnalysis,
         ruralTimeline,
         insuranceQualityAnalysis,
