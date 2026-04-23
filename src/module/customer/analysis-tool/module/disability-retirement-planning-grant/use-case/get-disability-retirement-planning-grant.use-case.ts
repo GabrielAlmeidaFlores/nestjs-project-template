@@ -289,9 +289,7 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
               DisabilityRetirementPlanningGrantFirstAnalysisBelowMinimumContributionItemModel.build(
                 {
                   contributionDate: new Date(item.contributionDate),
-                  contributionValue: new DecimalValue(
-                    item.contributionValue.toString(),
-                  ),
+                  contributionValue: item.contributionValue,
                 },
               ),
             ),

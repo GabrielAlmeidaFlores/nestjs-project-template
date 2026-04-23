@@ -17,8 +17,8 @@ export class DisabilityRetirementPlanningGrantFirstAnalysisBelowMinimumContribut
   @ResponseDtoDateProperty()
   public readonly contributionDate: Date;
 
-  @ResponseDtoValueObjectProperty(DecimalValue)
-  public readonly contributionValue: DecimalValue;
+  @ResponseDtoStringProperty()
+  public readonly contributionValue: string;
 
   protected override readonly _type =
     DisabilityRetirementPlanningGrantFirstAnalysisBelowMinimumContributionItemModel.name;

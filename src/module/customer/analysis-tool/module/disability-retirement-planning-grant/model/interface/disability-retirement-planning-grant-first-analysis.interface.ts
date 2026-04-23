@@ -4,7 +4,7 @@ import type { DisabilityRetirementPlanningGrantPeriodPendencyReasonEnum } from '
 
 export interface DisabilityRetirementPlanningGrantFirstAnalysisBelowMinimumContributionItemInterface {
   contributionDate: string;
-  contributionValue: number | string;
+  contributionValue: string;
 }
 
 export interface DisabilityRetirementPlanningGrantFirstAnalysisEarningsHistoryItemInterface {
