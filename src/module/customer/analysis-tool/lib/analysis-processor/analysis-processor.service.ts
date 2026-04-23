@@ -2070,6 +2070,47 @@ Análise processada do CNIS:
     );
   }
 
+  public async getAccidentAssistanceTerminatedCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getAccidentAssistanceTerminatedSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getAccidentAssistanceTerminatedDecisionDetails(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getAccidentAssistanceTerminatedDecisionDetailsJsonSchema(),
+        }),
+      }),
+    );
+  }
+
   private getSurvivorPensionAnalysisResultJsonSchema(): object {
     return {
       type: 'object',
@@ -6098,6 +6139,30 @@ Análise processada do CNIS:
         'perCapitaIncomeBelowQuarterMinimumWage',
         'ageEqualOrAbove65Years',
       ],
+    };
+  }
+
+  private getAccidentAssistanceTerminatedDecisionDetailsJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        decision: {
+          type: 'string',
+          enum: ['TERMINATED', 'MAINTAINED'],
+          description:
+            'Decisão final sobre o termo de assistência acidente: TERMINATED (termo de assistência acidente encerrado) ou MAINTAINED (termo de assistência acidente mantido).',
+        },
+        terminationJustification: {
+          type: 'string',
+          description:
+            'Justificativa detalhada para a decisão de encerramento do termo de assistência acidente, incluindo os fundamentos legais, análise dos documentos apresentados e a situação do segurado.',
+        },
+        analysis: {
+          type: 'string',
+          description:
+            'Análise detalhada do caso, considerando os critérios para encerramento do termo de assistência acidente, a situação do segurado e a aplicação da legislação pertinente. Deve conter uma avaliação dos documentos apresentados, a situação do segurado e os fundamentos legais para a decisão tomada.',
+        },
+      },
     };
   }
 }

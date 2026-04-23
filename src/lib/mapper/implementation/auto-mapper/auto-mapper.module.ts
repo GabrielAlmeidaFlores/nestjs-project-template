@@ -3,6 +3,13 @@ import { Module } from '@nestjs/common';
 
 import { AutoMapperService } from '@lib/mapper/implementation/auto-mapper/auto-mapper.service';
 import { noopStrategy } from '@lib/mapper/implementation/auto-mapper/noop-strategy';
+import { AccidentAssistanceTerminatedEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated/accident-assistance-terminated-entity.auto-mapper.profile';
+import { GetAccidentAssistanceTerminatedQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated/get-accident-assistance-terminated-query-result.auto-mapper.profile';
+import { GetAccidentAssistanceTerminatedWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated/get-accident-assistance-terminated-with-relations-query-result.auto-mapper.profile';
+import { GetAccidentAssistanceTerminatedBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-benefit/get-accident-assistance-terminated-benefit-query-result.auto-mapper.profile';
+import { GetAccidentAssistanceTerminatedDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-document/get-accident-assistance-terminated-document-query-result.auto-mapper.profile';
+import { GetAccidentAssistanceTerminatedLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-legal-proceeding/get-accident-assistance-terminated-legal-proceeding-query-result.auto-mapper.profile';
+import { GetAccidentAssistanceTerminatedResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-result/get-accident-assistance-terminated-result-query-result.auto-mapper.profile';
 import { AdminEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/admin/admin-entity.auto-mapper.profile';
 import { GetAdminQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/admin/get-admin-query-result.auto-mapper.profile';
 import { AdministrativeProcedureInssAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis-entity.auto-mapper.profile';
@@ -843,6 +850,13 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     PerCapitaIncomeForBpcAnalysisResultEntityAutoMapperProfile,
     GetPerCapitaIncomeForBpcAnalysisResultQueryResultAutoMapperProfile,
     BpcElderlyAnalysisEntityAutoMapperProfile,
+    AccidentAssistanceTerminatedEntityAutoMapperProfile,
+    GetAccidentAssistanceTerminatedQueryResultAutoMapperProfile,
+    GetAccidentAssistanceTerminatedBenefitQueryResultAutoMapperProfile,
+    GetAccidentAssistanceTerminatedDocumentQueryResultAutoMapperProfile,
+    GetAccidentAssistanceTerminatedLegalProceedingQueryResultAutoMapperProfile,
+    GetAccidentAssistanceTerminatedResultQueryResultAutoMapperProfile,
+    GetAccidentAssistanceTerminatedWithRelationsQueryResultAutoMapperProfile,
     GetBpcElderlyAnalysisQueryResultAutoMapperProfile,
     GetBpcElderlyAnalysisWithRelationsQueryResultAutoMapperProfile,
     BpcElderlyAnalysisDocumentEntityAutoMapperProfile,
