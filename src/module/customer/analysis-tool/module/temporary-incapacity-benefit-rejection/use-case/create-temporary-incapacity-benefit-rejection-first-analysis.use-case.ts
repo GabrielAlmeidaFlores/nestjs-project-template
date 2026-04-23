@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
@@ -13,17 +14,22 @@ import { CnisDocumentIsNotValidError } from '@module/customer/analysis-tool/modu
 import { TemporaryIncapacityBenefitRejectionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection/command/temporary-incapacity-benefit-rejection.command.repository.gateway';
 import { TemporaryIncapacityBenefitRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection/query/temporary-incapacity-benefit-rejection.query.repository.gateway';
 import { TemporaryIncapacityBenefitRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-result/command/temporary-incapacity-benefit-rejection-result.command.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionCategoryEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/enum/temporary-incapacity-benefit-rejection-category.enum';
 import { TemporaryIncapacityBenefitRejectionId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/value-object/temporary-incapacity-benefit-rejection-id.value-object';
 import { TemporaryIncapacityBenefitRejectionDocumentTypeEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-document/enum/temporary-incapacity-benefit-rejection-document-type.enum';
 import { TemporaryIncapacityBenefitRejectionResultEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-result/temporary-incapacity-benefit-rejection-result.entity';
 import { TemporaryIncapacityBenefitRejectionResultId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-result/value-object/temporary-incapacity-benefit-rejection-result-id.value-object';
+import { TemporaryIncapacityBenefitRejectionWorkPeriodsPendencyReasonEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-work-periods/enum/temporary-incapacity-benefit-rejection-work-periods-pendency-reason.enum';
 import { CreateTemporaryIncapacityBenefitRejectionFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/response/create-temporary-incapacity-benefit-rejection-first-analysis.response.dto';
 import { InvalidTemporaryIncapacityBenefitRejectionFirstAnalysisJsonError } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/error/invalid-temporary-incapacity-benefit-rejection-first-analysis-json.error';
 import { TemporaryIncapacityBenefitRejectionCnisDocumentNotFoundError } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/error/temporary-incapacity-benefit-rejection-cnis-document-not-found.error';
 import { TemporaryIncapacityBenefitRejectionNotFoundError } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/error/temporary-incapacity-benefit-rejection-not-found.error';
 import {
+  TemporaryIncapacityBenefitRejectionFirstAnalysisClientDataModel,
+  TemporaryIncapacityBenefitRejectionFirstAnalysisEarningsHistoryItemModel,
   TemporaryIncapacityBenefitRejectionFirstAnalysisGracePeriodItemModel,
   TemporaryIncapacityBenefitRejectionFirstAnalysisModel,
+  TemporaryIncapacityBenefitRejectionFirstAnalysisPeriodModel,
 } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/model/generic/temporary-incapacity-benefit-rejection-first-analysis.model';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
@@ -156,6 +162,11 @@ export class CreateTemporaryIncapacityBenefitRejectionFirstAnalysisUseCase {
 
     const parsedFirstAnalysis = this.parseFirstAnalysisOrThrow(
       firstAnalysisRaw ?? '',
+      {
+        gender: analysisToolClient.gender ?? null,
+        email: analysisToolClient.email?.toString() ?? null,
+        phone: analysisToolClient.phoneNumber?.toString() ?? null,
+      },
     );
 
     const resultEntity = new TemporaryIncapacityBenefitRejectionResultEntity({
@@ -202,13 +213,17 @@ export class CreateTemporaryIncapacityBenefitRejectionFirstAnalysisUseCase {
       {
         temporaryIncapacityBenefitRejectionId,
         firstAnalysis: parsedFirstAnalysis.model,
-        cnisAnalysis,
       },
     );
   }
 
   private parseFirstAnalysisOrThrow(
     rawJson: string,
+    entityClientData: {
+      gender: string | null;
+      email: string | null;
+      phone: string | null;
+    },
   ): ParsedFirstAnalysisInterface {
     try {
       let cleanedJson = rawJson;
@@ -223,9 +238,111 @@ export class CreateTemporaryIncapacityBenefitRejectionFirstAnalysisUseCase {
 
       cleanedJson = JSON.stringify(raw);
 
+      const clientData =
+        TemporaryIncapacityBenefitRejectionFirstAnalysisClientDataModel.build({
+          name: raw.clientData.name,
+          ...(this.hasValue(raw.clientData.cpf) && {
+            cpf: raw.clientData.cpf,
+          }),
+          ...(this.hasValue(raw.clientData.birthDate) && {
+            birthDate: raw.clientData.birthDate,
+          }),
+          ...(this.hasValue(raw.clientData.category) && {
+            category: raw.clientData.category,
+          }),
+          ...(this.hasValue(raw.clientData.nb) && {
+            nb: raw.clientData.nb,
+          }),
+          ...(this.hasValue(raw.clientData.judicialProcessNumber) && {
+            judicialProcessNumber: raw.clientData.judicialProcessNumber,
+          }),
+          ...(this.hasValue(raw.clientData.incapacityStartDate) && {
+            incapacityStartDate: raw.clientData.incapacityStartDate,
+          }),
+          ...(this.hasValue(entityClientData.gender) && {
+            gender: entityClientData.gender,
+          }),
+          ...(this.hasValue(entityClientData.email) && {
+            email: entityClientData.email,
+          }),
+          ...(this.hasValue(entityClientData.phone) && {
+            phone: entityClientData.phone,
+          }),
+        });
+
+      const periods = (this.hasValue(raw.periods) ? raw.periods : []).map(
+        (period) =>
+          TemporaryIncapacityBenefitRejectionFirstAnalysisPeriodModel.build({
+            startDate: period.startDate,
+            isPendency: period.isPendency,
+            competenceBelowTheMinimum: period.competenceBelowTheMinimum,
+            status: period.status,
+            ...(this.hasValue(period.bondOrigin) && {
+              bondOrigin: period.bondOrigin,
+            }),
+            ...(this.isValidEnum(
+              period.category,
+              TemporaryIncapacityBenefitRejectionCategoryEnum,
+            ) && {
+              category: period.category,
+            }),
+            ...(this.hasValue(period.activityDescription) && {
+              activityDescription: period.activityDescription,
+            }),
+            ...(this.hasValue(period.endDate) && {
+              endDate: period.endDate,
+            }),
+            ...(this.hasValue(period.impactMonths) && {
+              impactMonths: period.impactMonths,
+            }),
+            ...(this.hasValue(period.graceMonths) && {
+              graceMonths: period.graceMonths,
+            }),
+            ...(this.hasValue(period.contributionAverage) && {
+              contributionAverage: new DecimalValue(
+                period.contributionAverage.toString(),
+              ),
+            }),
+            ...(this.isValidEnum(
+              period.pendencyReason,
+              TemporaryIncapacityBenefitRejectionWorkPeriodsPendencyReasonEnum,
+            ) && {
+              pendencyReason: period.pendencyReason,
+            }),
+            ...(this.hasValue(period.periodConsideration) && {
+              periodConsideration: period.periodConsideration,
+            }),
+            ...(this.hasValue(period.wantsToComplementViaMeuINSS) && {
+              wantsToComplementViaMeuINSS: period.wantsToComplementViaMeuINSS,
+            }),
+            earningsHistory: (this.hasValue(period.earningsHistory)
+              ? period.earningsHistory
+              : []
+            ).map((eh) =>
+              TemporaryIncapacityBenefitRejectionFirstAnalysisEarningsHistoryItemModel.build(
+                {
+                  ...(this.hasValue(eh.competence) && {
+                    competence: eh.competence,
+                  }),
+                  ...(this.hasValue(eh.value) && {
+                    value: eh.value,
+                  }),
+                  ...(this.hasValue(eh.pendencyType) && {
+                    pendencyType: eh.pendencyType,
+                  }),
+                  ...(this.hasValue(eh.collectedAt) && {
+                    collectedAt: eh.collectedAt,
+                  }),
+                },
+              ),
+            ),
+          }),
+      );
+
       return {
         cleanedJson,
         model: TemporaryIncapacityBenefitRejectionFirstAnalysisModel.build({
+          clientData,
           insuredStatus: raw.insuredStatus,
           gracePeriodStatus: raw.gracePeriodStatus,
           gracePeriods: raw.gracePeriods.map((item) =>
@@ -241,17 +358,37 @@ export class CreateTemporaryIncapacityBenefitRejectionFirstAnalysisUseCase {
           graceExtensionDueToInvoluntaryUnemployment:
             raw.graceExtensionDueToInvoluntaryUnemployment,
           requestToExtendGracePeriod: raw.requestToExtendGracePeriod,
+          graceExempt: raw.graceExempt,
+          graceValidation: raw.graceValidation,
           contributionTimeWithoutResolvingPendencies:
             raw.contributionTimeWithoutResolvingPendencies,
           contributionTimeResolvingPendencies:
             raw.contributionTimeResolvingPendencies,
           contributionTimeWithAccelerators:
             raw.contributionTimeWithAccelerators,
+          periods,
         }),
       };
-    } catch {
+    } catch (error) {
+      console.error('Failed to parse first analysis JSON. Raw input:', rawJson);
+      console.error('Parse error:', error);
       throw new InvalidTemporaryIncapacityBenefitRejectionFirstAnalysisJsonError();
     }
+  }
+
+  private hasValue<T>(value: T | null | undefined): value is T {
+    return value !== null && value !== undefined;
+  }
+
+  private isValidEnum<T extends Record<string, string>>(
+    value: string | null | undefined,
+    enumType: T,
+  ): value is T[keyof T] {
+    if (!this.hasValue(value) || value === '') {
+      return false;
+    }
+
+    return Object.values(enumType).includes(value);
   }
 
   private buildRejectionDataBuffer(

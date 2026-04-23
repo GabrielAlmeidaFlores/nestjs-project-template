@@ -9,16 +9,20 @@ import type { TemporaryIncapacityBenefitRejectionWorkPeriodsPeriodConsiderationE
 import type { TemporaryIncapacityBenefitRejectionWorkPeriodsEntityPropsInterface } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-work-periods/temporary-incapacity-benefit-rejection-work-periods.entity.props.interface';
 
 export class TemporaryIncapacityBenefitRejectionWorkPeriodsEntity extends BaseEntity<TemporaryIncapacityBenefitRejectionWorkPeriodsId> {
-  public readonly bondOrigin: string;
+  public readonly bondOrigin: string | null;
   public readonly startDate: Date;
   public readonly endDate: Date | null;
-  public readonly category: TemporaryIncapacityBenefitRejectionCategoryEnum;
+  public readonly category: TemporaryIncapacityBenefitRejectionCategoryEnum | null;
+  public readonly activityDescription: string | null;
   public readonly competenceBelowTheMinimum: boolean;
   public readonly pendencyReason: TemporaryIncapacityBenefitRejectionWorkPeriodsPendencyReasonEnum | null;
   public readonly periodConsideration: TemporaryIncapacityBenefitRejectionWorkPeriodsPeriodConsiderationEnum | null;
   public readonly contributionAverage: DecimalValue | null;
+  public readonly impactMonths: number | null;
+  public readonly gracePeriod: number | null;
+  public readonly isPendency: boolean;
+  public readonly wantsToComplementViaMeuINSS: boolean | null;
   public readonly status: boolean;
-  public readonly gracePeriod: number;
   public readonly temporaryIncapacityBenefitRejectionId: TemporaryIncapacityBenefitRejectionId;
 
   protected readonly _type =
@@ -28,16 +32,21 @@ export class TemporaryIncapacityBenefitRejectionWorkPeriodsEntity extends BaseEn
     props: TemporaryIncapacityBenefitRejectionWorkPeriodsEntityPropsInterface,
   ) {
     super(TemporaryIncapacityBenefitRejectionWorkPeriodsId, props);
-    this.bondOrigin = props.bondOrigin;
+    this.bondOrigin = props.bondOrigin ?? null;
     this.startDate = props.startDate;
     this.endDate = props.endDate ?? null;
-    this.category = props.category;
+    this.category = props.category ?? null;
+    this.activityDescription = props.activityDescription ?? null;
     this.competenceBelowTheMinimum = props.competenceBelowTheMinimum;
     this.pendencyReason = props.pendencyReason ?? null;
     this.periodConsideration = props.periodConsideration ?? null;
     this.contributionAverage = props.contributionAverage ?? null;
+    this.impactMonths = props.impactMonths ?? null;
+    this.gracePeriod = props.gracePeriod ?? null;
+    this.isPendency = props.isPendency;
+    this.wantsToComplementViaMeuINSS =
+      props.wantsToComplementViaMeuINSS ?? null;
     this.status = props.status;
-    this.gracePeriod = props.gracePeriod;
     this.temporaryIncapacityBenefitRejectionId =
       props.temporaryIncapacityBenefitRejectionId;
   }

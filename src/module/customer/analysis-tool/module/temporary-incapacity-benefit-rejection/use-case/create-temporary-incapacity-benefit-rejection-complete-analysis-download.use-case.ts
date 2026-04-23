@@ -12,8 +12,6 @@ import { TemporaryIncapacityBenefitRejectionNotFoundError } from '@module/custom
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
-import type { TemporaryIncapacityBenefitRejectionResultInterface } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/model/interface/temporary-incapacity-benefit-rejection-result.interface';
-
 @Injectable()
 export class CreateTemporaryIncapacityBenefitRejectionCompleteAnalysisDownloadUseCase {
   protected readonly _type =
@@ -59,46 +57,21 @@ export class CreateTemporaryIncapacityBenefitRejectionCompleteAnalysisDownloadUs
         TemporaryIncapacityBenefitRejectionNotFoundError,
       );
 
-    const completeAnalysisJson =
-      analysisQueryResult.result?.completeAnalysis ?? null;
+    const completeAnalysisDownloadHtml =
+      analysisQueryResult.result?.completeAnalysisDownload ?? null;
 
-    if (completeAnalysisJson === null) {
+    if (completeAnalysisDownloadHtml === null) {
       throw new TemporaryIncapacityBenefitRejectionCompleteAnalysisDownloadNotFoundError();
     }
 
-    const analysisResult = this.extractAnalysisResult(completeAnalysisJson);
-
-    if (analysisResult === null) {
-      throw new TemporaryIncapacityBenefitRejectionCompleteAnalysisDownloadNotFoundError();
-    }
-
-    const htmlContent =
-      await this.exportDocumentGateway.convertMarkdownToHtml(analysisResult);
+    const htmlContent = await this.exportDocumentGateway.convertMarkdownToHtml(
+      completeAnalysisDownloadHtml,
+    );
 
     return this.exportDocumentGateway.downloadFileAsStreamable(
       htmlContent,
       format,
       'analise_completa_indeferimento_auxilio_incapacidade_temporaria',
     );
-  }
-
-  private extractAnalysisResult(raw: string): string | null {
-    try {
-      let cleanedJson = raw;
-
-      if (cleanedJson.startsWith('"') && cleanedJson.endsWith('"')) {
-        cleanedJson = JSON.parse(cleanedJson) as string;
-      }
-
-      const parsed = JSON.parse(
-        cleanedJson,
-      ) as TemporaryIncapacityBenefitRejectionResultInterface;
-
-      return typeof parsed.analysisResult === 'string'
-        ? parsed.analysisResult
-        : null;
-    } catch {
-      return null;
-    }
   }
 }

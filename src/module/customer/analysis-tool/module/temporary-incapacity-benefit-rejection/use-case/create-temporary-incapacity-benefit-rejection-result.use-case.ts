@@ -16,7 +16,13 @@ import { TemporaryIncapacityBenefitRejectionId } from '@module/customer/analysis
 import { TemporaryIncapacityBenefitRejectionDocumentTypeEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-document/enum/temporary-incapacity-benefit-rejection-document-type.enum';
 import { TemporaryIncapacityBenefitRejectionResultEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-result/temporary-incapacity-benefit-rejection-result.entity';
 import { TemporaryIncapacityBenefitRejectionResultId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-result/value-object/temporary-incapacity-benefit-rejection-result-id.value-object';
-import { CreateTemporaryIncapacityBenefitRejectionResultResponseDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/response/create-temporary-incapacity-benefit-rejection-result.response.dto';
+import {
+  CreateTemporaryIncapacityBenefitRejectionResultDisabilityAnalysisResponseDto,
+  CreateTemporaryIncapacityBenefitRejectionResultGracePeriodAnalysisResponseDto,
+  CreateTemporaryIncapacityBenefitRejectionResultInsuredStatusResponseDto,
+  CreateTemporaryIncapacityBenefitRejectionResultResponseDto,
+  CreateTemporaryIncapacityBenefitRejectionResultRetirementRuleResponseDto,
+} from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/response/create-temporary-incapacity-benefit-rejection-result.response.dto';
 import { InvalidTemporaryIncapacityBenefitRejectionResultJsonError } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/error/invalid-temporary-incapacity-benefit-rejection-result-json.error';
 import { TemporaryIncapacityBenefitRejectionCnisDocumentNotFoundError } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/error/temporary-incapacity-benefit-rejection-cnis-document-not-found.error';
 import { TemporaryIncapacityBenefitRejectionNotFoundError } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/error/temporary-incapacity-benefit-rejection-not-found.error';
@@ -27,7 +33,10 @@ import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
-import type { TemporaryIncapacityBenefitRejectionResultInterface } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/model/interface/temporary-incapacity-benefit-rejection-result.interface';
+import type {
+  TemporaryIncapacityBenefitRejectionResultInterface,
+  TemporaryIncapacityBenefitRejectionResultRetirementRuleInterface,
+} from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/model/interface/temporary-incapacity-benefit-rejection-result.interface';
 
 @Injectable()
 export class CreateTemporaryIncapacityBenefitRejectionResultUseCase {
@@ -157,7 +166,7 @@ export class CreateTemporaryIncapacityBenefitRejectionResultUseCase {
       inssDecisionAnalysis: existingResult.inssDecisionAnalysis,
       firstAnalysis: existingResult.firstAnalysis,
       completeAnalysis: completeAnalysisRaw,
-      completeAnalysisDownload: existingResult.completeAnalysisDownload,
+      completeAnalysisDownload: parsedResult.completeAnalysisDownload,
       simplifiedAnalysis: existingResult.simplifiedAnalysis,
     });
 
@@ -172,7 +181,60 @@ export class CreateTemporaryIncapacityBenefitRejectionResultUseCase {
 
     return CreateTemporaryIncapacityBenefitRejectionResultResponseDto.build({
       temporaryIncapacityBenefitRejectionId,
-      result: parsedResult.analysisResult,
+      isEligibleForTemporaryIncapacityBenefit:
+        parsedResult.isEligibleForTemporaryIncapacityBenefit,
+      gracePeriodAnalysis:
+        CreateTemporaryIncapacityBenefitRejectionResultGracePeriodAnalysisResponseDto.build(
+          {
+            totalContribution:
+              parsedResult.gracePeriodAnalysis.totalContribution,
+            minimumGracePeriodRequired:
+              parsedResult.gracePeriodAnalysis.minimumGracePeriodRequired,
+            status: parsedResult.gracePeriodAnalysis.status,
+          },
+        ),
+      insuredStatus:
+        CreateTemporaryIncapacityBenefitRejectionResultInsuredStatusResponseDto.build(
+          {
+            lastContributionDate:
+              parsedResult.insuredStatus.lastContributionDate,
+            disabilityStartDate: parsedResult.insuredStatus.disabilityStartDate,
+            gracePeriod: parsedResult.insuredStatus.gracePeriod,
+            status: parsedResult.insuredStatus.status,
+          },
+        ),
+      disabilityAnalysis:
+        CreateTemporaryIncapacityBenefitRejectionResultDisabilityAnalysisResponseDto.build(
+          {
+            informedCids: parsedResult.disabilityAnalysis.informedCids,
+            medicalDocumentsCount:
+              parsedResult.disabilityAnalysis.medicalDocumentsCount,
+            preliminaryAnalysis:
+              parsedResult.disabilityAnalysis.preliminaryAnalysis,
+          },
+        ),
+      retirementRules: parsedResult.retirementRules.map(
+        (
+          rule: TemporaryIncapacityBenefitRejectionResultRetirementRuleInterface,
+        ) =>
+          CreateTemporaryIncapacityBenefitRejectionResultRetirementRuleResponseDto.build(
+            {
+              modality: rule.modality,
+              isFulfilled: rule.isFulfilled,
+              ...(rule.retirementDate !== null && {
+                retirementDate: rule.retirementDate,
+              }),
+              ...(rule.estimatedRmi !== null && {
+                estimatedRmi: rule.estimatedRmi,
+              }),
+              ...(rule.estimatedCauseValue !== null && {
+                estimatedCauseValue: rule.estimatedCauseValue,
+              }),
+              detailedAnalysis: rule.detailedAnalysis,
+            },
+          ),
+      ),
+      analysisResult: parsedResult.analysisResult,
     });
   }
 
@@ -207,7 +269,8 @@ export class CreateTemporaryIncapacityBenefitRejectionResultUseCase {
       this.isRecord(value['insuredStatus']) &&
       this.isRecord(value['disabilityAnalysis']) &&
       Array.isArray(value['retirementRules']) &&
-      typeof value['analysisResult'] === 'string'
+      typeof value['analysisResult'] === 'string' &&
+      typeof value['completeAnalysisDownload'] === 'string'
     );
   }
 

@@ -11,8 +11,8 @@ import type { TemporaryIncapacityBenefitRejectionWorkPeriodsPeriodConsiderationE
 
 @Entity({ name: 'temporary_incapacity_benefit_rejection_work_periods' })
 export class TemporaryIncapacityBenefitRejectionWorkPeriodsTypeormEntity extends BaseTypeormEntity {
-  @Column({ name: 'bond_origin', type: 'varchar', length: 255 })
-  public bondOrigin: string;
+  @Column({ name: 'bond_origin', type: 'varchar', length: 255, nullable: true })
+  public bondOrigin: string | null;
 
   @Column({
     name: 'start_date',
@@ -29,8 +29,11 @@ export class TemporaryIncapacityBenefitRejectionWorkPeriodsTypeormEntity extends
   })
   public endDate: Date | null;
 
-  @Column({ name: 'category', type: 'varchar', length: 100 })
-  public category: TemporaryIncapacityBenefitRejectionCategoryEnum;
+  @Column({ name: 'category', type: 'varchar', length: 100, nullable: true })
+  public category: TemporaryIncapacityBenefitRejectionCategoryEnum | null;
+
+  @Column({ name: 'activity_description', type: 'text', nullable: true })
+  public activityDescription: string | null;
 
   @Column({ name: 'competence_below_the_minimum', type: 'boolean' })
   public competenceBelowTheMinimum: boolean;
@@ -60,11 +63,24 @@ export class TemporaryIncapacityBenefitRejectionWorkPeriodsTypeormEntity extends
   })
   public contributionAverage: string | null;
 
+  @Column({ name: 'impact_months', type: 'int', nullable: true })
+  public impactMonths: number | null;
+
+  @Column({ name: 'grace_period', type: 'int', nullable: true })
+  public gracePeriod: number | null;
+
+  @Column({ name: 'is_pendency', type: 'boolean' })
+  public isPendency: boolean;
+
+  @Column({
+    name: 'wants_to_complement_via_meu_inss',
+    type: 'boolean',
+    nullable: true,
+  })
+  public wantsToComplementViaMeuINSS: boolean | null;
+
   @Column({ name: 'status', type: 'boolean' })
   public status: boolean;
-
-  @Column({ name: 'grace_period', type: 'int' })
-  public gracePeriod: number;
 
   @ManyToOne(
     () => TemporaryIncapacityBenefitRejectionTypeormEntity,

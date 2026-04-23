@@ -15,12 +15,11 @@ import { CreateTemporaryIncapacityBenefitRejectionInssDecisionAnalysisUseCase } 
 import { CreateTemporaryIncapacityBenefitRejectionInsuredStatusUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/create-temporary-incapacity-benefit-rejection-insured-status.use-case';
 import { CreateTemporaryIncapacityBenefitRejectionResultUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/create-temporary-incapacity-benefit-rejection-result.use-case';
 import { CreateTemporaryIncapacityBenefitRejectionSimplifiedAnalysisDownloadUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/create-temporary-incapacity-benefit-rejection-simplified-analysis-download.use-case';
-import { CreateTemporaryIncapacityBenefitRejectionWorkPeriodsUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/create-temporary-incapacity-benefit-rejection-work-periods.use-case';
 import { CreateTemporaryIncapacityBenefitRejectionUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/create-temporary-incapacity-benefit-rejection.use-case';
 import { GetTemporaryIncapacityBenefitRejectionUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/get-temporary-incapacity-benefit-rejection.use-case';
+import { SaveTemporaryIncapacityBenefitRejectionPeriodsUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/save-temporary-incapacity-benefit-rejection-periods.use-case';
 import { UpdateTemporaryIncapacityBenefitRejectionDisabilityAnalysisUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/update-temporary-incapacity-benefit-rejection-disability-analysis.use-case';
 import { UpdateTemporaryIncapacityBenefitRejectionInsuredStatusUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/update-temporary-incapacity-benefit-rejection-insured-status.use-case';
-import { UpdateTemporaryIncapacityBenefitRejectionWorkPeriodsUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/update-temporary-incapacity-benefit-rejection-work-periods.use-case';
 import { UpdateTemporaryIncapacityBenefitRejectionUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/update-temporary-incapacity-benefit-rejection.use-case';
 import { UploadTemporaryIncapacityBenefitRejectionDocumentsUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/upload-temporary-incapacity-benefit-rejection-documents.use-case';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
@@ -53,8 +52,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     UpdateTemporaryIncapacityBenefitRejectionDisabilityAnalysisUseCase,
     CreateTemporaryIncapacityBenefitRejectionInsuredStatusUseCase,
     UpdateTemporaryIncapacityBenefitRejectionInsuredStatusUseCase,
-    CreateTemporaryIncapacityBenefitRejectionWorkPeriodsUseCase,
-    UpdateTemporaryIncapacityBenefitRejectionWorkPeriodsUseCase,
+    SaveTemporaryIncapacityBenefitRejectionPeriodsUseCase,
     CreateTemporaryIncapacityBenefitRejectionFirstAnalysisUseCase,
     CreateTemporaryIncapacityBenefitRejectionResultUseCase,
     CreateTemporaryIncapacityBenefitRejectionCompleteAnalysisDownloadUseCase,

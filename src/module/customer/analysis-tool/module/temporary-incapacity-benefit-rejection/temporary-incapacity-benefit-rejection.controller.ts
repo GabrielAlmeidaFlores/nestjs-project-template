@@ -12,11 +12,10 @@ import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/exp
 import { TemporaryIncapacityBenefitRejectionId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/value-object/temporary-incapacity-benefit-rejection-id.value-object';
 import { CreateTemporaryIncapacityBenefitRejectionDisabilityAnalysisRequestDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/request/create-temporary-incapacity-benefit-rejection-disability-analysis.request.dto';
 import { CreateTemporaryIncapacityBenefitRejectionInsuredStatusRequestDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/request/create-temporary-incapacity-benefit-rejection-insured-status.request.dto';
-import { CreateTemporaryIncapacityBenefitRejectionWorkPeriodsRequestDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/request/create-temporary-incapacity-benefit-rejection-work-periods.request.dto';
 import { CreateTemporaryIncapacityBenefitRejectionRequestDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/request/create-temporary-incapacity-benefit-rejection.request.dto';
+import { SaveTemporaryIncapacityBenefitRejectionPeriodsRequestDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/request/save-temporary-incapacity-benefit-rejection-periods.request.dto';
 import { UpdateTemporaryIncapacityBenefitRejectionDisabilityAnalysisRequestDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/request/update-temporary-incapacity-benefit-rejection-disability-analysis.request.dto';
 import { UpdateTemporaryIncapacityBenefitRejectionInsuredStatusRequestDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/request/update-temporary-incapacity-benefit-rejection-insured-status.request.dto';
-import { UpdateTemporaryIncapacityBenefitRejectionWorkPeriodsRequestDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/request/update-temporary-incapacity-benefit-rejection-work-periods.request.dto';
 import { UpdateTemporaryIncapacityBenefitRejectionRequestDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/request/update-temporary-incapacity-benefit-rejection.request.dto';
 import { UploadTemporaryIncapacityBenefitRejectionDocumentsRequestDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/request/upload-temporary-incapacity-benefit-rejection-documents.request.dto';
 import { CreateTemporaryIncapacityBenefitRejectionDisabilityAnalysisResponseDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/response/create-temporary-incapacity-benefit-rejection-disability-analysis.response.dto';
@@ -24,12 +23,11 @@ import { CreateTemporaryIncapacityBenefitRejectionFirstAnalysisResponseDto } fro
 import { CreateTemporaryIncapacityBenefitRejectionInssDecisionAnalysisResponseDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/response/create-temporary-incapacity-benefit-rejection-inss-decision-analysis.response.dto';
 import { CreateTemporaryIncapacityBenefitRejectionInsuredStatusResponseDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/response/create-temporary-incapacity-benefit-rejection-insured-status.response.dto';
 import { CreateTemporaryIncapacityBenefitRejectionResultResponseDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/response/create-temporary-incapacity-benefit-rejection-result.response.dto';
-import { CreateTemporaryIncapacityBenefitRejectionWorkPeriodsResponseDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/response/create-temporary-incapacity-benefit-rejection-work-periods.response.dto';
 import { CreateTemporaryIncapacityBenefitRejectionResponseDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/response/create-temporary-incapacity-benefit-rejection.response.dto';
 import { GetTemporaryIncapacityBenefitRejectionResponseDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/response/get-temporary-incapacity-benefit-rejection.response.dto';
+import { SaveTemporaryIncapacityBenefitRejectionPeriodsResponseDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/response/save-temporary-incapacity-benefit-rejection-periods.response.dto';
 import { UpdateTemporaryIncapacityBenefitRejectionDisabilityAnalysisResponseDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/response/update-temporary-incapacity-benefit-rejection-disability-analysis.response.dto';
 import { UpdateTemporaryIncapacityBenefitRejectionInsuredStatusResponseDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/response/update-temporary-incapacity-benefit-rejection-insured-status.response.dto';
-import { UpdateTemporaryIncapacityBenefitRejectionWorkPeriodsResponseDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/response/update-temporary-incapacity-benefit-rejection-work-periods.response.dto';
 import { UpdateTemporaryIncapacityBenefitRejectionResponseDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/response/update-temporary-incapacity-benefit-rejection.response.dto';
 import { UploadTemporaryIncapacityBenefitRejectionDocumentsResponseDto } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/response/upload-temporary-incapacity-benefit-rejection-documents.response.dto';
 import { CreateTemporaryIncapacityBenefitRejectionCompleteAnalysisDownloadUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/create-temporary-incapacity-benefit-rejection-complete-analysis-download.use-case';
@@ -39,12 +37,11 @@ import { CreateTemporaryIncapacityBenefitRejectionInssDecisionAnalysisUseCase } 
 import { CreateTemporaryIncapacityBenefitRejectionInsuredStatusUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/create-temporary-incapacity-benefit-rejection-insured-status.use-case';
 import { CreateTemporaryIncapacityBenefitRejectionResultUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/create-temporary-incapacity-benefit-rejection-result.use-case';
 import { CreateTemporaryIncapacityBenefitRejectionSimplifiedAnalysisDownloadUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/create-temporary-incapacity-benefit-rejection-simplified-analysis-download.use-case';
-import { CreateTemporaryIncapacityBenefitRejectionWorkPeriodsUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/create-temporary-incapacity-benefit-rejection-work-periods.use-case';
 import { CreateTemporaryIncapacityBenefitRejectionUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/create-temporary-incapacity-benefit-rejection.use-case';
 import { GetTemporaryIncapacityBenefitRejectionUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/get-temporary-incapacity-benefit-rejection.use-case';
+import { SaveTemporaryIncapacityBenefitRejectionPeriodsUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/save-temporary-incapacity-benefit-rejection-periods.use-case';
 import { UpdateTemporaryIncapacityBenefitRejectionDisabilityAnalysisUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/update-temporary-incapacity-benefit-rejection-disability-analysis.use-case';
 import { UpdateTemporaryIncapacityBenefitRejectionInsuredStatusUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/update-temporary-incapacity-benefit-rejection-insured-status.use-case';
-import { UpdateTemporaryIncapacityBenefitRejectionWorkPeriodsUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/update-temporary-incapacity-benefit-rejection-work-periods.use-case';
 import { UpdateTemporaryIncapacityBenefitRejectionUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/update-temporary-incapacity-benefit-rejection.use-case';
 import { UploadTemporaryIncapacityBenefitRejectionDocumentsUseCase } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/use-case/upload-temporary-incapacity-benefit-rejection-documents.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -72,8 +69,7 @@ export class TemporaryIncapacityBenefitRejectionController {
     private readonly updateTemporaryIncapacityBenefitRejectionDisabilityAnalysisUseCase: UpdateTemporaryIncapacityBenefitRejectionDisabilityAnalysisUseCase,
     private readonly createTemporaryIncapacityBenefitRejectionInsuredStatusUseCase: CreateTemporaryIncapacityBenefitRejectionInsuredStatusUseCase,
     private readonly updateTemporaryIncapacityBenefitRejectionInsuredStatusUseCase: UpdateTemporaryIncapacityBenefitRejectionInsuredStatusUseCase,
-    private readonly createTemporaryIncapacityBenefitRejectionWorkPeriodsUseCase: CreateTemporaryIncapacityBenefitRejectionWorkPeriodsUseCase,
-    private readonly updateTemporaryIncapacityBenefitRejectionWorkPeriodsUseCase: UpdateTemporaryIncapacityBenefitRejectionWorkPeriodsUseCase,
+    private readonly saveTemporaryIncapacityBenefitRejectionPeriodsUseCase: SaveTemporaryIncapacityBenefitRejectionPeriodsUseCase,
     private readonly createTemporaryIncapacityBenefitRejectionFirstAnalysisUseCase: CreateTemporaryIncapacityBenefitRejectionFirstAnalysisUseCase,
     private readonly createTemporaryIncapacityBenefitRejectionResultUseCase: CreateTemporaryIncapacityBenefitRejectionResultUseCase,
     private readonly createTemporaryIncapacityBenefitRejectionCompleteAnalysisDownloadUseCase: CreateTemporaryIncapacityBenefitRejectionCompleteAnalysisDownloadUseCase,
@@ -393,22 +389,22 @@ export class TemporaryIncapacityBenefitRejectionController {
 
   @BuildEndpointSpecification({
     summary:
-      'Criar vínculos empregatícios da análise de indeferimento de auxílio por incapacidade temporária',
+      'Salvar vínculos empregatícios da análise de indeferimento de auxílio por incapacidade temporária',
     userLevel: [UserLevelEnum.CUSTOMER, UserLevelEnum.ADMIN],
     http: {
       path: ':temporaryIncapacityBenefitRejectionId/work-periods',
       method: RequestMethod.POST,
-      type: CreateTemporaryIncapacityBenefitRejectionWorkPeriodsRequestDto,
+      type: SaveTemporaryIncapacityBenefitRejectionPeriodsRequestDto,
     },
     tag: ['auxilio-incapacidade-temporaria-indeferimento'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
-      description: 'Vínculos empregatícios criados com sucesso.',
-      type: CreateTemporaryIncapacityBenefitRejectionWorkPeriodsResponseDto,
+      description: 'Vínculos empregatícios salvos com sucesso.',
+      type: SaveTemporaryIncapacityBenefitRejectionPeriodsResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
   })
-  public async createWorkPeriods(
+  public async saveWorkPeriods(
     @GetSessionData() sessionData: SessionDataModel,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
@@ -418,46 +414,9 @@ export class TemporaryIncapacityBenefitRejectionController {
     )
     temporaryIncapacityBenefitRejectionId: TemporaryIncapacityBenefitRejectionId,
     @Body()
-    dto: CreateTemporaryIncapacityBenefitRejectionWorkPeriodsRequestDto,
-  ): Promise<CreateTemporaryIncapacityBenefitRejectionWorkPeriodsResponseDto> {
-    return await this.createTemporaryIncapacityBenefitRejectionWorkPeriodsUseCase.execute(
-      sessionData,
-      organizationSessionData,
-      temporaryIncapacityBenefitRejectionId,
-      dto,
-    );
-  }
-
-  @BuildEndpointSpecification({
-    summary:
-      'Atualizar vínculos empregatícios da análise de indeferimento de auxílio por incapacidade temporária',
-    userLevel: [UserLevelEnum.CUSTOMER, UserLevelEnum.ADMIN],
-    http: {
-      path: ':temporaryIncapacityBenefitRejectionId/work-periods',
-      method: RequestMethod.PATCH,
-      type: UpdateTemporaryIncapacityBenefitRejectionWorkPeriodsRequestDto,
-    },
-    tag: ['auxilio-incapacidade-temporaria-indeferimento'],
-    successResponse: {
-      statusCode: HttpStatus.OK,
-      description: 'Vínculos empregatícios atualizados com sucesso.',
-      type: UpdateTemporaryIncapacityBenefitRejectionWorkPeriodsResponseDto,
-    },
-    guard: [AuthGuard, OrganizationSessionGuard],
-  })
-  public async updateWorkPeriods(
-    @GetSessionData() sessionData: SessionDataModel,
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
-    @Param(
-      'temporaryIncapacityBenefitRejectionId',
-      new ParseValueObjectPipe(TemporaryIncapacityBenefitRejectionId),
-    )
-    temporaryIncapacityBenefitRejectionId: TemporaryIncapacityBenefitRejectionId,
-    @Body()
-    dto: UpdateTemporaryIncapacityBenefitRejectionWorkPeriodsRequestDto,
-  ): Promise<UpdateTemporaryIncapacityBenefitRejectionWorkPeriodsResponseDto> {
-    return await this.updateTemporaryIncapacityBenefitRejectionWorkPeriodsUseCase.execute(
+    dto: SaveTemporaryIncapacityBenefitRejectionPeriodsRequestDto,
+  ): Promise<SaveTemporaryIncapacityBenefitRejectionPeriodsResponseDto> {
+    return await this.saveTemporaryIncapacityBenefitRejectionPeriodsUseCase.execute(
       sessionData,
       organizationSessionData,
       temporaryIncapacityBenefitRejectionId,

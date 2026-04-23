@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { GetTemporaryIncapacityBenefitRejectionWithRelationsQueryResult } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection/query/result/get-temporary-incapacity-benefit-rejection-with-relations.query.result';
@@ -20,8 +21,11 @@ import {
 } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/dto/response/get-temporary-incapacity-benefit-rejection.response.dto';
 import { TemporaryIncapacityBenefitRejectionNotFoundError } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/error/temporary-incapacity-benefit-rejection-not-found.error';
 import {
+  TemporaryIncapacityBenefitRejectionFirstAnalysisClientDataModel,
+  TemporaryIncapacityBenefitRejectionFirstAnalysisEarningsHistoryItemModel,
   TemporaryIncapacityBenefitRejectionFirstAnalysisGracePeriodItemModel,
   TemporaryIncapacityBenefitRejectionFirstAnalysisModel,
+  TemporaryIncapacityBenefitRejectionFirstAnalysisPeriodModel,
 } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/model/generic/temporary-incapacity-benefit-rejection-first-analysis.model';
 
 import type { TemporaryIncapacityBenefitRejectionFirstAnalysisInterface } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/model/interface/temporary-incapacity-benefit-rejection-first-analysis.interface';
@@ -51,7 +55,10 @@ export class GetTemporaryIncapacityBenefitRejectionUseCase {
 
     const firstAnalysis =
       result.result !== null && result.result.firstAnalysis !== null
-        ? this.parseStoredFirstAnalysis(result.result.firstAnalysis)
+        ? this.parseStoredFirstAnalysis(
+            result.result.firstAnalysis,
+            result.analysisToolClient,
+          )
         : null;
 
     const completeAnalysis =
@@ -304,13 +311,129 @@ export class GetTemporaryIncapacityBenefitRejectionUseCase {
 
   private parseStoredFirstAnalysis(
     stored: string,
+    entityClientData: {
+      name: string | null;
+      email: string | null;
+      sex: string | null;
+      phone: string | null;
+    },
   ): TemporaryIncapacityBenefitRejectionFirstAnalysisModel | null {
     try {
-      const raw = JSON.parse(
-        stored,
-      ) as TemporaryIncapacityBenefitRejectionFirstAnalysisInterface;
+      const raw = JSON.parse(stored) as Omit<
+        TemporaryIncapacityBenefitRejectionFirstAnalysisInterface,
+        'clientData' | 'graceExempt' | 'graceValidation' | 'periods'
+      > & {
+        clientData?: TemporaryIncapacityBenefitRejectionFirstAnalysisInterface['clientData'];
+        graceExempt?: boolean;
+        graceValidation?: string;
+        periods?: TemporaryIncapacityBenefitRejectionFirstAnalysisInterface['periods'];
+      };
+
+      const rawClientData = raw.clientData;
+
+      const clientData =
+        TemporaryIncapacityBenefitRejectionFirstAnalysisClientDataModel.build({
+          name: rawClientData?.name ?? entityClientData.name ?? '',
+          ...(rawClientData !== undefined &&
+            this.hasValue(rawClientData.cpf) && {
+              cpf: rawClientData.cpf,
+            }),
+          ...(rawClientData !== undefined &&
+            this.hasValue(rawClientData.birthDate) && {
+              birthDate: rawClientData.birthDate,
+            }),
+          ...(rawClientData !== undefined &&
+            this.hasValue(rawClientData.category) && {
+              category: rawClientData.category,
+            }),
+          ...(rawClientData !== undefined &&
+            this.hasValue(rawClientData.nb) && {
+              nb: rawClientData.nb,
+            }),
+          ...(rawClientData !== undefined &&
+            this.hasValue(rawClientData.judicialProcessNumber) && {
+              judicialProcessNumber: rawClientData.judicialProcessNumber,
+            }),
+          ...(rawClientData !== undefined &&
+            this.hasValue(rawClientData.incapacityStartDate) && {
+              incapacityStartDate: rawClientData.incapacityStartDate,
+            }),
+          ...(this.hasValue(entityClientData.sex) && {
+            gender: entityClientData.sex,
+          }),
+          ...(this.hasValue(entityClientData.email) && {
+            email: entityClientData.email,
+          }),
+          ...(this.hasValue(entityClientData.phone) && {
+            phone: entityClientData.phone,
+          }),
+        });
+
+      const periods = (this.hasValue(raw.periods) ? raw.periods : []).map(
+        (period) =>
+          TemporaryIncapacityBenefitRejectionFirstAnalysisPeriodModel.build({
+            startDate: period.startDate,
+            isPendency: period.isPendency,
+            competenceBelowTheMinimum: period.competenceBelowTheMinimum,
+            status: period.status,
+            ...(this.hasValue(period.bondOrigin) && {
+              bondOrigin: period.bondOrigin,
+            }),
+            ...(this.hasValue(period.category) && {
+              category: period.category,
+            }),
+            ...(this.hasValue(period.activityDescription) && {
+              activityDescription: period.activityDescription,
+            }),
+            ...(this.hasValue(period.endDate) && {
+              endDate: period.endDate,
+            }),
+            ...(this.hasValue(period.impactMonths) && {
+              impactMonths: period.impactMonths,
+            }),
+            ...(this.hasValue(period.graceMonths) && {
+              graceMonths: period.graceMonths,
+            }),
+            ...(this.hasValue(period.contributionAverage) && {
+              contributionAverage: new DecimalValue(
+                period.contributionAverage.toString(),
+              ),
+            }),
+            ...(this.hasValue(period.pendencyReason) && {
+              pendencyReason: period.pendencyReason,
+            }),
+            ...(this.hasValue(period.periodConsideration) && {
+              periodConsideration: period.periodConsideration,
+            }),
+            ...(this.hasValue(period.wantsToComplementViaMeuINSS) && {
+              wantsToComplementViaMeuINSS: period.wantsToComplementViaMeuINSS,
+            }),
+            earningsHistory: (this.hasValue(period.earningsHistory)
+              ? period.earningsHistory
+              : []
+            ).map((eh) =>
+              TemporaryIncapacityBenefitRejectionFirstAnalysisEarningsHistoryItemModel.build(
+                {
+                  ...(this.hasValue(eh.competence) && {
+                    competence: eh.competence,
+                  }),
+                  ...(this.hasValue(eh.value) && {
+                    value: eh.value,
+                  }),
+                  ...(this.hasValue(eh.pendencyType) && {
+                    pendencyType: eh.pendencyType,
+                  }),
+                  ...(this.hasValue(eh.collectedAt) && {
+                    collectedAt: eh.collectedAt,
+                  }),
+                },
+              ),
+            ),
+          }),
+      );
 
       return TemporaryIncapacityBenefitRejectionFirstAnalysisModel.build({
+        clientData,
         insuredStatus: raw.insuredStatus,
         gracePeriodStatus: raw.gracePeriodStatus,
         gracePeriods: raw.gracePeriods.map((item) =>
@@ -326,15 +449,22 @@ export class GetTemporaryIncapacityBenefitRejectionUseCase {
         graceExtensionDueToInvoluntaryUnemployment:
           raw.graceExtensionDueToInvoluntaryUnemployment,
         requestToExtendGracePeriod: raw.requestToExtendGracePeriod,
+        graceExempt: raw.graceExempt ?? false,
+        graceValidation: raw.graceValidation ?? '',
         contributionTimeWithoutResolvingPendencies:
           raw.contributionTimeWithoutResolvingPendencies,
         contributionTimeResolvingPendencies:
           raw.contributionTimeResolvingPendencies,
         contributionTimeWithAccelerators: raw.contributionTimeWithAccelerators,
+        periods,
       });
     } catch {
       return null;
     }
+  }
+
+  private hasValue<T>(value: T | null | undefined): value is T {
+    return value !== null && value !== undefined;
   }
 
   private parseStoredCompleteAnalysis(
