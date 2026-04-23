@@ -25,5 +25,6 @@ export enum AnalysisToolRecordTypeEnum {
   SURVIVOR_PENSION_ANALYSIS = 'pensao_por_morte',
   GENERAL_URBAN_RETIREMENT_DENIAL = 'indeferimento_aposentadoria_urbana_geral',
   DISABILITY_RETIREMENT_PLANNING_REJECTION = 'indeferimento_aposentadoria_para_deficiente',
+  BPC_DISABILITY_DENIAL = 'indeferimento_bpc_deficiente',
   BPC_ELDERLY_ANALYSIS = 'bpc_ao_idoso',
 }

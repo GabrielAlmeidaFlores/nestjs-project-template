@@ -107,6 +107,7 @@ export class ListAnalysisToolRecordUseCase {
             analysisToolRecord.specialRetirementGrant ??
             analysisToolRecord.generalUrbanRetirementDenial ??
             analysisToolRecord.disabilityRetirementPlanningRejection ??
+            analysisToolRecord.bpcDisabilityDenial ??
             analysisToolRecord.deathBenefitGrant ??
             analysisToolRecord.bpcElderlyAnalysis;
 

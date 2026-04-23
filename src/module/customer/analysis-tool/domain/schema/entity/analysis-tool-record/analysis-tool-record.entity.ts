@@ -7,6 +7,7 @@ import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/sc
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
 import { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
+import { BpcDisabilityDenialEntity } from '@module/customer/analysis-tool/module/bpc-disability-denial/domain/schema/entity/bpc-disability-denial/bpc-disability-denial.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { DeathBenefitGrantEntity } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant/death-benefit-grant.entity';
 import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.entity';
@@ -177,6 +178,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly disabilityRetirementPlanningRejection: DisabilityRetirementPlanningRejectionEntity | null;
 
   @Description(
+    'Análise de indeferimento de BPC Pessoa com Deficiência associada ao registro da ferramenta de análise',
+  )
+  public readonly bpcDisabilityDenial: BpcDisabilityDenialEntity | null;
+
+  @Description(
     'Análise de BPC ao Idoso associada ao registro da ferramenta de análise',
   )
   public readonly bpcElderlyAnalysis: BpcElderlyAnalysisEntity | null;
@@ -241,6 +247,7 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
       props.generalUrbanRetirementDenial ?? null;
     this.disabilityRetirementPlanningRejection =
       props.disabilityRetirementPlanningRejection ?? null;
+    this.bpcDisabilityDenial = props.bpcDisabilityDenial ?? null;
     this.bpcElderlyAnalysis = props.bpcElderlyAnalysis ?? null;
     this.status = props.status;
     this.analysisToolClient = props.analysisToolClient;

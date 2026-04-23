@@ -1423,6 +1423,42 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise simplificada do direito ao BPC/LOAS para idosos com IA. Verifica critério de idade (65 anos), calcula renda per capita familiar e compara com o limite legal de 1/4 do salário mínimo, informando de forma objetiva sobre a elegibilidade. Versão resumida e acessível para apresentação ao cliente.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c3e4f5a6-d7b8-4c9d-8e1f-2a3b4c5d6e7f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_DISABILITY_DENIAL_INSS_DECISION_ANALYSIS,
+      creditCost: 4,
+      title: 'INDEFERIMENTO BPC PCD - ANÁLISE DA DECISÃO INSS',
+      description:
+        'Análise da carta de indeferimento e documentos do processo administrativo do BPC para pessoa com deficiência. Identifica fundamentos legais da negativa, verifica erros na avaliação do grau de deficiência ou na apuração da renda familiar, aponta irregularidades processuais e recomenda estratégia de reversão (recurso ao CRPS, ação judicial ou novo requerimento).',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d4f5a6b7-e8c9-4d0e-9f2a-3b4c5d6e7f8a'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_DISABILITY_DENIAL_FIRST_ANALYSIS,
+      creditCost: 3,
+      title: 'INDEFERIMENTO BPC PCD - PRIMEIRA ANÁLISE',
+      description:
+        'Primeira análise técnica do caso de indeferimento do BPC para pessoa com deficiência. Cruza dados de composição familiar, renda per capita e grau de deficiência com os requisitos legais, identifica pontos de fortalecimento e lacunas, e aponta viabilidade preliminar da reversão do indeferimento.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e5a6b7c8-f9d0-4e1f-a23b-4c5d6e7f8a9b'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_DISABILITY_DENIAL_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title: 'INDEFERIMENTO BPC PCD - ANÁLISE COMPLETA',
+      description:
+        'Análise completa do indeferimento do BPC para pessoa com deficiência com IA. Examina critério de deficiência (perícia biopsicossocial), critério de renda familiar per capita, composição do grupo familiar, rendas e benefícios de cada membro, despesas dedutíveis, analisa os fundamentos do indeferimento e emite parecer técnico conclusivo com recomendação de estratégia de reversão fundamentada em lei e jurisprudência.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f6b7c8d9-a0e1-4f2a-b34c-5d6e7f8a9b0c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_DISABILITY_DENIAL_SIMPLIFIED_ANALYSIS,
+      creditCost: 2,
+      title: 'INDEFERIMENTO BPC PCD - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada do indeferimento do BPC para pessoa com deficiência com IA. Verifica critério de deficiência e critério de renda familiar per capita, informa de forma objetiva e acessível sobre a possibilidade de reversão do indeferimento. Versão resumida para apresentação ao cliente ou familiar.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {
