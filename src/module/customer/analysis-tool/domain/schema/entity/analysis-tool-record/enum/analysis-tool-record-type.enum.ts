@@ -25,6 +25,7 @@ export enum AnalysisToolRecordTypeEnum {
   TEMPORARY_DISABILITY_BENEFITS_GRANT = 'auxilio_incapacidade_temporaria',
   SURVIVOR_PENSION_ANALYSIS = 'pensao_por_morte',
   GENERAL_URBAN_RETIREMENT_DENIAL = 'indeferimento_aposentadoria_urbana_geral',
+  ACCIDENT_BENEFIT_REJECTION = 'indeferimento_acidente',
   DISABILITY_RETIREMENT_PLANNING_REJECTION = 'indeferimento_aposentadoria_para_deficiente',
   BPC_ELDERLY_ANALYSIS = 'bpc_ao_idoso',
 }

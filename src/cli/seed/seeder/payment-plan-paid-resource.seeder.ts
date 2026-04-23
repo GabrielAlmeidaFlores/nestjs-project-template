@@ -1398,6 +1398,42 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Comparação inteligente entre vínculos do CNIS e anotações da CTPS com IA para indeferimento de aposentadoria urbana comum. Identifica períodos divergentes, vínculos omissos no CNIS, inconsistências de datas e dados, gerando relatório de períodos que podem ser reconhecidos judicialmente ou administrativamente para reverter o indeferimento.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('65805ba8-5e45-4d7c-b6db-289dd8e0e466'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_BENEFIT_REJECTION_FIRST_ANALYSIS,
+      creditCost: 5,
+      title: 'INDEFERIMENTO DE AUXÍLIO-ACIDENTE - PRIMEIRO STEP',
+      description:
+        'Primeira análise técnica de indeferimento de auxílio-acidente com IA, combinando a leitura do CNIS já processado com os dados estruturados do caso e a documentação médica apresentada. Verifica manutenção da qualidade de segurado, presença de sequelas permanentes e compatibilidade inicial entre o acidente e a redução funcional alegada.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f86f4652-16ed-4712-a33e-9c10e6ee153c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_BENEFIT_REJECTION_SECOND_ANALYSIS,
+      creditCost: 5,
+      title: 'INDEFERIMENTO DE AUXÍLIO-ACIDENTE - SEGUNDO STEP',
+      description:
+        'Segunda análise técnica de indeferimento de auxílio-acidente com IA, aprofundando o exame médico-jurídico do caso. Avalia sequelas consolidadas, redução da capacidade laborativa, coerência entre os documentos clínicos e o histórico do acidente, além de indicar riscos probatórios e estratégia inicial de reversão.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a14bb96d-586f-46b0-b0f3-7362d934ee7c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_BENEFIT_REJECTION_COMPLETE_ANALYSIS,
+      creditCost: 8,
+      title: 'INDEFERIMENTO DE AUXÍLIO-ACIDENTE - ANÁLISE COMPLETA',
+      description:
+        'Análise completa de indeferimento de auxílio-acidente com IA. Consolida os dados previdenciários, a documentação médica e ocupacional e as conclusões preliminares para gerar parecer técnico final com impacto previdenciário, avaliação estratégica e estudo das regras de aposentadoria potencialmente afetadas pelo reconhecimento do benefício.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('7fa941ec-a60f-4338-9b24-c4cf8db34c02'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_BENEFIT_REJECTION_SIMPLIFIED_ANALYSIS,
+      creditCost: 3,
+      title: 'INDEFERIMENTO DE AUXÍLIO-ACIDENTE - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada de indeferimento de auxílio-acidente com IA. Resume de forma clara os achados centrais da análise completa, a viabilidade do caso, os principais riscos e os próximos passos recomendados para apresentação ao cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('da60c3bc-c91d-4332-aae2-b3f30d1de126'),
       resource:
         PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION_COMPLETE_ANALYSIS,
