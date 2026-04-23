@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 
+import { AccidentAssistanceTerminatedTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated.entity';
 import { AdministrativeProcedureInssAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis.entity';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator.typeorm.entity';
@@ -282,6 +283,14 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   )
   @JoinColumn({ name: 'bpc_elderly_analysis_id' })
   public bpcElderlyAnalysis?: BpcElderlyAnalysisTypeormEntity | null;
+
+  @OneToOne(
+    () => AccidentAssistanceTerminatedTypeormEntity,
+    (entity) => entity.analysisToolRecord,
+    { nullable: true },
+  )
+  @JoinColumn({ name: 'accident_assistance_terminated_id' })
+  public accidentAssistanceTerminated?: AccidentAssistanceTerminatedTypeormEntity | null;
 
   @ManyToOne(
     () => AnalysisToolClientTypeormEntity,

@@ -7,6 +7,7 @@ import type { AnalysisToolRecordCode } from '@module/customer/analysis-tool/doma
 import type { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import type { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
 import type { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
+import type { AccidentAssistanceTerminatedEntity } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated/accident-assistance-terminated.entity';
 import type { BpcElderlyAnalysisEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/bpc-elderly-analysis.entity';
 import type { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import type { DeathBenefitGrantEntity } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant/death-benefit-grant.entity';
@@ -65,6 +66,7 @@ export interface AnalysisToolRecordEntityPropsInterface extends BaseEntityPropsI
   deathBenefitRejection?: DeathBenefitRejectionEntity | null;
   specialRetirementGrant?: SpecialRetirementGrantEntity | null;
   bpcElderlyAnalysis?: BpcElderlyAnalysisEntity | null;
+  accidentAssistanceTerminated?: AccidentAssistanceTerminatedEntity | null;
   status: AnalysisStatusEnum;
   analysisToolClient: AnalysisToolClientEntity;
   createdBy: OrganizationMemberId;

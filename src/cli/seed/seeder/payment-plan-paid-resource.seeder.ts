@@ -1533,6 +1533,24 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise simplificada do direito ao BPC/LOAS para idosos com IA. Verifica critério de idade (65 anos), calcula renda per capita familiar e compara com o limite legal de 1/4 do salário mínimo, informando de forma objetiva sobre a elegibilidade. Versão resumida e acessível para apresentação ao cliente.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c3e4f5a6-d7b8-4c9d-0e1f-2a3b4c5d6e7f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_ASSISTANCE_TERMINATED_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title: 'DIAGNÓSTICO AUXÍLIO-ACIDENTE (RGPS) - ANÁLISE COMPLETA',
+      description:
+        'Análise completa do direito ao auxílio-acidente cessado com IA. Examina documentos do procedimento administrativo, CNIS, laudos médicos e histórico previdenciário para identificar irregularidades na cessação do benefício, verificar nexo causal com acidente de trabalho, calcular redução da capacidade laborativa e emitir parecer técnico conclusivo com fundamentação legal e jurisprudencial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d4f5a6b7-e8c9-4d0e-1f2a-3b4c5d6e7f8a'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_ASSISTANCE_TERMINATED_SIMPLIFIED_ANALYSIS,
+      creditCost: 2,
+      title: 'DIAGNÓSTICO AUXÍLIO-ACIDENTE (RGPS) - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada do direito ao auxílio-acidente cessado com IA. Verifica os principais critérios para concessão ou restabelecimento do benefício, identifica irregularidades na cessação e apresenta de forma objetiva as possibilidades de revisão ou recurso. Versão resumida e acessível para apresentação ao cliente.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {

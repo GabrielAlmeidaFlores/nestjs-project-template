@@ -1,5 +1,11 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { AccidentAssistanceTerminatedTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated/accident-assistance-terminated.typeorm.command.repository';
+import { AccidentAssistanceTerminatedTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated/accident-assistance-terminated.typeorm.query.repository';
+import { AccidentAssistanceTerminatedBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated-benefit/accident-assistance-terminated-benefit.typeorm.command.repository';
+import { AccidentAssistanceTerminatedDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated-document/accident-assistance-terminated-document.typeorm.command.repository';
+import { AccidentAssistanceTerminatedLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated-legal-proceeding/accident-assistance-terminated-legal-proceeding.typeorm.command.repository';
+import { AccidentAssistanceTerminatedResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated-result/accident-assistance-terminated-result.typeorm.command.repository';
 import { AdminTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/admin/admin.typeorm.command.repository';
 import { AdminTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/admin/admin.typeorm.query.repository';
 import { AdministrativeProcedureInssAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.typeorm.command.repository';
@@ -358,6 +364,11 @@ import { TemporaryDisabilityBenefitsGrantWorkPeriodsTypeormQueryRepository } fro
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-work-periods-earnings-history/temporary-disability-benefits-grant-work-periods-earnings-history.typeorm.command.repository';
 import { TutorialTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/tutorial/tutorial.typeorm.command.repository';
 import { TutorialTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/tutorial/tutorial.typeorm.query.repository';
+import { AccidentAssistanceTerminatedBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-benefit.entity';
+import { AccidentAssistanceTerminatedDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-document.entity';
+import { AccidentAssistanceTerminatedLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-legal-proceeding.entity';
+import { AccidentAssistanceTerminatedResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-result.entity';
+import { AccidentAssistanceTerminatedTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated.entity';
 import { AdminTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/admin.typeorm.entity';
 import { AdministrativeProcedureInssAnalysisBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis-benefit.entity';
 import { AdministrativeProcedureInssAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis-document.entity';
@@ -957,6 +968,11 @@ export class TypeormIndex {
     BpcElderlyAnalysisResultTypeormEntity,
     BpcElderlyAnalysisInssBenefitTypeormEntity,
     BpcElderlyAnalysisLegalProceedingTypeormEntity,
+    AccidentAssistanceTerminatedTypeormEntity,
+    AccidentAssistanceTerminatedBenefitTypeormEntity,
+    AccidentAssistanceTerminatedDocumentTypeormEntity,
+    AccidentAssistanceTerminatedLegalProceedingTypeormEntity,
+    AccidentAssistanceTerminatedResultTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [
@@ -971,6 +987,12 @@ export class TypeormIndex {
     AudienceQuestionGeneratorResultTypeormCommandRepository,
     AdministrativeProcedureInssAnalysisTypeormCommandRepository,
     AdministrativeProcedureInssAnalysisTypeormQueryRepository,
+    AccidentAssistanceTerminatedTypeormCommandRepository,
+    AccidentAssistanceTerminatedTypeormQueryRepository,
+    AccidentAssistanceTerminatedBenefitTypeormCommandRepository,
+    AccidentAssistanceTerminatedDocumentTypeormCommandRepository,
+    AccidentAssistanceTerminatedLegalProceedingTypeormCommandRepository,
+    AccidentAssistanceTerminatedResultTypeormCommandRepository,
     DisabilityAssessmentForBpcAnalysisTypeormCommandRepository,
     DisabilityAssessmentForBpcAnalysisTypeormQueryRepository,
     DisabilityAssessmentForBpcAnalysisBenefitTypeormCommandRepository,

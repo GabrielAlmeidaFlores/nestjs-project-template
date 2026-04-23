@@ -2,6 +2,7 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { AccidentAssistanceTerminatedTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated.entity';
 import { AdministrativeProcedureInssAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis.entity';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
@@ -39,6 +40,7 @@ import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
+import { AccidentAssistanceTerminatedEntity } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated/accident-assistance-terminated.entity';
 import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
 import { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
 import { BpcElderlyAnalysisEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/bpc-elderly-analysis.entity';
@@ -216,6 +218,16 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const accidentAssistanceTerminated =
+        source.accidentAssistanceTerminated !== null &&
+        source.accidentAssistanceTerminated !== undefined
+          ? this.mapper.map(
+              source.accidentAssistanceTerminated,
+              AccidentAssistanceTerminatedTypeormEntity,
+              AccidentAssistanceTerminatedEntity,
+            )
+          : null;
+
       const specialActivity =
         source.specialActivity !== null
           ? this.mapper.map(
@@ -360,6 +372,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         audienceQuestionGenerator,
         perCapitaIncomeForBpcAnalysis,
         bpcElderlyAnalysis,
+        accidentAssistanceTerminated,
         ruralTimelineAnalysis,
         insuranceQualityAnalysis,
         disabilityRetirementPlanning,
@@ -525,6 +538,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const accidentAssistanceTerminated =
+        source.accidentAssistanceTerminated !== null
+          ? this.mapper.map(
+              source.accidentAssistanceTerminated,
+              AccidentAssistanceTerminatedEntity,
+              AccidentAssistanceTerminatedTypeormEntity,
+            )
+          : null;
+
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         AnalysisToolClientEntity,
@@ -655,6 +677,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         disabilityAssessmentForBpcAnalysis,
         perCapitaIncomeForBpcAnalysis,
         bpcElderlyAnalysis,
+        accidentAssistanceTerminated,
         ruralTimeline,
         insuranceQualityAnalysis,
         teacherRetirementPlanning,

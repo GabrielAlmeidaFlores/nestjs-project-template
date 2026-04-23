@@ -64,6 +64,8 @@ export class AnalysisActivityMessageFactory {
       'Indeferimento de aposentadoria para deficiente',
     [AnalysisToolRecordTypeEnum.BPC_ELDERLY_ANALYSIS]:
       'Análise de BPC ao Idoso',
+    [AnalysisToolRecordTypeEnum.ACCIDENT_ASSISTANCE_TERMINATED]:
+      'Auxílio-acidente cessado',
   };
 
   private static readonly actionLabelMap: Record<
