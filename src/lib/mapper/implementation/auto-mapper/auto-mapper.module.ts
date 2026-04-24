@@ -64,6 +64,21 @@ import { BankPaymentEntityAutoMapperProfile } from '@lib/mapper/implementation/a
 import { GetBankPaymentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bank-payment/get-bank-payment-query-result.auto-mapper.profile';
 import { BankTransferEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bank-transfer/bank-transfer-entity.auto-mapper.profile';
 import { GetBankTransferQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bank-transfer/get-bank-transfer-query-result.auto-mapper.profile';
+import { BpcDisabilityDenialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-denial/bpc-disability-denial-entity.auto-mapper.profile';
+import { GetBpcDisabilityDenialQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-denial/get-bpc-disability-denial-query-result.auto-mapper.profile';
+import { GetBpcDisabilityDenialWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-denial/get-bpc-disability-denial-with-relations-query-result.auto-mapper.profile';
+import { BpcDisabilityDenialDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-denial-document/bpc-disability-denial-document-entity.auto-mapper.profile';
+import { GetBpcDisabilityDenialDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-denial-document/get-bpc-disability-denial-document-query-result.auto-mapper.profile';
+import { BpcDisabilityDenialFamilyMemberEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-denial-family-member/bpc-disability-denial-family-member-entity.auto-mapper.profile';
+import { GetBpcDisabilityDenialFamilyMemberQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-denial-family-member/get-bpc-disability-denial-family-member-query-result.auto-mapper.profile';
+import { BpcDisabilityDenialFamilyMemberDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-denial-family-member-document/bpc-disability-denial-family-member-document-entity.auto-mapper.profile';
+import { GetBpcDisabilityDenialFamilyMemberDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-denial-family-member-document/get-bpc-disability-denial-family-member-document-query-result.auto-mapper.profile';
+import { BpcDisabilityDenialInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-denial-inss-benefit/bpc-disability-denial-inss-benefit-entity.auto-mapper.profile';
+import { GetBpcDisabilityDenialInssBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-denial-inss-benefit/get-bpc-disability-denial-inss-benefit-query-result.auto-mapper.profile';
+import { BpcDisabilityDenialLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-denial-legal-proceeding/bpc-disability-denial-legal-proceeding-entity.auto-mapper.profile';
+import { GetBpcDisabilityDenialLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-denial-legal-proceeding/get-bpc-disability-denial-legal-proceeding-query-result.auto-mapper.profile';
+import { BpcDisabilityDenialResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-denial-result/bpc-disability-denial-result-entity.auto-mapper.profile';
+import { GetBpcDisabilityDenialResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-denial-result/get-bpc-disability-denial-result-query-result.auto-mapper.profile';
 import { BpcElderlyAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis/bpc-elderly-analysis-entity.auto-mapper.profile';
 import { GetBpcElderlyAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis/get-bpc-elderly-analysis-query-result.auto-mapper.profile';
 import { GetBpcElderlyAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis/get-bpc-elderly-analysis-with-relations-query-result.auto-mapper.profile';
@@ -897,6 +912,21 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     PerCapitaIncomeForBpcAnalysisLegalProceedingEntityAutoMapperProfile,
     PerCapitaIncomeForBpcAnalysisResultEntityAutoMapperProfile,
     GetPerCapitaIncomeForBpcAnalysisResultQueryResultAutoMapperProfile,
+    BpcDisabilityDenialEntityAutoMapperProfile,
+    GetBpcDisabilityDenialQueryResultAutoMapperProfile,
+    GetBpcDisabilityDenialWithRelationsQueryResultAutoMapperProfile,
+    BpcDisabilityDenialDocumentEntityAutoMapperProfile,
+    GetBpcDisabilityDenialDocumentQueryResultAutoMapperProfile,
+    BpcDisabilityDenialResultEntityAutoMapperProfile,
+    GetBpcDisabilityDenialResultQueryResultAutoMapperProfile,
+    BpcDisabilityDenialInssBenefitEntityAutoMapperProfile,
+    GetBpcDisabilityDenialInssBenefitQueryResultAutoMapperProfile,
+    BpcDisabilityDenialLegalProceedingEntityAutoMapperProfile,
+    GetBpcDisabilityDenialLegalProceedingQueryResultAutoMapperProfile,
+    BpcDisabilityDenialFamilyMemberEntityAutoMapperProfile,
+    GetBpcDisabilityDenialFamilyMemberQueryResultAutoMapperProfile,
+    BpcDisabilityDenialFamilyMemberDocumentEntityAutoMapperProfile,
+    GetBpcDisabilityDenialFamilyMemberDocumentQueryResultAutoMapperProfile,
     BpcElderlyAnalysisEntityAutoMapperProfile,
     GetBpcElderlyAnalysisQueryResultAutoMapperProfile,
     GetBpcElderlyAnalysisWithRelationsQueryResultAutoMapperProfile,
