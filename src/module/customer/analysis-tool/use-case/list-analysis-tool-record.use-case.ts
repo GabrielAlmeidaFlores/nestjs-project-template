@@ -96,6 +96,7 @@ export class ListAnalysisToolRecordUseCase {
             analysisToolRecord.medicalAndSocialReportObjectionGeneratorAnalysis ??
             analysisToolRecord.specialActivity ??
             analysisToolRecord.disabilityAssessmentForBpcAnalysis ??
+            analysisToolRecord.ruralOrHybridRetirementRejection ??
             analysisToolRecord.ruralTimelineAnalysis ??
             analysisToolRecord.speechGenerator ??
             analysisToolRecord.medicalQuestionGenerator ??
@@ -105,20 +106,18 @@ export class ListAnalysisToolRecordUseCase {
             analysisToolRecord.audienceQuestionGenerator ??
             analysisToolRecord.survivorPensionAnalysis ??
             analysisToolRecord.specialRetirementGrant ??
+            analysisToolRecord.maternityPayGrant ??
+            analysisToolRecord.deathBenefitGrant ??
             analysisToolRecord.generalUrbanRetirementDenial ??
             analysisToolRecord.disabilityRetirementPlanningRejection ??
+            analysisToolRecord.bpcDisabilityDenial ??
             analysisToolRecord.deathBenefitGrant ??
+            analysisToolRecord.temporaryIncapacityBenefitRejection ??
             analysisToolRecord.deathBenefitRejection ??
             analysisToolRecord.bpcElderlyAnalysis ??
             analysisToolRecord.accidentAssistanceTerminated;
 
-          const analysisId =
-            analysis?.id ??
-            analysisToolRecord.specialCategoryRetirementAnalysis
-              ?.specialCategoryRetirementAnalysisId ??
-            analysisToolRecord.temporaryDisabilityBenefitsGrant
-              ?.temporaryDisabilityBenefitsGrantId ??
-            null;
+          const analysisId = analysis?.id ?? null;
 
           if (analysisId === null) {
             return null;

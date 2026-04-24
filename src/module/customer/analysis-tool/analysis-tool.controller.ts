@@ -205,7 +205,7 @@ export class AnalysisToolController {
     summary: 'Atualizar cliente da análise',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: ':analysisToolClientId',
+      path: 'analysis-tool-client/:analysisToolClientId',
       method: RequestMethod.PATCH,
       type: UpdateAnalysisToolClientRequestDto,
     },

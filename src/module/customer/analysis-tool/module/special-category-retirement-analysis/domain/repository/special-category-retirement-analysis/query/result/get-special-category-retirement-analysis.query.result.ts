@@ -3,7 +3,7 @@ import type { RetirementAnalysisObjectiveTypeEnum } from '@module/customer/analy
 import type { SpecialCategoryRetirementAnalysisId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/value-object/special-category-retirement-analysis-id/special-category-retirement-analysis-id.value-object';
 
 export class GetSpecialCategoryRetirementAnalysisQueryResult {
-  public readonly specialCategoryRetirementAnalysisId: SpecialCategoryRetirementAnalysisId;
+  public readonly id: SpecialCategoryRetirementAnalysisId;
   public readonly analysisToolClientId: AnalysisToolClientId | null;
   public readonly analysisCustomName: string | null;
   public readonly retirementAnalysisObjectiveType: RetirementAnalysisObjectiveTypeEnum | null;

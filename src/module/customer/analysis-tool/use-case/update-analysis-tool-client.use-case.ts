@@ -114,6 +114,8 @@ export class UpdateAnalysisToolClientUseCase {
       email: dto.email ?? analysisToolClientQueryResult.email,
       corporateEmail:
         dto.corporateEmail ?? analysisToolClientQueryResult.corporateEmail,
+      inssPassword:
+        dto.inssPassword ?? analysisToolClientQueryResult.inssPassword,
       phoneNumber: dto.phoneNumber ?? analysisToolClientQueryResult.phoneNumber,
       clientType: dto.clientType ?? analysisToolClientQueryResult.clientType,
       createdAt: analysisToolClientQueryResult.createdAt,
