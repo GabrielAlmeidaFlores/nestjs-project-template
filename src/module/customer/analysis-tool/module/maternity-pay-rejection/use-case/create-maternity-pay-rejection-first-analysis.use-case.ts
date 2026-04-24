@@ -223,25 +223,27 @@ export class CreateMaternityPayRejectionFirstAnalysisUseCase {
         endOfGracePeriod: parsed.gracePeriod.endOfGracePeriod,
       });
 
-      const benefitInformation = MaternityPayRejectionBenefitInformationModel.build({
-        situation: parsed.benefitInformation.situation,
-        duration: parsed.benefitInformation.duration,
-        startDate: parsed.benefitInformation.startDate,
-        concessionDate: parsed.benefitInformation.concessionDate,
-        startOfTheLeave: parsed.benefitInformation.startOfTheLeave,
-        endOfTheLeave: parsed.benefitInformation.endOfTheLeave,
-        totalLeaveDuration: parsed.benefitInformation.totalLeaveDuration,
-        amountBenefit: parsed.benefitInformation.amountBenefit,
-        calculationBasis: parsed.benefitInformation.calculationBasis,
-      });
+      const benefitInformation =
+        MaternityPayRejectionBenefitInformationModel.build({
+          situation: parsed.benefitInformation.situation,
+          duration: parsed.benefitInformation.duration,
+          startDate: parsed.benefitInformation.startDate,
+          concessionDate: parsed.benefitInformation.concessionDate,
+          startOfTheLeave: parsed.benefitInformation.startOfTheLeave,
+          endOfTheLeave: parsed.benefitInformation.endOfTheLeave,
+          totalLeaveDuration: parsed.benefitInformation.totalLeaveDuration,
+          amountBenefit: parsed.benefitInformation.amountBenefit,
+          calculationBasis: parsed.benefitInformation.calculationBasis,
+        });
 
-      const requirementDeadline = MaternityPayRejectionRequirementDeadlineModel.build({
-        triggeringEventDate: parsed.requirementDeadline.triggeringEventDate,
-        requirementDate: parsed.requirementDeadline.requirementDate,
-        statuoryDeadline: parsed.requirementDeadline.statuoryDeadline,
-        details: parsed.requirementDeadline.details,
-        justification: parsed.requirementDeadline.justification,
-      });
+      const requirementDeadline =
+        MaternityPayRejectionRequirementDeadlineModel.build({
+          triggeringEventDate: parsed.requirementDeadline.triggeringEventDate,
+          requirementDate: parsed.requirementDeadline.requirementDate,
+          statuoryDeadline: parsed.requirementDeadline.statuoryDeadline,
+          details: parsed.requirementDeadline.details,
+          justification: parsed.requirementDeadline.justification,
+        });
 
       const model = MaternityPayRejectionFirstAnalysisModel.build({
         insuredStatusManteined: parsed.insuredStatusManteined,

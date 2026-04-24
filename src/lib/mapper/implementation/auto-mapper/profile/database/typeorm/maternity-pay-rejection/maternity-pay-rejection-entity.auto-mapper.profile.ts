@@ -67,9 +67,10 @@ export class MaternityPayRejectionEntityAutoMapperProfile {
         category: source.category,
         triggeringEventDate: source.triggeringEventDate,
         ...(source.maternityPayRejectionResultId !== null && {
-          maternityPayRejectionResult: MaternityPayRejectionResultTypeormEntity.build({
-            id: source.maternityPayRejectionResultId.toString(),
-          } as MaternityPayRejectionResultTypeormEntity),
+          maternityPayRejectionResult:
+            MaternityPayRejectionResultTypeormEntity.build({
+              id: source.maternityPayRejectionResultId.toString(),
+            } as MaternityPayRejectionResultTypeormEntity),
         }),
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
