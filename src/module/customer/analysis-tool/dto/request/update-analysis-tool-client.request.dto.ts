@@ -24,6 +24,9 @@ export class UpdateAnalysisToolClientRequestDto extends BaseBuildableDtoObject {
   @RequestDtoValueObjectProperty(Email, { required: false })
   public corporateEmail?: Email;
 
+  @RequestDtoStringProperty({ required: false })
+  public inssPassword?: string;
+
   @RequestDtoValueObjectProperty(PhoneNumber, { required: false })
   public phoneNumber?: PhoneNumber;
 

@@ -1661,6 +1661,44 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise do Perfil Profissiográfico Previdenciário (PPP) com IA para identificação e estruturação de períodos contributivos no contexto de indeferimento de aposentadoria da pessoa com deficiência. Extrai e organiza os dados do PPP em períodos prontos para inserção na análise, com categoria, status de deficiência, média de contribuição e origem do vínculo.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f7a1b2c3-d4e5-4f6a-8b9c-0d1e2f3a4b5c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_REJECTION_INSS_DECISION_ANALYSIS,
+      creditCost: 5,
+      title:
+        'Análise de Decisão do INSS (Indeferimento Auxílio Incapacidade Temporária)',
+      description:
+        'Análise da carta de indeferimento e documentos do processo administrativo do INSS com IA para auxílio por incapacidade temporária. Examina o fundamento da negativa, identifica erros de cálculo ou enquadramento legal, aponta eventuais irregularidades processuais e orienta sobre a melhor estratégia de impugnação — administrativa ou judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f7a1b2c3-d4e5-4f6a-8b9c-0d1e2f3a4b5d'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_REJECTION_FIRST_ANALYSIS,
+      creditCost: 5,
+      title: 'Primeira Análise (Indeferimento Auxílio Incapacidade Temporária)',
+      description:
+        'Primeira análise de indeferimento de auxílio por incapacidade temporária com IA, combinando os dados estruturados do caso com a leitura e interpretação do CNIS. Gera parecer inicial técnico sobre tempo de contribuição, carência, períodos relevantes, pontos de atenção e viabilidade preliminar de reversão do indeferimento.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f7a1b2c3-d4e5-4f6a-8b9c-0d1e2f3a4b5e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_REJECTION_COMPLETE_ANALYSIS,
+      creditCost: 8,
+      title: 'Análise Completa (Indeferimento Auxílio Incapacidade Temporária)',
+      description:
+        'Análise completa de indeferimento de auxílio por incapacidade temporária com IA. Consolida o histórico contributivo, os períodos analisados, a decisão do INSS e a condição de incapacidade, gerando parecer técnico detalhado com enquadramento nas regras aplicáveis, fundamentação jurídica, estratégia processual recomendada e perspectivas do caso.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f7a1b2c3-d4e5-4f6a-8b9c-0d1e2f3a4b5f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_REJECTION_SIMPLIFIED_ANALYSIS,
+      creditCost: 3,
+      title:
+        'Análise Simplificada (Indeferimento Auxílio Incapacidade Temporária)',
+      description:
+        'Análise simplificada de indeferimento de auxílio por incapacidade temporária com IA. Resume os principais achados da análise completa, indica a viabilidade geral do caso, os pontos críticos e os próximos passos recomendados, em linguagem acessível para apresentação ao cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('a1c2e3f4-b5d6-4a7b-8c9d-0e1f2a3b4c5d'),
       resource:
         PaymentPlanPaidResourceTypeEnum.BPC_ELDERLY_ANALYSIS_COMPLETE_ANALYSIS,
@@ -1713,6 +1751,69 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       title: 'APOSENTADORIA RURAL/HÍBRIDA - ANÁLISE DE DOCUMENTOS DO PERÍODO',
       description:
         'Análise individual de documentos probatórios de períodos de trabalho rural para o caso de aposentadoria rural ou híbrida. Identifica o tipo de documento, o nome do titular, o ano e emite nota técnica sobre a relevância probatória.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c3e4f5a6-d7b8-4c9d-8e1f-2a3b4c5d6e7f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_DISABILITY_DENIAL_INSS_DECISION_ANALYSIS,
+      creditCost: 4,
+      title: 'INDEFERIMENTO BPC PCD - ANÁLISE DA DECISÃO INSS',
+      description:
+        'Análise da carta de indeferimento e documentos do processo administrativo do BPC para pessoa com deficiência. Identifica fundamentos legais da negativa, verifica erros na avaliação do grau de deficiência ou na apuração da renda familiar, aponta irregularidades processuais e recomenda estratégia de reversão (recurso ao CRPS, ação judicial ou novo requerimento).',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d4f5a6b7-e8c9-4d0e-9f2a-3b4c5d6e7f8a'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_DISABILITY_DENIAL_FIRST_ANALYSIS,
+      creditCost: 3,
+      title: 'INDEFERIMENTO BPC PCD - PRIMEIRA ANÁLISE',
+      description:
+        'Primeira análise técnica do caso de indeferimento do BPC para pessoa com deficiência. Cruza dados de composição familiar, renda per capita e grau de deficiência com os requisitos legais, identifica pontos de fortalecimento e lacunas, e aponta viabilidade preliminar da reversão do indeferimento.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e5a6b7c8-f9d0-4e1f-a23b-4c5d6e7f8a9b'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_DISABILITY_DENIAL_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title: 'INDEFERIMENTO BPC PCD - ANÁLISE COMPLETA',
+      description:
+        'Análise completa do indeferimento do BPC para pessoa com deficiência com IA. Examina critério de deficiência (perícia biopsicossocial), critério de renda familiar per capita, composição do grupo familiar, rendas e benefícios de cada membro, despesas dedutíveis, analisa os fundamentos do indeferimento e emite parecer técnico conclusivo com recomendação de estratégia de reversão fundamentada em lei e jurisprudência.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f6b7c8d9-a0e1-4f2a-b34c-5d6e7f8a9b0c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_DISABILITY_DENIAL_SIMPLIFIED_ANALYSIS,
+      creditCost: 2,
+      title: 'INDEFERIMENTO BPC PCD - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada do indeferimento do BPC para pessoa com deficiência com IA. Verifica critério de deficiência e critério de renda familiar per capita, informa de forma objetiva e acessível sobre a possibilidade de reversão do indeferimento. Versão resumida para apresentação ao cliente ou familiar.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c3d4e5f6-a7b8-4c9d-8e1f-2a3b4c5d6e7f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_GRANT_FIRST_ANALYSIS,
+      creditCost: 2,
+      title: 'CONCESSÃO SALÁRIO MATERNIDADE - PRIMEIRA ANÁLISE',
+      description:
+        'Primeira análise do direito ao Salário Maternidade com IA. Verifica o evento gerador informado, a carência necessária, a qualidade de segurada no período e identifica os pontos críticos que determinam o direito ao benefício. Indicado para um diagnóstico inicial rápido sobre a viabilidade do pedido.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d4e5f6a7-b8c9-4d0e-9f2a-3b4c5d6e7f8a'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_GRANT_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title: 'CONCESSÃO SALÁRIO MATERNIDADE - ANÁLISE COMPLETA',
+      description:
+        'Análise completa do direito ao Salário Maternidade com IA. Examina o evento gerador, verifica a carência exigida por categoria de segurada, analisa a qualidade de segurada na data do fato gerador, avalia o histórico contributivo e os documentos apresentados, identifica possíveis impedimentos e emite parecer técnico conclusivo com fundamentação legal e jurisprudencial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e5f6a7b8-c9d0-4e1f-ab3b-4c5d6e7f8a9b'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_GRANT_SIMPLIFIED_ANALYSIS,
+      creditCost: 2,
+      title: 'CONCESSÃO SALÁRIO MATERNIDADE - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada do direito ao Salário Maternidade com IA. Verifica o evento gerador, a carência e a qualidade de segurada, informando de forma objetiva sobre a elegibilidade ao benefício. Versão resumida e acessível para apresentação ao cliente.',
     }),
   ];
 

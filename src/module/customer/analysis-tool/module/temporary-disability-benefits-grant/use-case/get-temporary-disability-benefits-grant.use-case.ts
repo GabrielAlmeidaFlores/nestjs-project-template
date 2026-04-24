@@ -220,8 +220,7 @@ export class GetTemporaryDisabilityBenefitsGrantUseCase {
     });
 
     return GetTemporaryDisabilityBenefitsGrantResponseDto.build({
-      temporaryDisabilityBenefitsGrantId:
-        result.temporaryDisabilityBenefitsGrantId,
+      temporaryDisabilityBenefitsGrantId: result.id,
       category: result.category,
       analysisToolClient:
         GetTemporaryDisabilityBenefitsGrantAnalysisToolClientResponseDto.build({
