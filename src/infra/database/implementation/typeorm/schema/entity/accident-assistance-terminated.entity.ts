@@ -11,6 +11,7 @@ import { AccidentAssistanceTerminatedBenefitTypeormEntity } from '@infra/databas
 import { AccidentAssistanceTerminatedCidTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-cid.entity';
 import { AccidentAssistanceTerminatedDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-document.entity';
 import { AccidentAssistanceTerminatedLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-legal-proceeding.entity';
+import { AccidentAssistanceTerminatedPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-period.typeorm.entity';
 import { AccidentAssistanceTerminatedResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-result.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
@@ -149,6 +150,14 @@ export class AccidentAssistanceTerminatedTypeormEntity extends BaseTypeormEntity
   )
   public accidentAssistanceTerminatedCid?:
     | AccidentAssistanceTerminatedCidTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => AccidentAssistanceTerminatedPeriodTypeormEntity,
+    (entity) => entity.accidentAssistanceTerminated,
+  )
+  public accidentAssistanceTerminatedPeriod?:
+    | AccidentAssistanceTerminatedPeriodTypeormEntity[]
     | undefined;
 
   @OneToOne(

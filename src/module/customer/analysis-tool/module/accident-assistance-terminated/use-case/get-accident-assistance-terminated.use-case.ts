@@ -12,8 +12,16 @@ import {
   GetAccidentAssistanceTerminatedResultResponseDto,
   GetAccidentAssistanceTerminatedResponsibleResponseDto,
   GetAccidentAssistanceTerminatedDocumentResponseDto,
+  GetAccidentAssistanceTerminatedPeriodResponseDto,
 } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/get-accident-assistance-terminated.response.dto';
 import { AccidentAssistanceTerminatedNotFoundError } from '@module/customer/analysis-tool/module/accident-assistance-terminated/error/accident-assistance-terminated-not-found.error';
+import {
+  AccidentAssistanceTerminatedFirstAnalysisAssessmentSequelaeModel,
+  AccidentAssistanceTerminatedFirstAnalysisModel,
+  AccidentAssistanceTerminatedFirstAnalysisQualitySecurityModel,
+} from '@module/customer/analysis-tool/module/accident-assistance-terminated/model/generic/accident-assistance-terminated-first-analysis.model';
+import { AccidentAssistanceTerminatedFirstAnalysisInterface } from '@module/customer/analysis-tool/module/accident-assistance-terminated/model/interface/accident-assistance-terminated-first-analysis.interface';
+import { GetAccidentAssistanceTerminatedPeriodQueryResult } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated-period/query/result/get-accident-assistance-terminated-period.query.result';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -61,6 +69,10 @@ export class GetAccidentAssistanceTerminatedUseCase {
         AccidentAssistanceTerminatedNotFoundError,
       );
 
+    const firstAnalysisModel = this.parseFirstAnalysis(
+      accidentAssistanceTerminatedQueryResult.accidentAssistanceTerminatedResult?.firstAnalysis ?? null,
+    );
+
     const accidentAssistanceTerminatedResultDto =
       accidentAssistanceTerminatedQueryResult.accidentAssistanceTerminatedResult !==
       null
@@ -82,6 +94,9 @@ export class GetAccidentAssistanceTerminatedUseCase {
                 accidentAssistanceTerminatedQueryResult
                   .accidentAssistanceTerminatedResult.decisionDetails,
             }),
+            ...(firstAnalysisModel !== null && {
+              firstAnalysis: firstAnalysisModel,
+            }),
             createdAt:
               accidentAssistanceTerminatedQueryResult
                 .accidentAssistanceTerminatedResult.createdAt,
@@ -90,6 +105,10 @@ export class GetAccidentAssistanceTerminatedUseCase {
                 .accidentAssistanceTerminatedResult.updatedAt,
           })
         : null;
+
+    const periodDtos = this.buildPeriodDtos(
+      accidentAssistanceTerminatedQueryResult.accidentAssistanceTerminatedPeriod,
+    );
 
     const response = GetAccidentAssistanceTerminatedResponseDto.build({
       id: accidentAssistanceTerminatedQueryResult.id,
@@ -142,6 +161,9 @@ export class GetAccidentAssistanceTerminatedUseCase {
           accidentAssistanceTerminatedQueryResult.extensionRequestStatus,
       }),
       accidentAssistanceTerminatedResult: accidentAssistanceTerminatedResultDto,
+      ...(periodDtos.length > 0 && {
+        accidentAssistanceTerminatedPeriod: periodDtos,
+      }),
       createdBy: GetAccidentAssistanceTerminatedResponsibleResponseDto.build({
         ...analysisToolRecordQueryResult.createdBy.customer,
       }),
@@ -203,5 +225,69 @@ export class GetAccidentAssistanceTerminatedUseCase {
     }
 
     return response;
+  }
+
+  private parseFirstAnalysis(
+    firstAnalysisJson: string | null,
+  ): AccidentAssistanceTerminatedFirstAnalysisModel | null {
+    if (firstAnalysisJson === null) {
+      return null;
+    }
+
+    try {
+      const raw = JSON.parse(
+        firstAnalysisJson,
+      ) as AccidentAssistanceTerminatedFirstAnalysisInterface;
+
+      return AccidentAssistanceTerminatedFirstAnalysisModel.build({
+        qualitySecurity:
+          AccidentAssistanceTerminatedFirstAnalysisQualitySecurityModel.build({
+            status: raw.qualitySecurity.status,
+            description: raw.qualitySecurity.description,
+          }),
+        assessmentSequelae:
+          AccidentAssistanceTerminatedFirstAnalysisAssessmentSequelaeModel.build(
+            {
+              existsSequelae: raw.assessmentSequelae.existsSequelae,
+              sequelaeCompatibility:
+                raw.assessmentSequelae.sequelaeCompatibility,
+              partialWorkCapacityMaintenance:
+                raw.assessmentSequelae.partialWorkCapacityMaintenance,
+              description: raw.assessmentSequelae.description,
+            },
+          ),
+      });
+    } catch {
+      return null;
+    }
+  }
+
+  private buildPeriodDtos(
+    periods: GetAccidentAssistanceTerminatedPeriodQueryResult[],
+  ): GetAccidentAssistanceTerminatedPeriodResponseDto[] {
+    return periods.map((period) =>
+      GetAccidentAssistanceTerminatedPeriodResponseDto.build({
+        accidentAssistanceTerminatedPeriodId: period.id,
+        ...(period.sequencial !== null && { sequencial: period.sequencial }),
+        ...(period.periodName !== null && { periodName: period.periodName }),
+        ...(period.periodStart !== null && { periodStart: period.periodStart }),
+        ...(period.periodEnd !== null && { periodEnd: period.periodEnd }),
+        ...(period.category !== null && { category: period.category }),
+        ...(period.isPendency !== null && { isPendency: period.isPendency }),
+        ...(period.competenceBelowTheMinimum !== null && {
+          competenceBelowTheMinimum: period.competenceBelowTheMinimum,
+        }),
+        ...(period.contributionAverage !== null && {
+          contributionAverage: period.contributionAverage,
+        }),
+        ...(period.typeOfContribution !== null && {
+          typeOfContribution: period.typeOfContribution,
+        }),
+        ...(period.status !== null && { status: period.status }),
+        ...(period.reasonPendency !== null && {
+          reasonPendency: period.reasonPendency,
+        }),
+      }),
+    );
   }
 }

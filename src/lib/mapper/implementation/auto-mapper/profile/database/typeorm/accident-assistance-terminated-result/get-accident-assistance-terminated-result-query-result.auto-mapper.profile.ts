@@ -32,6 +32,7 @@ export class GetAccidentAssistanceTerminatedResultQueryResultAutoMapperProfile {
         accidentAssistanceTerminatedSimplifiedAnalysis:
           source.accidentAssistanceTerminatedSimplifiedAnalysis,
         decisionDetails: source.decisionDetails,
+        firstAnalysis: source.firstAnalysis,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
       });
@@ -58,6 +59,7 @@ export class GetAccidentAssistanceTerminatedResultQueryResultAutoMapperProfile {
         accidentAssistanceTerminatedSimplifiedAnalysis:
           source.accidentAssistanceTerminatedSimplifiedAnalysis,
         decisionDetails: source.decisionDetails,
+        firstAnalysis: source.firstAnalysis,
         accidentAssistanceTerminated: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),

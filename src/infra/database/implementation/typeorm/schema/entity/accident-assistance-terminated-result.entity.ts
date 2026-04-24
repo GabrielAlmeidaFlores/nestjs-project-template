@@ -26,6 +26,13 @@ export class AccidentAssistanceTerminatedResultTypeormEntity extends BaseTypeorm
   })
   public decisionDetails: string | null;
 
+  @Column({
+    name: 'first_analysis',
+    type: 'longtext',
+    nullable: true,
+  })
+  public firstAnalysis: string | null;
+
   @OneToOne(
     () => AccidentAssistanceTerminatedTypeormEntity,
     (entity) => entity.accidentAssistanceTerminatedResult,

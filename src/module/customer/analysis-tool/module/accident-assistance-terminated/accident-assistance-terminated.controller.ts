@@ -10,11 +10,16 @@ import {
 
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { AccidentAssistanceTerminatedId } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated/value-object/accident-assistance-terminated-id/accident-assistance-terminated-id.value-object';
+import { AccidentAssistanceTerminatedPeriodId } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-period/value-object/accident-assistance-terminated-period-id/accident-assistance-terminated-period-id.value-object';
+import { PeriodConsiderationActionRequestDto } from '@module/customer/analysis-tool/dto/request/period-consideration-action.request.dto';
 import { CreateAccidentAssistanceTerminatedEventRequestDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/request/create-accident-assistance-terminated-event.request.dto';
 import { CreateAccidentAssistanceTerminatedRequestDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/request/create-accident-assistance-terminated.request.dto';
 import { UpdateAccidentAssistanceTerminatedRequestDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/request/update-accident-assistance-terminated.request.dto';
 import { UploadAccidentAssistanceTerminatedDocumentsRequestDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/request/upload-accident-assistance-terminated-documents.request.dto';
 import { CreateAccidentAssistanceTerminatedDecisionDetailsResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/create-accident-assistance-terminated-decision-details.response.dto';
+import { CreateAccidentAssistanceTerminatedFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/create-accident-assistance-terminated-first-analysis.response.dto';
+import { CreateAccidentAssistanceTerminatedPeriodRequestDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/request/create-accident-assistance-terminated-period.request.dto';
+import { CreateAccidentAssistanceTerminatedPeriodResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/create-accident-assistance-terminated-period.response.dto';
 import { CreateAccidentAssistanceTerminatedEventResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/create-accident-assistance-terminated-event.response.dto';
 import { CreateAccidentAssistanceTerminatedResultResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/create-accident-assistance-terminated-result.response.dto';
 import { CreateAccidentAssistanceTerminatedResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/create-accident-assistance-terminated.response.dto';
@@ -22,6 +27,9 @@ import { GetAccidentAssistanceTerminatedResponseDto } from '@module/customer/ana
 import { UpdateAccidentAssistanceTerminatedResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/update-accident-assistance-terminated.response.dto';
 import { UploadAccidentAssistanceTerminatedDocumentsResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/upload-accident-assistance-terminated-documents.response.dto';
 import { CreateAccidentAssistanceTerminatedDecisionDetailsUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/create-accident-assistance-terminated-decision-details.use-case';
+import { CreateAccidentAssistanceTerminatedFirstAnalysisUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/create-accident-assistance-terminated-first-analysis.use-case';
+import { CreateAccidentAssistanceTerminatedPeriodUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/create-accident-assistance-terminated-period.use-case';
+import { UpdateAccidentAssistanceTerminatedPeriodConsiderationActionUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/update-accident-assistance-terminated-period-consideration-action.use-case';
 import { CreateAccidentAssistanceTerminatedEventUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/create-accident-assistance-terminated-event.use-case';
 import { CreateAccidentAssistanceTerminatedResultUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/create-accident-assistance-terminated-result.use-case';
 import { CreateAccidentAssistanceTerminatedUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/create-accident-assistance-terminated.use-case';
@@ -55,6 +63,9 @@ export class AccidentAssistanceTerminatedController {
     private readonly updateAccidentAssistanceTerminatedUseCase: UpdateAccidentAssistanceTerminatedUseCase,
     private readonly uploadAccidentAssistanceTerminatedDocumentsUseCase: UploadAccidentAssistanceTerminatedDocumentsUseCase,
     private readonly createAccidentAssistanceTerminatedEventUseCase: CreateAccidentAssistanceTerminatedEventUseCase,
+    private readonly createAccidentAssistanceTerminatedFirstAnalysisUseCase: CreateAccidentAssistanceTerminatedFirstAnalysisUseCase,
+    private readonly createAccidentAssistanceTerminatedPeriodUseCase: CreateAccidentAssistanceTerminatedPeriodUseCase,
+    private readonly updateAccidentAssistanceTerminatedPeriodConsiderationActionUseCase: UpdateAccidentAssistanceTerminatedPeriodConsiderationActionUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -363,6 +374,111 @@ export class AccidentAssistanceTerminatedController {
       sessionData,
       organizationSessionData,
       accidentAssistanceTerminatedId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Executar primeira análise do auxílio-acidente cessado',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':accidentAssistanceTerminatedId/first-analysis',
+      method: RequestMethod.POST,
+    },
+    tag: ['diagnostico-auxilio-acidente-rgps'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Primeira análise do auxílio-acidente cessado executada com sucesso.',
+      type: CreateAccidentAssistanceTerminatedFirstAnalysisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createAccidentAssistanceTerminatedFirstAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'accidentAssistanceTerminatedId',
+      new ParseValueObjectPipe(AccidentAssistanceTerminatedId),
+    )
+    accidentAssistanceTerminatedId: AccidentAssistanceTerminatedId,
+  ): Promise<CreateAccidentAssistanceTerminatedFirstAnalysisResponseDto> {
+    return await this.createAccidentAssistanceTerminatedFirstAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      accidentAssistanceTerminatedId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Criar período manualmente para o auxílio-acidente cessado',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':accidentAssistanceTerminatedId/period',
+      method: RequestMethod.POST,
+      type: CreateAccidentAssistanceTerminatedPeriodRequestDto,
+    },
+    tag: ['diagnostico-auxilio-acidente-rgps'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Período criado com sucesso.',
+      type: CreateAccidentAssistanceTerminatedPeriodResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createAccidentAssistanceTerminatedPeriod(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'accidentAssistanceTerminatedId',
+      new ParseValueObjectPipe(AccidentAssistanceTerminatedId),
+    )
+    accidentAssistanceTerminatedId: AccidentAssistanceTerminatedId,
+    @Body() dto: CreateAccidentAssistanceTerminatedPeriodRequestDto,
+  ): Promise<CreateAccidentAssistanceTerminatedPeriodResponseDto> {
+    return await this.createAccidentAssistanceTerminatedPeriodUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      accidentAssistanceTerminatedId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Resolver pendência de período do auxílio-acidente cessado',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':accidentAssistanceTerminatedId/period/:accidentAssistanceTerminatedPeriodId/consideration-action',
+      method: RequestMethod.POST,
+      type: PeriodConsiderationActionRequestDto,
+    },
+    tag: ['diagnostico-auxilio-acidente-rgps'],
+    successResponse: {
+      statusCode: HttpStatus.NO_CONTENT,
+      description: 'Ação de consideração do período executada com sucesso.',
+      type: undefined,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateAccidentAssistanceTerminatedPeriodConsiderationAction(
+    @GetSessionData() _sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    _organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'accidentAssistanceTerminatedId',
+      new ParseValueObjectPipe(AccidentAssistanceTerminatedId),
+    )
+    _accidentAssistanceTerminatedId: AccidentAssistanceTerminatedId,
+    @Param(
+      'accidentAssistanceTerminatedPeriodId',
+      new ParseValueObjectPipe(AccidentAssistanceTerminatedPeriodId),
+    )
+    accidentAssistanceTerminatedPeriodId: AccidentAssistanceTerminatedPeriodId,
+    @Body() dto: PeriodConsiderationActionRequestDto,
+  ): Promise<void> {
+    return await this.updateAccidentAssistanceTerminatedPeriodConsiderationActionUseCase.execute(
+      accidentAssistanceTerminatedPeriodId,
       dto,
     );
   }
