@@ -2,6 +2,7 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { AccidentBenefitRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection.typeorm.entity';
 import { AdministrativeProcedureInssAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis.entity';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
@@ -26,6 +27,7 @@ import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/
 import { PerCapitaIncomeForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
+import { RuralOrHybridRetirementRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-rejection.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
 import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
 import { SpecialCategoryRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis.typeorm.entity';
@@ -34,12 +36,14 @@ import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typ
 import { SurvivorPensionAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/survivor-pension-analysis.typeorm.entity';
 import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant.typeorm.entity';
+import { TemporaryIncapacityBenefitRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-rejection.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
+import { AccidentBenefitRejectionEntity } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection/accident-benefit-rejection.entity';
 import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
 import { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
 import { BpcElderlyAnalysisEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/bpc-elderly-analysis.entity';
@@ -61,6 +65,7 @@ import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/m
 import { PerCapitaIncomeForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.entity';
 import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
+import { RuralOrHybridRetirementRejectionEntity } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/rural-or-hybrid-retirement-rejection.entity';
 import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
 import { SpecialActivityEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/special-activity-entity';
 import { SpecialCategoryRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/special-category-retirement-analysis.entity';
@@ -68,6 +73,7 @@ import { SpecialRetirementGrantEntity } from '@module/customer/analysis-tool/mod
 import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
 import { SurvivorPensionAnalysisEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis/survivor-pension-analysis.entity';
 import { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/temporary-disability-benefits-grant.entity';
+import { TemporaryIncapacityBenefitRejectionEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.entity';
 
 @Injectable()
 export class AnalysisToolRecordEntityAutoMapperProfile {
@@ -309,12 +315,40 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const temporaryIncapacityBenefitRejection =
+        source.temporaryIncapacityBenefitRejection !== null &&
+        source.temporaryIncapacityBenefitRejection !== undefined
+          ? this.mapper.map(
+              source.temporaryIncapacityBenefitRejection,
+              TemporaryIncapacityBenefitRejectionTypeormEntity,
+              TemporaryIncapacityBenefitRejectionEntity,
+            )
+          : null;
+      const accidentBenefitRejection =
+        source.accidentBenefitRejection !== null &&
+        source.accidentBenefitRejection !== undefined
+          ? this.mapper.map(
+              source.accidentBenefitRejection,
+              AccidentBenefitRejectionTypeormEntity,
+              AccidentBenefitRejectionEntity,
+            )
+          : null;
+
       const survivorPensionAnalysis =
         source.survivorPensionAnalysis !== undefined
           ? this.mapper.map(
               source.survivorPensionAnalysis,
               SurvivorPensionAnalysisTypeormEntity,
               SurvivorPensionAnalysisEntity,
+            )
+          : null;
+
+      const ruralOrHybridRetirementRejection =
+        source.ruralOrHybridRetirementRejection !== null
+          ? this.mapper.map(
+              source.ruralOrHybridRetirementRejection,
+              RuralOrHybridRetirementRejectionTypeormEntity,
+              RuralOrHybridRetirementRejectionEntity,
             )
           : null;
 
@@ -382,7 +416,10 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         deathBenefitRejection,
         specialRetirementGrant,
         temporaryDisabilityBenefitsGrant,
+        temporaryIncapacityBenefitRejection,
+        accidentBenefitRejection,
         survivorPensionAnalysis,
+        ruralOrHybridRetirementRejection,
         maternityPayGrant,
       });
     };
@@ -552,9 +589,36 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
 
       const temporaryDisabilityBenefitsGrant =
         source.temporaryDisabilityBenefitsGrant !== null
+          ? this.mapper.map(
+              source.temporaryDisabilityBenefitsGrant,
+              TemporaryDisabilityBenefitsGrantEntity,
+              TemporaryDisabilityBenefitsGrantTypeormEntity,
+            )
+          : null;
+
+      const temporaryIncapacityBenefitRejection =
+        source.temporaryIncapacityBenefitRejection !== null
+          ? this.mapper.map(
+              source.temporaryIncapacityBenefitRejection,
+              TemporaryIncapacityBenefitRejectionEntity,
+              TemporaryIncapacityBenefitRejectionTypeormEntity,
+            )
+          : null;
+
+      const ruralOrHybridRetirementRejection =
+        source.ruralOrHybridRetirementRejection !== null
+          ? this.mapper.map(
+              source.ruralOrHybridRetirementRejection,
+              RuralOrHybridRetirementRejectionEntity,
+              RuralOrHybridRetirementRejectionTypeormEntity,
+            )
+          : null;
+
+      const accidentBenefitRejection =
+        source.accidentBenefitRejection !== null
           ? ({
-              id: source.temporaryDisabilityBenefitsGrant.id.toString(),
-            } as TemporaryDisabilityBenefitsGrantTypeormEntity)
+              id: source.accidentBenefitRejection.id.toString(),
+            } as AccidentBenefitRejectionTypeormEntity)
           : null;
 
       const survivorPensionAnalysis =
@@ -682,7 +746,10 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         specialCategoryRetirementAnalysis,
         specialRetirementGrant,
         temporaryDisabilityBenefitsGrant,
+        temporaryIncapacityBenefitRejection,
+        accidentBenefitRejection,
         survivorPensionAnalysis,
+        ruralOrHybridRetirementRejection,
         deathBenefitGrant,
         deathBenefitRejection,
         analysisToolClient,

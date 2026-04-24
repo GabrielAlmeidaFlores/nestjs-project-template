@@ -5,6 +5,7 @@ import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema
 import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
+import { AccidentBenefitRejectionEntity } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection/accident-benefit-rejection.entity';
 import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
 import { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
@@ -23,6 +24,7 @@ import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/
 import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
 import { PerCapitaIncomeForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.entity';
 import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
+import { RuralOrHybridRetirementRejectionEntity } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/rural-or-hybrid-retirement-rejection.entity';
 import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
 import { SpecialActivityEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/special-activity-entity';
 import { SpecialCategoryRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/special-category-retirement-analysis.entity';
@@ -31,6 +33,7 @@ import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/spe
 import { SurvivorPensionAnalysisEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis/survivor-pension-analysis.entity';
 import { TeacherRetirementPlanningEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
 import { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/temporary-disability-benefits-grant.entity';
+import { TemporaryIncapacityBenefitRejectionEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { AnalysisToolRecordEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity.props.interface';
@@ -149,6 +152,16 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly temporaryDisabilityBenefitsGrant: TemporaryDisabilityBenefitsGrantEntity | null;
 
   @Description(
+    'Análise de indeferimento de aposentadoria rural ou híbrida associada ao registro da ferramenta de análise',
+  )
+  public readonly ruralOrHybridRetirementRejection: RuralOrHybridRetirementRejectionEntity | null;
+
+  @Description(
+    'Indeferimento de auxílio-acidente associado ao registro da ferramenta de análise',
+  )
+  public readonly accidentBenefitRejection: AccidentBenefitRejectionEntity | null;
+
+  @Description(
     'Análise de pensão por morte associada ao registro da ferramenta de análise',
   )
   public readonly survivorPensionAnalysis: SurvivorPensionAnalysisEntity | null;
@@ -187,6 +200,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     'Análise de BPC ao Idoso associada ao registro da ferramenta de análise',
   )
   public readonly bpcElderlyAnalysis: BpcElderlyAnalysisEntity | null;
+
+  @Description(
+    'Análise de indeferimento de benefício por incapacidade temporária associada ao registro da ferramenta de análise',
+  )
+  public readonly temporaryIncapacityBenefitRejection: TemporaryIncapacityBenefitRejectionEntity | null;
 
   @Description(
     'Análise de concessão de salário-maternidade associada ao registro da ferramenta de análise',
@@ -244,6 +262,9 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
       props.disabilityRetirementPlanningGrant ?? null;
     this.temporaryDisabilityBenefitsGrant =
       props.temporaryDisabilityBenefitsGrant ?? null;
+    this.ruralOrHybridRetirementRejection =
+      props.ruralOrHybridRetirementRejection ?? null;
+    this.accidentBenefitRejection = props.accidentBenefitRejection ?? null;
     this.survivorPensionAnalysis = props.survivorPensionAnalysis ?? null;
     this.specialCategoryRetirementAnalysis =
       props.specialCategoryRetirementAnalysis ?? null;
@@ -255,6 +276,8 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     this.disabilityRetirementPlanningRejection =
       props.disabilityRetirementPlanningRejection ?? null;
     this.bpcElderlyAnalysis = props.bpcElderlyAnalysis ?? null;
+    this.temporaryIncapacityBenefitRejection =
+      props.temporaryIncapacityBenefitRejection ?? null;
     this.maternityPayGrant = props.maternityPayGrant ?? null;
     this.status = props.status;
     this.analysisToolClient = props.analysisToolClient;

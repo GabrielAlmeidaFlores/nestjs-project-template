@@ -906,6 +906,78 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise de sentenças e acordos trabalhistas com IA para reconhecimento previdenciário na concessão de aposentadoria da pessoa com deficiência. Examina robustez da decisão, períodos reconhecidos, remunerações e a melhor estratégia de aproveitamento perante o INSS.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b571f2fd-ae3a-4749-90a9-26942f613cd1'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TIME_ACCELERATOR_RURAL_TIME_ANALYSIS,
+      creditCost: 4,
+      title: 'ACELERADOR DE TEMPO - ANÁLISE DE TEMPO RURAL',
+      description:
+        'Análise de períodos de atividade rural com IA para reconhecimento previdenciário. Examina documentos comprobatórios, valida início de prova material, calcula tempo rural computável e orienta sobre reconhecimento administrativo ou judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('4461fbd7-b0cb-4f16-ba26-722a52b423eb'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TIME_ACCELERATOR_MILITARY_SERVICE_ANALYSIS,
+      creditCost: 4,
+      title: 'ACELERADOR DE TEMPO - ANÁLISE DE SERVIÇO MILITAR',
+      description:
+        'Análise de tempo de serviço militar obrigatório com IA para cômputo previdenciário. Valida certificados e certidões, calcula o período computável, verifica sobreposição com outros vínculos e orienta sobre averbação.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('caea1907-6ea2-4394-bce9-ec14b6db3b81'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TIME_ACCELERATOR_PUBLIC_SERVICE_ANALYSIS,
+      creditCost: 5,
+      title: 'ACELERADOR DE TEMPO - ANÁLISE DE SERVIÇO PÚBLICO',
+      description:
+        'Análise de tempo de serviço público com IA para averbação no RGPS. Examina CTC, valida períodos computáveis, identifica riscos de contagem em duplicidade e orienta sobre averbação administrativa ou judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('dd3de53d-e64f-42ba-ae8c-1c8386cc4637'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TIME_ACCELERATOR_CTPS_OUTSIDE_CNIS_ANALYSIS,
+      creditCost: 4,
+      title: 'ACELERADOR DE TEMPO - ANÁLISE DE CTPS FORA DO CNIS',
+      description:
+        'Análise de vínculos anotados na CTPS mas ausentes no CNIS usando IA. Identifica períodos omissos, avalia a força probatória dos documentos e orienta sobre regularização no INSS.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('7dcb035a-dd2e-4f4a-aec9-b2d77f9b7ef3'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TIME_ACCELERATOR_STUDENT_APPRENTICE_ANALYSIS,
+      creditCost: 3,
+      title: 'ACELERADOR DE TEMPO - ANÁLISE DE ESTUDANTE APRENDIZ',
+      description:
+        'Análise de tempo como estudante aprendiz com IA para reconhecimento previdenciário. Valida documentos escolares, contraprestação e elementos probatórios necessários ao cômputo do período.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d63fd41b-2609-4e24-9f84-9f746b8f0eb6'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TIME_ACCELERATOR_WORK_ABROAD_ANALYSIS,
+      creditCost: 5,
+      title: 'ACELERADOR DE TEMPO - ANÁLISE DE TRABALHO NO EXTERIOR',
+      description:
+        'Análise de períodos de trabalho no exterior com IA para reconhecimento no RGPS. Examina acordos internacionais, valida documentação estrangeira e orienta sobre totalização e formalidades documentais.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('fa6d1740-eb67-4064-96f6-e0c7537f2f94'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TIME_ACCELERATOR_INFORMAL_WORK_ANALYSIS,
+      creditCost: 4,
+      title: 'ACELERADOR DE TEMPO - ANÁLISE DE TRABALHO INFORMAL',
+      description:
+        'Análise de períodos de trabalho informal com IA. Examina provas da atividade, recolhimentos existentes, necessidade de indenização e impacto do período no tempo de contribuição e na carência.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('0076664c-b4c2-43f3-84bf-c5cb5a33765f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TIME_ACCELERATOR_LABOR_COURT_DECISION_ANALYSIS,
+      creditCost: 6,
+      title: 'ACELERADOR DE TEMPO - ANÁLISE DE DECISÃO TRABALHISTA',
+      description:
+        'Análise de sentenças e acordos trabalhistas com IA para reconhecimento previdenciário. Examina robustez da decisão, períodos reconhecidos, remunerações e a melhor estratégia de aproveitamento perante o INSS.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('e7b3d2c1-7a65-42be-9da1-4f6071c2b009'),
       resource:
         PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_GRANT_PPP_ANALYSIS,
@@ -1262,6 +1334,43 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Gera o documento de análise simplificada da pensão por morte, com linguagem acessível para apresentação ao cliente.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c7d8e9f0-a1b2-4c3d-8e4f-5a6b7c8d9e0f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RURAL_OR_HYBRID_RETIREMENT_REJECTION_FIRST_ANALYSIS,
+      creditCost: 5,
+      title: 'INDEFERIMENTO APOSENTADORIA RURAL/HÍBRIDA - PRIMEIRO STEP',
+      description:
+        'Primeira análise do caso de indeferimento de aposentadoria rural ou híbrida com IA. Combina os dados do CNIS com os dados estruturados do processo de indeferimento para gerar parecer inicial técnico sobre os períodos urbanos, períodos rurais, carência e viabilidade de reversão do indeferimento.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d8e9f0a1-b2c3-4d5e-9f0a-6b7c8d9e0f1a'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RURAL_OR_HYBRID_RETIREMENT_REJECTION_COMPLETE_ANALYSIS,
+      creditCost: 8,
+      title: 'INDEFERIMENTO APOSENTADORIA RURAL/HÍBRIDA - ANÁLISE COMPLETA',
+      description:
+        'Análise completa do indeferimento de aposentadoria rural ou híbrida com IA. Examina CNIS, documentos do processo administrativo e dados do caso para gerar parecer técnico detalhado com fundamentação legal, análise de provas, conformidade da linha do tempo e recomendação estratégica para recurso administrativo ou ação judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e9f0a1b2-c3d4-4e5f-af1b-7c8d9e0f1a2b'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RURAL_OR_HYBRID_RETIREMENT_REJECTION_SIMPLIFIED_ANALYSIS,
+      creditCost: 3,
+      title: 'INDEFERIMENTO APOSENTADORIA RURAL/HÍBRIDA - ANÁLISE SIMPLIFICADA',
+      description:
+        'Geração do documento de análise simplificada do indeferimento de aposentadoria rural ou híbrida, com linguagem acessível para apresentação ao cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f0a1b2c3-d4e5-4f6a-b0c1-8d9e0f1a2b3c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RURAL_OR_HYBRID_RETIREMENT_REJECTION_WORK_PERIOD_DOCUMENT_ANALYSIS,
+      creditCost: 2,
+      title:
+        'INDEFERIMENTO APOSENTADORIA RURAL/HÍBRIDA - ANÁLISE DE DOCUMENTOS DO PERÍODO',
+      description:
+        'Análise individual de documentos probatórios de períodos de trabalho rural para o caso de indeferimento de aposentadoria rural ou híbrida. Identifica o tipo de documento, o nome do titular, o ano e emite nota técnica sobre a relevância probatória.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('a2b3c4d5-e6f7-4890-b1c2-d3e4f5a6b7c1'),
       resource:
         PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL_COMPLETE_ANALYSIS,
@@ -1398,6 +1507,42 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Comparação inteligente entre vínculos do CNIS e anotações da CTPS com IA para indeferimento de aposentadoria urbana comum. Identifica períodos divergentes, vínculos omissos no CNIS, inconsistências de datas e dados, gerando relatório de períodos que podem ser reconhecidos judicialmente ou administrativamente para reverter o indeferimento.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('65805ba8-5e45-4d7c-b6db-289dd8e0e466'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_BENEFIT_REJECTION_FIRST_ANALYSIS,
+      creditCost: 5,
+      title: 'INDEFERIMENTO DE AUXÍLIO-ACIDENTE - PRIMEIRO STEP',
+      description:
+        'Primeira análise técnica de indeferimento de auxílio-acidente com IA, combinando a leitura do CNIS já processado com os dados estruturados do caso e a documentação médica apresentada. Verifica manutenção da qualidade de segurado, presença de sequelas permanentes e compatibilidade inicial entre o acidente e a redução funcional alegada.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f86f4652-16ed-4712-a33e-9c10e6ee153c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_BENEFIT_REJECTION_SECOND_ANALYSIS,
+      creditCost: 5,
+      title: 'INDEFERIMENTO DE AUXÍLIO-ACIDENTE - SEGUNDO STEP',
+      description:
+        'Segunda análise técnica de indeferimento de auxílio-acidente com IA, aprofundando o exame médico-jurídico do caso. Avalia sequelas consolidadas, redução da capacidade laborativa, coerência entre os documentos clínicos e o histórico do acidente, além de indicar riscos probatórios e estratégia inicial de reversão.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a14bb96d-586f-46b0-b0f3-7362d934ee7c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_BENEFIT_REJECTION_COMPLETE_ANALYSIS,
+      creditCost: 8,
+      title: 'INDEFERIMENTO DE AUXÍLIO-ACIDENTE - ANÁLISE COMPLETA',
+      description:
+        'Análise completa de indeferimento de auxílio-acidente com IA. Consolida os dados previdenciários, a documentação médica e ocupacional e as conclusões preliminares para gerar parecer técnico final com impacto previdenciário, avaliação estratégica e estudo das regras de aposentadoria potencialmente afetadas pelo reconhecimento do benefício.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('7fa941ec-a60f-4338-9b24-c4cf8db34c02'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_BENEFIT_REJECTION_SIMPLIFIED_ANALYSIS,
+      creditCost: 3,
+      title: 'INDEFERIMENTO DE AUXÍLIO-ACIDENTE - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada de indeferimento de auxílio-acidente com IA. Resume de forma clara os achados centrais da análise completa, a viabilidade do caso, os principais riscos e os próximos passos recomendados para apresentação ao cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('da60c3bc-c91d-4332-aae2-b3f30d1de126'),
       resource:
         PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION_COMPLETE_ANALYSIS,
@@ -1514,6 +1659,44 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       title: 'INDEFERIMENTO APOSENTADORIA PCD - ANÁLISE DE PPP',
       description:
         'Análise do Perfil Profissiográfico Previdenciário (PPP) com IA para identificação e estruturação de períodos contributivos no contexto de indeferimento de aposentadoria da pessoa com deficiência. Extrai e organiza os dados do PPP em períodos prontos para inserção na análise, com categoria, status de deficiência, média de contribuição e origem do vínculo.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f7a1b2c3-d4e5-4f6a-8b9c-0d1e2f3a4b5c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_REJECTION_INSS_DECISION_ANALYSIS,
+      creditCost: 5,
+      title:
+        'Análise de Decisão do INSS (Indeferimento Auxílio Incapacidade Temporária)',
+      description:
+        'Análise da carta de indeferimento e documentos do processo administrativo do INSS com IA para auxílio por incapacidade temporária. Examina o fundamento da negativa, identifica erros de cálculo ou enquadramento legal, aponta eventuais irregularidades processuais e orienta sobre a melhor estratégia de impugnação — administrativa ou judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f7a1b2c3-d4e5-4f6a-8b9c-0d1e2f3a4b5d'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_REJECTION_FIRST_ANALYSIS,
+      creditCost: 5,
+      title: 'Primeira Análise (Indeferimento Auxílio Incapacidade Temporária)',
+      description:
+        'Primeira análise de indeferimento de auxílio por incapacidade temporária com IA, combinando os dados estruturados do caso com a leitura e interpretação do CNIS. Gera parecer inicial técnico sobre tempo de contribuição, carência, períodos relevantes, pontos de atenção e viabilidade preliminar de reversão do indeferimento.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f7a1b2c3-d4e5-4f6a-8b9c-0d1e2f3a4b5e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_REJECTION_COMPLETE_ANALYSIS,
+      creditCost: 8,
+      title: 'Análise Completa (Indeferimento Auxílio Incapacidade Temporária)',
+      description:
+        'Análise completa de indeferimento de auxílio por incapacidade temporária com IA. Consolida o histórico contributivo, os períodos analisados, a decisão do INSS e a condição de incapacidade, gerando parecer técnico detalhado com enquadramento nas regras aplicáveis, fundamentação jurídica, estratégia processual recomendada e perspectivas do caso.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f7a1b2c3-d4e5-4f6a-8b9c-0d1e2f3a4b5f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_REJECTION_SIMPLIFIED_ANALYSIS,
+      creditCost: 3,
+      title:
+        'Análise Simplificada (Indeferimento Auxílio Incapacidade Temporária)',
+      description:
+        'Análise simplificada de indeferimento de auxílio por incapacidade temporária com IA. Resume os principais achados da análise completa, indica a viabilidade geral do caso, os pontos críticos e os próximos passos recomendados, em linguagem acessível para apresentação ao cliente.',
     }),
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('a1c2e3f4-b5d6-4a7b-8c9d-0e1f2a3b4c5d'),

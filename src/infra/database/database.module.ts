@@ -1,6 +1,16 @@
 import { ClassProvider, Module } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { AccidentBenefitRejectionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection/accident-benefit-rejection.typeorm.command.repository';
+import { AccidentBenefitRejectionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection/accident-benefit-rejection.typeorm.query.repository';
+import { AccidentBenefitRejectionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection-document/accident-benefit-rejection-document.typeorm.command.repository';
+import { AccidentBenefitRejectionEventTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection-event/accident-benefit-rejection-event.typeorm.command.repository';
+import { AccidentBenefitRejectionEventDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection-event-document/accident-benefit-rejection-event-document.typeorm.command.repository';
+import { AccidentBenefitRejectionInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection-inss-benefit/accident-benefit-rejection-inss-benefit.typeorm.command.repository';
+import { AccidentBenefitRejectionResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection-result/accident-benefit-rejection-result.typeorm.command.repository';
+import { AccidentBenefitRejectionWorkPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection-work-period/accident-benefit-rejection-work-period.typeorm.command.repository';
+import { AccidentBenefitRejectionWorkPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection-work-period-document/accident-benefit-rejection-work-period-document.typeorm.command.repository';
+import { AccidentBenefitRejectionWorkPeriodEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection-work-period-earnings-history/accident-benefit-rejection-work-period-earnings-history.typeorm.command.repository';
 import { AdminTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/admin/admin.typeorm.command.repository';
 import { AdminTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/admin/admin.typeorm.query.repository';
 import { AdministrativeProcedureInssAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.typeorm.command.repository';
@@ -314,6 +324,23 @@ import { RetirementPlanningRppsRemunerationTypeormQueryRepository } from '@infra
 import { RetirementPlanningRppsRemunerationCalculationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rpps-remuneration-calculation/retirement-planning-rpps-remuneration-calculation.typeorm.command.repository';
 import { RetirementPlanningRppsRemunerationCalculationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rpps-remuneration-calculation/retirement-planning-rpps-remuneration-calculation.typeorm.query.repository';
 import { RetirementPlanningRppsResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rpps-result/retirement-planning-rpps-result.typeorm.command.repository';
+import { RuralOrHybridRetirementRejectionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-rejection/rural-or-hybrid-retirement-rejection.typeorm.command.repository';
+import { RuralOrHybridRetirementRejectionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-rejection/rural-or-hybrid-retirement-rejection.typeorm.query.repository';
+import { RuralOrHybridRetirementRejectionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-rejection-document/rural-or-hybrid-retirement-rejection-document.typeorm.command.repository';
+import { RuralOrHybridRetirementRejectionInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-rejection-inss-benefit/rural-or-hybrid-retirement-rejection-inss-benefit.typeorm.command.repository';
+import { RuralOrHybridRetirementRejectionLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-rejection-legal-proceeding/rural-or-hybrid-retirement-rejection-legal-proceeding.typeorm.command.repository';
+import { RuralOrHybridRetirementRejectionPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-rejection-period/rural-or-hybrid-retirement-rejection-period.typeorm.command.repository';
+import { RuralOrHybridRetirementRejectionPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-rejection-period-document/rural-or-hybrid-retirement-rejection-period-document.typeorm.command.repository';
+import { RuralOrHybridRetirementRejectionPeriodMemberTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-rejection-period-member/rural-or-hybrid-retirement-rejection-period-member.typeorm.command.repository';
+import { RuralOrHybridRetirementRejectionPeriodMemberDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-rejection-period-member-document/rural-or-hybrid-retirement-rejection-period-member-document.typeorm.command.repository';
+import { RuralOrHybridRetirementRejectionResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-rejection-result/rural-or-hybrid-retirement-rejection-result.typeorm.command.repository';
+import { RuralOrHybridRetirementRejectionTestimonialWitnessTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-rejection-testimonial-witness/rural-or-hybrid-retirement-rejection-testimonial-witness.typeorm.command.repository';
+import { RuralOrHybridRetirementRejectionTestimonialWitnessDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-rejection-testimonial-witness-document/rural-or-hybrid-retirement-rejection-testimonial-witness-document.typeorm.command.repository';
+import { RuralOrHybridRetirementRejectionTimeAcceleratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-rejection-time-accelerator/rural-or-hybrid-retirement-rejection-time-accelerator.typeorm.command.repository';
+import { RuralOrHybridRetirementRejectionWorkPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-rejection-work-period/rural-or-hybrid-retirement-rejection-work-period.typeorm.command.repository';
+import { RuralOrHybridRetirementRejectionWorkPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-rejection-work-period-document/rural-or-hybrid-retirement-rejection-work-period-document.typeorm.command.repository';
+import { RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-rejection-work-period-document-analysis/rural-or-hybrid-retirement-rejection-work-period-document-analysis.typeorm.command.repository';
+import { RuralOrHybridRetirementRejectionWorkPeriodEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-or-hybrid-retirement-rejection-work-period-earnings-history/rural-or-hybrid-retirement-rejection-work-period-earnings-history.typeorm.command.repository';
 import { RuralTimelineAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis/rural-timeline-analysis.typeorm.command.repository';
 import { RuralTimelineAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis/rural-timeline-analysis.typeorm.query.repository';
 import { RuralTimelineAnalysisCnisContributionPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-cnis-contribution-period/rural-timeline-analysis-cnis-contribution-period.typeorm.command.repository';
@@ -445,6 +472,21 @@ import { TemporaryDisabilityBenefitsGrantResultTypeormCommandRepository } from '
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-work-periods/temporary-disability-benefits-grant-work-periods.typeorm.command.repository';
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-work-periods/temporary-disability-benefits-grant-work-periods.typeorm.query.repository';
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-work-periods-earnings-history/temporary-disability-benefits-grant-work-periods-earnings-history.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.typeorm.query.repository';
+import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-disability-analysis/temporary-incapacity-benefit-rejection-disability-analysis.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-disability-analysis/temporary-incapacity-benefit-rejection-disability-analysis.typeorm.query.repository';
+import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisCidTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-disability-analysis-cid/temporary-incapacity-benefit-rejection-disability-analysis-cid.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-disability-analysis-document/temporary-incapacity-benefit-rejection-disability-analysis-document.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-document/temporary-incapacity-benefit-rejection-document.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-inss-benefit/temporary-incapacity-benefit-rejection-inss-benefit.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionInsuredStatusTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-insured-status/temporary-incapacity-benefit-rejection-insured-status.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionInsuredStatusTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-insured-status/temporary-incapacity-benefit-rejection-insured-status.typeorm.query.repository';
+import { TemporaryIncapacityBenefitRejectionInsuredStatusDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-insured-status-document/temporary-incapacity-benefit-rejection-insured-status-document.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-result/temporary-incapacity-benefit-rejection-result.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionWorkPeriodsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-work-periods/temporary-incapacity-benefit-rejection-work-periods.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionWorkPeriodsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-work-periods/temporary-incapacity-benefit-rejection-work-periods.typeorm.query.repository';
+import { TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-work-periods-earnings-history/temporary-incapacity-benefit-rejection-work-periods-earnings-history.typeorm.command.repository';
 import { TutorialTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/tutorial/tutorial.typeorm.command.repository';
 import { TutorialTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/tutorial/tutorial.typeorm.query.repository';
 import { TypeormModule } from '@infra/database/implementation/typeorm/typeorm.module';
@@ -483,6 +525,16 @@ import { CidTenCommandRepositoryGateway } from '@module/customer/analysis-tool/d
 import { CidTenQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cid-ten/query/cid-ten.query.repository.gateway';
 import { SystemActivitiesCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/system-activities/command/system-activities.command.repository.gateway';
 import { SystemActivitiesQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/system-activities/query/system-activities.query.repository.gateway';
+import { AccidentBenefitRejectionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/repository/accident-benefit-rejection/command/accident-benefit-rejection.command.repository.gateway';
+import { AccidentBenefitRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/repository/accident-benefit-rejection/query/accident-benefit-rejection.query.repository.gateway';
+import { AccidentBenefitRejectionDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/repository/accident-benefit-rejection-document/command/accident-benefit-rejection-document.command.repository.gateway';
+import { AccidentBenefitRejectionEventCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/repository/accident-benefit-rejection-event/command/accident-benefit-rejection-event.command.repository.gateway';
+import { AccidentBenefitRejectionEventDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/repository/accident-benefit-rejection-event-document/command/accident-benefit-rejection-event-document.command.repository.gateway';
+import { AccidentBenefitRejectionInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/repository/accident-benefit-rejection-inss-benefit/command/accident-benefit-rejection-inss-benefit.command.repository.gateway';
+import { AccidentBenefitRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/repository/accident-benefit-rejection-result/command/accident-benefit-rejection-result.command.repository.gateway';
+import { AccidentBenefitRejectionWorkPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/repository/accident-benefit-rejection-work-period/command/accident-benefit-rejection-work-period.command.repository.gateway';
+import { AccidentBenefitRejectionWorkPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/repository/accident-benefit-rejection-work-period-document/command/accident-benefit-rejection-work-period-document.command.repository.gateway';
+import { AccidentBenefitRejectionWorkPeriodEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/repository/accident-benefit-rejection-work-period-earnings-history/command/accident-benefit-rejection-work-period-earnings-history.command.repository.gateway';
 import { AdministrativeProcedureInssAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/repository/administrative-procedure-inss-analysis/command/administrative-procedure-inss-analysis.command.repository.gateway';
 import { AdministrativeProcedureInssAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/repository/administrative-procedure-inss-analysis/query/administrative-procedure-inss-analysis.query.repository.gateway';
 import { AdministrativeProcedureInssAnalysisBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/repository/administrative-procedure-inss-analysis-benefit/command/administrative-procedure-inss-analysis-benefit.command.repository.gateway';
@@ -710,6 +762,23 @@ import { RetirementPlanningRppsRemunerationQueryRepositoryGateway } from '@modul
 import { RetirementPlanningRppsRemunerationCalculationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps-remuneration-calculation/command/retirement-planning-rpps-remuneration-calculation.command.repository.gateway';
 import { RetirementPlanningRppsRemunerationCalculationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps-remuneration-calculation/query/retirement-planning-rpps-remuneration-calculation.query.repository.gateway';
 import { RetirementPlanningRppsResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps-result/command/retirement-planning-rpps-result.command.repository.gateway';
+import { RuralOrHybridRetirementRejectionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection/command/rural-or-hybrid-retirement-rejection.command.repository.gateway';
+import { RuralOrHybridRetirementRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection/query/rural-or-hybrid-retirement-rejection.query.repository.gateway';
+import { RuralOrHybridRetirementRejectionDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-document/command/rural-or-hybrid-retirement-rejection-document.command.repository.gateway';
+import { RuralOrHybridRetirementRejectionInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-inss-benefit/command/rural-or-hybrid-retirement-rejection-inss-benefit.command.repository.gateway';
+import { RuralOrHybridRetirementRejectionLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-legal-proceeding/command/rural-or-hybrid-retirement-rejection-legal-proceeding.command.repository.gateway';
+import { RuralOrHybridRetirementRejectionPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-period/command/rural-or-hybrid-retirement-rejection-period.command.repository.gateway';
+import { RuralOrHybridRetirementRejectionPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-period-document/command/rural-or-hybrid-retirement-rejection-period-document.command.repository.gateway';
+import { RuralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-period-member/command/rural-or-hybrid-retirement-rejection-period-member.command.repository.gateway';
+import { RuralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-period-member-document/command/rural-or-hybrid-retirement-rejection-period-member-document.command.repository.gateway';
+import { RuralOrHybridRetirementRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-result/command/rural-or-hybrid-retirement-rejection-result.command.repository.gateway';
+import { RuralOrHybridRetirementRejectionTestimonialWitnessCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-testimonial-witness/command/rural-or-hybrid-retirement-rejection-testimonial-witness.command.repository.gateway';
+import { RuralOrHybridRetirementRejectionTestimonialWitnessDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-testimonial-witness-document/command/rural-or-hybrid-retirement-rejection-testimonial-witness-document.command.repository.gateway';
+import { RuralOrHybridRetirementRejectionTimeAcceleratorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-time-accelerator/command/rural-or-hybrid-retirement-rejection-time-accelerator.command.repository.gateway';
+import { RuralOrHybridRetirementRejectionWorkPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-work-period/command/rural-or-hybrid-retirement-rejection-work-period.command.repository.gateway';
+import { RuralOrHybridRetirementRejectionWorkPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-work-period-document/command/rural-or-hybrid-retirement-rejection-work-period-document.command.repository.gateway';
+import { RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-work-period-document-analysis/command/rural-or-hybrid-retirement-rejection-work-period-document-analysis.command.repository.gateway';
+import { RuralOrHybridRetirementRejectionWorkPeriodEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection-work-period-earnings-history/command/rural-or-hybrid-retirement-rejection-work-period-earnings-history.command.repository.gateway';
 import { RuralTimelineAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/command/rural-timeline-analysis.command.repository.gateway';
 import { RuralTimelineAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/rural-timeline-analysis.query.repository.gateway';
 import { RuralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period/command/rural-timeline-analysis-cnis-contribution-period.command.repository.gateway';
@@ -830,6 +899,21 @@ import { TemporaryDisabilityBenefitsGrantResultCommandRepositoryGateway } from '
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-work-periods/command/temporary-disability-benefits-grant-work-periods.command.repository.gateway';
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-work-periods/query/temporary-disability-benefits-grant-work-periods.query.repository.gateway';
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-work-periods-earnings-history/command/temporary-disability-benefits-grant-work-periods-earnings-history.command.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection/command/temporary-incapacity-benefit-rejection.command.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection/query/temporary-incapacity-benefit-rejection.query.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-disability-analysis/command/temporary-incapacity-benefit-rejection-disability-analysis.command.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-disability-analysis/query/temporary-incapacity-benefit-rejection-disability-analysis.query.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisCidCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-disability-analysis-cid/command/temporary-incapacity-benefit-rejection-disability-analysis-cid.command.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-disability-analysis-document/command/temporary-incapacity-benefit-rejection-disability-analysis-document.command.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-document/command/temporary-incapacity-benefit-rejection-document.command.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-inss-benefit/command/temporary-incapacity-benefit-rejection-inss-benefit.command.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionInsuredStatusCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-insured-status/command/temporary-incapacity-benefit-rejection-insured-status.command.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionInsuredStatusQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-insured-status/query/temporary-incapacity-benefit-rejection-insured-status.query.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionInsuredStatusDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-insured-status-document/command/temporary-incapacity-benefit-rejection-insured-status-document.command.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-result/command/temporary-incapacity-benefit-rejection-result.command.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionWorkPeriodsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-work-periods/command/temporary-incapacity-benefit-rejection-work-periods.command.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionWorkPeriodsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-work-periods/query/temporary-incapacity-benefit-rejection-work-periods.query.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-work-periods-earnings-history/command/temporary-incapacity-benefit-rejection-work-periods-earnings-history.command.repository.gateway';
 import { CreditPackCommandRepositoryGateway } from '@module/customer/credit-pack/domain/repository/credit-pack/command/credit-pack.command.repository.gateway';
 import { CreditPackQueryRepositoryGateway } from '@module/customer/credit-pack/domain/repository/credit-pack/query/credit-pack.query.repository.gateway';
 import { OrganizationCreditPackPurchaseCommandRepositoryGateway } from '@module/customer/credit-pack/domain/repository/organization-credit-pack-purchase/command/organization-credit-pack-purchase.command.repository.gateway';
@@ -2352,6 +2436,97 @@ const classProvider: ClassProvider[] = [
       RuralTimelineAnalysisCnisContributionPeriodAdjustmentTypeormQueryRepository,
   },
   {
+    provide: RuralOrHybridRetirementRejectionCommandRepositoryGateway,
+    useClass: RuralOrHybridRetirementRejectionTypeormCommandRepository,
+  },
+  {
+    provide: RuralOrHybridRetirementRejectionQueryRepositoryGateway,
+    useClass: RuralOrHybridRetirementRejectionTypeormQueryRepository,
+  },
+  {
+    provide: RuralOrHybridRetirementRejectionResultCommandRepositoryGateway,
+    useClass: RuralOrHybridRetirementRejectionResultTypeormCommandRepository,
+  },
+  {
+    provide: RuralOrHybridRetirementRejectionDocumentCommandRepositoryGateway,
+    useClass: RuralOrHybridRetirementRejectionDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      RuralOrHybridRetirementRejectionInssBenefitCommandRepositoryGateway,
+    useClass:
+      RuralOrHybridRetirementRejectionInssBenefitTypeormCommandRepository,
+  },
+  {
+    provide:
+      RuralOrHybridRetirementRejectionLegalProceedingCommandRepositoryGateway,
+    useClass:
+      RuralOrHybridRetirementRejectionLegalProceedingTypeormCommandRepository,
+  },
+  {
+    provide: RuralOrHybridRetirementRejectionPeriodCommandRepositoryGateway,
+    useClass: RuralOrHybridRetirementRejectionPeriodTypeormCommandRepository,
+  },
+  {
+    provide:
+      RuralOrHybridRetirementRejectionPeriodDocumentCommandRepositoryGateway,
+    useClass:
+      RuralOrHybridRetirementRejectionPeriodDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      RuralOrHybridRetirementRejectionPeriodMemberCommandRepositoryGateway,
+    useClass:
+      RuralOrHybridRetirementRejectionPeriodMemberTypeormCommandRepository,
+  },
+  {
+    provide:
+      RuralOrHybridRetirementRejectionPeriodMemberDocumentCommandRepositoryGateway,
+    useClass:
+      RuralOrHybridRetirementRejectionPeriodMemberDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      RuralOrHybridRetirementRejectionTestimonialWitnessCommandRepositoryGateway,
+    useClass:
+      RuralOrHybridRetirementRejectionTestimonialWitnessTypeormCommandRepository,
+  },
+  {
+    provide:
+      RuralOrHybridRetirementRejectionTestimonialWitnessDocumentCommandRepositoryGateway,
+    useClass:
+      RuralOrHybridRetirementRejectionTestimonialWitnessDocumentTypeormCommandRepository,
+  },
+  {
+    provide: RuralOrHybridRetirementRejectionWorkPeriodCommandRepositoryGateway,
+    useClass:
+      RuralOrHybridRetirementRejectionWorkPeriodTypeormCommandRepository,
+  },
+  {
+    provide:
+      RuralOrHybridRetirementRejectionWorkPeriodDocumentCommandRepositoryGateway,
+    useClass:
+      RuralOrHybridRetirementRejectionWorkPeriodDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisCommandRepositoryGateway,
+    useClass:
+      RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisTypeormCommandRepository,
+  },
+  {
+    provide:
+      RuralOrHybridRetirementRejectionWorkPeriodEarningsHistoryCommandRepositoryGateway,
+    useClass:
+      RuralOrHybridRetirementRejectionWorkPeriodEarningsHistoryTypeormCommandRepository,
+  },
+  {
+    provide:
+      RuralOrHybridRetirementRejectionTimeAcceleratorCommandRepositoryGateway,
+    useClass:
+      RuralOrHybridRetirementRejectionTimeAcceleratorTypeormCommandRepository,
+  },
+  {
     provide: SpecialActivityAnalysisQueryRepositoryGateway,
     useClass: SpecialActivityTypeormQueryRepository,
   },
@@ -2794,6 +2969,49 @@ const classProvider: ClassProvider[] = [
     useClass: GeneralUrbanRetirementDenialInssBenefitTypeormCommandRepository,
   },
   {
+    provide: AccidentBenefitRejectionQueryRepositoryGateway,
+    useClass: AccidentBenefitRejectionTypeormQueryRepository,
+  },
+  {
+    provide: AccidentBenefitRejectionCommandRepositoryGateway,
+    useClass: AccidentBenefitRejectionTypeormCommandRepository,
+  },
+  {
+    provide: AccidentBenefitRejectionResultCommandRepositoryGateway,
+    useClass: AccidentBenefitRejectionResultTypeormCommandRepository,
+  },
+  {
+    provide: AccidentBenefitRejectionDocumentCommandRepositoryGateway,
+    useClass: AccidentBenefitRejectionDocumentTypeormCommandRepository,
+  },
+  {
+    provide: AccidentBenefitRejectionInssBenefitCommandRepositoryGateway,
+    useClass: AccidentBenefitRejectionInssBenefitTypeormCommandRepository,
+  },
+  {
+    provide: AccidentBenefitRejectionEventCommandRepositoryGateway,
+    useClass: AccidentBenefitRejectionEventTypeormCommandRepository,
+  },
+  {
+    provide: AccidentBenefitRejectionEventDocumentCommandRepositoryGateway,
+    useClass: AccidentBenefitRejectionEventDocumentTypeormCommandRepository,
+  },
+  {
+    provide: AccidentBenefitRejectionWorkPeriodCommandRepositoryGateway,
+    useClass: AccidentBenefitRejectionWorkPeriodTypeormCommandRepository,
+  },
+  {
+    provide: AccidentBenefitRejectionWorkPeriodDocumentCommandRepositoryGateway,
+    useClass:
+      AccidentBenefitRejectionWorkPeriodDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      AccidentBenefitRejectionWorkPeriodEarningsHistoryCommandRepositoryGateway,
+    useClass:
+      AccidentBenefitRejectionWorkPeriodEarningsHistoryTypeormCommandRepository,
+  },
+  {
     provide: MaternityPayGrantCommandRepositoryGateway,
     useClass: MaternityPayGrantTypeormCommandRepository,
   },
@@ -2888,6 +3106,90 @@ const classProvider: ClassProvider[] = [
       DisabilityRetirementPlanningRejectionInssBenefitCommandRepositoryGateway,
     useClass:
       DisabilityRetirementPlanningRejectionInssBenefitTypeormCommandRepository,
+  },
+  {
+    provide: TemporaryIncapacityBenefitRejectionQueryRepositoryGateway,
+    useClass: TemporaryIncapacityBenefitRejectionTypeormQueryRepository,
+  },
+  {
+    provide: TemporaryIncapacityBenefitRejectionCommandRepositoryGateway,
+    useClass: TemporaryIncapacityBenefitRejectionTypeormCommandRepository,
+  },
+  {
+    provide: TemporaryIncapacityBenefitRejectionResultCommandRepositoryGateway,
+    useClass: TemporaryIncapacityBenefitRejectionResultTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryIncapacityBenefitRejectionDocumentCommandRepositoryGateway,
+    useClass:
+      TemporaryIncapacityBenefitRejectionDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryIncapacityBenefitRejectionInssBenefitCommandRepositoryGateway,
+    useClass:
+      TemporaryIncapacityBenefitRejectionInssBenefitTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryIncapacityBenefitRejectionDisabilityAnalysisQueryRepositoryGateway,
+    useClass:
+      TemporaryIncapacityBenefitRejectionDisabilityAnalysisTypeormQueryRepository,
+  },
+  {
+    provide:
+      TemporaryIncapacityBenefitRejectionDisabilityAnalysisCommandRepositoryGateway,
+    useClass:
+      TemporaryIncapacityBenefitRejectionDisabilityAnalysisTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryIncapacityBenefitRejectionDisabilityAnalysisCidCommandRepositoryGateway,
+    useClass:
+      TemporaryIncapacityBenefitRejectionDisabilityAnalysisCidTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryIncapacityBenefitRejectionDisabilityAnalysisDocumentCommandRepositoryGateway,
+    useClass:
+      TemporaryIncapacityBenefitRejectionDisabilityAnalysisDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryIncapacityBenefitRejectionInsuredStatusQueryRepositoryGateway,
+    useClass:
+      TemporaryIncapacityBenefitRejectionInsuredStatusTypeormQueryRepository,
+  },
+  {
+    provide:
+      TemporaryIncapacityBenefitRejectionInsuredStatusCommandRepositoryGateway,
+    useClass:
+      TemporaryIncapacityBenefitRejectionInsuredStatusTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryIncapacityBenefitRejectionInsuredStatusDocumentCommandRepositoryGateway,
+    useClass:
+      TemporaryIncapacityBenefitRejectionInsuredStatusDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryIncapacityBenefitRejectionWorkPeriodsQueryRepositoryGateway,
+    useClass:
+      TemporaryIncapacityBenefitRejectionWorkPeriodsTypeormQueryRepository,
+  },
+  {
+    provide:
+      TemporaryIncapacityBenefitRejectionWorkPeriodsCommandRepositoryGateway,
+    useClass:
+      TemporaryIncapacityBenefitRejectionWorkPeriodsTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryCommandRepositoryGateway,
+    useClass:
+      TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryTypeormCommandRepository,
   },
 ];
 
