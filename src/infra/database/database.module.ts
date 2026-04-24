@@ -4,6 +4,7 @@ import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/t
 import { AccidentAssistanceTerminatedTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated/accident-assistance-terminated.typeorm.command.repository';
 import { AccidentAssistanceTerminatedTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated/accident-assistance-terminated.typeorm.query.repository';
 import { AccidentAssistanceTerminatedBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated-benefit/accident-assistance-terminated-benefit.typeorm.command.repository';
+import { AccidentAssistanceTerminatedCidTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated-cid/accident-assistance-terminated-cid.typeorm.command.repository';
 import { AccidentAssistanceTerminatedDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated-document/accident-assistance-terminated-document.typeorm.command.repository';
 import { AccidentAssistanceTerminatedLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated-legal-proceeding/accident-assistance-terminated-legal-proceeding.typeorm.command.repository';
 import { AccidentAssistanceTerminatedResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated-result/accident-assistance-terminated-result.typeorm.command.repository';
@@ -482,6 +483,7 @@ import { SystemActivitiesQueryRepositoryGateway } from '@module/customer/analysi
 import { AccidentAssistanceTerminatedCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated/command/accident-assistance-terminated.command.repository.gateway';
 import { AccidentAssistanceTerminatedQueryRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated/query/accident-assistance-terminated.query.repository.gateway';
 import { AccidentAssistanceTerminatedBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated-benefit/command/accident-assistance-terminated-benefit.command.repository.gateway';
+import { AccidentAssistanceTerminatedCidCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated-cid/command/accident-assistance-terminated-cid.command.repository.gateway';
 import { AccidentAssistanceTerminatedDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated-document/command/accident-assistance-terminated-document.command.repository.gateway';
 import { AccidentAssistanceTerminatedLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated-legal-proceeding/command/accident-assistance-terminated-legal-proceeding.command.repository.gateway';
 import { AccidentAssistanceTerminatedResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated-result/command/accident-assistance-terminated-result.command.repository.gateway';
@@ -997,12 +999,18 @@ const classProvider: ClassProvider[] = [
     useClass: AccidentAssistanceTerminatedDocumentTypeormCommandRepository,
   },
   {
-    provide: AccidentAssistanceTerminatedLegalProceedingCommandRepositoryGateway,
-    useClass: AccidentAssistanceTerminatedLegalProceedingTypeormCommandRepository,
+    provide:
+      AccidentAssistanceTerminatedLegalProceedingCommandRepositoryGateway,
+    useClass:
+      AccidentAssistanceTerminatedLegalProceedingTypeormCommandRepository,
   },
   {
     provide: AccidentAssistanceTerminatedResultCommandRepositoryGateway,
     useClass: AccidentAssistanceTerminatedResultTypeormCommandRepository,
+  },
+  {
+    provide: AccidentAssistanceTerminatedCidCommandRepositoryGateway,
+    useClass: AccidentAssistanceTerminatedCidTypeormCommandRepository,
   },
   {
     provide: AdministrativeProcedureInssAnalysisBenefitCommandRepositoryGateway,

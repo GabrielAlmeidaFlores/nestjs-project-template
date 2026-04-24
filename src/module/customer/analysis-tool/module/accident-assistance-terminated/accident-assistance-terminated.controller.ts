@@ -10,20 +10,21 @@ import {
 
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { AccidentAssistanceTerminatedId } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated/value-object/accident-assistance-terminated-id/accident-assistance-terminated-id.value-object';
+import { CreateAccidentAssistanceTerminatedEventRequestDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/request/create-accident-assistance-terminated-event.request.dto';
 import { CreateAccidentAssistanceTerminatedRequestDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/request/create-accident-assistance-terminated.request.dto';
 import { UpdateAccidentAssistanceTerminatedRequestDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/request/update-accident-assistance-terminated.request.dto';
 import { UploadAccidentAssistanceTerminatedDocumentsRequestDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/request/upload-accident-assistance-terminated-documents.request.dto';
 import { CreateAccidentAssistanceTerminatedDecisionDetailsResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/create-accident-assistance-terminated-decision-details.response.dto';
+import { CreateAccidentAssistanceTerminatedEventResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/create-accident-assistance-terminated-event.response.dto';
 import { CreateAccidentAssistanceTerminatedResultResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/create-accident-assistance-terminated-result.response.dto';
 import { CreateAccidentAssistanceTerminatedResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/create-accident-assistance-terminated.response.dto';
-import { DeleteAccidentAssistanceTerminatedResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/delete-accident-assistance-terminated.response.dto';
 import { GetAccidentAssistanceTerminatedResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/get-accident-assistance-terminated.response.dto';
 import { UpdateAccidentAssistanceTerminatedResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/update-accident-assistance-terminated.response.dto';
 import { UploadAccidentAssistanceTerminatedDocumentsResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/upload-accident-assistance-terminated-documents.response.dto';
 import { CreateAccidentAssistanceTerminatedDecisionDetailsUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/create-accident-assistance-terminated-decision-details.use-case';
+import { CreateAccidentAssistanceTerminatedEventUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/create-accident-assistance-terminated-event.use-case';
 import { CreateAccidentAssistanceTerminatedResultUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/create-accident-assistance-terminated-result.use-case';
 import { CreateAccidentAssistanceTerminatedUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/create-accident-assistance-terminated.use-case';
-import { DeleteAccidentAssistanceTerminatedUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/delete-accident-assistance-terminated.use-case';
 import { DownloadAccidentAssistanceTerminatedCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/download-accident-assistance-terminated-complete-analysis.use-case';
 import { DownloadAccidentAssistanceTerminatedSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/download-accident-assistance-terminated-simplified-analysis.use-case';
 import { GetAccidentAssistanceTerminatedUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/get-accident-assistance-terminated.use-case';
@@ -52,8 +53,8 @@ export class AccidentAssistanceTerminatedController {
     private readonly downloadAccidentAssistanceTerminatedCompleteAnalysisUseCase: DownloadAccidentAssistanceTerminatedCompleteAnalysisUseCase,
     private readonly downloadAccidentAssistanceTerminatedSimplifiedAnalysisUseCase: DownloadAccidentAssistanceTerminatedSimplifiedAnalysisUseCase,
     private readonly updateAccidentAssistanceTerminatedUseCase: UpdateAccidentAssistanceTerminatedUseCase,
-    private readonly deleteAccidentAssistanceTerminatedUseCase: DeleteAccidentAssistanceTerminatedUseCase,
     private readonly uploadAccidentAssistanceTerminatedDocumentsUseCase: UploadAccidentAssistanceTerminatedDocumentsUseCase,
+    private readonly createAccidentAssistanceTerminatedEventUseCase: CreateAccidentAssistanceTerminatedEventUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -152,39 +153,6 @@ export class AccidentAssistanceTerminatedController {
       organizationSessionData,
       accidentAssistanceTerminatedId,
       dto,
-    );
-  }
-
-  @BuildEndpointSpecification({
-    summary: 'Excluir diagnóstico para auxílio-acidente (RGPS)',
-    userLevel: [UserLevelEnum.CUSTOMER],
-    http: {
-      path: ':accidentAssistanceTerminatedId',
-      method: RequestMethod.DELETE,
-    },
-    tag: ['diagnostico-auxilio-acidente-rgps'],
-    successResponse: {
-      statusCode: HttpStatus.OK,
-      description:
-        'Diagnóstico para auxílio-acidente (RGPS) excluído com sucesso.',
-      type: DeleteAccidentAssistanceTerminatedResponseDto,
-    },
-    guard: [AuthGuard, OrganizationSessionGuard],
-  })
-  public async deleteAccidentAssistanceTerminated(
-    @GetSessionData() sessionData: SessionDataModel,
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
-    @Param(
-      'accidentAssistanceTerminatedId',
-      new ParseValueObjectPipe(AccidentAssistanceTerminatedId),
-    )
-    accidentAssistanceTerminatedId: AccidentAssistanceTerminatedId,
-  ): Promise<DeleteAccidentAssistanceTerminatedResponseDto> {
-    return await this.deleteAccidentAssistanceTerminatedUseCase.execute(
-      sessionData,
-      organizationSessionData,
-      accidentAssistanceTerminatedId,
     );
   }
 
@@ -357,6 +325,41 @@ export class AccidentAssistanceTerminatedController {
     @Body() dto: UploadAccidentAssistanceTerminatedDocumentsRequestDto,
   ): Promise<UploadAccidentAssistanceTerminatedDocumentsResponseDto> {
     return await this.uploadAccidentAssistanceTerminatedDocumentsUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      accidentAssistanceTerminatedId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Registrar evento gerador do auxílio-acidente (RGPS)',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':accidentAssistanceTerminatedId/event',
+      method: RequestMethod.POST,
+      type: CreateAccidentAssistanceTerminatedEventRequestDto,
+    },
+    tag: ['diagnostico-auxilio-acidente-rgps'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Evento gerador registrado com sucesso.',
+      type: CreateAccidentAssistanceTerminatedEventResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createAccidentAssistanceTerminatedEvent(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'accidentAssistanceTerminatedId',
+      new ParseValueObjectPipe(AccidentAssistanceTerminatedId),
+    )
+    accidentAssistanceTerminatedId: AccidentAssistanceTerminatedId,
+    @Body() dto: CreateAccidentAssistanceTerminatedEventRequestDto,
+  ): Promise<CreateAccidentAssistanceTerminatedEventResponseDto> {
+    return await this.createAccidentAssistanceTerminatedEventUseCase.execute(
       sessionData,
       organizationSessionData,
       accidentAssistanceTerminatedId,

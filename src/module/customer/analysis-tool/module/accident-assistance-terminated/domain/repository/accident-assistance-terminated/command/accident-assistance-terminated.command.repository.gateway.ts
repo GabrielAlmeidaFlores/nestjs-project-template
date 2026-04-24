@@ -13,6 +13,13 @@ export abstract class AccidentAssistanceTerminatedCommandRepositoryGateway {
     props: AccidentAssistanceTerminatedEntity,
   ): TransactionType;
 
+  public abstract updateAccidentAssistanceTerminatedEventContext(
+    id: AccidentAssistanceTerminatedId,
+    accidentDate: Date,
+    accidentDescription: string,
+    updatedBy: OrganizationMemberId,
+  ): TransactionType;
+
   public abstract deleteAccidentAssistanceTerminated(
     id: AccidentAssistanceTerminatedId,
     updatedBy: OrganizationMemberId,

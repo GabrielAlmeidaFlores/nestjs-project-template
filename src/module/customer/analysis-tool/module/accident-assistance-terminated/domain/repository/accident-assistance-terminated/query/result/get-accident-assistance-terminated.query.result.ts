@@ -19,6 +19,8 @@ export class GetAccidentAssistanceTerminatedQueryResult extends BaseBuildableObj
   public readonly previousIncapacityBenefitStartDate: Date | null;
   public readonly previousIncapacityBenefitEndDate: Date | null;
   public readonly extensionRequestStatus: AccidentAssistanceTerminatedExtensionRequestStatusEnum | null;
+  public readonly accidentDate: Date | null;
+  public readonly accidentDescription: string | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

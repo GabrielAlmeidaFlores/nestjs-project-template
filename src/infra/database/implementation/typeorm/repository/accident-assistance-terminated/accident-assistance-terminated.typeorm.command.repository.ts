@@ -52,6 +52,21 @@ export class AccidentAssistanceTerminatedTypeormCommandRepository
     return this.update(id.toString(), mappedData);
   }
 
+  public updateAccidentAssistanceTerminatedEventContext(
+    id: AccidentAssistanceTerminatedId,
+    accidentDate: Date,
+    accidentDescription: string,
+    updatedBy: OrganizationMemberId,
+  ): TransactionType {
+    return this.update(id.toString(), {
+      accidentDate,
+      accidentDescription,
+      updatedBy: {
+        id: updatedBy.toString(),
+      },
+    });
+  }
+
   public deleteAccidentAssistanceTerminated(
     id: AccidentAssistanceTerminatedId,
     updatedBy: OrganizationMemberId,
