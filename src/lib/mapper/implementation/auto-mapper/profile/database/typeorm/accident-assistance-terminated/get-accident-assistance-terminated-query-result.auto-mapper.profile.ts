@@ -51,6 +51,8 @@ export class GetAccidentAssistanceTerminatedQueryResultAutoMapperProfile {
       return AccidentAssistanceTerminatedTypeormEntity.build({
         ...source,
         id: source.id.toString(),
+        accidentDate: source.accidentDate,
+        accidentDescription: source.accidentDescription,
         accidentAssistanceTerminatedResult: undefined,
       });
     };

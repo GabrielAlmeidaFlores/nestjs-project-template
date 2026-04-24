@@ -12,6 +12,12 @@ import type { AccidentAssistanceTerminatedLegalProceedingEntity } from '@module/
 import type { AccidentAssistanceTerminatedResultEntity } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-result/accident-assistance-terminated-result.entity';
 
 export class AccidentAssistanceTerminatedEntity extends BaseEntity<AccidentAssistanceTerminatedId> {
+  @Description('Data em que ocorreu o acidente.')
+  public readonly accidentDate: Date | null;
+
+  @Description('Descrição breve sobre a condição médica decorrente do acidente.')
+  public readonly accidentDescription: string | null;
+
   @Description('Data de Encaminhamento/Requerimento (DER) do benefício.')
   public readonly der: Date;
 
@@ -74,6 +80,8 @@ export class AccidentAssistanceTerminatedEntity extends BaseEntity<AccidentAssis
   public constructor(props: AccidentAssistanceTerminatedEntityPropsInterface) {
     super(AccidentAssistanceTerminatedId, props);
 
+    this.accidentDate = props.accidentDate ?? null;
+    this.accidentDescription = props.accidentDescription ?? null;
     this.der = props.der;
     this.denialDate = props.denialDate;
     this.category = props.category;

@@ -9,6 +9,8 @@ import type { AccidentAssistanceTerminatedLegalProceedingEntity } from '@module/
 import type { AccidentAssistanceTerminatedResultEntity } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-result/accident-assistance-terminated-result.entity';
 
 export interface AccidentAssistanceTerminatedEntityPropsInterface extends BaseEntityPropsInterface<AccidentAssistanceTerminatedId> {
+  accidentDate?: Date | null;
+  accidentDescription?: string | null;
   der: Date;
   denialDate: Date;
   category: AccidentAssistanceTerminatedCategoryEnum;

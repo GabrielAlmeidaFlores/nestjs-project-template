@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AccidentAssistanceTerminatedTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated/accident-assistance-terminated.typeorm.command.repository';
 import { AccidentAssistanceTerminatedTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated/accident-assistance-terminated.typeorm.query.repository';
 import { AccidentAssistanceTerminatedBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated-benefit/accident-assistance-terminated-benefit.typeorm.command.repository';
+import { AccidentAssistanceTerminatedCidTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated-cid/accident-assistance-terminated-cid.typeorm.command.repository';
 import { AccidentAssistanceTerminatedDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated-document/accident-assistance-terminated-document.typeorm.command.repository';
 import { AccidentAssistanceTerminatedLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated-legal-proceeding/accident-assistance-terminated-legal-proceeding.typeorm.command.repository';
 import { AccidentAssistanceTerminatedResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated-result/accident-assistance-terminated-result.typeorm.command.repository';
@@ -365,6 +366,7 @@ import { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryTypeormComman
 import { TutorialTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/tutorial/tutorial.typeorm.command.repository';
 import { TutorialTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/tutorial/tutorial.typeorm.query.repository';
 import { AccidentAssistanceTerminatedBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-benefit.entity';
+import { AccidentAssistanceTerminatedCidTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-cid.entity';
 import { AccidentAssistanceTerminatedDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-document.entity';
 import { AccidentAssistanceTerminatedLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-legal-proceeding.entity';
 import { AccidentAssistanceTerminatedResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-result.entity';
@@ -970,6 +972,7 @@ export class TypeormIndex {
     BpcElderlyAnalysisLegalProceedingTypeormEntity,
     AccidentAssistanceTerminatedTypeormEntity,
     AccidentAssistanceTerminatedBenefitTypeormEntity,
+    AccidentAssistanceTerminatedCidTypeormEntity,
     AccidentAssistanceTerminatedDocumentTypeormEntity,
     AccidentAssistanceTerminatedLegalProceedingTypeormEntity,
     AccidentAssistanceTerminatedResultTypeormEntity,
@@ -990,6 +993,7 @@ export class TypeormIndex {
     AccidentAssistanceTerminatedTypeormCommandRepository,
     AccidentAssistanceTerminatedTypeormQueryRepository,
     AccidentAssistanceTerminatedBenefitTypeormCommandRepository,
+    AccidentAssistanceTerminatedCidTypeormCommandRepository,
     AccidentAssistanceTerminatedDocumentTypeormCommandRepository,
     AccidentAssistanceTerminatedLegalProceedingTypeormCommandRepository,
     AccidentAssistanceTerminatedResultTypeormCommandRepository,

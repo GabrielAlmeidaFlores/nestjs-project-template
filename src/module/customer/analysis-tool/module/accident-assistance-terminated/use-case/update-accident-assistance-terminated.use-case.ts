@@ -112,13 +112,11 @@ export class UpdateAccidentAssistanceTerminatedUseCase {
           dto.json?.category ??
           accidentAssistanceTerminatedQueryResult.category,
         inssPassword:
-          dto.json?.inssPassword !== undefined
-            ? dto.json.inssPassword
-            : accidentAssistanceTerminatedQueryResult.inssPassword,
+          dto.json?.inssPassword ??
+          accidentAssistanceTerminatedQueryResult.inssPassword,
         analysisName:
-          dto.json?.analysisName !== undefined
-            ? dto.json.analysisName
-            : accidentAssistanceTerminatedQueryResult.analysisName,
+          dto.json?.analysisName ??
+          accidentAssistanceTerminatedQueryResult.analysisName,
         benefitCessationReason:
           dto.json?.benefitCessationReason ??
           accidentAssistanceTerminatedQueryResult.benefitCessationReason,
@@ -126,21 +124,17 @@ export class UpdateAccidentAssistanceTerminatedUseCase {
           dto.json?.hadPreviousIncapacityBenefit ??
           accidentAssistanceTerminatedQueryResult.hadPreviousIncapacityBenefit,
         previousIncapacityBenefitNumber:
-          dto.json?.previousIncapacityBenefitNumber !== undefined
-            ? dto.json.previousIncapacityBenefitNumber
-            : accidentAssistanceTerminatedQueryResult.previousIncapacityBenefitNumber,
+          dto.json?.previousIncapacityBenefitNumber ??
+          accidentAssistanceTerminatedQueryResult.previousIncapacityBenefitNumber,
         previousIncapacityBenefitStartDate:
-          dto.json?.previousIncapacityBenefitStartDate !== undefined
-            ? dto.json.previousIncapacityBenefitStartDate
-            : accidentAssistanceTerminatedQueryResult.previousIncapacityBenefitStartDate,
+          dto.json?.previousIncapacityBenefitStartDate ??
+          accidentAssistanceTerminatedQueryResult.previousIncapacityBenefitStartDate,
         previousIncapacityBenefitEndDate:
-          dto.json?.previousIncapacityBenefitEndDate !== undefined
-            ? dto.json.previousIncapacityBenefitEndDate
-            : accidentAssistanceTerminatedQueryResult.previousIncapacityBenefitEndDate,
+          dto.json?.previousIncapacityBenefitEndDate ??
+          accidentAssistanceTerminatedQueryResult.previousIncapacityBenefitEndDate,
         extensionRequestStatus:
-          dto.json?.extensionRequestStatus !== undefined
-            ? dto.json.extensionRequestStatus
-            : accidentAssistanceTerminatedQueryResult.extensionRequestStatus,
+          dto.json?.extensionRequestStatus ??
+          accidentAssistanceTerminatedQueryResult.extensionRequestStatus,
         createdBy: accidentAssistanceTerminatedQueryResult.createdBy.id,
         updatedBy: organizationMember.id,
       },

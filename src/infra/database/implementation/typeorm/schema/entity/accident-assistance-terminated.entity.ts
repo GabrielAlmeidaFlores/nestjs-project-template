@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 
 import { AccidentAssistanceTerminatedBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-benefit.entity';
+import { AccidentAssistanceTerminatedCidTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-cid.entity';
 import { AccidentAssistanceTerminatedDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-document.entity';
 import { AccidentAssistanceTerminatedLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-legal-proceeding.entity';
 import { AccidentAssistanceTerminatedResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-result.entity';
@@ -21,6 +22,21 @@ import { AccidentAssistanceTerminatedExtensionRequestStatusEnum } from '@module/
 
 @Entity({ name: 'accident_assistance_terminated' })
 export class AccidentAssistanceTerminatedTypeormEntity extends BaseTypeormEntity {
+  @Column({
+    name: 'accident_date',
+    type: 'date',
+    nullable: true,
+    transformer: DateOnlyTransformer,
+  })
+  public accidentDate: Date | null;
+
+  @Column({
+    name: 'accident_description',
+    type: 'text',
+    nullable: true,
+  })
+  public accidentDescription: string | null;
+
   @Column({
     name: 'der',
     type: 'date',
@@ -125,6 +141,14 @@ export class AccidentAssistanceTerminatedTypeormEntity extends BaseTypeormEntity
   )
   public accidentAssistanceTerminatedDocument?:
     | AccidentAssistanceTerminatedDocumentTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => AccidentAssistanceTerminatedCidTypeormEntity,
+    (entity) => entity.accidentAssistanceTerminated,
+  )
+  public accidentAssistanceTerminatedCid?:
+    | AccidentAssistanceTerminatedCidTypeormEntity[]
     | undefined;
 
   @OneToOne(

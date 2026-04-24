@@ -8,9 +8,9 @@ import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-pro
 import { OrganizationCustomizationExportDocumentOptionsResolverModule } from '@module/customer/analysis-tool/lib/organization-customization-resolver/organization-customization-export-document-options-resolver.module';
 import { AccidentAssistanceTerminatedController } from '@module/customer/analysis-tool/module/accident-assistance-terminated/accident-assistance-terminated.controller';
 import { CreateAccidentAssistanceTerminatedDecisionDetailsUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/create-accident-assistance-terminated-decision-details.use-case';
+import { CreateAccidentAssistanceTerminatedEventUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/create-accident-assistance-terminated-event.use-case';
 import { CreateAccidentAssistanceTerminatedResultUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/create-accident-assistance-terminated-result.use-case';
 import { CreateAccidentAssistanceTerminatedUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/create-accident-assistance-terminated.use-case';
-import { DeleteAccidentAssistanceTerminatedUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/delete-accident-assistance-terminated.use-case';
 import { DownloadAccidentAssistanceTerminatedCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/download-accident-assistance-terminated-complete-analysis.use-case';
 import { DownloadAccidentAssistanceTerminatedSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/download-accident-assistance-terminated-simplified-analysis.use-case';
 import { GetAccidentAssistanceTerminatedUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/get-accident-assistance-terminated.use-case';
@@ -40,13 +40,13 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateAccidentAssistanceTerminatedResultUseCase,
     CreateAccidentAssistanceTerminatedDecisionDetailsUseCase,
     GetAccidentAssistanceTerminatedUseCase,
-    DeleteAccidentAssistanceTerminatedUseCase,
     DownloadAccidentAssistanceTerminatedCompleteAnalysisUseCase,
     DownloadAccidentAssistanceTerminatedSimplifiedAnalysisUseCase,
     UpdateAccidentAssistanceTerminatedUseCase,
     UploadAccidentAssistanceTerminatedDocumentsUseCase,
+    CreateAccidentAssistanceTerminatedEventUseCase,
   ],
-  exports: [DeleteAccidentAssistanceTerminatedUseCase],
+  exports: [],
 })
 export class AccidentAssistanceTerminatedModule {
   protected readonly _type = AccidentAssistanceTerminatedModule.name;

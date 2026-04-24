@@ -47,6 +47,8 @@ export class AccidentAssistanceTerminatedEntityAutoMapperProfile {
 
       return new AccidentAssistanceTerminatedEntity({
         id: new AccidentAssistanceTerminatedId(source.id),
+        accidentDate: source.accidentDate,
+        accidentDescription: source.accidentDescription,
         der: source.der,
         denialDate: source.denialDate,
         category: source.category,
@@ -105,6 +107,8 @@ export class AccidentAssistanceTerminatedEntityAutoMapperProfile {
 
       return AccidentAssistanceTerminatedTypeormEntity.build({
         id: source.id.toString(),
+        accidentDate: source.accidentDate,
+        accidentDescription: source.accidentDescription,
         der: source.der,
         denialDate: source.denialDate,
         category: source.category,
