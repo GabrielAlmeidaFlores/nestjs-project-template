@@ -1717,6 +1717,42 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise simplificada do direito ao BPC/LOAS para idosos com IA. Verifica critério de idade (65 anos), calcula renda per capita familiar e compara com o limite legal de 1/4 do salário mínimo, informando de forma objetiva sobre a elegibilidade. Versão resumida e acessível para apresentação ao cliente.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c3e4f5a6-b7d8-4c9d-8e1f-2a3b4c5d6e7f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_ELDERLY_CESSATION_INSS_DECISION_ANALYSIS,
+      creditCost: 3,
+      title: 'BPC AO IDOSO (CESSAÇÃO) - ANÁLISE DA DECISÃO DO INSS',
+      description:
+        'Análise da decisão administrativa de cessação ou suspensão do BPC ao Idoso com IA. Extrai NB, data da decisão, motivo da cessação ou suspensão, fundamentos jurídicos utilizados pelo INSS, prazo recursal e pontos técnicos de contestação administrativa ou judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d4f5a6b7-c8e9-4d0e-9f2a-3b4c5d6e7f8a'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_ELDERLY_CESSATION_FIRST_ANALYSIS,
+      creditCost: 5,
+      title: 'BPC AO IDOSO (CESSAÇÃO) - PRIMEIRA ANÁLISE',
+      description:
+        'Primeira análise técnica de cessação ou suspensão do BPC ao Idoso com IA. Cruza dados do formulário, cliente, CadÚnico, CNIS, composição familiar, renda e decisão do INSS, avaliando os critérios legais do BPC (idade e renda per capita) e a viabilidade preliminar de reversão.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e5a6b7c8-d9f0-4e1f-aa3b-4c5d6e7f8a9b'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_ELDERLY_CESSATION_COMPLETE_ANALYSIS,
+      creditCost: 8,
+      title: 'BPC AO IDOSO (CESSAÇÃO) - ANÁLISE COMPLETA',
+      description:
+        'Análise completa de cessação ou suspensão do BPC ao Idoso com IA. Examina todos os dados do caso, interpreta a decisão do INSS à luz da LOAS e regulamentações do BPC, verifica requisitos de idade e renda per capita, identifica regras aplicáveis e emite parecer técnico conclusivo com diagnóstico, cálculo de renda familiar e fundamentação jurídica.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f6b7c8d9-e0a1-4f2a-bb4c-5d6e7f8a9b0c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_ELDERLY_CESSATION_SIMPLIFIED_ANALYSIS,
+      creditCost: 3,
+      title: 'BPC AO IDOSO (CESSAÇÃO) - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada de cessação ou suspensão do BPC ao Idoso com IA. Resume os principais achados da análise completa, indica a viabilidade geral da reversão, os pontos críticos (renda per capita, composição familiar, prazo recursal) e os próximos passos recomendados em linguagem acessível.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('c3e4f5a6-d7b8-4c9d-8e1f-2a3b4c5d6e7f'),
       resource:
         PaymentPlanPaidResourceTypeEnum.BPC_DISABILITY_DENIAL_INSS_DECISION_ANALYSIS,

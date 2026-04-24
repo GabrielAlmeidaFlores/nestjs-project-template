@@ -65,6 +65,14 @@ import { BpcElderlyAnalysisFamilyMemberDocumentTypeormCommandRepository } from '
 import { BpcElderlyAnalysisInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-analysis-inss-benefit/bpc-elderly-analysis-inss-benefit.typeorm.command.repository';
 import { BpcElderlyAnalysisLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-analysis-legal-proceeding/bpc-elderly-analysis-legal-proceeding.typeorm.command.repository';
 import { BpcElderlyAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-analysis-result/bpc-elderly-analysis-result.typeorm.command.repository';
+import { BpcElderlyCessationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-cessation/bpc-elderly-cessation.typeorm.command.repository';
+import { BpcElderlyCessationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-cessation/bpc-elderly-cessation.typeorm.query.repository';
+import { BpcElderlyCessationDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-cessation-document/bpc-elderly-cessation-document.typeorm.command.repository';
+import { BpcElderlyCessationFamilyMemberTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-cessation-family-member/bpc-elderly-cessation-family-member.typeorm.command.repository';
+import { BpcElderlyCessationFamilyMemberDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-cessation-family-member-document/bpc-elderly-cessation-family-member-document.typeorm.command.repository';
+import { BpcElderlyCessationInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-cessation-inss-benefit/bpc-elderly-cessation-inss-benefit.typeorm.command.repository';
+import { BpcElderlyCessationLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-cessation-legal-proceeding/bpc-elderly-cessation-legal-proceeding.typeorm.command.repository';
+import { BpcElderlyCessationResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-cessation-result/bpc-elderly-cessation-result.typeorm.command.repository';
 import { CidTenTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cid-ten/cid-ten.typeorm.command.repository';
 import { CidTenTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/cid-ten/cid-ten.typeorm.query.repository';
 import { CnisFastAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis/cnis-fast-analysis.typeorm.command.repository';
@@ -571,6 +579,14 @@ import { BpcElderlyAnalysisFamilyMemberDocumentCommandRepositoryGateway } from '
 import { BpcElderlyAnalysisInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-inss-benefit/command/bpc-elderly-analysis-inss-benefit.command.repository.gateway';
 import { BpcElderlyAnalysisLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-legal-proceeding/command/bpc-elderly-analysis-legal-proceeding.command.repository.gateway';
 import { BpcElderlyAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-result/command/bpc-elderly-analysis-result.command.repository.gateway';
+import { BpcElderlyCessationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/domain/repository/bpc-elderly-cessation/command/bpc-elderly-cessation.command.repository.gateway';
+import { BpcElderlyCessationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/domain/repository/bpc-elderly-cessation/query/bpc-elderly-cessation.query.repository.gateway';
+import { BpcElderlyCessationDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/domain/repository/bpc-elderly-cessation-document/command/bpc-elderly-cessation-document.command.repository.gateway';
+import { BpcElderlyCessationFamilyMemberCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/domain/repository/bpc-elderly-cessation-family-member/command/bpc-elderly-cessation-family-member.command.repository.gateway';
+import { BpcElderlyCessationFamilyMemberDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/domain/repository/bpc-elderly-cessation-family-member-document/command/bpc-elderly-cessation-family-member-document.command.repository.gateway';
+import { BpcElderlyCessationInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/domain/repository/bpc-elderly-cessation-inss-benefit/command/bpc-elderly-cessation-inss-benefit.command.repository.gateway';
+import { BpcElderlyCessationLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/domain/repository/bpc-elderly-cessation-legal-proceeding/command/bpc-elderly-cessation-legal-proceeding.command.repository.gateway';
+import { BpcElderlyCessationResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/domain/repository/bpc-elderly-cessation-result/command/bpc-elderly-cessation-result.command.repository.gateway';
 import { CnisFastAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/repository/cnis-fast-analysis/command/cnis-fast-analysis.command.repository.gateway';
 import { CnisFastAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/repository/cnis-fast-analysis/query/cnis-fast-analysis.query.repository.gateway';
 import { CnisFastAnalysisInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/repository/cnis-fast-analysis-inss-benefit/command/cnis-fast-analysis-inss-benefit.command.repository.gateway';
@@ -2743,6 +2759,38 @@ const classProvider: ClassProvider[] = [
   {
     provide: BpcElderlyAnalysisLegalProceedingCommandRepositoryGateway,
     useClass: BpcElderlyAnalysisLegalProceedingTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyCessationCommandRepositoryGateway,
+    useClass: BpcElderlyCessationTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyCessationQueryRepositoryGateway,
+    useClass: BpcElderlyCessationTypeormQueryRepository,
+  },
+  {
+    provide: BpcElderlyCessationDocumentCommandRepositoryGateway,
+    useClass: BpcElderlyCessationDocumentTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyCessationResultCommandRepositoryGateway,
+    useClass: BpcElderlyCessationResultTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyCessationFamilyMemberCommandRepositoryGateway,
+    useClass: BpcElderlyCessationFamilyMemberTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyCessationFamilyMemberDocumentCommandRepositoryGateway,
+    useClass: BpcElderlyCessationFamilyMemberDocumentTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyCessationInssBenefitCommandRepositoryGateway,
+    useClass: BpcElderlyCessationInssBenefitTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyCessationLegalProceedingCommandRepositoryGateway,
+    useClass: BpcElderlyCessationLegalProceedingTypeormCommandRepository,
   },
   {
     provide: MiniAdvisorCommandRepositoryGateway,

@@ -94,6 +94,21 @@ import { BpcElderlyAnalysisLegalProceedingEntityAutoMapperProfile } from '@lib/m
 import { GetBpcElderlyAnalysisLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-legal-proceeding/get-bpc-elderly-analysis-legal-proceeding-query-result.auto-mapper.profile';
 import { BpcElderlyAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-result/bpc-elderly-analysis-result-entity.auto-mapper.profile';
 import { GetBpcElderlyAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-result/get-bpc-elderly-analysis-result-query-result.auto-mapper.profile';
+import { BpcElderlyCessationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation/bpc-elderly-cessation-entity.auto-mapper.profile';
+import { GetBpcElderlyCessationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation/get-bpc-elderly-cessation-query-result.auto-mapper.profile';
+import { GetBpcElderlyCessationWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation/get-bpc-elderly-cessation-with-relations-query-result.auto-mapper.profile';
+import { BpcElderlyCessationDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation-document/bpc-elderly-cessation-document-entity.auto-mapper.profile';
+import { GetBpcElderlyCessationDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation-document/get-bpc-elderly-cessation-document-query-result.auto-mapper.profile';
+import { BpcElderlyCessationFamilyMemberEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation-family-member/bpc-elderly-cessation-family-member-entity.auto-mapper.profile';
+import { GetBpcElderlyCessationFamilyMemberQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation-family-member/get-bpc-elderly-cessation-family-member-query-result.auto-mapper.profile';
+import { BpcElderlyCessationFamilyMemberDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation-family-member-document/bpc-elderly-cessation-family-member-document-entity.auto-mapper.profile';
+import { GetBpcElderlyCessationFamilyMemberDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation-family-member-document/get-bpc-elderly-cessation-family-member-document-query-result.auto-mapper.profile';
+import { BpcElderlyCessationInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation-inss-benefit/bpc-elderly-cessation-inss-benefit-entity.auto-mapper.profile';
+import { GetBpcElderlyCessationInssBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation-inss-benefit/get-bpc-elderly-cessation-inss-benefit-query-result.auto-mapper.profile';
+import { BpcElderlyCessationLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation-legal-proceeding/bpc-elderly-cessation-legal-proceeding-entity.auto-mapper.profile';
+import { GetBpcElderlyCessationLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation-legal-proceeding/get-bpc-elderly-cessation-legal-proceeding-query-result.auto-mapper.profile';
+import { BpcElderlyCessationResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation-result/bpc-elderly-cessation-result-entity.auto-mapper.profile';
+import { GetBpcElderlyCessationResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation-result/get-bpc-elderly-cessation-result-query-result.auto-mapper.profile';
 import { CidTenEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cid-ten/cid-ten-entity.auto-mapper.profile';
 import { GetCidTenQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cid-ten/get-cid-ten-query-result.auto-mapper.profile';
 import { CnisFastAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis/cnis-fast-analysis-entity.auto-mapper.profile';
@@ -942,6 +957,21 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetBpcElderlyAnalysisFamilyMemberQueryResultAutoMapperProfile,
     BpcElderlyAnalysisFamilyMemberDocumentEntityAutoMapperProfile,
     GetBpcElderlyAnalysisFamilyMemberDocumentQueryResultAutoMapperProfile,
+    BpcElderlyCessationEntityAutoMapperProfile,
+    GetBpcElderlyCessationQueryResultAutoMapperProfile,
+    GetBpcElderlyCessationWithRelationsQueryResultAutoMapperProfile,
+    BpcElderlyCessationDocumentEntityAutoMapperProfile,
+    GetBpcElderlyCessationDocumentQueryResultAutoMapperProfile,
+    BpcElderlyCessationResultEntityAutoMapperProfile,
+    GetBpcElderlyCessationResultQueryResultAutoMapperProfile,
+    BpcElderlyCessationInssBenefitEntityAutoMapperProfile,
+    GetBpcElderlyCessationInssBenefitQueryResultAutoMapperProfile,
+    BpcElderlyCessationLegalProceedingEntityAutoMapperProfile,
+    GetBpcElderlyCessationLegalProceedingQueryResultAutoMapperProfile,
+    BpcElderlyCessationFamilyMemberEntityAutoMapperProfile,
+    GetBpcElderlyCessationFamilyMemberQueryResultAutoMapperProfile,
+    BpcElderlyCessationFamilyMemberDocumentEntityAutoMapperProfile,
+    GetBpcElderlyCessationFamilyMemberDocumentQueryResultAutoMapperProfile,
     JudicialCaseAnalysisEntityAutoMapperProfile,
     GetJudicialCaseAnalysisQueryResultAutoMapperProfile,
     GetJudicialCaseAnalysisWithRelationsQueryResultAutoMapperProfile,

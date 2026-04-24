@@ -456,6 +456,13 @@ import { BpcElderlyAnalysisInssBenefitTypeormEntity } from '@infra/database/impl
 import { BpcElderlyAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-legal-proceeding.typeorm.entity';
 import { BpcElderlyAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-result.typeorm.entity';
 import { BpcElderlyAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis.typeorm.entity';
+import { BpcElderlyCessationDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-cessation-document.typeorm.entity';
+import { BpcElderlyCessationFamilyMemberDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-cessation-family-member-document.typeorm.entity';
+import { BpcElderlyCessationFamilyMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-cessation-family-member.typeorm.entity';
+import { BpcElderlyCessationInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-cessation-inss-benefit.typeorm.entity';
+import { BpcElderlyCessationLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-cessation-legal-proceeding.typeorm.entity';
+import { BpcElderlyCessationResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-cessation-result.typeorm.entity';
+import { BpcElderlyCessationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-cessation.typeorm.entity';
 import { CidTenTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cid-ten.typeorm.entity';
 import { CnisFastAnalysisInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-inss-benefit.typeorm.entity';
 import { CnisFastAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-legal-proceeding.typeorm.entity';
@@ -1103,6 +1110,13 @@ export class TypeormIndex {
     BpcElderlyAnalysisResultTypeormEntity,
     BpcElderlyAnalysisInssBenefitTypeormEntity,
     BpcElderlyAnalysisLegalProceedingTypeormEntity,
+    BpcElderlyCessationTypeormEntity,
+    BpcElderlyCessationDocumentTypeormEntity,
+    BpcElderlyCessationFamilyMemberTypeormEntity,
+    BpcElderlyCessationFamilyMemberDocumentTypeormEntity,
+    BpcElderlyCessationResultTypeormEntity,
+    BpcElderlyCessationInssBenefitTypeormEntity,
+    BpcElderlyCessationLegalProceedingTypeormEntity,
     MaternityPayGrantTypeormEntity,
     MaternityPayGrantDocumentTypeormEntity,
     MaternityPayGrantEarningsHistoryTypeormEntity,
