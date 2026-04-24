@@ -462,6 +462,21 @@ import { TemporaryDisabilityBenefitsGrantResultTypeormCommandRepository } from '
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-work-periods/temporary-disability-benefits-grant-work-periods.typeorm.command.repository';
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-work-periods/temporary-disability-benefits-grant-work-periods.typeorm.query.repository';
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-work-periods-earnings-history/temporary-disability-benefits-grant-work-periods-earnings-history.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.typeorm.query.repository';
+import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-disability-analysis/temporary-incapacity-benefit-rejection-disability-analysis.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-disability-analysis/temporary-incapacity-benefit-rejection-disability-analysis.typeorm.query.repository';
+import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisCidTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-disability-analysis-cid/temporary-incapacity-benefit-rejection-disability-analysis-cid.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-disability-analysis-document/temporary-incapacity-benefit-rejection-disability-analysis-document.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-document/temporary-incapacity-benefit-rejection-document.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-inss-benefit/temporary-incapacity-benefit-rejection-inss-benefit.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionInsuredStatusTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-insured-status/temporary-incapacity-benefit-rejection-insured-status.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionInsuredStatusTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-insured-status/temporary-incapacity-benefit-rejection-insured-status.typeorm.query.repository';
+import { TemporaryIncapacityBenefitRejectionInsuredStatusDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-insured-status-document/temporary-incapacity-benefit-rejection-insured-status-document.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-result/temporary-incapacity-benefit-rejection-result.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionWorkPeriodsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-work-periods/temporary-incapacity-benefit-rejection-work-periods.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionWorkPeriodsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-work-periods/temporary-incapacity-benefit-rejection-work-periods.typeorm.query.repository';
+import { TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-work-periods-earnings-history/temporary-incapacity-benefit-rejection-work-periods-earnings-history.typeorm.command.repository';
 import { TutorialTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/tutorial/tutorial.typeorm.command.repository';
 import { TutorialTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/tutorial/tutorial.typeorm.query.repository';
 import { TypeormModule } from '@infra/database/implementation/typeorm/typeorm.module';
@@ -864,6 +879,21 @@ import { TemporaryDisabilityBenefitsGrantResultCommandRepositoryGateway } from '
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-work-periods/command/temporary-disability-benefits-grant-work-periods.command.repository.gateway';
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-work-periods/query/temporary-disability-benefits-grant-work-periods.query.repository.gateway';
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-work-periods-earnings-history/command/temporary-disability-benefits-grant-work-periods-earnings-history.command.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection/command/temporary-incapacity-benefit-rejection.command.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection/query/temporary-incapacity-benefit-rejection.query.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-disability-analysis/command/temporary-incapacity-benefit-rejection-disability-analysis.command.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-disability-analysis/query/temporary-incapacity-benefit-rejection-disability-analysis.query.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisCidCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-disability-analysis-cid/command/temporary-incapacity-benefit-rejection-disability-analysis-cid.command.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-disability-analysis-document/command/temporary-incapacity-benefit-rejection-disability-analysis-document.command.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-document/command/temporary-incapacity-benefit-rejection-document.command.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-inss-benefit/command/temporary-incapacity-benefit-rejection-inss-benefit.command.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionInsuredStatusCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-insured-status/command/temporary-incapacity-benefit-rejection-insured-status.command.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionInsuredStatusQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-insured-status/query/temporary-incapacity-benefit-rejection-insured-status.query.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionInsuredStatusDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-insured-status-document/command/temporary-incapacity-benefit-rejection-insured-status-document.command.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-result/command/temporary-incapacity-benefit-rejection-result.command.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionWorkPeriodsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-work-periods/command/temporary-incapacity-benefit-rejection-work-periods.command.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionWorkPeriodsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-work-periods/query/temporary-incapacity-benefit-rejection-work-periods.query.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-work-periods-earnings-history/command/temporary-incapacity-benefit-rejection-work-periods-earnings-history.command.repository.gateway';
 import { CreditPackCommandRepositoryGateway } from '@module/customer/credit-pack/domain/repository/credit-pack/command/credit-pack.command.repository.gateway';
 import { CreditPackQueryRepositoryGateway } from '@module/customer/credit-pack/domain/repository/credit-pack/query/credit-pack.query.repository.gateway';
 import { OrganizationCreditPackPurchaseCommandRepositoryGateway } from '@module/customer/credit-pack/domain/repository/organization-credit-pack-purchase/command/organization-credit-pack-purchase.command.repository.gateway';
@@ -3016,6 +3046,90 @@ const classProvider: ClassProvider[] = [
       DisabilityRetirementPlanningRejectionInssBenefitCommandRepositoryGateway,
     useClass:
       DisabilityRetirementPlanningRejectionInssBenefitTypeormCommandRepository,
+  },
+  {
+    provide: TemporaryIncapacityBenefitRejectionQueryRepositoryGateway,
+    useClass: TemporaryIncapacityBenefitRejectionTypeormQueryRepository,
+  },
+  {
+    provide: TemporaryIncapacityBenefitRejectionCommandRepositoryGateway,
+    useClass: TemporaryIncapacityBenefitRejectionTypeormCommandRepository,
+  },
+  {
+    provide: TemporaryIncapacityBenefitRejectionResultCommandRepositoryGateway,
+    useClass: TemporaryIncapacityBenefitRejectionResultTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryIncapacityBenefitRejectionDocumentCommandRepositoryGateway,
+    useClass:
+      TemporaryIncapacityBenefitRejectionDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryIncapacityBenefitRejectionInssBenefitCommandRepositoryGateway,
+    useClass:
+      TemporaryIncapacityBenefitRejectionInssBenefitTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryIncapacityBenefitRejectionDisabilityAnalysisQueryRepositoryGateway,
+    useClass:
+      TemporaryIncapacityBenefitRejectionDisabilityAnalysisTypeormQueryRepository,
+  },
+  {
+    provide:
+      TemporaryIncapacityBenefitRejectionDisabilityAnalysisCommandRepositoryGateway,
+    useClass:
+      TemporaryIncapacityBenefitRejectionDisabilityAnalysisTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryIncapacityBenefitRejectionDisabilityAnalysisCidCommandRepositoryGateway,
+    useClass:
+      TemporaryIncapacityBenefitRejectionDisabilityAnalysisCidTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryIncapacityBenefitRejectionDisabilityAnalysisDocumentCommandRepositoryGateway,
+    useClass:
+      TemporaryIncapacityBenefitRejectionDisabilityAnalysisDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryIncapacityBenefitRejectionInsuredStatusQueryRepositoryGateway,
+    useClass:
+      TemporaryIncapacityBenefitRejectionInsuredStatusTypeormQueryRepository,
+  },
+  {
+    provide:
+      TemporaryIncapacityBenefitRejectionInsuredStatusCommandRepositoryGateway,
+    useClass:
+      TemporaryIncapacityBenefitRejectionInsuredStatusTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryIncapacityBenefitRejectionInsuredStatusDocumentCommandRepositoryGateway,
+    useClass:
+      TemporaryIncapacityBenefitRejectionInsuredStatusDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryIncapacityBenefitRejectionWorkPeriodsQueryRepositoryGateway,
+    useClass:
+      TemporaryIncapacityBenefitRejectionWorkPeriodsTypeormQueryRepository,
+  },
+  {
+    provide:
+      TemporaryIncapacityBenefitRejectionWorkPeriodsCommandRepositoryGateway,
+    useClass:
+      TemporaryIncapacityBenefitRejectionWorkPeriodsTypeormCommandRepository,
+  },
+  {
+    provide:
+      TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryCommandRepositoryGateway,
+    useClass:
+      TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryTypeormCommandRepository,
   },
 ];
 

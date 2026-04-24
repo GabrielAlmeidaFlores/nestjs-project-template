@@ -68,6 +68,8 @@ export class AnalysisActivityMessageFactory {
       'Indeferimento de aposentadoria para deficiente',
     [AnalysisToolRecordTypeEnum.BPC_ELDERLY_ANALYSIS]:
       'Análise de BPC ao Idoso',
+    [AnalysisToolRecordTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_REJECTION]:
+      'Indeferimento de benefício por incapacidade temporária',
   };
 
   private static readonly actionLabelMap: Record<
