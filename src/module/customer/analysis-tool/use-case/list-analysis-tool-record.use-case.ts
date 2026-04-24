@@ -106,6 +106,8 @@ export class ListAnalysisToolRecordUseCase {
             analysisToolRecord.audienceQuestionGenerator ??
             analysisToolRecord.survivorPensionAnalysis ??
             analysisToolRecord.specialRetirementGrant ??
+            analysisToolRecord.maternityPayGrant ??
+            analysisToolRecord.deathBenefitGrant ??
             analysisToolRecord.generalUrbanRetirementDenial ??
             analysisToolRecord.disabilityRetirementPlanningRejection ??
             analysisToolRecord.bpcDisabilityDenial ??

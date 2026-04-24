@@ -72,6 +72,8 @@ export class AnalysisActivityMessageFactory {
       'Análise de BPC ao Idoso',
     [AnalysisToolRecordTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_REJECTION]:
       'Indeferimento de benefício por incapacidade temporária',
+    [AnalysisToolRecordTypeEnum.MATERNITY_PAY_GRANT]:
+      'Concessão de salário maternidade',
   };
 
   private static readonly actionLabelMap: Record<

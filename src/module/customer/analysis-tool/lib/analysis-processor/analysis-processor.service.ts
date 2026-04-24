@@ -1,5 +1,6 @@
 ﻿import { Inject, Injectable } from '@nestjs/common';
 
+import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
 import { GenerativeIaResponseMimeTypeEnum } from '@infra/generative-ia/enum/generative-ia-response-mime-type.enum';
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
@@ -2437,6 +2438,101 @@ Análise processada do CNIS:
   }
 
   public async getTemporaryIncapacityBenefitRejectionSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getMaternityPayGrantFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    contributorGender: GenderEnum | null,
+    asJson = true,
+  ): Promise<string | null> {
+    const genderLabel =
+      contributorGender === GenderEnum.FEMALE
+        ? 'Feminino'
+        : contributorGender === GenderEnum.MALE
+          ? 'Masculino'
+          : 'Não informado';
+
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize cálculos como valores salariais, use estritamente os fornecidos.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Para cada item de \`periods\`, use prioritariamente os dados estruturados já enviados nos arquivos do prompt; não invente valores.
+- O campo \`contributionAverage\` representa a média das remunerações do período já informada nos dados estruturados; quando esse valor estiver disponível, reutilize exatamente esse valor e não retorne \`0\`.
+- Quando o valor de \`contributionAverage\` não estiver presente nos dados estruturados do período, omita esse campo em vez de retornar \`0\`.
+- O campo \`belowMinimumContributions\` deve conter somente as competências cujos valores ficaram abaixo do mínimo.
+- Quando não houver competências abaixo do mínimo, retorne \`belowMinimumContributions: []\`.
+- O campo \`competenceBelowTheMinimum\` deve ser \`true\` somente quando houver ao menos um item em \`belowMinimumContributions\`; caso contrário, deve ser \`false\`.
+- Analise a qualidade de segurado da requerente com base nos períodos e na data do evento gerador (parto/adoção/aborto).
+- Analise o cumprimento da carência necessária para o salário-maternidade.
+- Analise a elegibilidade para o benefício com base na categoria de segurada.
+- O campo \`lastContribution\` deve conter a data da última contribuição identificada no CNIS no formato YYYY-MM-DD, ou null se não identificada.
+- O campo \`categoryAtDfg\` deve descrever a categoria contributiva do segurado na data do fato gerador (DFG), ex: "desempregada (ex-empregada)".
+- O campo \`employmentBondStatus\` deve descrever o status do vínculo contributivo na data do fato gerador, ex: "Inativo - desempregada há 7 meses na DFG".
+Sexo do contribuinte: ${genderLabel}
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: asJson
+          ? ResponseConfigInputModel.build({
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema: this.getMaternityPayGrantFirstAnalysisJsonSchema(),
+            })
+          : null,
+      }),
+    );
+  }
+
+  public async getMaternityPayGrantResultAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- O campo \`completeAnalysisDownload\` deve conter HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF. Deve conter todos os dados analisados, e uma explicação técnica de todos os dados
+- O campo \`analysisDescription\` deve conter um texto explicativo completo sobre o resultado da análise e as perspectivas do caso.
+- Não incluir tag <br> na resposta no campo \`analysisDescription\`.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: this.getMaternityPayGrantResultAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getMaternityPayGrantSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null> {
@@ -7457,6 +7553,410 @@ Análise processada do CNIS:
         'completeAnalysisDownload',
         'applicableRules',
         'benefitSummaries',
+      ],
+    };
+  }
+
+  private getMaternityPayGrantFirstAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        insuredQualityAnalysis: {
+          type: 'object',
+          description:
+            'Análise da qualidade de segurada na data do evento gerador',
+          properties: {
+            isConfirmed: {
+              type: 'boolean',
+              description:
+                'Indica se a qualidade de segurada foi confirmada na data do evento gerador',
+            },
+            status: {
+              type: 'string',
+              description:
+                'Status da qualidade de segurada: CONFIRMADA (a qualidade de segurada foi confirmada na data do evento gerador), NÃO CONFIRMADA (a qualidade de segurada não foi confirmada na data do evento gerador), PENDENTE (há pendências ou informações insuficientes para confirmar a qualidade de segurada na data do evento gerador, ou seja, existem indícios que sugerem que a qualidade de segurada pode estar presente, mas ainda é necessário resolver pendências ou obter informações adicionais para uma confirmação definitiva).',
+              enum: [
+                'QUALIDADE_DE_SEGURADO_MANTIDA',
+                'QUALIDADE_DE_SEGURADO_NAO_CONFIRMADA',
+              ],
+            },
+            description: {
+              type: 'string',
+              description:
+                'Descrição detalhada da análise da qualidade de segurada',
+            },
+          },
+          required: ['isConfirmed', 'description', 'status'],
+        },
+        carenciaAnalysis: {
+          type: 'object',
+          description:
+            'Análise do cumprimento da carência para salário-maternidade',
+          properties: {
+            status: {
+              type: 'string',
+              description:
+                'Status do cumprimento da carência: CUMPRIDA (a carência necessária foi cumprida), NÃO CUMPRIDA (a carência necessária não foi cumprida), PARCIALMENTE CUMPRIDA (a carência necessária foi parcialmente cumprida, ou seja, o segurado possui algumas contribuições, mas não atinge o total necessário para cumprir a carência, ou há pendências que precisam ser resolvidas para comprovar o cumprimento total da carência).',
+              enum: [
+                'Isento_de_Carencia_Base_Artigo_25_Lei_8213',
+                'Nao_Isento_de_Carencia_Base_Artigo_25_Lei_8213',
+              ],
+            },
+            isConfirmed: {
+              type: 'boolean',
+              description: 'Indica se a carência necessária foi cumprida',
+            },
+            description: {
+              type: 'string',
+              description: 'Descrição detalhada da análise da carência',
+            },
+          },
+          required: ['isConfirmed', 'description', 'status'],
+        },
+        requirementAnalysis: {
+          type: 'object',
+          description:
+            'Análise do cumprimento dos requisitos para salário-maternidade',
+          properties: {
+            status: {
+              type: 'string',
+              description:
+                'Status do cumprimento dos requisitos: CUMPRIDOS (todos os requisitos foram cumpridos), NÃO CUMPRIDOS (um ou mais requisitos não foram cumpridos), PARCIALMENTE CUMPRIDOS (alguns requisitos foram cumpridos, mas outros não, ou há pendências que precisam ser resolvidas para comprovar o cumprimento total dos requisitos).',
+              enum: [
+                'Dentro_do_prazo_de_requiremento',
+                'Fora_do_prazo_de_requiremento',
+              ],
+            },
+            eventDate: {
+              type: 'string',
+              description:
+                'Data do evento gerador no formato YYYY-MM-DD. Null se não identificada.',
+            },
+            requirementDate: {
+              type: 'string',
+              description:
+                'Data do requerimento no formato YYYY-MM-DD. Null se não identificada.',
+            },
+            statutoryPeriod: {
+              type: 'string',
+              description:
+                'Prazo legal para requerimento do benefício, que varia de acordo com o tipo de evento gerador',
+            },
+            details: {
+              type: 'string',
+              description:
+                'Descrição detalhada da análise do cumprimento dos requisitos, incluindo quais requisitos foram cumpridos ou não cumpridos, e quais pendências existem para comprovar o cumprimento total dos requisitos',
+            },
+            rationale: {
+              type: 'string',
+              description:
+                'Fundamentação detalhada para a conclusão sobre o cumprimento dos requisitos, baseada na legislação vigente, na jurisprudência aplicável e nos dados analisados',
+            },
+          },
+          required: [
+            'status',
+            'description',
+            'eventDate',
+            'requirementDate',
+            'statutoryPeriod',
+            'details',
+            'rationale',
+          ],
+        },
+        applicationDeadlineAnalysis: {
+          type: 'object',
+          description:
+            'Análise do cumprimento do prazo de requerimento para salário-maternidade',
+          properties: {
+            status: {
+              type: 'string',
+              description:
+                'Parto normal ou aborto espontâneo: Prazo de requerimento é de até 28 dias após a data do evento gerador. Parto prematuro: Prazo de requerimento é de até 28 dias após a data prevista para o parto. Aborto induzido legal: Prazo de requerimento é de até 28 dias após a data do evento gerador. Nascimento de natimorto: Prazo de requerimento é de até 28 dias após a data do evento gerador.',
+              enum: [
+                'PARTO_NORMAL',
+                'PARTO_PREMATURO',
+                'ABORTO_ESPONTANEO',
+                'ABORTO_INDUZIDO_LEGAL',
+                'NASCIMENTO_NATIMORTO',
+              ],
+            },
+            duration: {
+              type: 'string',
+              description:
+                'Duração entre a data do evento gerador e a data do requerimento, apresentada em formato textual (ex: 45 dias). Null se não calculável.',
+            },
+            startDate: {
+              type: 'string',
+              format: 'date',
+              description:
+                'Data de início de inicio do beneficio, se aplicável, no formato YYYY-MM-DD',
+            },
+            terminationDate: {
+              type: 'string',
+              format: 'date',
+              description:
+                'Data de cessação do benefício, se aplicável, no formato YYYY-MM-DD',
+            },
+            startLeaveDate: {
+              type: 'string',
+              format: 'date',
+              description:
+                'Data de início do afastamento, se aplicável, no formato YYYY-MM-DD',
+            },
+            endLeaveDate: {
+              type: 'string',
+              format: 'date',
+              description:
+                'Data de término do afastamento, se aplicável, no formato YYYY-MM-DD',
+            },
+            total: {
+              type: 'number',
+              description:
+                'Total de dias entre a data de início do afastamento e a data de término do afastamento',
+            },
+            amountBenefit: {
+              type: 'string',
+              description:
+                'Valor estimado do benefício quando aplicável, em formato textual (ex: R$ 3.218,45). Null se não calculável.',
+            },
+            calculationBasis: {
+              type: 'string',
+              description:
+                'Base de cálculo utilizada para estimar o valor do benefício,média das ultimas contribuições ou salário de contribuição, quando disponível nos dados estruturados. Null se não calculável.',
+            },
+          },
+          required: [
+            'status',
+            'duration',
+            'startDate',
+            'terminationDate',
+            'startLeaveDate',
+            'endLeaveDate',
+            'total',
+            'amountBenefit',
+            'calculationBasis',
+          ],
+        },
+        benefitEligibilityAnalysis: {
+          type: 'object',
+          description: 'Análise da elegibilidade para o salário-maternidade',
+          properties: {
+            isConfirmed: {
+              type: 'boolean',
+              description: 'Indica se há direito ao salário-maternidade',
+            },
+            description: {
+              type: 'string',
+              description:
+                'Descrição detalhada da elegibilidade para o benefício',
+            },
+          },
+          required: ['isConfirmed', 'description'],
+        },
+        periods: {
+          type: 'array',
+          description: 'Lista de períodos contributivos analisados',
+          items: {
+            type: 'object',
+            properties: {
+              name: {
+                type: 'string',
+                description: 'Nome ou identificação do período',
+              },
+              startDate: {
+                type: 'string',
+                format: 'date',
+                description: 'Data de início do período no formato YYYY-MM-DD',
+              },
+              endDate: {
+                type: 'string',
+                format: 'date',
+                description: 'Data de término do período no formato YYYY-MM-DD',
+              },
+              category: {
+                type: 'string',
+                description: 'Categoria do segurado para este período',
+                enum: [
+                  'EMPREGADO_URBANO',
+                  'EMPREGADO_RURAL',
+                  'EMPREGO_DOMESTICO',
+                  'TRABALHADOR_AVULSO',
+                  'CONTRIBUINTE_INDIVIDUAL_AUTONOMO',
+                  'CONTRIBUINTE_INDIVIDUAL_PRESTADOR',
+                  'MEI',
+                  'SEGURADO_ESPECIAL',
+                  'SEGURADO_FACULTATIVO',
+                ],
+              },
+              gracePeriod: {
+                type: 'number',
+                description: 'Período de graça calculado em meses',
+              },
+              status: {
+                type: 'boolean',
+                description: 'Indica se o período é válido para contagem',
+              },
+              isPendency: {
+                type: 'boolean',
+                description: 'Indica se o período possui pendências',
+              },
+              competenceBelowTheMinimum: {
+                type: 'boolean',
+                description:
+                  'Indica se há competências abaixo do salário mínimo neste período',
+              },
+              contributionAverage: {
+                type: 'string',
+                description:
+                  'Média das contribuições do período quando disponível nos dados estruturados',
+              },
+              belowMinimumContributions: {
+                type: 'array',
+                description:
+                  'Lista de competências com contribuições abaixo do mínimo',
+                items: {
+                  type: 'object',
+                  properties: {
+                    contributionDate: {
+                      type: 'string',
+                      format: 'date',
+                      description: 'Data da competência no formato YYYY-MM-DD',
+                    },
+                    contributionValue: {
+                      type: 'number',
+                      description: 'Valor da contribuição abaixo do mínimo',
+                    },
+                  },
+                  required: ['contributionDate', 'contributionValue'],
+                },
+              },
+              reasonPendency: {
+                type: 'string',
+                description: 'Motivo da pendência quando isPendency é true',
+                enum: [
+                  'LEAVE_DATE',
+                  'COMPETENCE_BELOW_MINIMUM',
+                  'INCONSISTENT_COMPETENCE',
+                ],
+              },
+              bondOrigin: {
+                type: 'string',
+                description: 'Origem do vínculo previdenciário',
+              },
+              impact: {
+                type: 'string',
+                description:
+                  'Impacto deste período na elegibilidade do benefício',
+              },
+              complementViaMyInss: {
+                type: 'boolean',
+                description:
+                  'Indica se há possibilidade de complementação via Meu INSS',
+              },
+            },
+            required: [
+              'name',
+              'startDate',
+              'endDate',
+              'category',
+              'gracePeriod',
+              'status',
+              'isPendency',
+              'competenceBelowTheMinimum',
+              'belowMinimumContributions',
+            ],
+          },
+        },
+        lastContribution: {
+          type: 'string',
+          format: 'date',
+          description:
+            'Data da última contribuição identificada no CNIS no formato YYYY-MM-DD. Null se não identificada.',
+          nullable: true,
+        },
+        categoryAtDfg: {
+          type: 'string',
+          description:
+            'Categoria contributiva do segurado na data do fato gerador (DFG), ex: "desempregada (ex-empregada)".',
+        },
+        employmentBondStatus: {
+          type: 'string',
+          description:
+            'Status do vínculo contributivo na data do fato gerador, ex: "Inativo - desempregada há 7 meses na DFG".',
+        },
+      },
+      required: [
+        'insuredQualityAnalysis',
+        'carenciaAnalysis',
+        'requirementAnalysis',
+        'applicationDeadlineAnalysis',
+        'benefitEligibilityAnalysis',
+        'periods',
+        'lastContribution',
+        'categoryAtDfg',
+        'employmentBondStatus',
+      ],
+    };
+  }
+
+  private getMaternityPayGrantResultAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        eligibilityStatus: {
+          type: 'string',
+          enum: ['ELIGIBLE', 'NOT_ELIGIBLE', 'ELIGIBLE_WITH_PENDENCIES'],
+          description: 'Status de elegibilidade para o salário-maternidade',
+        },
+        insuredQualityStatus: {
+          type: 'string',
+          enum: ['CONFIRMED', 'NOT_CONFIRMED', 'CONDITIONAL'],
+          description: 'Status da qualidade de segurada',
+        },
+        applicableRules: {
+          type: 'array',
+          description: 'Regras aplicáveis ao caso de salário-maternidade',
+          items: {
+            type: 'object',
+            properties: {
+              ruleName: {
+                type: 'string',
+                description: 'Nome da regra ou critério analisado',
+              },
+              result: {
+                type: 'string',
+                description: 'Resultado da análise desta regra',
+              },
+              estimatedBenefit: {
+                type: 'string',
+                description:
+                  'Valor estimado do benefício quando aplicável. Null se não calculável.',
+              },
+              detailedAnalysis: {
+                type: 'string',
+                description: 'Análise detalhada desta regra',
+              },
+            },
+            required: ['ruleName', 'result', 'detailedAnalysis'],
+          },
+        },
+        analysisDescription: {
+          type: 'string',
+          description:
+            'Texto explicativo completo sobre o resultado da análise e as perspectivas do caso',
+        },
+        completeAnalysisDownload: {
+          type: 'string',
+          description:
+            'Detalhamento completo da análise, incluindo a avaliação de cada documento e uma explicação detalhada de cada caso. Conteúdo HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.',
+        },
+      },
+      required: [
+        'eligibilityStatus',
+        'insuredQualityStatus',
+        'applicableRules',
+        'analysisDescription',
+        'completeAnalysisDownload',
       ],
     };
   }
