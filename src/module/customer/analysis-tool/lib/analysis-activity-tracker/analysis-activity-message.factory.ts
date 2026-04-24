@@ -28,6 +28,8 @@ export class AnalysisActivityMessageFactory {
     [AnalysisToolRecordTypeEnum.SPEECH_GENERATOR]: 'Gerador de discurso',
     [AnalysisToolRecordTypeEnum.DISABILITY_ASSESSMENT_FOR_BPC_ANALYSIS]:
       'Avaliação de deficiência para BPC',
+    [AnalysisToolRecordTypeEnum.MATERNITY_PAY_REJECTION]:
+      'Indeferimento de salário maternidade',
     [AnalysisToolRecordTypeEnum.PER_CAPITA_INCOME_FOR_BPC_ANALYSIS]:
       'Análise de renda per capita para BPC',
     [AnalysisToolRecordTypeEnum.RURAL_TIMELINE_ANALYSIS]:
