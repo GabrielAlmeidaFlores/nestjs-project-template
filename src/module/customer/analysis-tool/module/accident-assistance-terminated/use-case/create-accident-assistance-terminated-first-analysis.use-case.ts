@@ -12,14 +12,15 @@ import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/ana
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { AccidentAssistanceTerminatedCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated/command/accident-assistance-terminated.command.repository.gateway';
 import { AccidentAssistanceTerminatedQueryRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated/query/accident-assistance-terminated.query.repository.gateway';
+import { GetAccidentAssistanceTerminatedWithRelationsQueryResult } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated/query/result/get-accident-assistance-terminated-with-relations.query.result';
 import { AccidentAssistanceTerminatedPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated-period/command/accident-assistance-terminated-period.command.repository.gateway';
 import { AccidentAssistanceTerminatedResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated-result/command/accident-assistance-terminated-result.command.repository.gateway';
 import { AccidentAssistanceTerminatedEntity } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated/accident-assistance-terminated.entity';
+import { AccidentAssistanceTerminatedId } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated/value-object/accident-assistance-terminated-id/accident-assistance-terminated-id.value-object';
+import { AccidentAssistanceTerminatedDocumentTypeEnum } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-document/enum/accident-assistance-terminated-document-type.enum';
 import { AccidentAssistanceTerminatedPeriodEntity } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-period/accident-assistance-terminated-period.entity';
 import { AccidentAssistanceTerminatedPeriodReasonPendencyEnum } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-period/enum/accident-assistance-terminated-period-reason-pendency.enum';
-import { AccidentAssistanceTerminatedId } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated/value-object/accident-assistance-terminated-id/accident-assistance-terminated-id.value-object';
 import { AccidentAssistanceTerminatedResultEntity } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-result/accident-assistance-terminated-result.entity';
-import { AccidentAssistanceTerminatedDocumentTypeEnum } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-document/enum/accident-assistance-terminated-document-type.enum';
 import { CreateAccidentAssistanceTerminatedFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/create-accident-assistance-terminated-first-analysis.response.dto';
 import { AccidentAssistanceTerminatedCnisDocumentNotFoundError } from '@module/customer/analysis-tool/module/accident-assistance-terminated/error/accident-assistance-terminated-cnis-document-not-found.error';
 import { AccidentAssistanceTerminatedNotFoundError } from '@module/customer/analysis-tool/module/accident-assistance-terminated/error/accident-assistance-terminated-not-found.error';
@@ -35,8 +36,6 @@ import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/d
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
-
-import { GetAccidentAssistanceTerminatedWithRelationsQueryResult } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated/query/result/get-accident-assistance-terminated-with-relations.query.result';
 
 interface ParsedFirstAnalysisInterface {
   cleanedJson: string;
@@ -98,9 +97,10 @@ export class CreateAccidentAssistanceTerminatedFirstAnalysisUseCase {
         AccidentAssistanceTerminatedNotFoundError,
       );
 
-    const cnisDocument = aatQueryResult.accidentAssistanceTerminatedDocument.find(
-      (doc) => doc.type === AccidentAssistanceTerminatedDocumentTypeEnum.CNIS,
-    );
+    const cnisDocument =
+      aatQueryResult.accidentAssistanceTerminatedDocument.find(
+        (doc) => doc.type === AccidentAssistanceTerminatedDocumentTypeEnum.CNIS,
+      );
 
     if (!cnisDocument) {
       throw new AccidentAssistanceTerminatedCnisDocumentNotFoundError();
@@ -256,7 +256,9 @@ export class CreateAccidentAssistanceTerminatedFirstAnalysisUseCase {
     });
   }
 
-  private parseFirstAnalysisOrThrow(rawJson: string): ParsedFirstAnalysisInterface {
+  private parseFirstAnalysisOrThrow(
+    rawJson: string,
+  ): ParsedFirstAnalysisInterface {
     try {
       let cleanedJson = rawJson;
 
@@ -274,10 +276,12 @@ export class CreateAccidentAssistanceTerminatedFirstAnalysisUseCase {
         cleanedJson,
         model: AccidentAssistanceTerminatedFirstAnalysisModel.build({
           qualitySecurity:
-            AccidentAssistanceTerminatedFirstAnalysisQualitySecurityModel.build({
-              status: raw.qualitySecurity.status,
-              description: raw.qualitySecurity.description,
-            }),
+            AccidentAssistanceTerminatedFirstAnalysisQualitySecurityModel.build(
+              {
+                status: raw.qualitySecurity.status,
+                description: raw.qualitySecurity.description,
+              },
+            ),
           assessmentSequelae:
             AccidentAssistanceTerminatedFirstAnalysisAssessmentSequelaeModel.build(
               {
@@ -296,7 +300,9 @@ export class CreateAccidentAssistanceTerminatedFirstAnalysisUseCase {
     }
   }
 
-  private buildPeriodsFromCnis(cnisData: CnisModel): AccidentAssistanceTerminatedPeriodEntity[] {
+  private buildPeriodsFromCnis(
+    cnisData: CnisModel,
+  ): AccidentAssistanceTerminatedPeriodEntity[] {
     if (!cnisData.socialSecurityRelations) {
       return [];
     }
@@ -329,14 +335,13 @@ export class CreateAccidentAssistanceTerminatedFirstAnalysisUseCase {
             relation.socialSecurityAffiliationEarningsHistory.length
           : 0;
 
-      const delayPayment = relation.socialSecurityAffiliationEarningsHistory.some(
-        (earning) => {
+      const delayPayment =
+        relation.socialSecurityAffiliationEarningsHistory.some((earning) => {
           if (!earning.indicadores) {
             return false;
           }
           return this.INDICADORES_PENDENCIA.includes(earning.indicadores);
-        },
-      );
+        });
 
       const reasonPendency: AccidentAssistanceTerminatedPeriodReasonPendencyEnum | null =
         relation.socialSecurityAffiliationInfo.dataFim === undefined
