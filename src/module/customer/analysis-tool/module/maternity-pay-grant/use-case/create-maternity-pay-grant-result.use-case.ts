@@ -33,6 +33,10 @@ import type {
   MaternityPayGrantResultApplicableRuleInterface,
   MaternityPayGrantResultInterface,
 } from '@module/customer/analysis-tool/module/maternity-pay-grant/model/interface/maternity-pay-grant-result.interface';
+import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
+import { MaternityPayGrantEntity } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/maternity-pay-grant.entity';
+import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 
 @Injectable()
 export class CreateMaternityPayGrantResultUseCase {
@@ -51,6 +55,8 @@ export class CreateMaternityPayGrantResultUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(AnalysisToolRecordQueryRepositoryGateway)
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordCommandRepositoryGateway)
+    private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
     @Inject(MaternityPayGrantQueryRepositoryGateway)
     private readonly maternityPayGrantQueryRepositoryGateway: MaternityPayGrantQueryRepositoryGateway,
     @Inject(MaternityPayGrantResultCommandRepositoryGateway)
@@ -78,21 +84,21 @@ export class CreateMaternityPayGrantResultUseCase {
       throw new OrganizationMemberNotFoundError();
     }
 
-    const maternityPayGrant =
+    const maternityPayGrantQueryResult =
       await this.maternityPayGrantQueryRepositoryGateway.findOneByMaternityPayGrantIdOrFailWithRelations(
         maternityPayGrantId,
         MaternityPayGrantNotFoundError,
       );
 
-    const cnisDocumentPath = maternityPayGrant.cnisDocument;
+    const cnisDocumentPath = maternityPayGrantQueryResult.cnisDocument;
 
     if (cnisDocumentPath === null) {
       throw new MaternityPayGrantCnisDocumentNotFoundError();
     }
 
-    const maternityPayGrantResult = maternityPayGrant.maternityPayGrantResult;
+    const maternityPayGrantResultEntity = maternityPayGrantQueryResult.maternityPayGrantResult;
 
-    if (maternityPayGrantResult === null) {
+    if (maternityPayGrantResultEntity === null) {
       throw new MaternityPayGrantResultNotFoundError();
     }
 
@@ -105,6 +111,14 @@ export class CreateMaternityPayGrantResultUseCase {
     if (!isCnisValid) {
       throw new CnisDocumentIsNotValidError();
     }
+
+    const analysisToolRecordQueryResult = await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByMaternityPayGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
+      maternityPayGrantId,
+      organizationSessionData.organizationId,
+      sessionData.authIdentityId,
+      AnalysisToolRecordNotFoundError,
+    );
+
 
     const analysisToolClient =
       await this.findAnalysisToolClientByAnalysisToolRecordOrFail(
@@ -121,7 +135,7 @@ export class CreateMaternityPayGrantResultUseCase {
       analysisToolClient,
     );
 
-    const grantDataBuffer = this.buildGrantDataBuffer(maternityPayGrant);
+    const grantDataBuffer = this.buildGrantDataBuffer(maternityPayGrantQueryResult);
 
     const promptResponse =
       await this.getPaymentPlanPaidResourcePromptUseCase.execute(
@@ -153,15 +167,64 @@ export class CreateMaternityPayGrantResultUseCase {
     );
 
     const resultEntity = new MaternityPayGrantResultEntity({
-      id: maternityPayGrantResult.id,
-      firstAnalysis: maternityPayGrantResult.firstAnalysis,
+      id: maternityPayGrantResultEntity.id,
+      firstAnalysis: maternityPayGrantResultEntity.firstAnalysis,
       completeAnalysis,
-      simplifiedAnalysis: maternityPayGrantResult.simplifiedAnalysis,
+      simplifiedAnalysis: maternityPayGrantResultEntity.simplifiedAnalysis,
       completeAnalysisDownload: htmlContent,
     });
 
+    const maternityPayGrant = new MaternityPayGrantEntity({
+      ...maternityPayGrantQueryResult,
+    });
+
+    const analysisToolRecord = new AnalysisToolRecordEntity({
+      id: analysisToolRecordQueryResult.id,
+      code: analysisToolRecordQueryResult.code,
+      type: analysisToolRecordQueryResult.type,
+      status: AnalysisStatusEnum.COMPLETED,
+      analysisToolClient,
+      bpcElderlyAnalysis: null,
+      cnisFastAnalysis: null,
+      retirementPlanningRpps: null,
+      createdBy: analysisToolRecordQueryResult.createdBy.id,
+      updatedBy: organizationMember.id,
+      retirementPlanningRgps: null,
+      specialActivity: null,
+      judicialCaseAnalysis: null,
+      administrativeProcedureInssAnalysis: null,
+      medicalAndSocialReportObjectionGeneratorAnalysis: null,
+      disabilityAssessmentForBpcAnalysis: null,
+      perCapitaIncomeForBpcAnalysis: null,
+      ruralOrHybridRetirementRejection: null,
+      bpcDisabilityDenial: null,
+      ruralTimelineAnalysis: null,
+      insuranceQualityAnalysis: null,
+      teacherRetirementPlanning: null,
+      disabilityRetirementPlanning: null,
+      generalUrbanRetirementGrant: null,
+      generalUrbanRetirementAnalysis: null,
+      generalUrbanRetirementDenial: null,
+      deathBenefitGrant: null,
+      deathBenefitRejection: null,
+      specialRetirementGrant: null,
+      disabilityRetirementPlanningGrant: null,
+      disabilityRetirementPlanningRejection: null,
+      temporaryDisabilityBenefitsGrant: null,
+      temporaryIncapacityBenefitRejection: null,
+      survivorPensionAnalysis: null,
+      maternityPayGrant,
+    });
+
+    const updateAnalysisToolRecordTransaction =
+      this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecord(
+        analysisToolRecord.id,
+        analysisToolRecord,
+      );
+
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       consumeCreditTransaction,
+      updateAnalysisToolRecordTransaction,
       this.maternityPayGrantResultCommandRepositoryGateway.updateMaternityPayGrantResult(
         resultEntity,
       ),
