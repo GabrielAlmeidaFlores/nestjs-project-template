@@ -2598,7 +2598,7 @@ Análise processada do CNIS:
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         systemInstruction,
-        promptText: cnisAnalysisJson,
+        prompt: cnisAnalysisJson,
         promptFiles: files,
         responseConfig: ResponseConfigInputModel.build({
           responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,

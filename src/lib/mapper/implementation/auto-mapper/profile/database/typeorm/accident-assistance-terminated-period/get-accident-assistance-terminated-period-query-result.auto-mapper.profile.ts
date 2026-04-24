@@ -77,7 +77,7 @@ export class GetAccidentAssistanceTerminatedPeriodQueryResultAutoMapperProfile {
         typeOfContribution: source.typeOfContribution,
         status: source.status,
         reasonPendency: source.reasonPendency,
-        accidentAssistanceTerminated: undefined,
+        accidentAssistanceTerminated: null,
         createdAt: source.createdAt ?? new Date(),
         updatedAt: source.updatedAt ?? new Date(),
         deletedAt: source.deletedAt ?? null,
