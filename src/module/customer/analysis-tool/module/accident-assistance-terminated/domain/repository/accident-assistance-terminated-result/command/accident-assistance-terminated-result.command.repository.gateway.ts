@@ -12,4 +12,9 @@ export abstract class AccidentAssistanceTerminatedResultCommandRepositoryGateway
     accidentAssistanceTerminatedId: AccidentAssistanceTerminatedId,
     props: AccidentAssistanceTerminatedResultEntity,
   ): TransactionType;
+
+  public abstract updateAccidentAssistanceTerminatedResultFirstAnalysis(
+    accidentAssistanceTerminatedId: AccidentAssistanceTerminatedId,
+    props: AccidentAssistanceTerminatedResultEntity,
+  ): TransactionType;
 }

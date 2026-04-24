@@ -1,4 +1,8 @@
 import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { AccidentAssistanceTerminatedPeriodId } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-period/value-object/accident-assistance-terminated-period-id/accident-assistance-terminated-period-id.value-object';
+import { AccidentAssistanceTerminatedPeriodReasonPendencyEnum } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-period/enum/accident-assistance-terminated-period-reason-pendency.enum';
+import { AccidentAssistanceTerminatedFirstAnalysisModel } from '@module/customer/analysis-tool/module/accident-assistance-terminated/model/generic/accident-assistance-terminated-first-analysis.model';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
@@ -16,6 +20,7 @@ import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto
 import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
+import { ResponseDtoNumberProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-number-property/response-dto-number-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
@@ -62,6 +67,9 @@ export class GetAccidentAssistanceTerminatedResultResponseDto extends BaseBuilda
   @ResponseDtoStringProperty({ required: false })
   public decisionDetails?: string;
 
+  @ResponseDtoObjectProperty(() => AccidentAssistanceTerminatedFirstAnalysisModel, { required: false })
+  public firstAnalysis?: AccidentAssistanceTerminatedFirstAnalysisModel;
+
   @ResponseDtoDateProperty()
   public createdAt: Date;
 
@@ -70,6 +78,48 @@ export class GetAccidentAssistanceTerminatedResultResponseDto extends BaseBuilda
 
   protected override readonly _type =
     GetAccidentAssistanceTerminatedResultResponseDto.name;
+}
+
+@ResponseDto()
+export class GetAccidentAssistanceTerminatedPeriodResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(AccidentAssistanceTerminatedPeriodId)
+  public accidentAssistanceTerminatedPeriodId: AccidentAssistanceTerminatedPeriodId;
+
+  @ResponseDtoNumberProperty({ required: false })
+  public sequencial?: number;
+
+  @ResponseDtoStringProperty({ required: false })
+  public periodName?: string;
+
+  @ResponseDtoDateProperty({ required: false })
+  public periodStart?: Date;
+
+  @ResponseDtoDateProperty({ required: false })
+  public periodEnd?: Date;
+
+  @ResponseDtoStringProperty({ required: false })
+  public category?: string;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public isPendency?: boolean;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public competenceBelowTheMinimum?: boolean;
+
+  @ResponseDtoValueObjectProperty(DecimalValue, { required: false })
+  public contributionAverage?: DecimalValue;
+
+  @ResponseDtoStringProperty({ required: false })
+  public typeOfContribution?: string;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public status?: boolean;
+
+  @ResponseDtoEnumProperty(AccidentAssistanceTerminatedPeriodReasonPendencyEnum, { required: false })
+  public reasonPendency?: AccidentAssistanceTerminatedPeriodReasonPendencyEnum;
+
+  protected override readonly _type =
+    GetAccidentAssistanceTerminatedPeriodResponseDto.name;
 }
 
 @ResponseDto()
@@ -176,6 +226,15 @@ export class GetAccidentAssistanceTerminatedResponseDto extends BaseBuildableDto
     },
   )
   public accidentAssistanceTerminatedResult?: GetAccidentAssistanceTerminatedResultResponseDto;
+
+  @ResponseDtoObjectProperty(
+    () => GetAccidentAssistanceTerminatedPeriodResponseDto,
+    {
+      required: false,
+      isArray: true,
+    },
+  )
+  public accidentAssistanceTerminatedPeriod?: GetAccidentAssistanceTerminatedPeriodResponseDto[];
 
   @ResponseDtoObjectProperty(
     () => GetAccidentAssistanceTerminatedResponsibleResponseDto,

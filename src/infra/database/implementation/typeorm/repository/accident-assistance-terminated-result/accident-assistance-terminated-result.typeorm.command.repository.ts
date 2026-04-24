@@ -77,4 +77,24 @@ export class AccidentAssistanceTerminatedResultTypeormCommandRepository
         );
     };
   }
+
+  public updateAccidentAssistanceTerminatedResultFirstAnalysis(
+    accidentAssistanceTerminatedId: AccidentAssistanceTerminatedId,
+    props: AccidentAssistanceTerminatedResultEntity,
+  ): TransactionType {
+    return async (executor: unknown) => {
+      const manager = (executor as { manager: import('typeorm').EntityManager })
+        .manager;
+      await manager
+        .getRepository(AccidentAssistanceTerminatedResultTypeormEntity)
+        .update(
+          {
+            accidentAssistanceTerminated: {
+              id: accidentAssistanceTerminatedId.toString(),
+            },
+          },
+          { firstAnalysis: props.firstAnalysis },
+        );
+    };
+  }
 }

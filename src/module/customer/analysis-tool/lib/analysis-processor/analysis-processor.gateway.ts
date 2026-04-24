@@ -446,6 +446,7 @@ export abstract class AnalysisProcessorGateway {
 
   public abstract getAccidentAssistanceTerminatedFirstAnalysis(
     systemInstruction: string,
+    cnisAnalysisJson: string,
     files: Buffer[],
   ): Promise<string | null>;
 }

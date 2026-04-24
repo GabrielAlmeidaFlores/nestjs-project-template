@@ -2118,11 +2118,13 @@ Análise processada do CNIS:
 
   public async getAccidentAssistanceTerminatedFirstAnalysis(
     systemInstruction: string,
+    cnisAnalysisJson: string,
     files: Buffer[],
   ): Promise<string | null> {
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         systemInstruction,
+        promptText: cnisAnalysisJson,
         promptFiles: files,
         responseConfig: ResponseConfigInputModel.build({
           responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,

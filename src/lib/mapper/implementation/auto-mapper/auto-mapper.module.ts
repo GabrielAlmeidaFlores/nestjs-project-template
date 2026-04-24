@@ -10,6 +10,8 @@ import { GetAccidentAssistanceTerminatedBenefitQueryResultAutoMapperProfile } fr
 import { GetAccidentAssistanceTerminatedDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-document/get-accident-assistance-terminated-document-query-result.auto-mapper.profile';
 import { GetAccidentAssistanceTerminatedLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-legal-proceeding/get-accident-assistance-terminated-legal-proceeding-query-result.auto-mapper.profile';
 import { GetAccidentAssistanceTerminatedResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-result/get-accident-assistance-terminated-result-query-result.auto-mapper.profile';
+import { AccidentAssistanceTerminatedPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-period/accident-assistance-terminated-period-entity.auto-mapper.profile';
+import { GetAccidentAssistanceTerminatedPeriodQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-period/get-accident-assistance-terminated-period-query-result.auto-mapper.profile';
 import { AdminEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/admin/admin-entity.auto-mapper.profile';
 import { GetAdminQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/admin/get-admin-query-result.auto-mapper.profile';
 import { AdministrativeProcedureInssAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis-entity.auto-mapper.profile';
@@ -857,6 +859,8 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetAccidentAssistanceTerminatedLegalProceedingQueryResultAutoMapperProfile,
     GetAccidentAssistanceTerminatedResultQueryResultAutoMapperProfile,
     GetAccidentAssistanceTerminatedWithRelationsQueryResultAutoMapperProfile,
+    AccidentAssistanceTerminatedPeriodEntityAutoMapperProfile,
+    GetAccidentAssistanceTerminatedPeriodQueryResultAutoMapperProfile,
     GetBpcElderlyAnalysisQueryResultAutoMapperProfile,
     GetBpcElderlyAnalysisWithRelationsQueryResultAutoMapperProfile,
     BpcElderlyAnalysisDocumentEntityAutoMapperProfile,

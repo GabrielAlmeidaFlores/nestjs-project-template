@@ -49,6 +49,7 @@ export class AccidentAssistanceTerminatedTypeormQueryRepository
           accidentAssistanceTerminatedLegalProceeding: true,
           accidentAssistanceTerminatedDocument: true,
           accidentAssistanceTerminatedResult: true,
+          accidentAssistanceTerminatedPeriod: true,
         },
       },
       err,

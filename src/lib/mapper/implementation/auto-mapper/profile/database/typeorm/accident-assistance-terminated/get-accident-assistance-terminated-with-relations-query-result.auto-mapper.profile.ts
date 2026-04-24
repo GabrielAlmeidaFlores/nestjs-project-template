@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { AccidentAssistanceTerminatedBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-benefit.entity';
 import { AccidentAssistanceTerminatedDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-document.entity';
 import { AccidentAssistanceTerminatedLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-legal-proceeding.entity';
+import { AccidentAssistanceTerminatedPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-period.typeorm.entity';
 import { AccidentAssistanceTerminatedResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-result.entity';
 import { AccidentAssistanceTerminatedTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
@@ -15,6 +16,7 @@ import { GetAccidentAssistanceTerminatedDocumentQueryResult } from '@module/cust
 import { GetAccidentAssistanceTerminatedLegalProceedingQueryResult } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated/query/result/get-accident-assistance-terminated-legal-proceeding.query.result';
 import { GetAccidentAssistanceTerminatedWithRelationsQueryResult } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated/query/result/get-accident-assistance-terminated-with-relations.query.result';
 import { GetAccidentAssistanceTerminatedResultQueryResult } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated-result/query/result/get-accident-assistance-terminated-result.query.result';
+import { GetAccidentAssistanceTerminatedPeriodQueryResult } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated-period/query/result/get-accident-assistance-terminated-period.query.result';
 import { AccidentAssistanceTerminatedId } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated/value-object/accident-assistance-terminated-id/accident-assistance-terminated-id.value-object';
 
 @Injectable()
@@ -83,6 +85,12 @@ export class GetAccidentAssistanceTerminatedWithRelationsQueryResultAutoMapperPr
         GetAccidentAssistanceTerminatedDocumentQueryResult,
       );
 
+      const accidentAssistanceTerminatedPeriod = this.mapper.mapArray(
+        source.accidentAssistanceTerminatedPeriod ?? [],
+        AccidentAssistanceTerminatedPeriodTypeormEntity,
+        GetAccidentAssistanceTerminatedPeriodQueryResult,
+      );
+
       return GetAccidentAssistanceTerminatedWithRelationsQueryResult.build({
         id: new AccidentAssistanceTerminatedId(source.id),
         der: source.der,
@@ -106,6 +114,7 @@ export class GetAccidentAssistanceTerminatedWithRelationsQueryResultAutoMapperPr
         accidentAssistanceTerminatedLegalProceeding,
         accidentAssistanceTerminatedBenefit,
         accidentAssistanceTerminatedDocument,
+        accidentAssistanceTerminatedPeriod,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
@@ -162,6 +171,12 @@ export class GetAccidentAssistanceTerminatedWithRelationsQueryResultAutoMapperPr
         AccidentAssistanceTerminatedDocumentTypeormEntity,
       );
 
+      const accidentAssistanceTerminatedPeriod = this.mapper.mapArray(
+        source.accidentAssistanceTerminatedPeriod,
+        GetAccidentAssistanceTerminatedPeriodQueryResult,
+        AccidentAssistanceTerminatedPeriodTypeormEntity,
+      );
+
       return AccidentAssistanceTerminatedTypeormEntity.build({
         id: source.id.toString(),
         der: source.der,
@@ -185,6 +200,7 @@ export class GetAccidentAssistanceTerminatedWithRelationsQueryResultAutoMapperPr
         accidentAssistanceTerminatedBenefit,
         accidentAssistanceTerminatedLegalProceeding,
         accidentAssistanceTerminatedDocument,
+        accidentAssistanceTerminatedPeriod,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,

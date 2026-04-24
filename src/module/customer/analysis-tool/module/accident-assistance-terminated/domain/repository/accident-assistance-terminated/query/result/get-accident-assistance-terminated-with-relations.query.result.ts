@@ -4,6 +4,7 @@ import type { GetOrganizationMemberWithCustomerRelationQueryResult } from '@modu
 import type { GetAccidentAssistanceTerminatedBenefitQueryResult } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated/query/result/get-accident-assistance-terminated-benefit.query.result';
 import type { GetAccidentAssistanceTerminatedDocumentQueryResult } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated/query/result/get-accident-assistance-terminated-document.query.result';
 import type { GetAccidentAssistanceTerminatedLegalProceedingQueryResult } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated/query/result/get-accident-assistance-terminated-legal-proceeding.query.result';
+import type { GetAccidentAssistanceTerminatedPeriodQueryResult } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated-period/query/result/get-accident-assistance-terminated-period.query.result';
 import type { GetAccidentAssistanceTerminatedResultQueryResult } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated-result/query/result/get-accident-assistance-terminated-result.query.result';
 import type { AccidentAssistanceTerminatedCategoryEnum } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated/enum/accident-assistance-terminated-category.enum';
 import type { AccidentAssistanceTerminatedExtensionRequestStatusEnum } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated/enum/accident-assistance-terminated-extension-request-status.enum';
@@ -31,6 +32,7 @@ export class GetAccidentAssistanceTerminatedWithRelationsQueryResult extends Bas
   public readonly accidentAssistanceTerminatedBenefit: GetAccidentAssistanceTerminatedBenefitQueryResult[];
   public readonly accidentAssistanceTerminatedLegalProceeding: GetAccidentAssistanceTerminatedLegalProceedingQueryResult[];
   public readonly accidentAssistanceTerminatedDocument: GetAccidentAssistanceTerminatedDocumentQueryResult[];
+  public readonly accidentAssistanceTerminatedPeriod: GetAccidentAssistanceTerminatedPeriodQueryResult[];
   public readonly createdBy: GetOrganizationMemberWithCustomerRelationQueryResult;
   public readonly updatedBy: GetOrganizationMemberWithCustomerRelationQueryResult;
 

@@ -14,6 +14,9 @@ export class AccidentAssistanceTerminatedResultEntity extends BaseEntity<Acciden
   @Description('Detalhes da decisão do benefício.')
   public readonly decisionDetails: string | null;
 
+  @Description('Primeira análise do auxílio-acidente cessado em formato JSON.')
+  public readonly firstAnalysis: string | null;
+
   protected readonly _type = AccidentAssistanceTerminatedResultEntity.name;
 
   public constructor(
@@ -26,5 +29,6 @@ export class AccidentAssistanceTerminatedResultEntity extends BaseEntity<Acciden
     this.accidentAssistanceTerminatedSimplifiedAnalysis =
       props.accidentAssistanceTerminatedSimplifiedAnalysis ?? null;
     this.decisionDetails = props.decisionDetails ?? null;
+    this.firstAnalysis = props.firstAnalysis ?? null;
   }
 }
