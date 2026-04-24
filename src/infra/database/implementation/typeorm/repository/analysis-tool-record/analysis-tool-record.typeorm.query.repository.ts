@@ -34,6 +34,7 @@ import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/sche
 import { AccidentBenefitRejectionId } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection/value-object/accident-benefit-rejection-id.value-object';
 import { AdministrativeProcedureInssAnalysisId } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/value-object/administrative-procedure-inss-analysis-id/administrative-procedure-inss-analysis-id.value-object';
 import { AudienceQuestionGeneratorId } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/value-object/audience-question-generator-id/audience-question-generator-id.value-object';
+import { BpcDisabilityDenialId } from '@module/customer/analysis-tool/module/bpc-disability-denial/domain/schema/entity/bpc-disability-denial/value-object/bpc-disability-denial-id/bpc-disability-denial-id.value-object';
 import { BpcElderlyAnalysisId } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/value-object/bpc-elderly-analysis-id/bpc-elderly-analysis-id.value-object';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { DeathBenefitGrantId } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant/value-object/death-benefit-grant-id.value-object';
@@ -134,6 +135,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { survivorPensionAnalysis: Not(IsNull()) },
         { generalUrbanRetirementDenial: Not(IsNull()) },
         { disabilityRetirementPlanningRejection: Not(IsNull()) },
+        { bpcDisabilityDenial: Not(IsNull()) },
         { bpcElderlyAnalysis: Not(IsNull()) },
         { temporaryIncapacityBenefitRejection: Not(IsNull()) },
         { maternityPayGrant: Not(IsNull()) },
@@ -1699,6 +1701,73 @@ export class AnalysisToolRecordTypeormQueryRepository
     return mappedData;
   }
 
+  public async findWithRelationsByBpcDisabilityDenialIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    bpcDisabilityDenialId: BpcDisabilityDenialId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          bpcDisabilityDenial: {
+            id: bpcDisabilityDenialId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          bpcDisabilityDenial: {
+            bpcDisabilityDenialResult: true,
+            bpcDisabilityDenialDocument: true,
+            bpcDisabilityDenialInssBenefit: true,
+            bpcDisabilityDenialLegalProceeding: true,
+            bpcDisabilityDenialFamilyMember: {
+              bpcDisabilityDenialFamilyMemberDocument: true,
+            },
+          },
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
   public async getStatisticsByOrganizationIdAndAuthIdentityId(
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
@@ -1954,6 +2023,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { survivorPensionAnalysis: Not(IsNull()) },
         { generalUrbanRetirementDenial: Not(IsNull()) },
         { disabilityRetirementPlanningRejection: Not(IsNull()) },
+        { bpcDisabilityDenial: Not(IsNull()) },
         { bpcElderlyAnalysis: Not(IsNull()) },
         { temporaryIncapacityBenefitRejection: Not(IsNull()) },
         { maternityPayGrant: Not(IsNull()) },
@@ -2935,6 +3005,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       'survivorPensionAnalysis',
       'generalUrbanRetirementDenial',
       'disabilityRetirementPlanningRejection',
+      'bpcDisabilityDenial',
       'bpcElderlyAnalysis',
       'temporaryIncapacityBenefitRejection',
       'maternityPayGrant',
