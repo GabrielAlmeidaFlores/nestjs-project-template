@@ -457,7 +457,6 @@ export class AccidentAssistanceTerminatedController {
     successResponse: {
       statusCode: HttpStatus.NO_CONTENT,
       description: 'Ação de consideração do período executada com sucesso.',
-      type: undefined,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
   })
