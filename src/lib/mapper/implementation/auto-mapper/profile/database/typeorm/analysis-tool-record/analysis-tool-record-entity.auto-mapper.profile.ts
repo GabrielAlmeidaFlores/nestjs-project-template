@@ -21,6 +21,7 @@ import { GeneralUrbanRetirementDenialTypeormEntity } from '@infra/database/imple
 import { GeneralUrbanRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant.typeorm.entity';
 import { InsuranceQualityAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis.typeorm.entity';
 import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis.typeorm.entity';
+import { MaternityPayGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-grant.typeorm.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis.entity';
 import { MedicalQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
@@ -60,6 +61,7 @@ import { GeneralUrbanRetirementDenialEntity } from '@module/customer/analysis-to
 import { GeneralUrbanRetirementGrantEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/general-urban-retirement-grant.entity';
 import { InsuranceQualityAnalysisEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/insurance-quality-analysis.entity';
 import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
+import { MaternityPayGrantEntity } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/maternity-pay-grant.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
 import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
 import { PerCapitaIncomeForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.entity';
@@ -371,6 +373,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const maternityPayGrant =
+        source.maternityPayGrant !== undefined
+          ? this.mapper.map(
+              source.maternityPayGrant,
+              MaternityPayGrantTypeormEntity,
+              MaternityPayGrantEntity,
+            )
+          : null;
+
       const disabilityRetirementPlanningRejection =
         source.disabilityRetirementPlanningRejection !== undefined
           ? this.mapper.map(
@@ -422,6 +433,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         accidentBenefitRejection,
         survivorPensionAnalysis,
         ruralOrHybridRetirementRejection,
+        maternityPayGrant,
       });
     };
 
@@ -549,6 +561,13 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
               GeneralUrbanRetirementDenialEntity,
               GeneralUrbanRetirementDenialTypeormEntity,
             )
+          : null;
+
+      const maternityPayGrant =
+        source.maternityPayGrant !== null
+          ? ({
+              id: source.maternityPayGrant.id.toString(),
+            } as MaternityPayGrantTypeormEntity)
           : null;
 
       const disabilityRetirementPlanningRejection =
@@ -758,6 +777,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         deathBenefitRejection,
         analysisToolClient,
         generalUrbanRetirementDenial,
+        maternityPayGrant,
         disabilityRetirementPlanningRejection,
         createdBy: {
           id: source.createdBy.toString(),

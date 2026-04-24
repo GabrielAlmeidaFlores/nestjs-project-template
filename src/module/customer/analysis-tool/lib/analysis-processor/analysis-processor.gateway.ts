@@ -1,3 +1,4 @@
+import type { GenderEnum } from '@core/domain/schema/enum/gender.enum';
 import type { CnisModel } from '@lib/cnis-processor/model/generic/cnis.model';
 
 export abstract class AnalysisProcessorGateway {
@@ -521,6 +522,25 @@ export abstract class AnalysisProcessorGateway {
   ): Promise<string | null>;
 
   public abstract getTemporaryIncapacityBenefitRejectionSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getMaternityPayGrantFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    contributorGender: GenderEnum | null,
+    asJson?: boolean,
+  ): Promise<string | null>;
+
+  public abstract getMaternityPayGrantResultAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getMaternityPayGrantSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null>;

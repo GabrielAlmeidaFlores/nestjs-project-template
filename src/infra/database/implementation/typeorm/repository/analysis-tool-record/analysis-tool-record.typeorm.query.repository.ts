@@ -48,6 +48,7 @@ import { GeneralUrbanRetirementDenialId } from '@module/customer/analysis-tool/m
 import { GeneralUrbanRetirementGrantId } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/value-object/general-urban-retirement-grant-id.value-object';
 import { InsuranceQualityAnalysisId } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/value-object/insurance-quality-analysis-id/insurance-quality-analysis-id.value-object';
 import { JudicialCaseAnalysisId } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/value-object/judicial-case-analysis-id/judicial-case-analysis-id.value-object';
+import { MaternityPayGrantId } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/value-object/maternity-pay-grant-id.value-object';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisId } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/value-object/medical-and-social-report-objection-generator-analysis-id/medical-and-social-report-objection-generator-analysis-id.value-object';
 import { MedicalQuestionGeneratorId } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/value-object/medical-question-generator-id/medical-question-generator-id.value-object';
 import { PerCapitaIncomeForBpcAnalysisId } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/value-object/per-capita-income-for-bpc-analysis-id/per-capita-income-for-bpc-analysis-id.value-object';
@@ -137,6 +138,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { bpcDisabilityDenial: Not(IsNull()) },
         { bpcElderlyAnalysis: Not(IsNull()) },
         { temporaryIncapacityBenefitRejection: Not(IsNull()) },
+        { maternityPayGrant: Not(IsNull()) },
       ];
 
     const withUpdatedBy = {
@@ -2024,6 +2026,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { bpcDisabilityDenial: Not(IsNull()) },
         { bpcElderlyAnalysis: Not(IsNull()) },
         { temporaryIncapacityBenefitRejection: Not(IsNull()) },
+        { maternityPayGrant: Not(IsNull()) },
       ];
 
     for (const relationalClause of atLeastOneRelationNotNull) {
@@ -2762,6 +2765,65 @@ export class AnalysisToolRecordTypeormQueryRepository
     return mappedData;
   }
 
+  public async findWithRelationsByMaternityPayGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    maternityPayGrantId: MaternityPayGrantId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          maternityPayGrant: {
+            id: maternityPayGrantId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          maternityPayGrant: true,
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
   public async findWithRelationsByDisabilityRetirementPlanningRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
     disabilityRetirementPlanningRejectionId: DisabilityRetirementPlanningRejectionId,
     organizationId: OrganizationId,
@@ -2946,6 +3008,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       'bpcDisabilityDenial',
       'bpcElderlyAnalysis',
       'temporaryIncapacityBenefitRejection',
+      'maternityPayGrant',
     ];
   }
 }

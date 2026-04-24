@@ -21,6 +21,7 @@ import type { GetGeneralUrbanRetirementDenialWithRelationsQueryResult } from '@m
 import type { GetGeneralUrbanRetirementGrantWithRelationsQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant/query/result/get-general-urban-retirement-grant-with-relations.query.result';
 import type { GetInsuranceQualityAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis/query/result/get-insurance-quality-analysis-with-relations.query.result';
 import type { GetJudicialCaseAnalysisQueryResult } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/repository/judicial-case-analysis/query/result/get-judicial-case-analysis.query.result';
+import type { GetMaternityPayGrantWithRelationsQueryResult } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant/query/result/get-maternity-pay-grant-with-relations.query.result';
 import type { GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResult } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/repository/medical-and-social-report-objection-generator-analysis/query/result/get-medical-and-social-report-objection-generator-analysis.query.result';
 import type { GetMedicalQuestionGeneratorWithRelationsQueryResult } from '@module/customer/analysis-tool/module/medical-question-generator/domain/repository/medical-question-generator/query/result/get-medical-question-generator-with-relations.query.result';
 import type { GetPerCapitaIncomeForBpcAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis/query/result/get-per-capita-income-for-bpc-analysis-with-relations.query.result';
@@ -72,6 +73,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResult extends BaseBuildable
   public readonly temporaryDisabilityBenefitsGrant: GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResult | null;
   public readonly temporaryIncapacityBenefitRejection: GetTemporaryIncapacityBenefitRejectionWithRelationsQueryResult | null;
   public readonly survivorPensionAnalysis: GetSurvivorPensionAnalysisQueryResult | null;
+  public readonly maternityPayGrant: GetMaternityPayGrantWithRelationsQueryResult | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;
