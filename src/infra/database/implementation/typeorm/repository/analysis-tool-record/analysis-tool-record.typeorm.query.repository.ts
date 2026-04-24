@@ -1665,6 +1665,25 @@ export class AnalysisToolRecordTypeormQueryRepository
               organization: true,
             },
           },
+          ruralOrHybridRetirementAnalysis: {
+            ruralOrHybridRetirementAnalysisResult: true,
+            ruralOrHybridRetirementAnalysisDocument: true,
+            ruralOrHybridRetirementAnalysisPeriod: {
+              ruralOrHybridRetirementAnalysisPeriodDocument: true,
+              ruralOrHybridRetirementAnalysisPeriodMember: {
+                ruralOrHybridRetirementAnalysisPeriodMemberDocument: true,
+              },
+            },
+            ruralOrHybridRetirementAnalysisTestimonialWitness: {
+              ruralOrHybridRetirementAnalysisTestimonialWitnessDocument: true,
+            },
+            ruralOrHybridRetirementAnalysisWorkPeriod: {
+              ruralOrHybridRetirementAnalysisWorkPeriodDocument: true,
+              ruralOrHybridRetirementAnalysisWorkPeriodDocumentAnalysis: true,
+              ruralOrHybridRetirementAnalysisWorkPeriodEarningsHistory: true,
+            },
+            ruralOrHybridRetirementAnalysisTimeAccelerator: true,
+          },
           createdBy: {
             customer: true,
             organization: true,

@@ -3,8 +3,11 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { AnalysisToolRecordNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-record-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
@@ -13,6 +16,7 @@ import { CnisDocumentIsNotValidError } from '@module/customer/analysis-tool/modu
 import { RuralOrHybridRetirementAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/domain/repository/rural-or-hybrid-retirement-analysis/command/rural-or-hybrid-retirement-analysis.command.repository.gateway';
 import { RuralOrHybridRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/domain/repository/rural-or-hybrid-retirement-analysis/query/rural-or-hybrid-retirement-analysis.query.repository.gateway';
 import { RuralOrHybridRetirementAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/domain/repository/rural-or-hybrid-retirement-analysis-result/command/rural-or-hybrid-retirement-analysis-result.command.repository.gateway';
+import { RuralOrHybridRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/domain/schema/entity/rural-or-hybrid-retirement-analysis/rural-or-hybrid-retirement-analysis.entity';
 import { RuralOrHybridRetirementAnalysisId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/domain/schema/entity/rural-or-hybrid-retirement-analysis/value-object/rural-or-hybrid-retirement-analysis-id.value-object';
 import { RuralOrHybridRetirementAnalysisDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/domain/schema/entity/rural-or-hybrid-retirement-analysis-document/enum/rural-or-hybrid-retirement-analysis-document-type.enum';
 import { RuralOrHybridRetirementAnalysisResultEntity } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/domain/schema/entity/rural-or-hybrid-retirement-analysis-result/rural-or-hybrid-retirement-analysis-result.entity';
@@ -42,6 +46,8 @@ export class CreateRuralOrHybridRetirementAnalysisResultUseCase {
     private readonly fileProcessorGateway: FileProcessorGateway,
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordCommandRepositoryGateway)
+    private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
     @Inject(AnalysisToolRecordQueryRepositoryGateway)
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(RuralOrHybridRetirementAnalysisCommandRepositoryGateway)
@@ -103,12 +109,18 @@ export class CreateRuralOrHybridRetirementAnalysisResultUseCase {
       throw new CnisDocumentIsNotValidError();
     }
 
-    const analysisToolClient =
-      await this.findAnalysisToolClientByAnalysisToolRecordOrFail(
+    const analysisToolRecordQueryResult =
+      await this.findAnalysisToolRecordQueryResultOrFail(
         ruralOrHybridRetirementAnalysisId,
         organizationSessionData.organizationId,
         sessionData.authIdentityId,
       );
+
+    const analysisToolClient = new AnalysisToolClientEntity({
+      ...analysisToolRecordQueryResult.analysisToolClient,
+      createdBy: analysisToolRecordQueryResult.analysisToolClient.createdBy.id,
+      updatedBy: analysisToolRecordQueryResult.analysisToolClient.updatedBy.id,
+    });
 
     const cnisData =
       await this.analysisProcessorGateway.parseCnisDocument(cnisBuffer);
@@ -181,6 +193,29 @@ export class CreateRuralOrHybridRetirementAnalysisResultUseCase {
         ),
       );
     }
+
+    const ruralOrHybridRetirementAnalysisEntity =
+      new RuralOrHybridRetirementAnalysisEntity({
+        id: ruralOrHybridRetirementAnalysisId,
+      });
+
+    const analysisToolRecord = new AnalysisToolRecordEntity({
+      id: analysisToolRecordQueryResult.id,
+      code: analysisToolRecordQueryResult.code,
+      type: analysisToolRecordQueryResult.type,
+      ruralOrHybridRetirementAnalysis: ruralOrHybridRetirementAnalysisEntity,
+      analysisToolClient,
+      status: AnalysisStatusEnum.COMPLETED,
+      createdBy: analysisToolRecordQueryResult.createdBy.id,
+      updatedBy: organizationMember.id,
+    });
+
+    transactionOperations.push(
+      this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecord(
+        analysisToolRecord.id,
+        analysisToolRecord,
+      ),
+    );
 
     const transaction = await this.baseTransactionRepositoryGateway.execute(
       transactionOperations,
@@ -506,32 +541,18 @@ export class CreateRuralOrHybridRetirementAnalysisResultUseCase {
     return [cnisBuffer, ...buffers];
   }
 
-  private findAnalysisToolClientByAnalysisToolRecordOrFail(
+  private findAnalysisToolRecordQueryResultOrFail(
     ruralOrHybridRetirementAnalysisId: RuralOrHybridRetirementAnalysisId,
     organizationId: OrganizationSessionDataModel['organizationId'],
     authIdentityId: SessionDataModel['authIdentityId'],
-  ): Promise<AnalysisToolClientEntity> {
-    const analysisToolRecordQueryResultPromise: ReturnType<
-      AnalysisToolRecordQueryRepositoryGateway['findWithRelationsByRuralOrHybridRetirementAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail']
-    > =
-      this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByRuralOrHybridRetirementAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
-        ruralOrHybridRetirementAnalysisId,
-        organizationId,
-        authIdentityId,
-        AnalysisToolRecordNotFoundError,
-      );
-
-    return analysisToolRecordQueryResultPromise.then(
-      (analysisToolRecordQueryResult) => {
-        const analysisToolClient =
-          analysisToolRecordQueryResult.analysisToolClient;
-
-        return new AnalysisToolClientEntity({
-          ...analysisToolClient,
-          createdBy: analysisToolClient.createdBy.id,
-          updatedBy: analysisToolClient.updatedBy.id,
-        });
-      },
+  ): ReturnType<
+    AnalysisToolRecordQueryRepositoryGateway['findWithRelationsByRuralOrHybridRetirementAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail']
+  > {
+    return this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByRuralOrHybridRetirementAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+      ruralOrHybridRetirementAnalysisId,
+      organizationId,
+      authIdentityId,
+      AnalysisToolRecordNotFoundError,
     );
   }
 }
