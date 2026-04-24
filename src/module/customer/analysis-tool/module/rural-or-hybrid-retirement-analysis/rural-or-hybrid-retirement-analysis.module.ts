@@ -5,6 +5,7 @@ import { CnisAnalyzerModule } from '@lib/cnis-analyzer/cnis-analyzer.module';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
+import { OrganizationCustomizationExportDocumentOptionsResolverModule } from '@module/customer/analysis-tool/lib/organization-customization-resolver/organization-customization-export-document-options-resolver.module';
 import { RuralOrHybridRetirementAnalysisController } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/rural-or-hybrid-retirement-analysis.controller';
 import { AnalyzeRuralOrHybridRetirementAnalysisTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/analyze-rural-or-hybrid-retirement-analysis-time-accelerator.use-case';
 import { AnalyzeRuralOrHybridRetirementAnalysisWorkPeriodDocumentsUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/analyze-rural-or-hybrid-retirement-analysis-work-period-documents.use-case';
@@ -15,8 +16,14 @@ import { CreateRuralOrHybridRetirementAnalysisTestimonialWitnessUseCase } from '
 import { CreateRuralOrHybridRetirementAnalysisTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/create-rural-or-hybrid-retirement-analysis-time-accelerator.use-case';
 import { CreateRuralOrHybridRetirementAnalysisWorkPeriodUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/create-rural-or-hybrid-retirement-analysis-work-period.use-case';
 import { CreateRuralOrHybridRetirementAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/create-rural-or-hybrid-retirement-analysis.use-case';
+import { DeleteRuralOrHybridRetirementAnalysisPeriodUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/delete-rural-or-hybrid-retirement-analysis-period.use-case';
+import { DeleteRuralOrHybridRetirementAnalysisTestimonialWitnessUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/delete-rural-or-hybrid-retirement-analysis-testimonial-witness.use-case';
+import { DeleteRuralOrHybridRetirementAnalysisTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/delete-rural-or-hybrid-retirement-analysis-time-accelerator.use-case';
+import { DeleteRuralOrHybridRetirementAnalysisWorkPeriodUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/delete-rural-or-hybrid-retirement-analysis-work-period.use-case';
+import { DeleteRuralOrHybridRetirementAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/delete-rural-or-hybrid-retirement-analysis.use-case';
 import { DownloadRuralOrHybridRetirementAnalysisCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/download-rural-or-hybrid-retirement-analysis-complete-analysis.use-case';
 import { DownloadRuralOrHybridRetirementAnalysisSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/download-rural-or-hybrid-retirement-analysis-simplified-analysis.use-case';
+import { GetRuralOrHybridRetirementAnalysisResultUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/get-rural-or-hybrid-retirement-analysis-result.use-case';
 import { GetRuralOrHybridRetirementAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/get-rural-or-hybrid-retirement-analysis.use-case';
 import { UpdateRuralOrHybridRetirementAnalysisPeriodUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/update-rural-or-hybrid-retirement-analysis-period.use-case';
 import { UpdateRuralOrHybridRetirementAnalysisTestimonialWitnessUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/update-rural-or-hybrid-retirement-analysis-testimonial-witness.use-case';
@@ -37,6 +44,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     AnalysisProcessorModule,
     FileProcessorModule,
     ExportDocumentModule,
+    OrganizationCustomizationExportDocumentOptionsResolverModule,
     OrganizationCreditModule,
     PaymentPlanModule,
   ],
@@ -45,6 +53,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateRuralOrHybridRetirementAnalysisUseCase,
     UpdateRuralOrHybridRetirementAnalysisUseCase,
     GetRuralOrHybridRetirementAnalysisUseCase,
+    GetRuralOrHybridRetirementAnalysisResultUseCase,
     CreateRuralOrHybridRetirementAnalysisFirstAnalysisUseCase,
     CreateRuralOrHybridRetirementAnalysisResultUseCase,
     CreateRuralOrHybridRetirementAnalysisPeriodUseCase,
@@ -59,6 +68,11 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     AnalyzeRuralOrHybridRetirementAnalysisTimeAcceleratorUseCase,
     DownloadRuralOrHybridRetirementAnalysisCompleteAnalysisUseCase,
     DownloadRuralOrHybridRetirementAnalysisSimplifiedAnalysisUseCase,
+    DeleteRuralOrHybridRetirementAnalysisUseCase,
+    DeleteRuralOrHybridRetirementAnalysisPeriodUseCase,
+    DeleteRuralOrHybridRetirementAnalysisTestimonialWitnessUseCase,
+    DeleteRuralOrHybridRetirementAnalysisWorkPeriodUseCase,
+    DeleteRuralOrHybridRetirementAnalysisTimeAcceleratorUseCase,
   ],
 })
 export class RuralOrHybridRetirementAnalysisModule {

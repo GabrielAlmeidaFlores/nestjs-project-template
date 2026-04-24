@@ -11,6 +11,10 @@ import {
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { RuralOrHybridRetirementAnalysisId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/domain/schema/entity/rural-or-hybrid-retirement-analysis/value-object/rural-or-hybrid-retirement-analysis-id.value-object';
+import { RuralOrHybridRetirementAnalysisPeriodId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/domain/schema/entity/rural-or-hybrid-retirement-analysis-period/value-object/rural-or-hybrid-retirement-analysis-period-id.value-object';
+import { RuralOrHybridRetirementAnalysisTestimonialWitnessId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/domain/schema/entity/rural-or-hybrid-retirement-analysis-testimonial-witness/value-object/rural-or-hybrid-retirement-analysis-testimonial-witness-id.value-object';
+import { RuralOrHybridRetirementAnalysisTimeAcceleratorId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/domain/schema/entity/rural-or-hybrid-retirement-analysis-time-accelerator/value-object/rural-or-hybrid-retirement-analysis-time-accelerator-id.value-object';
+import { RuralOrHybridRetirementAnalysisWorkPeriodId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/domain/schema/entity/rural-or-hybrid-retirement-analysis-work-period/value-object/rural-or-hybrid-retirement-analysis-work-period-id.value-object';
 import { AnalyzeRuralOrHybridRetirementAnalysisTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/dto/request/analyze-rural-or-hybrid-retirement-analysis-time-accelerator.request.dto';
 import { AnalyzeRuralOrHybridRetirementAnalysisWorkPeriodDocumentsRequestDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/dto/request/analyze-rural-or-hybrid-retirement-analysis-work-period-documents.request.dto';
 import { CreateRuralOrHybridRetirementAnalysisPeriodRequestDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/dto/request/create-rural-or-hybrid-retirement-analysis-period.request.dto';
@@ -32,7 +36,15 @@ import { CreateRuralOrHybridRetirementAnalysisTestimonialWitnessResponseDto } fr
 import { CreateRuralOrHybridRetirementAnalysisTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/dto/response/create-rural-or-hybrid-retirement-analysis-time-accelerator.response.dto';
 import { CreateRuralOrHybridRetirementAnalysisWorkPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/dto/response/create-rural-or-hybrid-retirement-analysis-work-period.response.dto';
 import { CreateRuralOrHybridRetirementAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/dto/response/create-rural-or-hybrid-retirement-analysis.response.dto';
-import { GetRuralOrHybridRetirementAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/dto/response/get-rural-or-hybrid-retirement-analysis.response.dto';
+import { DeleteRuralOrHybridRetirementAnalysisPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/dto/response/delete-rural-or-hybrid-retirement-analysis-period.response.dto';
+import { DeleteRuralOrHybridRetirementAnalysisTestimonialWitnessResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/dto/response/delete-rural-or-hybrid-retirement-analysis-testimonial-witness.response.dto';
+import { DeleteRuralOrHybridRetirementAnalysisTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/dto/response/delete-rural-or-hybrid-retirement-analysis-time-accelerator.response.dto';
+import { DeleteRuralOrHybridRetirementAnalysisWorkPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/dto/response/delete-rural-or-hybrid-retirement-analysis-work-period.response.dto';
+import { DeleteRuralOrHybridRetirementAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/dto/response/delete-rural-or-hybrid-retirement-analysis.response.dto';
+import {
+  GetRuralOrHybridRetirementAnalysisResponseDto,
+  GetRuralOrHybridRetirementAnalysisResultResponseDto,
+} from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/dto/response/get-rural-or-hybrid-retirement-analysis.response.dto';
 import { UpdateRuralOrHybridRetirementAnalysisPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/dto/response/update-rural-or-hybrid-retirement-analysis-period.response.dto';
 import { UpdateRuralOrHybridRetirementAnalysisTestimonialWitnessResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/dto/response/update-rural-or-hybrid-retirement-analysis-testimonial-witness.response.dto';
 import { UpdateRuralOrHybridRetirementAnalysisTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/dto/response/update-rural-or-hybrid-retirement-analysis-time-accelerator.response.dto';
@@ -47,8 +59,14 @@ import { CreateRuralOrHybridRetirementAnalysisTestimonialWitnessUseCase } from '
 import { CreateRuralOrHybridRetirementAnalysisTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/create-rural-or-hybrid-retirement-analysis-time-accelerator.use-case';
 import { CreateRuralOrHybridRetirementAnalysisWorkPeriodUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/create-rural-or-hybrid-retirement-analysis-work-period.use-case';
 import { CreateRuralOrHybridRetirementAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/create-rural-or-hybrid-retirement-analysis.use-case';
+import { DeleteRuralOrHybridRetirementAnalysisPeriodUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/delete-rural-or-hybrid-retirement-analysis-period.use-case';
+import { DeleteRuralOrHybridRetirementAnalysisTestimonialWitnessUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/delete-rural-or-hybrid-retirement-analysis-testimonial-witness.use-case';
+import { DeleteRuralOrHybridRetirementAnalysisTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/delete-rural-or-hybrid-retirement-analysis-time-accelerator.use-case';
+import { DeleteRuralOrHybridRetirementAnalysisWorkPeriodUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/delete-rural-or-hybrid-retirement-analysis-work-period.use-case';
+import { DeleteRuralOrHybridRetirementAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/delete-rural-or-hybrid-retirement-analysis.use-case';
 import { DownloadRuralOrHybridRetirementAnalysisCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/download-rural-or-hybrid-retirement-analysis-complete-analysis.use-case';
 import { DownloadRuralOrHybridRetirementAnalysisSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/download-rural-or-hybrid-retirement-analysis-simplified-analysis.use-case';
+import { GetRuralOrHybridRetirementAnalysisResultUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/get-rural-or-hybrid-retirement-analysis-result.use-case';
 import { GetRuralOrHybridRetirementAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/get-rural-or-hybrid-retirement-analysis.use-case';
 import { UpdateRuralOrHybridRetirementAnalysisPeriodUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/update-rural-or-hybrid-retirement-analysis-period.use-case';
 import { UpdateRuralOrHybridRetirementAnalysisTestimonialWitnessUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/use-case/update-rural-or-hybrid-retirement-analysis-testimonial-witness.use-case';
@@ -74,6 +92,7 @@ export class RuralOrHybridRetirementAnalysisController {
     private readonly createRuralOrHybridRetirementAnalysisUseCase: CreateRuralOrHybridRetirementAnalysisUseCase,
     private readonly updateRuralOrHybridRetirementAnalysisUseCase: UpdateRuralOrHybridRetirementAnalysisUseCase,
     private readonly getRuralOrHybridRetirementAnalysisUseCase: GetRuralOrHybridRetirementAnalysisUseCase,
+    private readonly getRuralOrHybridRetirementAnalysisResultUseCase: GetRuralOrHybridRetirementAnalysisResultUseCase,
     private readonly createRuralOrHybridRetirementAnalysisFirstAnalysisUseCase: CreateRuralOrHybridRetirementAnalysisFirstAnalysisUseCase,
     private readonly createRuralOrHybridRetirementAnalysisResultUseCase: CreateRuralOrHybridRetirementAnalysisResultUseCase,
     private readonly createRuralOrHybridRetirementAnalysisPeriodUseCase: CreateRuralOrHybridRetirementAnalysisPeriodUseCase,
@@ -88,6 +107,11 @@ export class RuralOrHybridRetirementAnalysisController {
     private readonly analyzeRuralOrHybridRetirementAnalysisTimeAcceleratorUseCase: AnalyzeRuralOrHybridRetirementAnalysisTimeAcceleratorUseCase,
     private readonly downloadRuralOrHybridRetirementAnalysisCompleteAnalysisUseCase: DownloadRuralOrHybridRetirementAnalysisCompleteAnalysisUseCase,
     private readonly downloadRuralOrHybridRetirementAnalysisSimplifiedAnalysisUseCase: DownloadRuralOrHybridRetirementAnalysisSimplifiedAnalysisUseCase,
+    private readonly deleteRuralOrHybridRetirementAnalysisUseCase: DeleteRuralOrHybridRetirementAnalysisUseCase,
+    private readonly deleteRuralOrHybridRetirementAnalysisPeriodUseCase: DeleteRuralOrHybridRetirementAnalysisPeriodUseCase,
+    private readonly deleteRuralOrHybridRetirementAnalysisTestimonialWitnessUseCase: DeleteRuralOrHybridRetirementAnalysisTestimonialWitnessUseCase,
+    private readonly deleteRuralOrHybridRetirementAnalysisWorkPeriodUseCase: DeleteRuralOrHybridRetirementAnalysisWorkPeriodUseCase,
+    private readonly deleteRuralOrHybridRetirementAnalysisTimeAcceleratorUseCase: DeleteRuralOrHybridRetirementAnalysisTimeAcceleratorUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -187,6 +211,34 @@ export class RuralOrHybridRetirementAnalysisController {
   }
 
   @BuildEndpointSpecification({
+    summary:
+      'Obter resultado da análise de indeferimento de aposentadoria rural ou híbrida',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralOrHybridRetirementAnalysisId/result',
+      method: RequestMethod.GET,
+    },
+    tag: ['analise-aposentadoria-rural-ou-hibrida'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Resultado da análise retornado com sucesso.',
+      type: GetRuralOrHybridRetirementAnalysisResultResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async getResult(
+    @Param(
+      'ruralOrHybridRetirementAnalysisId',
+      new ParseValueObjectPipe(RuralOrHybridRetirementAnalysisId),
+    )
+    ruralOrHybridRetirementAnalysisId: RuralOrHybridRetirementAnalysisId,
+  ): Promise<GetRuralOrHybridRetirementAnalysisResultResponseDto> {
+    return this.getRuralOrHybridRetirementAnalysisResultUseCase.execute(
+      ruralOrHybridRetirementAnalysisId,
+    );
+  }
+
+  @BuildEndpointSpecification({
     summary: 'Gerar first analysis da análise',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
@@ -195,7 +247,7 @@ export class RuralOrHybridRetirementAnalysisController {
     },
     tag: ['analise-aposentadoria-rural-ou-hibrida'],
     successResponse: {
-      statusCode: HttpStatus.OK,
+      statusCode: HttpStatus.CREATED,
       description: 'First analysis criada com sucesso.',
       type: CreateRuralOrHybridRetirementAnalysisFirstAnalysisResponseDto,
     },
@@ -227,7 +279,7 @@ export class RuralOrHybridRetirementAnalysisController {
     },
     tag: ['analise-aposentadoria-rural-ou-hibrida'],
     successResponse: {
-      statusCode: HttpStatus.OK,
+      statusCode: HttpStatus.CREATED,
       description: 'Resultado criado com sucesso.',
       type: CreateRuralOrHybridRetirementAnalysisResultResponseDto,
     },
@@ -671,6 +723,196 @@ export class RuralOrHybridRetirementAnalysisController {
       organizationSessionData,
       ruralOrHybridRetirementAnalysisId,
       format,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Deletar análise de indeferimento de aposentadoria rural ou híbrida',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralOrHybridRetirementAnalysisId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['analise-aposentadoria-rural-ou-hibrida'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Análise de indeferimento de aposentadoria rural ou híbrida deletada com sucesso.',
+      type: DeleteRuralOrHybridRetirementAnalysisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async delete(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralOrHybridRetirementAnalysisId',
+      new ParseValueObjectPipe(RuralOrHybridRetirementAnalysisId),
+    )
+    ruralOrHybridRetirementAnalysisId: RuralOrHybridRetirementAnalysisId,
+  ): Promise<DeleteRuralOrHybridRetirementAnalysisResponseDto> {
+    return this.deleteRuralOrHybridRetirementAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralOrHybridRetirementAnalysisId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Deletar período da análise',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralOrHybridRetirementAnalysisId/period/:ruralOrHybridRetirementAnalysisPeriodId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['analise-aposentadoria-rural-ou-hibrida'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Período deletado com sucesso.',
+      type: DeleteRuralOrHybridRetirementAnalysisPeriodResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async deletePeriod(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralOrHybridRetirementAnalysisId',
+      new ParseValueObjectPipe(RuralOrHybridRetirementAnalysisId),
+    )
+    ruralOrHybridRetirementAnalysisId: RuralOrHybridRetirementAnalysisId,
+    @Param(
+      'ruralOrHybridRetirementAnalysisPeriodId',
+      new ParseValueObjectPipe(RuralOrHybridRetirementAnalysisPeriodId),
+    )
+    ruralOrHybridRetirementAnalysisPeriodId: RuralOrHybridRetirementAnalysisPeriodId,
+  ): Promise<DeleteRuralOrHybridRetirementAnalysisPeriodResponseDto> {
+    return this.deleteRuralOrHybridRetirementAnalysisPeriodUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralOrHybridRetirementAnalysisId,
+      ruralOrHybridRetirementAnalysisPeriodId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Deletar testemunha da análise',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralOrHybridRetirementAnalysisId/testimonial-witness/:ruralOrHybridRetirementAnalysisTestimonialWitnessId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['analise-aposentadoria-rural-ou-hibrida'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Testemunha deletada com sucesso.',
+      type: DeleteRuralOrHybridRetirementAnalysisTestimonialWitnessResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async deleteTestimonialWitness(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralOrHybridRetirementAnalysisId',
+      new ParseValueObjectPipe(RuralOrHybridRetirementAnalysisId),
+    )
+    ruralOrHybridRetirementAnalysisId: RuralOrHybridRetirementAnalysisId,
+    @Param(
+      'ruralOrHybridRetirementAnalysisTestimonialWitnessId',
+      new ParseValueObjectPipe(
+        RuralOrHybridRetirementAnalysisTestimonialWitnessId,
+      ),
+    )
+    ruralOrHybridRetirementAnalysisTestimonialWitnessId: RuralOrHybridRetirementAnalysisTestimonialWitnessId,
+  ): Promise<DeleteRuralOrHybridRetirementAnalysisTestimonialWitnessResponseDto> {
+    return this.deleteRuralOrHybridRetirementAnalysisTestimonialWitnessUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralOrHybridRetirementAnalysisId,
+      ruralOrHybridRetirementAnalysisTestimonialWitnessId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Deletar período de trabalho da análise',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralOrHybridRetirementAnalysisId/work-period/:ruralOrHybridRetirementAnalysisWorkPeriodId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['analise-aposentadoria-rural-ou-hibrida'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Período de trabalho deletado com sucesso.',
+      type: DeleteRuralOrHybridRetirementAnalysisWorkPeriodResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async deleteWorkPeriod(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralOrHybridRetirementAnalysisId',
+      new ParseValueObjectPipe(RuralOrHybridRetirementAnalysisId),
+    )
+    ruralOrHybridRetirementAnalysisId: RuralOrHybridRetirementAnalysisId,
+    @Param(
+      'ruralOrHybridRetirementAnalysisWorkPeriodId',
+      new ParseValueObjectPipe(RuralOrHybridRetirementAnalysisWorkPeriodId),
+    )
+    ruralOrHybridRetirementAnalysisWorkPeriodId: RuralOrHybridRetirementAnalysisWorkPeriodId,
+  ): Promise<DeleteRuralOrHybridRetirementAnalysisWorkPeriodResponseDto> {
+    return this.deleteRuralOrHybridRetirementAnalysisWorkPeriodUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralOrHybridRetirementAnalysisId,
+      ruralOrHybridRetirementAnalysisWorkPeriodId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Deletar acelerador de tempo da análise',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralOrHybridRetirementAnalysisId/time-accelerator/:ruralOrHybridRetirementAnalysisTimeAcceleratorId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['analise-aposentadoria-rural-ou-hibrida'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Acelerador de tempo deletado com sucesso.',
+      type: DeleteRuralOrHybridRetirementAnalysisTimeAcceleratorResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async deleteTimeAccelerator(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralOrHybridRetirementAnalysisId',
+      new ParseValueObjectPipe(RuralOrHybridRetirementAnalysisId),
+    )
+    ruralOrHybridRetirementAnalysisId: RuralOrHybridRetirementAnalysisId,
+    @Param(
+      'ruralOrHybridRetirementAnalysisTimeAcceleratorId',
+      new ParseValueObjectPipe(
+        RuralOrHybridRetirementAnalysisTimeAcceleratorId,
+      ),
+    )
+    ruralOrHybridRetirementAnalysisTimeAcceleratorId: RuralOrHybridRetirementAnalysisTimeAcceleratorId,
+  ): Promise<DeleteRuralOrHybridRetirementAnalysisTimeAcceleratorResponseDto> {
+    return this.deleteRuralOrHybridRetirementAnalysisTimeAcceleratorUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralOrHybridRetirementAnalysisId,
+      ruralOrHybridRetirementAnalysisTimeAcceleratorId,
     );
   }
 }
