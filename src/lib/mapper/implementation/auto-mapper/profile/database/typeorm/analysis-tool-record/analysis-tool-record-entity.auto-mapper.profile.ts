@@ -7,6 +7,7 @@ import { AdministrativeProcedureInssAnalysisTypeormEntity } from '@infra/databas
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator.typeorm.entity';
+import { BpcDisabilityDenialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-denial.typeorm.entity';
 import { BpcElderlyAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { DeathBenefitGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant.typeorm.entity';
@@ -45,6 +46,7 @@ import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/sche
 import { AccidentBenefitRejectionEntity } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection/accident-benefit-rejection.entity';
 import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
 import { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
+import { BpcDisabilityDenialEntity } from '@module/customer/analysis-tool/module/bpc-disability-denial/domain/schema/entity/bpc-disability-denial/bpc-disability-denial.entity';
 import { BpcElderlyAnalysisEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/bpc-elderly-analysis.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { DeathBenefitGrantEntity } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant/death-benefit-grant.entity';
@@ -211,6 +213,16 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         PerCapitaIncomeForBpcAnalysisTypeormEntity,
         PerCapitaIncomeForBpcAnalysisEntity,
       );
+
+      const bpcDisabilityDenial =
+        source.bpcDisabilityDenial !== null &&
+        source.bpcDisabilityDenial !== undefined
+          ? this.mapper.map(
+              source.bpcDisabilityDenial,
+              BpcDisabilityDenialTypeormEntity,
+              BpcDisabilityDenialEntity,
+            )
+          : null;
 
       const bpcElderlyAnalysis =
         source.bpcElderlyAnalysis !== null &&
@@ -393,6 +405,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         disabilityAssessmentForBpcAnalysis,
         audienceQuestionGenerator,
         perCapitaIncomeForBpcAnalysis,
+        bpcDisabilityDenial,
         bpcElderlyAnalysis,
         ruralTimelineAnalysis,
         insuranceQualityAnalysis,
@@ -552,6 +565,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         PerCapitaIncomeForBpcAnalysisEntity,
         PerCapitaIncomeForBpcAnalysisTypeormEntity,
       );
+
+      const bpcDisabilityDenial =
+        source.bpcDisabilityDenial !== null
+          ? this.mapper.map(
+              source.bpcDisabilityDenial,
+              BpcDisabilityDenialEntity,
+              BpcDisabilityDenialTypeormEntity,
+            )
+          : null;
 
       const bpcElderlyAnalysis =
         source.bpcElderlyAnalysis !== null
@@ -718,6 +740,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         speechGenerator,
         disabilityAssessmentForBpcAnalysis,
         perCapitaIncomeForBpcAnalysis,
+        bpcDisabilityDenial,
         bpcElderlyAnalysis,
         ruralTimeline,
         insuranceQualityAnalysis,

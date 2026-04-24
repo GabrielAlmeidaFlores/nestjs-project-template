@@ -14,6 +14,7 @@ import { RemunerationCalculatorModule } from '@module/customer/analysis-tool/lib
 import { AccidentBenefitRejectionModule } from '@module/customer/analysis-tool/module/accident-benefit-rejection/accident-benefit-rejection.module';
 import { AdministrativeProcedureInssAnalysisModule } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.module';
 import { AudienceQuestionGeneratorModule } from '@module/customer/analysis-tool/module/audience-question-generator/audience-question-generator.module';
+import { BpcDisabilityDenialModule } from '@module/customer/analysis-tool/module/bpc-disability-denial/bpc-disability-denial.module';
 import { BpcElderlyAnalysisModule } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/bpc-elderly-analysis.module';
 import { CnisFastAnalysisModule } from '@module/customer/analysis-tool/module/cnis-fast-analysis/cnis-fast-analysis.module';
 import { DeathBenefitGrantModule } from '@module/customer/analysis-tool/module/death-benefit-grant/death-benefit-grant.module';
@@ -89,6 +90,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     DisabilityAssessmentForBpcAnalysisModule,
     InsuranceQualityAnalysisModule,
     PerCapitaIncomeForBpcAnalysisModule,
+    BpcDisabilityDenialModule,
     BpcElderlyAnalysisModule,
     LegalPleadingModule,
     RuralTimelineAnalysisModule,

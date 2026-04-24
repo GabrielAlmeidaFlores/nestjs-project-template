@@ -2124,6 +2124,30 @@ Análise processada do CNIS:
     );
   }
 
+  public async getBpcDisabilityDenialInssDecisionAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getBpcDisabilityDenialFirstAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
   public async getDisabilityRetirementPlanningRejectionTimeAcceleratorAnalysis(
     systemInstruction: string,
     files: Buffer[],
@@ -2274,7 +2298,46 @@ Análise processada do CNIS:
     );
   }
 
+  public async getBpcDisabilityDenialCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- O campo \`completeAnalysisDownload\` deve conter a análise detalhada em Markdown, pronta para exportação em PDF/DOCX.
+- O campo \`analysisResult\` deve conter um resumo textual objetivo do resultado.
+- O campo \`analysisDetailedText\` deve conter a fundamentação detalhada em texto corrido.
+- Cada item de \`applicableRules\` deve representar uma regra aplicável à análise do BPC Pessoa com Deficiência.
+- Cada item de \`benefitSummaries\` deve representar um cenário ou benefício resumido para a tela final.
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: this.getBpcDisabilityDenialCompleteAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
   public async getDisabilityRetirementPlanningRejectionSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getBpcDisabilityDenialSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null> {
@@ -7340,6 +7403,60 @@ Análise processada do CNIS:
         'retirementRules',
         'analysisResult',
         'completeAnalysisDownload',
+      ],
+    };
+  }
+
+  private getBpcDisabilityDenialCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        analysisResult: {
+          type: 'string',
+          description: 'Resumo principal do resultado da análise.',
+        },
+        analysisDetailedText: {
+          type: 'string',
+          description: 'Texto detalhado da análise final.',
+        },
+        completeAnalysisDownload: {
+          type: 'string',
+          description:
+            'Versão em Markdown da análise completa, pronta para exportação.',
+        },
+        applicableRules: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              title: { type: 'string' },
+              description: { type: 'string' },
+              status: { type: 'string' },
+            },
+            required: ['title', 'description', 'status'],
+          },
+        },
+        benefitSummaries: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              benefitType: { type: 'string' },
+              result: { type: 'string' },
+              dib: { type: 'string' },
+              expectedMonthlyBenefit: { type: 'number' },
+              detailedAnalysis: { type: 'string' },
+            },
+            required: ['benefitType', 'result'],
+          },
+        },
+      },
+      required: [
+        'analysisResult',
+        'analysisDetailedText',
+        'completeAnalysisDownload',
+        'applicableRules',
+        'benefitSummaries',
       ],
     };
   }
