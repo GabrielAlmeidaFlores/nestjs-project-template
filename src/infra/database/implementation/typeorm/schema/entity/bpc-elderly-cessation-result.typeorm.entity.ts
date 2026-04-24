@@ -43,7 +43,7 @@ export class BpcElderlyCessationResultTypeormEntity extends BaseTypeormEntity {
     scale: 2,
     nullable: true,
   })
-  public totalHouseholdIncome: number | null;
+  public totalHouseholdIncome: string | null;
 
   @Column({
     name: 'per_capita_income',
@@ -52,7 +52,7 @@ export class BpcElderlyCessationResultTypeormEntity extends BaseTypeormEntity {
     scale: 2,
     nullable: true,
   })
-  public perCapitaIncome: number | null;
+  public perCapitaIncome: string | null;
 
   @Column({ name: 'legal_requirements_met', type: 'text', nullable: true })
   public legalRequirementsMet: string | null;
