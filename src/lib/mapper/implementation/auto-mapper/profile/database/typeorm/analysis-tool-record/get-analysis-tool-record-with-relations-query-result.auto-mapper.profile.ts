@@ -212,7 +212,8 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
           : null;
 
       const ruralOrHybridRetirementAnalysis =
-        source.ruralOrHybridRetirementAnalysis !== null
+        source.ruralOrHybridRetirementAnalysis !== null &&
+        source.ruralOrHybridRetirementAnalysis !== undefined
           ? this.mapper.map(
               source.ruralOrHybridRetirementAnalysis,
               RuralOrHybridRetirementAnalysisTypeormEntity,

@@ -5,6 +5,7 @@ import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analy
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { RuralOrHybridRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/domain/repository/rural-or-hybrid-retirement-analysis/query/rural-or-hybrid-retirement-analysis.query.repository.gateway';
 import { RuralOrHybridRetirementAnalysisId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/domain/schema/entity/rural-or-hybrid-retirement-analysis/value-object/rural-or-hybrid-retirement-analysis-id.value-object';
+import { RuralOrHybridRetirementAnalysisDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/domain/schema/entity/rural-or-hybrid-retirement-analysis-document/enum/rural-or-hybrid-retirement-analysis-document-type.enum';
 import {
   GetRuralOrHybridRetirementAnalysisResponseDto,
   GetRuralOrHybridRetirementAnalysisAnalysisToolClientResponseDto,
@@ -55,7 +56,9 @@ export class GetRuralOrHybridRetirementAnalysisUseCase {
     ]);
 
     const cnisDocumentEntity =
-      result.ruralOrHybridRetirementAnalysisDocument?.[0] ?? null;
+      result.ruralOrHybridRetirementAnalysisDocument?.find(
+        (d) => d.type === RuralOrHybridRetirementAnalysisDocumentTypeEnum.CNIS,
+      ) ?? null;
 
     const cnisDocument =
       cnisDocumentEntity !== null && cnisDocumentEntity.document !== null
