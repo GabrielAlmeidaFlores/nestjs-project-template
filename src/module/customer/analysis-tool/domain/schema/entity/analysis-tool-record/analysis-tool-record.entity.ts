@@ -37,6 +37,7 @@ import { Description } from '@shared/system/decorator/property/description/descr
 import type { AnalysisToolRecordEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity.props.interface';
 import type { BpcElderlyAnalysisEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/bpc-elderly-analysis.entity';
 import type { DisabilityRetirementPlanningEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/disability-retirement-planning.entity';
+import type { MaternityPayRejectionEntity } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/schema/entity/maternity-pay-rejection/maternity-pay-rejection.entity';
 import type { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 
 export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
@@ -200,6 +201,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly bpcElderlyAnalysis: BpcElderlyAnalysisEntity | null;
 
   @Description(
+    'Análise de indeferimento de salário maternidade associada ao registro da ferramenta de análise',
+  )
+  public readonly maternityPayRejection: MaternityPayRejectionEntity | null;
+
+  @Description(
     'Cliente da ferramenta de análise associado ao registro da ferramenta de análise',
   )
   public readonly analysisToolClient: AnalysisToolClientEntity;
@@ -264,6 +270,7 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     this.disabilityRetirementPlanningRejection =
       props.disabilityRetirementPlanningRejection ?? null;
     this.bpcElderlyAnalysis = props.bpcElderlyAnalysis ?? null;
+    this.maternityPayRejection = props.maternityPayRejection ?? null;
     this.status = props.status;
     this.analysisToolClient = props.analysisToolClient;
     this.createdBy = props.createdBy;

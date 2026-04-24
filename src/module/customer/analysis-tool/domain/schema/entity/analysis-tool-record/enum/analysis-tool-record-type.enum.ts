@@ -29,4 +29,5 @@ export enum AnalysisToolRecordTypeEnum {
   ACCIDENT_BENEFIT_REJECTION = 'indeferimento_acidente',
   DISABILITY_RETIREMENT_PLANNING_REJECTION = 'indeferimento_aposentadoria_para_deficiente',
   BPC_ELDERLY_ANALYSIS = 'bpc_ao_idoso',
+  MATERNITY_PAY_REJECTION = 'indeferimento_salario_maternidade',
 }

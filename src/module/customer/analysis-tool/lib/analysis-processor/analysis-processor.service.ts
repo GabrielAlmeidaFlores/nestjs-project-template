@@ -2297,6 +2297,95 @@ Análise processada do CNIS:
     );
   }
 
+  public async getMaternityPayRejectionFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    useJson = true,
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        ...(useJson && {
+          jsonSchema: this.getMaternityPayRejectionFirstAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getMaternityPayRejectionSecondAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getMaternityPayRejectionCompleteAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: this.getMaternityPayRejectionCompleteAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getMaternityPayRejectionSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
   private getSurvivorPensionAnalysisResultJsonSchema(): object {
     return {
       type: 'object',
@@ -6843,6 +6932,114 @@ Análise processada do CNIS:
         'legalRequirementsMet',
         'perCapitaIncomeBelowQuarterMinimumWage',
         'ageEqualOrAbove65Years',
+      ],
+    };
+  }
+
+  private getMaternityPayRejectionFirstAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        insuredStatusManteined: {
+          type: 'boolean',
+        },
+        insuredStatusAnalysisConclusion: {
+          type: 'string',
+        },
+        gracePeriod: {
+          type: 'object',
+          properties: {
+            withinTheGracePeriod: { type: 'boolean' },
+            situation: { type: 'string' },
+            applicableGracePeriod: { type: 'string' },
+            endOfGracePeriod: { type: 'string' },
+          },
+          required: [
+            'withinTheGracePeriod',
+            'situation',
+            'applicableGracePeriod',
+            'endOfGracePeriod',
+          ],
+        },
+        benefitInformation: {
+          type: 'object',
+          properties: {
+            situation: { type: 'string' },
+            duration: { type: 'string' },
+            startDate: { type: 'string' },
+            concessionDate: { type: 'string' },
+            startOfTheLeave: { type: 'string' },
+            endOfTheLeave: { type: 'string' },
+            totalLeaveDuration: { type: 'string' },
+            amountBenefit: { type: 'string' },
+            calculationBasis: { type: 'string' },
+          },
+          required: [
+            'situation',
+            'duration',
+            'startDate',
+            'concessionDate',
+            'startOfTheLeave',
+            'endOfTheLeave',
+            'totalLeaveDuration',
+            'amountBenefit',
+            'calculationBasis',
+          ],
+        },
+        requirementDeadline: {
+          type: 'object',
+          properties: {
+            triggeringEventDate: { type: 'string' },
+            requirementDate: { type: 'string' },
+            statuoryDeadline: { type: 'string' },
+            details: { type: 'string' },
+            justification: { type: 'string' },
+          },
+          required: [
+            'triggeringEventDate',
+            'requirementDate',
+            'statuoryDeadline',
+            'details',
+            'justification',
+          ],
+        },
+      },
+      required: [
+        'insuredStatusManteined',
+        'insuredStatusAnalysisConclusion',
+        'gracePeriod',
+        'benefitInformation',
+        'requirementDeadline',
+      ],
+    };
+  }
+
+  private getMaternityPayRejectionCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        retirementRules: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              ruleName: { type: 'string' },
+              fulfilled: { type: 'boolean' },
+              grantDate: { type: 'string' },
+              expectedRmi: { type: 'number' },
+              causeValue: { type: 'number' },
+              detaildAnalysis: { type: 'string' },
+            },
+            required: ['ruleName', 'fulfilled', 'detaildAnalysis'],
+          },
+        },
+        isEligibleForMaternityPay: { type: 'boolean' },
+        analysisResult: { type: 'string' },
+      },
+      required: [
+        'retirementRules',
+        'isEligibleForMaternityPay',
+        'analysisResult',
       ],
     };
   }

@@ -269,6 +269,15 @@ import { LegalPleadingResultEntityAutoMapperProfile } from '@lib/mapper/implemen
 import { GetLegalProceedingDetailQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-proceeding-detail/get-legal-proceeding-detail-query-result.auto-mapper.profile';
 import { GetLegalProceedingDetailWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-proceeding-detail/get-legal-proceeding-detail-with-relations-query-result.auto-mapper.profile';
 import { LegalProceedingDetailEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-proceeding-detail/legal-proceeding-detail-entity.auto-mapper.profile';
+import { GetMaternityPayRejectionWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-rejection/get-maternity-pay-rejection-with-relations-query-result.auto-mapper.profile';
+import { MaternityPayRejectionEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-rejection/maternity-pay-rejection-entity.auto-mapper.profile';
+import { MaternityPayRejectionDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-rejection-document/maternity-pay-rejection-document-entity.auto-mapper.profile';
+import { MaternityPayRejectionInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-rejection-inss-benefit/maternity-pay-rejection-inss-benefit-entity.auto-mapper.profile';
+import { MaternityPayRejectionLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-rejection-legal-proceeding/maternity-pay-rejection-legal-proceeding-entity.auto-mapper.profile';
+import { MaternityPayRejectionResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-rejection-result/maternity-pay-rejection-result-entity.auto-mapper.profile';
+import { MaternityPayRejectionWorkPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-rejection-work-period/maternity-pay-rejection-work-period-entity.auto-mapper.profile';
+import { MaternityPayRejectionWorkPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-rejection-work-period-document/maternity-pay-rejection-work-period-document-entity.auto-mapper.profile';
+import { MaternityPayRejectionWorkPeriodEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-rejection-work-period-earnings-history/maternity-pay-rejection-work-period-earnings-history-entity.auto-mapper.profile';
 import { GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-and-social-report-objection-generator-analysis/get-medical-and-social-report-objection-generator-analysis-query-result.auto-mapper.profile';
 import { GetMedicalAndSocialReportObjectionGeneratorAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-and-social-report-objection-generator-analysis/get-medical-and-social-report-objection-generator-analysis-with-relations-query-result.auto-mapper.profile';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis-entity.auto-mapper.profile';
@@ -1016,6 +1025,15 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetSurvivorPensionAnalysisResultRetirementRuleQueryResultAutoMapperProfile,
     GetSurvivorPensionAnalysisResultDependentPensionAnalysisQueryResultAutoMapperProfile,
     RuralOrHybridRetirementRejectionEntityAutoMapperProfile,
+    MaternityPayRejectionEntityAutoMapperProfile,
+    GetMaternityPayRejectionWithRelationsQueryResultAutoMapperProfile,
+    MaternityPayRejectionResultEntityAutoMapperProfile,
+    MaternityPayRejectionInssBenefitEntityAutoMapperProfile,
+    MaternityPayRejectionLegalProceedingEntityAutoMapperProfile,
+    MaternityPayRejectionDocumentEntityAutoMapperProfile,
+    MaternityPayRejectionWorkPeriodEntityAutoMapperProfile,
+    MaternityPayRejectionWorkPeriodDocumentEntityAutoMapperProfile,
+    MaternityPayRejectionWorkPeriodEarningsHistoryEntityAutoMapperProfile,
   ],
   exports: [AutoMapperService],
 })

@@ -36,6 +36,8 @@ import { TemporaryDisabilityBenefitsGrantTypeormEntity } from '@infra/database/i
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 
+import type { MaternityPayRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-rejection.typeorm.entity';
+
 @Entity({ name: 'analysis_tool_record' })
 export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   @Column({
@@ -292,6 +294,10 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   )
   @JoinColumn({ name: 'bpc_elderly_analysis_id' })
   public bpcElderlyAnalysis?: BpcElderlyAnalysisTypeormEntity | null;
+
+  @ManyToOne('MaternityPayRejectionTypeormEntity')
+  @JoinColumn({ name: 'maternity_pay_rejection_id' })
+  public maternityPayRejection?: MaternityPayRejectionTypeormEntity | null;
 
   @ManyToOne(
     () => AnalysisToolClientTypeormEntity,
