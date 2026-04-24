@@ -76,8 +76,8 @@ export class BpcElderlyCessationResultEntityAutoMapperProfile {
         benefitSummaries: source.benefitSummaries,
         analysisDetailedText: source.analysisDetailedText,
         diagnosis: source.diagnosis,
-        totalHouseholdIncome: source.totalHouseholdIncome,
-        perCapitaIncome: source.perCapitaIncome,
+        totalHouseholdIncome: source.totalHouseholdIncome?.toString() ?? null,
+        perCapitaIncome: source.perCapitaIncome?.toString() ?? null,
         legalRequirementsMet: source.legalRequirementsMet,
         perCapitaIncomeBelowQuarterMinimumWage:
           source.perCapitaIncomeBelowQuarterMinimumWage,
