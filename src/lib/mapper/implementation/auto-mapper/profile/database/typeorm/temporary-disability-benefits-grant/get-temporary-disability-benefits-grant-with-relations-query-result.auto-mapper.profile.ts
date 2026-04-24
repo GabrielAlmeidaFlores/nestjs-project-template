@@ -325,8 +325,7 @@ export class GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResultAutoMapp
       );
 
       return GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResult.build({
-        temporaryDisabilityBenefitsGrantId:
-          new TemporaryDisabilityBenefitsGrantId(source.id),
+        id: new TemporaryDisabilityBenefitsGrantId(source.id),
         category: source.category,
         analysisName: source.analysisName,
         createdAt: source.createdAt,
@@ -376,7 +375,7 @@ export class GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResultAutoMapp
           fileName: item.fileName,
           type: item.type,
           temporaryDisabilityBenefitsGrant: {
-            id: source.temporaryDisabilityBenefitsGrantId.toString(),
+            id: source.id.toString(),
           } as unknown as TemporaryDisabilityBenefitsGrantTypeormEntity,
           createdAt: item.createdAt,
           updatedAt: item.updatedAt,
@@ -404,7 +403,7 @@ export class GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResultAutoMapp
       );
 
       return TemporaryDisabilityBenefitsGrantTypeormEntity.build({
-        id: source.temporaryDisabilityBenefitsGrantId.toString(),
+        id: source.id.toString(),
         category: source.category,
         analysisName: source.analysisName,
         temporaryDisabilityBenefitsGrantResult,
