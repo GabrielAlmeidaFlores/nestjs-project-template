@@ -8,6 +8,7 @@ import { RuralOrHybridRetirementAnalysisResultTypeormEntity } from '@infra/datab
 import { RuralOrHybridRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-analysis.typeorm.entity';
 import { RuralOrHybridRetirementAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/domain/repository/rural-or-hybrid-retirement-analysis-result/command/rural-or-hybrid-retirement-analysis-result.command.repository.gateway';
 import { RuralOrHybridRetirementAnalysisResultEntity } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/domain/schema/entity/rural-or-hybrid-retirement-analysis-result/rural-or-hybrid-retirement-analysis-result.entity';
+import { RuralOrHybridRetirementAnalysisResultId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/domain/schema/entity/rural-or-hybrid-retirement-analysis-result/value-object/rural-or-hybrid-retirement-analysis-result-id.value-object';
 
 @Injectable()
 export class RuralOrHybridRetirementAnalysisResultTypeormCommandRepository
@@ -38,6 +39,12 @@ export class RuralOrHybridRetirementAnalysisResultTypeormCommandRepository
     const mappedData = this.mapToTypeormEntity(props);
 
     return this.update(props.id.toString(), mappedData);
+  }
+
+  public deleteRuralOrHybridRetirementAnalysisResult(
+    id: RuralOrHybridRetirementAnalysisResultId,
+  ): TransactionType {
+    return this.delete(id.toString());
   }
 
   private mapToTypeormEntity(
