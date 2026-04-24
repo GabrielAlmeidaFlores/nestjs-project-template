@@ -1679,7 +1679,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise simplificada do direito ao BPC/LOAS para idosos com IA. Verifica critério de idade (65 anos), calcula renda per capita familiar e compara com o limite legal de 1/4 do salário mínimo, informando de forma objetiva sobre a elegibilidade. Versão resumida e acessível para apresentação ao cliente.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('c3e4f5a6-d7b8-4c9d-0e1f-2a3b4c5d6e7f'),
+      id: new PaymentPlanPaidResourceId('c3e4f5a6-d7b8-4c9d-8e1f-2a3b4c5d6e7f'),
       resource:
         PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_REJECTION_FIRST_ANALYSIS,
       creditCost: 3,
@@ -1688,7 +1688,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Primeira análise técnica do indeferimento de salário maternidade com IA. Avalia a manutenção da qualidade de segurada, analisa o período de graça aplicável, verifica as informações do benefício indeferido e calcula o prazo para solicitação de reembolso. Baseada prioritariamente na análise do CNIS.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('d4f5a6b7-e8c9-4d0e-1f2a-3b4c5d6e7f8a'),
+      id: new PaymentPlanPaidResourceId('d4f5a6b7-e8c9-4d0e-9f2a-3b4c5d6e7f8a'),
       resource:
         PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_REJECTION_SECOND_ANALYSIS,
       creditCost: 3,
@@ -1697,7 +1697,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Segunda análise técnica do indeferimento de salário maternidade com IA. Aprofunda a avaliação da situação previdenciária da segurada, identifica pontos fortes e fragilidades probatórias, e indica a estratégia mais adequada para reversão do indeferimento com orientação sobre reforço documental.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('e5a6b7c8-f9d0-4e1f-2a3b-4c5d6e7f8a9b'),
+      id: new PaymentPlanPaidResourceId('e5a6b7c8-f9d0-4e1f-aa3b-4c5d6e7f8a9b'),
       resource:
         PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_REJECTION_COMPLETE_ANALYSIS,
       creditCost: 5,
@@ -1706,7 +1706,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise completa do indeferimento de salário maternidade com IA. Examina todas as regras previdenciáveis aplicáveis, determina a elegibilidade ao benefício, avalia o impacto da concessão do salário maternidade nas futuras aposentadorias e entrega conclusão estratégica orientada à tomada de decisão jurídica.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('f6b7c8d9-a0e1-4f2a-3b4c-5d6e7f8a9b0c'),
+      id: new PaymentPlanPaidResourceId('f6b7c8d9-a0e1-4f2a-ab4c-5d6e7f8a9b0c'),
       resource:
         PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_REJECTION_SIMPLIFIED_ANALYSIS,
       creditCost: 2,
