@@ -176,8 +176,7 @@ export class GetSpecialCategoryRetirementAnalysisByIdUseCase {
     }
 
     return GetSpecialCategoryRetirementAnalysisResponseDto.build({
-      specialCategoryRetirementAnalysisId:
-        queryResult.specialCategoryRetirementAnalysisId,
+      specialCategoryRetirementAnalysisId: queryResult.id,
       ...(queryResult.retirementAnalysisObjectiveType !== null && {
         retirementAnalysisObjectiveType:
           queryResult.retirementAnalysisObjectiveType,
