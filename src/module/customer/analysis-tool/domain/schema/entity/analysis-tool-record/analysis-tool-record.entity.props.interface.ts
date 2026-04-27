@@ -8,6 +8,7 @@ import type { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain
 import type { AccidentBenefitRejectionEntity } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection/accident-benefit-rejection.entity';
 import type { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
 import type { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
+import type { BpcDisabilityDenialEntity } from '@module/customer/analysis-tool/module/bpc-disability-denial/domain/schema/entity/bpc-disability-denial/bpc-disability-denial.entity';
 import type { BpcElderlyAnalysisEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/bpc-elderly-analysis.entity';
 import type { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import type { DeathBenefitGrantEntity } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant/death-benefit-grant.entity';
@@ -22,6 +23,7 @@ import type { GeneralUrbanRetirementGrantEntity } from '@module/customer/analysi
 import type { InsuranceQualityAnalysisEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/insurance-quality-analysis.entity';
 import type { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
 import type { MaternityPayRejectionEntity } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/schema/entity/maternity-pay-rejection/maternity-pay-rejection.entity';
+import type { MaternityPayGrantEntity } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/maternity-pay-grant.entity';
 import type { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
 import type { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
 import type { PerCapitaIncomeForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.entity';
@@ -36,6 +38,7 @@ import type { SpeechGeneratorEntity } from '@module/customer/analysis-tool/modul
 import type { SurvivorPensionAnalysisEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis/survivor-pension-analysis.entity';
 import type { TeacherRetirementPlanningEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
 import type { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/temporary-disability-benefits-grant.entity';
+import type { TemporaryIncapacityBenefitRejectionEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.entity';
 
 export interface AnalysisToolRecordEntityPropsInterface extends BaseEntityPropsInterface<AnalysisToolRecordId> {
   code: AnalysisToolRecordCode;
@@ -64,13 +67,16 @@ export interface AnalysisToolRecordEntityPropsInterface extends BaseEntityPropsI
   accidentBenefitRejection?: AccidentBenefitRejectionEntity | null;
   survivorPensionAnalysis?: SurvivorPensionAnalysisEntity | null;
   generalUrbanRetirementDenial?: GeneralUrbanRetirementDenialEntity | null;
+  maternityPayGrant?: MaternityPayGrantEntity | null;
   disabilityRetirementPlanningRejection?: DisabilityRetirementPlanningRejectionEntity | null;
   specialCategoryRetirementAnalysis?: SpecialCategoryRetirementAnalysisEntity | null;
   deathBenefitGrant?: DeathBenefitGrantEntity | null;
   deathBenefitRejection?: DeathBenefitRejectionEntity | null;
   specialRetirementGrant?: SpecialRetirementGrantEntity | null;
+  bpcDisabilityDenial?: BpcDisabilityDenialEntity | null;
   bpcElderlyAnalysis?: BpcElderlyAnalysisEntity | null;
   maternityPayRejection?: MaternityPayRejectionEntity | null;
+  temporaryIncapacityBenefitRejection?: TemporaryIncapacityBenefitRejectionEntity | null;
   status: AnalysisStatusEnum;
   analysisToolClient: AnalysisToolClientEntity;
   createdBy: OrganizationMemberId;
