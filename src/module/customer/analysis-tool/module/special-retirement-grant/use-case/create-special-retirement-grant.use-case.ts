@@ -25,7 +25,6 @@ import { SpecialRetirementGrantLegalProceedingEntity } from '@module/customer/an
 import { CreateSpecialRetirementGrantRequestDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/request/create-special-retirement-grant.request.dto';
 import { CreateSpecialRetirementGrantResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/create-special-retirement-grant.response.dto';
 import { SpecialRetirementGrantAtLeastOnePppRequiredError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-at-least-one-ppp-required.error';
-import { SpecialRetirementGrantCnisRequiredError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-cnis-required.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { FileModel } from '@shared/system/model/generic/file.model';
@@ -72,10 +71,6 @@ export class CreateSpecialRetirementGrantUseCase {
       throw new OrganizationMemberNotFoundError();
     }
 
-    if (!dto.cnisDocument) {
-      throw new SpecialRetirementGrantCnisRequiredError();
-    }
-
     const hasPpp = dto.json.documents?.some(
       (d) => d.type === SpecialRetirementGrantDocumentTypeEnum.PPP,
     );
@@ -84,15 +79,18 @@ export class CreateSpecialRetirementGrantUseCase {
       throw new SpecialRetirementGrantAtLeastOnePppRequiredError();
     }
 
-    const cnisBuffer = dto.cnisDocument.buffer;
-    const cnisFileModel = FileModel.build({
-      buffer: cnisBuffer,
-      originalName: dto.cnisDocument.originalName,
-      size: cnisBuffer.length,
-      encoding: 'base64',
-    });
-    const cnisDocumentKey =
-      await this.fileProcessorGateway.uploadFile(cnisFileModel);
+    let cnisDocumentKey: string | null = null;
+    if (dto.cnisDocument) {
+      const cnisBuffer = dto.cnisDocument.buffer;
+      const cnisFileModel = FileModel.build({
+        buffer: cnisBuffer,
+        originalName: dto.cnisDocument.originalName,
+        size: cnisBuffer.length,
+        encoding: 'base64',
+      });
+      cnisDocumentKey =
+        await this.fileProcessorGateway.uploadFile(cnisFileModel);
+    }
 
     const analysisToolClientQueryResult =
       await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
