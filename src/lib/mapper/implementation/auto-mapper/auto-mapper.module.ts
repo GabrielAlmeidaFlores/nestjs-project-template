@@ -528,6 +528,21 @@ import { TemporaryDisabilityBenefitsGrantPreviousBenefitsDocumentEntityAutoMappe
 import { TemporaryDisabilityBenefitsGrantResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-result/temporary-disability-benefits-grant-result-entity.auto-mapper.profile';
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-work-periods/temporary-disability-benefits-grant-work-periods-entity.auto-mapper.profile';
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-work-periods-earnings-history/temporary-disability-benefits-grant-work-periods-earnings-history-entity.auto-mapper.profile';
+import { GetTemporaryDisabilityBenefitsTerminatedWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated/get-temporary-disability-benefits-terminated-with-relations-query-result.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated/temporary-disability-benefits-terminated-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-disability-analysis/temporary-disability-benefits-terminated-disability-analysis-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisCidEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-disability-analysis-cid/temporary-disability-benefits-terminated-disability-analysis-cid-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-disability-analysis-document/temporary-disability-benefits-terminated-disability-analysis-document-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-document/temporary-disability-benefits-terminated-document-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-inss-benefit/temporary-disability-benefits-terminated-inss-benefit-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedInsuredStatusEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-insured-status/temporary-disability-benefits-terminated-insured-status-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedInsuredStatusDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-insured-status-document/temporary-disability-benefits-terminated-insured-status-document-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedPreviousBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-previous-benefit/temporary-disability-benefits-terminated-previous-benefit-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedPreviousBenefitDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-previous-benefit-document/temporary-disability-benefits-terminated-previous-benefit-document-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-result/temporary-disability-benefits-terminated-result-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedWorkPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-work-period-document/temporary-disability-benefits-terminated-work-period-document-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedWorkPeriodsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-work-periods/temporary-disability-benefits-terminated-work-periods-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedWorkPeriodsEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-work-periods-earnings-history/temporary-disability-benefits-terminated-work-periods-earnings-history-entity.auto-mapper.profile';
 import { GetTemporaryIncapacityBenefitRejectionWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-rejection/get-temporary-incapacity-benefit-rejection-with-relations-query-result.auto-mapper.profile';
 import { TemporaryIncapacityBenefitRejectionEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection-entity.auto-mapper.profile';
 import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-rejection-disability-analysis/temporary-incapacity-benefit-rejection-disability-analysis-entity.auto-mapper.profile';
@@ -887,6 +902,21 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     TemporaryIncapacityBenefitRejectionWorkPeriodsEntityAutoMapperProfile,
     TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryEntityAutoMapperProfile,
     GetTemporaryIncapacityBenefitRejectionWithRelationsQueryResultAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedResultEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedDocumentEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedInssBenefitEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisCidEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisDocumentEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedInsuredStatusEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedInsuredStatusDocumentEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedWorkPeriodsEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedWorkPeriodsEarningsHistoryEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedPreviousBenefitEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedPreviousBenefitDocumentEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedWorkPeriodDocumentEntityAutoMapperProfile,
+    GetTemporaryDisabilityBenefitsTerminatedWithRelationsQueryResultAutoMapperProfile,
     GeneralUrbanRetirementAnalysisEntityAutoMapperProfile,
     GetGeneralUrbanRetirementAnalysisDocumentQueryResultAutoMapperProfile,
     GetGeneralUrbanRetirementAnalysisLegalProceedingQueryResultAutoMapperProfile,
