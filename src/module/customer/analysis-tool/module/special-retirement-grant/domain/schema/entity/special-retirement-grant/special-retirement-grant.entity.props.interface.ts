@@ -9,7 +9,7 @@ import type { SpecialRetirementGrantResultEntity } from '@module/customer/analys
 export interface SpecialRetirementGrantEntityPropsInterface extends BaseEntityPropsInterface<SpecialRetirementGrantId> {
   name: string;
   specialActivity: boolean;
-  cnisDocument: string;
+  cnisDocument?: string | null;
   specialRetirementGrantResult?: SpecialRetirementGrantResultEntity | null;
   specialRetirementGrantDocument?:
     | SpecialRetirementGrantDocumentEntity[]

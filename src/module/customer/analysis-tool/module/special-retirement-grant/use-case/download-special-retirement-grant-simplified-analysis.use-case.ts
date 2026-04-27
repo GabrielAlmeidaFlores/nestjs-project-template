@@ -11,6 +11,7 @@ import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-pr
 import { SpecialRetirementGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-result/command/special-retirement-grant-result.command.repository.gateway';
 import { SpecialRetirementGrantId } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/value-object/special-retirement-grant-id/special-retirement-grant-id.value-object';
 import { SpecialRetirementGrantResultEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-result/special-retirement-grant-result.entity';
+import { SpecialRetirementGrantCnisRequiredError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-cnis-required.error';
 import { SpecialRetirementGrantDoesNotContainSimplifiedAnalysisError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-does-not-contain-simplified-analysis.error';
 import { SpecialRetirementGrantNotFoundError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-not-found.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
@@ -99,6 +100,10 @@ export class DownloadSpecialRetirementGrantSimplifiedAnalysisUseCase {
         ),
         'utf-8',
       );
+
+      if (specialRetirementGrant.cnisDocument === null) {
+        throw new SpecialRetirementGrantCnisRequiredError();
+      }
 
       const cnisBuffer = await this.fileProcessorGateway.getFileBuffer(
         specialRetirementGrant.cnisDocument,

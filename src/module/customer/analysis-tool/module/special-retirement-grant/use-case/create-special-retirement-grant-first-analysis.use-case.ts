@@ -29,6 +29,7 @@ import { SpecialRetirementGrantPeriodUnderMinimumEntity } from '@module/customer
 import { SpecialRetirementGrantResultEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-result/special-retirement-grant-result.entity';
 import { CreateSpecialRetirementGrantFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/create-special-retirement-grant-first-analysis.response.dto';
 import { InvalidSpecialRetirementGrantFirstAnalysisJsonError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/invalid-special-retirement-grant-first-analysis-json.error';
+import { SpecialRetirementGrantCnisRequiredError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-cnis-required.error';
 import { SpecialRetirementGrantNotFoundError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-not-found.error';
 import {
   SpecialRetirementGrantFirstAnalysisAgentModel,
@@ -122,6 +123,10 @@ export class CreateSpecialRetirementGrantFirstAnalysisUseCase {
     }
 
     const grant = analysisToolRecord.specialRetirementGrant;
+
+    if (grant.cnisDocument === null) {
+      throw new SpecialRetirementGrantCnisRequiredError();
+    }
 
     const cnisBuffer = await this.fileProcessorGateway.getFileBuffer(
       grant.cnisDocument,

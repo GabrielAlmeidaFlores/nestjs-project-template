@@ -32,7 +32,6 @@ import {
 } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/request/update-special-retirement-grant.request.dto';
 import { UpdateSpecialRetirementGrantResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/update-special-retirement-grant.response.dto';
 import { SpecialRetirementGrantAtLeastOnePppRequiredError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-at-least-one-ppp-required.error';
-import { SpecialRetirementGrantCnisRequiredError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-cnis-required.error';
 import { SpecialRetirementGrantNotFoundError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -113,10 +112,6 @@ export class UpdateSpecialRetirementGrantUseCase {
       dto.json.cnisDocument !== undefined
         ? await this.uploadCnis(dto.json.cnisDocument)
         : specialRetirementGrantQueryResult.cnisDocument;
-
-    if (!cnisKey) {
-      throw new SpecialRetirementGrantCnisRequiredError();
-    }
 
     const specialRetirementGrant = new SpecialRetirementGrantEntity({
       ...specialRetirementGrantQueryResult,
