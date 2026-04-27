@@ -261,11 +261,15 @@ export class GetSpecialRetirementGrantResponseDto extends BaseBuildableDtoObject
   @ResponseDtoBooleanProperty()
   public specialActivity: boolean;
 
-  @ResponseDtoStringProperty()
-  public cnisDocument: string;
+  @ResponseDtoStringProperty({
+    required: false,
+  })
+  public cnisDocument?: string;
 
-  @ResponseDtoStringProperty()
-  public cnisDocumentOriginalFileName: string;
+  @ResponseDtoStringProperty({
+    required: false,
+  })
+  public cnisDocumentOriginalFileName?: string;
 
   @ResponseDtoObjectProperty(
     () => GetSpecialRetirementGrantDocumentResponseDto,
