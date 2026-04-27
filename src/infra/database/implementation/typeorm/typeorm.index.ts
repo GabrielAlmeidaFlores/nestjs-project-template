@@ -206,6 +206,16 @@ import { MaternityPayRejectionResultTypeormCommandRepository } from '@infra/data
 import { MaternityPayRejectionWorkPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-work-period/maternity-pay-rejection-work-period.typeorm.command.repository';
 import { MaternityPayRejectionWorkPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-work-period-document/maternity-pay-rejection-work-period-document.typeorm.command.repository';
 import { MaternityPayRejectionWorkPeriodEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-work-period-earnings-history/maternity-pay-rejection-work-period-earnings-history.typeorm.command.repository';
+import { MaternityPayGrantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant/maternity-pay-grant.typeorm.command.repository';
+import { MaternityPayGrantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant/maternity-pay-grant.typeorm.query.repository';
+import { MaternityPayGrantDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant-document/maternity-pay-grant-document.typeorm.command.repository';
+import { MaternityPayGrantEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant-earnings-history/maternity-pay-grant-earnings-history.typeorm.command.repository';
+import { MaternityPayGrantInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant-inss-benefit/maternity-pay-grant-inss-benefit.typeorm.command.repository';
+import { MaternityPayGrantLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant-legal-proceeding/maternity-pay-grant-legal-proceeding.typeorm.command.repository';
+import { MaternityPayGrantPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant-period/maternity-pay-grant-period.typeorm.command.repository';
+import { MaternityPayGrantPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant-period/maternity-pay-grant-period.typeorm.query.repository';
+import { MaternityPayGrantPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant-period-document/maternity-pay-grant-period-document.typeorm.command.repository';
+import { MaternityPayGrantResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant-result/maternity-pay-grant-result.typeorm.command.repository';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.typeorm.command.repository';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.typeorm.query.repository';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/medical-and-social-report-objection-generator-analysis-benefit/medical-and-social-report-objection-generator-analysis-benefit.typeorm.command.repository';
@@ -392,6 +402,21 @@ import { TemporaryDisabilityBenefitsGrantResultTypeormCommandRepository } from '
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-work-periods/temporary-disability-benefits-grant-work-periods.typeorm.command.repository';
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-work-periods/temporary-disability-benefits-grant-work-periods.typeorm.query.repository';
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-work-periods-earnings-history/temporary-disability-benefits-grant-work-periods-earnings-history.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.typeorm.query.repository';
+import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-disability-analysis/temporary-incapacity-benefit-rejection-disability-analysis.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-disability-analysis/temporary-incapacity-benefit-rejection-disability-analysis.typeorm.query.repository';
+import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisCidTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-disability-analysis-cid/temporary-incapacity-benefit-rejection-disability-analysis-cid.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-disability-analysis-document/temporary-incapacity-benefit-rejection-disability-analysis-document.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-document/temporary-incapacity-benefit-rejection-document.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-inss-benefit/temporary-incapacity-benefit-rejection-inss-benefit.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionInsuredStatusTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-insured-status/temporary-incapacity-benefit-rejection-insured-status.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionInsuredStatusTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-insured-status/temporary-incapacity-benefit-rejection-insured-status.typeorm.query.repository';
+import { TemporaryIncapacityBenefitRejectionInsuredStatusDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-insured-status-document/temporary-incapacity-benefit-rejection-insured-status-document.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-result/temporary-incapacity-benefit-rejection-result.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionWorkPeriodsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-work-periods/temporary-incapacity-benefit-rejection-work-periods.typeorm.command.repository';
+import { TemporaryIncapacityBenefitRejectionWorkPeriodsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-work-periods/temporary-incapacity-benefit-rejection-work-periods.typeorm.query.repository';
+import { TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-work-periods-earnings-history/temporary-incapacity-benefit-rejection-work-periods-earnings-history.typeorm.command.repository';
 import { TutorialTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/tutorial/tutorial.typeorm.command.repository';
 import { TutorialTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/tutorial/tutorial.typeorm.query.repository';
 import { AccidentBenefitRejectionDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection-document.typeorm.entity';
@@ -426,6 +451,13 @@ import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implemen
 import { AuthIdentityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/auth-identity.typeorm.entity';
 import { BankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-payment.typeorm.entity';
 import { BankTransferTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-transfer.typeorm.entity';
+import { BpcDisabilityDenialDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-denial-document.typeorm.entity';
+import { BpcDisabilityDenialFamilyMemberDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-denial-family-member-document.typeorm.entity';
+import { BpcDisabilityDenialFamilyMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-denial-family-member.typeorm.entity';
+import { BpcDisabilityDenialInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-denial-inss-benefit.typeorm.entity';
+import { BpcDisabilityDenialLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-denial-legal-proceeding.typeorm.entity';
+import { BpcDisabilityDenialResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-denial-result.typeorm.entity';
+import { BpcDisabilityDenialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-denial.typeorm.entity';
 import { BpcElderlyAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-document.typeorm.entity';
 import { BpcElderlyAnalysisFamilyMemberDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-family-member-document.typeorm.entity';
 import { BpcElderlyAnalysisFamilyMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-family-member.typeorm.entity';
@@ -561,6 +593,14 @@ import { MaternityPayRejectionWorkPeriodDocumentTypeormEntity } from '@infra/dat
 import { MaternityPayRejectionWorkPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-rejection-work-period-earnings-history.typeorm.entity';
 import { MaternityPayRejectionWorkPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-rejection-work-period.typeorm.entity';
 import { MaternityPayRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-rejection.typeorm.entity';
+import { MaternityPayGrantDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-grant-document.typeorm.entity';
+import { MaternityPayGrantEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-grant-earnings-history.typeorm.entity';
+import { MaternityPayGrantInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-grant-inss-benefit.typeorm.entity';
+import { MaternityPayGrantLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-grant-legal-proceeding.typeorm.entity';
+import { MaternityPayGrantPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-grant-period-document.typeorm.entity';
+import { MaternityPayGrantPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-grant-period.typeorm.entity';
+import { MaternityPayGrantResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-grant-result.typeorm.entity';
+import { MaternityPayGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-grant.typeorm.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis-benefit.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis-document.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis-legal-proceeding.entity';
@@ -721,6 +761,17 @@ import { TemporaryDisabilityBenefitsGrantResultTypeormEntity } from '@infra/data
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-work-periods-earnings-history.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-work-periods.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant.typeorm.entity';
+import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisCidTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-rejection-disability-analysis-cid.typeorm.entity';
+import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-rejection-disability-analysis-document.typeorm.entity';
+import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-rejection-disability-analysis.typeorm.entity';
+import { TemporaryIncapacityBenefitRejectionDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-rejection-document.typeorm.entity';
+import { TemporaryIncapacityBenefitRejectionInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-rejection-inss-benefit.typeorm.entity';
+import { TemporaryIncapacityBenefitRejectionInsuredStatusDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-rejection-insured-status-document.typeorm.entity';
+import { TemporaryIncapacityBenefitRejectionInsuredStatusTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-rejection-insured-status.typeorm.entity';
+import { TemporaryIncapacityBenefitRejectionResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-rejection-result.typeorm.entity';
+import { TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-rejection-work-periods-earnings-history.typeorm.entity';
+import { TemporaryIncapacityBenefitRejectionWorkPeriodsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-rejection-work-periods.typeorm.entity';
+import { TemporaryIncapacityBenefitRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-rejection.typeorm.entity';
 import { TutorialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/tutorial.typeorm.entity';
 import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/source/database.application-variable';
 
@@ -836,6 +887,17 @@ export class TypeormIndex {
     TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryTypeormEntity,
     TemporaryDisabilityBenefitsGrantInssBenefitTypeormEntity,
     TemporaryDisabilityBenefitsGrantLegalProceedingTypeormEntity,
+    TemporaryIncapacityBenefitRejectionTypeormEntity,
+    TemporaryIncapacityBenefitRejectionResultTypeormEntity,
+    TemporaryIncapacityBenefitRejectionDocumentTypeormEntity,
+    TemporaryIncapacityBenefitRejectionInssBenefitTypeormEntity,
+    TemporaryIncapacityBenefitRejectionDisabilityAnalysisTypeormEntity,
+    TemporaryIncapacityBenefitRejectionDisabilityAnalysisCidTypeormEntity,
+    TemporaryIncapacityBenefitRejectionDisabilityAnalysisDocumentTypeormEntity,
+    TemporaryIncapacityBenefitRejectionInsuredStatusTypeormEntity,
+    TemporaryIncapacityBenefitRejectionInsuredStatusDocumentTypeormEntity,
+    TemporaryIncapacityBenefitRejectionWorkPeriodsTypeormEntity,
+    TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryTypeormEntity,
     GeneralUrbanRetirementGrantTypeormEntity,
     GeneralUrbanRetirementGrantResultTypeormEntity,
     GeneralUrbanRetirementGrantInssBenefitTypeormEntity,
@@ -1052,6 +1114,13 @@ export class TypeormIndex {
     DisabilityRetirementPlanningRejectionPeriodDocumentTypeormEntity,
     DisabilityRetirementPlanningRejectionPeriodEarningsHistoryTypeormEntity,
     DisabilityRetirementPlanningRejectionTimeAcceleratorTypeormEntity,
+    BpcDisabilityDenialTypeormEntity,
+    BpcDisabilityDenialDocumentTypeormEntity,
+    BpcDisabilityDenialFamilyMemberTypeormEntity,
+    BpcDisabilityDenialFamilyMemberDocumentTypeormEntity,
+    BpcDisabilityDenialResultTypeormEntity,
+    BpcDisabilityDenialInssBenefitTypeormEntity,
+    BpcDisabilityDenialLegalProceedingTypeormEntity,
     BpcElderlyAnalysisTypeormEntity,
     BpcElderlyAnalysisDocumentTypeormEntity,
     BpcElderlyAnalysisFamilyMemberTypeormEntity,
@@ -1059,6 +1128,14 @@ export class TypeormIndex {
     BpcElderlyAnalysisResultTypeormEntity,
     BpcElderlyAnalysisInssBenefitTypeormEntity,
     BpcElderlyAnalysisLegalProceedingTypeormEntity,
+    MaternityPayGrantTypeormEntity,
+    MaternityPayGrantDocumentTypeormEntity,
+    MaternityPayGrantEarningsHistoryTypeormEntity,
+    MaternityPayGrantInssBenefitTypeormEntity,
+    MaternityPayGrantLegalProceedingTypeormEntity,
+    MaternityPayGrantPeriodTypeormEntity,
+    MaternityPayGrantPeriodDocumentTypeormEntity,
+    MaternityPayGrantResultTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [
@@ -1193,6 +1270,21 @@ export class TypeormIndex {
     TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryTypeormCommandRepository,
     TemporaryDisabilityBenefitsGrantInssBenefitTypeormCommandRepository,
     TemporaryDisabilityBenefitsGrantLegalProceedingTypeormCommandRepository,
+    TemporaryIncapacityBenefitRejectionTypeormQueryRepository,
+    TemporaryIncapacityBenefitRejectionTypeormCommandRepository,
+    TemporaryIncapacityBenefitRejectionResultTypeormCommandRepository,
+    TemporaryIncapacityBenefitRejectionDocumentTypeormCommandRepository,
+    TemporaryIncapacityBenefitRejectionInssBenefitTypeormCommandRepository,
+    TemporaryIncapacityBenefitRejectionDisabilityAnalysisTypeormQueryRepository,
+    TemporaryIncapacityBenefitRejectionDisabilityAnalysisTypeormCommandRepository,
+    TemporaryIncapacityBenefitRejectionDisabilityAnalysisCidTypeormCommandRepository,
+    TemporaryIncapacityBenefitRejectionDisabilityAnalysisDocumentTypeormCommandRepository,
+    TemporaryIncapacityBenefitRejectionInsuredStatusTypeormQueryRepository,
+    TemporaryIncapacityBenefitRejectionInsuredStatusTypeormCommandRepository,
+    TemporaryIncapacityBenefitRejectionInsuredStatusDocumentTypeormCommandRepository,
+    TemporaryIncapacityBenefitRejectionWorkPeriodsTypeormQueryRepository,
+    TemporaryIncapacityBenefitRejectionWorkPeriodsTypeormCommandRepository,
+    TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryTypeormCommandRepository,
     GeneralUrbanRetirementGrantTypeormCommandRepository,
     GeneralUrbanRetirementGrantTypeormQueryRepository,
     GeneralUrbanRetirementGrantResultTypeormCommandRepository,
@@ -1447,6 +1539,16 @@ export class TypeormIndex {
     MaternityPayRejectionWorkPeriodTypeormCommandRepository,
     MaternityPayRejectionWorkPeriodDocumentTypeormCommandRepository,
     MaternityPayRejectionWorkPeriodEarningsHistoryTypeormCommandRepository,
+    MaternityPayGrantTypeormCommandRepository,
+    MaternityPayGrantTypeormQueryRepository,
+    MaternityPayGrantDocumentTypeormCommandRepository,
+    MaternityPayGrantEarningsHistoryTypeormCommandRepository,
+    MaternityPayGrantInssBenefitTypeormCommandRepository,
+    MaternityPayGrantLegalProceedingTypeormCommandRepository,
+    MaternityPayGrantPeriodTypeormCommandRepository,
+    MaternityPayGrantPeriodTypeormQueryRepository,
+    MaternityPayGrantPeriodDocumentTypeormCommandRepository,
+    MaternityPayGrantResultTypeormCommandRepository,
     DisabilityRetirementPlanningRejectionTypeormCommandRepository,
     DisabilityRetirementPlanningRejectionTypeormQueryRepository,
     DisabilityRetirementPlanningRejectionResultTypeormCommandRepository,
