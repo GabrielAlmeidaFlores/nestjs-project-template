@@ -28,6 +28,7 @@ import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/
 import { PerCapitaIncomeForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
+import { RuralOrHybridRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-analysis.typeorm.entity';
 import { RuralOrHybridRetirementRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-rejection.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
 import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
@@ -70,6 +71,7 @@ import { GetMedicalQuestionGeneratorWithRelationsQueryResult } from '@module/cus
 import { GetPerCapitaIncomeForBpcAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis/query/result/get-per-capita-income-for-bpc-analysis-with-relations.query.result';
 import { GetRetirementPlanningRgpsWithRelationsQueryResult } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps/query/result/get-retirement-planning-rgps-with-relations.query.result';
 import { GetRetirementPlanningRppsQueryResult } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps/query/result/get-retirement-planning-rpps.query.resut';
+import { RuralOrHybridRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/domain/schema/entity/rural-or-hybrid-retirement-analysis/rural-or-hybrid-retirement-analysis.entity';
 import { RuralOrHybridRetirementRejectionEntity } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/rural-or-hybrid-retirement-rejection.entity';
 import { GetRuralTimelineAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
 import { GetSpecialActivityAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis/query/result/get-special-activity-analysis-with-relations.query.result';
@@ -212,6 +214,16 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
               source.ruralOrHybridRetirementRejection,
               RuralOrHybridRetirementRejectionTypeormEntity,
               RuralOrHybridRetirementRejectionEntity,
+            )
+          : null;
+
+      const ruralOrHybridRetirementAnalysis =
+        source.ruralOrHybridRetirementAnalysis !== null &&
+        source.ruralOrHybridRetirementAnalysis !== undefined
+          ? this.mapper.map(
+              source.ruralOrHybridRetirementAnalysis,
+              RuralOrHybridRetirementAnalysisTypeormEntity,
+              RuralOrHybridRetirementAnalysisEntity,
             )
           : null;
 
@@ -455,6 +467,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         audienceQuestionGenerator,
         perCapitaIncomeForBpcAnalysis,
         ruralOrHybridRetirementRejection,
+        ruralOrHybridRetirementAnalysis,
         bpcDisabilityDenial,
         bpcElderlyAnalysis,
         ruralTimelineAnalysis,
@@ -594,6 +607,15 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
               source.ruralOrHybridRetirementRejection,
               RuralOrHybridRetirementRejectionEntity,
               RuralOrHybridRetirementRejectionTypeormEntity,
+            )
+          : null;
+
+      const ruralOrHybridRetirementAnalysis =
+        source.ruralOrHybridRetirementAnalysis !== null
+          ? this.mapper.map(
+              source.ruralOrHybridRetirementAnalysis,
+              RuralOrHybridRetirementAnalysisEntity,
+              RuralOrHybridRetirementAnalysisTypeormEntity,
             )
           : null;
 
@@ -743,6 +765,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         audienceQuestionGenerator,
         perCapitaIncomeForBpcAnalysis,
         ruralOrHybridRetirementRejection,
+        ruralOrHybridRetirementAnalysis,
         bpcDisabilityDenial,
         bpcElderlyAnalysis,
         ruralTimeline,

@@ -347,14 +347,38 @@ export abstract class AnalysisProcessorGateway {
     files: Buffer[],
   ): Promise<string | null>;
 
-  public abstract getTimeAcceleratorAnalysis(
+  public abstract getRuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysis(
+    systemInstruction: string,
+    customerName: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getRuralOrHybridRetirementAnalysisFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson?: boolean,
+  ): Promise<string | null>;
+
+  public abstract getRuralOrHybridRetirementAnalysisCompleteAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getRuralOrHybridRetirementAnalysisSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null>;
 
-  public abstract getRuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysis(
+  public abstract getRuralOrHybridRetirementAnalysisWorkPeriodDocumentAnalysis(
     systemInstruction: string,
     customerName: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getTimeAcceleratorAnalysis(
+    systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null>;
 
