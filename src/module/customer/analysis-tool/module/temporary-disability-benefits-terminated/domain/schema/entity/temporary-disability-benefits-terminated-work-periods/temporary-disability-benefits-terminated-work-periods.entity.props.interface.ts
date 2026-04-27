@@ -21,6 +21,6 @@ export interface TemporaryDisabilityBenefitsTerminatedWorkPeriodsEntityPropsInte
   isPendency: boolean;
   wantsToComplementViaMeuINSS?: boolean | null;
   status: boolean;
-  isManualPeriod?: boolean;
+  isManualPeriod?: boolean | null;
   temporaryDisabilityBenefitsTerminatedId: TemporaryDisabilityBenefitsTerminatedId;
 }
