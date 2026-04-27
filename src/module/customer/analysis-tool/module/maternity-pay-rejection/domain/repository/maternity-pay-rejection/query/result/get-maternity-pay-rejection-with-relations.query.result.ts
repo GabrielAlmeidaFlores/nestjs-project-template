@@ -18,6 +18,15 @@ export class GetMaternityPayRejectionWithRelationsQueryResult extends BaseBuilda
   public readonly isCurrentlyUnemployed: boolean | null;
   public readonly category: MaternityPayRejectionCategoryEnum | null;
   public readonly triggeringEventDate: Date | null;
+  public readonly estimatedTriggeringEventDate: Date | null;
+  public readonly workAccidentOrSevereDesease: boolean | null;
+  public readonly clientWasUnemployedOnBenefitOrDisabilityStartDate:
+    | boolean
+    | null;
+  public readonly clientWasRuralInsuredOnBenefitOrDisabilityStartDate:
+    | boolean
+    | null;
+  public readonly thirdPartyDocumentRelationDescription: string | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

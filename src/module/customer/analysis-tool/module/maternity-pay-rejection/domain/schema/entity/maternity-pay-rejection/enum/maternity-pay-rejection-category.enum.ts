@@ -1,8 +1,11 @@
 export enum MaternityPayRejectionCategoryEnum {
-  SEGURADO_EMPREGADO = 'segurado_empregado',
-  SEGURADO_CONTRIBUINTE_INDIVIDUAL = 'segurado_contribuinte_individual',
-  SEGURADO_FACULTATIVO = 'segurado_facultativo',
+  EMPREGADO_URBANO = 'empregado_urbano',
+  EMPREGADO_RURAL = 'empregado_rural',
+  EMPREGADO_DOMESTICO = 'empregado_domestico',
+  TRABALHADOR_AVULSO = 'trabalhador_avulso',
+  CONTRIBUINTE_INDIVIDUAL_AUTONOMO = 'contribuinte_individual_autonomo',
+  CONTRIBUINTE_INDIVIDUAL_PRESTADOR = 'contribuinte_individual_prestador',
+  MEI = 'mei',
   SEGURADO_ESPECIAL = 'segurado_especial',
-  SEGURADO_DOMESTICO = 'segurado_domestico',
-  SEGURADO_AVULSO = 'segurado_avulso',
+  SEGURADO_FACULTATIVO = 'segurado_facultativo',
 }

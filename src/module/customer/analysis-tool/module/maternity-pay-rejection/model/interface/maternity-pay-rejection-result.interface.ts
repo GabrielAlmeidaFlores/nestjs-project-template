@@ -3,7 +3,7 @@ export interface MaternityPayRejectionResultRuleInterface {
   fulfilled: boolean;
   grantDate: string | null;
   expectedRmi: number | null;
-  causeValue: number | null;
+  causeValue: string | null;
   detaildAnalysis: string;
 }
 

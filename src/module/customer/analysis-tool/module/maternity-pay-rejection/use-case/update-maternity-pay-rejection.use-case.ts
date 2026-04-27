@@ -80,9 +80,24 @@ export class UpdateMaternityPayRejectionUseCase {
       triggeringEvent: dto.triggeringEvent ?? existingRejection.triggeringEvent,
       triggeringEventDate:
         dto.triggeringEventDate ?? existingRejection.triggeringEventDate,
+      estimatedTriggeringEventDate:
+        dto.estimatedTriggeringEventDate ??
+        existingRejection.estimatedTriggeringEventDate,
+      workAccidentOrSevereDesease:
+        dto.workAccidentOrSevereDesease ??
+        existingRejection.workAccidentOrSevereDesease,
+      clientWasUnemployedOnBenefitOrDisabilityStartDate:
+        dto.clientWasUnemployedOnBenefitOrDisabilityStartDate ??
+        existingRejection.clientWasUnemployedOnBenefitOrDisabilityStartDate,
+      clientWasRuralInsuredOnBenefitOrDisabilityStartDate:
+        dto.clientWasRuralInsuredOnBenefitOrDisabilityStartDate ??
+        existingRejection.clientWasRuralInsuredOnBenefitOrDisabilityStartDate,
       isCurrentlyUnemployed:
         dto.isCurrentlyUnemployed ?? existingRejection.isCurrentlyUnemployed,
       category: dto.category ?? existingRejection.category,
+      thirdPartyDocumentRelationDescription:
+        dto.thirdPartyDocumentRelationDescription ??
+        existingRejection.thirdPartyDocumentRelationDescription,
       maternityPayRejectionResultId:
         existingRejection.maternityPayRejectionResult?.id ?? null,
     });

@@ -12,6 +12,15 @@ export class MaternityPayRejectionEntity extends BaseEntity<MaternityPayRejectio
   public readonly isCurrentlyUnemployed: boolean | null;
   public readonly category: MaternityPayRejectionCategoryEnum | null;
   public readonly triggeringEventDate: Date | null;
+  public readonly estimatedTriggeringEventDate: Date | null;
+  public readonly workAccidentOrSevereDesease: boolean | null;
+  public readonly clientWasUnemployedOnBenefitOrDisabilityStartDate:
+    | boolean
+    | null;
+  public readonly clientWasRuralInsuredOnBenefitOrDisabilityStartDate:
+    | boolean
+    | null;
+  public readonly thirdPartyDocumentRelationDescription: string | null;
   public readonly maternityPayRejectionResultId: MaternityPayRejectionResultId | null;
 
   protected readonly _type = MaternityPayRejectionEntity.name;
@@ -23,6 +32,16 @@ export class MaternityPayRejectionEntity extends BaseEntity<MaternityPayRejectio
     this.isCurrentlyUnemployed = props.isCurrentlyUnemployed ?? null;
     this.category = props.category ?? null;
     this.triggeringEventDate = props.triggeringEventDate ?? null;
+    this.estimatedTriggeringEventDate =
+      props.estimatedTriggeringEventDate ?? null;
+    this.workAccidentOrSevereDesease =
+      props.workAccidentOrSevereDesease ?? null;
+    this.clientWasUnemployedOnBenefitOrDisabilityStartDate =
+      props.clientWasUnemployedOnBenefitOrDisabilityStartDate ?? null;
+    this.clientWasRuralInsuredOnBenefitOrDisabilityStartDate =
+      props.clientWasRuralInsuredOnBenefitOrDisabilityStartDate ?? null;
+    this.thirdPartyDocumentRelationDescription =
+      props.thirdPartyDocumentRelationDescription ?? null;
     this.maternityPayRejectionResultId =
       props.maternityPayRejectionResultId ?? null;
   }

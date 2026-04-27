@@ -40,6 +40,18 @@ export class CreateMaternityPayRejectionRequestDto extends BaseBuildableDtoObjec
   @RequestDtoDateProperty({ required: false })
   public triggeringEventDate?: Date;
 
+  @RequestDtoDateProperty({ required: false })
+  public estimatedTriggeringEventDate?: Date;
+
+  @RequestDtoBooleanProperty({ required: false })
+  public workAccidentOrSevereDesease?: boolean;
+
+  @RequestDtoBooleanProperty({ required: false })
+  public clientWasUnemployedOnBenefitOrDisabilityStartDate?: boolean;
+
+  @RequestDtoBooleanProperty({ required: false })
+  public clientWasRuralInsuredOnBenefitOrDisabilityStartDate?: boolean;
+
   @RequestDtoBooleanProperty({ required: false })
   public isCurrentlyUnemployed?: boolean;
 
@@ -47,6 +59,9 @@ export class CreateMaternityPayRejectionRequestDto extends BaseBuildableDtoObjec
     required: false,
   })
   public category?: MaternityPayRejectionCategoryEnum;
+
+  @RequestDtoStringProperty({ required: false })
+  public thirdPartyDocumentRelationDescription?: string;
 
   @RequestDtoStringProperty({ required: false, isArray: true })
   public inssBenefits?: string[];

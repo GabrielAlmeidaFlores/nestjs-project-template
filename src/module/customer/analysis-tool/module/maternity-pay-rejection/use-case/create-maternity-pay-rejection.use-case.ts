@@ -92,8 +92,16 @@ export class CreateMaternityPayRejectionUseCase {
       analysisName: dto.analysisName ?? null,
       triggeringEvent: dto.triggeringEvent ?? null,
       triggeringEventDate: dto.triggeringEventDate ?? null,
+      estimatedTriggeringEventDate: dto.estimatedTriggeringEventDate ?? null,
+      workAccidentOrSevereDesease: dto.workAccidentOrSevereDesease ?? null,
+      clientWasUnemployedOnBenefitOrDisabilityStartDate:
+        dto.clientWasUnemployedOnBenefitOrDisabilityStartDate ?? null,
+      clientWasRuralInsuredOnBenefitOrDisabilityStartDate:
+        dto.clientWasRuralInsuredOnBenefitOrDisabilityStartDate ?? null,
       isCurrentlyUnemployed: dto.isCurrentlyUnemployed ?? null,
       category: dto.category ?? null,
+      thirdPartyDocumentRelationDescription:
+        dto.thirdPartyDocumentRelationDescription ?? null,
       maternityPayRejectionResultId: null,
     });
 

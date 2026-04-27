@@ -153,7 +153,7 @@ export class CreateMaternityPayRejectionResultUseCase {
       throw new MaternityPayRejectionNotFoundError();
     }
 
-    this.parseResultAnalysis(completeAnalysisResponse);
+    const parsedResult = this.parseResultAnalysis(completeAnalysisResponse);
 
     const resultEntity = new MaternityPayRejectionResultEntity({
       id: existingResult.id,
@@ -173,7 +173,7 @@ export class CreateMaternityPayRejectionResultUseCase {
     await transaction.commit();
 
     return CreateMaternityPayRejectionResultResponseDto.build({
-      maternityPayRejectionId,
+      maternityPayRejectionCompleteAnalysis: parsedResult,
     });
   }
 
