@@ -22,6 +22,9 @@ export interface AccidentAssistanceTerminatedEntityPropsInterface extends BaseEn
   previousIncapacityBenefitStartDate?: Date | null;
   previousIncapacityBenefitEndDate?: Date | null;
   extensionRequestStatus?: AccidentAssistanceTerminatedExtensionRequestStatusEnum | null;
+  dib?: Date | null;
+  dcb?: Date | null;
+  inssBenefitNumber?: string | null;
   accidentAssistanceTerminatedResult?: AccidentAssistanceTerminatedResultEntity | null;
   accidentAssistanceTerminatedBenefit?: AccidentAssistanceTerminatedBenefitEntity[];
   accidentAssistanceTerminatedLegalProceeding?: AccidentAssistanceTerminatedLegalProceedingEntity[];

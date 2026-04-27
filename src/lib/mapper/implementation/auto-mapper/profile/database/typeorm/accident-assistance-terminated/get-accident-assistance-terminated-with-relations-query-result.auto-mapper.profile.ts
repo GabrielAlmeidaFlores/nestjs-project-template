@@ -106,6 +106,9 @@ export class GetAccidentAssistanceTerminatedWithRelationsQueryResultAutoMapperPr
         previousIncapacityBenefitEndDate:
           source.previousIncapacityBenefitEndDate,
         extensionRequestStatus: source.extensionRequestStatus,
+        dib: source.dib,
+        dcb: source.dcb,
+        inssBenefitNumber: source.inssBenefitNumber,
         accidentDate: source.accidentDate,
         accidentDescription: source.accidentDescription,
         accidentAssistanceTerminatedResult,
@@ -192,6 +195,9 @@ export class GetAccidentAssistanceTerminatedWithRelationsQueryResultAutoMapperPr
         previousIncapacityBenefitEndDate:
           source.previousIncapacityBenefitEndDate,
         extensionRequestStatus: source.extensionRequestStatus,
+        dib: source.dib,
+        dcb: source.dcb,
+        inssBenefitNumber: source.inssBenefitNumber,
         accidentDate: source.accidentDate,
         accidentDescription: source.accidentDescription,
         accidentAssistanceTerminatedResult,

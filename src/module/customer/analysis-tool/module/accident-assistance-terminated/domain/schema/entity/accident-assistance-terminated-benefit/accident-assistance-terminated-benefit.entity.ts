@@ -8,12 +8,6 @@ export class AccidentAssistanceTerminatedBenefitEntity extends BaseEntity<Accide
   @Description('Número do benefício INSS.')
   public readonly inssBenefitNumber: string;
 
-  @Description('Data de início do benefício (DIB).')
-  public readonly dib: Date | null;
-
-  @Description('Data de cessação do benefício (DCB).')
-  public readonly dcb: Date | null;
-
   protected readonly _type = AccidentAssistanceTerminatedBenefitEntity.name;
 
   public constructor(
@@ -22,7 +16,5 @@ export class AccidentAssistanceTerminatedBenefitEntity extends BaseEntity<Accide
     super(AccidentAssistanceTerminatedBenefitId, props);
 
     this.inssBenefitNumber = props.inssBenefitNumber;
-    this.dib = props.dib ?? null;
-    this.dcb = props.dcb ?? null;
   }
 }

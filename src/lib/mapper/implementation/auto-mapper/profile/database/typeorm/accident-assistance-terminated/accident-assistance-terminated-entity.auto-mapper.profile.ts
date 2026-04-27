@@ -62,6 +62,9 @@ export class AccidentAssistanceTerminatedEntityAutoMapperProfile {
         previousIncapacityBenefitEndDate:
           source.previousIncapacityBenefitEndDate,
         extensionRequestStatus: source.extensionRequestStatus,
+        dib: source.dib,
+        dcb: source.dcb,
+        inssBenefitNumber: source.inssBenefitNumber,
         accidentAssistanceTerminatedResult,
         accidentAssistanceTerminatedBenefit: [],
         accidentAssistanceTerminatedLegalProceeding: [],
@@ -122,6 +125,9 @@ export class AccidentAssistanceTerminatedEntityAutoMapperProfile {
         previousIncapacityBenefitEndDate:
           source.previousIncapacityBenefitEndDate,
         extensionRequestStatus: source.extensionRequestStatus,
+        dib: source.dib,
+        dcb: source.dcb,
+        inssBenefitNumber: source.inssBenefitNumber,
         accidentAssistanceTerminatedResult,
         accidentAssistanceTerminatedBenefit: undefined,
         accidentAssistanceTerminatedLegalProceeding: undefined,

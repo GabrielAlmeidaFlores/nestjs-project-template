@@ -59,6 +59,15 @@ export class UpdateAccidentAssistanceTerminatedJsonRequestDto extends BaseBuilda
   @RequestDtoStringProperty({ required: false, isArray: true })
   public inssBenefitNumber?: string[];
 
+  @RequestDtoStringProperty({ required: false })
+  public mainInssBenefitNumber?: string;
+
+  @RequestDtoDateProperty({ required: false })
+  public dib?: Date;
+
+  @RequestDtoDateProperty({ required: false })
+  public dcb?: Date;
+
   protected override readonly _type =
     UpdateAccidentAssistanceTerminatedJsonRequestDto.name;
 }

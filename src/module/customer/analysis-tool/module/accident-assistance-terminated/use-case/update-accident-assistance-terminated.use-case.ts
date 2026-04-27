@@ -135,6 +135,11 @@ export class UpdateAccidentAssistanceTerminatedUseCase {
         extensionRequestStatus:
           dto.json?.extensionRequestStatus ??
           accidentAssistanceTerminatedQueryResult.extensionRequestStatus,
+        dib: dto.json?.dib ?? accidentAssistanceTerminatedQueryResult.dib,
+        dcb: dto.json?.dcb ?? accidentAssistanceTerminatedQueryResult.dcb,
+        inssBenefitNumber:
+          dto.json?.mainInssBenefitNumber ??
+          accidentAssistanceTerminatedQueryResult.inssBenefitNumber,
         createdBy: accidentAssistanceTerminatedQueryResult.createdBy.id,
         updatedBy: organizationMember.id,
       },
