@@ -15,8 +15,14 @@ import { CreateRuralOrHybridRetirementRejectionTestimonialWitnessUseCase } from 
 import { CreateRuralOrHybridRetirementRejectionTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/create-rural-or-hybrid-retirement-rejection-time-accelerator.use-case';
 import { CreateRuralOrHybridRetirementRejectionWorkPeriodUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/create-rural-or-hybrid-retirement-rejection-work-period.use-case';
 import { CreateRuralOrHybridRetirementRejectionUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/create-rural-or-hybrid-retirement-rejection.use-case';
+import { DeleteRuralOrHybridRetirementRejectionPeriodUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/delete-rural-or-hybrid-retirement-rejection-period.use-case';
+import { DeleteRuralOrHybridRetirementRejectionTestimonialWitnessUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/delete-rural-or-hybrid-retirement-rejection-testimonial-witness.use-case';
+import { DeleteRuralOrHybridRetirementRejectionTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/delete-rural-or-hybrid-retirement-rejection-time-accelerator.use-case';
+import { DeleteRuralOrHybridRetirementRejectionWorkPeriodUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/delete-rural-or-hybrid-retirement-rejection-work-period.use-case';
+import { DeleteRuralOrHybridRetirementRejectionUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/delete-rural-or-hybrid-retirement-rejection.use-case';
 import { DownloadRuralOrHybridRetirementRejectionCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/download-rural-or-hybrid-retirement-rejection-complete-analysis.use-case';
 import { DownloadRuralOrHybridRetirementRejectionSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/download-rural-or-hybrid-retirement-rejection-simplified-analysis.use-case';
+import { GetRuralOrHybridRetirementRejectionResultUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/get-rural-or-hybrid-retirement-rejection-result.use-case';
 import { GetRuralOrHybridRetirementRejectionUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/get-rural-or-hybrid-retirement-rejection.use-case';
 import { UpdateRuralOrHybridRetirementRejectionPeriodUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/update-rural-or-hybrid-retirement-rejection-period.use-case';
 import { UpdateRuralOrHybridRetirementRejectionTestimonialWitnessUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/update-rural-or-hybrid-retirement-rejection-testimonial-witness.use-case';
@@ -57,8 +63,14 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateRuralOrHybridRetirementRejectionTimeAcceleratorUseCase,
     UpdateRuralOrHybridRetirementRejectionTimeAcceleratorUseCase,
     AnalyzeRuralOrHybridRetirementRejectionTimeAcceleratorUseCase,
+    DeleteRuralOrHybridRetirementRejectionTimeAcceleratorUseCase,
     DownloadRuralOrHybridRetirementRejectionCompleteAnalysisUseCase,
     DownloadRuralOrHybridRetirementRejectionSimplifiedAnalysisUseCase,
+    DeleteRuralOrHybridRetirementRejectionUseCase,
+    DeleteRuralOrHybridRetirementRejectionPeriodUseCase,
+    DeleteRuralOrHybridRetirementRejectionTestimonialWitnessUseCase,
+    DeleteRuralOrHybridRetirementRejectionWorkPeriodUseCase,
+    GetRuralOrHybridRetirementRejectionResultUseCase,
   ],
 })
 export class RuralOrHybridRetirementRejectionModule {

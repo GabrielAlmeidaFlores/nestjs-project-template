@@ -25,6 +25,7 @@ import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/
 import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
 import { PerCapitaIncomeForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.entity';
 import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
+import { RuralOrHybridRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/domain/schema/entity/rural-or-hybrid-retirement-analysis/rural-or-hybrid-retirement-analysis.entity';
 import { RuralOrHybridRetirementRejectionEntity } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/rural-or-hybrid-retirement-rejection.entity';
 import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
 import { SpecialActivityEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/special-activity-entity';
@@ -159,6 +160,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly ruralOrHybridRetirementRejection: RuralOrHybridRetirementRejectionEntity | null;
 
   @Description(
+    'Análise de aposentadoria rural ou híbrida associada ao registro da ferramenta de análise',
+  )
+  public readonly ruralOrHybridRetirementAnalysis: RuralOrHybridRetirementAnalysisEntity | null;
+
+  @Description(
     'Indeferimento de auxílio-acidente associado ao registro da ferramenta de análise',
   )
   public readonly accidentBenefitRejection: AccidentBenefitRejectionEntity | null;
@@ -276,6 +282,8 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
       props.temporaryDisabilityBenefitsGrant ?? null;
     this.ruralOrHybridRetirementRejection =
       props.ruralOrHybridRetirementRejection ?? null;
+    this.ruralOrHybridRetirementAnalysis =
+      props.ruralOrHybridRetirementAnalysis ?? null;
     this.accidentBenefitRejection = props.accidentBenefitRejection ?? null;
     this.survivorPensionAnalysis = props.survivorPensionAnalysis ?? null;
     this.specialCategoryRetirementAnalysis =

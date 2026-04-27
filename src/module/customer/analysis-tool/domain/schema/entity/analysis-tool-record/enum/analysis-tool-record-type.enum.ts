@@ -24,6 +24,7 @@ export enum AnalysisToolRecordTypeEnum {
   DEATH_BENEFIT_REJECTION = 'indeferimento_pensao_por_morte',
   TEMPORARY_DISABILITY_BENEFITS_GRANT = 'auxilio_incapacidade_temporaria',
   RURAL_OR_HYBRID_RETIREMENT_REJECTION = 'indeferimento_aposentadoria_rural_hibrida',
+  RURAL_OR_HYBRID_RETIREMENT_ANALYSIS = 'analise_aposentadoria_rural_hibrida',
   SURVIVOR_PENSION_ANALYSIS = 'pensao_por_morte',
   GENERAL_URBAN_RETIREMENT_DENIAL = 'indeferimento_aposentadoria_urbana_geral',
   ACCIDENT_BENEFIT_REJECTION = 'indeferimento_acidente',

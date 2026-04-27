@@ -36,6 +36,7 @@ import { MedicalQuestionGeneratorModule } from '@module/customer/analysis-tool/m
 import { PerCapitaIncomeForBpcAnalysisModule } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.module';
 import { RetirementPlanningRgpsModule } from '@module/customer/analysis-tool/module/retirement-planning-rgps/retirement-planning-rgps.module';
 import { RetirementPlanningRppsModule } from '@module/customer/analysis-tool/module/retirement-planning-rpps/retirement-planning-rpps.module';
+import { RuralOrHybridRetirementAnalysisModule } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/rural-or-hybrid-retirement-analysis.module';
 import { RuralOrHybridRetirementRejectionModule } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/rural-or-hybrid-retirement-rejection.module';
 import { RuralTimelineAnalysisModule } from '@module/customer/analysis-tool/module/rural-timeline-analysis/rural-timeline-analysis.module';
 import { SpecialActivityAnalysisModule } from '@module/customer/analysis-tool/module/special-activity-analysis/special-activity-analysis.module';
@@ -97,6 +98,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     LegalPleadingModule,
     RuralTimelineAnalysisModule,
     RuralOrHybridRetirementRejectionModule,
+    RuralOrHybridRetirementAnalysisModule,
     RetirementPlanningRgpsModule,
     RetirementPlanningRppsModule,
     SpecialRetirementGrantModule,

@@ -1717,6 +1717,42 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise simplificada do direito ao BPC/LOAS para idosos com IA. Verifica critério de idade (65 anos), calcula renda per capita familiar e compara com o limite legal de 1/4 do salário mínimo, informando de forma objetiva sobre a elegibilidade. Versão resumida e acessível para apresentação ao cliente.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('eaf7638a-8141-4781-a802-38a71b8f99d8'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RURAL_OR_HYBRID_RETIREMENT_ANALYSIS_FIRST_ANALYSIS,
+      creditCost: 5,
+      title: 'APOSENTADORIA RURAL/HÍBRIDA - PRIMEIRO STEP',
+      description:
+        'Primeira análise do caso de aposentadoria rural ou híbrida com IA. Combina os dados do CNIS com os períodos rurais declarados pelo segurado para gerar parecer inicial técnico sobre os períodos urbanos, períodos rurais, carência e viabilidade de concessão do benefício.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('5baca808-97a9-4c6a-818d-1e5221b8f8dd'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RURAL_OR_HYBRID_RETIREMENT_ANALYSIS_COMPLETE_ANALYSIS,
+      creditCost: 8,
+      title: 'APOSENTADORIA RURAL/HÍBRIDA - ANÁLISE COMPLETA',
+      description:
+        'Análise completa do caso de aposentadoria rural ou híbrida com IA. Examina CNIS, documentos probatórios e dados dos períodos declarados para gerar parecer técnico detalhado com fundamentação legal, análise de provas, conformidade da linha do tempo e recomendação estratégica para requerimento administrativo ou ação judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e22c1d76-2230-458e-9942-081e57a34f0f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RURAL_OR_HYBRID_RETIREMENT_ANALYSIS_SIMPLIFIED_ANALYSIS,
+      creditCost: 3,
+      title: 'APOSENTADORIA RURAL/HÍBRIDA - ANÁLISE SIMPLIFICADA',
+      description:
+        'Geração do documento de análise simplificada do caso de aposentadoria rural ou híbrida, com linguagem acessível para apresentação ao cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('ce1dc622-f336-46fc-b394-7738fb82c0ef'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RURAL_OR_HYBRID_RETIREMENT_ANALYSIS_WORK_PERIOD_DOCUMENT_ANALYSIS,
+      creditCost: 2,
+      title: 'APOSENTADORIA RURAL/HÍBRIDA - ANÁLISE DE DOCUMENTOS DO PERÍODO',
+      description:
+        'Análise individual de documentos probatórios de períodos de trabalho rural para o caso de aposentadoria rural ou híbrida. Identifica o tipo de documento, o nome do titular, o ano e emite nota técnica sobre a relevância probatória.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('c3e4f5a6-d7b8-4c9d-8e1f-2a3b4c5d6e7f'),
       resource:
         PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_REJECTION_FIRST_ANALYSIS,

@@ -11,6 +11,10 @@ import {
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { RuralOrHybridRetirementRejectionId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id.value-object';
+import { RuralOrHybridRetirementRejectionPeriodId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period/value-object/rural-or-hybrid-retirement-rejection-period-id.value-object';
+import { RuralOrHybridRetirementRejectionTestimonialWitnessId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-testimonial-witness/value-object/rural-or-hybrid-retirement-rejection-testimonial-witness-id.value-object';
+import { RuralOrHybridRetirementRejectionTimeAcceleratorId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-time-accelerator/value-object/rural-or-hybrid-retirement-rejection-time-accelerator-id.value-object';
+import { RuralOrHybridRetirementRejectionWorkPeriodId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-work-period/value-object/rural-or-hybrid-retirement-rejection-work-period-id.value-object';
 import { AnalyzeRuralOrHybridRetirementRejectionTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/request/analyze-rural-or-hybrid-retirement-rejection-time-accelerator.request.dto';
 import { AnalyzeRuralOrHybridRetirementRejectionWorkPeriodDocumentsRequestDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/request/analyze-rural-or-hybrid-retirement-rejection-work-period-documents.request.dto';
 import { CreateRuralOrHybridRetirementRejectionPeriodRequestDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/request/create-rural-or-hybrid-retirement-rejection-period.request.dto';
@@ -32,7 +36,15 @@ import { CreateRuralOrHybridRetirementRejectionTestimonialWitnessResponseDto } f
 import { CreateRuralOrHybridRetirementRejectionTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/response/create-rural-or-hybrid-retirement-rejection-time-accelerator.response.dto';
 import { CreateRuralOrHybridRetirementRejectionWorkPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/response/create-rural-or-hybrid-retirement-rejection-work-period.response.dto';
 import { CreateRuralOrHybridRetirementRejectionResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/response/create-rural-or-hybrid-retirement-rejection.response.dto';
-import { GetRuralOrHybridRetirementRejectionResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/response/get-rural-or-hybrid-retirement-rejection.response.dto';
+import { DeleteRuralOrHybridRetirementRejectionPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/response/delete-rural-or-hybrid-retirement-rejection-period.response.dto';
+import { DeleteRuralOrHybridRetirementRejectionTestimonialWitnessResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/response/delete-rural-or-hybrid-retirement-rejection-testimonial-witness.response.dto';
+import { DeleteRuralOrHybridRetirementRejectionTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/response/delete-rural-or-hybrid-retirement-rejection-time-accelerator.response.dto';
+import { DeleteRuralOrHybridRetirementRejectionWorkPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/response/delete-rural-or-hybrid-retirement-rejection-work-period.response.dto';
+import { DeleteRuralOrHybridRetirementRejectionResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/response/delete-rural-or-hybrid-retirement-rejection.response.dto';
+import {
+  GetRuralOrHybridRetirementRejectionResponseDto,
+  GetRuralOrHybridRetirementRejectionResultResponseDto,
+} from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/response/get-rural-or-hybrid-retirement-rejection.response.dto';
 import { UpdateRuralOrHybridRetirementRejectionPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/response/update-rural-or-hybrid-retirement-rejection-period.response.dto';
 import { UpdateRuralOrHybridRetirementRejectionTestimonialWitnessResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/response/update-rural-or-hybrid-retirement-rejection-testimonial-witness.response.dto';
 import { UpdateRuralOrHybridRetirementRejectionTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/response/update-rural-or-hybrid-retirement-rejection-time-accelerator.response.dto';
@@ -47,8 +59,14 @@ import { CreateRuralOrHybridRetirementRejectionTestimonialWitnessUseCase } from 
 import { CreateRuralOrHybridRetirementRejectionTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/create-rural-or-hybrid-retirement-rejection-time-accelerator.use-case';
 import { CreateRuralOrHybridRetirementRejectionWorkPeriodUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/create-rural-or-hybrid-retirement-rejection-work-period.use-case';
 import { CreateRuralOrHybridRetirementRejectionUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/create-rural-or-hybrid-retirement-rejection.use-case';
+import { DeleteRuralOrHybridRetirementRejectionPeriodUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/delete-rural-or-hybrid-retirement-rejection-period.use-case';
+import { DeleteRuralOrHybridRetirementRejectionTestimonialWitnessUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/delete-rural-or-hybrid-retirement-rejection-testimonial-witness.use-case';
+import { DeleteRuralOrHybridRetirementRejectionTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/delete-rural-or-hybrid-retirement-rejection-time-accelerator.use-case';
+import { DeleteRuralOrHybridRetirementRejectionWorkPeriodUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/delete-rural-or-hybrid-retirement-rejection-work-period.use-case';
+import { DeleteRuralOrHybridRetirementRejectionUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/delete-rural-or-hybrid-retirement-rejection.use-case';
 import { DownloadRuralOrHybridRetirementRejectionCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/download-rural-or-hybrid-retirement-rejection-complete-analysis.use-case';
 import { DownloadRuralOrHybridRetirementRejectionSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/download-rural-or-hybrid-retirement-rejection-simplified-analysis.use-case';
+import { GetRuralOrHybridRetirementRejectionResultUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/get-rural-or-hybrid-retirement-rejection-result.use-case';
 import { GetRuralOrHybridRetirementRejectionUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/get-rural-or-hybrid-retirement-rejection.use-case';
 import { UpdateRuralOrHybridRetirementRejectionPeriodUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/update-rural-or-hybrid-retirement-rejection-period.use-case';
 import { UpdateRuralOrHybridRetirementRejectionTestimonialWitnessUseCase } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/use-case/update-rural-or-hybrid-retirement-rejection-testimonial-witness.use-case';
@@ -86,8 +104,14 @@ export class RuralOrHybridRetirementRejectionController {
     private readonly createRuralOrHybridRetirementRejectionTimeAcceleratorUseCase: CreateRuralOrHybridRetirementRejectionTimeAcceleratorUseCase,
     private readonly updateRuralOrHybridRetirementRejectionTimeAcceleratorUseCase: UpdateRuralOrHybridRetirementRejectionTimeAcceleratorUseCase,
     private readonly analyzeRuralOrHybridRetirementRejectionTimeAcceleratorUseCase: AnalyzeRuralOrHybridRetirementRejectionTimeAcceleratorUseCase,
+    private readonly deleteRuralOrHybridRetirementRejectionTimeAcceleratorUseCase: DeleteRuralOrHybridRetirementRejectionTimeAcceleratorUseCase,
     private readonly downloadRuralOrHybridRetirementRejectionCompleteAnalysisUseCase: DownloadRuralOrHybridRetirementRejectionCompleteAnalysisUseCase,
     private readonly downloadRuralOrHybridRetirementRejectionSimplifiedAnalysisUseCase: DownloadRuralOrHybridRetirementRejectionSimplifiedAnalysisUseCase,
+    private readonly deleteRuralOrHybridRetirementRejectionUseCase: DeleteRuralOrHybridRetirementRejectionUseCase,
+    private readonly deleteRuralOrHybridRetirementRejectionPeriodUseCase: DeleteRuralOrHybridRetirementRejectionPeriodUseCase,
+    private readonly deleteRuralOrHybridRetirementRejectionTestimonialWitnessUseCase: DeleteRuralOrHybridRetirementRejectionTestimonialWitnessUseCase,
+    private readonly deleteRuralOrHybridRetirementRejectionWorkPeriodUseCase: DeleteRuralOrHybridRetirementRejectionWorkPeriodUseCase,
+    private readonly getRuralOrHybridRetirementRejectionResultUseCase: GetRuralOrHybridRetirementRejectionResultUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -195,7 +219,7 @@ export class RuralOrHybridRetirementRejectionController {
     },
     tag: ['indeferimento-aposentadoria-rural-ou-hibrida'],
     successResponse: {
-      statusCode: HttpStatus.OK,
+      statusCode: HttpStatus.CREATED,
       description: 'First analysis criada com sucesso.',
       type: CreateRuralOrHybridRetirementRejectionFirstAnalysisResponseDto,
     },
@@ -227,7 +251,7 @@ export class RuralOrHybridRetirementRejectionController {
     },
     tag: ['indeferimento-aposentadoria-rural-ou-hibrida'],
     successResponse: {
-      statusCode: HttpStatus.OK,
+      statusCode: HttpStatus.CREATED,
       description: 'Resultado criado com sucesso.',
       type: CreateRuralOrHybridRetirementRejectionResultResponseDto,
     },
@@ -603,8 +627,47 @@ export class RuralOrHybridRetirementRejectionController {
   }
 
   @BuildEndpointSpecification({
-    summary:
-      'Download da análise completa de indeferimento de aposentadoria rural ou híbrida',
+    summary: 'Excluir acelerador de tempo da análise',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralOrHybridRetirementRejectionId/time-accelerator/:timeAcceleratorId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['indeferimento-aposentadoria-rural-ou-hibrida'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Acelerador de tempo excluído com sucesso.',
+      type: DeleteRuralOrHybridRetirementRejectionTimeAcceleratorResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async deleteTimeAccelerator(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralOrHybridRetirementRejectionId',
+      new ParseValueObjectPipe(RuralOrHybridRetirementRejectionId),
+    )
+    ruralOrHybridRetirementRejectionId: RuralOrHybridRetirementRejectionId,
+    @Param(
+      'timeAcceleratorId',
+      new ParseValueObjectPipe(
+        RuralOrHybridRetirementRejectionTimeAcceleratorId,
+      ),
+    )
+    ruralOrHybridRetirementRejectionTimeAcceleratorId: RuralOrHybridRetirementRejectionTimeAcceleratorId,
+  ): Promise<DeleteRuralOrHybridRetirementRejectionTimeAcceleratorResponseDto> {
+    return this.deleteRuralOrHybridRetirementRejectionTimeAcceleratorUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralOrHybridRetirementRejectionId,
+      ruralOrHybridRetirementRejectionTimeAcceleratorId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Baixar análise completa da análise de indeferimento',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':ruralOrHybridRetirementRejectionId/download/complete-version',
@@ -671,6 +734,183 @@ export class RuralOrHybridRetirementRejectionController {
       organizationSessionData,
       ruralOrHybridRetirementRejectionId,
       format,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Excluir análise de indeferimento de aposentadoria rural ou híbrida',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralOrHybridRetirementRejectionId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['indeferimento-aposentadoria-rural-ou-hibrida'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Análise de indeferimento de aposentadoria rural ou híbrida excluída com sucesso.',
+      type: DeleteRuralOrHybridRetirementRejectionResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async delete(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralOrHybridRetirementRejectionId',
+      new ParseValueObjectPipe(RuralOrHybridRetirementRejectionId),
+    )
+    ruralOrHybridRetirementRejectionId: RuralOrHybridRetirementRejectionId,
+  ): Promise<DeleteRuralOrHybridRetirementRejectionResponseDto> {
+    return this.deleteRuralOrHybridRetirementRejectionUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralOrHybridRetirementRejectionId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Excluir período da análise',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralOrHybridRetirementRejectionId/period/:ruralOrHybridRetirementRejectionPeriodId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['indeferimento-aposentadoria-rural-ou-hibrida'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Período excluído com sucesso.',
+      type: DeleteRuralOrHybridRetirementRejectionPeriodResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async deletePeriod(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralOrHybridRetirementRejectionId',
+      new ParseValueObjectPipe(RuralOrHybridRetirementRejectionId),
+    )
+    ruralOrHybridRetirementRejectionId: RuralOrHybridRetirementRejectionId,
+    @Param(
+      'ruralOrHybridRetirementRejectionPeriodId',
+      new ParseValueObjectPipe(RuralOrHybridRetirementRejectionPeriodId),
+    )
+    ruralOrHybridRetirementRejectionPeriodId: RuralOrHybridRetirementRejectionPeriodId,
+  ): Promise<DeleteRuralOrHybridRetirementRejectionPeriodResponseDto> {
+    return this.deleteRuralOrHybridRetirementRejectionPeriodUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralOrHybridRetirementRejectionId,
+      ruralOrHybridRetirementRejectionPeriodId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Excluir testemunha da análise',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralOrHybridRetirementRejectionId/testimonial-witness/:testimonialWitnessId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['indeferimento-aposentadoria-rural-ou-hibrida'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Testemunha excluída com sucesso.',
+      type: DeleteRuralOrHybridRetirementRejectionTestimonialWitnessResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async deleteTestimonialWitness(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralOrHybridRetirementRejectionId',
+      new ParseValueObjectPipe(RuralOrHybridRetirementRejectionId),
+    )
+    ruralOrHybridRetirementRejectionId: RuralOrHybridRetirementRejectionId,
+    @Param(
+      'testimonialWitnessId',
+      new ParseValueObjectPipe(
+        RuralOrHybridRetirementRejectionTestimonialWitnessId,
+      ),
+    )
+    ruralOrHybridRetirementRejectionTestimonialWitnessId: RuralOrHybridRetirementRejectionTestimonialWitnessId,
+  ): Promise<DeleteRuralOrHybridRetirementRejectionTestimonialWitnessResponseDto> {
+    return this.deleteRuralOrHybridRetirementRejectionTestimonialWitnessUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralOrHybridRetirementRejectionId,
+      ruralOrHybridRetirementRejectionTestimonialWitnessId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Excluir período de trabalho da análise',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralOrHybridRetirementRejectionId/work-period/:ruralOrHybridRetirementRejectionWorkPeriodId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['indeferimento-aposentadoria-rural-ou-hibrida'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Período de trabalho excluído com sucesso.',
+      type: DeleteRuralOrHybridRetirementRejectionWorkPeriodResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async deleteWorkPeriod(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralOrHybridRetirementRejectionId',
+      new ParseValueObjectPipe(RuralOrHybridRetirementRejectionId),
+    )
+    ruralOrHybridRetirementRejectionId: RuralOrHybridRetirementRejectionId,
+    @Param(
+      'ruralOrHybridRetirementRejectionWorkPeriodId',
+      new ParseValueObjectPipe(RuralOrHybridRetirementRejectionWorkPeriodId),
+    )
+    ruralOrHybridRetirementRejectionWorkPeriodId: RuralOrHybridRetirementRejectionWorkPeriodId,
+  ): Promise<DeleteRuralOrHybridRetirementRejectionWorkPeriodResponseDto> {
+    return this.deleteRuralOrHybridRetirementRejectionWorkPeriodUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralOrHybridRetirementRejectionId,
+      ruralOrHybridRetirementRejectionWorkPeriodId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Obter resultado da análise',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralOrHybridRetirementRejectionId/result',
+      method: RequestMethod.GET,
+    },
+    tag: ['indeferimento-aposentadoria-rural-ou-hibrida'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Resultado retornado com sucesso.',
+      type: GetRuralOrHybridRetirementRejectionResultResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async getResult(
+    @Param(
+      'ruralOrHybridRetirementRejectionId',
+      new ParseValueObjectPipe(RuralOrHybridRetirementRejectionId),
+    )
+    ruralOrHybridRetirementRejectionId: RuralOrHybridRetirementRejectionId,
+  ): Promise<GetRuralOrHybridRetirementRejectionResultResponseDto> {
+    return this.getRuralOrHybridRetirementRejectionResultUseCase.execute(
+      ruralOrHybridRetirementRejectionId,
     );
   }
 }
