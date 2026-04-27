@@ -85,9 +85,7 @@ export class GetMaternityPayRejectionUseCase {
       (result.maternityPayRejectionDocument ?? [])
         .filter(
           (d: MaternityPayRejectionDocumentEntity) =>
-            d.type !== MaternityPayRejectionDocumentTypeEnum.CNIS &&
-            d.document !== null &&
-            d.type !== null,
+            d.document !== null && d.type !== null,
         )
         .map(async (doc: MaternityPayRejectionDocumentEntity) =>
           this.buildDocumentResponse(
@@ -259,10 +257,29 @@ export class GetMaternityPayRejectionUseCase {
       ...(result.triggeringEventDate !== null && {
         triggeringEventDate: result.triggeringEventDate,
       }),
+      ...(result.estimatedTriggeringEventDate !== null && {
+        estimatedTriggeringEventDate: result.estimatedTriggeringEventDate,
+      }),
+      ...(result.workAccidentOrSevereDesease !== null && {
+        workAccidentOrSevereDesease: result.workAccidentOrSevereDesease,
+      }),
+      ...(result.clientWasUnemployedOnBenefitOrDisabilityStartDate !== null && {
+        clientWasUnemployedOnBenefitOrDisabilityStartDate:
+          result.clientWasUnemployedOnBenefitOrDisabilityStartDate,
+      }),
+      ...(result.clientWasRuralInsuredOnBenefitOrDisabilityStartDate !==
+        null && {
+        clientWasRuralInsuredOnBenefitOrDisabilityStartDate:
+          result.clientWasRuralInsuredOnBenefitOrDisabilityStartDate,
+      }),
       ...(result.isCurrentlyUnemployed !== null && {
         isCurrentlyUnemployed: result.isCurrentlyUnemployed,
       }),
       ...(result.category !== null && { category: result.category }),
+      ...(result.thirdPartyDocumentRelationDescription !== null && {
+        thirdPartyDocumentRelationDescription:
+          result.thirdPartyDocumentRelationDescription,
+      }),
       ...(inssBenefits.length > 0 && { inssBenefits }),
       ...(legalProceedingNumbers.length > 0 && { legalProceedingNumbers }),
       ...(documents.length > 0 && { documents }),
@@ -274,6 +291,16 @@ export class GetMaternityPayRejectionUseCase {
     });
   }
 
+  private parseStoredCompleteAnalysis(
+    raw: string,
+  ): MaternityPayRejectionResultInterface | null {
+    try {
+      return JSON.parse(raw) as MaternityPayRejectionResultInterface;
+    } catch {
+      return null;
+    }
+  }
+
   private tryParseStoredSecondAnalysis(
     raw: string,
   ): MaternityPayRejectionFirstAnalysisModel | null {
@@ -282,30 +309,42 @@ export class GetMaternityPayRejectionUseCase {
         raw,
       ) as MaternityPayRejectionFirstAnalysisInterface;
 
+      const gracePeriod = MaternityPayRejectionGracePeriodModel.build({
+        withinTheGracePeriod: parsed.gracePeriod.withinTheGracePeriod,
+        situation: parsed.gracePeriod.situation,
+        applicableGracePeriod: parsed.gracePeriod.applicableGracePeriod,
+        endOfGracePeriod: parsed.gracePeriod.endOfGracePeriod,
+      });
+
+      const benefitInformation =
+        MaternityPayRejectionBenefitInformationModel.build({
+          situation: parsed.benefitInformation.situation,
+          duration: parsed.benefitInformation.duration,
+          startDate: parsed.benefitInformation.startDate,
+          concessionDate: parsed.benefitInformation.concessionDate,
+          startOfTheLeave: parsed.benefitInformation.startOfTheLeave,
+          endOfTheLeave: parsed.benefitInformation.endOfTheLeave,
+          totalLeaveDuration: parsed.benefitInformation.totalLeaveDuration,
+          amountBenefit: parsed.benefitInformation.amountBenefit,
+          calculationBasis: parsed.benefitInformation.calculationBasis,
+        });
+
+      const requirementDeadline =
+        MaternityPayRejectionRequirementDeadlineModel.build({
+          triggeringEventDate: parsed.requirementDeadline.triggeringEventDate,
+          requirementDate: parsed.requirementDeadline.requirementDate,
+          statuoryDeadline: parsed.requirementDeadline.statuoryDeadline,
+          details: parsed.requirementDeadline.details,
+          justification: parsed.requirementDeadline.justification,
+        });
+
       return MaternityPayRejectionFirstAnalysisModel.build({
         insuredStatusManteined: parsed.insuredStatusManteined,
         insuredStatusAnalysisConclusion: parsed.insuredStatusAnalysisConclusion,
-        gracePeriod: MaternityPayRejectionGracePeriodModel.build({
-          ...parsed.gracePeriod,
-        }),
-        benefitInformation: MaternityPayRejectionBenefitInformationModel.build({
-          ...parsed.benefitInformation,
-        }),
-        requirementDeadline:
-          MaternityPayRejectionRequirementDeadlineModel.build({
-            ...parsed.requirementDeadline,
-          }),
+        gracePeriod,
+        benefitInformation,
+        requirementDeadline,
       });
-    } catch {
-      return null;
-    }
-  }
-
-  private parseStoredCompleteAnalysis(
-    raw: string,
-  ): MaternityPayRejectionResultInterface | null {
-    try {
-      return JSON.parse(raw) as MaternityPayRejectionResultInterface;
     } catch {
       return null;
     }

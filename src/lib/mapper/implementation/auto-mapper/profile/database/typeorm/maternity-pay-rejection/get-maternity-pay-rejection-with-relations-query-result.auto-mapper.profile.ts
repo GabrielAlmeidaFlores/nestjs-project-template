@@ -177,6 +177,14 @@ export class GetMaternityPayRejectionWithRelationsQueryResultAutoMapperProfile {
         isCurrentlyUnemployed: source.isCurrentlyUnemployed,
         category: source.category,
         triggeringEventDate: source.triggeringEventDate,
+        estimatedTriggeringEventDate: source.estimatedTriggeringEventDate,
+        workAccidentOrSevereDesease: source.workAccidentOrSevereDesease,
+        clientWasUnemployedOnBenefitOrDisabilityStartDate:
+          source.clientWasUnemployedOnBenefitOrDisabilityStartDate,
+        clientWasRuralInsuredOnBenefitOrDisabilityStartDate:
+          source.clientWasRuralInsuredOnBenefitOrDisabilityStartDate,
+        thirdPartyDocumentRelationDescription:
+          source.thirdPartyDocumentRelationDescription,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
@@ -270,6 +278,14 @@ export class GetMaternityPayRejectionWithRelationsQueryResultAutoMapperProfile {
         isCurrentlyUnemployed: source.isCurrentlyUnemployed,
         category: source.category,
         triggeringEventDate: source.triggeringEventDate,
+        estimatedTriggeringEventDate: source.estimatedTriggeringEventDate,
+        workAccidentOrSevereDesease: source.workAccidentOrSevereDesease,
+        clientWasUnemployedOnBenefitOrDisabilityStartDate:
+          source.clientWasUnemployedOnBenefitOrDisabilityStartDate,
+        clientWasRuralInsuredOnBenefitOrDisabilityStartDate:
+          source.clientWasRuralInsuredOnBenefitOrDisabilityStartDate,
+        thirdPartyDocumentRelationDescription:
+          source.thirdPartyDocumentRelationDescription,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,

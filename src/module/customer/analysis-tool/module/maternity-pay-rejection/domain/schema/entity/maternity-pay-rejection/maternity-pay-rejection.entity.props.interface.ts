@@ -10,5 +10,10 @@ export interface MaternityPayRejectionEntityPropsInterface extends BaseEntityPro
   isCurrentlyUnemployed?: boolean | null;
   category?: MaternityPayRejectionCategoryEnum | null;
   triggeringEventDate?: Date | null;
+  estimatedTriggeringEventDate?: Date | null;
+  workAccidentOrSevereDesease?: boolean | null;
+  clientWasUnemployedOnBenefitOrDisabilityStartDate?: boolean | null;
+  clientWasRuralInsuredOnBenefitOrDisabilityStartDate?: boolean | null;
+  thirdPartyDocumentRelationDescription?: string | null;
   maternityPayRejectionResultId?: MaternityPayRejectionResultId | null;
 }

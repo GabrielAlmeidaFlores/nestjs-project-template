@@ -38,8 +38,8 @@ export class MaternityPayRejectionTypeormEntity extends BaseTypeormEntity {
 
   @Column({
     name: 'category',
-    type: 'simple-enum',
-    enum: MaternityPayRejectionCategoryEnum,
+    type: 'varchar',
+    length: 100,
     nullable: true,
   })
   public category: MaternityPayRejectionCategoryEnum | null;
@@ -51,6 +51,42 @@ export class MaternityPayRejectionTypeormEntity extends BaseTypeormEntity {
     transformer: DateOnlyTransformer,
   })
   public triggeringEventDate: Date | null;
+
+  @Column({
+    name: 'estimated_triggering_event_date',
+    type: 'date',
+    nullable: true,
+    transformer: DateOnlyTransformer,
+  })
+  public estimatedTriggeringEventDate: Date | null;
+
+  @Column({
+    name: 'work_accident_or_severe_desease',
+    type: 'boolean',
+    nullable: true,
+  })
+  public workAccidentOrSevereDesease: boolean | null;
+
+  @Column({
+    name: 'client_was_unemployed_on_benefit_or_disability_start_date',
+    type: 'boolean',
+    nullable: true,
+  })
+  public clientWasUnemployedOnBenefitOrDisabilityStartDate: boolean | null;
+
+  @Column({
+    name: 'client_was_rural_insured_on_benefit_or_disability_start_date',
+    type: 'boolean',
+    nullable: true,
+  })
+  public clientWasRuralInsuredOnBenefitOrDisabilityStartDate: boolean | null;
+
+  @Column({
+    name: 'third_party_document_relation_description',
+    type: 'text',
+    nullable: true,
+  })
+  public thirdPartyDocumentRelationDescription: string | null;
 
   @OneToOne('MaternityPayRejectionResultTypeormEntity', {
     nullable: true,

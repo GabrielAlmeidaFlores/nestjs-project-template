@@ -18861,7 +18861,7 @@ REGRAS IMPORTANTES
 - Use os valores e dados do CNIS já processado como fonte principal para a análise previdenciária.
 - Não invente datas, vínculos, recolhimentos, afastamentos, salários, filhos, fatos geradores ou documentos.
 - Quando houver limitação documental ou inconsistência entre os dados, registre isso com cautela.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.`,
+- Retorne exclusivamente texto markdown`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(

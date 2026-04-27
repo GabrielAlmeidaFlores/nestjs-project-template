@@ -16,8 +16,15 @@ import { MaternityPayRejectionId } from '@module/customer/analysis-tool/module/m
 import { MaternityPayRejectionDocumentTypeEnum } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/schema/entity/maternity-pay-rejection-document/enum/maternity-pay-rejection-document-type.enum';
 import { MaternityPayRejectionResultEntity } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/schema/entity/maternity-pay-rejection-result/maternity-pay-rejection-result.entity';
 import { CreateMaternityPayRejectionSecondAnalysisResponseDto } from '@module/customer/analysis-tool/module/maternity-pay-rejection/dto/response/create-maternity-pay-rejection-second-analysis.response.dto';
+import { InvalidMaternityPayRejectionResultJsonError } from '@module/customer/analysis-tool/module/maternity-pay-rejection/error/invalid-maternity-pay-rejection-result-json.error';
 import { MaternityPayRejectionCnisDocumentNotFoundError } from '@module/customer/analysis-tool/module/maternity-pay-rejection/error/maternity-pay-rejection-cnis-document-not-found.error';
 import { MaternityPayRejectionNotFoundError } from '@module/customer/analysis-tool/module/maternity-pay-rejection/error/maternity-pay-rejection-not-found.error';
+import {
+  MaternityPayRejectionBenefitInformationModel,
+  MaternityPayRejectionFirstAnalysisModel,
+  MaternityPayRejectionGracePeriodModel,
+  MaternityPayRejectionRequirementDeadlineModel,
+} from '@module/customer/analysis-tool/module/maternity-pay-rejection/model/generic/maternity-pay-rejection-first-analysis.model';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
@@ -25,6 +32,12 @@ import { OrganizationSessionDataModel } from '@shared/api/util/decorator/propert
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 import type { GetMaternityPayRejectionWithRelationsQueryResult } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection/query/result/get-maternity-pay-rejection-with-relations.query.result';
+import type { MaternityPayRejectionFirstAnalysisInterface } from '@module/customer/analysis-tool/module/maternity-pay-rejection/model/interface/maternity-pay-rejection-first-analysis.interface';
+
+interface ParsedSecondAnalysisInterface {
+  cleanedJson: string;
+  model: MaternityPayRejectionFirstAnalysisModel;
+}
 
 @Injectable()
 export class CreateMaternityPayRejectionSecondAnalysisUseCase {
@@ -133,7 +146,7 @@ export class CreateMaternityPayRejectionSecondAnalysisUseCase {
     const consumeCreditTransaction =
       await this.consumeOrganizationCreditUseCase.execute(
         organizationSessionData.organizationId,
-        PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_REJECTION_FIRST_ANALYSIS,
+        PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_REJECTION_SECOND_ANALYSIS,
         organizationMember.id,
       );
 
@@ -148,12 +161,16 @@ export class CreateMaternityPayRejectionSecondAnalysisUseCase {
       throw new MaternityPayRejectionNotFoundError();
     }
 
+    const parsedSecondAnalysis = this.parseSecondAnalysisOrThrow(
+      secondAnalysisResponse,
+    );
+
     const existingResult = rejection.maternityPayRejectionResult;
 
     const resultEntity = new MaternityPayRejectionResultEntity({
       ...(existingResult !== null && { id: existingResult.id }),
-      firstAnalysis: secondAnalysisResponse,
-      secondAnalysis: existingResult?.secondAnalysis ?? null,
+      firstAnalysis: existingResult?.firstAnalysis ?? null,
+      secondAnalysis: parsedSecondAnalysis.cleanedJson,
       completeAnalysis: existingResult?.completeAnalysis ?? null,
       simplifiedAnalysis: existingResult?.simplifiedAnalysis ?? null,
     });
@@ -185,8 +202,64 @@ export class CreateMaternityPayRejectionSecondAnalysisUseCase {
     await transaction.commit();
 
     return CreateMaternityPayRejectionSecondAnalysisResponseDto.build({
-      maternityPayRejectionSecondAnalysis: secondAnalysisResponse,
+      maternityPayRejectionSecondAnalysis: parsedSecondAnalysis.model,
     });
+  }
+
+  private parseSecondAnalysisOrThrow(
+    raw: string,
+  ): ParsedSecondAnalysisInterface {
+    try {
+      const cleaned = raw
+        .trim()
+        .replace(/^```json\s*/i, '')
+        .replace(/```$/i, '')
+        .trim();
+      const parsed = JSON.parse(
+        cleaned,
+      ) as MaternityPayRejectionFirstAnalysisInterface;
+
+      const gracePeriod = MaternityPayRejectionGracePeriodModel.build({
+        withinTheGracePeriod: parsed.gracePeriod.withinTheGracePeriod,
+        situation: parsed.gracePeriod.situation,
+        applicableGracePeriod: parsed.gracePeriod.applicableGracePeriod,
+        endOfGracePeriod: parsed.gracePeriod.endOfGracePeriod,
+      });
+
+      const benefitInformation =
+        MaternityPayRejectionBenefitInformationModel.build({
+          situation: parsed.benefitInformation.situation,
+          duration: parsed.benefitInformation.duration,
+          startDate: parsed.benefitInformation.startDate,
+          concessionDate: parsed.benefitInformation.concessionDate,
+          startOfTheLeave: parsed.benefitInformation.startOfTheLeave,
+          endOfTheLeave: parsed.benefitInformation.endOfTheLeave,
+          totalLeaveDuration: parsed.benefitInformation.totalLeaveDuration,
+          amountBenefit: parsed.benefitInformation.amountBenefit,
+          calculationBasis: parsed.benefitInformation.calculationBasis,
+        });
+
+      const requirementDeadline =
+        MaternityPayRejectionRequirementDeadlineModel.build({
+          triggeringEventDate: parsed.requirementDeadline.triggeringEventDate,
+          requirementDate: parsed.requirementDeadline.requirementDate,
+          statuoryDeadline: parsed.requirementDeadline.statuoryDeadline,
+          details: parsed.requirementDeadline.details,
+          justification: parsed.requirementDeadline.justification,
+        });
+
+      const model = MaternityPayRejectionFirstAnalysisModel.build({
+        insuredStatusManteined: parsed.insuredStatusManteined,
+        insuredStatusAnalysisConclusion: parsed.insuredStatusAnalysisConclusion,
+        gracePeriod,
+        benefitInformation,
+        requirementDeadline,
+      });
+
+      return { cleanedJson: cleaned, model };
+    } catch {
+      throw new InvalidMaternityPayRejectionResultJsonError();
+    }
   }
 
   private buildRejectionDataBuffer(
