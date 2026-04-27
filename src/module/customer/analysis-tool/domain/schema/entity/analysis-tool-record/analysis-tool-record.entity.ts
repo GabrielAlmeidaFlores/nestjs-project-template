@@ -34,6 +34,7 @@ import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/spe
 import { SurvivorPensionAnalysisEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis/survivor-pension-analysis.entity';
 import { TeacherRetirementPlanningEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
 import { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/temporary-disability-benefits-grant.entity';
+import { TemporaryDisabilityBenefitsTerminatedEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/schema/entity/temporary-disability-benefits-terminated/temporary-disability-benefits-terminated.entity';
 import { TemporaryIncapacityBenefitRejectionEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
@@ -153,6 +154,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly temporaryDisabilityBenefitsGrant: TemporaryDisabilityBenefitsGrantEntity | null;
 
   @Description(
+    'Cessação ou suspensão de benefício por incapacidade temporária associada ao registro da ferramenta de análise',
+  )
+  public readonly temporaryDisabilityBenefitsTerminated: TemporaryDisabilityBenefitsTerminatedEntity | null;
+
+  @Description(
     'Análise de indeferimento de aposentadoria rural ou híbrida associada ao registro da ferramenta de análise',
   )
   public readonly ruralOrHybridRetirementRejection: RuralOrHybridRetirementRejectionEntity | null;
@@ -268,6 +274,8 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
       props.disabilityRetirementPlanningGrant ?? null;
     this.temporaryDisabilityBenefitsGrant =
       props.temporaryDisabilityBenefitsGrant ?? null;
+    this.temporaryDisabilityBenefitsTerminated =
+      props.temporaryDisabilityBenefitsTerminated ?? null;
     this.ruralOrHybridRetirementRejection =
       props.ruralOrHybridRetirementRejection ?? null;
     this.accidentBenefitRejection = props.accidentBenefitRejection ?? null;
