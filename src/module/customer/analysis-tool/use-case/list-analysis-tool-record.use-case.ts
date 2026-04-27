@@ -97,6 +97,7 @@ export class ListAnalysisToolRecordUseCase {
             analysisToolRecord.specialActivity ??
             analysisToolRecord.disabilityAssessmentForBpcAnalysis ??
             analysisToolRecord.ruralOrHybridRetirementRejection ??
+            analysisToolRecord.ruralOrHybridRetirementAnalysis ??
             analysisToolRecord.ruralTimelineAnalysis ??
             analysisToolRecord.speechGenerator ??
             analysisToolRecord.medicalQuestionGenerator ??

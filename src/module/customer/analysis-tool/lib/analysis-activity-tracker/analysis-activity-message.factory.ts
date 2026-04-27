@@ -58,6 +58,8 @@ export class AnalysisActivityMessageFactory {
       'Concessão de benefício por incapacidade temporária',
     [AnalysisToolRecordTypeEnum.RURAL_OR_HYBRID_RETIREMENT_REJECTION]:
       'Indeferimento de aposentadoria rural ou híbrida',
+    [AnalysisToolRecordTypeEnum.RURAL_OR_HYBRID_RETIREMENT_ANALYSIS]:
+      'Análise de aposentadoria rural ou híbrida',
     [AnalysisToolRecordTypeEnum.SURVIVOR_PENSION_ANALYSIS]:
       'Análise de pensão por morte',
     [AnalysisToolRecordTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL]:

@@ -82,6 +82,7 @@ export class SeedService {
         await this.baseTransactionRepositoryGateway.execute(transactions);
 
       await transaction.commit();
+      transactions.length = 0;
     }
   }
 }
