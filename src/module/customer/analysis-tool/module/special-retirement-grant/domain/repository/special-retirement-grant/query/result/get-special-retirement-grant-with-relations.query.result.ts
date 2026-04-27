@@ -11,7 +11,7 @@ export class GetSpecialRetirementGrantWithRelationsQueryResult extends BaseBuild
   public readonly id: SpecialRetirementGrantId;
   public readonly name: string;
   public readonly specialActivity: boolean;
-  public readonly cnisDocument: string;
+  public readonly cnisDocument: string | null;
   public readonly specialRetirementGrantResult: GetSpecialRetirementGrantResultQueryResult | null;
   public readonly specialRetirementGrantLegalProceeding: GetSpecialRetirementGrantLegalProceedingQueryResult[];
   public readonly specialRetirementGrantBenefit: GetSpecialRetirementGrantBenefitQueryResult[];
