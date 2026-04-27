@@ -27,8 +27,6 @@ export class GetAccidentAssistanceTerminatedBenefitQueryResultAutoMapperProfile 
       return GetAccidentAssistanceTerminatedBenefitQueryResult.build({
         id: new AccidentAssistanceTerminatedBenefitId(source.id),
         inssBenefitNumber: source.inssBenefitNumber,
-        dib: source.dib,
-        dcb: source.dcb,
       });
     };
 
@@ -49,8 +47,6 @@ export class GetAccidentAssistanceTerminatedBenefitQueryResultAutoMapperProfile 
       return AccidentAssistanceTerminatedBenefitTypeormEntity.build({
         id: source.id.toString(),
         inssBenefitNumber: source.inssBenefitNumber,
-        dib: source.dib,
-        dcb: source.dcb,
         accidentAssistanceTerminated: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),

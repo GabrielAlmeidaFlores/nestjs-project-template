@@ -110,6 +110,30 @@ export class AccidentAssistanceTerminatedTypeormEntity extends BaseTypeormEntity
   })
   public extensionRequestStatus: AccidentAssistanceTerminatedExtensionRequestStatusEnum | null;
 
+  @Column({
+    name: 'dib',
+    type: 'date',
+    nullable: true,
+    transformer: DateOnlyTransformer,
+  })
+  public dib: Date | null;
+
+  @Column({
+    name: 'dcb',
+    type: 'date',
+    nullable: true,
+    transformer: DateOnlyTransformer,
+  })
+  public dcb: Date | null;
+
+  @Column({
+    name: 'inss_benefit_number',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
+  public inssBenefitNumber: string | null;
+
   @OneToOne(
     () => AccidentAssistanceTerminatedResultTypeormEntity,
     (entity) => entity.accidentAssistanceTerminated,

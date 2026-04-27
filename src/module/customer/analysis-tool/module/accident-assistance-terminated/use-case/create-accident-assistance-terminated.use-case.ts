@@ -106,6 +106,11 @@ export class CreateAccidentAssistanceTerminatedUseCase {
         ...(dto.json.extensionRequestStatus !== undefined && {
           extensionRequestStatus: dto.json.extensionRequestStatus,
         }),
+        dib: dto.json.dib ?? null,
+        dcb: dto.json.dcb ?? null,
+        ...(dto.json.mainInssBenefitNumber !== undefined && {
+          inssBenefitNumber: dto.json.mainInssBenefitNumber,
+        }),
         createdBy: organizationMember.id,
         updatedBy: organizationMember.id,
       },

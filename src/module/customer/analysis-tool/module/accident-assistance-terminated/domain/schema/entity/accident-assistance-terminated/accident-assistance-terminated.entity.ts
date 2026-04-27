@@ -51,6 +51,15 @@ export class AccidentAssistanceTerminatedEntity extends BaseEntity<AccidentAssis
   @Description('Status do pedido de prorrogação.')
   public readonly extensionRequestStatus: AccidentAssistanceTerminatedExtensionRequestStatusEnum | null;
 
+  @Description('Data de início do benefício (DIB).')
+  public readonly dib: Date | null;
+
+  @Description('Data de cessação do benefício (DCB).')
+  public readonly dcb: Date | null;
+
+  @Description('Número do benefício do INSS.')
+  public readonly inssBenefitNumber: string | null;
+
   @Description('Resultado da análise de auxílio-acidente cessado.')
   public readonly accidentAssistanceTerminatedResult: AccidentAssistanceTerminatedResultEntity | null;
 
@@ -96,6 +105,9 @@ export class AccidentAssistanceTerminatedEntity extends BaseEntity<AccidentAssis
     this.previousIncapacityBenefitEndDate =
       props.previousIncapacityBenefitEndDate ?? null;
     this.extensionRequestStatus = props.extensionRequestStatus ?? null;
+    this.dib = props.dib ?? null;
+    this.dcb = props.dcb ?? null;
+    this.inssBenefitNumber = props.inssBenefitNumber ?? null;
     this.accidentAssistanceTerminatedResult =
       props.accidentAssistanceTerminatedResult ?? null;
     this.accidentAssistanceTerminatedBenefit =
