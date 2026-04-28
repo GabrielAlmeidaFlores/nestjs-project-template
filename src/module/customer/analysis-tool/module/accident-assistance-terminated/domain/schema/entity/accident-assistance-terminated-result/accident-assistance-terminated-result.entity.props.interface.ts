@@ -6,4 +6,5 @@ export interface AccidentAssistanceTerminatedResultEntityPropsInterface extends 
   accidentAssistanceTerminatedSimplifiedAnalysis?: string | null;
   decisionDetails?: string | null;
   firstAnalysis?: string | null;
+  completeAnalysisDownload?: string | null;
 }

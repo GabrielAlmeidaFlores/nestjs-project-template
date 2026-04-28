@@ -37,6 +37,7 @@ export class AccidentAssistanceTerminatedResultEntityAutoMapperProfile {
               source.accidentAssistanceTerminatedCompleteAnalysis,
             accidentAssistanceTerminatedSimplifiedAnalysis:
               source.accidentAssistanceTerminatedSimplifiedAnalysis,
+            completeAnalysisDownload: source.completeAnalysisDownload,
             createdAt: source.createdAt,
             updatedAt: source.updatedAt,
             deletedAt: source.deletedAt,
@@ -62,6 +63,7 @@ export class AccidentAssistanceTerminatedResultEntityAutoMapperProfile {
               source.accidentAssistanceTerminatedCompleteAnalysis,
             accidentAssistanceTerminatedSimplifiedAnalysis:
               source.accidentAssistanceTerminatedSimplifiedAnalysis,
+            completeAnalysisDownload: source.completeAnalysisDownload,
             createdAt: source.createdAt,
             updatedAt: source.updatedAt,
             deletedAt: source.deletedAt,

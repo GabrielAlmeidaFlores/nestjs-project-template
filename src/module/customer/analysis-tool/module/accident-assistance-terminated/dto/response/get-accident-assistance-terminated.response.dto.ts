@@ -1,8 +1,5 @@
 import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
-import { AccidentAssistanceTerminatedPeriodId } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-period/value-object/accident-assistance-terminated-period-id/accident-assistance-terminated-period-id.value-object';
-import { AccidentAssistanceTerminatedPeriodReasonPendencyEnum } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-period/enum/accident-assistance-terminated-period-reason-pendency.enum';
-import { AccidentAssistanceTerminatedFirstAnalysisModel } from '@module/customer/analysis-tool/module/accident-assistance-terminated/model/generic/accident-assistance-terminated-first-analysis.model';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
@@ -13,14 +10,17 @@ import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema
 import { AccidentAssistanceTerminatedCategoryEnum } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated/enum/accident-assistance-terminated-category.enum';
 import { AccidentAssistanceTerminatedExtensionRequestStatusEnum } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated/enum/accident-assistance-terminated-extension-request-status.enum';
 import { AccidentAssistanceTerminatedId } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated/value-object/accident-assistance-terminated-id/accident-assistance-terminated-id.value-object';
+import { AccidentAssistanceTerminatedPeriodReasonPendencyEnum } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-period/enum/accident-assistance-terminated-period-reason-pendency.enum';
+import { AccidentAssistanceTerminatedPeriodId } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-period/value-object/accident-assistance-terminated-period-id/accident-assistance-terminated-period-id.value-object';
+import { AccidentAssistanceTerminatedFirstAnalysisModel } from '@module/customer/analysis-tool/module/accident-assistance-terminated/model/generic/accident-assistance-terminated-first-analysis.model';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-boolean-property/response-dto-boolean-property.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
+import { ResponseDtoNumberProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-number-property/response-dto-number-property.decorator';
 import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
-import { ResponseDtoNumberProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-number-property/response-dto-number-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
@@ -67,7 +67,10 @@ export class GetAccidentAssistanceTerminatedResultResponseDto extends BaseBuilda
   @ResponseDtoStringProperty({ required: false })
   public decisionDetails?: string;
 
-  @ResponseDtoObjectProperty(() => AccidentAssistanceTerminatedFirstAnalysisModel, { required: false })
+  @ResponseDtoObjectProperty(
+    () => AccidentAssistanceTerminatedFirstAnalysisModel,
+    { required: false },
+  )
   public firstAnalysis?: AccidentAssistanceTerminatedFirstAnalysisModel;
 
   @ResponseDtoDateProperty()
@@ -115,7 +118,10 @@ export class GetAccidentAssistanceTerminatedPeriodResponseDto extends BaseBuilda
   @ResponseDtoBooleanProperty({ required: false })
   public status?: boolean;
 
-  @ResponseDtoEnumProperty(AccidentAssistanceTerminatedPeriodReasonPendencyEnum, { required: false })
+  @ResponseDtoEnumProperty(
+    AccidentAssistanceTerminatedPeriodReasonPendencyEnum,
+    { required: false },
+  )
   public reasonPendency?: AccidentAssistanceTerminatedPeriodReasonPendencyEnum;
 
   protected override readonly _type =
@@ -210,6 +216,21 @@ export class GetAccidentAssistanceTerminatedResponseDto extends BaseBuildableDto
 
   @ResponseDtoDateProperty({ required: false })
   public previousIncapacityBenefitEndDate?: Date;
+
+  @ResponseDtoDateProperty({ required: false })
+  public dib?: Date;
+
+  @ResponseDtoDateProperty({ required: false })
+  public dcb?: Date;
+
+  @ResponseDtoStringProperty({ required: false })
+  public mainInssBenefitNumber?: string;
+
+  @ResponseDtoDateProperty({ required: false })
+  public accidentDate?: Date;
+
+  @ResponseDtoStringProperty({ required: false })
+  public accidentDescription?: string;
 
   @ResponseDtoEnumProperty(
     AccidentAssistanceTerminatedExtensionRequestStatusEnum,

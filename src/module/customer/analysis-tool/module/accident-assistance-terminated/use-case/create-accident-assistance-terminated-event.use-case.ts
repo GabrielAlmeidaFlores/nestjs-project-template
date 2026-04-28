@@ -82,16 +82,6 @@ export class CreateAccidentAssistanceTerminatedEventUseCase {
         organizationMember.id,
       );
 
-    const deleteCidsTransaction: TransactionType =
-      this.accidentAssistanceTerminatedCidCommandRepositoryGateway.deleteAccidentAssistanceTerminatedCidByAccidentAssistanceTerminatedId(
-        accidentAssistanceTerminatedId,
-      );
-
-    const deleteDocumentsTransaction =
-      this.accidentAssistanceTerminatedDocumentCommandRepositoryGateway.deleteAccidentAssistanceTerminatedDocumentByAccidentAssistanceTerminatedId(
-        accidentAssistanceTerminatedId,
-      );
-
     const createCidTransactions: TransactionType[] = cidEntities.map((entity) =>
       this.accidentAssistanceTerminatedCidCommandRepositoryGateway.createAccidentAssistanceTerminatedCid(
         accidentAssistanceTerminatedId,
@@ -109,8 +99,6 @@ export class CreateAccidentAssistanceTerminatedEventUseCase {
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       updateEventContextTransaction,
-      deleteCidsTransaction,
-      deleteDocumentsTransaction,
       ...createCidTransactions,
       ...createDocumentTransactions,
     ]);

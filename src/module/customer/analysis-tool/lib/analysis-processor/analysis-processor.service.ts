@@ -8068,8 +8068,8 @@ Análise processada do CNIS:
               description:
                 'Descrição detalhada da conclusão da análise se a qualidade do segurada foi mantida na Dii',
             },
-            required: ['status', 'description'],
           },
+          required: ['status', 'description'],
         },
         assessmentSequelae: {
           type: 'object',

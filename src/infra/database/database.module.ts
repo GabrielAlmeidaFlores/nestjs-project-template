@@ -1012,6 +1012,8 @@ import { SupportTicketAttachmentCommandRepositoryGateway } from '@module/support
 import { SupportTicketMessageCommandRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket-message/command/support-ticket-message.command.repository.gateway';
 import { SupportTicketMessageQueryRepositoryGateway } from '@module/support/service-desk/domain/repository/support-ticket-message/query/support-ticket-message.query.repository.gateway';
 import { SystemLogCommandGateway } from '@shared/system/system-log/system-log.command.gateway';
+import { AccidentAssistanceTerminatedPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated-period-document/command/accident-assistance-terminated-period-document.command.repository.gateway';
+import { AccidentAssistanceTerminatedPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated-period-document/accident-assistance-terminated-period-document.typeorm.command.repository';
 
 const classProvider: ClassProvider[] = [
   {
@@ -1135,6 +1137,10 @@ const classProvider: ClassProvider[] = [
   {
     provide: AccidentAssistanceTerminatedPeriodCommandRepositoryGateway,
     useClass: AccidentAssistanceTerminatedPeriodTypeormCommandRepository,
+  },
+    {
+    provide: AccidentAssistanceTerminatedPeriodDocumentCommandRepositoryGateway,
+    useClass: AccidentAssistanceTerminatedPeriodDocumentTypeormCommandRepository,
   },
   {
     provide: AccidentAssistanceTerminatedPeriodQueryRepositoryGateway,

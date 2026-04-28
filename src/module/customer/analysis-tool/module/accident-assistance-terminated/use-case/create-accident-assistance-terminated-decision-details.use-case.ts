@@ -194,6 +194,10 @@ export class CreateAccidentAssistanceTerminatedDecisionDetailsUseCase {
         extensionRequestStatus:
           accidentAssistanceTerminatedQueryResult.extensionRequestStatus,
         accidentAssistanceTerminatedResult,
+        dib: accidentAssistanceTerminatedQueryResult.dib,
+        dcb: accidentAssistanceTerminatedQueryResult.dcb,
+        inssBenefitNumber:
+          accidentAssistanceTerminatedQueryResult.inssBenefitNumber,
         createdBy: analysisToolRecordQueryResult.createdBy.id,
         updatedBy: organizationMember.id,
       },
