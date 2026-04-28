@@ -1,0 +1,12 @@
+import type { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
+import type { BpcDisabilityTerminationDocumentEntity } from '@module/customer/analysis-tool/module/bpc-disability-termination/domain/schema/entity/bpc-disability-termination-document/bpc-disability-termination-document.entity';
+
+export abstract class BpcDisabilityTerminationDocumentCommandRepositoryGateway {
+  public abstract createBpcDisabilityTerminationDocument(
+    props: BpcDisabilityTerminationDocumentEntity,
+  ): TransactionType;
+
+  public abstract createManyBpcDisabilityTerminationDocument(
+    props: BpcDisabilityTerminationDocumentEntity[],
+  ): TransactionType[];
+}
