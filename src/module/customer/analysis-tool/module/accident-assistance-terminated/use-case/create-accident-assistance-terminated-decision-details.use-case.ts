@@ -6,7 +6,6 @@ import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/ana
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
-import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisActivityTrackerGateway } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.gateway';
@@ -22,7 +21,6 @@ import { AccidentAssistanceTerminatedResultId } from '@module/customer/analysis-
 import { CreateAccidentAssistanceTerminatedDecisionDetailsResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/create-accident-assistance-terminated-decision-details.response.dto';
 import { AccidentAssistanceTerminatedDocumentRequiredError } from '@module/customer/analysis-tool/module/accident-assistance-terminated/error/accident-assistance-terminated-document-required.error';
 import { AccidentAssistanceTerminatedNotFoundError } from '@module/customer/analysis-tool/module/accident-assistance-terminated/error/accident-assistance-terminated-not-found.error';
-import { AccidentAssistanceTerminatedResultNotFoundError } from '@module/customer/analysis-tool/module/accident-assistance-terminated/error/accident-assistance-terminated-result-not-found.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
@@ -102,13 +100,6 @@ export class CreateAccidentAssistanceTerminatedDecisionDetailsUseCase {
     }
 
     if (
-      accidentAssistanceTerminatedQueryResult.accidentAssistanceTerminatedResult ===
-      null
-    ) {
-      throw new AccidentAssistanceTerminatedResultNotFoundError();
-    }
-
-    if (
       accidentAssistanceTerminatedQueryResult
         .accidentAssistanceTerminatedDocument.length === 0
     ) {
@@ -136,14 +127,51 @@ export class CreateAccidentAssistanceTerminatedDecisionDetailsUseCase {
         [...documentBuffers, clientDataBuffer],
       );
 
+    const existingResultId =
+      accidentAssistanceTerminatedQueryResult.accidentAssistanceTerminatedResult
+        ?.id;
+
+    const accidentAssistanceTerminatedResultId =
+      existingResultId !== undefined
+        ? new AccidentAssistanceTerminatedResultId(existingResultId)
+        : new AccidentAssistanceTerminatedResultId();
+
     const accidentAssistanceTerminatedResult =
       new AccidentAssistanceTerminatedResultEntity({
-        id: new AccidentAssistanceTerminatedResultId(
-          accidentAssistanceTerminatedQueryResult
-            .accidentAssistanceTerminatedResult.id,
-        ),
+        id: accidentAssistanceTerminatedResultId,
         decisionDetails,
+        firstAnalysis:
+          accidentAssistanceTerminatedQueryResult.accidentAssistanceTerminatedResult !==
+          null
+            ? (accidentAssistanceTerminatedQueryResult
+                .accidentAssistanceTerminatedResult.firstAnalysis ?? null)
+            : null,
+        accidentAssistanceTerminatedCompleteAnalysis:
+          accidentAssistanceTerminatedQueryResult.accidentAssistanceTerminatedResult !==
+          null
+            ? (accidentAssistanceTerminatedQueryResult
+                .accidentAssistanceTerminatedResult
+                .accidentAssistanceTerminatedCompleteAnalysis ?? null)
+            : null,
+        accidentAssistanceTerminatedSimplifiedAnalysis:
+          accidentAssistanceTerminatedQueryResult.accidentAssistanceTerminatedResult !==
+          null
+            ? (accidentAssistanceTerminatedQueryResult
+                .accidentAssistanceTerminatedResult
+                .accidentAssistanceTerminatedSimplifiedAnalysis ?? null)
+            : null,
       });
+
+    const accidentAssistanceTerminatedResultTransaction =
+      existingResultId !== undefined
+        ? this.accidentAssistanceTerminatedResultCommandRepositoryGateway.updateAccidentAssistanceTerminatedResult(
+            accidentAssistanceTerminatedResultId,
+            accidentAssistanceTerminatedResult,
+          )
+        : this.accidentAssistanceTerminatedResultCommandRepositoryGateway.createAccidentAssistanceTerminatedResult(
+            accidentAssistanceTerminatedId,
+            accidentAssistanceTerminatedResult,
+          );
 
     const accidentAssistanceTerminated = new AccidentAssistanceTerminatedEntity(
       {
@@ -181,7 +209,7 @@ export class CreateAccidentAssistanceTerminatedDecisionDetailsUseCase {
       id: analysisToolRecordQueryResult.id,
       code: analysisToolRecordQueryResult.code,
       type: analysisToolRecordQueryResult.type,
-      status: AnalysisStatusEnum.COMPLETED,
+      status: analysisToolRecordQueryResult.status,
       analysisToolClient,
       accidentAssistanceTerminated,
       createdBy: analysisToolRecordQueryResult.createdBy.id,
@@ -192,12 +220,6 @@ export class CreateAccidentAssistanceTerminatedDecisionDetailsUseCase {
       this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecord(
         analysisToolRecord.id,
         analysisToolRecord,
-      );
-
-    const updateDecisionDetailsTransaction =
-      this.accidentAssistanceTerminatedResultCommandRepositoryGateway.updateAccidentAssistanceTerminatedResultDecisionDetails(
-        accidentAssistanceTerminatedId,
-        accidentAssistanceTerminatedResult,
       );
 
     const updateAccidentAssistanceTerminatedTransaction =
@@ -215,7 +237,7 @@ export class CreateAccidentAssistanceTerminatedDecisionDetailsUseCase {
         analysisToolRecordId: analysisToolRecord.id,
         transactions: [
           consumeCreditTransaction,
-          updateDecisionDetailsTransaction,
+          accidentAssistanceTerminatedResultTransaction,
           updateAccidentAssistanceTerminatedTransaction,
           updateAnalysisToolRecordTransaction,
         ],
