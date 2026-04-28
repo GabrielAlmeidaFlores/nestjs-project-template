@@ -78,15 +78,15 @@ export class ConvertGeneralUrbanRetirementReviewSpecialPeriodUseCase {
     const periodEntities = items.map(
       (item) =>
         new GeneralUrbanRetirementReviewPeriodEntity({
-          periodName: item.empresa ?? null,
+          periodName: item.empresa,
           periodStart: item.periodoInicio ? new Date(item.periodoInicio) : null,
           periodEnd: item.periodoFim ? new Date(item.periodoFim) : null,
-          category: item.categoria ?? null,
+          category: item.categoria,
           isPendency: false,
-          competenceBelowTheMinimum: item.competenciaAbaixoDoMinimo ?? false,
-          contributionAverage: new DecimalValue(item.contribuicaoMedia ?? '0'),
-          typeOfContribution: item.tipoDeTrabalho ?? null,
-          status: item.status ?? null,
+          competenceBelowTheMinimum: item.competenciaAbaixoDoMinimo,
+          contributionAverage: new DecimalValue(item.contribuicaoMedia),
+          typeOfContribution: item.tipoDeTrabalho,
+          status: item.status,
           generalUrbanRetirementReview: generalUrbanRetirementReviewEntity,
         }),
     );

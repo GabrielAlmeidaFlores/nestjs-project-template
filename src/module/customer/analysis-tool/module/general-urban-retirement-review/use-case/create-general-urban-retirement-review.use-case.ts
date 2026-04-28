@@ -98,7 +98,6 @@ export class CreateGeneralUrbanRetirementReviewUseCase {
     );
 
     const generalUrbanRetirementReviewInssBenefit =
-      dto.json.inssBenefitNumber !== null &&
       dto.json.inssBenefitNumber !== undefined
         ? dto.json.inssBenefitNumber.map((value) => {
             return new GeneralUrbanRetirementReviewInssBenefitEntity({
@@ -109,7 +108,6 @@ export class CreateGeneralUrbanRetirementReviewUseCase {
         : [];
 
     const generalUrbanRetirementReviewLegalProceeding =
-      dto.json.legalProceedingNumber !== null &&
       dto.json.legalProceedingNumber !== undefined
         ? dto.json.legalProceedingNumber.map((value) => {
             return new GeneralUrbanRetirementReviewLegalProceedingEntity({
