@@ -79,6 +79,25 @@ import { BpcDisabilityDenialLegalProceedingEntityAutoMapperProfile } from '@lib/
 import { GetBpcDisabilityDenialLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-denial-legal-proceeding/get-bpc-disability-denial-legal-proceeding-query-result.auto-mapper.profile';
 import { BpcDisabilityDenialResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-denial-result/bpc-disability-denial-result-entity.auto-mapper.profile';
 import { GetBpcDisabilityDenialResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-denial-result/get-bpc-disability-denial-result-query-result.auto-mapper.profile';
+import { BpcDisabilityTerminationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-termination/bpc-disability-termination-entity.auto-mapper.profile';
+import { GetBpcDisabilityTerminationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-termination/get-bpc-disability-termination-query-result.auto-mapper.profile';
+import { GetBpcDisabilityTerminationWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-termination/get-bpc-disability-termination-with-relations-query-result.auto-mapper.profile';
+import { BpcDisabilityTerminationDisabilityAssessmentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-termination-disability-assessment/bpc-disability-termination-disability-assessment-entity.auto-mapper.profile';
+import { GetBpcDisabilityTerminationDisabilityAssessmentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-termination-disability-assessment/get-bpc-disability-termination-disability-assessment-query-result.auto-mapper.profile';
+import { BpcDisabilityTerminationDisabilityAssessmentDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-termination-disability-assessment-document/bpc-disability-termination-disability-assessment-document-entity.auto-mapper.profile';
+import { GetBpcDisabilityTerminationDisabilityAssessmentDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-termination-disability-assessment-document/get-bpc-disability-termination-disability-assessment-document-query-result.auto-mapper.profile';
+import { BpcDisabilityTerminationDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-termination-document/bpc-disability-termination-document-entity.auto-mapper.profile';
+import { GetBpcDisabilityTerminationDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-termination-document/get-bpc-disability-termination-document-query-result.auto-mapper.profile';
+import { BpcDisabilityTerminationFamilyMemberEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-termination-family-member/bpc-disability-termination-family-member-entity.auto-mapper.profile';
+import { GetBpcDisabilityTerminationFamilyMemberQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-termination-family-member/get-bpc-disability-termination-family-member-query-result.auto-mapper.profile';
+import { BpcDisabilityTerminationFamilyMemberDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-termination-family-member-document/bpc-disability-termination-family-member-document-entity.auto-mapper.profile';
+import { GetBpcDisabilityTerminationFamilyMemberDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-termination-family-member-document/get-bpc-disability-termination-family-member-document-query-result.auto-mapper.profile';
+import { BpcDisabilityTerminationInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-termination-inss-benefit/bpc-disability-termination-inss-benefit-entity.auto-mapper.profile';
+import { GetBpcDisabilityTerminationInssBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-termination-inss-benefit/get-bpc-disability-termination-inss-benefit-query-result.auto-mapper.profile';
+import { BpcDisabilityTerminationLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-termination-legal-proceeding/bpc-disability-termination-legal-proceeding-entity.auto-mapper.profile';
+import { GetBpcDisabilityTerminationLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-termination-legal-proceeding/get-bpc-disability-termination-legal-proceeding-query-result.auto-mapper.profile';
+import { BpcDisabilityTerminationResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-termination-result/bpc-disability-termination-result-entity.auto-mapper.profile';
+import { GetBpcDisabilityTerminationResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-termination-result/get-bpc-disability-termination-result-query-result.auto-mapper.profile';
 import { BpcElderlyAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis/bpc-elderly-analysis-entity.auto-mapper.profile';
 import { GetBpcElderlyAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis/get-bpc-elderly-analysis-query-result.auto-mapper.profile';
 import { GetBpcElderlyAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis/get-bpc-elderly-analysis-with-relations-query-result.auto-mapper.profile';
@@ -928,6 +947,25 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetBpcDisabilityDenialFamilyMemberQueryResultAutoMapperProfile,
     BpcDisabilityDenialFamilyMemberDocumentEntityAutoMapperProfile,
     GetBpcDisabilityDenialFamilyMemberDocumentQueryResultAutoMapperProfile,
+    BpcDisabilityTerminationEntityAutoMapperProfile,
+    GetBpcDisabilityTerminationQueryResultAutoMapperProfile,
+    GetBpcDisabilityTerminationWithRelationsQueryResultAutoMapperProfile,
+    BpcDisabilityTerminationDisabilityAssessmentEntityAutoMapperProfile,
+    GetBpcDisabilityTerminationDisabilityAssessmentQueryResultAutoMapperProfile,
+    BpcDisabilityTerminationDisabilityAssessmentDocumentEntityAutoMapperProfile,
+    GetBpcDisabilityTerminationDisabilityAssessmentDocumentQueryResultAutoMapperProfile,
+    BpcDisabilityTerminationDocumentEntityAutoMapperProfile,
+    GetBpcDisabilityTerminationDocumentQueryResultAutoMapperProfile,
+    BpcDisabilityTerminationResultEntityAutoMapperProfile,
+    GetBpcDisabilityTerminationResultQueryResultAutoMapperProfile,
+    BpcDisabilityTerminationInssBenefitEntityAutoMapperProfile,
+    GetBpcDisabilityTerminationInssBenefitQueryResultAutoMapperProfile,
+    BpcDisabilityTerminationLegalProceedingEntityAutoMapperProfile,
+    GetBpcDisabilityTerminationLegalProceedingQueryResultAutoMapperProfile,
+    BpcDisabilityTerminationFamilyMemberEntityAutoMapperProfile,
+    GetBpcDisabilityTerminationFamilyMemberQueryResultAutoMapperProfile,
+    BpcDisabilityTerminationFamilyMemberDocumentEntityAutoMapperProfile,
+    GetBpcDisabilityTerminationFamilyMemberDocumentQueryResultAutoMapperProfile,
     BpcElderlyAnalysisEntityAutoMapperProfile,
     GetBpcElderlyAnalysisQueryResultAutoMapperProfile,
     GetBpcElderlyAnalysisWithRelationsQueryResultAutoMapperProfile,
