@@ -1,8 +1,9 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
-import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
-import { AccidentAssistanceTerminatedPeriodReasonPendencyEnum } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-period/enum/accident-assistance-terminated-period-reason-pendency.enum';
-import { AccidentAssistanceTerminatedPeriodEntityPropsInterface } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-period/accident-assistance-terminated-period.entity.props.interface';
 import { AccidentAssistanceTerminatedPeriodId } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-period/value-object/accident-assistance-terminated-period-id/accident-assistance-terminated-period-id.value-object';
+
+import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import type { AccidentAssistanceTerminatedPeriodEntityPropsInterface } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-period/accident-assistance-terminated-period.entity.props.interface';
+import type { AccidentAssistanceTerminatedPeriodReasonPendencyEnum } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-period/enum/accident-assistance-terminated-period-reason-pendency.enum';
 
 export class AccidentAssistanceTerminatedPeriodEntity extends BaseEntity<AccidentAssistanceTerminatedPeriodId> {
   public readonly sequencial: number | null;
@@ -19,7 +20,9 @@ export class AccidentAssistanceTerminatedPeriodEntity extends BaseEntity<Acciden
 
   protected readonly _type = AccidentAssistanceTerminatedPeriodEntity.name;
 
-  public constructor(props: AccidentAssistanceTerminatedPeriodEntityPropsInterface) {
+  public constructor(
+    props: AccidentAssistanceTerminatedPeriodEntityPropsInterface,
+  ) {
     super(AccidentAssistanceTerminatedPeriodId, props);
     this.sequencial = props.sequencial ?? null;
     this.periodName = props.periodName ?? null;
