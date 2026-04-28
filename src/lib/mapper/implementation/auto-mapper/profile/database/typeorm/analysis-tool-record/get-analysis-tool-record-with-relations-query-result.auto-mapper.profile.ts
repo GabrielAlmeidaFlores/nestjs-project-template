@@ -19,6 +19,7 @@ import { DisabilityRetirementPlanningTypeormEntity } from '@infra/database/imple
 import { GeneralUrbanRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis.typeorm.entity';
 import { GeneralUrbanRetirementDenialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial.typeorm.entity';
 import { GeneralUrbanRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant.typeorm.entity';
+import { GeneralUrbanRetirementReviewTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-review.typeorm.entity';
 import { InsuranceQualityAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis.typeorm.entity';
 import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis.typeorm.entity';
 import { MaternityPayGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-grant.typeorm.entity';
@@ -63,6 +64,7 @@ import { GeneralUrbanRetirementAnalysisRemunerationId } from '@module/customer/a
 import { GeneralUrbanRetirementAnalysisResultId } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis-result/value-object/general-urban-retirement-analysis-result-id.value-object';
 import { GetGeneralUrbanRetirementDenialWithRelationsQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial/query/result/get-general-urban-retirement-denial-with-relations.query.result';
 import { GetGeneralUrbanRetirementGrantWithRelationsQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant/query/result/get-general-urban-retirement-grant-with-relations.query.result';
+import { GetGeneralUrbanRetirementReviewWithRelationsQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement-review/domain/repository/general-urban-retirement-review/query/result/get-general-urban-retirement-review-with-relations.query.result';
 import { GetInsuranceQualityAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis/query/result/get-insurance-quality-analysis-with-relations.query.result';
 import { GetJudicialCaseAnalysisQueryResult } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/repository/judicial-case-analysis/query/result/get-judicial-case-analysis.query.result';
 import { GetMaternityPayGrantWithRelationsQueryResult } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant/query/result/get-maternity-pay-grant-with-relations.query.result';
@@ -137,6 +139,16 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
               source.generalUrbanRetirementGrant,
               GeneralUrbanRetirementGrantTypeormEntity,
               GetGeneralUrbanRetirementGrantWithRelationsQueryResult,
+            )
+          : null;
+
+      const generalUrbanRetirementReview =
+        source.generalUrbanRetirementReview !== null &&
+        source.generalUrbanRetirementReview !== undefined
+          ? this.mapper.map(
+              source.generalUrbanRetirementReview,
+              GeneralUrbanRetirementReviewTypeormEntity,
+              GetGeneralUrbanRetirementReviewWithRelationsQueryResult,
             )
           : null;
 
@@ -476,6 +488,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         disabilityRetirementPlanning,
         generalUrbanRetirementGrant,
         generalUrbanRetirementAnalysis,
+        generalUrbanRetirementReview,
         specialRetirementGrant,
         disabilityRetirementPlanningGrant,
         temporaryDisabilityBenefitsGrant,

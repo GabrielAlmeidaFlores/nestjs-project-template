@@ -46,6 +46,7 @@ import { DisabilityRetirementPlanningRejectionId } from '@module/customer/analys
 import { GeneralUrbanRetirementAnalysisId } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/value-object/general-urban-retirement-analysis-id.value-object';
 import { GeneralUrbanRetirementDenialId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/value-object/general-urban-retirement-denial-id/general-urban-retirement-denial-id.value-object';
 import { GeneralUrbanRetirementGrantId } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/value-object/general-urban-retirement-grant-id.value-object';
+import { GeneralUrbanRetirementReviewId } from '@module/customer/analysis-tool/module/general-urban-retirement-review/domain/schema/entity/general-urban-retirement-review/value-object/general-urban-retirement-review-id.value-object';
 import { InsuranceQualityAnalysisId } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/value-object/insurance-quality-analysis-id/insurance-quality-analysis-id.value-object';
 import { JudicialCaseAnalysisId } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/value-object/judicial-case-analysis-id/judicial-case-analysis-id.value-object';
 import { MaternityPayGrantId } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/value-object/maternity-pay-grant-id.value-object';
@@ -135,6 +136,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { deathBenefitRejection: Not(IsNull()) },
         { survivorPensionAnalysis: Not(IsNull()) },
         { generalUrbanRetirementDenial: Not(IsNull()) },
+        { generalUrbanRetirementReview: Not(IsNull()) },
         { disabilityRetirementPlanningRejection: Not(IsNull()) },
         { bpcDisabilityDenial: Not(IsNull()) },
         { bpcElderlyAnalysis: Not(IsNull()) },
@@ -2165,6 +2167,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { deathBenefitRejection: Not(IsNull()) },
         { survivorPensionAnalysis: Not(IsNull()) },
         { generalUrbanRetirementDenial: Not(IsNull()) },
+        { generalUrbanRetirementReview: Not(IsNull()) },
         { disabilityRetirementPlanningRejection: Not(IsNull()) },
         { bpcDisabilityDenial: Not(IsNull()) },
         { bpcElderlyAnalysis: Not(IsNull()) },
@@ -2850,6 +2853,65 @@ export class AnalysisToolRecordTypeormQueryRepository
     return mappedData;
   }
 
+  public async findWithRelationsByGeneralUrbanRetirementReviewIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    generalUrbanRetirementReviewId: GeneralUrbanRetirementReviewId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          generalUrbanRetirementReview: {
+            id: generalUrbanRetirementReviewId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+          generalUrbanRetirementReview: true,
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
   public async findWithRelationsByAccidentBenefitRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
     accidentBenefitRejectionId: AccidentBenefitRejectionId,
     organizationId: OrganizationId,
@@ -3147,6 +3209,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       'temporaryDisabilityBenefitsGrant',
       'survivorPensionAnalysis',
       'generalUrbanRetirementDenial',
+      'generalUrbanRetirementReview',
       'disabilityRetirementPlanningRejection',
       'bpcDisabilityDenial',
       'bpcElderlyAnalysis',

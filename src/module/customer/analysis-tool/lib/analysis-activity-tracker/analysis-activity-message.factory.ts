@@ -64,6 +64,8 @@ export class AnalysisActivityMessageFactory {
       'Análise de pensão por morte',
     [AnalysisToolRecordTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL]:
       'Indeferimento de aposentadoria urbana geral',
+    [AnalysisToolRecordTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW]:
+      'Revisão de aposentadoria urbana geral',
     [AnalysisToolRecordTypeEnum.ACCIDENT_BENEFIT_REJECTION]:
       'Indeferimento de auxílio-acidente',
     [AnalysisToolRecordTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION]:

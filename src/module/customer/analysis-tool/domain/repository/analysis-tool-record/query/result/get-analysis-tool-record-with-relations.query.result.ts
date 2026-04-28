@@ -19,6 +19,7 @@ import type { GetDisabilityRetirementPlanningGrantWithRelationsQueryResult } fro
 import type { GetGeneralUrbanRetirementAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis/query/result/get-general-urban-retirement-analysis-with-relations.query.result';
 import type { GetGeneralUrbanRetirementDenialWithRelationsQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial/query/result/get-general-urban-retirement-denial-with-relations.query.result';
 import type { GetGeneralUrbanRetirementGrantWithRelationsQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant/query/result/get-general-urban-retirement-grant-with-relations.query.result';
+import type { GetGeneralUrbanRetirementReviewWithRelationsQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement-review/domain/repository/general-urban-retirement-review/query/result/get-general-urban-retirement-review-with-relations.query.result';
 import type { GetInsuranceQualityAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis/query/result/get-insurance-quality-analysis-with-relations.query.result';
 import type { GetJudicialCaseAnalysisQueryResult } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/repository/judicial-case-analysis/query/result/get-judicial-case-analysis.query.result';
 import type { GetMaternityPayGrantWithRelationsQueryResult } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant/query/result/get-maternity-pay-grant-with-relations.query.result';
@@ -66,6 +67,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResult extends BaseBuildable
   public readonly disabilityRetirementPlanning: GetDisabilityRetirementPlanningWithRelationsQueryResult | null;
   public readonly generalUrbanRetirementGrant: GetGeneralUrbanRetirementGrantWithRelationsQueryResult | null;
   public readonly generalUrbanRetirementAnalysis: GetGeneralUrbanRetirementAnalysisWithRelationsQueryResult | null;
+  public readonly generalUrbanRetirementReview: GetGeneralUrbanRetirementReviewWithRelationsQueryResult | null;
   public readonly generalUrbanRetirementDenial: GetGeneralUrbanRetirementDenialWithRelationsQueryResult | null;
   public readonly deathBenefitGrant: GetDeathBenefitGrantWithRelationsQueryResult | null;
   public readonly deathBenefitRejection: GetDeathBenefitRejectionWithRelationsQueryResult | null;

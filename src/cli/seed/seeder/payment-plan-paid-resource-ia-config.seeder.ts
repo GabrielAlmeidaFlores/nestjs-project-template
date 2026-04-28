@@ -20001,6 +20001,102 @@ REGRAS IMPORTANTES
 - Se faltar informação, informe "não identificado".
 - Use linguagem clara, sem perder a precisão jurídica.`,
     }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_CNIS_ANALYSIS,
+      ),
+      prompt: `Você é ELOY, especialista em CNIS e revisão previdenciária. Analise o CNIS enviado e retorne exclusivamente JSON válido com: clientData, periods, earningsHistory, pendencies, contributionTimeSummary, gracePeriodSummary e warnings. Identifique competências abaixo do mínimo, recolhimentos em atraso, vínculos sem data de saída e dados relevantes para revisão de aposentadoria urbana comum.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_BENEFIT_AWARD_LETTER_ANALYSIS,
+      ),
+      prompt: `Você é ELOY, especialista em carta de concessão previdenciária. Extraia exclusivamente em JSON válido os dados da carta de concessão do benefício a revisar. Inclua no mínimo: benefitType, dib, rmi, rma, insuredName, nb, legalBasis, observations e inconsistencies.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_FIRST_ANALYSIS,
+      ),
+      prompt: `Você é ELOY, especialista em revisão de aposentadoria urbana comum. Com base nos dados estruturados do cliente, na análise do CNIS e na análise da carta de concessão, retorne exclusivamente JSON válido com: clientData, benefitAwardLetterSummary, timeSummary, awardLetterXRay, cnisXRay, periods, timeAcceleratorsSummary, mainPendencies e preliminaryConclusion.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_COMPARE_CNIS_CTPS,
+      ),
+      prompt: `Você é ELOY, especialista em confronto CNIS x CTPS. Compare os dados enviados e retorne exclusivamente JSON válido com: matchedPeriods, periodsOnlyInCnis, periodsOnlyInCtps, divergences, recommendedActions e summary.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_SPECIAL_PERIOD_PPP_ANALYSIS,
+      ),
+      prompt: `Você é ELOY, especialista em PPP e tempo especial. Analise o PPP e retorne exclusivamente JSON válido com: specialPeriods, harmfulAgents, legalFramework, conversionPossibility, estimatedGain, viability e technicalNote.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_NO_END_DATE_DOCUMENTS_ANALYSIS,
+      ),
+      prompt: `Você é ELOY, especialista em vínculos sem data de saída. Analise os documentos enviados e retorne exclusivamente JSON válido com: inferredEndDate, supportingDocuments, confidenceLevel, recommendedPeriodTreatment e technicalNote.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_RURAL_TIME_ANALYSIS,
+      ),
+      prompt: `Você é ELOY, especialista em tempo rural para revisão previdenciária. Retorne exclusivamente JSON válido com: timeAccelerators, supportingEvidence, legalRationale, viability, recognitionInss, recognitionJudicial e technicalNote.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_MILITARY_SERVICE_ANALYSIS,
+      ),
+      prompt: `Você é ELOY, especialista em contagem de serviço militar. Retorne exclusivamente JSON válido com: timeAccelerators, proofSummary, viability, recognitionInss, recognitionJudicial, affectsQualifyingPeriod e technicalNote.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_PUBLIC_SERVICE_ANALYSIS,
+      ),
+      prompt: `Você é ELOY, especialista em averbação de serviço público no RGPS. Retorne exclusivamente JSON válido com: timeAccelerators, publicServiceSummary, viability, recognitionInss, recognitionJudicial, requiredDocuments e technicalNote.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_CTPS_OUTSIDE_CNIS_ANALYSIS,
+      ),
+      prompt: `Você é ELOY, especialista em vínculos da CTPS não refletidos no CNIS. Retorne exclusivamente JSON válido com: timeAccelerators, omittedPeriods, documentaryStrength, viability, recognitionInss, recognitionJudicial e technicalNote.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_STUDENT_APPRENTICE_ANALYSIS,
+      ),
+      prompt: `Você é ELOY, especialista em tempo de aluno aprendiz. Retorne exclusivamente JSON válido com: timeAccelerators, proofSummary, legalFramework, viability, recognitionInss, recognitionJudicial e technicalNote.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_WORK_ABROAD_ANALYSIS,
+      ),
+      prompt: `Você é ELOY, especialista em tempo de trabalho no exterior. Retorne exclusivamente JSON válido com: timeAccelerators, countryContext, treatyAnalysis, viability, recognitionInss, recognitionJudicial, requiredDocuments e technicalNote.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_INFORMAL_WORK_ANALYSIS,
+      ),
+      prompt: `Você é ELOY, especialista em trabalho informal e contribuições em atraso. Retorne exclusivamente JSON válido com: timeAccelerators, evidenceSummary, contributionStrategy, viability, recognitionInss, recognitionJudicial e technicalNote.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_LABOR_COURT_DECISION_ANALYSIS,
+      ),
+      prompt: `Você é ELOY, especialista em decisões trabalhistas com reflexo previdenciário. Retorne exclusivamente JSON válido com: timeAccelerators, judicialDecisionSummary, recognizedPeriods, viability, recognitionInss, recognitionJudicial e technicalNote.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_COMPLETE_ANALYSIS,
+      ),
+      prompt: `Você é ELOY, especialista em revisão de aposentadoria urbana comum. Gere exclusivamente JSON válido com: reviewConclusion, revisionPossibilities, detailedAnalysis, recommendedStrategy, alternativeStrategy, revisedScenarios, legalNotes e finalRecommendation.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_SIMPLIFIED_ANALYSIS,
+      ),
+      prompt: `Você é ELOY, especialista em revisão previdenciária. Transforme a análise completa em um resumo objetivo para o cliente. Retorne texto claro com situação atual, potencial revisional, tese principal, riscos e próximos passos, sem inventar dados.`,
+    }),
   ];
 
 export class PaymentPlanPaidResourceIaConfigSeeder implements SeederInterface {
