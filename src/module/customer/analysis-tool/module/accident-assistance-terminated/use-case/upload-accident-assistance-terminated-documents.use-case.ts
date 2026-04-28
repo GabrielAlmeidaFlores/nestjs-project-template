@@ -24,13 +24,6 @@ export class UploadAccidentAssistanceTerminatedDocumentsUseCase {
   protected readonly _type =
     UploadAccidentAssistanceTerminatedDocumentsUseCase.name;
 
-  private readonly allowedDocumentTypes = [
-    AccidentAssistanceTerminatedDocumentTypeEnum.DENIED_ADMINISTRATIVE_PROCEDURE,
-    AccidentAssistanceTerminatedDocumentTypeEnum.CNIS,
-    AccidentAssistanceTerminatedDocumentTypeEnum.SUSPENSION_CESSATION_ADMINISTRATIVE_PROCEDURE,
-    AccidentAssistanceTerminatedDocumentTypeEnum.MEDICAL_REPORTS,
-  ];
-
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
@@ -60,8 +53,15 @@ export class UploadAccidentAssistanceTerminatedDocumentsUseCase {
       throw new OrganizationMemberNotFoundError();
     }
 
+    const allowedDocumentTypes = [
+      AccidentAssistanceTerminatedDocumentTypeEnum.DENIED_ADMINISTRATIVE_PROCEDURE,
+      AccidentAssistanceTerminatedDocumentTypeEnum.CNIS,
+      AccidentAssistanceTerminatedDocumentTypeEnum.SUSPENSION_CESSATION_ADMINISTRATIVE_PROCEDURE,
+      AccidentAssistanceTerminatedDocumentTypeEnum.MEDICAL_REPORTS,
+    ];
+
     const hasDisallowedType = dto.documents.some(
-      (doc) => !this.allowedDocumentTypes.includes(doc.type),
+      (doc) => !allowedDocumentTypes.includes(doc.type),
     );
 
     if (hasDisallowedType) {

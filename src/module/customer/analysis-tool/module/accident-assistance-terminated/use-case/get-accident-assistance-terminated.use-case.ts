@@ -138,7 +138,7 @@ export class GetAccidentAssistanceTerminatedUseCase {
         analysisName: accidentAssistanceTerminatedQueryResult.analysisName,
       }),
       ...(accidentAssistanceTerminatedQueryResult.benefitCessationReason !==
-        null && {
+        undefined && {
         benefitCessationReason:
           accidentAssistanceTerminatedQueryResult.benefitCessationReason,
       }),

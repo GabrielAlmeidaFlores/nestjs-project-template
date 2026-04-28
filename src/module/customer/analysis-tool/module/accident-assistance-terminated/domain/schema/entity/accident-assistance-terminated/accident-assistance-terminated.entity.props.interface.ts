@@ -26,9 +26,15 @@ export interface AccidentAssistanceTerminatedEntityPropsInterface extends BaseEn
   dcb?: Date | null;
   inssBenefitNumber?: string | null;
   accidentAssistanceTerminatedResult?: AccidentAssistanceTerminatedResultEntity | null;
-  accidentAssistanceTerminatedBenefit?: AccidentAssistanceTerminatedBenefitEntity[];
-  accidentAssistanceTerminatedLegalProceeding?: AccidentAssistanceTerminatedLegalProceedingEntity[];
-  accidentAssistanceTerminatedDocument?: AccidentAssistanceTerminatedDocumentEntity[];
+  accidentAssistanceTerminatedBenefit?:
+    | AccidentAssistanceTerminatedBenefitEntity[]
+    | null;
+  accidentAssistanceTerminatedLegalProceeding?:
+    | AccidentAssistanceTerminatedLegalProceedingEntity[]
+    | null;
+  accidentAssistanceTerminatedDocument?:
+    | AccidentAssistanceTerminatedDocumentEntity[]
+    | null;
   createdBy: OrganizationMemberId;
   updatedBy: OrganizationMemberId;
 }

@@ -15,7 +15,9 @@ export class AccidentAssistanceTerminatedEntity extends BaseEntity<AccidentAssis
   @Description('Data em que ocorreu o acidente.')
   public readonly accidentDate: Date | null;
 
-  @Description('Descrição breve sobre a condição médica decorrente do acidente.')
+  @Description(
+    'Descrição breve sobre a condição médica decorrente do acidente.',
+  )
   public readonly accidentDescription: string | null;
 
   @Description('Data de Encaminhamento/Requerimento (DER) do benefício.')

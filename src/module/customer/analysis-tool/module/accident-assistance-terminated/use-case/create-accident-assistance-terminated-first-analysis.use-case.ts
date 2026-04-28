@@ -47,8 +47,6 @@ export class CreateAccidentAssistanceTerminatedFirstAnalysisUseCase {
   protected readonly _type =
     CreateAccidentAssistanceTerminatedFirstAnalysisUseCase.name;
 
-  private readonly INDICADORES_PENDENCIA = ['PEXT'];
-
   public constructor(
     @Inject(AnalysisProcessorGateway)
     private readonly analysisProcessorGateway: AnalysisProcessorGateway,
@@ -306,6 +304,7 @@ export class CreateAccidentAssistanceTerminatedFirstAnalysisUseCase {
     if (!cnisData.socialSecurityRelations) {
       return [];
     }
+    const pendencies = ['PEXT'];
 
     return cnisData.socialSecurityRelations.map((relation) => {
       const typeOfContribution =
@@ -337,10 +336,10 @@ export class CreateAccidentAssistanceTerminatedFirstAnalysisUseCase {
 
       const delayPayment =
         relation.socialSecurityAffiliationEarningsHistory.some((earning) => {
-          if (!earning.indicadores) {
+          if (earning.indicadores === undefined) {
             return false;
           }
-          return this.INDICADORES_PENDENCIA.includes(earning.indicadores);
+          return pendencies.includes(earning.indicadores);
         });
 
       const reasonPendency: AccidentAssistanceTerminatedPeriodReasonPendencyEnum | null =

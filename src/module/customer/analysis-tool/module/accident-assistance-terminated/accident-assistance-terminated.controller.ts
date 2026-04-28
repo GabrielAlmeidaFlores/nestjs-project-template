@@ -8,34 +8,34 @@ import {
   StreamableFile,
 } from '@nestjs/common';
 
+import { PeriodConsiderationActionRequestDto } from '@module/customer/analysis-tool/dto/request/period-consideration-action.request.dto';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { AccidentAssistanceTerminatedId } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated/value-object/accident-assistance-terminated-id/accident-assistance-terminated-id.value-object';
 import { AccidentAssistanceTerminatedPeriodId } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-period/value-object/accident-assistance-terminated-period-id/accident-assistance-terminated-period-id.value-object';
-import { PeriodConsiderationActionRequestDto } from '@module/customer/analysis-tool/dto/request/period-consideration-action.request.dto';
 import { CreateAccidentAssistanceTerminatedEventRequestDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/request/create-accident-assistance-terminated-event.request.dto';
+import { CreateAccidentAssistanceTerminatedPeriodRequestDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/request/create-accident-assistance-terminated-period.request.dto';
 import { CreateAccidentAssistanceTerminatedRequestDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/request/create-accident-assistance-terminated.request.dto';
 import { UpdateAccidentAssistanceTerminatedRequestDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/request/update-accident-assistance-terminated.request.dto';
 import { UploadAccidentAssistanceTerminatedDocumentsRequestDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/request/upload-accident-assistance-terminated-documents.request.dto';
 import { CreateAccidentAssistanceTerminatedDecisionDetailsResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/create-accident-assistance-terminated-decision-details.response.dto';
-import { CreateAccidentAssistanceTerminatedFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/create-accident-assistance-terminated-first-analysis.response.dto';
-import { CreateAccidentAssistanceTerminatedPeriodRequestDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/request/create-accident-assistance-terminated-period.request.dto';
-import { CreateAccidentAssistanceTerminatedPeriodResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/create-accident-assistance-terminated-period.response.dto';
 import { CreateAccidentAssistanceTerminatedEventResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/create-accident-assistance-terminated-event.response.dto';
+import { CreateAccidentAssistanceTerminatedFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/create-accident-assistance-terminated-first-analysis.response.dto';
+import { CreateAccidentAssistanceTerminatedPeriodResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/create-accident-assistance-terminated-period.response.dto';
 import { CreateAccidentAssistanceTerminatedResultResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/create-accident-assistance-terminated-result.response.dto';
 import { CreateAccidentAssistanceTerminatedResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/create-accident-assistance-terminated.response.dto';
 import { GetAccidentAssistanceTerminatedResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/get-accident-assistance-terminated.response.dto';
 import { UpdateAccidentAssistanceTerminatedResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/update-accident-assistance-terminated.response.dto';
 import { UploadAccidentAssistanceTerminatedDocumentsResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-terminated/dto/response/upload-accident-assistance-terminated-documents.response.dto';
 import { CreateAccidentAssistanceTerminatedDecisionDetailsUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/create-accident-assistance-terminated-decision-details.use-case';
+import { CreateAccidentAssistanceTerminatedEventUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/create-accident-assistance-terminated-event.use-case';
 import { CreateAccidentAssistanceTerminatedFirstAnalysisUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/create-accident-assistance-terminated-first-analysis.use-case';
 import { CreateAccidentAssistanceTerminatedPeriodUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/create-accident-assistance-terminated-period.use-case';
-import { UpdateAccidentAssistanceTerminatedPeriodConsiderationActionUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/update-accident-assistance-terminated-period-consideration-action.use-case';
-import { CreateAccidentAssistanceTerminatedEventUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/create-accident-assistance-terminated-event.use-case';
 import { CreateAccidentAssistanceTerminatedResultUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/create-accident-assistance-terminated-result.use-case';
 import { CreateAccidentAssistanceTerminatedUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/create-accident-assistance-terminated.use-case';
 import { DownloadAccidentAssistanceTerminatedCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/download-accident-assistance-terminated-complete-analysis.use-case';
 import { DownloadAccidentAssistanceTerminatedSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/download-accident-assistance-terminated-simplified-analysis.use-case';
 import { GetAccidentAssistanceTerminatedUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/get-accident-assistance-terminated.use-case';
+import { UpdateAccidentAssistanceTerminatedPeriodConsiderationActionUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/update-accident-assistance-terminated-period-consideration-action.use-case';
 import { UpdateAccidentAssistanceTerminatedUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/update-accident-assistance-terminated.use-case';
 import { UploadAccidentAssistanceTerminatedDocumentsUseCase } from '@module/customer/analysis-tool/module/accident-assistance-terminated/use-case/upload-accident-assistance-terminated-documents.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -388,7 +388,8 @@ export class AccidentAssistanceTerminatedController {
     tag: ['diagnostico-auxilio-acidente-rgps'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
-      description: 'Primeira análise do auxílio-acidente cessado executada com sucesso.',
+      description:
+        'Primeira análise do auxílio-acidente cessado executada com sucesso.',
       type: CreateAccidentAssistanceTerminatedFirstAnalysisResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
