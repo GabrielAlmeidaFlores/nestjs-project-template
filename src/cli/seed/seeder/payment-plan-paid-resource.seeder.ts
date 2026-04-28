@@ -1834,7 +1834,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise completa da cessação do BPC para pessoa com deficiência com IA. Examina critério de deficiência, critério de renda familiar per capita, composição do grupo familiar, avaliação de deficiência, fundamentos da cessação e emite parecer técnico conclusivo com recomendação de estratégia de reversão fundamentada em lei e jurisprudência.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f'),
+      id: new PaymentPlanPaidResourceId('c3d4e5f6-a7b8-4c9d-8e1f-2a3b4c5d6e7f'),
       resource:
         PaymentPlanPaidResourceTypeEnum.BPC_DISABILITY_TERMINATION_SIMPLIFIED_ANALYSIS,
       creditCost: 2,
