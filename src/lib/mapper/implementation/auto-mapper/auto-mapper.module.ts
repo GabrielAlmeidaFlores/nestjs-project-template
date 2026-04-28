@@ -8,6 +8,7 @@ import { GetAccidentAssistanceTerminatedQueryResultAutoMapperProfile } from '@li
 import { GetAccidentAssistanceTerminatedWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated/get-accident-assistance-terminated-with-relations-query-result.auto-mapper.profile';
 import { AccidentAssistanceTerminatedBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-benefit/accident-assistance-terminated-benefit-entity.auto-mapper.profile';
 import { GetAccidentAssistanceTerminatedBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-benefit/get-accident-assistance-terminated-benefit-query-result.auto-mapper.profile';
+import { AccidentAssistanceTerminatedDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-document/accident-assistance-terminated-document-entity.auto-mapper.profile';
 import { GetAccidentAssistanceTerminatedDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-document/get-accident-assistance-terminated-document-query-result.auto-mapper.profile';
 import { AccidentAssistanceTerminatedLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-legal-proceeding/accident-assistance-terminated-legal-proceeding-entity.auto-mapper.profile';
 import { GetAccidentAssistanceTerminatedLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-legal-proceeding/get-accident-assistance-terminated-legal-proceeding-query-result.auto-mapper.profile';
@@ -943,6 +944,7 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     AccidentAssistanceTerminatedBenefitEntityAutoMapperProfile,
     GetAccidentAssistanceTerminatedQueryResultAutoMapperProfile,
     GetAccidentAssistanceTerminatedBenefitQueryResultAutoMapperProfile,
+    AccidentAssistanceTerminatedDocumentEntityAutoMapperProfile,
     GetAccidentAssistanceTerminatedDocumentQueryResultAutoMapperProfile,
     AccidentAssistanceTerminatedLegalProceedingEntityAutoMapperProfile,
     GetAccidentAssistanceTerminatedLegalProceedingQueryResultAutoMapperProfile,
