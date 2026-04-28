@@ -9,6 +9,7 @@ export class GetAccidentAssistanceTerminatedResultQueryResult extends BaseBuilda
   public readonly accidentAssistanceTerminatedSimplifiedAnalysis: string | null;
   public readonly decisionDetails: string | null;
   public readonly firstAnalysis: string | null;
+  public readonly completeAnalysisDownload: string | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
 

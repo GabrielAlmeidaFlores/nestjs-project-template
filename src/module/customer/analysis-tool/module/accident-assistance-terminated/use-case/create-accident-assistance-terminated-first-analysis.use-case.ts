@@ -183,8 +183,8 @@ export class CreateAccidentAssistanceTerminatedFirstAnalysisUseCase {
 
     const resultTransaction =
       existingResult !== null
-        ? this.accidentAssistanceTerminatedResultCommandRepositoryGateway.updateAccidentAssistanceTerminatedResultFirstAnalysis(
-            accidentAssistanceTerminatedId,
+        ? this.accidentAssistanceTerminatedResultCommandRepositoryGateway.updateAccidentAssistanceTerminatedResult(
+            existingResult.id,
             resultEntity,
           )
         : this.accidentAssistanceTerminatedResultCommandRepositoryGateway.createAccidentAssistanceTerminatedResult(

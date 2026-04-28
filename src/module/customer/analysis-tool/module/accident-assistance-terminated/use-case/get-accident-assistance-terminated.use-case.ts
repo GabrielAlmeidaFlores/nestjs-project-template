@@ -5,6 +5,7 @@ import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analy
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { AccidentAssistanceTerminatedQueryRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated/query/accident-assistance-terminated.query.repository.gateway';
+import { GetAccidentAssistanceTerminatedPeriodQueryResult } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated-period/query/result/get-accident-assistance-terminated-period.query.result';
 import { AccidentAssistanceTerminatedId } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated/value-object/accident-assistance-terminated-id/accident-assistance-terminated-id.value-object';
 import {
   GetAccidentAssistanceTerminatedResponseDto,
@@ -21,7 +22,6 @@ import {
   AccidentAssistanceTerminatedFirstAnalysisQualitySecurityModel,
 } from '@module/customer/analysis-tool/module/accident-assistance-terminated/model/generic/accident-assistance-terminated-first-analysis.model';
 import { AccidentAssistanceTerminatedFirstAnalysisInterface } from '@module/customer/analysis-tool/module/accident-assistance-terminated/model/interface/accident-assistance-terminated-first-analysis.interface';
-import { GetAccidentAssistanceTerminatedPeriodQueryResult } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated-period/query/result/get-accident-assistance-terminated-period.query.result';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -70,7 +70,8 @@ export class GetAccidentAssistanceTerminatedUseCase {
       );
 
     const firstAnalysisModel = this.parseFirstAnalysis(
-      accidentAssistanceTerminatedQueryResult.accidentAssistanceTerminatedResult?.firstAnalysis ?? null,
+      accidentAssistanceTerminatedQueryResult.accidentAssistanceTerminatedResult
+        ?.firstAnalysis ?? null,
     );
 
     const accidentAssistanceTerminatedResultDto =
@@ -136,10 +137,16 @@ export class GetAccidentAssistanceTerminatedUseCase {
       ...(accidentAssistanceTerminatedQueryResult.analysisName !== null && {
         analysisName: accidentAssistanceTerminatedQueryResult.analysisName,
       }),
-      benefitCessationReason:
-        accidentAssistanceTerminatedQueryResult.benefitCessationReason,
-      hadPreviousIncapacityBenefit:
-        accidentAssistanceTerminatedQueryResult.hadPreviousIncapacityBenefit,
+      ...(accidentAssistanceTerminatedQueryResult.benefitCessationReason !==
+        null && {
+        benefitCessationReason:
+          accidentAssistanceTerminatedQueryResult.benefitCessationReason,
+      }),
+      ...(accidentAssistanceTerminatedQueryResult.hadPreviousIncapacityBenefit !==
+        null && {
+        hadPreviousIncapacityBenefit:
+          accidentAssistanceTerminatedQueryResult.hadPreviousIncapacityBenefit,
+      }),
       ...(accidentAssistanceTerminatedQueryResult.previousIncapacityBenefitNumber !==
         null && {
         previousIncapacityBenefitNumber:
@@ -164,6 +171,26 @@ export class GetAccidentAssistanceTerminatedUseCase {
       ...(periodDtos.length > 0 && {
         accidentAssistanceTerminatedPeriod: periodDtos,
       }),
+      ...(accidentAssistanceTerminatedQueryResult.dib !== null && {
+        dib: accidentAssistanceTerminatedQueryResult.dib,
+      }),
+      ...(accidentAssistanceTerminatedQueryResult.dcb !== null && {
+        dcb: accidentAssistanceTerminatedQueryResult.dcb,
+      }),
+      ...(accidentAssistanceTerminatedQueryResult.inssBenefitNumber !==
+        null && {
+        mainInssBenefitNumber:
+          accidentAssistanceTerminatedQueryResult.inssBenefitNumber,
+      }),
+      ...(accidentAssistanceTerminatedQueryResult.accidentDate !== null && {
+        accidentDate: accidentAssistanceTerminatedQueryResult.accidentDate,
+      }),
+      ...(accidentAssistanceTerminatedQueryResult.accidentDescription !==
+        null && {
+        accidentDescription:
+          accidentAssistanceTerminatedQueryResult.accidentDescription,
+      }),
+
       createdBy: GetAccidentAssistanceTerminatedResponsibleResponseDto.build({
         ...analysisToolRecordQueryResult.createdBy.customer,
       }),

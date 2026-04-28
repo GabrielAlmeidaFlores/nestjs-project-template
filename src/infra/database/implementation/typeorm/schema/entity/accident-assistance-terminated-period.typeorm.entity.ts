@@ -1,9 +1,10 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
-import { AccidentAssistanceTerminatedTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated.entity';
+import { AccidentAssistanceTerminatedPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-period-document.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 import { AccidentAssistanceTerminatedPeriodReasonPendencyEnum } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-period/enum/accident-assistance-terminated-period-reason-pendency.enum';
+import { AccidentAssistanceTerminatedTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated.entity';
 
 @Entity({ name: 'accident_assistance_terminated_period' })
 export class AccidentAssistanceTerminatedPeriodTypeormEntity extends BaseTypeormEntity {
@@ -99,6 +100,12 @@ export class AccidentAssistanceTerminatedPeriodTypeormEntity extends BaseTypeorm
   )
   @JoinColumn({ name: 'accident_assistance_terminated_id' })
   public accidentAssistanceTerminated?: AccidentAssistanceTerminatedTypeormEntity | null;
+
+  @OneToMany(
+    () => AccidentAssistanceTerminatedPeriodDocumentTypeormEntity,
+    (entity) => entity.accidentAssistanceTerminatedPeriod,
+  )
+  public accidentAssistanceTerminatedPeriodDocument?: AccidentAssistanceTerminatedPeriodDocumentTypeormEntity[];
 
   protected override readonly _type =
     AccidentAssistanceTerminatedPeriodTypeormEntity.name;

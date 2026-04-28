@@ -17,6 +17,11 @@ export class AccidentAssistanceTerminatedResultEntity extends BaseEntity<Acciden
   @Description('Primeira análise do auxílio-acidente cessado em formato JSON.')
   public readonly firstAnalysis: string | null;
 
+  @Description(
+    'Link para download da análise completa do auxílio-acidente cessado.',
+  )
+  public completeAnalysisDownload: string | null;
+
   protected readonly _type = AccidentAssistanceTerminatedResultEntity.name;
 
   public constructor(
@@ -30,5 +35,6 @@ export class AccidentAssistanceTerminatedResultEntity extends BaseEntity<Acciden
       props.accidentAssistanceTerminatedSimplifiedAnalysis ?? null;
     this.decisionDetails = props.decisionDetails ?? null;
     this.firstAnalysis = props.firstAnalysis ?? null;
+    this.completeAnalysisDownload = props.completeAnalysisDownload ?? null;
   }
 }

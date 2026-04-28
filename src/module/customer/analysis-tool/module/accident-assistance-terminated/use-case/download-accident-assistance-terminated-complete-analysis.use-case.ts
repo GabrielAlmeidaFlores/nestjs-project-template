@@ -58,7 +58,7 @@ export class DownloadAccidentAssistanceTerminatedCompleteAnalysisUseCase {
 
     const responseAi =
       accidentAssistanceTerminatedQueryResult.accidentAssistanceTerminatedResult
-        .accidentAssistanceTerminatedCompleteAnalysis;
+        .completeAnalysisDownload;
 
     if (responseAi === null) {
       throw new AccidentAssistanceTerminatedDoesNotContainCompleteAnalysisError();

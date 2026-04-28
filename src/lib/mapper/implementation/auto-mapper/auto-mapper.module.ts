@@ -14,6 +14,8 @@ import { AccidentAssistanceTerminatedLegalProceedingEntityAutoMapperProfile } fr
 import { GetAccidentAssistanceTerminatedLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-legal-proceeding/get-accident-assistance-terminated-legal-proceeding-query-result.auto-mapper.profile';
 import { AccidentAssistanceTerminatedPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-period/accident-assistance-terminated-period-entity.auto-mapper.profile';
 import { GetAccidentAssistanceTerminatedPeriodQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-period/get-accident-assistance-terminated-period-query-result.auto-mapper.profile';
+import { AccidentAssistanceTerminatedPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-period-document/accident-assistance-terminated-period-document-entity.auto-mapper.profile';
+import { AccidentAssistanceTerminatedResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-result/accident-assistance-terminated-result-entity.auto-mapper.profile';
 import { GetAccidentAssistanceTerminatedResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-result/get-accident-assistance-terminated-result-query-result.auto-mapper.profile';
 import { AccidentBenefitRejectionEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-benefit-rejection/accident-benefit-rejection-entity.auto-mapper.profile';
 import { GetAccidentBenefitRejectionWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-benefit-rejection/get-accident-benefit-rejection-with-relations-query-result.auto-mapper.profile';
@@ -554,7 +556,6 @@ import { TemporaryIncapacityBenefitRejectionWorkPeriodsEntityAutoMapperProfile }
 import { TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-rejection-work-periods-earnings-history/temporary-incapacity-benefit-rejection-work-periods-earnings-history-entity.auto-mapper.profile';
 import { GetTutorialQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/tutorial/get-tutorial-query-result.auto-mapper.profile';
 import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/tutorial/tutorial-entity.auto-mapper.profile';
-import { AccidentAssistanceTerminatedResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-result/accident-assistance-terminated-result-entity.auto-mapper.profile';
 
 @Module({
   imports: [
@@ -953,6 +954,7 @@ import { AccidentAssistanceTerminatedResultEntityAutoMapperProfile } from '@lib/
     GetAccidentAssistanceTerminatedWithRelationsQueryResultAutoMapperProfile,
     AccidentAssistanceTerminatedPeriodEntityAutoMapperProfile,
     GetAccidentAssistanceTerminatedPeriodQueryResultAutoMapperProfile,
+    AccidentAssistanceTerminatedPeriodDocumentEntityAutoMapperProfile,
     GetBpcElderlyAnalysisQueryResultAutoMapperProfile,
     GetBpcElderlyAnalysisWithRelationsQueryResultAutoMapperProfile,
     BpcElderlyAnalysisDocumentEntityAutoMapperProfile,

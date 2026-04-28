@@ -33,6 +33,13 @@ export class AccidentAssistanceTerminatedResultTypeormEntity extends BaseTypeorm
   })
   public firstAnalysis: string | null;
 
+  @Column({
+    name: 'complete_analysis_download',
+    type: 'longtext',
+    nullable: true,
+  })
+  public completeAnalysisDownload: string | null;
+
   @OneToOne(
     () => AccidentAssistanceTerminatedTypeormEntity,
     (entity) => entity.accidentAssistanceTerminatedResult,

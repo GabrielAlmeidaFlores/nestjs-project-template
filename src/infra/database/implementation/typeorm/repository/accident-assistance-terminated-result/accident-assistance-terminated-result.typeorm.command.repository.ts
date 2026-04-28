@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
@@ -56,24 +56,5 @@ export class AccidentAssistanceTerminatedResultTypeormCommandRepository
     );
 
     return this.update(id.toString(), mappedData);
-  }
-
-  public updateAccidentAssistanceTerminatedResultFirstAnalysis(
-    accidentAssistanceTerminatedId: AccidentAssistanceTerminatedId,
-    props: AccidentAssistanceTerminatedResultEntity,
-  ): TransactionType {
-    return async (executor: unknown) => {
-      const manager = (executor as { manager: EntityManager }).manager;
-      await manager
-        .getRepository(AccidentAssistanceTerminatedResultTypeormEntity)
-        .update(
-          {
-            accidentAssistanceTerminated: {
-              id: accidentAssistanceTerminatedId.toString(),
-            },
-          },
-          { firstAnalysis: props.firstAnalysis },
-        );
-    };
   }
 }
