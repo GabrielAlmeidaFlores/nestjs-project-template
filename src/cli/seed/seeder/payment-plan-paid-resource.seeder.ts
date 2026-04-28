@@ -1815,6 +1815,33 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise simplificada do direito ao Salário Maternidade com IA. Verifica o evento gerador, a carência e a qualidade de segurada, informando de forma objetiva sobre a elegibilidade ao benefício. Versão resumida e acessível para apresentação ao cliente.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_DISABILITY_TERMINATION_INSS_DECISION_ANALYSIS,
+      creditCost: 4,
+      title: 'CESSAÇÃO BPC PCD - ANÁLISE DA DECISÃO INSS',
+      description:
+        'Análise da decisão de cessação do BPC para pessoa com deficiência. Examina os fundamentos da cessação, verifica se houve reavaliação adequada do grau de deficiência e da renda familiar, identifica irregularidades processuais e recomenda estratégia de reversão.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_DISABILITY_TERMINATION_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title: 'CESSAÇÃO BPC PCD - ANÁLISE COMPLETA',
+      description:
+        'Análise completa da cessação do BPC para pessoa com deficiência com IA. Examina critério de deficiência, critério de renda familiar per capita, composição do grupo familiar, avaliação de deficiência, fundamentos da cessação e emite parecer técnico conclusivo com recomendação de estratégia de reversão fundamentada em lei e jurisprudência.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_DISABILITY_TERMINATION_SIMPLIFIED_ANALYSIS,
+      creditCost: 2,
+      title: 'CESSAÇÃO BPC PCD - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada da cessação do BPC para pessoa com deficiência com IA. Verifica critério de deficiência e critério de renda familiar per capita, informa de forma objetiva sobre a possibilidade de reversão da cessação. Versão resumida para apresentação ao cliente ou familiar.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {
