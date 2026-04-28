@@ -554,6 +554,7 @@ import { TemporaryIncapacityBenefitRejectionWorkPeriodsEntityAutoMapperProfile }
 import { TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-rejection-work-periods-earnings-history/temporary-incapacity-benefit-rejection-work-periods-earnings-history-entity.auto-mapper.profile';
 import { GetTutorialQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/tutorial/get-tutorial-query-result.auto-mapper.profile';
 import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/tutorial/tutorial-entity.auto-mapper.profile';
+import { AccidentAssistanceTerminatedResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-result/accident-assistance-terminated-result-entity.auto-mapper.profile';
 
 @Module({
   imports: [
@@ -1114,6 +1115,7 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetMaternityPayGrantPeriodQueryResultAutoMapperProfile,
     MaternityPayGrantPeriodDocumentEntityAutoMapperProfile,
     MaternityPayGrantResultEntityAutoMapperProfile,
+    AccidentAssistanceTerminatedResultEntityAutoMapperProfile,
   ],
   exports: [AutoMapperService],
 })
