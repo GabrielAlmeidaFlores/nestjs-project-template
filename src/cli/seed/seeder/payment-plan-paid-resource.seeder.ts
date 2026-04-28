@@ -1815,6 +1815,153 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise simplificada do direito ao Salário Maternidade com IA. Verifica o evento gerador, a carência e a qualidade de segurada, informando de forma objetiva sobre a elegibilidade ao benefício. Versão resumida e acessível para apresentação ao cliente.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a1010101-1111-4aaa-8bbb-111111111111'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_CNIS_ANALYSIS,
+      creditCost: 5,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - ANÁLISE DO CNIS',
+      description:
+        'Leitura estruturada do CNIS para revisão de aposentadoria urbana geral, com geração de períodos, histórico remuneratório e identificação de pendências relevantes ao recálculo.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a2020202-2222-4aaa-8bbb-222222222222'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_BENEFIT_AWARD_LETTER_ANALYSIS,
+      creditCost: 4,
+      title:
+        'REVISÃO APOSENTADORIA URBANA GERAL - ANÁLISE DA CARTA DE CONCESSÃO',
+      description:
+        'Extração estruturada da carta de concessão para identificar DIB, espécie, RMI, RMA, segurado e demais dados essenciais à revisão do benefício.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a3030303-3333-4aaa-8bbb-333333333333'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_FIRST_ANALYSIS,
+      creditCost: 4,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - PRIMEIRA ANÁLISE INTEGRADA',
+      description:
+        'Consolidação inicial da revisão previdenciária com resumo do cliente, análise da carta, tempo de contribuição, carência, raio-x do CNIS e principais pendências.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a4040404-4444-4aaa-8bbb-444444444444'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_COMPARE_CNIS_CTPS,
+      creditCost: 4,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - COMPARAÇÃO CNIS E CTPS',
+      description:
+        'Comparação entre vínculos do CNIS e anotações da CTPS para identificar omissões, divergências e períodos com potencial de inclusão na revisão.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a5050505-5555-4aaa-8bbb-555555555555'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_SPECIAL_PERIOD_PPP_ANALYSIS,
+      creditCost: 6,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - ANÁLISE DE PPP',
+      description:
+        'Análise de PPP para reconhecimento de tempo especial e conversão em tempo comum no fluxo revisional da aposentadoria urbana geral.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a6060606-6666-4aaa-8bbb-666666666666'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_NO_END_DATE_DOCUMENTS_ANALYSIS,
+      creditCost: 4,
+      title:
+        'REVISÃO APOSENTADORIA URBANA GERAL - DOCUMENTOS SEM DATA DE SAÍDA',
+      description:
+        'Análise de documentos comprobatórios para resolução de vínculos sem data de saída no CNIS, com definição do melhor tratamento do período.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a7070707-7777-4aaa-8bbb-777777777777'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_RURAL_TIME_ANALYSIS,
+      creditCost: 4,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - ANÁLISE DE TEMPO RURAL',
+      description:
+        'Avaliação de documentação e contexto de atividade rural para aproveitamento revisional do período no benefício já concedido.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a8080808-8888-4aaa-8bbb-888888888888'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_MILITARY_SERVICE_ANALYSIS,
+      creditCost: 4,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - ANÁLISE DE SERVIÇO MILITAR',
+      description:
+        'Análise de serviço militar para cômputo em revisão de aposentadoria urbana geral, com verificação de prova e impacto no tempo total.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a9090909-9999-4aaa-8bbb-999999999999'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_PUBLIC_SERVICE_ANALYSIS,
+      creditCost: 5,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - ANÁLISE DE SERVIÇO PÚBLICO',
+      description:
+        'Avaliação de tempo em serviço público e documentos correlatos para eventual averbação ou aproveitamento revisional no RGPS.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('aa0a0a0a-0a0a-4aaa-8bbb-0a0a0a0a0a0a'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_CTPS_OUTSIDE_CNIS_ANALYSIS,
+      creditCost: 4,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - CTPS FORA DO CNIS',
+      description:
+        'Análise de vínculos anotados em CTPS, mas ausentes no CNIS, para estimar viabilidade de inclusão no cálculo revisional.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('ab0b0b0b-0b0b-4aaa-8bbb-0b0b0b0b0b0b'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_STUDENT_APPRENTICE_ANALYSIS,
+      creditCost: 3,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - ALUNO APRENDIZ',
+      description:
+        'Análise de período como aluno aprendiz para verificar aproveitamento revisional e reflexos no tempo de contribuição e carência.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('ac0c0c0c-0c0c-4aaa-8bbb-0c0c0c0c0c0c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_WORK_ABROAD_ANALYSIS,
+      creditCost: 5,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - TRABALHO NO EXTERIOR',
+      description:
+        'Análise de trabalho no exterior e documentos correspondentes para aferir possibilidade de contagem no contexto revisional.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('ad0d0d0d-0d0d-4aaa-8bbb-0d0d0d0d0d0d'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_INFORMAL_WORK_ANALYSIS,
+      creditCost: 4,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - TRABALHO INFORMAL',
+      description:
+        'Análise de trabalho informal e contribuições correlatas para medir chance de aproveitamento revisional e necessidade de complementação.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('ae0e0e0e-0e0e-4aaa-8bbb-0e0e0e0e0e0e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_LABOR_COURT_DECISION_ANALYSIS,
+      creditCost: 6,
+      title:
+        'REVISÃO APOSENTADORIA URBANA GERAL - DECISÃO DA JUSTIÇA DO TRABALHO',
+      description:
+        'Análise de sentença ou acordo trabalhista para verificar seus reflexos no histórico contributivo e no recálculo do benefício.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('af0f0f0f-0f0f-4aaa-8bbb-0f0f0f0f0f0f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_COMPLETE_ANALYSIS,
+      creditCost: 6,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - ANÁLISE COMPLETA',
+      description:
+        'Análise revisional completa com comparação de teses, cenários revisionais, conclusão técnica, recomendação principal e documento final.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b0101010-1010-4aaa-8bbb-101010101010'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_SIMPLIFIED_ANALYSIS,
+      creditCost: 2,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - ANÁLISE SIMPLIFICADA',
+      description:
+        'Versão resumida da análise revisional, com linguagem objetiva para apresentação rápida do diagnóstico e dos próximos passos.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {

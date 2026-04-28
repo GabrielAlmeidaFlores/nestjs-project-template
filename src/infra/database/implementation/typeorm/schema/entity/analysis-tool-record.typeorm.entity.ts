@@ -17,6 +17,7 @@ import { DisabilityRetirementPlanningTypeormEntity } from '@infra/database/imple
 import { GeneralUrbanRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis.typeorm.entity';
 import { GeneralUrbanRetirementDenialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial.typeorm.entity';
 import { GeneralUrbanRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant.typeorm.entity';
+import { GeneralUrbanRetirementReviewTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-review.typeorm.entity';
 import { InsuranceQualityAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis.typeorm.entity';
 import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis.typeorm.entity';
 import { MaternityPayGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-grant.typeorm.entity';
@@ -264,6 +265,10 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   @ManyToOne(() => GeneralUrbanRetirementGrantTypeormEntity)
   @JoinColumn({ name: 'general_urban_retirement_grant_id' })
   public generalUrbanRetirementGrant?: GeneralUrbanRetirementGrantTypeormEntity | null;
+
+  @ManyToOne(() => GeneralUrbanRetirementReviewTypeormEntity)
+  @JoinColumn({ name: 'general_urban_retirement_review_id' })
+  public generalUrbanRetirementReview?: GeneralUrbanRetirementReviewTypeormEntity | null;
 
   @OneToOne(
     () => GeneralUrbanRetirementAnalysisTypeormEntity,

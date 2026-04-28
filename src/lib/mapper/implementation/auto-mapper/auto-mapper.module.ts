@@ -245,6 +245,24 @@ import { GeneralUrbanRetirementGrantSpecialPeriodEntityAutoMapperProfile } from 
 import { GetGeneralUrbanRetirementGrantSpecialPeriodQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-grant-special-period/get-general-urban-retirement-grant-special-period-query-result.auto-mapper.profile';
 import { GeneralUrbanRetirementGrantTimeAcceleratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-grant-time-accelerator/general-urban-retirement-grant-time-accelerator-entity.auto-mapper.profile';
 import { GetGeneralUrbanRetirementGrantTimeAcceleratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-grant-time-accelerator/get-general-urban-retirement-grant-time-accelerator-query-result.auto-mapper.profile';
+import { GeneralUrbanRetirementReviewEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-review/general-urban-retirement-review-entity.auto-mapper.profile';
+import { GetGeneralUrbanRetirementReviewQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-review/get-general-urban-retirement-review-query-result.auto-mapper.profile';
+import { GetGeneralUrbanRetirementReviewWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-review/get-general-urban-retirement-review-with-relations-query-result.auto-mapper.profile';
+import { GeneralUrbanRetirementReviewAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-review-analysis-result/general-urban-retirement-review-analysis-result-entity.auto-mapper.profile';
+import { GetGeneralUrbanRetirementReviewAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-review-analysis-result/get-general-urban-retirement-review-analysis-result-query-result.auto-mapper.profile';
+import { GeneralUrbanRetirementReviewEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-review-earnings-history/general-urban-retirement-review-earnings-history-entity.auto-mapper.profile';
+import { GeneralUrbanRetirementReviewInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-review-inss-benefit/general-urban-retirement-review-inss-benefit-entity.auto-mapper.profile';
+import { GeneralUrbanRetirementReviewLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-review-legal-proceeding/general-urban-retirement-review-legal-proceeding-entity.auto-mapper.profile';
+import { GeneralUrbanRetirementReviewPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-review-period/general-urban-retirement-review-period-entity.auto-mapper.profile';
+import { GetGeneralUrbanRetirementReviewPeriodQueryResultWithRelationsAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-review-period/get-general-urban-retirement-review-period-query-result-with-relations.auto-mapper.profile';
+import { GetGeneralUrbanRetirementReviewPeriodQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-review-period/get-general-urban-retirement-review-period-query-result.auto-mapper.profile';
+import { GeneralUrbanRetirementReviewPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-review-period-document/general-urban-retirement-review-period-document-entity.auto-mapper.profile';
+import { GeneralUrbanRetirementReviewResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-review-result/general-urban-retirement-review-result-entity.auto-mapper.profile';
+import { GetGeneralUrbanRetirementReviewResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-review-result/get-general-urban-retirement-review-result-query-result.auto-mapper.profile';
+import { GeneralUrbanRetirementReviewSpecialPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-review-special-period/general-urban-retirement-review-special-period-entity.auto-mapper.profile';
+import { GetGeneralUrbanRetirementReviewSpecialPeriodQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-review-special-period/get-general-urban-retirement-review-special-period-query-result.auto-mapper.profile';
+import { GeneralUrbanRetirementReviewTimeAcceleratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-review-time-accelerator/general-urban-retirement-review-time-accelerator-entity.auto-mapper.profile';
+import { GetGeneralUrbanRetirementReviewTimeAcceleratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-review-time-accelerator/get-general-urban-retirement-review-time-accelerator-query-result.auto-mapper.profile';
 import { InitialPetitionGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/initial-petition-generator-analysis-result/initial-petition-generator-analysis-result-entity.auto-mapper.profile';
 import { GetInsuranceQualityAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis/get-insurance-quality-analysis-with-relations-query-result.auto-mapper.profile';
 import { InsuranceQualityAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis/insurance-quality-analysis-entity.auto-mapper.profile';
@@ -788,6 +806,24 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetGeneralUrbanRetirementGrantTimeAcceleratorQueryResultAutoMapperProfile,
     GetGeneralUrbanRetirementGrantWithRelationsQueryResultAutoMapperProfile,
     GeneralUrbanRetirementGrantEntityAutoMapperProfile,
+    GeneralUrbanRetirementReviewAnalysisResultEntityAutoMapperProfile,
+    GetGeneralUrbanRetirementReviewAnalysisResultQueryResultAutoMapperProfile,
+    GetGeneralUrbanRetirementReviewResultQueryResultAutoMapperProfile,
+    GeneralUrbanRetirementReviewResultEntityAutoMapperProfile,
+    GetGeneralUrbanRetirementReviewQueryResultAutoMapperProfile,
+    GeneralUrbanRetirementReviewPeriodEntityAutoMapperProfile,
+    GetGeneralUrbanRetirementReviewPeriodQueryResultAutoMapperProfile,
+    GetGeneralUrbanRetirementReviewPeriodQueryResultWithRelationsAutoMapperProfile,
+    GeneralUrbanRetirementReviewEarningsHistoryEntityAutoMapperProfile,
+    GeneralUrbanRetirementReviewInssBenefitEntityAutoMapperProfile,
+    GeneralUrbanRetirementReviewLegalProceedingEntityAutoMapperProfile,
+    GeneralUrbanRetirementReviewPeriodDocumentEntityAutoMapperProfile,
+    GeneralUrbanRetirementReviewSpecialPeriodEntityAutoMapperProfile,
+    GetGeneralUrbanRetirementReviewSpecialPeriodQueryResultAutoMapperProfile,
+    GeneralUrbanRetirementReviewTimeAcceleratorEntityAutoMapperProfile,
+    GetGeneralUrbanRetirementReviewTimeAcceleratorQueryResultAutoMapperProfile,
+    GetGeneralUrbanRetirementReviewWithRelationsQueryResultAutoMapperProfile,
+    GeneralUrbanRetirementReviewEntityAutoMapperProfile,
     GeneralUrbanRetirementDenialDocumentEntityAutoMapperProfile,
     GeneralUrbanRetirementDenialEntityAutoMapperProfile,
     GeneralUrbanRetirementDenialInssBenefitEntityAutoMapperProfile,

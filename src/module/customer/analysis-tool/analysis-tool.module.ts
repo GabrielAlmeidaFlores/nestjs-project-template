@@ -26,6 +26,7 @@ import { DisabilityRetirementPlanningRejectionModule } from '@module/customer/an
 import { GeneralUrbanRetirementModule } from '@module/customer/analysis-tool/module/general-urban-retirement/general-urban-retirement.module';
 import { GeneralUrbanRetirementDenialModule } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/general-urban-retirement-denial.module';
 import { GeneralUrbanRetirementGrantModule } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/general-urban-retirement-grant.module';
+import { GeneralUrbanRetirementReviewModule } from '@module/customer/analysis-tool/module/general-urban-retirement-review/general-urban-retirement-review.module';
 import { InsuranceQualityAnalysisModule } from '@module/customer/analysis-tool/module/insurance-quality-analysis/insurance-quality-analysis.module';
 import { JudicialCaseAnalysisModule } from '@module/customer/analysis-tool/module/judicial-case-analysis/judicial-case-analysis.module';
 import { LegalPleadingModule } from '@module/customer/analysis-tool/module/legal-pleading/legal-pleading.module';
@@ -105,6 +106,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     DisabilityRetirementPlanningModule,
     DisabilityRetirementPlanningGrantModule,
     GeneralUrbanRetirementGrantModule,
+    GeneralUrbanRetirementReviewModule,
     GeneralUrbanRetirementModule,
     SpecialCategoryRetirementAnalysisModule,
     DeathBenefitGrantModule,
