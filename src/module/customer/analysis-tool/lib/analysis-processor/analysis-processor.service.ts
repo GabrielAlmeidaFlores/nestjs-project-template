@@ -3881,7 +3881,6 @@ Análise processada do CNIS:
               'isPendency',
               'competenceBelowTheMinimum',
               'belowMinimumContributions',
-              'earningsHistory',
             ],
           },
         },
