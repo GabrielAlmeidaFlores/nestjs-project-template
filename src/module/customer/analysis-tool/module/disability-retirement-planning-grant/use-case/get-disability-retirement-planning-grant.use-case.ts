@@ -176,9 +176,11 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
                         ...(eh.indicators !== null && {
                           indicators: eh.indicators,
                         }),
-                        ...(eh.paymentDate !== null && {
-                          paymentDate: eh.paymentDate,
-                        }),
+                        ...((() => {
+                          if (!eh.paymentDate) return {};
+                          const d = new Date(eh.paymentDate);
+                          return isNaN(d.getTime()) ? {} : { paymentDate: d };
+                        })()),
                         ...(eh.contribution !== null && {
                           contribution: eh.contribution,
                         }),
@@ -288,7 +290,10 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
             ).map((item) =>
               DisabilityRetirementPlanningGrantFirstAnalysisBelowMinimumContributionItemModel.build(
                 {
-                  contributionDate: new Date(item.contributionDate),
+                  contributionDate: (() => {
+                    const d = new Date(item.contributionDate);
+                    return isNaN(d.getTime()) ? new Date(0) : d;
+                  })(),
                   contributionValue: item.contributionValue,
                 },
               ),
@@ -298,7 +303,10 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
                 DisabilityRetirementPlanningGrantFirstAnalysisEarningsHistoryItemModel.build(
                   {
                     ...(eh.competence !== null && {
-                      competence: new Date(eh.competence),
+                      competence: (() => {
+                        const d = new Date(eh.competence);
+                        return isNaN(d.getTime()) ? null : d;
+                      })(),
                     }),
                     ...(eh.remuneration !== null && {
                       remuneration: eh.remuneration,
@@ -306,9 +314,11 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
                     ...(eh.indicators !== null && {
                       indicators: eh.indicators,
                     }),
-                    ...(eh.paymentDate !== null && {
-                      paymentDate: new Date(eh.paymentDate),
-                    }),
+                    ...((() => {
+                      if (!eh.paymentDate) return {};
+                      const d = new Date(eh.paymentDate);
+                      return isNaN(d.getTime()) ? {} : { paymentDate: d };
+                    })()),
                     ...(eh.contribution !== null && {
                       contribution: eh.contribution,
                     }),

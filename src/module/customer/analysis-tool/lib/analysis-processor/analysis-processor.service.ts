@@ -982,9 +982,19 @@ AnÃ¡lise processada do CNIS:
     const prompt = `
 # IMPORTANTE
 - A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON;
-- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize calculos como valores salariais, use estritamente os fornecidos.
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize cálculos como valores salariais, use estritamente os fornecidos.
 - Não incluir tag <br> na resposta.
 - Retorne estritamente um objeto JSON compatível com o schema solicitado.
+
+## Instruções para os campos em Markdown
+Os campos \`retirementAnalysis\` (por regra) e \`analysisResult\` (análise geral) devem ser gerados em **Markdown rico**, com:
+- Títulos com ## e ###
+- Subtítulos e seções bem definidas
+- Tabelas Markdown (| coluna | coluna |) para apresentar dados comparativos, requisitos, datas e valores
+- Listas com marcadores (- item) ou numeradas (1. item) para enumerar critérios, documentos, pendências
+- Negrito (**texto**) para destacar termos técnicos, datas, valores monetários e conclusões
+- Seções como: Resumo do Caso, Análise da Incapacidade, Qualidade de Segurado, Carência, Conclusão, Estratégia Recomendada
+- O texto deve ser extenso, detalhado e juridicamente fundamentado, com referências às normas aplicáveis
 
 Análise processada do CNIS:
   ${cnisAnalysisJson}
@@ -4147,7 +4157,7 @@ Análise processada do CNIS:
               retirementAnalysis: {
                 type: 'string',
                 description:
-                  'Anï¿½lise detalhada desta regra em formato markdown',
+                  'Análise detalhada desta regra em formato Markdown rico, com títulos (##, ###), tabelas comparativas de requisitos, listas de critérios, datas e valores em negrito, fundamentação legal e conclusão sobre elegibilidade.',
               },
             },
             required: [
@@ -4245,7 +4255,7 @@ Análise processada do CNIS:
         analysisResult: {
           type: 'string',
           description:
-            'Anï¿½lise extensa e detalhada do caso, abrangendo o histï¿½rico previdenciï¿½rio do segurado, as condiï¿½ï¿½es incapacitantes apresentadas, os reflexos dos perï¿½odos contributivos, a aplicabilidade das regras de elegibilidade, as estratï¿½gias de reconhecimento de direitos e a conclusï¿½o fundamentada sobre a viabilidade da concessï¿½o da aposentadoria. O campo deve conter um texto longo, estruturado em parï¿½grafos, em formato Markdown.',
+            'Análise extensa e detalhada do caso em formato Markdown rico. Deve conter: títulos de seção com ## e ###, tabelas Markdown comparando requisitos e situação do segurado, listas com critérios atendidos e pendentes, valores monetários e datas em negrito. Seções obrigatórias: ## Resumo do Caso, ## Histórico Previdenciário, ## Análise da Incapacidade, ## Qualidade de Segurado e Carência, ## Conclusão, ## Estratégia Recomendada. O texto deve ser extenso, juridicamente fundamentado, com referência expressa às normas aplicáveis (artigos de lei, decretos).',
         },
       },
       required: [
