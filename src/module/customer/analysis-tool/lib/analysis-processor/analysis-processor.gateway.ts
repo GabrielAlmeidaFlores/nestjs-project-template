@@ -552,6 +552,29 @@ export abstract class AnalysisProcessorGateway {
     files: Buffer[],
   ): Promise<string | null>;
 
+  public abstract getTemporaryIncapacityBenefitTerminationInssDecisionAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getTemporaryIncapacityBenefitTerminationFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson?: boolean,
+  ): Promise<string | null>;
+
+  public abstract getTemporaryIncapacityBenefitTerminationCompleteAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getTemporaryIncapacityBenefitTerminationSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
   public abstract getMaternityPayGrantFirstAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,

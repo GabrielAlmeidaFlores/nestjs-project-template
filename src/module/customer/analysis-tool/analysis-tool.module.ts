@@ -46,6 +46,7 @@ import { SurvivorPensionAnalysisModule } from '@module/customer/analysis-tool/mo
 import { TeacherRetirementPlanningModule } from '@module/customer/analysis-tool/module/teacher-retirement-planning/teacher-retirement-planning.module';
 import { TemporaryDisabilityBenefitsGrantModule } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/temporary-disability-benefits-grant.module';
 import { TemporaryIncapacityBenefitRejectionModule } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.module';
+import { TemporaryIncapacityBenefitTerminationModule } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-termination/temporary-incapacity-benefit-termination.module';
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
 import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
 import { DeleteAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-record.use-case';
@@ -115,6 +116,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     DisabilityRetirementPlanningRejectionModule,
     TemporaryDisabilityBenefitsGrantModule,
     TemporaryIncapacityBenefitRejectionModule,
+    TemporaryIncapacityBenefitTerminationModule,
     AccidentBenefitRejectionModule,
   ],
   controllers: [AnalysisToolController],
