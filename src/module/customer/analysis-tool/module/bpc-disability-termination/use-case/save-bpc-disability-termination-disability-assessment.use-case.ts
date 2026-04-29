@@ -79,8 +79,12 @@ export class SaveBpcDisabilityTerminationDisabilityAssessmentUseCase {
 
     const transactions: TransactionType[] = [];
 
+    const currentAssessment =
+      bpcDisabilityTerminationQueryResult.bpcDisabilityTerminationDisabilityAssessment;
+
     const assessmentEntity =
       new BpcDisabilityTerminationDisabilityAssessmentEntity({
+        ...(currentAssessment !== null && { id: currentAssessment.id }),
         estimatedDisabilityStartDate: dto.estimatedDisabilityStartDate ?? null,
         attendsSchoolOrTechnicalCourse:
           dto.attendsSchoolOrTechnicalCourse ?? null,
@@ -90,10 +94,13 @@ export class SaveBpcDisabilityTerminationDisabilityAssessmentUseCase {
         otherBarriersDescription: dto.otherBarriersDescription ?? null,
       });
 
-    const currentAssessment =
-      bpcDisabilityTerminationQueryResult.bpcDisabilityTerminationDisabilityAssessment;
-
     if (currentAssessment !== null) {
+      transactions.push(
+        this.bpcDisabilityTerminationDisabilityAssessmentDocumentCommandRepositoryGateway.deleteAllBpcDisabilityTerminationDisabilityAssessmentDocumentByBpcDisabilityTerminationDisabilityAssessmentId(
+          currentAssessment.id,
+        ),
+      );
+
       transactions.push(
         this.bpcDisabilityTerminationDisabilityAssessmentCommandRepositoryGateway.updateBpcDisabilityTerminationDisabilityAssessment(
           currentAssessment.id,
