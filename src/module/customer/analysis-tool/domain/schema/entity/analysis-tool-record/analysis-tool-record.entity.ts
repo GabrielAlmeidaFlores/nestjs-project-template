@@ -36,6 +36,7 @@ import { SurvivorPensionAnalysisEntity } from '@module/customer/analysis-tool/mo
 import { TeacherRetirementPlanningEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
 import { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/temporary-disability-benefits-grant.entity';
 import { TemporaryIncapacityBenefitRejectionEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.entity';
+import { TemporaryIncapacityBenefitTerminationEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-termination/domain/schema/entity/temporary-incapacity-benefit-termination/temporary-incapacity-benefit-termination.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { AnalysisToolRecordEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity.props.interface';
@@ -219,6 +220,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly temporaryIncapacityBenefitRejection: TemporaryIncapacityBenefitRejectionEntity | null;
 
   @Description(
+    'Análise de cessação de benefício por incapacidade temporária associada ao registro da ferramenta de análise',
+  )
+  public readonly temporaryIncapacityBenefitTermination: TemporaryIncapacityBenefitTerminationEntity | null;
+
+  @Description(
     'Análise de concessão de salário-maternidade associada ao registro da ferramenta de análise',
   )
   public readonly maternityPayGrant: MaternityPayGrantEntity | null;
@@ -293,6 +299,8 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     this.bpcElderlyAnalysis = props.bpcElderlyAnalysis ?? null;
     this.temporaryIncapacityBenefitRejection =
       props.temporaryIncapacityBenefitRejection ?? null;
+    this.temporaryIncapacityBenefitTermination =
+      props.temporaryIncapacityBenefitTermination ?? null;
     this.maternityPayGrant = props.maternityPayGrant ?? null;
     this.status = props.status;
     this.analysisToolClient = props.analysisToolClient;
