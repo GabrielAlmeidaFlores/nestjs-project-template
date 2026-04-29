@@ -20,6 +20,7 @@ import { SpecialRetirementGrantPeriodUnderMinimumCommandRepositoryGateway } from
 import { SpecialRetirementGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-result/command/special-retirement-grant-result.command.repository.gateway';
 import { SpecialRetirementGrantEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/special-retirement-grant.entity';
 import { SpecialRetirementGrantId } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/value-object/special-retirement-grant-id/special-retirement-grant-id.value-object';
+import { SpecialRetirementGrantDocumentTypeEnum } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-document/enum/special-retirement-grant-document-type.enum';
 import { SpecialRetirementGrantEarningsHistoryEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-earnings-history/special-retirement-grant-earnings-history.entity';
 import { SpecialRetirementGrantPeriodStatusEnum } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-period/enum/special-retirement-grant-period-status.enum';
 import { SpecialRetirementGrantPeriodEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-period/special-retirement-grant-period.entity';
@@ -29,6 +30,7 @@ import { SpecialRetirementGrantPeriodUnderMinimumEntity } from '@module/customer
 import { SpecialRetirementGrantResultEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-result/special-retirement-grant-result.entity';
 import { CreateSpecialRetirementGrantFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/create-special-retirement-grant-first-analysis.response.dto';
 import { InvalidSpecialRetirementGrantFirstAnalysisJsonError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/invalid-special-retirement-grant-first-analysis-json.error';
+import { SpecialRetirementGrantAtLeastOnePppRequiredError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-at-least-one-ppp-required.error';
 import { SpecialRetirementGrantCnisRequiredError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-cnis-required.error';
 import { SpecialRetirementGrantNotFoundError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-not-found.error';
 import {
@@ -126,6 +128,14 @@ export class CreateSpecialRetirementGrantFirstAnalysisUseCase {
 
     if (grant.cnisDocument === null) {
       throw new SpecialRetirementGrantCnisRequiredError();
+    }
+
+    const hasPpp = grant.specialRetirementGrantDocument.some(
+      (doc) => doc.type === SpecialRetirementGrantDocumentTypeEnum.PPP,
+    );
+
+    if (hasPpp === false) {
+      throw new SpecialRetirementGrantAtLeastOnePppRequiredError();
     }
 
     const cnisBuffer = await this.fileProcessorGateway.getFileBuffer(
