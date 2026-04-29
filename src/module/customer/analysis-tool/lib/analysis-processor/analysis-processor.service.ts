@@ -916,6 +916,7 @@ Anï¿½lise processada do CNIS:
 - O campo \`isPendency\` deve indicar se o período possui qualquer pendência relevante.
 - O campo \`reasonPendency\` só deve ser preenchido quando realmente existir pendência no período.
 - O campo \`statusPCD\` só deve ser preenchido nos períodos em que houve deficiência reconhecida no período; nos demais, omita o campo.
+- NÃO inclua o campo \`earningsHistory\` na resposta — esse dado já está armazenado e não deve ser reenviado.
 
 Análise processada do CNIS:
   ${cnisAnalysisJson}
@@ -3819,56 +3820,6 @@ Análise processada do CNIS:
                 ),
                 description:
                   'Motivo da pendï¿½ncia do perï¿½odo, quando houver',
-              },
-              earningsHistory: {
-                type: 'array',
-                description:
-                  'HistÃ³rico de remuneraÃ§Ãµes do perÃ­odo extraÃ­do do CNIS',
-                items: {
-                  type: 'object',
-                  properties: {
-                    competence: {
-                      type: 'string',
-                      format: 'date',
-                      description: 'CompetÃªncia no formato YYYY-MM-DD',
-                    },
-                    remuneration: {
-                      type: 'string',
-                      description: 'Valor ou descriÃ§Ã£o da remuneraÃ§Ã£o',
-                    },
-                    indicators: {
-                      type: 'string',
-                      description: 'Indicadores da remuneraÃ§Ã£o',
-                    },
-                    paymentDate: {
-                      type: 'string',
-                      format: 'date',
-                      description: 'Data de pagamento no formato YYYY-MM-DD',
-                    },
-                    contribution: {
-                      type: 'string',
-                      description: 'InformaÃ§Ãµes de contribuiÃ§Ã£o',
-                    },
-                    contributionSalary: {
-                      type: 'string',
-                      description: 'SalÃ¡rio de contribuiÃ§Ã£o',
-                    },
-                    analysis: {
-                      type: 'string',
-                      description: 'AnÃ¡lise da competÃªncia',
-                    },
-                    competenceBelowTheMinimum: {
-                      type: 'boolean',
-                      description:
-                        'Indica se a competÃªncia estÃ¡ abaixo do mÃ­nimo',
-                    },
-                  },
-                  required: [
-                    'competence',
-                    'remuneration',
-                    'competenceBelowTheMinimum',
-                  ],
-                },
               },
             },
             required: [
