@@ -173,11 +173,14 @@ export class CreateRuralOrHybridRetirementRejectionResultUseCase {
       firstAnalysis: rejectionResult?.firstAnalysis ?? null,
       secondAnalysis: rejectionResult?.secondAnalysis ?? null,
       completeAnalysis,
-      simplifiedAnalysis: simplifiedAnalysis ?? rejectionResult?.simplifiedAnalysis ?? null,
+      simplifiedAnalysis:
+        simplifiedAnalysis ?? rejectionResult?.simplifiedAnalysis ?? null,
       completeAnalysisDownload:
         rejectionResult?.completeAnalysisDownload ?? null,
       simplifiedAnalysisDownload:
-        simplifiedAnalysis ?? rejectionResult?.simplifiedAnalysisDownload ?? null,
+        simplifiedAnalysis ??
+        rejectionResult?.simplifiedAnalysisDownload ??
+        null,
       ruralOrHybridRetirementRejectionId,
     });
 
@@ -190,7 +193,11 @@ export class CreateRuralOrHybridRetirementRejectionResultUseCase {
             resultEntity,
           );
 
-    const transactionOperations = [consumeCreditTransaction, consumeSimplifiedCreditTransaction, resultTransaction];
+    const transactionOperations = [
+      consumeCreditTransaction,
+      consumeSimplifiedCreditTransaction,
+      resultTransaction,
+    ];
 
     if (rejectionResult === null) {
       transactionOperations.push(
