@@ -21,9 +21,11 @@ import { SpecialRetirementGrantPeriodQueryRepositoryGateway } from '@module/cust
 import { SpecialRetirementGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-result/command/special-retirement-grant-result.command.repository.gateway';
 import { SpecialRetirementGrantEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/special-retirement-grant.entity';
 import { SpecialRetirementGrantId } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/value-object/special-retirement-grant-id/special-retirement-grant-id.value-object';
+import { SpecialRetirementGrantDocumentTypeEnum } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-document/enum/special-retirement-grant-document-type.enum';
 import { SpecialRetirementGrantResultEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-result/special-retirement-grant-result.entity';
 import { CreateSpecialRetirementGrantResultResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/create-special-retirement-grant-result.response.dto';
 import { InvalidSpecialRetirementGrantCompleteAnalysisJsonError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/invalid-special-retirement-grant-complete-analysis-json.error';
+import { SpecialRetirementGrantAtLeastOnePppRequiredError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-at-least-one-ppp-required.error';
 import { SpecialRetirementGrantCnisRequiredError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-cnis-required.error';
 import { SpecialRetirementGrantNotFoundError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-not-found.error';
 import { SpecialRetirementGrantResultAlreadyExistsError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-result-already-exists.error';
@@ -211,6 +213,15 @@ export class CreateSpecialRetirementGrantResultUseCase {
       null,
       2,
     );
+
+    const hasPpp =
+      specialRetirementGrantQueryResult.specialRetirementGrantDocument.some(
+        (doc) => doc.type === SpecialRetirementGrantDocumentTypeEnum.PPP,
+      );
+
+    if (hasPpp === false) {
+      throw new SpecialRetirementGrantAtLeastOnePppRequiredError();
+    }
 
     if (specialRetirementGrantQueryResult.cnisDocument === null) {
       throw new SpecialRetirementGrantCnisRequiredError();
