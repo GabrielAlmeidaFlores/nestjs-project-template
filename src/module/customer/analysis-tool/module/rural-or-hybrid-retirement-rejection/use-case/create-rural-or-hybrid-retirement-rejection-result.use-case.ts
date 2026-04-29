@@ -129,10 +129,22 @@ export class CreateRuralOrHybridRetirementRejectionResultUseCase {
         PaymentPlanPaidResourceTypeEnum.RURAL_OR_HYBRID_RETIREMENT_REJECTION_COMPLETE_ANALYSIS,
       );
 
+    const simplifiedPromptResponse =
+      await this.getPaymentPlanPaidResourcePromptUseCase.execute(
+        PaymentPlanPaidResourceTypeEnum.RURAL_OR_HYBRID_RETIREMENT_REJECTION_SIMPLIFIED_ANALYSIS,
+      );
+
     const consumeCreditTransaction =
       await this.consumeOrganizationCreditUseCase.execute(
         organizationSessionData.organizationId,
         PaymentPlanPaidResourceTypeEnum.RURAL_OR_HYBRID_RETIREMENT_REJECTION_COMPLETE_ANALYSIS,
+        organizationMember.id,
+      );
+
+    const consumeSimplifiedCreditTransaction =
+      await this.consumeOrganizationCreditUseCase.execute(
+        organizationSessionData.organizationId,
+        PaymentPlanPaidResourceTypeEnum.RURAL_OR_HYBRID_RETIREMENT_REJECTION_SIMPLIFIED_ANALYSIS,
         organizationMember.id,
       );
 
@@ -149,16 +161,23 @@ export class CreateRuralOrHybridRetirementRejectionResultUseCase {
 
     const parsedResult = this.parseResultAnalysis(completeAnalysis);
 
+    const simplifiedAnalysis =
+      await this.analysisProcessorGateway.getRuralOrHybridRetirementRejectionSimplifiedAnalysis(
+        simplifiedPromptResponse.prompt,
+        [],
+        completeAnalysis,
+      );
+
     const resultEntity = new RuralOrHybridRetirementRejectionResultEntity({
       ...(rejectionResult !== null && { id: rejectionResult.id }),
       firstAnalysis: rejectionResult?.firstAnalysis ?? null,
       secondAnalysis: rejectionResult?.secondAnalysis ?? null,
       completeAnalysis,
-      simplifiedAnalysis: rejectionResult?.simplifiedAnalysis ?? null,
+      simplifiedAnalysis: simplifiedAnalysis ?? rejectionResult?.simplifiedAnalysis ?? null,
       completeAnalysisDownload:
         rejectionResult?.completeAnalysisDownload ?? null,
       simplifiedAnalysisDownload:
-        rejectionResult?.simplifiedAnalysisDownload ?? null,
+        simplifiedAnalysis ?? rejectionResult?.simplifiedAnalysisDownload ?? null,
       ruralOrHybridRetirementRejectionId,
     });
 
@@ -171,7 +190,7 @@ export class CreateRuralOrHybridRetirementRejectionResultUseCase {
             resultEntity,
           );
 
-    const transactionOperations = [consumeCreditTransaction, resultTransaction];
+    const transactionOperations = [consumeCreditTransaction, consumeSimplifiedCreditTransaction, resultTransaction];
 
     if (rejectionResult === null) {
       transactionOperations.push(
@@ -190,6 +209,9 @@ export class CreateRuralOrHybridRetirementRejectionResultUseCase {
 
     return CreateRuralOrHybridRetirementRejectionResultResponseDto.build({
       ruralOrHybridRetirementRejectionResult: parsedResult,
+      ...(simplifiedAnalysis !== null && {
+        ruralOrHybridRetirementRejectionSimplifiedAnalysis: simplifiedAnalysis,
+      }),
     });
   }
 
