@@ -107,6 +107,11 @@ export class SaveBpcDisabilityTerminationDocumentsUseCase {
       );
     }
 
+    const deleteExistingDocumentsTransaction =
+      this.bpcDisabilityTerminationDocumentCommandRepositoryGateway.deleteAllBpcDisabilityTerminationDocumentByBpcDisabilityTerminationId(
+        bpcDisabilityTerminationId,
+      );
+
     const createDocumentsTransactions =
       this.bpcDisabilityTerminationDocumentCommandRepositoryGateway.createManyBpcDisabilityTerminationDocument(
         documentEntities,
@@ -120,7 +125,10 @@ export class SaveBpcDisabilityTerminationDocumentsUseCase {
         analysisToolClientId:
           analysisToolRecordQueryResult.analysisToolClient.id,
         analysisToolRecordId: analysisToolRecordQueryResult.id,
-        transactions: createDocumentsTransactions,
+        transactions: [
+          deleteExistingDocumentsTransaction,
+          ...createDocumentsTransactions,
+        ],
       });
 
     const transaction = await this.baseTransactionRepositoryGateway.execute(
