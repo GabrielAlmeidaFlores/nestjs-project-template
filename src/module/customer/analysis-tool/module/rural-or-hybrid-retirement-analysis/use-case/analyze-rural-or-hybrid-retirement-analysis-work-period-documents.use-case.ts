@@ -94,8 +94,6 @@ export class AnalyzeRuralOrHybridRetirementAnalysisWorkPeriodDocumentsUseCase {
         dto.documents.map((document) => document.file.base64.decodeToBuffer()),
       );
 
-    console.log('[WorkPeriodDocs] RAW AI RESPONSE:', JSON.stringify(analysisResult));
-
     const parsedResult = this.parseAnalysisResult(analysisResult);
 
     if (creditTransactions.length > 0) {
@@ -111,9 +109,13 @@ export class AnalyzeRuralOrHybridRetirementAnalysisWorkPeriodDocumentsUseCase {
       ) =>
         AnalyzeRuralOrHybridRetirementAnalysisWorkPeriodDocumentAnalysisItemResponseDto.build(
           {
-            documentType: item.documentType ?? '',
-            ownName: typeof item.ownName === 'boolean' ? item.ownName : String(item.ownName ?? '').toLowerCase() === 'true',
-            documentYear: item.documentYear != null ? String(item.documentYear) : '',
+            documentType: item.documentType,
+            ownName:
+              typeof item.ownName === 'boolean'
+                ? item.ownName
+                : String(item.ownName ?? '').toLowerCase() === 'true',
+            documentYear:
+              item.documentYear !== null ? String(item.documentYear) : '',
             shortDescription: item.shortDescription ?? '',
             technicalNote: item.technicalNote ?? '',
           },
@@ -126,11 +128,26 @@ export class AnalyzeRuralOrHybridRetirementAnalysisWorkPeriodDocumentsUseCase {
     dto: AnalyzeRuralOrHybridRetirementAnalysisWorkPeriodDocumentsRequestDto,
   ): string {
     const contextParts: string[] = [];
-    if (dto.periodStartDate) contextParts.push(`Período rural: ${dto.periodStartDate} a ${dto.periodEndDate ?? 'atual'}`);
-    if (dto.workerType) contextParts.push(`Tipo de trabalhador: ${dto.workerType}`);
-    if (dto.propertyName) contextParts.push(`Nome da propriedade: ${dto.propertyName}`);
-    if (dto.propertyCity && dto.propertyState) contextParts.push(`Localização: ${dto.propertyCity}/${dto.propertyState}`);
-    const periodContextStr = contextParts.length > 0 ? `\n\nContexto do período analisado:\n${contextParts.join('\n')}` : '';
+    if (dto.periodStartDate !== undefined) {
+      contextParts.push(
+        `Período rural: ${dto.periodStartDate} a ${dto.periodEndDate ?? 'atual'}`,
+      );
+    }
+    if (dto.workerType !== undefined) {
+      contextParts.push(`Tipo de trabalhador: ${dto.workerType}`);
+    }
+    if (dto.propertyName !== undefined) {
+      contextParts.push(`Nome da propriedade: ${dto.propertyName}`);
+    }
+    if (dto.propertyCity !== undefined && dto.propertyState !== undefined) {
+      contextParts.push(
+        `Localização: ${dto.propertyCity}/${dto.propertyState}`,
+      );
+    }
+    const periodContextStr =
+      contextParts.length > 0
+        ? `\n\nContexto do período analisado:\n${contextParts.join('\n')}`
+        : '';
     return `Cliente: ${clientName}${periodContextStr}`;
   }
 
@@ -145,7 +162,10 @@ export class AnalyzeRuralOrHybridRetirementAnalysisWorkPeriodDocumentsUseCase {
 
     // Strip markdown code blocks (```json ... ``` or ``` ... ```)
     if (cleanedJson.startsWith('```')) {
-      cleanedJson = cleanedJson.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '').trim();
+      cleanedJson = cleanedJson
+        .replace(/^```(?:json)?\n?/, '')
+        .replace(/\n?```$/, '')
+        .trim();
     }
 
     if (cleanedJson.startsWith('"') && cleanedJson.endsWith('"')) {
@@ -156,12 +176,19 @@ export class AnalyzeRuralOrHybridRetirementAnalysisWorkPeriodDocumentsUseCase {
     try {
       parsedResult = JSON.parse(cleanedJson);
     } catch {
-      console.error('[parseAnalysisResult] JSON.parse failed. Raw AI response:', analysisResult.substring(0, 500));
+      console.error(
+        '[parseAnalysisResult] JSON.parse failed. Raw AI response:',
+        analysisResult.substring(0, 500),
+      );
       throw new InvalidRuralOrHybridRetirementAnalysisWorkPeriodDocumentAnalysisJsonError();
     }
 
     // If AI wrapped the array in an object (e.g. { documents: [...] }), unwrap it
-    if (!Array.isArray(parsedResult) && typeof parsedResult === 'object' && parsedResult !== null) {
+    if (
+      !Array.isArray(parsedResult) &&
+      typeof parsedResult === 'object' &&
+      parsedResult !== null
+    ) {
       const obj = parsedResult as Record<string, unknown>;
       const firstArrayValue = Object.values(obj).find((v) => Array.isArray(v));
       if (firstArrayValue) {
@@ -170,7 +197,10 @@ export class AnalyzeRuralOrHybridRetirementAnalysisWorkPeriodDocumentsUseCase {
     }
 
     if (!this.isAnalysisResult(parsedResult)) {
-      console.error('[parseAnalysisResult] isAnalysisResult failed. Parsed value:', JSON.stringify(parsedResult).substring(0, 500));
+      console.error(
+        '[parseAnalysisResult] isAnalysisResult failed. Parsed value:',
+        JSON.stringify(parsedResult).substring(0, 500),
+      );
       throw new InvalidRuralOrHybridRetirementAnalysisWorkPeriodDocumentAnalysisJsonError();
     }
 
