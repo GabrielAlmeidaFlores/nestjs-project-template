@@ -137,36 +137,19 @@ export class GetAccidentAssistanceTerminatedUseCase {
       ...(accidentAssistanceTerminatedQueryResult.analysisName !== null && {
         analysisName: accidentAssistanceTerminatedQueryResult.analysisName,
       }),
-      ...(accidentAssistanceTerminatedQueryResult.benefitCessationReason !==
-        null && {
-        benefitCessationReason:
-          accidentAssistanceTerminatedQueryResult.benefitCessationReason,
-      }),
-      ...(accidentAssistanceTerminatedQueryResult.hadPreviousIncapacityBenefit !==
-        null && {
-        hadPreviousIncapacityBenefit:
-          accidentAssistanceTerminatedQueryResult.hadPreviousIncapacityBenefit,
-      }),
-      ...(accidentAssistanceTerminatedQueryResult.previousIncapacityBenefitNumber !==
-        null && {
-        previousIncapacityBenefitNumber:
-          accidentAssistanceTerminatedQueryResult.previousIncapacityBenefitNumber,
-      }),
-      ...(accidentAssistanceTerminatedQueryResult.previousIncapacityBenefitStartDate !==
-        null && {
-        previousIncapacityBenefitStartDate:
-          accidentAssistanceTerminatedQueryResult.previousIncapacityBenefitStartDate,
-      }),
-      ...(accidentAssistanceTerminatedQueryResult.previousIncapacityBenefitEndDate !==
-        null && {
-        previousIncapacityBenefitEndDate:
-          accidentAssistanceTerminatedQueryResult.previousIncapacityBenefitEndDate,
-      }),
-      ...(accidentAssistanceTerminatedQueryResult.extensionRequestStatus !==
-        null && {
-        extensionRequestStatus:
-          accidentAssistanceTerminatedQueryResult.extensionRequestStatus,
-      }),
+      benefitCessationReason:
+        accidentAssistanceTerminatedQueryResult.benefitCessationReason,
+      hadPreviousIncapacityBenefit:
+        accidentAssistanceTerminatedQueryResult.hadPreviousIncapacityBenefit,
+
+      previousIncapacityBenefitNumber:
+        accidentAssistanceTerminatedQueryResult.previousIncapacityBenefitNumber,
+      previousIncapacityBenefitStartDate:
+        accidentAssistanceTerminatedQueryResult.previousIncapacityBenefitStartDate,
+      previousIncapacityBenefitEndDate:
+        accidentAssistanceTerminatedQueryResult.previousIncapacityBenefitEndDate,
+      extensionRequestStatus:
+        accidentAssistanceTerminatedQueryResult.extensionRequestStatus,
       accidentAssistanceTerminatedResult: accidentAssistanceTerminatedResultDto,
       ...(periodDtos.length > 0 && {
         accidentAssistanceTerminatedPeriod: periodDtos,

@@ -70,10 +70,6 @@ export class DownloadAccidentAssistanceTerminatedSimplifiedAnalysisUseCase {
       throw new AccidentAssistanceTerminatedNotFoundError();
     }
 
-    if (accidentAssistanceTerminatedQueryResult === null) {
-      throw new AccidentAssistanceTerminatedNotFoundError();
-    }
-
     if (
       accidentAssistanceTerminatedQueryResult.accidentAssistanceTerminatedResult
         .accidentAssistanceTerminatedCompleteAnalysis === null
