@@ -204,19 +204,23 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
       retirementRules: parsedResult.retirementRules.map(
         (
           rule: DisabilityRetirementPlanningGrantResultRetirementRuleInterface,
-        ) =>
-          CreateDisabilityRetirementPlanningGrantResultRetirementRuleResponseDto.build(
+        ) => {
+          const eligibilityDate = (() => {
+            if (!rule.eligibilityAvailableAt) return undefined;
+            const d = new Date(rule.eligibilityAvailableAt);
+            return isNaN(d.getTime()) ? undefined : d;
+          })();
+          return CreateDisabilityRetirementPlanningGrantResultRetirementRuleResponseDto.build(
             {
               retirementRuleName: rule.retirementRuleName,
               isEligible: rule.isEligible,
-              ...(rule.eligibilityAvailableAt !== null && {
-                eligibilityAvailableAt: new Date(rule.eligibilityAvailableAt),
-              }),
+              ...(eligibilityDate !== undefined && { eligibilityAvailableAt: eligibilityDate }),
               expectedMonthlyBenefit: rule.expectedMonthlyBenefit,
               estimatedProcessValue: rule.estimatedProcessValue,
               retirementAnalysis: rule.retirementAnalysis,
             },
-          ),
+          );
+        },
       ),
       systemRecomendation: parsedResult.systemRecomendation.map(
         (
