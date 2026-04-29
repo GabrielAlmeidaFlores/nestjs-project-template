@@ -373,13 +373,23 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
       cleanedJson = JSON.parse(cleanedJson) as string;
     }
 
+    cleanedJson = cleanedJson.replace(/\\\\n/g, '\n');
+
     const parsed: unknown = JSON.parse(cleanedJson);
 
     if (!this.isResultAnalysis(parsed)) {
       throw new InvalidDisabilityRetirementPlanningGrantResultJsonError();
     }
 
-    return parsed;
+    const result = parsed as DisabilityRetirementPlanningGrantResultInterface;
+
+    result.analysisResult = result.analysisResult.replace(/\\n/g, '\n');
+    result.retirementRules = result.retirementRules.map((rule) => ({
+      ...rule,
+      retirementAnalysis: rule.retirementAnalysis?.replace(/\\n/g, '\n') ?? rule.retirementAnalysis,
+    }));
+
+    return result;
   }
 
   private isResultAnalysis(
