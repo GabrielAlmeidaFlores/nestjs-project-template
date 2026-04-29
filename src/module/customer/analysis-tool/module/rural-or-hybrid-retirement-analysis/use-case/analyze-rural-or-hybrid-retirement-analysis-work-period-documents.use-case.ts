@@ -113,9 +113,8 @@ export class AnalyzeRuralOrHybridRetirementAnalysisWorkPeriodDocumentsUseCase {
             ownName:
               typeof item.ownName === 'boolean'
                 ? item.ownName
-                : String(item.ownName ?? '').toLowerCase() === 'true',
-            documentYear:
-              item.documentYear !== null ? String(item.documentYear) : '',
+                : String(item.ownName).toLowerCase() === 'true',
+            documentYear: String(item.documentYear),
             shortDescription: item.shortDescription ?? '',
             technicalNote: item.technicalNote ?? '',
           },
@@ -154,6 +153,8 @@ export class AnalyzeRuralOrHybridRetirementAnalysisWorkPeriodDocumentsUseCase {
   private parseAnalysisResult(
     analysisResult: string | null,
   ): RuralOrHybridRetirementAnalysisWorkPeriodDocumentAnalysisResultType {
+    const NUMBER_OF_CHARACTERS_TO_LOG = 500;
+
     if (analysisResult === null) {
       throw new InvalidRuralOrHybridRetirementAnalysisWorkPeriodDocumentAnalysisJsonError();
     }
@@ -178,7 +179,7 @@ export class AnalyzeRuralOrHybridRetirementAnalysisWorkPeriodDocumentsUseCase {
     } catch {
       console.error(
         '[parseAnalysisResult] JSON.parse failed. Raw AI response:',
-        analysisResult.substring(0, 500),
+        analysisResult.substring(0, NUMBER_OF_CHARACTERS_TO_LOG),
       );
       throw new InvalidRuralOrHybridRetirementAnalysisWorkPeriodDocumentAnalysisJsonError();
     }
@@ -191,7 +192,7 @@ export class AnalyzeRuralOrHybridRetirementAnalysisWorkPeriodDocumentsUseCase {
     ) {
       const obj = parsedResult as Record<string, unknown>;
       const firstArrayValue = Object.values(obj).find((v) => Array.isArray(v));
-      if (firstArrayValue) {
+      if (firstArrayValue !== null && firstArrayValue !== undefined) {
         parsedResult = firstArrayValue;
       }
     }
@@ -199,7 +200,7 @@ export class AnalyzeRuralOrHybridRetirementAnalysisWorkPeriodDocumentsUseCase {
     if (!this.isAnalysisResult(parsedResult)) {
       console.error(
         '[parseAnalysisResult] isAnalysisResult failed. Parsed value:',
-        JSON.stringify(parsedResult).substring(0, 500),
+        JSON.stringify(parsedResult).substring(0, NUMBER_OF_CHARACTERS_TO_LOG),
       );
       throw new InvalidRuralOrHybridRetirementAnalysisWorkPeriodDocumentAnalysisJsonError();
     }

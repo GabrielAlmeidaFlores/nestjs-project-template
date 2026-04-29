@@ -124,18 +124,18 @@ export class AnalyzeRuralOrHybridRetirementRejectionWorkPeriodDocumentsUseCase {
     dto: AnalyzeRuralOrHybridRetirementRejectionWorkPeriodDocumentsRequestDto,
   ): string {
     const contextParts: string[] = [];
-    if (dto.periodStartDate) {
+    if (dto.periodStartDate !== undefined || dto.periodEndDate !== undefined) {
       contextParts.push(
         `Período rural: ${dto.periodStartDate} a ${dto.periodEndDate ?? 'atual'}`,
       );
     }
-    if (dto.workerType) {
+    if (dto.workerType !== undefined) {
       contextParts.push(`Tipo de trabalhador: ${dto.workerType}`);
     }
-    if (dto.propertyName) {
+    if (dto.propertyName !== undefined) {
       contextParts.push(`Nome da propriedade: ${dto.propertyName}`);
     }
-    if (dto.propertyCity && dto.propertyState) {
+    if (dto.propertyCity !== undefined && dto.propertyState !== undefined) {
       contextParts.push(
         `Localização: ${dto.propertyCity}/${dto.propertyState}`,
       );
