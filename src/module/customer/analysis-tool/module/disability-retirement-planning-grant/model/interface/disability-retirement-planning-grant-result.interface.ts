@@ -60,6 +60,19 @@ export function parseDisabilityRetirementPlanningGrantCompleteAnalysis(
   if (cleaned.startsWith('"') && cleaned.endsWith('"')) {
     cleaned = JSON.parse(cleaned) as string;
   }
-  const parsed = JSON.parse(cleaned) as Record<string, unknown>;
-  return parsed as unknown as DisabilityRetirementPlanningGrantResultInterface;
+  const parsed = JSON.parse(cleaned) as DisabilityRetirementPlanningGrantResultInterface;
+
+  if (typeof parsed.analysisResult === 'string') {
+    parsed.analysisResult = parsed.analysisResult.replace(/\\n/g, '\n');
+  }
+  if (Array.isArray(parsed.retirementRules)) {
+    parsed.retirementRules = parsed.retirementRules.map((rule) => ({
+      ...rule,
+      retirementAnalysis: typeof rule.retirementAnalysis === 'string'
+        ? rule.retirementAnalysis.replace(/\\n/g, '\n')
+        : rule.retirementAnalysis,
+    }));
+  }
+
+  return parsed;
 }
