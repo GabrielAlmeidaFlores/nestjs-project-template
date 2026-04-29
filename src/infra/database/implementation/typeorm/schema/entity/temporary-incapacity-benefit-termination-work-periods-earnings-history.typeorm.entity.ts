@@ -5,7 +5,7 @@ import { TemporaryIncapacityBenefitTerminationWorkPeriodsTypeormEntity } from '@
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 
 @Entity({
-  name: 'temp_incapacity_benefit_termination_work_periods_earnings_history',
+  name: 'temp_incap_benefit_term_work_periods_earnings_history',
 })
 export class TemporaryIncapacityBenefitTerminationWorkPeriodsEarningsHistoryTypeormEntity extends BaseTypeormEntity {
   @Column({
