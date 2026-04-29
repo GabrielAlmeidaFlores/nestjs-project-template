@@ -368,7 +368,7 @@ export class CreateAccidentAssistanceTerminatedFirstAnalysisUseCase {
   }
 
   private parseRemunerationString(value: string | undefined): number | null {
-    if (value === undefined || value === null) {
+    if (value === undefined) {
       return null;
     }
     const cleaned = value.replace(/\./g, '').replace(',', '.');
