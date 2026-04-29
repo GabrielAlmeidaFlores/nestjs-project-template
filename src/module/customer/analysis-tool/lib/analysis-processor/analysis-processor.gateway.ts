@@ -345,6 +345,7 @@ export abstract class AnalysisProcessorGateway {
   public abstract getRuralOrHybridRetirementRejectionSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
+    analysisJson?: string,
   ): Promise<string | null>;
 
   public abstract getRuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysis(
@@ -369,6 +370,7 @@ export abstract class AnalysisProcessorGateway {
   public abstract getRuralOrHybridRetirementAnalysisSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
+    analysisJson?: string,
   ): Promise<string | null>;
 
   public abstract getRuralOrHybridRetirementAnalysisWorkPeriodDocumentAnalysis(
