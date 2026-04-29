@@ -48,7 +48,7 @@ export class GetBpcDisabilityTerminationWithRelationsQueryResultAutoMapperProfil
 
       const bpcDisabilityTerminationDisabilityAssessment =
         source.bpcDisabilityTerminationDisabilityAssessment
-          ? (() => {
+          ? ((): GetBpcDisabilityTerminationDisabilityAssessmentQueryResult => {
               const assessmentDocs =
                 source.bpcDisabilityTerminationDisabilityAssessment.bpcDisabilityTerminationDisabilityAssessmentDocument?.map(
                   (doc) =>
