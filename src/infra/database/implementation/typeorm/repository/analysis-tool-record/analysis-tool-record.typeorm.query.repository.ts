@@ -140,6 +140,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { bpcDisabilityDenial: Not(IsNull()) },
         { bpcElderlyAnalysis: Not(IsNull()) },
         { temporaryIncapacityBenefitRejection: Not(IsNull()) },
+        { temporaryIncapacityBenefitTermination: Not(IsNull()) },
         { maternityPayGrant: Not(IsNull()) },
       ];
 
@@ -2171,6 +2172,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { bpcDisabilityDenial: Not(IsNull()) },
         { bpcElderlyAnalysis: Not(IsNull()) },
         { temporaryIncapacityBenefitRejection: Not(IsNull()) },
+        { temporaryIncapacityBenefitTermination: Not(IsNull()) },
         { maternityPayGrant: Not(IsNull()) },
       ];
 
@@ -3154,6 +3156,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       'bpcDisabilityDenial',
       'bpcElderlyAnalysis',
       'temporaryIncapacityBenefitRejection',
+      'temporaryIncapacityBenefitTermination',
       'maternityPayGrant',
     ];
   }
