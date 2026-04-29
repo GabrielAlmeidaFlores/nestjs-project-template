@@ -901,23 +901,23 @@ Anï¿½lise processada do CNIS:
   ): Promise<string | null> {
     const prompt = `
 # IMPORTANTE
-- A anï¿½lise tï¿½cnica deve se basear prioritariamente na anï¿½lise jï¿½ processada do CNIS em formato JSON;
-- Calcule somente os valores que nï¿½o estiverem presentes na anï¿½lise jï¿½ fornecida do CNIS, nï¿½o realize calculos como valores salï¿½riais, use estritamente os fornecidos.
-- Nï¿½o incluir tag <br> na resposta.
-- Retorne estritamente um objeto JSON compatï¿½vel com o schema solicitado.
-- Para cada item de \`periods\`, use prioritariamente os dados estruturados jï¿½ enviados nos arquivos do prompt; nï¿½o invente valores.
-- O campo \`contributionAverage\` representa a mï¿½dia das remuneraï¿½ï¿½es do perï¿½odo jï¿½ informada nos dados estruturados; quando esse valor estiver disponï¿½vel, reutilize exatamente esse valor e nï¿½o retorne \`0\`.
-- O campo \`contributionAverage\` nï¿½o ï¿½ uma lista de contribuiï¿½ï¿½es e nï¿½o deve ser calculado como soma zerada por ausï¿½ncia de detalhamento mensal.
-- Quando o valor de \`contributionAverage\` nï¿½o estiver presente nos dados estruturados do perï¿½odo, omita esse campo em vez de retornar \`0\`.
-- O campo \`belowMinimumContributions\` deve conter somente as competï¿½ncias cujos valores ficaram abaixo do mï¿½nimo.
-- Nï¿½o liste em \`belowMinimumContributions\` contribuiï¿½ï¿½es que nï¿½o estejam abaixo do mï¿½nimo.
-- Quando nï¿½o houver competï¿½ncias abaixo do mï¿½nimo, retorne \`belowMinimumContributions: []\`.
-- O campo \`competenceBelowTheMinimum\` deve ser \`true\` somente quando houver ao menos um item em \`belowMinimumContributions\`; caso contrï¿½rio, deve ser \`false\`.
-- O campo \`isPendency\` deve indicar se o perï¿½odo possui qualquer pendï¿½ncia relevante.
-- O campo \`reasonPendency\` sï¿½ deve ser preenchido quando realmente existir pendï¿½ncia no perï¿½odo.
-- O campo \`statusPCD\` sï¿½ deve ser preenchido nos perï¿½odos em que houve deficiï¿½ncia reconhecida no perï¿½odo; nos demais, omita o campo.
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON;
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize calculos como valores salariais, use estritamente os fornecidos.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Para cada item de \`periods\`, use prioritariamente os dados estruturados já enviados nos arquivos do prompt; não invente valores.
+- O campo \`contributionAverage\` representa a média das remunerações do período já informada nos dados estruturados; quando esse valor estiver disponível, reutilize exatamente esse valor e não retorne \`0\`.
+- O campo \`contributionAverage\` não é uma lista de contribuições e não deve ser calculado como soma zerada por ausência de detalhamento mensal.
+- Quando o valor de \`contributionAverage\` não estiver presente nos dados estruturados do período, omita esse campo em vez de retornar \`0\`.
+- O campo \`belowMinimumContributions\` deve conter somente as competências cujos valores ficaram abaixo do mínimo.
+- Não liste em \`belowMinimumContributions\` contribuições que não estejam abaixo do mínimo.
+- Quando não houver competências abaixo do mínimo, retorne \`belowMinimumContributions: []\`.
+- O campo \`competenceBelowTheMinimum\` deve ser \`true\` somente quando houver ao menos um item em \`belowMinimumContributions\`; caso contrário, deve ser \`false\`.
+- O campo \`isPendency\` deve indicar se o período possui qualquer pendência relevante.
+- O campo \`reasonPendency\` só deve ser preenchido quando realmente existir pendência no período.
+- O campo \`statusPCD\` só deve ser preenchido nos períodos em que houve deficiência reconhecida no período; nos demais, omita o campo.
 
-Anï¿½lise processada do CNIS:
+Análise processada do CNIS:
   ${cnisAnalysisJson}
 `;
 
@@ -981,12 +981,12 @@ AnÃ¡lise processada do CNIS:
   ): Promise<string | null> {
     const prompt = `
 # IMPORTANTE
-- A anï¿½lise tï¿½cnica deve se basear prioritariamente na anï¿½lise jï¿½ processada do CNIS em formato JSON;
-- Calcule somente os valores que nï¿½o estiverem presentes na anï¿½lise jï¿½ fornecida do CNIS, nï¿½o realize calculos como valores salï¿½riais, use estritamente os fornecidos.
-- Nï¿½o incluir tag <br> na resposta.
-- Retorne estritamente um objeto JSON compatï¿½vel com o schema solicitado.
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON;
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize calculos como valores salariais, use estritamente os fornecidos.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
 
-Anï¿½lise processada do CNIS:
+Análise processada do CNIS:
   ${cnisAnalysisJson}
 `;
 
@@ -1010,11 +1010,11 @@ Anï¿½lise processada do CNIS:
   ): Promise<string | null> {
     const prompt = `
 # IMPORTANTE
-- Retorne estritamente um objeto JSON compatï¿½vel com o schema solicitado.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
 - Use exclusivamente os valores de enum fornecidos no schema para os campos de reconhecimento e viabilidade.
-- Cada item de \`timeAccelerators\` deve ser compatï¿½vel com a criaï¿½ï¿½o de um perï¿½odo de acelerador de tempo.
-- Preencha \`technicalNote\`, \`startDate\`, \`endDate\` e \`institution\` quando essas informaï¿½ï¿½es estiverem disponï¿½veis nos documentos analisados.
-- Nï¿½o incluir tag <br> na resposta.
+- Cada item de \`timeAccelerators\` deve ser compatível com a criação de um período de acelerador de tempo.
+- Preencha \`technicalNote\`, \`startDate\`, \`endDate\` e \`institution\` quando essas informações estiverem disponíveis nos documentos analisados.
+- Não incluir tag <br> na resposta.
 `;
 
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
