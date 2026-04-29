@@ -124,11 +124,26 @@ export class AnalyzeRuralOrHybridRetirementRejectionWorkPeriodDocumentsUseCase {
     dto: AnalyzeRuralOrHybridRetirementRejectionWorkPeriodDocumentsRequestDto,
   ): string {
     const contextParts: string[] = [];
-    if (dto.periodStartDate) contextParts.push(`Período rural: ${dto.periodStartDate} a ${dto.periodEndDate ?? 'atual'}`);
-    if (dto.workerType) contextParts.push(`Tipo de trabalhador: ${dto.workerType}`);
-    if (dto.propertyName) contextParts.push(`Nome da propriedade: ${dto.propertyName}`);
-    if (dto.propertyCity && dto.propertyState) contextParts.push(`Localização: ${dto.propertyCity}/${dto.propertyState}`);
-    const periodContextStr = contextParts.length > 0 ? `\n\nContexto do período analisado:\n${contextParts.join('\n')}` : '';
+    if (dto.periodStartDate !== undefined || dto.periodEndDate !== undefined) {
+      contextParts.push(
+        `Período rural: ${dto.periodStartDate} a ${dto.periodEndDate ?? 'atual'}`,
+      );
+    }
+    if (dto.workerType !== undefined) {
+      contextParts.push(`Tipo de trabalhador: ${dto.workerType}`);
+    }
+    if (dto.propertyName !== undefined) {
+      contextParts.push(`Nome da propriedade: ${dto.propertyName}`);
+    }
+    if (dto.propertyCity !== undefined && dto.propertyState !== undefined) {
+      contextParts.push(
+        `Localização: ${dto.propertyCity}/${dto.propertyState}`,
+      );
+    }
+    const periodContextStr =
+      contextParts.length > 0
+        ? `\n\nContexto do período analisado:\n${contextParts.join('\n')}`
+        : '';
     return `Cliente: ${clientName}${periodContextStr}`;
   }
 
