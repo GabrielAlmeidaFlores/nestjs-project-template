@@ -3,8 +3,11 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { AnalysisToolRecordNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-record-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
@@ -74,6 +77,8 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
     private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(AnalysisToolRecordCommandRepositoryGateway)
+    private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
   ) {}
 
   public async execute(
@@ -123,12 +128,19 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
       throw new CnisDocumentIsNotValidError();
     }
 
-    const analysisToolClient =
-      await this.findAnalysisToolClientByAnalysisToolRecordOrFail(
+    const analysisRecord =
+      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByDisabilityRetirementPlanningGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
         disabilityRetirementPlanningGrantId,
         organizationSessionData.organizationId,
         sessionData.authIdentityId,
+        AnalysisToolRecordNotFoundError,
       );
+
+    const analysisToolClient = new AnalysisToolClientEntity({
+      ...analysisRecord.analysisToolClient,
+      createdBy: analysisRecord.analysisToolClient.createdBy.id,
+      updatedBy: analysisRecord.analysisToolClient.updatedBy.id,
+    });
 
     const cnisData =
       await this.analysisProcessorGateway.parseCnisDocument(cnisBuffer);
@@ -186,11 +198,40 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
     const parsedResult: DisabilityRetirementPlanningGrantResultInterface =
       this.parseResultAnalysis(completeAnalysis);
 
+    const updatedAnalysisToolRecord = new AnalysisToolRecordEntity({
+      id: analysisRecord.id,
+      code: analysisRecord.code,
+      type: analysisRecord.type,
+      status: AnalysisStatusEnum.COMPLETED,
+      cnisFastAnalysis: null,
+      analysisToolClient,
+      retirementPlanningRpps: null,
+      retirementPlanningRgps: null,
+      specialActivity: null,
+      judicialCaseAnalysis: null,
+      administrativeProcedureInssAnalysis: null,
+      medicalQuestionGenerator: null,
+      medicalAndSocialReportObjectionGeneratorAnalysis: null,
+      speechGenerator: null,
+      disabilityAssessmentForBpcAnalysis: null,
+      audienceQuestionGenerator: null,
+      perCapitaIncomeForBpcAnalysis: null,
+      ruralTimelineAnalysis: null,
+      insuranceQualityAnalysis: null,
+      disabilityRetirementPlanningGrant: null,
+      createdBy: analysisRecord.createdBy.id,
+      updatedBy: organizationMember.id,
+    });
+
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       consumeCreditTransaction,
       this.disabilityRetirementPlanningGrantResultCommandRepositoryGateway.updateDisabilityRetirementPlanningGrantResult(
         disabilityRetirementPlanningGrantResult.id,
         resultEntity,
+      ),
+      this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecord(
+        analysisRecord.id,
+        updatedAnalysisToolRecord,
       ),
       ...this.buildEarningsHistoryTransactions(
         parsedResult,
@@ -527,34 +568,5 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
     );
 
     return [currentDocumentBuffer, ...otherDocumentBuffers];
-  }
-
-  private findAnalysisToolClientByAnalysisToolRecordOrFail(
-    disabilityRetirementPlanningGrantId: DisabilityRetirementPlanningGrantId,
-    organizationId: OrganizationSessionDataModel['organizationId'],
-    authIdentityId: SessionDataModel['authIdentityId'],
-  ): Promise<AnalysisToolClientEntity> {
-    const analysisToolRecordQueryResultPromise: ReturnType<
-      AnalysisToolRecordQueryRepositoryGateway['findWithRelationsByDisabilityRetirementPlanningGrantIdAndOrganizationIdAndAuthIdentityIdOrFail']
-    > =
-      this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByDisabilityRetirementPlanningGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
-        disabilityRetirementPlanningGrantId,
-        organizationId,
-        authIdentityId,
-        AnalysisToolRecordNotFoundError,
-      );
-
-    return analysisToolRecordQueryResultPromise.then(
-      (analysisToolRecordQueryResult) => {
-        const analysisToolClient =
-          analysisToolRecordQueryResult.analysisToolClient;
-
-        return new AnalysisToolClientEntity({
-          ...analysisToolClient,
-          createdBy: analysisToolClient.createdBy.id,
-          updatedBy: analysisToolClient.updatedBy.id,
-        });
-      },
-    );
   }
 }
