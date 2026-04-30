@@ -1,5 +1,11 @@
+import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
 import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { Email } from '@core/domain/schema/value-object/email/email.value-object';
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
+import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
+import { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/enum/analysis-tool-client-type.enum';
+import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { DisabilityRetirementPlanningGrantCategoryEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant/enum/disability-retirement-planning-grant-category.enum';
 import { DisabilityRetirementPlanningGrantId } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant/value-object/disability-retirement-planning-grant-id.value-object';
 import { DisabilityRetirementPlanningGrantDisabilityCategoryEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-disability-period/enum/disability-retirement-planning-grant-disability-category.enum';
@@ -20,6 +26,39 @@ import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/d
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
+
+@ResponseDto()
+export class GetDisabilityRetirementPlanningGrantAnalysisToolClientResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(AnalysisToolClientId)
+  public analysisToolClientId: AnalysisToolClientId;
+
+  @ResponseDtoStringProperty({ required: false })
+  public name?: string;
+
+  @ResponseDtoValueObjectProperty(FederalDocument, { required: false })
+  public federalDocument?: FederalDocument;
+
+  @ResponseDtoValueObjectProperty(Email, { required: false })
+  public email?: Email;
+
+  @ResponseDtoValueObjectProperty(Email, { required: false })
+  public corporateEmail?: Email;
+
+  @ResponseDtoValueObjectProperty(PhoneNumber, { required: false })
+  public phoneNumber?: PhoneNumber;
+
+  @ResponseDtoDateProperty({ required: false })
+  public birthDate?: Date;
+
+  @ResponseDtoEnumProperty(GenderEnum, { required: false })
+  public gender?: GenderEnum;
+
+  @ResponseDtoEnumProperty(AnalysisToolClientTypeEnum, { required: false })
+  public clientType?: AnalysisToolClientTypeEnum;
+
+  protected override readonly _type =
+    GetDisabilityRetirementPlanningGrantAnalysisToolClientResponseDto.name;
+}
 
 @ResponseDto()
 export class GetDisabilityRetirementPlanningGrantInssBenefitResponseDto extends BaseBuildableDtoObject {
@@ -246,6 +285,11 @@ export class GetDisabilityRetirementPlanningGrantResponseDto extends BaseBuildab
 
   @ResponseDtoBooleanProperty()
   public longPrizeDisability: boolean;
+
+  @ResponseDtoObjectProperty(
+    () => GetDisabilityRetirementPlanningGrantAnalysisToolClientResponseDto,
+  )
+  public analysisToolClient: GetDisabilityRetirementPlanningGrantAnalysisToolClientResponseDto;
 
   @ResponseDtoObjectProperty(
     () => GetDisabilityRetirementPlanningGrantCnisDocumentResponseDto,

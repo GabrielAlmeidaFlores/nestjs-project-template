@@ -15,6 +15,9 @@ export class AnalyzeRuralOrHybridRetirementAnalysisWorkPeriodDocumentAnalysisIte
   public documentYear: string;
 
   @ResponseDtoStringProperty()
+  public shortDescription: string;
+
+  @ResponseDtoStringProperty()
   public technicalNote: string;
 
   protected override readonly _type =

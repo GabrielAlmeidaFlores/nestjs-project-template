@@ -32,6 +32,10 @@ export enum AnalysisToolRecordTypeEnum {
   DISABILITY_RETIREMENT_PLANNING_REJECTION = 'indeferimento_aposentadoria_para_deficiente',
   BPC_DISABILITY_DENIAL = 'indeferimento_bpc_deficiente',
   BPC_ELDERLY_ANALYSIS = 'bpc_ao_idoso',
+  MATERNITY_PAY_REJECTION = 'indeferimento_salario_maternidade',
   TEMPORARY_INCAPACITY_BENEFIT_REJECTION = 'indeferimento_auxilio_incapacidade_temporaria',
+  TEMPORARY_DISABILITY_BENEFITS_TERMINATED = 'cessacao_auxilio_incapacidade_temporaria',
+  BPC_ELDERLY_CESSATION = 'cessacao_bpc_idoso',
   MATERNITY_PAY_GRANT = 'concessao_salario_maternidade',
+  ACCIDENT_ASSISTANCE_TERMINATED = 'auxilio_acidente_cessado',
 }
