@@ -85,6 +85,11 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
           )
         : null;
 
+    const client = analysisToolRecord.analysisToolClient;
+    if (!client) {
+      throw new DisabilityRetirementPlanningGrantNotFoundError();
+    }
+
     return GetDisabilityRetirementPlanningGrantResponseDto.build({
       id: result.id,
       category: result.category,
@@ -94,30 +99,30 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
       longPrizeDisability: result.longPrizeDisability,
       analysisToolClient:
         GetDisabilityRetirementPlanningGrantAnalysisToolClientResponseDto.build({
-          analysisToolClientId: analysisToolRecord.analysisToolClient.id,
-          ...(analysisToolRecord.analysisToolClient.name !== null && {
-            name: analysisToolRecord.analysisToolClient.name,
+          analysisToolClientId: client.id,
+          ...(client.name !== null && {
+            name: client.name,
           }),
-          ...(analysisToolRecord.analysisToolClient.federalDocument !== null && {
-            federalDocument: analysisToolRecord.analysisToolClient.federalDocument,
+          ...(client.federalDocument !== null && {
+            federalDocument: client.federalDocument,
           }),
-          ...(analysisToolRecord.analysisToolClient.email !== null && {
-            email: analysisToolRecord.analysisToolClient.email,
+          ...(client.email !== null && {
+            email: client.email,
           }),
-          ...(analysisToolRecord.analysisToolClient.corporateEmail !== null && {
-            corporateEmail: analysisToolRecord.analysisToolClient.corporateEmail,
+          ...(client.corporateEmail !== null && {
+            corporateEmail: client.corporateEmail,
           }),
-          ...(analysisToolRecord.analysisToolClient.phoneNumber !== null && {
-            phoneNumber: analysisToolRecord.analysisToolClient.phoneNumber,
+          ...(client.phoneNumber !== null && {
+            phoneNumber: client.phoneNumber,
           }),
-          ...(analysisToolRecord.analysisToolClient.birthDate !== null && {
-            birthDate: analysisToolRecord.analysisToolClient.birthDate,
+          ...(client.birthDate !== null && {
+            birthDate: client.birthDate,
           }),
-          ...(analysisToolRecord.analysisToolClient.gender !== null && {
-            gender: analysisToolRecord.analysisToolClient.gender,
+          ...(client.gender !== null && {
+            gender: client.gender,
           }),
-          ...(analysisToolRecord.analysisToolClient.clientType !== null && {
-            clientType: analysisToolRecord.analysisToolClient.clientType,
+          ...(client.clientType !== null && {
+            clientType: client.clientType,
           }),
         }),
       ...(cnisDocument !== null && { cnisDocument }),
