@@ -6,7 +6,6 @@ import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/accou
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
-import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { AnalysisToolRecordNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-record-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
@@ -198,40 +197,16 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
     const parsedResult: DisabilityRetirementPlanningGrantResultInterface =
       this.parseResultAnalysis(completeAnalysis);
 
-    const updatedAnalysisToolRecord = new AnalysisToolRecordEntity({
-      id: analysisRecord.id,
-      code: analysisRecord.code,
-      type: analysisRecord.type,
-      status: AnalysisStatusEnum.COMPLETED,
-      cnisFastAnalysis: null,
-      analysisToolClient,
-      retirementPlanningRpps: null,
-      retirementPlanningRgps: null,
-      specialActivity: null,
-      judicialCaseAnalysis: null,
-      administrativeProcedureInssAnalysis: null,
-      medicalQuestionGenerator: null,
-      medicalAndSocialReportObjectionGeneratorAnalysis: null,
-      speechGenerator: null,
-      disabilityAssessmentForBpcAnalysis: null,
-      audienceQuestionGenerator: null,
-      perCapitaIncomeForBpcAnalysis: null,
-      ruralTimelineAnalysis: null,
-      insuranceQualityAnalysis: null,
-      disabilityRetirementPlanningGrant: null,
-      createdBy: analysisRecord.createdBy.id,
-      updatedBy: organizationMember.id,
-    });
-
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       consumeCreditTransaction,
       this.disabilityRetirementPlanningGrantResultCommandRepositoryGateway.updateDisabilityRetirementPlanningGrantResult(
         disabilityRetirementPlanningGrantResult.id,
         resultEntity,
       ),
-      this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecord(
+      this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecordStatus(
         analysisRecord.id,
-        updatedAnalysisToolRecord,
+        AnalysisStatusEnum.COMPLETED,
+        organizationMember.id,
       ),
       ...this.buildEarningsHistoryTransactions(
         parsedResult,
@@ -414,7 +389,7 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
       cleanedJson = JSON.parse(cleanedJson) as string;
     }
 
-    cleanedJson = cleanedJson.replace(/\\\\n/g, '\n');
+    cleanedJson = this.sanitizeJsonControlChars(cleanedJson);
 
     const parsed: unknown = JSON.parse(cleanedJson);
 
@@ -429,6 +404,47 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
       ...rule,
       retirementAnalysis: rule.retirementAnalysis?.replace(/\\n/g, '\n') ?? rule.retirementAnalysis,
     }));
+
+    return result;
+  }
+
+  private sanitizeJsonControlChars(json: string): string {
+    let result = '';
+    let inString = false;
+    let escaped = false;
+
+    for (let i = 0; i < json.length; i++) {
+      const char = json[i];
+      const code = json.charCodeAt(i);
+
+      if (escaped) {
+        result += char;
+        escaped = false;
+        continue;
+      }
+
+      if (char === '\\' && inString) {
+        result += char;
+        escaped = true;
+        continue;
+      }
+
+      if (char === '"') {
+        inString = !inString;
+        result += char;
+        continue;
+      }
+
+      if (inString && code < 0x20) {
+        if (code === 0x0a) result += '\\n';
+        else if (code === 0x0d) result += '\\r';
+        else if (code === 0x09) result += '\\t';
+        else result += '\\u' + code.toString(16).padStart(4, '0');
+        continue;
+      }
+
+      result += char;
+    }
 
     return result;
   }
