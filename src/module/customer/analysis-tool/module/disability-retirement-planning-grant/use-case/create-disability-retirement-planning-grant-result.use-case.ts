@@ -46,6 +46,15 @@ import type {
   DisabilityRetirementPlanningGrantResultSystemRecommendationInterface,
 } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/disability-retirement-planning-grant-result.interface';
 
+const enum SanitizerCharCodeEnum {
+  CONTROL_CHAR_MAX = 0x20,
+  LINE_FEED = 0x0a,
+  CARRIAGE_RETURN = 0x0d,
+  HORIZONTAL_TAB = 0x09,
+  HEX_RADIX = 16,
+  UNICODE_PAD_LENGTH = 4,
+}
+
 @Injectable()
 export class CreateDisabilityRetirementPlanningGrantResultUseCase {
   protected readonly _type =
@@ -191,7 +200,8 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
       disabilityRetirementPlanningGrantFirstAnalysis:
         disabilityRetirementPlanningGrantResult.disabilityRetirementPlanningGrantFirstAnalysis,
       disabilityRetirementPlanningGrantCompleteAnalysis: completeAnalysis,
-      disabilityRetirementPlanningGrantSimplifiedAnalysis: parsedResult.analysisResult,
+      disabilityRetirementPlanningGrantSimplifiedAnalysis:
+        parsedResult.analysisResult,
       disabilityRetirementPlanningGrantCompleteAnalysisDownload:
         disabilityRetirementPlanningGrantResult.disabilityRetirementPlanningGrantCompleteAnalysisDownload,
     });
@@ -220,8 +230,10 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
         (
           rule: DisabilityRetirementPlanningGrantResultRetirementRuleInterface,
         ) => {
-          const eligibilityDate = (() => {
-            if (!rule.eligibilityAvailableAt) return undefined;
+          const eligibilityDate = ((): Date | undefined => {
+            if (rule.eligibilityAvailableAt === null) {
+              return undefined;
+            }
             const d = new Date(rule.eligibilityAvailableAt);
             return isNaN(d.getTime()) ? undefined : d;
           })();
@@ -229,7 +241,9 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
             {
               retirementRuleName: rule.retirementRuleName,
               isEligible: rule.isEligible,
-              ...(eligibilityDate !== undefined && { eligibilityAvailableAt: eligibilityDate }),
+              ...(eligibilityDate !== undefined && {
+                eligibilityAvailableAt: eligibilityDate,
+              }),
               expectedMonthlyBenefit: rule.expectedMonthlyBenefit,
               estimatedProcessValue: rule.estimatedProcessValue,
               retirementAnalysis: rule.retirementAnalysis,
@@ -396,12 +410,12 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
       throw new InvalidDisabilityRetirementPlanningGrantResultJsonError();
     }
 
-    const result = parsed as DisabilityRetirementPlanningGrantResultInterface;
+    const result = parsed;
 
     result.analysisResult = result.analysisResult.replace(/\\n/g, '\n');
     result.retirementRules = result.retirementRules.map((rule) => ({
       ...rule,
-      retirementAnalysis: rule.retirementAnalysis?.replace(/\\n/g, '\n') ?? rule.retirementAnalysis,
+      retirementAnalysis: rule.retirementAnalysis.replace(/\\n/g, '\n'),
     }));
 
     return result;
@@ -434,11 +448,21 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
         continue;
       }
 
-      if (inString && code < 0x20) {
-        if (code === 0x0a) result += '\\n';
-        else if (code === 0x0d) result += '\\r';
-        else if (code === 0x09) result += '\\t';
-        else result += '\\u' + code.toString(16).padStart(4, '0');
+      const codeEnum = code as SanitizerCharCodeEnum;
+      if (inString && codeEnum < SanitizerCharCodeEnum.CONTROL_CHAR_MAX) {
+        if (codeEnum === SanitizerCharCodeEnum.LINE_FEED) {
+          result += '\\n';
+        } else if (codeEnum === SanitizerCharCodeEnum.CARRIAGE_RETURN) {
+          result += '\\r';
+        } else if (codeEnum === SanitizerCharCodeEnum.HORIZONTAL_TAB) {
+          result += '\\t';
+        } else {
+          result +=
+            '\\u' +
+            code
+              .toString(SanitizerCharCodeEnum.HEX_RADIX)
+              .padStart(SanitizerCharCodeEnum.UNICODE_PAD_LENGTH, '0');
+        }
         continue;
       }
 

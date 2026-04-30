@@ -37,11 +37,20 @@ import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
+const enum SanitizerCharCodeEnum {
+  CONTROL_CHAR_MAX = 0x20,
+  LINE_FEED = 0x0a,
+  CARRIAGE_RETURN = 0x0d,
+  HORIZONTAL_TAB = 0x09,
+  HEX_RADIX = 16,
+  UNICODE_PAD_LENGTH = 4,
+}
+
 @Injectable()
 export class CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase {
   protected readonly _type =
     CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase.name;
-  private readonly logger = new Logger(CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase.name);
+  private readonly logger: Logger;
 
   public constructor(
     @Inject(AnalysisProcessorGateway)
@@ -66,7 +75,11 @@ export class CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase {
     private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
-  ) {}
+  ) {
+    this.logger = new Logger(
+      CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase.name,
+    );
+  }
 
   public async execute(
     sessionData: SessionDataModel,
@@ -345,7 +358,10 @@ export class CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase {
         }),
       };
     } catch (err) {
-      this.logger.error('parseFirstAnalysisOrThrow failed', err instanceof Error ? err.stack : String(err));
+      this.logger.error(
+        'parseFirstAnalysisOrThrow failed',
+        err instanceof Error ? err.stack : String(err),
+      );
       throw new InvalidDisabilityRetirementPlanningGrantFirstAnalysisJsonError();
     }
   }
@@ -594,11 +610,21 @@ export class CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase {
         continue;
       }
 
-      if (inString && code < 0x20) {
-        if (code === 0x0a) result += '\\n';
-        else if (code === 0x0d) result += '\\r';
-        else if (code === 0x09) result += '\\t';
-        else result += '\\u' + code.toString(16).padStart(4, '0');
+      const codeEnum = code as SanitizerCharCodeEnum;
+      if (inString && codeEnum < SanitizerCharCodeEnum.CONTROL_CHAR_MAX) {
+        if (codeEnum === SanitizerCharCodeEnum.LINE_FEED) {
+          result += '\\n';
+        } else if (codeEnum === SanitizerCharCodeEnum.CARRIAGE_RETURN) {
+          result += '\\r';
+        } else if (codeEnum === SanitizerCharCodeEnum.HORIZONTAL_TAB) {
+          result += '\\t';
+        } else {
+          result +=
+            '\\u' +
+            code
+              .toString(SanitizerCharCodeEnum.HEX_RADIX)
+              .padStart(SanitizerCharCodeEnum.UNICODE_PAD_LENGTH, '0');
+        }
         continue;
       }
 

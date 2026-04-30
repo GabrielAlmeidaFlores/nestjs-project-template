@@ -86,9 +86,6 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
         : null;
 
     const client = analysisToolRecord.analysisToolClient;
-    if (!client) {
-      throw new DisabilityRetirementPlanningGrantNotFoundError();
-    }
 
     return GetDisabilityRetirementPlanningGrantResponseDto.build({
       id: result.id,
@@ -98,33 +95,35 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
       }),
       longPrizeDisability: result.longPrizeDisability,
       analysisToolClient:
-        GetDisabilityRetirementPlanningGrantAnalysisToolClientResponseDto.build({
-          analysisToolClientId: client.id,
-          ...(client.name !== null && {
-            name: client.name,
-          }),
-          ...(client.federalDocument !== null && {
-            federalDocument: client.federalDocument,
-          }),
-          ...(client.email !== null && {
-            email: client.email,
-          }),
-          ...(client.corporateEmail !== null && {
-            corporateEmail: client.corporateEmail,
-          }),
-          ...(client.phoneNumber !== null && {
-            phoneNumber: client.phoneNumber,
-          }),
-          ...(client.birthDate !== null && {
-            birthDate: client.birthDate,
-          }),
-          ...(client.gender !== null && {
-            gender: client.gender,
-          }),
-          ...(client.clientType !== null && {
-            clientType: client.clientType,
-          }),
-        }),
+        GetDisabilityRetirementPlanningGrantAnalysisToolClientResponseDto.build(
+          {
+            analysisToolClientId: client.id,
+            ...(client.name !== null && {
+              name: client.name,
+            }),
+            ...(client.federalDocument !== null && {
+              federalDocument: client.federalDocument,
+            }),
+            ...(client.email !== null && {
+              email: client.email,
+            }),
+            ...(client.corporateEmail !== null && {
+              corporateEmail: client.corporateEmail,
+            }),
+            ...(client.phoneNumber !== null && {
+              phoneNumber: client.phoneNumber,
+            }),
+            ...(client.birthDate !== null && {
+              birthDate: client.birthDate,
+            }),
+            ...(client.gender !== null && {
+              gender: client.gender,
+            }),
+            ...(client.clientType !== null && {
+              clientType: client.clientType,
+            }),
+          },
+        ),
       ...(cnisDocument !== null && { cnisDocument }),
       createdAt: result.createdAt,
       updatedAt: result.updatedAt,
@@ -224,11 +223,15 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
                         ...(eh.indicators !== null && {
                           indicators: eh.indicators,
                         }),
-                        ...((() => {
-                          if (!eh.paymentDate) return {};
-                          const d = new Date(eh.paymentDate);
-                          return isNaN(d.getTime()) ? {} : { paymentDate: d };
-                        })()),
+                        ...(
+                          (() => {
+                            if (!eh.paymentDate) {
+                              return {};
+                            }
+                            const d = new Date(eh.paymentDate);
+                            return isNaN(d.getTime()) ? {} : { paymentDate: d };
+                          }) as () => { paymentDate?: Date }
+                        )(),
                         ...(eh.contribution !== null && {
                           contribution: eh.contribution,
                         }),
@@ -338,7 +341,7 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
             ).map((item) =>
               DisabilityRetirementPlanningGrantFirstAnalysisBelowMinimumContributionItemModel.build(
                 {
-                  contributionDate: (() => {
+                  contributionDate: ((): Date => {
                     const d = new Date(item.contributionDate);
                     return isNaN(d.getTime()) ? new Date(0) : d;
                   })(),
@@ -351,7 +354,7 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
                 DisabilityRetirementPlanningGrantFirstAnalysisEarningsHistoryItemModel.build(
                   {
                     ...(eh.competence !== null && {
-                      competence: (() => {
+                      competence: ((): Date | null => {
                         const d = new Date(eh.competence);
                         return isNaN(d.getTime()) ? null : d;
                       })(),
@@ -362,11 +365,13 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
                     ...(eh.indicators !== null && {
                       indicators: eh.indicators,
                     }),
-                    ...((() => {
-                      if (!eh.paymentDate) return {};
+                    ...((): { paymentDate?: Date } => {
+                      if (eh.paymentDate === null) {
+                        return {};
+                      }
                       const d = new Date(eh.paymentDate);
                       return isNaN(d.getTime()) ? {} : { paymentDate: d };
-                    })()),
+                    })(),
                     ...(eh.contribution !== null && {
                       contribution: eh.contribution,
                     }),
