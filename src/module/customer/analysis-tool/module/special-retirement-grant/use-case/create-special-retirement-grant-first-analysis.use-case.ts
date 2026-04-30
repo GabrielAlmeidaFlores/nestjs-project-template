@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
@@ -416,14 +417,17 @@ export class CreateSpecialRetirementGrantFirstAnalysisUseCase {
                   },
                 ),
               ),
-              observations: (p.observations ?? []).map((obs) =>
-                SpecialRetirementGrantFirstAnalysisObservationModel.build({
-                  id: obs.id.toString(),
-                  observation: obs.observation,
-                  createdAt: obs.createdAt,
-                  updatedAt: obs.updatedAt,
-                }),
-              ),
+              observations: (p.observations ?? []).map((obs) => {
+                const now = new Date();
+                return SpecialRetirementGrantFirstAnalysisObservationModel.build(
+                  {
+                    id: new Guid().toString(),
+                    observation: obs,
+                    createdAt: now,
+                    updatedAt: now,
+                  },
+                );
+              }),
             }),
           ),
           technicalDiagnosis:
