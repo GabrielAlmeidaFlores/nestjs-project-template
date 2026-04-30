@@ -1,4 +1,4 @@
-import { CnisAnalysisResultModel } from '@lib/cnis-analyzer/model/generic/cnis-analysis-result.model';
+import { CnisWorkPeriodsResponseModel } from '@module/customer/analysis-tool/lib/cnis-x-ray-analysis/model/cnis-work-periods-response.model';
 import { TemporaryDisabilityBenefitsGrantFirstAnalysisModel } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/model/generic/temporary-disability-benefits-grant-first-analysis.model';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
@@ -11,8 +11,8 @@ export class CreateTemporaryDisabilityBenefitsGrantFirstAnalysisResponseDto exte
   )
   public temporaryDisabilityBenefitsGrantFirstAnalysis: TemporaryDisabilityBenefitsGrantFirstAnalysisModel;
 
-  @ResponseDtoObjectProperty(() => CnisAnalysisResultModel)
-  public cnisAnalysis: CnisAnalysisResultModel;
+  @ResponseDtoObjectProperty(() => CnisWorkPeriodsResponseModel)
+  public cnisWorkPeriods: CnisWorkPeriodsResponseModel;
 
   protected override readonly _type =
     CreateTemporaryDisabilityBenefitsGrantFirstAnalysisResponseDto.name;
