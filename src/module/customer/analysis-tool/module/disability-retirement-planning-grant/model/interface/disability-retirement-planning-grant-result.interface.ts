@@ -63,7 +63,9 @@ export function parseDisabilityRetirementPlanningGrantCompleteAnalysis(
 
   cleaned = sanitizeJsonControlChars(cleaned);
 
-  const parsed = JSON.parse(cleaned) as DisabilityRetirementPlanningGrantResultInterface;
+  const parsed = JSON.parse(
+    cleaned,
+  ) as DisabilityRetirementPlanningGrantResultInterface;
 
   if (typeof parsed.analysisResult === 'string') {
     parsed.analysisResult = parsed.analysisResult.replace(/\\n/g, '\n');
@@ -71,13 +73,23 @@ export function parseDisabilityRetirementPlanningGrantCompleteAnalysis(
   if (Array.isArray(parsed.retirementRules)) {
     parsed.retirementRules = parsed.retirementRules.map((rule) => ({
       ...rule,
-      retirementAnalysis: typeof rule.retirementAnalysis === 'string'
-        ? rule.retirementAnalysis.replace(/\\n/g, '\n')
-        : rule.retirementAnalysis,
+      retirementAnalysis:
+        typeof rule.retirementAnalysis === 'string'
+          ? rule.retirementAnalysis.replace(/\\n/g, '\n')
+          : rule.retirementAnalysis,
     }));
   }
 
   return parsed;
+}
+
+const enum SanitizerCharCodeEnum {
+  CONTROL_CHAR_MAX = 0x20,
+  LINE_FEED = 0x0a,
+  CARRIAGE_RETURN = 0x0d,
+  HORIZONTAL_TAB = 0x09,
+  HEX_RADIX = 16,
+  UNICODE_PAD_LENGTH = 4,
 }
 
 function sanitizeJsonControlChars(json: string): string {
@@ -107,11 +119,21 @@ function sanitizeJsonControlChars(json: string): string {
       continue;
     }
 
-    if (inString && code < 0x20) {
-      if (code === 0x0a) result += '\\n';
-      else if (code === 0x0d) result += '\\r';
-      else if (code === 0x09) result += '\\t';
-      else result += '\\u' + code.toString(16).padStart(4, '0');
+    const codeEnum = code as SanitizerCharCodeEnum;
+    if (inString && codeEnum < SanitizerCharCodeEnum.CONTROL_CHAR_MAX) {
+      if (codeEnum === SanitizerCharCodeEnum.LINE_FEED) {
+        result += '\\n';
+      } else if (codeEnum === SanitizerCharCodeEnum.CARRIAGE_RETURN) {
+        result += '\\r';
+      } else if (codeEnum === SanitizerCharCodeEnum.HORIZONTAL_TAB) {
+        result += '\\t';
+      } else {
+        result +=
+          '\\u' +
+          code
+            .toString(SanitizerCharCodeEnum.HEX_RADIX)
+            .padStart(SanitizerCharCodeEnum.UNICODE_PAD_LENGTH, '0');
+      }
       continue;
     }
 

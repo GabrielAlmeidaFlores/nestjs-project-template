@@ -7,6 +7,7 @@ import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implemen
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { BpcDisabilityDenialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-denial.typeorm.entity';
 import { BpcElderlyAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis.typeorm.entity';
+import { BpcElderlyCessationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-cessation.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { DeathBenefitGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant.typeorm.entity';
 import { DeathBenefitRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-rejection.typeorm.entity';
@@ -311,6 +312,14 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   )
   @JoinColumn({ name: 'bpc_elderly_analysis_id' })
   public bpcElderlyAnalysis?: BpcElderlyAnalysisTypeormEntity | null;
+
+  @OneToOne(
+    () => BpcElderlyCessationTypeormEntity,
+    (entity) => entity.analysisToolRecord,
+    { nullable: true },
+  )
+  @JoinColumn({ name: 'bpc_elderly_cessation_id' })
+  public bpcElderlyCessation?: BpcElderlyCessationTypeormEntity | null;
 
   @ManyToOne('MaternityPayRejectionTypeormEntity')
   @JoinColumn({ name: 'maternity_pay_rejection_id' })

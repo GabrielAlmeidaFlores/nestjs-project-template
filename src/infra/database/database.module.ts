@@ -65,6 +65,14 @@ import { BpcElderlyAnalysisFamilyMemberDocumentTypeormCommandRepository } from '
 import { BpcElderlyAnalysisInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-analysis-inss-benefit/bpc-elderly-analysis-inss-benefit.typeorm.command.repository';
 import { BpcElderlyAnalysisLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-analysis-legal-proceeding/bpc-elderly-analysis-legal-proceeding.typeorm.command.repository';
 import { BpcElderlyAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-analysis-result/bpc-elderly-analysis-result.typeorm.command.repository';
+import { BpcElderlyCessationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-cessation/bpc-elderly-cessation.typeorm.command.repository';
+import { BpcElderlyCessationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-cessation/bpc-elderly-cessation.typeorm.query.repository';
+import { BpcElderlyCessationDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-cessation-document/bpc-elderly-cessation-document.typeorm.command.repository';
+import { BpcElderlyCessationFamilyMemberTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-cessation-family-member/bpc-elderly-cessation-family-member.typeorm.command.repository';
+import { BpcElderlyCessationFamilyMemberDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-cessation-family-member-document/bpc-elderly-cessation-family-member-document.typeorm.command.repository';
+import { BpcElderlyCessationInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-cessation-inss-benefit/bpc-elderly-cessation-inss-benefit.typeorm.command.repository';
+import { BpcElderlyCessationLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-cessation-legal-proceeding/bpc-elderly-cessation-legal-proceeding.typeorm.command.repository';
+import { BpcElderlyCessationResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-elderly-cessation-result/bpc-elderly-cessation-result.typeorm.command.repository';
 import { CidTenTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cid-ten/cid-ten.typeorm.command.repository';
 import { CidTenTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/cid-ten/cid-ten.typeorm.query.repository';
 import { CnisFastAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis/cnis-fast-analysis.typeorm.command.repository';
@@ -229,15 +237,6 @@ import { LegalPleadingHistoryTypeormCommandRepository } from '@infra/database/im
 import { LegalPleadingHistoryTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/legal-pleading-history/legal-pleading-history.typeorm.query.repository';
 import { LegalProceedingDetailTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/legal-proceeding-detail/legal-proceeding-detail.typeorm.command.repository';
 import { LegalProceedingDetailTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/legal-proceeding-detail/legal-proceeding-detail.typeorm.query.repository';
-import { MaternityPayRejectionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection/maternity-pay-rejection.typeorm.command.repository';
-import { MaternityPayRejectionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection/maternity-pay-rejection.typeorm.query.repository';
-import { MaternityPayRejectionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-document/maternity-pay-rejection-document.typeorm.command.repository';
-import { MaternityPayRejectionInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-inss-benefit/maternity-pay-rejection-inss-benefit.typeorm.command.repository';
-import { MaternityPayRejectionLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-legal-proceeding/maternity-pay-rejection-legal-proceeding.typeorm.command.repository';
-import { MaternityPayRejectionResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-result/maternity-pay-rejection-result.typeorm.command.repository';
-import { MaternityPayRejectionWorkPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-work-period/maternity-pay-rejection-work-period.typeorm.command.repository';
-import { MaternityPayRejectionWorkPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-work-period-document/maternity-pay-rejection-work-period-document.typeorm.command.repository';
-import { MaternityPayRejectionWorkPeriodEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-work-period-earnings-history/maternity-pay-rejection-work-period-earnings-history.typeorm.command.repository';
 import { MaternityPayGrantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant/maternity-pay-grant.typeorm.command.repository';
 import { MaternityPayGrantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant/maternity-pay-grant.typeorm.query.repository';
 import { MaternityPayGrantDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant-document/maternity-pay-grant-document.typeorm.command.repository';
@@ -248,6 +247,15 @@ import { MaternityPayGrantPeriodTypeormCommandRepository } from '@infra/database
 import { MaternityPayGrantPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant-period/maternity-pay-grant-period.typeorm.query.repository';
 import { MaternityPayGrantPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant-period-document/maternity-pay-grant-period-document.typeorm.command.repository';
 import { MaternityPayGrantResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant-result/maternity-pay-grant-result.typeorm.command.repository';
+import { MaternityPayRejectionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection/maternity-pay-rejection.typeorm.command.repository';
+import { MaternityPayRejectionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection/maternity-pay-rejection.typeorm.query.repository';
+import { MaternityPayRejectionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-document/maternity-pay-rejection-document.typeorm.command.repository';
+import { MaternityPayRejectionInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-inss-benefit/maternity-pay-rejection-inss-benefit.typeorm.command.repository';
+import { MaternityPayRejectionLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-legal-proceeding/maternity-pay-rejection-legal-proceeding.typeorm.command.repository';
+import { MaternityPayRejectionResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-result/maternity-pay-rejection-result.typeorm.command.repository';
+import { MaternityPayRejectionWorkPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-work-period/maternity-pay-rejection-work-period.typeorm.command.repository';
+import { MaternityPayRejectionWorkPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-work-period-document/maternity-pay-rejection-work-period-document.typeorm.command.repository';
+import { MaternityPayRejectionWorkPeriodEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-work-period-earnings-history/maternity-pay-rejection-work-period-earnings-history.typeorm.command.repository';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.typeorm.command.repository';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.typeorm.query.repository';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/medical-and-social-report-objection-generator-analysis-benefit/medical-and-social-report-objection-generator-analysis-benefit.typeorm.command.repository';
@@ -610,6 +618,14 @@ import { BpcElderlyAnalysisFamilyMemberDocumentCommandRepositoryGateway } from '
 import { BpcElderlyAnalysisInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-inss-benefit/command/bpc-elderly-analysis-inss-benefit.command.repository.gateway';
 import { BpcElderlyAnalysisLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-legal-proceeding/command/bpc-elderly-analysis-legal-proceeding.command.repository.gateway';
 import { BpcElderlyAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis-result/command/bpc-elderly-analysis-result.command.repository.gateway';
+import { BpcElderlyCessationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/domain/repository/bpc-elderly-cessation/command/bpc-elderly-cessation.command.repository.gateway';
+import { BpcElderlyCessationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/domain/repository/bpc-elderly-cessation/query/bpc-elderly-cessation.query.repository.gateway';
+import { BpcElderlyCessationDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/domain/repository/bpc-elderly-cessation-document/command/bpc-elderly-cessation-document.command.repository.gateway';
+import { BpcElderlyCessationFamilyMemberCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/domain/repository/bpc-elderly-cessation-family-member/command/bpc-elderly-cessation-family-member.command.repository.gateway';
+import { BpcElderlyCessationFamilyMemberDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/domain/repository/bpc-elderly-cessation-family-member-document/command/bpc-elderly-cessation-family-member-document.command.repository.gateway';
+import { BpcElderlyCessationInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/domain/repository/bpc-elderly-cessation-inss-benefit/command/bpc-elderly-cessation-inss-benefit.command.repository.gateway';
+import { BpcElderlyCessationLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/domain/repository/bpc-elderly-cessation-legal-proceeding/command/bpc-elderly-cessation-legal-proceeding.command.repository.gateway';
+import { BpcElderlyCessationResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/domain/repository/bpc-elderly-cessation-result/command/bpc-elderly-cessation-result.command.repository.gateway';
 import { CnisFastAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/repository/cnis-fast-analysis/command/cnis-fast-analysis.command.repository.gateway';
 import { CnisFastAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/repository/cnis-fast-analysis/query/cnis-fast-analysis.query.repository.gateway';
 import { CnisFastAnalysisInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/repository/cnis-fast-analysis-inss-benefit/command/cnis-fast-analysis-inss-benefit.command.repository.gateway';
@@ -756,15 +772,6 @@ import { LegalPleadingHistoryCommandRepositoryGateway } from '@module/customer/a
 import { LegalPleadingHistoryQueryRepositoryGateway } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading-history/query/legal-pleading-history.query.repository.gateway';
 import { LegalPleadingResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading-result/command/legal-pleading-result.repository.gateway';
 import { LegalPleadingResultQueryRepositoryGateway } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading-result/query/legal-pleading-result.query.repository.gateway';
-import { MaternityPayRejectionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection/command/maternity-pay-rejection.command.repository.gateway';
-import { MaternityPayRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection/query/maternity-pay-rejection.query.repository.gateway';
-import { MaternityPayRejectionDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection-document/command/maternity-pay-rejection-document.command.repository.gateway';
-import { MaternityPayRejectionInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection-inss-benefit/command/maternity-pay-rejection-inss-benefit.command.repository.gateway';
-import { MaternityPayRejectionLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection-legal-proceeding/command/maternity-pay-rejection-legal-proceeding.command.repository.gateway';
-import { MaternityPayRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection-result/command/maternity-pay-rejection-result.command.repository.gateway';
-import { MaternityPayRejectionWorkPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection-work-period/command/maternity-pay-rejection-work-period.command.repository.gateway';
-import { MaternityPayRejectionWorkPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection-work-period-document/command/maternity-pay-rejection-work-period-document.command.repository.gateway';
-import { MaternityPayRejectionWorkPeriodEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection-work-period-earnings-history/command/maternity-pay-rejection-work-period-earnings-history.command.repository.gateway';
 import { MaternityPayGrantCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant/command/maternity-pay-grant.command.repository.gateway';
 import { MaternityPayGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant/query/maternity-pay-grant.query.repository.gateway';
 import { MaternityPayGrantDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant-document/command/maternity-pay-grant-document.command.repository.gateway';
@@ -775,6 +782,15 @@ import { MaternityPayGrantPeriodCommandRepositoryGateway } from '@module/custome
 import { MaternityPayGrantPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant-period/query/maternity-pay-grant-period.query.repository.gateway';
 import { MaternityPayGrantPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant-period-document/command/maternity-pay-grant-period-document.command.repository.gateway';
 import { MaternityPayGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant-result/command/maternity-pay-grant-result.command.repository.gateway';
+import { MaternityPayRejectionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection/command/maternity-pay-rejection.command.repository.gateway';
+import { MaternityPayRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection/query/maternity-pay-rejection.query.repository.gateway';
+import { MaternityPayRejectionDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection-document/command/maternity-pay-rejection-document.command.repository.gateway';
+import { MaternityPayRejectionInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection-inss-benefit/command/maternity-pay-rejection-inss-benefit.command.repository.gateway';
+import { MaternityPayRejectionLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection-legal-proceeding/command/maternity-pay-rejection-legal-proceeding.command.repository.gateway';
+import { MaternityPayRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection-result/command/maternity-pay-rejection-result.command.repository.gateway';
+import { MaternityPayRejectionWorkPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection-work-period/command/maternity-pay-rejection-work-period.command.repository.gateway';
+import { MaternityPayRejectionWorkPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection-work-period-document/command/maternity-pay-rejection-work-period-document.command.repository.gateway';
+import { MaternityPayRejectionWorkPeriodEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection-work-period-earnings-history/command/maternity-pay-rejection-work-period-earnings-history.command.repository.gateway';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/repository/medical-and-social-report-objection-generator-analysis/command/medical-and-social-report-objection-generator-analysis.command.repository.gateway';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/repository/medical-and-social-report-objection-generator-analysis/query/medical-and-social-report-objection-generator-analysis.query.repository.gateway';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/repository/medical-and-social-report-objection-generator-analysis-benefit/command/medical-and-social-report-objection-generator-analysis-benefit.command.repository.gateway';
@@ -2899,6 +2915,38 @@ const classProvider: ClassProvider[] = [
   {
     provide: BpcElderlyAnalysisLegalProceedingCommandRepositoryGateway,
     useClass: BpcElderlyAnalysisLegalProceedingTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyCessationCommandRepositoryGateway,
+    useClass: BpcElderlyCessationTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyCessationQueryRepositoryGateway,
+    useClass: BpcElderlyCessationTypeormQueryRepository,
+  },
+  {
+    provide: BpcElderlyCessationDocumentCommandRepositoryGateway,
+    useClass: BpcElderlyCessationDocumentTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyCessationResultCommandRepositoryGateway,
+    useClass: BpcElderlyCessationResultTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyCessationFamilyMemberCommandRepositoryGateway,
+    useClass: BpcElderlyCessationFamilyMemberTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyCessationFamilyMemberDocumentCommandRepositoryGateway,
+    useClass: BpcElderlyCessationFamilyMemberDocumentTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyCessationInssBenefitCommandRepositoryGateway,
+    useClass: BpcElderlyCessationInssBenefitTypeormCommandRepository,
+  },
+  {
+    provide: BpcElderlyCessationLegalProceedingCommandRepositoryGateway,
+    useClass: BpcElderlyCessationLegalProceedingTypeormCommandRepository,
   },
   {
     provide: MiniAdvisorCommandRepositoryGateway,
