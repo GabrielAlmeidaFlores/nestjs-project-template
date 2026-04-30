@@ -58,6 +58,8 @@ export class AnalysisActivityMessageFactory {
       'Concessão de aposentadoria especial',
     [AnalysisToolRecordTypeEnum.TEMPORARY_DISABILITY_BENEFITS_GRANT]:
       'Concessão de benefício por incapacidade temporária',
+    [AnalysisToolRecordTypeEnum.TEMPORARY_DISABILITY_BENEFITS_TERMINATED]:
+      'Cessação de auxílio por incapacidade temporária',
     [AnalysisToolRecordTypeEnum.RURAL_OR_HYBRID_RETIREMENT_REJECTION]:
       'Indeferimento de aposentadoria rural ou híbrida',
     [AnalysisToolRecordTypeEnum.RURAL_OR_HYBRID_RETIREMENT_ANALYSIS]:
@@ -80,8 +82,6 @@ export class AnalysisActivityMessageFactory {
       'Indeferimento de benefício por incapacidade temporária',
     [AnalysisToolRecordTypeEnum.MATERNITY_PAY_GRANT]:
       'Concessão de salário maternidade',
-    [AnalysisToolRecordTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_TERMINATION]:
-      'Cessação de benefício por incapacidade temporária',
   };
 
   private static readonly actionLabelMap: Record<

@@ -417,6 +417,24 @@ import { TemporaryDisabilityBenefitsGrantResultTypeormCommandRepository } from '
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-work-periods/temporary-disability-benefits-grant-work-periods.typeorm.command.repository';
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-work-periods/temporary-disability-benefits-grant-work-periods.typeorm.query.repository';
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-grant-work-periods-earnings-history/temporary-disability-benefits-grant-work-periods-earnings-history.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsTerminatedTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-terminated/temporary-disability-benefits-terminated.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsTerminatedTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-terminated/temporary-disability-benefits-terminated.typeorm.query.repository';
+import { TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-terminated-disability-analysis/temporary-disability-benefits-terminated-disability-analysis.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-terminated-disability-analysis/temporary-disability-benefits-terminated-disability-analysis.typeorm.query.repository';
+import { TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisCidTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-terminated-disability-analysis-cid/temporary-disability-benefits-terminated-disability-analysis-cid.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-terminated-disability-analysis-document/temporary-disability-benefits-terminated-disability-analysis-document.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsTerminatedDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-terminated-document/temporary-disability-benefits-terminated-document.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsTerminatedInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-terminated-inss-benefit/temporary-disability-benefits-terminated-inss-benefit.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsTerminatedInsuredStatusTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-terminated-insured-status/temporary-disability-benefits-terminated-insured-status.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsTerminatedInsuredStatusTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-terminated-insured-status/temporary-disability-benefits-terminated-insured-status.typeorm.query.repository';
+import { TemporaryDisabilityBenefitsTerminatedInsuredStatusDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-terminated-insured-status-document/temporary-disability-benefits-terminated-insured-status-document.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsTerminatedPreviousBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-terminated-previous-benefit/temporary-disability-benefits-terminated-previous-benefit.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsTerminatedPreviousBenefitDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-terminated-previous-benefit-document/temporary-disability-benefits-terminated-previous-benefit-document.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsTerminatedResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-terminated-result/temporary-disability-benefits-terminated-result.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsTerminatedWorkPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-terminated-work-period-document/temporary-disability-benefits-terminated-work-period-document.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsTerminatedWorkPeriodsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-terminated-work-periods/temporary-disability-benefits-terminated-work-periods.typeorm.command.repository';
+import { TemporaryDisabilityBenefitsTerminatedWorkPeriodsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-terminated-work-periods/temporary-disability-benefits-terminated-work-periods.typeorm.query.repository';
+import { TemporaryDisabilityBenefitsTerminatedWorkPeriodsEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-disability-benefits-terminated-work-periods-earnings-history/temporary-disability-benefits-terminated-work-periods-earnings-history.typeorm.command.repository';
 import { TemporaryIncapacityBenefitRejectionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.typeorm.command.repository';
 import { TemporaryIncapacityBenefitRejectionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.typeorm.query.repository';
 import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/temporary-incapacity-benefit-rejection-disability-analysis/temporary-incapacity-benefit-rejection-disability-analysis.typeorm.command.repository';
@@ -797,6 +815,20 @@ import { TemporaryDisabilityBenefitsGrantResultTypeormEntity } from '@infra/data
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-work-periods-earnings-history.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant-work-periods.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant.typeorm.entity';
+import { TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisCidTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-terminated-disability-analysis-cid.typeorm.entity';
+import { TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-terminated-disability-analysis-document.typeorm.entity';
+import { TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-terminated-disability-analysis.typeorm.entity';
+import { TemporaryDisabilityBenefitsTerminatedDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-terminated-document.typeorm.entity';
+import { TemporaryDisabilityBenefitsTerminatedInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-terminated-inss-benefit.typeorm.entity';
+import { TemporaryDisabilityBenefitsTerminatedInsuredStatusDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-terminated-insured-status-document.typeorm.entity';
+import { TemporaryDisabilityBenefitsTerminatedInsuredStatusTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-terminated-insured-status.typeorm.entity';
+import { TemporaryDisabilityBenefitsTerminatedPreviousBenefitDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-terminated-previous-benefit-document.typeorm.entity';
+import { TemporaryDisabilityBenefitsTerminatedPreviousBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-terminated-previous-benefit.typeorm.entity';
+import { TemporaryDisabilityBenefitsTerminatedResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-terminated-result.typeorm.entity';
+import { TemporaryDisabilityBenefitsTerminatedWorkPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-terminated-work-period-document.typeorm.entity';
+import { TemporaryDisabilityBenefitsTerminatedWorkPeriodsEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-terminated-work-periods-earnings-history.typeorm.entity';
+import { TemporaryDisabilityBenefitsTerminatedWorkPeriodsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-terminated-work-periods.typeorm.entity';
+import { TemporaryDisabilityBenefitsTerminatedTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-terminated.typeorm.entity';
 import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisCidTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-rejection-disability-analysis-cid.typeorm.entity';
 import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-rejection-disability-analysis-document.typeorm.entity';
 import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-rejection-disability-analysis.typeorm.entity';
@@ -934,6 +966,20 @@ export class TypeormIndex {
     TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryTypeormEntity,
     TemporaryDisabilityBenefitsGrantInssBenefitTypeormEntity,
     TemporaryDisabilityBenefitsGrantLegalProceedingTypeormEntity,
+    TemporaryDisabilityBenefitsTerminatedTypeormEntity,
+    TemporaryDisabilityBenefitsTerminatedResultTypeormEntity,
+    TemporaryDisabilityBenefitsTerminatedDocumentTypeormEntity,
+    TemporaryDisabilityBenefitsTerminatedInssBenefitTypeormEntity,
+    TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisTypeormEntity,
+    TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisCidTypeormEntity,
+    TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisDocumentTypeormEntity,
+    TemporaryDisabilityBenefitsTerminatedInsuredStatusTypeormEntity,
+    TemporaryDisabilityBenefitsTerminatedInsuredStatusDocumentTypeormEntity,
+    TemporaryDisabilityBenefitsTerminatedWorkPeriodsTypeormEntity,
+    TemporaryDisabilityBenefitsTerminatedWorkPeriodsEarningsHistoryTypeormEntity,
+    TemporaryDisabilityBenefitsTerminatedPreviousBenefitTypeormEntity,
+    TemporaryDisabilityBenefitsTerminatedPreviousBenefitDocumentTypeormEntity,
+    TemporaryDisabilityBenefitsTerminatedWorkPeriodDocumentTypeormEntity,
     TemporaryIncapacityBenefitRejectionTypeormEntity,
     TemporaryIncapacityBenefitRejectionResultTypeormEntity,
     TemporaryIncapacityBenefitRejectionDocumentTypeormEntity,
@@ -1349,6 +1395,24 @@ export class TypeormIndex {
     TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryTypeormCommandRepository,
     TemporaryDisabilityBenefitsGrantInssBenefitTypeormCommandRepository,
     TemporaryDisabilityBenefitsGrantLegalProceedingTypeormCommandRepository,
+    TemporaryDisabilityBenefitsTerminatedTypeormQueryRepository,
+    TemporaryDisabilityBenefitsTerminatedTypeormCommandRepository,
+    TemporaryDisabilityBenefitsTerminatedResultTypeormCommandRepository,
+    TemporaryDisabilityBenefitsTerminatedDocumentTypeormCommandRepository,
+    TemporaryDisabilityBenefitsTerminatedInssBenefitTypeormCommandRepository,
+    TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisTypeormQueryRepository,
+    TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisTypeormCommandRepository,
+    TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisCidTypeormCommandRepository,
+    TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisDocumentTypeormCommandRepository,
+    TemporaryDisabilityBenefitsTerminatedInsuredStatusTypeormQueryRepository,
+    TemporaryDisabilityBenefitsTerminatedInsuredStatusTypeormCommandRepository,
+    TemporaryDisabilityBenefitsTerminatedInsuredStatusDocumentTypeormCommandRepository,
+    TemporaryDisabilityBenefitsTerminatedWorkPeriodsTypeormQueryRepository,
+    TemporaryDisabilityBenefitsTerminatedWorkPeriodsTypeormCommandRepository,
+    TemporaryDisabilityBenefitsTerminatedWorkPeriodsEarningsHistoryTypeormCommandRepository,
+    TemporaryDisabilityBenefitsTerminatedPreviousBenefitTypeormCommandRepository,
+    TemporaryDisabilityBenefitsTerminatedPreviousBenefitDocumentTypeormCommandRepository,
+    TemporaryDisabilityBenefitsTerminatedWorkPeriodDocumentTypeormCommandRepository,
     TemporaryIncapacityBenefitRejectionTypeormQueryRepository,
     TemporaryIncapacityBenefitRejectionTypeormCommandRepository,
     TemporaryIncapacityBenefitRejectionResultTypeormCommandRepository,

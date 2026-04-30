@@ -99,7 +99,7 @@ export class CreateTemporaryIncapacityBenefitTerminationUseCase {
 
     const analysisToolRecord = new AnalysisToolRecordEntity({
       code: new AnalysisToolRecordCode(countRecords + 1),
-      type: AnalysisToolRecordTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_TERMINATION,
+      type: AnalysisToolRecordTypeEnum.TEMPORARY_DISABILITY_BENEFITS_TERMINATED,
       cnisFastAnalysis: null,
       temporaryIncapacityBenefitTermination,
       analysisToolClient,
