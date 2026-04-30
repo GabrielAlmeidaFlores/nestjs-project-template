@@ -32,6 +32,7 @@ import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementati
 import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
 import { SpecialCategoryRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis.typeorm.entity';
 import { SpecialRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant.typeorm.entity';
+import { SpecialRetirementRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection.typeorm.entity';
 import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
 import { SurvivorPensionAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/survivor-pension-analysis.typeorm.entity';
 import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning.typeorm.entity';
@@ -284,6 +285,10 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   )
   @JoinColumn({ name: 'special_retirement_grant_id' })
   public specialRetirementGrant?: SpecialRetirementGrantTypeormEntity | null;
+
+  @ManyToOne(() => SpecialRetirementRejectionTypeormEntity)
+  @JoinColumn({ name: 'special_retirement_rejection_id' })
+  public specialRetirementRejection?: SpecialRetirementRejectionTypeormEntity | null;
 
   @ManyToOne(() => GeneralUrbanRetirementDenialTypeormEntity)
   @JoinColumn({ name: 'general_urban_retirement_denial_id' })
