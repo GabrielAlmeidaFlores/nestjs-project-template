@@ -197,15 +197,6 @@ import { LegalPleadingHistoryTypeormCommandRepository } from '@infra/database/im
 import { LegalPleadingHistoryTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/legal-pleading-history/legal-pleading-history.typeorm.query.repository';
 import { LegalProceedingDetailTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/legal-proceeding-detail/legal-proceeding-detail.typeorm.command.repository';
 import { LegalProceedingDetailTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/legal-proceeding-detail/legal-proceeding-detail.typeorm.query.repository';
-import { MaternityPayRejectionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection/maternity-pay-rejection.typeorm.command.repository';
-import { MaternityPayRejectionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection/maternity-pay-rejection.typeorm.query.repository';
-import { MaternityPayRejectionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-document/maternity-pay-rejection-document.typeorm.command.repository';
-import { MaternityPayRejectionInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-inss-benefit/maternity-pay-rejection-inss-benefit.typeorm.command.repository';
-import { MaternityPayRejectionLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-legal-proceeding/maternity-pay-rejection-legal-proceeding.typeorm.command.repository';
-import { MaternityPayRejectionResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-result/maternity-pay-rejection-result.typeorm.command.repository';
-import { MaternityPayRejectionWorkPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-work-period/maternity-pay-rejection-work-period.typeorm.command.repository';
-import { MaternityPayRejectionWorkPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-work-period-document/maternity-pay-rejection-work-period-document.typeorm.command.repository';
-import { MaternityPayRejectionWorkPeriodEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-work-period-earnings-history/maternity-pay-rejection-work-period-earnings-history.typeorm.command.repository';
 import { MaternityPayGrantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant/maternity-pay-grant.typeorm.command.repository';
 import { MaternityPayGrantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant/maternity-pay-grant.typeorm.query.repository';
 import { MaternityPayGrantDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant-document/maternity-pay-grant-document.typeorm.command.repository';
@@ -216,6 +207,15 @@ import { MaternityPayGrantPeriodTypeormCommandRepository } from '@infra/database
 import { MaternityPayGrantPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant-period/maternity-pay-grant-period.typeorm.query.repository';
 import { MaternityPayGrantPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant-period-document/maternity-pay-grant-period-document.typeorm.command.repository';
 import { MaternityPayGrantResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-grant-result/maternity-pay-grant-result.typeorm.command.repository';
+import { MaternityPayRejectionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection/maternity-pay-rejection.typeorm.command.repository';
+import { MaternityPayRejectionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection/maternity-pay-rejection.typeorm.query.repository';
+import { MaternityPayRejectionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-document/maternity-pay-rejection-document.typeorm.command.repository';
+import { MaternityPayRejectionInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-inss-benefit/maternity-pay-rejection-inss-benefit.typeorm.command.repository';
+import { MaternityPayRejectionLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-legal-proceeding/maternity-pay-rejection-legal-proceeding.typeorm.command.repository';
+import { MaternityPayRejectionResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-result/maternity-pay-rejection-result.typeorm.command.repository';
+import { MaternityPayRejectionWorkPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-work-period/maternity-pay-rejection-work-period.typeorm.command.repository';
+import { MaternityPayRejectionWorkPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-work-period-document/maternity-pay-rejection-work-period-document.typeorm.command.repository';
+import { MaternityPayRejectionWorkPeriodEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/maternity-pay-rejection-work-period-earnings-history/maternity-pay-rejection-work-period-earnings-history.typeorm.command.repository';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.typeorm.command.repository';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.typeorm.query.repository';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/medical-and-social-report-objection-generator-analysis-benefit/medical-and-social-report-objection-generator-analysis-benefit.typeorm.command.repository';
@@ -480,6 +480,13 @@ import { BpcElderlyAnalysisInssBenefitTypeormEntity } from '@infra/database/impl
 import { BpcElderlyAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-legal-proceeding.typeorm.entity';
 import { BpcElderlyAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-result.typeorm.entity';
 import { BpcElderlyAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis.typeorm.entity';
+import { BpcElderlyCessationDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-cessation-document.typeorm.entity';
+import { BpcElderlyCessationFamilyMemberDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-cessation-family-member-document.typeorm.entity';
+import { BpcElderlyCessationFamilyMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-cessation-family-member.typeorm.entity';
+import { BpcElderlyCessationInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-cessation-inss-benefit.typeorm.entity';
+import { BpcElderlyCessationLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-cessation-legal-proceeding.typeorm.entity';
+import { BpcElderlyCessationResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-cessation-result.typeorm.entity';
+import { BpcElderlyCessationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-cessation.typeorm.entity';
 import { CidTenTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cid-ten.typeorm.entity';
 import { CnisFastAnalysisInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-inss-benefit.typeorm.entity';
 import { CnisFastAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-legal-proceeding.typeorm.entity';
@@ -600,14 +607,6 @@ import { LegalPleadingHistoryTypeormEntity } from '@infra/database/implementatio
 import { LegalPleadingResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-result.typeorm.entity';
 import { LegalPleadingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading.typeorm.entity';
 import { LegalProceedingDetailTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-proceeding-detail.typeorm.entity';
-import { MaternityPayRejectionDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-rejection-document.typeorm.entity';
-import { MaternityPayRejectionInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-rejection-inss-benefit.typeorm.entity';
-import { MaternityPayRejectionLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-rejection-legal-proceeding.typeorm.entity';
-import { MaternityPayRejectionResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-rejection-result.typeorm.entity';
-import { MaternityPayRejectionWorkPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-rejection-work-period-document.typeorm.entity';
-import { MaternityPayRejectionWorkPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-rejection-work-period-earnings-history.typeorm.entity';
-import { MaternityPayRejectionWorkPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-rejection-work-period.typeorm.entity';
-import { MaternityPayRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-rejection.typeorm.entity';
 import { MaternityPayGrantDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-grant-document.typeorm.entity';
 import { MaternityPayGrantEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-grant-earnings-history.typeorm.entity';
 import { MaternityPayGrantInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-grant-inss-benefit.typeorm.entity';
@@ -616,6 +615,14 @@ import { MaternityPayGrantPeriodDocumentTypeormEntity } from '@infra/database/im
 import { MaternityPayGrantPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-grant-period.typeorm.entity';
 import { MaternityPayGrantResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-grant-result.typeorm.entity';
 import { MaternityPayGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-grant.typeorm.entity';
+import { MaternityPayRejectionDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-rejection-document.typeorm.entity';
+import { MaternityPayRejectionInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-rejection-inss-benefit.typeorm.entity';
+import { MaternityPayRejectionLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-rejection-legal-proceeding.typeorm.entity';
+import { MaternityPayRejectionResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-rejection-result.typeorm.entity';
+import { MaternityPayRejectionWorkPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-rejection-work-period-document.typeorm.entity';
+import { MaternityPayRejectionWorkPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-rejection-work-period-earnings-history.typeorm.entity';
+import { MaternityPayRejectionWorkPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-rejection-work-period.typeorm.entity';
+import { MaternityPayRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-rejection.typeorm.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis-benefit.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis-document.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis-legal-proceeding.entity';
@@ -1193,6 +1200,13 @@ export class TypeormIndex {
     BpcElderlyAnalysisResultTypeormEntity,
     BpcElderlyAnalysisInssBenefitTypeormEntity,
     BpcElderlyAnalysisLegalProceedingTypeormEntity,
+    BpcElderlyCessationTypeormEntity,
+    BpcElderlyCessationDocumentTypeormEntity,
+    BpcElderlyCessationFamilyMemberTypeormEntity,
+    BpcElderlyCessationFamilyMemberDocumentTypeormEntity,
+    BpcElderlyCessationResultTypeormEntity,
+    BpcElderlyCessationInssBenefitTypeormEntity,
+    BpcElderlyCessationLegalProceedingTypeormEntity,
     MaternityPayGrantTypeormEntity,
     MaternityPayGrantDocumentTypeormEntity,
     MaternityPayGrantEarningsHistoryTypeormEntity,

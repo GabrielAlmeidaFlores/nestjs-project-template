@@ -16,6 +16,7 @@ import { AdministrativeProcedureInssAnalysisModule } from '@module/customer/anal
 import { AudienceQuestionGeneratorModule } from '@module/customer/analysis-tool/module/audience-question-generator/audience-question-generator.module';
 import { BpcDisabilityDenialModule } from '@module/customer/analysis-tool/module/bpc-disability-denial/bpc-disability-denial.module';
 import { BpcElderlyAnalysisModule } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/bpc-elderly-analysis.module';
+import { BpcElderlyCessationModule } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/bpc-elderly-cessation.module';
 import { CnisFastAnalysisModule } from '@module/customer/analysis-tool/module/cnis-fast-analysis/cnis-fast-analysis.module';
 import { DeathBenefitGrantModule } from '@module/customer/analysis-tool/module/death-benefit-grant/death-benefit-grant.module';
 import { DeathBenefitRejectionModule } from '@module/customer/analysis-tool/module/death-benefit-rejection/death-benefit-rejection.module';
@@ -29,8 +30,8 @@ import { GeneralUrbanRetirementGrantModule } from '@module/customer/analysis-too
 import { InsuranceQualityAnalysisModule } from '@module/customer/analysis-tool/module/insurance-quality-analysis/insurance-quality-analysis.module';
 import { JudicialCaseAnalysisModule } from '@module/customer/analysis-tool/module/judicial-case-analysis/judicial-case-analysis.module';
 import { LegalPleadingModule } from '@module/customer/analysis-tool/module/legal-pleading/legal-pleading.module';
-import { MaternityPayRejectionModule } from '@module/customer/analysis-tool/module/maternity-pay-rejection/maternity-pay-rejection.module';
 import { MaternityPayGrantModule } from '@module/customer/analysis-tool/module/maternity-pay-grant/maternity-pay-grant.module';
+import { MaternityPayRejectionModule } from '@module/customer/analysis-tool/module/maternity-pay-rejection/maternity-pay-rejection.module';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisModule } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.module';
 import { MedicalQuestionGeneratorModule } from '@module/customer/analysis-tool/module/medical-question-generator/medical-question-generator.module';
 import { PerCapitaIncomeForBpcAnalysisModule } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.module';
@@ -96,6 +97,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     PerCapitaIncomeForBpcAnalysisModule,
     BpcDisabilityDenialModule,
     BpcElderlyAnalysisModule,
+    BpcElderlyCessationModule,
     LegalPleadingModule,
     RuralTimelineAnalysisModule,
     RuralOrHybridRetirementRejectionModule,

@@ -74,6 +74,8 @@ export class AnalysisActivityMessageFactory {
       'Indeferimento de BPC Pessoa com Deficiência',
     [AnalysisToolRecordTypeEnum.BPC_ELDERLY_ANALYSIS]:
       'Análise de BPC ao Idoso',
+    [AnalysisToolRecordTypeEnum.BPC_ELDERLY_CESSATION]:
+      'Cessação de BPC ao Idoso',
     [AnalysisToolRecordTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_REJECTION]:
       'Indeferimento de benefício por incapacidade temporária',
     [AnalysisToolRecordTypeEnum.MATERNITY_PAY_GRANT]:

@@ -2214,6 +2214,46 @@ Análise processada do CNIS:
     );
   }
 
+  public async getBpcElderlyCessationInssDecisionAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- Analise a decisão administrativa de cessação ou suspensão do BPC ao Idoso.
+- Extraia, quando disponível, NB, data da decisão, motivo da cessação/suspensão, fundamentos usados pelo INSS, prazo recursal e pontos técnicos de contestação.
+- Não invente informações ausentes nos documentos; quando algo não estiver claro, indique a pendência.
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getBpcElderlyCessationFirstAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- Cruze os dados do formulário, cliente, CadÚnico, CNIS, composição familiar, renda, documentos anexados e decisão do INSS.
+- Foque nos critérios do BPC ao Idoso em cenário de cessação/suspensão: idade mínima, renda familiar, renda per capita, atualização cadastral, composição do grupo familiar, prazo recursal e fragilidades da decisão administrativa.
+- Não incluir tag <br> na resposta.
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+      }),
+    );
+  }
+
   public async getDisabilityRetirementPlanningRejectionTimeAcceleratorAnalysis(
     systemInstruction: string,
     files: Buffer[],
@@ -2535,6 +2575,34 @@ Análise processada do CNIS:
     );
   }
 
+  public async getBpcElderlyCessationCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- Retorne estritamente um objeto JSON válido compatível com o schema solicitado.
+- O campo \`completeAnalysisDownload\` deve conter a análise detalhada em Markdown, pronta para exportação em PDF/DOCX.
+- O campo \`analysisResult\` deve conter um resumo textual objetivo do resultado.
+- O campo \`analysisDetailedText\` deve conter a fundamentação detalhada em texto corrido.
+- Cada item de \`applicableRules\` deve representar uma regra aplicável ao BPC ao Idoso cessado/suspenso.
+- Cada item de \`benefitSummaries\` deve representar um cenário ou benefício resumido para a tela final.
+- Preencha diagnóstico, renda familiar total, renda per capita, requisitos legais, regra de renda e idade mínima com base nos documentos fornecidos.
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: this.getBpcElderlyCessationCompleteAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
   public async getTemporaryIncapacityBenefitRejectionFirstAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
@@ -2594,6 +2662,18 @@ Análise processada do CNIS:
           jsonSchema:
             this.getTemporaryIncapacityBenefitRejectionCompleteAnalysisJsonSchema(),
         }),
+      }),
+    );
+  }
+
+  public async getBpcElderlyCessationSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
       }),
     );
   }
@@ -7301,6 +7381,95 @@ Análise processada do CNIS:
         'amount',
         'analysisDetails',
         'completeAnalysisDownload',
+        'legalRequirementsMet',
+        'perCapitaIncomeBelowQuarterMinimumWage',
+        'ageEqualOrAbove65Years',
+      ],
+    };
+  }
+
+  private getBpcElderlyCessationCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        analysisResult: {
+          type: 'string',
+          description: 'Resumo principal do resultado da análise.',
+        },
+        analysisDetailedText: {
+          type: 'string',
+          description:
+            'Texto detalhado da análise final sobre a cessação ou suspensão do BPC ao Idoso.',
+        },
+        completeAnalysisDownload: {
+          type: 'string',
+          description:
+            'Versão em Markdown da análise completa, pronta para exportação.',
+        },
+        applicableRules: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              title: { type: 'string' },
+              description: { type: 'string' },
+              status: { type: 'string' },
+            },
+            required: ['title', 'description', 'status'],
+          },
+        },
+        benefitSummaries: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              benefitType: { type: 'string' },
+              result: { type: 'string' },
+              dib: { type: 'string' },
+              expectedMonthlyBenefit: { type: 'number' },
+              detailedAnalysis: { type: 'string' },
+            },
+            required: ['benefitType', 'result'],
+          },
+        },
+        diagnosis: {
+          type: 'string',
+          description:
+            'Diagnóstico da possibilidade de reativação/manutenção do BPC ao Idoso.',
+        },
+        totalHouseholdIncome: {
+          type: 'number',
+          description: 'Renda familiar total apurada.',
+        },
+        perCapitaIncome: {
+          type: 'number',
+          description: 'Renda familiar per capita apurada.',
+        },
+        legalRequirementsMet: {
+          type: 'string',
+          description:
+            'Conclusão sobre o preenchimento dos requisitos legais do BPC ao Idoso.',
+        },
+        perCapitaIncomeBelowQuarterMinimumWage: {
+          type: 'string',
+          description:
+            'Conclusão sobre a renda per capita inferior a 1/4 do salário mínimo.',
+        },
+        ageEqualOrAbove65Years: {
+          type: 'string',
+          description:
+            'Conclusão sobre o requisito de idade igual ou superior a 65 anos.',
+        },
+      },
+      required: [
+        'analysisResult',
+        'analysisDetailedText',
+        'completeAnalysisDownload',
+        'applicableRules',
+        'benefitSummaries',
+        'diagnosis',
+        'totalHouseholdIncome',
+        'perCapitaIncome',
         'legalRequirementsMet',
         'perCapitaIncomeBelowQuarterMinimumWage',
         'ageEqualOrAbove65Years',
