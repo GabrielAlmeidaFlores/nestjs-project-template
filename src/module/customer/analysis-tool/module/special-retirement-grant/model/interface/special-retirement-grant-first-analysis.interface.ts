@@ -16,13 +16,6 @@ export interface SpecialRetirementGrantFirstAnalysisEarningsHistoryItemInterface
   competenceBelowTheMinimum: boolean | null;
 }
 
-export interface SpecialRetirementGrantObservationsFirstAnalysisInterface {
-  id: string;
-  observation: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 export interface SpecialRetirementGrantFirstAnalysisPeriodInterface {
   id: string;
   employmentRelationshipSource: string | null;
@@ -34,9 +27,7 @@ export interface SpecialRetirementGrantFirstAnalysisPeriodInterface {
   agents: SpecialRetirementGrantFirstAnalysisAgentInterface[];
   status: 'valid' | 'pending' | 'invalid';
   earningsHistory: SpecialRetirementGrantFirstAnalysisEarningsHistoryItemInterface[];
-  observations?:
-    | SpecialRetirementGrantObservationsFirstAnalysisInterface[]
-    | null;
+  observations?: string[] | null;
 }
 
 export interface SpecialRetirementGrantFirstAnalysisSummaryInterface {
