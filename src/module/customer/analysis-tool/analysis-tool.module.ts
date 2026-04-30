@@ -29,8 +29,8 @@ import { GeneralUrbanRetirementGrantModule } from '@module/customer/analysis-too
 import { InsuranceQualityAnalysisModule } from '@module/customer/analysis-tool/module/insurance-quality-analysis/insurance-quality-analysis.module';
 import { JudicialCaseAnalysisModule } from '@module/customer/analysis-tool/module/judicial-case-analysis/judicial-case-analysis.module';
 import { LegalPleadingModule } from '@module/customer/analysis-tool/module/legal-pleading/legal-pleading.module';
-import { MaternityPayRejectionModule } from '@module/customer/analysis-tool/module/maternity-pay-rejection/maternity-pay-rejection.module';
 import { MaternityPayGrantModule } from '@module/customer/analysis-tool/module/maternity-pay-grant/maternity-pay-grant.module';
+import { MaternityPayRejectionModule } from '@module/customer/analysis-tool/module/maternity-pay-rejection/maternity-pay-rejection.module';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisModule } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.module';
 import { MedicalQuestionGeneratorModule } from '@module/customer/analysis-tool/module/medical-question-generator/medical-question-generator.module';
 import { PerCapitaIncomeForBpcAnalysisModule } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.module';
@@ -45,6 +45,7 @@ import { SpecialRetirementGrantModule } from '@module/customer/analysis-tool/mod
 import { SpeechGeneratorModule } from '@module/customer/analysis-tool/module/speech-generator/speech-generator.module';
 import { SurvivorPensionAnalysisModule } from '@module/customer/analysis-tool/module/survivor-pension-analysis/survivor-pension-analysis.module';
 import { TeacherRetirementPlanningModule } from '@module/customer/analysis-tool/module/teacher-retirement-planning/teacher-retirement-planning.module';
+import { TeacherRetirementPlanningRejectionModule } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/teacher-retirement-planning-rejection.module';
 import { TemporaryDisabilityBenefitsGrantModule } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/temporary-disability-benefits-grant.module';
 import { TemporaryIncapacityBenefitRejectionModule } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.module';
 import { TemporaryIncapacityBenefitTerminationModule } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-termination/temporary-incapacity-benefit-termination.module';
@@ -104,6 +105,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     RetirementPlanningRppsModule,
     SpecialRetirementGrantModule,
     TeacherRetirementPlanningModule,
+    TeacherRetirementPlanningRejectionModule,
     DisabilityRetirementPlanningModule,
     DisabilityRetirementPlanningGrantModule,
     GeneralUrbanRetirementGrantModule,
