@@ -3960,36 +3960,162 @@ Análise processada do CNIS:
           type: 'object',
           properties: {
             specialTime: {
-              type: 'string',
-              description: 'Tempo especial. Ex: 23 anos e 4 meses',
+              type: 'object',
+              properties: {
+                withoutResolvingPendencies: {
+                  type: 'string',
+                  description:
+                    'Tempo especial sem resolver pendências. Ex: 23 anos e 4 meses',
+                },
+                resolvingPendencies: {
+                  type: 'string',
+                  description:
+                    'Tempo especial resolvendo pendências. Ex: 27 anos e 8 meses',
+                },
+                withAccelerators: {
+                  type: 'string',
+                  description:
+                    'Tempo especial com aceleradores. Ex: 30 anos e 2 meses',
+                },
+              },
+              required: [
+                'withoutResolvingPendencies',
+                'resolvingPendencies',
+                'withAccelerators',
+              ],
             },
             commonTime: {
-              type: 'string',
-              description: 'Tempo comum. Ex: 12 anos e 3 meses',
-            },
-            specialGracePeriod: {
-              type: 'number',
-              description: 'CarÃªncia no tempo especial (contribuiÃ§Ãµes)',
-            },
-            commonGracePeriod: {
-              type: 'number',
-              description: 'CarÃªncia no tempo comum (contribuiÃ§Ãµes)',
+              type: 'object',
+              properties: {
+                withoutResolvingPendencies: {
+                  type: 'string',
+                  description:
+                    'Tempo comum sem resolver pendências. Ex: 23 anos e 4 meses',
+                },
+                resolvingPendencies: {
+                  type: 'string',
+                  description:
+                    'Tempo comum resolvendo pendências. Ex: 27 anos e 8 meses',
+                },
+                withAccelerators: {
+                  type: 'string',
+                  description:
+                    'Tempo comum com aceleradores. Ex: 30 anos e 2 meses',
+                },
+              },
+              required: [
+                'withoutResolvingPendencies',
+                'resolvingPendencies',
+                'withAccelerators',
+              ],
             },
             totalTime: {
-              type: 'string',
-              description: 'Tempo total. Ex: 30 anos e 2 meses',
+              type: 'object',
+              properties: {
+                withoutResolvingPendencies: {
+                  type: 'string',
+                  description:
+                    'Tempo total sem resolver pendências. Ex: 23 anos e 4 meses',
+                },
+                resolvingPendencies: {
+                  type: 'string',
+                  description:
+                    'Tempo total resolvendo pendências. Ex: 27 anos e 8 meses',
+                },
+                withAccelerators: {
+                  type: 'string',
+                  description:
+                    'Tempo total com aceleradores. Ex: 30 anos e 2 meses',
+                },
+              },
+              required: [
+                'withoutResolvingPendencies',
+                'resolvingPendencies',
+                'withAccelerators',
+              ],
+            },
+            specialGracePeriod: {
+              type: 'object',
+              properties: {
+                withoutResolvingPendencies: {
+                  type: 'number',
+                  description:
+                    'Carência em tempo especial sem resolver pendências (contribuições)',
+                },
+                resolvingPendencies: {
+                  type: 'number',
+                  description:
+                    'Carência em tempo especial resolvendo pendências (contribuições)',
+                },
+                withAccelerators: {
+                  type: 'number',
+                  description:
+                    'Carência em tempo especial com aceleradores (contribuições)',
+                },
+              },
+              required: [
+                'withoutResolvingPendencies',
+                'resolvingPendencies',
+                'withAccelerators',
+              ],
+            },
+            commonGracePeriod: {
+              type: 'object',
+              properties: {
+                withoutResolvingPendencies: {
+                  type: 'number',
+                  description:
+                    'Carência em tempo comum sem resolver pendências (contribuições)',
+                },
+                resolvingPendencies: {
+                  type: 'number',
+                  description:
+                    'Carência em tempo comum resolvendo pendências (contribuições)',
+                },
+                withAccelerators: {
+                  type: 'number',
+                  description:
+                    'Carência em tempo comum com aceleradores (contribuições)',
+                },
+              },
+              required: [
+                'withoutResolvingPendencies',
+                'resolvingPendencies',
+                'withAccelerators',
+              ],
             },
             totalGracePeriod: {
-              type: 'number',
-              description: 'CarÃªncia total (contribuiÃ§Ãµes)',
+              type: 'object',
+              properties: {
+                withoutResolvingPendencies: {
+                  type: 'number',
+                  description:
+                    'Carência total sem resolver pendências (contribuições)',
+                },
+                resolvingPendencies: {
+                  type: 'number',
+                  description:
+                    'Carência total resolvendo pendências (contribuições)',
+                },
+                withAccelerators: {
+                  type: 'number',
+                  description:
+                    'Carência total com aceleradores (contribuições)',
+                },
+              },
+              required: [
+                'withoutResolvingPendencies',
+                'resolvingPendencies',
+                'withAccelerators',
+              ],
             },
           },
           required: [
             'specialTime',
             'commonTime',
+            'totalTime',
             'specialGracePeriod',
             'commonGracePeriod',
-            'totalTime',
             'totalGracePeriod',
           ],
         },

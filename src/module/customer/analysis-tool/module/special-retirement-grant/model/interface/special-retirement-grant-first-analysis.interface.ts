@@ -30,13 +30,25 @@ export interface SpecialRetirementGrantFirstAnalysisPeriodInterface {
   observations?: string[] | null;
 }
 
+export interface SpecialRetirementGrantFirstAnalysisTimeSummaryInterface {
+  withoutResolvingPendencies: string | null;
+  resolvingPendencies: string | null;
+  withAccelerators: string | null;
+}
+
+export interface SpecialRetirementGrantFirstAnalysisGracePeriodSummaryInterface {
+  withoutResolvingPendencies: number | null;
+  resolvingPendencies: number | null;
+  withAccelerators: number | null;
+}
+
 export interface SpecialRetirementGrantFirstAnalysisSummaryInterface {
-  specialTime: string | null;
-  commonTime: string | null;
-  specialGracePeriod: number | null;
-  commonGracePeriod: number | null;
-  totalTime: string | null;
-  totalGracePeriod: number | null;
+  specialTime: SpecialRetirementGrantFirstAnalysisTimeSummaryInterface;
+  commonTime: SpecialRetirementGrantFirstAnalysisTimeSummaryInterface;
+  totalTime: SpecialRetirementGrantFirstAnalysisTimeSummaryInterface;
+  specialGracePeriod: SpecialRetirementGrantFirstAnalysisGracePeriodSummaryInterface;
+  commonGracePeriod: SpecialRetirementGrantFirstAnalysisGracePeriodSummaryInterface;
+  totalGracePeriod: SpecialRetirementGrantFirstAnalysisGracePeriodSummaryInterface;
 }
 
 export interface SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemInterface {
