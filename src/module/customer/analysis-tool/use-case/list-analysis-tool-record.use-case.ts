@@ -117,7 +117,8 @@ export class ListAnalysisToolRecordUseCase {
             analysisToolRecord.temporaryIncapacityBenefitTermination ??
             analysisToolRecord.deathBenefitRejection ??
             analysisToolRecord.bpcElderlyAnalysis ??
-            analysisToolRecord.maternityPayRejection;
+            analysisToolRecord.maternityPayRejection ??
+            analysisToolRecord.teacherRetirementPlanningRejection;
 
           const analysisId = analysis?.id ?? null;
 
