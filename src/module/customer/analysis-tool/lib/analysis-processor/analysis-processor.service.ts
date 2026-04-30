@@ -4228,7 +4228,11 @@ Análise processada do CNIS:
           type: 'string',
           enum: ['sim', 'nao', 'provisoriamente'],
         },
-        contributionAverage: { type: 'string' },
+        contributionAverage: {
+          type: 'string',
+          description:
+            'Valor numérico decimal sem símbolo de moeda, ex: "567.03". Não incluir "R$" ou qualquer formatação de moeda.',
+        },
         status: { type: 'string' },
         gracePeriod: { type: 'string' },
         activityType: {
@@ -4239,6 +4243,44 @@ Análise processada do CNIS:
             'periodo_sem_atividade',
             'pendencia',
           ],
+        },
+        specialPeriods: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              recognizedSpecialTime: { type: 'boolean' },
+              companyName: { type: 'string' },
+              cnpj: { type: 'string' },
+              position: { type: 'string' },
+              comprobatoryDocument: { type: 'string' },
+              linkedToCnis: { type: 'boolean' },
+              containsCnisRemunerationInPeriod: { type: 'boolean' },
+              technicalJustification: { type: 'string' },
+              additionalObservation: { type: 'string' },
+              lawyerObservation: { type: 'string' },
+              exposureFrequency: { type: 'string' },
+              informationSource: { type: 'string' },
+              identifiedAgents: { type: 'string' },
+              efficientEpi: { type: 'boolean' },
+            },
+            required: [
+              'recognizedSpecialTime',
+              'companyName',
+              'cnpj',
+              'position',
+              'comprobatoryDocument',
+              'linkedToCnis',
+              'containsCnisRemunerationInPeriod',
+              'technicalJustification',
+              'additionalObservation',
+              'lawyerObservation',
+              'exposureFrequency',
+              'informationSource',
+              'identifiedAgents',
+              'efficientEpi',
+            ],
+          },
         },
       },
       required: [
@@ -4252,6 +4294,7 @@ Análise processada do CNIS:
         'status',
         'gracePeriod',
         'activityType',
+        'specialPeriods',
       ],
     };
 

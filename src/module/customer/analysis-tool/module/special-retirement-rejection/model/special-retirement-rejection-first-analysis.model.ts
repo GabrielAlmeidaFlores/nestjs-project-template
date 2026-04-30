@@ -1,7 +1,56 @@
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
+import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-boolean-property/response-dto-boolean-property.decorator';
 import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
+
+@ResponseDto()
+export class SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodModel extends BaseBuildableDtoObject {
+  @ResponseDtoBooleanProperty({ required: false })
+  public recognizedSpecialTime?: boolean;
+
+  @ResponseDtoStringProperty({ required: false })
+  public companyName?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public cnpj?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public position?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public comprobatoryDocument?: string;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public linkedToCnis?: boolean;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public containsCnisRemunerationInPeriod?: boolean;
+
+  @ResponseDtoStringProperty({ required: false })
+  public technicalJustification?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public additionalObservation?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public lawyerObservation?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public exposureFrequency?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public informationSource?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public identifiedAgents?: string;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public efficientEpi?: boolean;
+
+  protected override readonly _type =
+    SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodModel.name;
+}
 
 @ResponseDto()
 export class SpecialRetirementRejectionFirstAnalysisWorkPeriodModel extends BaseBuildableDtoObject {
@@ -34,6 +83,12 @@ export class SpecialRetirementRejectionFirstAnalysisWorkPeriodModel extends Base
 
   @ResponseDtoStringProperty()
   public activityType: string;
+
+  @ResponseDtoObjectProperty(
+    () => SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodModel,
+    { isArray: true, required: false },
+  )
+  public specialPeriods?: SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodModel[];
 
   protected override readonly _type =
     SpecialRetirementRejectionFirstAnalysisWorkPeriodModel.name;

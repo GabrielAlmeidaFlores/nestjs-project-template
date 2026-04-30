@@ -136,9 +136,6 @@ export class GetSpecialRetirementRejectionWorkPeriodEarningsHistoryResponseDto e
   @ResponseDtoBooleanProperty({ required: false })
   public competenceBelowTheMinimum?: boolean;
 
-  @ResponseDtoDateProperty()
-  public updatedAt: Date;
-
   protected override readonly _type =
     GetSpecialRetirementRejectionWorkPeriodEarningsHistoryResponseDto.name;
 }
@@ -151,9 +148,6 @@ export class GetSpecialRetirementRejectionWorkSpecialPeriodLegalFrameworkRespons
   @ResponseDtoStringProperty({ required: false })
   public description?: string;
 
-  @ResponseDtoDateProperty()
-  public updatedAt: Date;
-
   protected override readonly _type =
     GetSpecialRetirementRejectionWorkSpecialPeriodLegalFrameworkResponseDto.name;
 }
@@ -163,26 +157,47 @@ export class GetSpecialRetirementRejectionWorkSpecialPeriodResponseDto extends B
   @ResponseDtoValueObjectProperty(SpecialRetirementRejectionWorkSpecialPeriodId)
   public specialRetirementRejectionWorkSpecialPeriodId: SpecialRetirementRejectionWorkSpecialPeriodId;
 
-  @ResponseDtoDateProperty({ required: false })
-  public startDate?: Date;
-
-  @ResponseDtoDateProperty({ required: false })
-  public endDate?: Date;
-
-  @ResponseDtoEnumProperty(SpecialRetirementRejectionHarmfulAgentEnum, {
-    required: false,
-    isArray: true,
-  })
-  public harmfulAgents?: SpecialRetirementRejectionHarmfulAgentEnum[];
-
-  @ResponseDtoStringProperty({ required: false })
-  public otherAgents?: string;
+  @ResponseDtoBooleanProperty({ required: false })
+  public recognizedSpecialTime?: boolean;
 
   @ResponseDtoStringProperty({ required: false })
   public companyName?: string;
 
-  @ResponseDtoValueObjectProperty(FederalDocument, { required: false })
-  public companyDocument?: FederalDocument;
+  @ResponseDtoStringProperty({ required: false })
+  public cnpj?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public position?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public comprobatoryDocument?: string;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public linkedToCnis?: boolean;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public containsCnisRemunerationInPeriod?: boolean;
+
+  @ResponseDtoStringProperty({ required: false })
+  public technicalJustification?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public additionalObservation?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public lawyerObservation?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public exposureFrequency?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public informationSource?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public identifiedAgents?: string;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public efficientEpi?: boolean;
 
   @ResponseDtoObjectProperty(
     () =>
@@ -190,9 +205,6 @@ export class GetSpecialRetirementRejectionWorkSpecialPeriodResponseDto extends B
     { required: false, isArray: true },
   )
   public legalFrameworks?: GetSpecialRetirementRejectionWorkSpecialPeriodLegalFrameworkResponseDto[];
-
-  @ResponseDtoDateProperty()
-  public updatedAt: Date;
 
   protected override readonly _type =
     GetSpecialRetirementRejectionWorkSpecialPeriodResponseDto.name;
@@ -258,9 +270,6 @@ export class GetSpecialRetirementRejectionWorkPeriodResponseDto extends BaseBuil
     { required: false, isArray: true },
   )
   public specialPeriods?: GetSpecialRetirementRejectionWorkSpecialPeriodResponseDto[];
-
-  @ResponseDtoDateProperty()
-  public updatedAt: Date;
 
   protected override readonly _type =
     GetSpecialRetirementRejectionWorkPeriodResponseDto.name;

@@ -1,32 +1,26 @@
-export interface SpecialRetirementRejectionFirstAnalysisLegalFrameworkInterface {
-  codeDescription: string;
-  description: string;
-}
-
-export interface SpecialRetirementRejectionFirstAnalysisTechnicalConclusionInterface {
-  recognizedSpecialTime: boolean;
-  technicalJustification: string;
-  additionalObservation: string;
-}
-
-export interface SpecialRetirementRejectionFirstAnalysisHarmfulAgentsInterface {
-  frequencyAndIntensityOfExposition: string;
-  sourceOfInformation: string;
-  identifiedAgents: string;
-  effectiveEPI: boolean;
-}
-
 export interface SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodInterface {
   recognizedSpecialTime: boolean;
   companyName: string;
   cnpj: string;
   position: string;
   comprobatoryDocument: string;
-  linkedToCniss: boolean;
+  linkedToCnis: boolean;
   containsCnisRemunerationInPeriod: boolean;
-  harmfulAgents: SpecialRetirementRejectionFirstAnalysisHarmfulAgentsInterface;
-  legalFramework: SpecialRetirementRejectionFirstAnalysisLegalFrameworkInterface[];
-  technicalConclusion: SpecialRetirementRejectionFirstAnalysisTechnicalConclusionInterface;
+  technicalJustification: string;
+  additionalObservation: string;
+  lawyerObservation: string;
+  exposureFrequency: string;
+  informationSource: string;
+  identifiedAgents: string;
+  efficientEpi: boolean;
+}
+
+export interface SpecialRetirementRejectionFirstAnalysisEarningsHistoryInterface {
+  competence: string;
+  value: string;
+  pendencyType?: string | null;
+  collectedAt?: string | null;
+  contributionBelowTheMinimun: boolean;
 }
 
 export interface SpecialRetirementRejectionFirstAnalysisEarningsHistoryInterface {
@@ -48,6 +42,7 @@ export interface SpecialRetirementRejectionFirstAnalysisWorkPeriodInterface {
   status: string;
   gracePeriod: string;
   activityType: string;
+  specialPeriods: SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodInterface[];
 }
 
 export interface SpecialRetirementRejectionFirstAnalysisInterface {

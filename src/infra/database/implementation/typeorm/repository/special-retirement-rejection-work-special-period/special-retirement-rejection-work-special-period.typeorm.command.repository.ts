@@ -41,15 +41,21 @@ export class SpecialRetirementRejectionWorkSpecialPeriodTypeormCommandRepository
     return this.create(
       SpecialRetirementRejectionWorkSpecialPeriodTypeormEntity.build({
         id: props.id.toString(),
-        startDate: props.startDate,
-        endDate: props.endDate,
-        harmfulAgents: props.harmfulAgents,
-        otherAgents: props.otherAgents,
+        recognizedSpecialTime: props.recognizedSpecialTime,
         companyName: props.companyName,
-        companyDocument:
-          props.companyDocument !== null
-            ? props.companyDocument.toString()
-            : null,
+        cnpj: props.cnpj,
+        position: props.position,
+        comprobatoryDocument: props.comprobatoryDocument,
+        linkedToCnis: props.linkedToCnis,
+        containsCnisRemunerationInPeriod:
+          props.containsCnisRemunerationInPeriod,
+        technicalJustification: props.technicalJustification,
+        additionalObservation: props.additionalObservation,
+        lawyerObservation: props.lawyerObservation,
+        exposureFrequency: props.exposureFrequency,
+        informationSource: props.informationSource,
+        identifiedAgents: props.identifiedAgents,
+        efficientEpi: props.efficientEpi,
         specialRetirementRejectionWorkPeriod,
         createdAt: props.createdAt,
         updatedAt: props.updatedAt,

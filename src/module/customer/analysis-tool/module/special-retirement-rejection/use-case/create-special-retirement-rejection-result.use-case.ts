@@ -337,12 +337,21 @@ export class CreateSpecialRetirementRejectionResultUseCase {
           )
           .map((specialPeriod) => ({
             id: specialPeriod.id.toString(),
-            startDate: specialPeriod.startDate,
-            endDate: specialPeriod.endDate,
-            harmfulAgents: specialPeriod.harmfulAgents,
-            otherAgents: specialPeriod.otherAgents,
+            recognizedSpecialTime: specialPeriod.recognizedSpecialTime,
             companyName: specialPeriod.companyName,
-            companyDocument: specialPeriod.companyDocument?.toString() ?? null,
+            cnpj: specialPeriod.cnpj,
+            position: specialPeriod.position,
+            comprobatoryDocument: specialPeriod.comprobatoryDocument,
+            linkedToCnis: specialPeriod.linkedToCnis,
+            containsCnisRemunerationInPeriod:
+              specialPeriod.containsCnisRemunerationInPeriod,
+            technicalJustification: specialPeriod.technicalJustification,
+            additionalObservation: specialPeriod.additionalObservation,
+            lawyerObservation: specialPeriod.lawyerObservation,
+            exposureFrequency: specialPeriod.exposureFrequency,
+            informationSource: specialPeriod.informationSource,
+            identifiedAgents: specialPeriod.identifiedAgents,
+            efficientEpi: specialPeriod.efficientEpi,
             legalFrameworks: workSpecialPeriodLegalFrameworks
               .filter(
                 (legalFramework) =>

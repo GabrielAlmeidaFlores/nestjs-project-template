@@ -181,7 +181,6 @@ export class GetSpecialRetirementRejectionUseCase {
               ...(item.competenceBelowTheMinimum !== null && {
                 competenceBelowTheMinimum: item.competenceBelowTheMinimum,
               }),
-              updatedAt: item.updatedAt,
             },
           ),
         );
@@ -201,7 +200,6 @@ export class GetSpecialRetirementRejectionUseCase {
                 ...(legalFramework.description !== null && {
                   description: legalFramework.description,
                 }),
-                updatedAt: legalFramework.updatedAt,
               },
             ),
           );
@@ -209,27 +207,50 @@ export class GetSpecialRetirementRejectionUseCase {
           return GetSpecialRetirementRejectionWorkSpecialPeriodResponseDto.build(
             {
               specialRetirementRejectionWorkSpecialPeriodId: specialPeriod.id,
-              ...(specialPeriod.startDate !== null && {
-                startDate: specialPeriod.startDate,
-              }),
-              ...(specialPeriod.endDate !== null && {
-                endDate: specialPeriod.endDate,
-              }),
-              ...(specialPeriod.harmfulAgents !== null && {
-                harmfulAgents:
-                  specialPeriod.harmfulAgents as SpecialRetirementRejectionHarmfulAgentEnum[],
-              }),
-              ...(specialPeriod.otherAgents !== null && {
-                otherAgents: specialPeriod.otherAgents,
+              ...(specialPeriod.recognizedSpecialTime !== null && {
+                recognizedSpecialTime: specialPeriod.recognizedSpecialTime,
               }),
               ...(specialPeriod.companyName !== null && {
                 companyName: specialPeriod.companyName,
               }),
-              ...(specialPeriod.companyDocument !== null && {
-                companyDocument: specialPeriod.companyDocument,
+              ...(specialPeriod.cnpj !== null && {
+                cnpj: specialPeriod.cnpj,
+              }),
+              ...(specialPeriod.position !== null && {
+                position: specialPeriod.position,
+              }),
+              ...(specialPeriod.comprobatoryDocument !== null && {
+                comprobatoryDocument: specialPeriod.comprobatoryDocument,
+              }),
+              ...(specialPeriod.linkedToCnis !== null && {
+                linkedToCnis: specialPeriod.linkedToCnis,
+              }),
+              ...(specialPeriod.containsCnisRemunerationInPeriod !== null && {
+                containsCnisRemunerationInPeriod:
+                  specialPeriod.containsCnisRemunerationInPeriod,
+              }),
+              ...(specialPeriod.technicalJustification !== null && {
+                technicalJustification: specialPeriod.technicalJustification,
+              }),
+              ...(specialPeriod.additionalObservation !== null && {
+                additionalObservation: specialPeriod.additionalObservation,
+              }),
+              ...(specialPeriod.lawyerObservation !== null && {
+                lawyerObservation: specialPeriod.lawyerObservation,
+              }),
+              ...(specialPeriod.exposureFrequency !== null && {
+                exposureFrequency: specialPeriod.exposureFrequency,
+              }),
+              ...(specialPeriod.informationSource !== null && {
+                informationSource: specialPeriod.informationSource,
+              }),
+              ...(specialPeriod.identifiedAgents !== null && {
+                identifiedAgents: specialPeriod.identifiedAgents,
+              }),
+              ...(specialPeriod.efficientEpi !== null && {
+                efficientEpi: specialPeriod.efficientEpi,
               }),
               ...(legalFrameworks.length > 0 && { legalFrameworks }),
-              updatedAt: specialPeriod.updatedAt,
             },
           );
         });
@@ -270,7 +291,6 @@ export class GetSpecialRetirementRejectionUseCase {
           ...(documentResponses.length > 0 && { documents: documentResponses }),
           ...(earningsHistory.length > 0 && { earningsHistory }),
           ...(specialPeriods.length > 0 && { specialPeriods }),
-          updatedAt: workPeriod.updatedAt,
         });
       }),
     );
