@@ -136,10 +136,15 @@ export class DisabilityRetirementPlanningGrantController {
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async getById(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Param('id', new ParseValueObjectPipe(DisabilityRetirementPlanningGrantId))
     disabilityRetirementPlanningGrantId: DisabilityRetirementPlanningGrantId,
   ): Promise<GetDisabilityRetirementPlanningGrantResponseDto> {
     return await this.getDisabilityRetirementPlanningGrantUseCase.execute(
+      sessionData,
+      organizationSessionData,
       disabilityRetirementPlanningGrantId,
     );
   }

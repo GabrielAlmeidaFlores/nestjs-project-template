@@ -10,6 +10,7 @@ import { OrganizationMemberId } from '@module/customer/account/domain/schema/ent
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 
 @Injectable()
@@ -62,6 +63,17 @@ export class AnalysisToolRecordTypeormCommandRepository
     );
 
     return this.update(id.toString(), mappedData);
+  }
+
+  public updateAnalysisToolRecordStatus(
+    id: AnalysisToolRecordId,
+    status: AnalysisStatusEnum,
+    updatedBy: OrganizationMemberId,
+  ): TransactionType {
+    return this.update(id.toString(), {
+      status,
+      updatedBy: { id: updatedBy.toString() },
+    });
   }
 
   public updateAnalysisToolRecordAnalysisToolClient(
