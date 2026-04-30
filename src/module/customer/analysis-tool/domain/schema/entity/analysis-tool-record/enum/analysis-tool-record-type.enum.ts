@@ -36,4 +36,5 @@ export enum AnalysisToolRecordTypeEnum {
   TEMPORARY_DISABILITY_BENEFITS_TERMINATED = 'cessacao_auxilio_incapacidade_temporaria',
   BPC_ELDERLY_CESSATION = 'cessacao_bpc_idoso',
   MATERNITY_PAY_GRANT = 'concessao_salario_maternidade',
+  ACCIDENT_ASSISTANCE_TERMINATED = 'auxilio_acidente_cessado',
 }

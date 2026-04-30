@@ -2918,6 +2918,71 @@ Análise processada do CNIS:
     );
   }
 
+  public async getAccidentAssistanceTerminatedCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getAccidentAssistanceTerminatedCompleteAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getAccidentAssistanceTerminatedSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getAccidentAssistanceTerminatedDecisionDetails(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getAccidentAssistanceTerminatedDecisionDetailsJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getAccidentAssistanceTerminatedFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt: cnisAnalysisJson,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getAccidentAssistanceTerminatedFirstAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
   private getSurvivorPensionAnalysisResultJsonSchema(): object {
     return {
       type: 'object',
@@ -9013,6 +9078,148 @@ Análise processada do CNIS:
         'insuredQualityStatus',
         'applicableRules',
         'analysisDescription',
+        'completeAnalysisDownload',
+      ],
+    };
+  }
+
+  private getAccidentAssistanceTerminatedDecisionDetailsJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        decision: {
+          type: 'string',
+          enum: ['TERMINATED', 'MAINTAINED'],
+          description:
+            'Decisão final sobre o termo de assistência acidente: TERMINATED (termo de assistência acidente encerrado) ou MAINTAINED (termo de assistência acidente mantido).',
+        },
+        terminationJustification: {
+          type: 'string',
+          description:
+            'Justificativa detalhada para a decisão de encerramento do termo de assistência acidente, incluindo os fundamentos legais, análise dos documentos apresentados e a situação do segurado.',
+        },
+        analysis: {
+          type: 'string',
+          description:
+            'Análise detalhada do caso, considerando os critérios para encerramento do termo de assistência acidente, a situação do segurado e a aplicação da legislação pertinente. Deve conter uma avaliação dos documentos apresentados, a situação do segurado e os fundamentos legais para a decisão tomada.',
+        },
+      },
+    };
+  }
+
+  private getAccidentAssistanceTerminatedFirstAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        qualitySecurity: {
+          type: 'object',
+          properties: {
+            status: {
+              type: 'string',
+              description:
+                'Status da qualidade de segurado se foi mantida ou não na DFG',
+              enum: ['MAINTAINED', 'NOT_MAINTAINED'],
+            },
+            description: {
+              type: 'string',
+              description:
+                'Descrição detalhada da conclusão da análise se a qualidade do segurada foi mantida na Dii',
+            },
+          },
+          required: ['status', 'description'],
+        },
+        assessmentSequelae: {
+          type: 'object',
+          properties: {
+            existsSequelae: {
+              type: 'string',
+              enum: ['Confirmada', 'Não confirmada'],
+              description:
+                'Indicação de existência de sequelas decorrentes do acidente',
+            },
+            sequelaeCompatibility: {
+              type: 'string',
+              enum: ['Confirmada', 'Não confirmada'],
+              description:
+                'Indicação de compatibilidade das sequelas decorrentes do acidente',
+            },
+            partialWorkCapacityMaintenance: {
+              type: 'string',
+              enum: [
+                'Capacidade laboral parcialmente comprometida',
+                'Capacidade laboral não comprometida',
+                'Capacidade laboral totalmente comprometida',
+              ],
+              description:
+                'Indicação de manutenção da capacidade laboral parcial decorrente do acidente',
+            },
+            description: {
+              type: 'string',
+              description:
+                'Descrição detalhada da conclusão da análise das sequelas decorrentes do acidente, incluindo a existência de sequelas, a compatibilidade das sequelas com o acidente e a manutenção da capacidade laboral parcial decorrente do acidente com a conclusão da análise',
+            },
+          },
+          required: [
+            'existsSequelae',
+            'sequelaeCompatibility',
+            'partialWorkCapacityMaintenance',
+            'description',
+          ],
+        },
+      },
+      required: ['qualitySecurity', 'assessmentSequelae'],
+    };
+  }
+
+  private getAccidentAssistanceTerminatedCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        category: {
+          type: 'string',
+          enum: ['AUXILIO_ACIDENTE'],
+          description:
+            'Modalidade da análise realizada, que é Auxílio Acidente',
+        },
+        isEligible: {
+          type: 'string',
+          enum: ['Sim', 'Não'],
+          description:
+            'Indicação de elegibilidade para manutenção do benefício de auxílio-acidente.',
+        },
+        startDate: {
+          type: 'string',
+          description:
+            'Data de início da concessão do benefício de auxílio-acidente. Retorne em YYYY-MM-DD ou null se o benefício não for elegível para manutenção ou se a data de início não puder ser determinada com base nos documentos analisados.',
+        },
+        rmiPreviuoslyGranted: {
+          type: 'string',
+          description:
+            'Valor da RMI do benefício de auxílio-acidente previsto para recebimento caso o benefício seja elegível para manutenção. Retorne como string em formato decimal (ex: "1234.56") ou null se o benefício não for elegível para manutenção ou se o valor da RMI não puder ser determinado com base nos documentos analisados.',
+        },
+        estimatedValueClaim: {
+          type: 'string',
+          description:
+            'Valor estimado do benefício de auxílio-acidente cessado a ser recebido caso o benefício seja elegível para manutenção. Retorne como string em formato decimal (ex: "1234.56") ou null se o benefício não for elegível para manutenção ou se o valor estimado do benefício não puder ser determinado com base nos documentos analisados.',
+        },
+        analysisResult: {
+          type: 'string',
+          description:
+            'Texto explicativo completo sobre o resultado da análise, perspectivas processuais e recomendações para o caso de indeferimento.',
+        },
+        completeAnalysisDownload: {
+          type: 'string',
+          description:
+            'Análise completa e detalhada do caso de auxílio-acidente cessado, incluindo a avaliação da qualidade de segurado, análise das sequelas decorrentes do acidente, aplicação das regras de manutenção do benefício e conclusão fundamentada sobre a elegibilidade para manutenção do benefício. A análise deve ser formatada em Markdown, pronta para exportação em PDF/DOCX. Deve conter todas as seções: Categoria da Análise, Elegibilidade para Manutenção do Benefício, Data de Início do Benefício, RMI Prevista e Análise Detalhada.',
+        },
+      },
+      required: [
+        'category',
+        'isEligible',
+        'startDate',
+        'rmiPreviuoslyGranted',
+        'estimatedValueClaim',
+        'analysisResult',
         'completeAnalysisDownload',
       ],
     };

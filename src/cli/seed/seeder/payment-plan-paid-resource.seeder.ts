@@ -1961,6 +1961,42 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise simplificada do direito ao Salário Maternidade com IA. Verifica o evento gerador, a carência e a qualidade de segurada, informando de forma objetiva sobre a elegibilidade ao benefício. Versão resumida e acessível para apresentação ao cliente.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d24bad95-ffee-4d83-a4f7-61a26f5b7936'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_ASSISTANCE_TERMINATED_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title: 'DIAGNÓSTICO AUXÍLIO-ACIDENTE (RGPS) - ANÁLISE COMPLETA',
+      description:
+        'Análise completa do direito ao auxílio-acidente cessado com IA. Examina documentos do procedimento administrativo, CNIS, laudos médicos e histórico previdenciário para identificar irregularidades na cessação do benefício, verificar nexo causal com acidente de trabalho, calcular redução da capacidade laborativa e emitir parecer técnico conclusivo com fundamentação legal e jurisprudencial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('cb4c7a81-6d14-4558-9263-aebb87bf37ef'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_ASSISTANCE_TERMINATED_SIMPLIFIED_ANALYSIS,
+      creditCost: 2,
+      title: 'DIAGNÓSTICO AUXÍLIO-ACIDENTE (RGPS) - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada do direito ao auxílio-acidente cessado com IA. Verifica os principais critérios para concessão ou restabelecimento do benefício, identifica irregularidades na cessação e apresenta de forma objetiva as possibilidades de revisão ou recurso. Versão resumida e acessível para apresentação ao cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('1caa4874-ca2e-4a92-a83e-613063f6ff18'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_ASSISTANCE_TERMINATED_DECISION_DETAILS,
+      creditCost: 4,
+      title: 'DIAGNÓSTICO AUXÍLIO-ACIDENTE (RGPS) - ANÁLISE DA DECISÃO DO INSS',
+      description:
+        'Análise da carta de cessação e documentos do processo administrativo do INSS com IA para auxílio-acidente. Examina o fundamento da cessação, identifica erros de cálculo ou enquadramento legal, aponta eventuais irregularidades processuais e orienta sobre a melhor estratégia de impugnação — administrativa ou judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('2ff58edd-7a27-4de3-8d18-4524872c05ad'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_ASSISTANCE_TERMINATED_FIRST_ANALYSIS,
+      creditCost: 4,
+      title: 'DIAGNÓSTICO AUXÍLIO-ACIDENTE (RGPS) - PRIMEIRA ANÁLISE',
+      description:
+        'Primeira análise de cessação de auxílio-acidente com IA, combinando os dados estruturados do caso com a leitura e interpretação do CNIS. Gera parecer inicial técnico sobre tempo de contribuição, carência, períodos relevantes, pontos de atenção e viabilidade preliminar de reversão da cessação.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {

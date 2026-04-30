@@ -3,6 +3,7 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { AccidentAssistanceTerminatedTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated.entity';
 import { AdministrativeProcedureInssAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis.entity';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
@@ -48,6 +49,7 @@ import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/
 import { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-relations.query.result';
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
+import { GetAccidentAssistanceTerminatedQueryResult } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated/query/result/get-accident-assistance-terminated.query.result';
 import { GetAdministrativeProcedureInssAnalysisQueryResult } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/repository/administrative-procedure-inss-analysis/query/result/get-administrative-procedure-inss-analysis.query.result';
 import { GetAudienceQuestionGeneratorWithRelationsQueryResult } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator/query/result/get-audience-question-generator-with-relations.query.result';
 import { GetBpcDisabilityDenialWithRelationsQueryResult } from '@module/customer/analysis-tool/module/bpc-disability-denial/domain/repository/bpc-disability-denial/query/result/get-bpc-disability-denial-with-relations.query.result';
@@ -252,6 +254,16 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
               source.bpcElderlyAnalysis,
               BpcElderlyAnalysisTypeormEntity,
               GetBpcElderlyAnalysisWithRelationsQueryResult,
+            )
+          : null;
+
+      const accidentAssistanceTerminated =
+        source.accidentAssistanceTerminated !== null &&
+        source.accidentAssistanceTerminated !== undefined
+          ? this.mapper.map(
+              source.accidentAssistanceTerminated,
+              AccidentAssistanceTerminatedTypeormEntity,
+              GetAccidentAssistanceTerminatedQueryResult,
             )
           : null;
 
@@ -518,6 +530,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         ruralOrHybridRetirementAnalysis,
         bpcDisabilityDenial,
         bpcElderlyAnalysis,
+        accidentAssistanceTerminated,
         bpcElderlyCessation,
         ruralTimelineAnalysis,
         insuranceQualityAnalysis,
@@ -689,6 +702,15 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
             )
           : null;
 
+      const accidentAssistanceTerminated =
+        source.accidentAssistanceTerminated !== null
+          ? this.mapper.map(
+              source.accidentAssistanceTerminated,
+              GetAccidentAssistanceTerminatedQueryResult,
+              AccidentAssistanceTerminatedTypeormEntity,
+            )
+          : null;
+
       const bpcElderlyCessation =
         source.bpcElderlyCessation !== null
           ? this.mapper.map(
@@ -838,6 +860,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         ruralOrHybridRetirementAnalysis,
         bpcDisabilityDenial,
         bpcElderlyAnalysis,
+        accidentAssistanceTerminated,
         bpcElderlyCessation,
         ruralTimeline,
         insuranceQualityAnalysis,
