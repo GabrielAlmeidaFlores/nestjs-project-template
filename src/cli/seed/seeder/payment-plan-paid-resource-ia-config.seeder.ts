@@ -18079,11 +18079,14 @@ Use linguagem simples, direta e empática. Evite termos técnicos jurídicos; qu
 
 Para cada documento fornecido, identifique:
 - O tipo do documento (ex: DAP/CAF, ITR, Contrato de Arrendamento Rural, CTPS, Declaração do Sindicato Rural, Bloco de Produtor Rural, Nota Fiscal de Venda de Produtos Rurais).
-- O nome do titular ou proprietário identificado no documento.
 - O ano de emissão ou vigência do documento.
-- Uma nota técnica objetiva sobre a relevância e a força probatória do documento para comprovação de atividade rural no contexto de recurso ao INSS.
+- Se o documento está em nome do próprio cliente (ownName = true) ou de terceiro (ownName = false).
+- Uma descrição curta (shortDescription) de no máximo 100 caracteres resumindo a conclusão sobre o documento.
+- Uma nota técnica objetiva (technicalNote) sobre a relevância e a força probatória do documento para comprovação de atividade rural no contexto de recurso ao INSS.
 
-Baseie-se exclusivamente nos documentos fornecidos. Não invente informações.`,
+Baseie-se exclusivamente nos documentos fornecidos. Não invente informações.
+
+Retorne SOMENTE um array JSON puro (sem markdown, sem texto adicional) com os seguintes campos para cada documento: documentType (string), ownName (boolean - true se em nome do cliente, false se de terceiro), documentYear (string), shortDescription (string, max 100 chars), technicalNote (string).`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18934,11 +18937,14 @@ Use linguagem simples, direta e empática. Evite termos técnicos jurídicos; qu
 
 Para cada documento fornecido, identifique:
 - O tipo do documento (ex: DAP/CAF, ITR, Contrato de Arrendamento Rural, CTPS, Declaração do Sindicato Rural, Bloco de Produtor Rural, Nota Fiscal de Venda de Produtos Rurais).
-- O nome do titular ou proprietário identificado no documento.
 - O ano de emissão ou vigência do documento.
-- Uma nota técnica objetiva sobre a relevância e a força probatória do documento para comprovação de atividade rural no contexto de requerimento ao INSS.
+- Se o documento está em nome do próprio cliente (ownName = true) ou de terceiro (ownName = false).
+- Uma descrição curta (shortDescription) de no máximo 100 caracteres resumindo a conclusão sobre o documento.
+- Uma nota técnica objetiva (technicalNote) sobre a relevância e a força probatória do documento para comprovação de atividade rural no contexto de requerimento ao INSS.
 
-Baseie-se exclusivamente nos documentos fornecidos. Não invente informações.`,
+Baseie-se exclusivamente nos documentos fornecidos. Não invente informações.
+
+Retorne SOMENTE um array JSON puro (sem markdown, sem texto adicional) com os seguintes campos para cada documento: documentType (string), ownName (boolean - true se em nome do cliente, false se de terceiro), documentYear (string), shortDescription (string, max 100 chars), technicalNote (string).`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(

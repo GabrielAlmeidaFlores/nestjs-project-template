@@ -1804,11 +1804,13 @@ Processed CNIS analysis:
   public async getRuralOrHybridRetirementRejectionSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
+    analysisJson?: string,
   ): Promise<string | null> {
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         systemInstruction,
-        promptFiles: files,
+        ...(analysisJson !== undefined && { prompt: analysisJson }),
+        ...(files.length > 0 && { promptFiles: files }),
       }),
     );
   }
@@ -1842,7 +1844,9 @@ Processed CNIS analysis:
     files: Buffer[],
   ): Promise<string | null> {
     const prompt = `
-Analyze the uploaded documents and verify if the holder name in each document matches the customer name exactly or with clear equivalent variation.
+You will receive ${files.length} document file(s). Analyze each one individually and return EXACTLY ${files.length} item(s) in the JSON array — one item per uploaded file, in the same order they were provided. Do NOT merge multiple files into a single item.
+
+For each document, verify if the holder name matches the customer name exactly or with clear equivalent variation.
 
 Customer name: ${customerName}
 
@@ -1892,10 +1896,12 @@ Set ownName as true when the document holder belongs to this customer, otherwise
   public async getRuralOrHybridRetirementAnalysisSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
+    analysisJson?: string,
   ): Promise<string | null> {
     return this.getRuralOrHybridRetirementRejectionSimplifiedAnalysis(
       systemInstruction,
       files,
+      analysisJson,
     );
   }
 
@@ -3149,34 +3155,51 @@ Análise processada do CNIS:
 
   private getRuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisJsonSchema(): object {
     return {
-      type: 'array',
-      description: 'Lista de documentos identificados e analisados',
-      items: {
-        type: 'object',
-        properties: {
-          documentType: {
-            type: 'string',
-            description:
-              'Tipo do documento identificado. Ex: DAP/CAF, ITR, Contrato de Arrendamento Rural, CTPS, Declaração do Sindicato Rural, Bloco de Produtor Rural, Nota Fiscal de Venda de Produtos Rurais',
-          },
-          ownName: {
-            type: 'boolean',
-            description:
-              'Indica se o documento está em nome do cliente informado na requisição',
-          },
-          documentYear: {
-            type: 'string',
-            format: 'date',
-            description: 'Data do documento no formato YYYY-MM-DD',
-          },
-          technicalNote: {
-            type: 'string',
-            description:
-              'Nota técnica sobre a relevância e a força probatória do documento para comprovação de atividade rural no contexto de recurso ao INSS',
+      type: 'object',
+      properties: {
+        items: {
+          type: 'array',
+          description: 'Lista de documentos identificados e analisados',
+          items: {
+            type: 'object',
+            properties: {
+              documentType: {
+                type: 'string',
+                description:
+                  'Tipo do documento identificado. Ex: DAP/CAF, ITR, Contrato de Arrendamento Rural, CTPS, Declaração do Sindicato Rural, Bloco de Produtor Rural, Nota Fiscal de Venda de Produtos Rurais',
+              },
+              ownName: {
+                type: 'boolean',
+                description:
+                  'Indica se o documento está em nome do cliente informado na requisição',
+              },
+              documentYear: {
+                type: 'string',
+                format: 'date',
+                description: 'Data do documento no formato YYYY-MM-DD',
+              },
+              shortDescription: {
+                type: 'string',
+                description:
+                  'Descrição curta de no máximo 100 caracteres resumindo a conclusão sobre o documento',
+              },
+              technicalNote: {
+                type: 'string',
+                description:
+                  'Nota técnica sobre a relevância e a força probatória do documento para comprovação de atividade rural no contexto de recurso ao INSS. Utilize formatação Markdown: use **negrito** para destacar pontos importantes, listas com `-` para enumerações e parágrafos separados por linha em branco.',
+              },
+            },
+            required: [
+              'documentType',
+              'ownName',
+              'documentYear',
+              'shortDescription',
+              'technicalNote',
+            ],
           },
         },
-        required: ['documentType', 'ownName', 'documentYear', 'technicalNote'],
       },
+      required: ['items'],
     };
   }
 
