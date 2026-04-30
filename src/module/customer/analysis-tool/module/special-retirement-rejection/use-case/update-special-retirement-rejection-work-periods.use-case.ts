@@ -172,12 +172,25 @@ export class UpdateSpecialRetirementRejectionWorkPeriodsUseCase {
             const specialPeriodEntity =
               new SpecialRetirementRejectionWorkSpecialPeriodEntity({
                 id: specialPeriodId,
-                startDate: specialPeriodDto.startDate ?? null,
-                endDate: specialPeriodDto.endDate ?? null,
-                harmfulAgents: specialPeriodDto.harmfulAgents ?? null,
-                otherAgents: specialPeriodDto.otherAgents ?? null,
+                recognizedSpecialTime:
+                  specialPeriodDto.recognizedSpecialTime ?? null,
                 companyName: specialPeriodDto.companyName ?? null,
-                companyDocument: specialPeriodDto.companyDocument ?? null,
+                cnpj: specialPeriodDto.cnpj ?? null,
+                position: specialPeriodDto.position ?? null,
+                comprobatoryDocument:
+                  specialPeriodDto.comprobatoryDocument ?? null,
+                linkedToCnis: specialPeriodDto.linkedToCnis ?? null,
+                containsCnisRemunerationInPeriod:
+                  specialPeriodDto.containsCnisRemunerationInPeriod ?? null,
+                technicalJustification:
+                  specialPeriodDto.technicalJustification ?? null,
+                additionalObservation:
+                  specialPeriodDto.additionalObservation ?? null,
+                lawyerObservation: specialPeriodDto.lawyerObservation ?? null,
+                exposureFrequency: specialPeriodDto.exposureFrequency ?? null,
+                informationSource: specialPeriodDto.informationSource ?? null,
+                identifiedAgents: specialPeriodDto.identifiedAgents ?? null,
+                efficientEpi: specialPeriodDto.efficientEpi ?? null,
                 specialRetirementRejectionWorkPeriodId: workPeriodId,
               });
 

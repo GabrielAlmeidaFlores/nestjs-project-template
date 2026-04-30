@@ -1,4 +1,3 @@
-import { SpecialRetirementRejectionHarmfulAgentEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection/enum/special-retirement-rejection-harmful-agent.enum';
 import { SpecialRetirementRejectionWorkPeriodActivityTypeEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period/enum/special-retirement-rejection-work-period-activity-type.enum';
 import { SpecialRetirementRejectionWorkPeriodCategoryEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period/enum/special-retirement-rejection-work-period-category.enum';
 import { SpecialRetirementRejectionWorkPeriodPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period/enum/special-retirement-rejection-work-period-period-consideration.enum';
@@ -12,7 +11,6 @@ import { RequestDtoStringProperty } from '@shared/api/util/decorator/property/dt
 import { RequestDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-value-object-property/request-dto-value-object-property.decorator';
 import { Base64FileRequestDto } from '@shared/api/util/dto/request/base64-file.request.dto';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
-import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 
 @RequestDto()
@@ -29,26 +27,47 @@ export class UpdateSpecialRetirementRejectionWorkSpecialPeriodLegalFrameworkRequ
 
 @RequestDto()
 export class UpdateSpecialRetirementRejectionWorkSpecialPeriodRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoDateProperty({ required: false })
-  public startDate?: Date;
-
-  @RequestDtoDateProperty({ required: false })
-  public endDate?: Date;
-
-  @RequestDtoEnumProperty(SpecialRetirementRejectionHarmfulAgentEnum, {
-    required: false,
-    isArray: true,
-  })
-  public harmfulAgents?: SpecialRetirementRejectionHarmfulAgentEnum[];
-
-  @RequestDtoStringProperty({ required: false })
-  public otherAgents?: string;
+  @RequestDtoBooleanProperty({ required: false })
+  public recognizedSpecialTime?: boolean;
 
   @RequestDtoStringProperty({ required: false })
   public companyName?: string;
 
-  @RequestDtoValueObjectProperty(FederalDocument, { required: false })
-  public companyDocument?: FederalDocument;
+  @RequestDtoStringProperty({ required: false })
+  public cnpj?: string;
+
+  @RequestDtoStringProperty({ required: false })
+  public position?: string;
+
+  @RequestDtoStringProperty({ required: false })
+  public comprobatoryDocument?: string;
+
+  @RequestDtoBooleanProperty({ required: false })
+  public linkedToCnis?: boolean;
+
+  @RequestDtoBooleanProperty({ required: false })
+  public containsCnisRemunerationInPeriod?: boolean;
+
+  @RequestDtoStringProperty({ required: false })
+  public technicalJustification?: string;
+
+  @RequestDtoStringProperty({ required: false })
+  public additionalObservation?: string;
+
+  @RequestDtoStringProperty({ required: false })
+  public lawyerObservation?: string;
+
+  @RequestDtoStringProperty({ required: false })
+  public exposureFrequency?: string;
+
+  @RequestDtoStringProperty({ required: false })
+  public informationSource?: string;
+
+  @RequestDtoStringProperty({ required: false })
+  public identifiedAgents?: string;
+
+  @RequestDtoBooleanProperty({ required: false })
+  public efficientEpi?: boolean;
 
   @RequestDtoObjectProperty(
     () =>

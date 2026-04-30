@@ -3,7 +3,6 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
-import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { SpecialRetirementRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection.typeorm.entity';
 import { GetSpecialRetirementRejectionWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/repository/special-retirement-rejection/query/result/get-special-retirement-rejection-with-relations.query.result';
 import { SpecialRetirementRejectionEntity } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection/special-retirement-rejection.entity';
@@ -196,15 +195,21 @@ export class GetSpecialRetirementRejectionWithRelationsQueryResultAutoMapperProf
           (item) =>
             new SpecialRetirementRejectionWorkSpecialPeriodEntity({
               id: new SpecialRetirementRejectionWorkSpecialPeriodId(item.id),
-              startDate: item.startDate,
-              endDate: item.endDate,
-              harmfulAgents: item.harmfulAgents,
-              otherAgents: item.otherAgents,
+              recognizedSpecialTime: item.recognizedSpecialTime,
               companyName: item.companyName,
-              companyDocument:
-                item.companyDocument !== null
-                  ? new FederalDocument(item.companyDocument)
-                  : null,
+              cnpj: item.cnpj,
+              position: item.position,
+              comprobatoryDocument: item.comprobatoryDocument,
+              linkedToCnis: item.linkedToCnis,
+              containsCnisRemunerationInPeriod:
+                item.containsCnisRemunerationInPeriod,
+              technicalJustification: item.technicalJustification,
+              additionalObservation: item.additionalObservation,
+              lawyerObservation: item.lawyerObservation,
+              exposureFrequency: item.exposureFrequency,
+              informationSource: item.informationSource,
+              identifiedAgents: item.identifiedAgents,
+              efficientEpi: item.efficientEpi,
               specialRetirementRejectionWorkPeriodId:
                 new SpecialRetirementRejectionWorkPeriodId(workPeriod.id),
               createdAt: item.createdAt,

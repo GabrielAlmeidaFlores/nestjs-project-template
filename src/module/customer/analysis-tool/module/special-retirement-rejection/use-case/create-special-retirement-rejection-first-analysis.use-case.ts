@@ -26,6 +26,7 @@ import { SpecialRetirementRejectionNotFoundError } from '@module/customer/analys
 import {
   SpecialRetirementRejectionFirstAnalysisModel,
   SpecialRetirementRejectionFirstAnalysisWorkPeriodModel,
+  SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodModel,
 } from '@module/customer/analysis-tool/module/special-retirement-rejection/model/special-retirement-rejection-first-analysis.model';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
@@ -311,6 +312,29 @@ export class CreateSpecialRetirementRejectionFirstAnalysisUseCase {
           status: workPeriod.status,
           gracePeriod: workPeriod.gracePeriod,
           activityType: workPeriod.activityType,
+          ...(workPeriod.specialPeriods.length > 0 && {
+            specialPeriods: workPeriod.specialPeriods.map((sp) =>
+              SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodModel.build(
+                {
+                  recognizedSpecialTime: sp.recognizedSpecialTime,
+                  companyName: sp.companyName,
+                  cnpj: sp.cnpj,
+                  position: sp.position,
+                  comprobatoryDocument: sp.comprobatoryDocument,
+                  linkedToCnis: sp.linkedToCnis,
+                  containsCnisRemunerationInPeriod:
+                    sp.containsCnisRemunerationInPeriod,
+                  technicalJustification: sp.technicalJustification,
+                  additionalObservation: sp.additionalObservation,
+                  lawyerObservation: sp.lawyerObservation,
+                  exposureFrequency: sp.exposureFrequency,
+                  informationSource: sp.informationSource,
+                  identifiedAgents: sp.identifiedAgents,
+                  efficientEpi: sp.efficientEpi,
+                },
+              ),
+            ),
+          }),
         }),
       ),
     });
@@ -404,12 +428,21 @@ export class CreateSpecialRetirementRejectionFirstAnalysisUseCase {
           )
           .map((specialPeriod) => ({
             id: specialPeriod.id.toString(),
-            startDate: specialPeriod.startDate,
-            endDate: specialPeriod.endDate,
-            harmfulAgents: specialPeriod.harmfulAgents,
-            otherAgents: specialPeriod.otherAgents,
+            recognizedSpecialTime: specialPeriod.recognizedSpecialTime,
             companyName: specialPeriod.companyName,
-            companyDocument: specialPeriod.companyDocument?.toString() ?? null,
+            cnpj: specialPeriod.cnpj,
+            position: specialPeriod.position,
+            comprobatoryDocument: specialPeriod.comprobatoryDocument,
+            linkedToCnis: specialPeriod.linkedToCnis,
+            containsCnisRemunerationInPeriod:
+              specialPeriod.containsCnisRemunerationInPeriod,
+            technicalJustification: specialPeriod.technicalJustification,
+            additionalObservation: specialPeriod.additionalObservation,
+            lawyerObservation: specialPeriod.lawyerObservation,
+            exposureFrequency: specialPeriod.exposureFrequency,
+            informationSource: specialPeriod.informationSource,
+            identifiedAgents: specialPeriod.identifiedAgents,
+            efficientEpi: specialPeriod.efficientEpi,
             legalFrameworks: workSpecialPeriodLegalFrameworks
               .filter(
                 (legalFramework) =>
