@@ -183,19 +183,18 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
       throw new DisabilityRetirementPlanningGrantNotFoundError();
     }
 
+    const parsedResult: DisabilityRetirementPlanningGrantResultInterface =
+      this.parseResultAnalysis(completeAnalysis);
+
     const resultEntity = new DisabilityRetirementPlanningGrantResultEntity({
       id: disabilityRetirementPlanningGrantResult.id,
       disabilityRetirementPlanningGrantFirstAnalysis:
         disabilityRetirementPlanningGrantResult.disabilityRetirementPlanningGrantFirstAnalysis,
       disabilityRetirementPlanningGrantCompleteAnalysis: completeAnalysis,
-      disabilityRetirementPlanningGrantSimplifiedAnalysis:
-        disabilityRetirementPlanningGrantResult.disabilityRetirementPlanningGrantSimplifiedAnalysis,
+      disabilityRetirementPlanningGrantSimplifiedAnalysis: parsedResult.analysisResult,
       disabilityRetirementPlanningGrantCompleteAnalysisDownload:
         disabilityRetirementPlanningGrantResult.disabilityRetirementPlanningGrantCompleteAnalysisDownload,
     });
-
-    const parsedResult: DisabilityRetirementPlanningGrantResultInterface =
-      this.parseResultAnalysis(completeAnalysis);
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       consumeCreditTransaction,
