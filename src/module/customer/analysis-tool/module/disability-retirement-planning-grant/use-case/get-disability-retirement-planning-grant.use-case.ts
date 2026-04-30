@@ -2,10 +2,12 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { DisabilityRetirementPlanningGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/repository/disability-retirement-planning-grant/query/disability-retirement-planning-grant.query.repository.gateway';
 import { DisabilityRetirementPlanningGrantId } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant/value-object/disability-retirement-planning-grant-id.value-object';
 import {
+  GetDisabilityRetirementPlanningGrantAnalysisToolClientResponseDto,
   GetDisabilityRetirementPlanningGrantResponseDto,
   GetDisabilityRetirementPlanningGrantCnisDocumentResponseDto,
   GetDisabilityRetirementPlanningGrantInssBenefitResponseDto,
@@ -29,12 +31,16 @@ import {
 import { DisabilityRetirementPlanningGrantFirstAnalysisSourcePeriodInterface } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/disability-retirement-planning-grant-first-analysis-source-period.interface';
 import { DisabilityRetirementPlanningGrantFirstAnalysisInterface } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/disability-retirement-planning-grant-first-analysis.interface';
 import { parseDisabilityRetirementPlanningGrantCompleteAnalysis } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/disability-retirement-planning-grant-result.interface';
+import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 @Injectable()
 export class GetDisabilityRetirementPlanningGrantUseCase {
   protected readonly _type = GetDisabilityRetirementPlanningGrantUseCase.name;
 
   public constructor(
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(DisabilityRetirementPlanningGrantQueryRepositoryGateway)
     private readonly disabilityRetirementPlanningGrantQueryRepositoryGateway: DisabilityRetirementPlanningGrantQueryRepositoryGateway,
     @Inject(FileProcessorGateway)
@@ -42,13 +48,22 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
   ) {}
 
   public async execute(
+    sessionData: SessionDataModel,
+    organizationSessionData: OrganizationSessionDataModel,
     disabilityRetirementPlanningGrantId: DisabilityRetirementPlanningGrantId,
   ): Promise<GetDisabilityRetirementPlanningGrantResponseDto> {
-    const result =
-      await this.disabilityRetirementPlanningGrantQueryRepositoryGateway.findOneByDisabilityRetirementPlanningGrantIdOrFailWithRelations(
+    const [result, analysisToolRecord] = await Promise.all([
+      this.disabilityRetirementPlanningGrantQueryRepositoryGateway.findOneByDisabilityRetirementPlanningGrantIdOrFailWithRelations(
         disabilityRetirementPlanningGrantId,
         DisabilityRetirementPlanningGrantNotFoundError,
-      );
+      ),
+      this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByDisabilityRetirementPlanningGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        disabilityRetirementPlanningGrantId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+        DisabilityRetirementPlanningGrantNotFoundError,
+      ),
+    ]);
 
     const cnisDocumentEntity =
       result.disabilityRetirementPlanningGrantDocument?.[0] ?? null;
@@ -77,6 +92,34 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
         analysisName: result.analysisName,
       }),
       longPrizeDisability: result.longPrizeDisability,
+      analysisToolClient:
+        GetDisabilityRetirementPlanningGrantAnalysisToolClientResponseDto.build({
+          analysisToolClientId: analysisToolRecord.analysisToolClient.id,
+          ...(analysisToolRecord.analysisToolClient.name !== null && {
+            name: analysisToolRecord.analysisToolClient.name,
+          }),
+          ...(analysisToolRecord.analysisToolClient.federalDocument !== null && {
+            federalDocument: analysisToolRecord.analysisToolClient.federalDocument,
+          }),
+          ...(analysisToolRecord.analysisToolClient.email !== null && {
+            email: analysisToolRecord.analysisToolClient.email,
+          }),
+          ...(analysisToolRecord.analysisToolClient.corporateEmail !== null && {
+            corporateEmail: analysisToolRecord.analysisToolClient.corporateEmail,
+          }),
+          ...(analysisToolRecord.analysisToolClient.phoneNumber !== null && {
+            phoneNumber: analysisToolRecord.analysisToolClient.phoneNumber,
+          }),
+          ...(analysisToolRecord.analysisToolClient.birthDate !== null && {
+            birthDate: analysisToolRecord.analysisToolClient.birthDate,
+          }),
+          ...(analysisToolRecord.analysisToolClient.gender !== null && {
+            gender: analysisToolRecord.analysisToolClient.gender,
+          }),
+          ...(analysisToolRecord.analysisToolClient.clientType !== null && {
+            clientType: analysisToolRecord.analysisToolClient.clientType,
+          }),
+        }),
       ...(cnisDocument !== null && { cnisDocument }),
       createdAt: result.createdAt,
       updatedAt: result.updatedAt,
