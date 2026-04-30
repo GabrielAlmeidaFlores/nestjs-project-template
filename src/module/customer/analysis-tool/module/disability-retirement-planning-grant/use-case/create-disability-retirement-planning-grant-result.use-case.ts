@@ -3,8 +3,10 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { AnalysisToolRecordNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-record-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
@@ -74,6 +76,8 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
     private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(AnalysisToolRecordCommandRepositoryGateway)
+    private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
   ) {}
 
   public async execute(
@@ -123,12 +127,19 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
       throw new CnisDocumentIsNotValidError();
     }
 
-    const analysisToolClient =
-      await this.findAnalysisToolClientByAnalysisToolRecordOrFail(
+    const analysisRecord =
+      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByDisabilityRetirementPlanningGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
         disabilityRetirementPlanningGrantId,
         organizationSessionData.organizationId,
         sessionData.authIdentityId,
+        AnalysisToolRecordNotFoundError,
       );
+
+    const analysisToolClient = new AnalysisToolClientEntity({
+      ...analysisRecord.analysisToolClient,
+      createdBy: analysisRecord.analysisToolClient.createdBy.id,
+      updatedBy: analysisRecord.analysisToolClient.updatedBy.id,
+    });
 
     const cnisData =
       await this.analysisProcessorGateway.parseCnisDocument(cnisBuffer);
@@ -192,6 +203,11 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
         disabilityRetirementPlanningGrantResult.id,
         resultEntity,
       ),
+      this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecordStatus(
+        analysisRecord.id,
+        AnalysisStatusEnum.COMPLETED,
+        organizationMember.id,
+      ),
       ...this.buildEarningsHistoryTransactions(
         parsedResult,
         disabilityRetirementPlanningGrant,
@@ -204,19 +220,23 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
       retirementRules: parsedResult.retirementRules.map(
         (
           rule: DisabilityRetirementPlanningGrantResultRetirementRuleInterface,
-        ) =>
-          CreateDisabilityRetirementPlanningGrantResultRetirementRuleResponseDto.build(
+        ) => {
+          const eligibilityDate = (() => {
+            if (!rule.eligibilityAvailableAt) return undefined;
+            const d = new Date(rule.eligibilityAvailableAt);
+            return isNaN(d.getTime()) ? undefined : d;
+          })();
+          return CreateDisabilityRetirementPlanningGrantResultRetirementRuleResponseDto.build(
             {
               retirementRuleName: rule.retirementRuleName,
               isEligible: rule.isEligible,
-              ...(rule.eligibilityAvailableAt !== null && {
-                eligibilityAvailableAt: new Date(rule.eligibilityAvailableAt),
-              }),
+              ...(eligibilityDate !== undefined && { eligibilityAvailableAt: eligibilityDate }),
               expectedMonthlyBenefit: rule.expectedMonthlyBenefit,
               estimatedProcessValue: rule.estimatedProcessValue,
               retirementAnalysis: rule.retirementAnalysis,
             },
-          ),
+          );
+        },
       ),
       systemRecomendation: parsedResult.systemRecomendation.map(
         (
@@ -369,13 +389,64 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
       cleanedJson = JSON.parse(cleanedJson) as string;
     }
 
+    cleanedJson = this.sanitizeJsonControlChars(cleanedJson);
+
     const parsed: unknown = JSON.parse(cleanedJson);
 
     if (!this.isResultAnalysis(parsed)) {
       throw new InvalidDisabilityRetirementPlanningGrantResultJsonError();
     }
 
-    return parsed;
+    const result = parsed as DisabilityRetirementPlanningGrantResultInterface;
+
+    result.analysisResult = result.analysisResult.replace(/\\n/g, '\n');
+    result.retirementRules = result.retirementRules.map((rule) => ({
+      ...rule,
+      retirementAnalysis: rule.retirementAnalysis?.replace(/\\n/g, '\n') ?? rule.retirementAnalysis,
+    }));
+
+    return result;
+  }
+
+  private sanitizeJsonControlChars(json: string): string {
+    let result = '';
+    let inString = false;
+    let escaped = false;
+
+    for (let i = 0; i < json.length; i++) {
+      const char = json[i];
+      const code = json.charCodeAt(i);
+
+      if (escaped) {
+        result += char;
+        escaped = false;
+        continue;
+      }
+
+      if (char === '\\' && inString) {
+        result += char;
+        escaped = true;
+        continue;
+      }
+
+      if (char === '"') {
+        inString = !inString;
+        result += char;
+        continue;
+      }
+
+      if (inString && code < 0x20) {
+        if (code === 0x0a) result += '\\n';
+        else if (code === 0x0d) result += '\\r';
+        else if (code === 0x09) result += '\\t';
+        else result += '\\u' + code.toString(16).padStart(4, '0');
+        continue;
+      }
+
+      result += char;
+    }
+
+    return result;
   }
 
   private isResultAnalysis(
@@ -513,34 +584,5 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
     );
 
     return [currentDocumentBuffer, ...otherDocumentBuffers];
-  }
-
-  private findAnalysisToolClientByAnalysisToolRecordOrFail(
-    disabilityRetirementPlanningGrantId: DisabilityRetirementPlanningGrantId,
-    organizationId: OrganizationSessionDataModel['organizationId'],
-    authIdentityId: SessionDataModel['authIdentityId'],
-  ): Promise<AnalysisToolClientEntity> {
-    const analysisToolRecordQueryResultPromise: ReturnType<
-      AnalysisToolRecordQueryRepositoryGateway['findWithRelationsByDisabilityRetirementPlanningGrantIdAndOrganizationIdAndAuthIdentityIdOrFail']
-    > =
-      this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByDisabilityRetirementPlanningGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
-        disabilityRetirementPlanningGrantId,
-        organizationId,
-        authIdentityId,
-        AnalysisToolRecordNotFoundError,
-      );
-
-    return analysisToolRecordQueryResultPromise.then(
-      (analysisToolRecordQueryResult) => {
-        const analysisToolClient =
-          analysisToolRecordQueryResult.analysisToolClient;
-
-        return new AnalysisToolClientEntity({
-          ...analysisToolClient,
-          createdBy: analysisToolClient.createdBy.id,
-          updatedBy: analysisToolClient.updatedBy.id,
-        });
-      },
-    );
   }
 }

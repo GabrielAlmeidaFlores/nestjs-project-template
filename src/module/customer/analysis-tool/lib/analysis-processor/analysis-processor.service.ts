@@ -902,23 +902,24 @@ Anï¿½lise processada do CNIS:
   ): Promise<string | null> {
     const prompt = `
 # IMPORTANTE
-- A anï¿½lise tï¿½cnica deve se basear prioritariamente na anï¿½lise jï¿½ processada do CNIS em formato JSON;
-- Calcule somente os valores que nï¿½o estiverem presentes na anï¿½lise jï¿½ fornecida do CNIS, nï¿½o realize calculos como valores salï¿½riais, use estritamente os fornecidos.
-- Nï¿½o incluir tag <br> na resposta.
-- Retorne estritamente um objeto JSON compatï¿½vel com o schema solicitado.
-- Para cada item de \`periods\`, use prioritariamente os dados estruturados jï¿½ enviados nos arquivos do prompt; nï¿½o invente valores.
-- O campo \`contributionAverage\` representa a mï¿½dia das remuneraï¿½ï¿½es do perï¿½odo jï¿½ informada nos dados estruturados; quando esse valor estiver disponï¿½vel, reutilize exatamente esse valor e nï¿½o retorne \`0\`.
-- O campo \`contributionAverage\` nï¿½o ï¿½ uma lista de contribuiï¿½ï¿½es e nï¿½o deve ser calculado como soma zerada por ausï¿½ncia de detalhamento mensal.
-- Quando o valor de \`contributionAverage\` nï¿½o estiver presente nos dados estruturados do perï¿½odo, omita esse campo em vez de retornar \`0\`.
-- O campo \`belowMinimumContributions\` deve conter somente as competï¿½ncias cujos valores ficaram abaixo do mï¿½nimo.
-- Nï¿½o liste em \`belowMinimumContributions\` contribuiï¿½ï¿½es que nï¿½o estejam abaixo do mï¿½nimo.
-- Quando nï¿½o houver competï¿½ncias abaixo do mï¿½nimo, retorne \`belowMinimumContributions: []\`.
-- O campo \`competenceBelowTheMinimum\` deve ser \`true\` somente quando houver ao menos um item em \`belowMinimumContributions\`; caso contrï¿½rio, deve ser \`false\`.
-- O campo \`isPendency\` deve indicar se o perï¿½odo possui qualquer pendï¿½ncia relevante.
-- O campo \`reasonPendency\` sï¿½ deve ser preenchido quando realmente existir pendï¿½ncia no perï¿½odo.
-- O campo \`statusPCD\` sï¿½ deve ser preenchido nos perï¿½odos em que houve deficiï¿½ncia reconhecida no perï¿½odo; nos demais, omita o campo.
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON;
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize calculos como valores salariais, use estritamente os fornecidos.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Para cada item de \`periods\`, use prioritariamente os dados estruturados já enviados nos arquivos do prompt; não invente valores.
+- O campo \`contributionAverage\` representa a média das remunerações do período já informada nos dados estruturados; quando esse valor estiver disponível, reutilize exatamente esse valor e não retorne \`0\`.
+- O campo \`contributionAverage\` não é uma lista de contribuições e não deve ser calculado como soma zerada por ausência de detalhamento mensal.
+- Quando o valor de \`contributionAverage\` não estiver presente nos dados estruturados do período, omita esse campo em vez de retornar \`0\`.
+- O campo \`belowMinimumContributions\` deve conter somente as competências cujos valores ficaram abaixo do mínimo.
+- Não liste em \`belowMinimumContributions\` contribuições que não estejam abaixo do mínimo.
+- Quando não houver competências abaixo do mínimo, retorne \`belowMinimumContributions: []\`.
+- O campo \`competenceBelowTheMinimum\` deve ser \`true\` somente quando houver ao menos um item em \`belowMinimumContributions\`; caso contrário, deve ser \`false\`.
+- O campo \`isPendency\` deve indicar se o período possui qualquer pendência relevante.
+- O campo \`reasonPendency\` só deve ser preenchido quando realmente existir pendência no período.
+- O campo \`statusPCD\` só deve ser preenchido nos períodos em que houve deficiência reconhecida no período; nos demais, omita o campo.
+- NÃO inclua o campo \`earningsHistory\` na resposta — esse dado já está armazenado e não deve ser reenviado.
 
-Anï¿½lise processada do CNIS:
+Análise processada do CNIS:
   ${cnisAnalysisJson}
 `;
 
@@ -982,12 +983,22 @@ AnÃ¡lise processada do CNIS:
   ): Promise<string | null> {
     const prompt = `
 # IMPORTANTE
-- A anï¿½lise tï¿½cnica deve se basear prioritariamente na anï¿½lise jï¿½ processada do CNIS em formato JSON;
-- Calcule somente os valores que nï¿½o estiverem presentes na anï¿½lise jï¿½ fornecida do CNIS, nï¿½o realize calculos como valores salï¿½riais, use estritamente os fornecidos.
-- Nï¿½o incluir tag <br> na resposta.
-- Retorne estritamente um objeto JSON compatï¿½vel com o schema solicitado.
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON;
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize cálculos como valores salariais, use estritamente os fornecidos.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
 
-Anï¿½lise processada do CNIS:
+## Instruções para os campos em Markdown
+Os campos \`retirementAnalysis\` (por regra) e \`analysisResult\` (análise geral) devem ser gerados em **Markdown rico**, com:
+- Títulos com ## e ###
+- Subtítulos e seções bem definidas
+- Tabelas Markdown (| coluna | coluna |) para apresentar dados comparativos, requisitos, datas e valores
+- Listas com marcadores (- item) ou numeradas (1. item) para enumerar critérios, documentos, pendências
+- Negrito (**texto**) para destacar termos técnicos, datas, valores monetários e conclusões
+- Seções como: Resumo do Caso, Análise da Incapacidade, Qualidade de Segurado, Carência, Conclusão, Estratégia Recomendada
+- O texto deve ser extenso, detalhado e juridicamente fundamentado, com referências às normas aplicáveis
+
+Análise processada do CNIS:
   ${cnisAnalysisJson}
 `;
 
@@ -1011,11 +1022,11 @@ Anï¿½lise processada do CNIS:
   ): Promise<string | null> {
     const prompt = `
 # IMPORTANTE
-- Retorne estritamente um objeto JSON compatï¿½vel com o schema solicitado.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
 - Use exclusivamente os valores de enum fornecidos no schema para os campos de reconhecimento e viabilidade.
-- Cada item de \`timeAccelerators\` deve ser compatï¿½vel com a criaï¿½ï¿½o de um perï¿½odo de acelerador de tempo.
-- Preencha \`technicalNote\`, \`startDate\`, \`endDate\` e \`institution\` quando essas informaï¿½ï¿½es estiverem disponï¿½veis nos documentos analisados.
-- Nï¿½o incluir tag <br> na resposta.
+- Cada item de \`timeAccelerators\` deve ser compatível com a criação de um período de acelerador de tempo.
+- Preencha \`technicalNote\`, \`startDate\`, \`endDate\` e \`institution\` quando essas informações estiverem disponíveis nos documentos analisados.
+- Não incluir tag <br> na resposta.
 `;
 
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
@@ -3999,56 +4010,6 @@ Análise processada do CNIS:
                 description:
                   'Motivo da pendï¿½ncia do perï¿½odo, quando houver',
               },
-              earningsHistory: {
-                type: 'array',
-                description:
-                  'HistÃ³rico de remuneraÃ§Ãµes do perÃ­odo extraÃ­do do CNIS',
-                items: {
-                  type: 'object',
-                  properties: {
-                    competence: {
-                      type: 'string',
-                      format: 'date',
-                      description: 'CompetÃªncia no formato YYYY-MM-DD',
-                    },
-                    remuneration: {
-                      type: 'string',
-                      description: 'Valor ou descriÃ§Ã£o da remuneraÃ§Ã£o',
-                    },
-                    indicators: {
-                      type: 'string',
-                      description: 'Indicadores da remuneraÃ§Ã£o',
-                    },
-                    paymentDate: {
-                      type: 'string',
-                      format: 'date',
-                      description: 'Data de pagamento no formato YYYY-MM-DD',
-                    },
-                    contribution: {
-                      type: 'string',
-                      description: 'InformaÃ§Ãµes de contribuiÃ§Ã£o',
-                    },
-                    contributionSalary: {
-                      type: 'string',
-                      description: 'SalÃ¡rio de contribuiÃ§Ã£o',
-                    },
-                    analysis: {
-                      type: 'string',
-                      description: 'AnÃ¡lise da competÃªncia',
-                    },
-                    competenceBelowTheMinimum: {
-                      type: 'boolean',
-                      description:
-                        'Indica se a competÃªncia estÃ¡ abaixo do mÃ­nimo',
-                    },
-                  },
-                  required: [
-                    'competence',
-                    'remuneration',
-                    'competenceBelowTheMinimum',
-                  ],
-                },
-              },
             },
             required: [
               'name',
@@ -4060,7 +4021,6 @@ Análise processada do CNIS:
               'isPendency',
               'competenceBelowTheMinimum',
               'belowMinimumContributions',
-              'earningsHistory',
             ],
           },
         },
@@ -4336,7 +4296,7 @@ Análise processada do CNIS:
               retirementAnalysis: {
                 type: 'string',
                 description:
-                  'Anï¿½lise detalhada desta regra em formato markdown',
+                  'Análise detalhada desta regra em formato Markdown rico, com títulos (##, ###), tabelas comparativas de requisitos, listas de critérios, datas e valores em negrito, fundamentação legal e conclusão sobre elegibilidade.',
               },
             },
             required: [
@@ -4434,7 +4394,7 @@ Análise processada do CNIS:
         analysisResult: {
           type: 'string',
           description:
-            'Anï¿½lise extensa e detalhada do caso, abrangendo o histï¿½rico previdenciï¿½rio do segurado, as condiï¿½ï¿½es incapacitantes apresentadas, os reflexos dos perï¿½odos contributivos, a aplicabilidade das regras de elegibilidade, as estratï¿½gias de reconhecimento de direitos e a conclusï¿½o fundamentada sobre a viabilidade da concessï¿½o da aposentadoria. O campo deve conter um texto longo, estruturado em parï¿½grafos, em formato Markdown.',
+            'Análise extensa e detalhada do caso em formato Markdown rico. Deve conter: títulos de seção com ## e ###, tabelas Markdown comparando requisitos e situação do segurado, listas com critérios atendidos e pendentes, valores monetários e datas em negrito. Seções obrigatórias: ## Resumo do Caso, ## Histórico Previdenciário, ## Análise da Incapacidade, ## Qualidade de Segurado e Carência, ## Conclusão, ## Estratégia Recomendada. O texto deve ser extenso, juridicamente fundamentado, com referência expressa às normas aplicáveis (artigos de lei, decretos).',
         },
       },
       required: [
