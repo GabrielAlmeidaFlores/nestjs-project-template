@@ -1817,7 +1817,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise completa de cessação de auxílio por incapacidade temporária com IA. Consolida o histórico contributivo, os períodos analisados, a decisão de cessação do INSS e a condição de incapacidade, gerando parecer técnico detalhado com enquadramento nas regras aplicáveis, fundamentação jurídica, estratégia processual recomendada e perspectivas do caso.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('d4e5f6a7-b8c9-4d0e-cf2a-4b5c6d7e8f9a'),
+      id: new PaymentPlanPaidResourceId('d4e5f6a7-b8c9-4d0e-8f2a-4b5c6d7e8f9a'),
       resource:
         PaymentPlanPaidResourceTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_TERMINATION_SIMPLIFIED_ANALYSIS,
       creditCost: 3,

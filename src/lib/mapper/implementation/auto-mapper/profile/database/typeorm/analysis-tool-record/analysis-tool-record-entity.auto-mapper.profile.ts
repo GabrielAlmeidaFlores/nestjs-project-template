@@ -39,6 +39,7 @@ import { SurvivorPensionAnalysisTypeormEntity } from '@infra/database/implementa
 import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant.typeorm.entity';
 import { TemporaryIncapacityBenefitRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-rejection.typeorm.entity';
+import { TemporaryIncapacityBenefitTerminationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-termination.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
@@ -78,6 +79,7 @@ import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/spe
 import { SurvivorPensionAnalysisEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis/survivor-pension-analysis.entity';
 import { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/temporary-disability-benefits-grant.entity';
 import { TemporaryIncapacityBenefitRejectionEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.entity';
+import { TemporaryIncapacityBenefitTerminationEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-termination/domain/schema/entity/temporary-incapacity-benefit-termination/temporary-incapacity-benefit-termination.entity';
 
 @Injectable()
 export class AnalysisToolRecordEntityAutoMapperProfile {
@@ -338,6 +340,17 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
               TemporaryIncapacityBenefitRejectionEntity,
             )
           : null;
+
+      const temporaryIncapacityBenefitTermination =
+        source.temporaryIncapacityBenefitTermination !== null &&
+        source.temporaryIncapacityBenefitTermination !== undefined
+          ? this.mapper.map(
+              source.temporaryIncapacityBenefitTermination,
+              TemporaryIncapacityBenefitTerminationTypeormEntity,
+              TemporaryIncapacityBenefitTerminationEntity,
+            )
+          : null;
+
       const accidentBenefitRejection =
         source.accidentBenefitRejection !== null &&
         source.accidentBenefitRejection !== undefined
@@ -442,6 +455,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         specialRetirementGrant,
         temporaryDisabilityBenefitsGrant,
         temporaryIncapacityBenefitRejection,
+        temporaryIncapacityBenefitTermination,
         accidentBenefitRejection,
         survivorPensionAnalysis,
         ruralOrHybridRetirementRejection,
@@ -759,6 +773,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const temporaryIncapacityBenefitTermination =
+        source.temporaryIncapacityBenefitTermination !== null
+          ? this.mapper.map(
+              source.temporaryIncapacityBenefitTermination,
+              TemporaryIncapacityBenefitTerminationEntity,
+              TemporaryIncapacityBenefitTerminationTypeormEntity,
+            )
+          : null;
+
       return AnalysisToolRecordTypeormEntity.build({
         id: source.id.toString(),
         code: source.code.toString(),
@@ -791,6 +814,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         specialCategoryRetirementAnalysis,
         specialRetirementGrant,
         temporaryDisabilityBenefitsGrant,
+        temporaryIncapacityBenefitTermination,
         temporaryIncapacityBenefitRejection,
         accidentBenefitRejection,
         survivorPensionAnalysis,
