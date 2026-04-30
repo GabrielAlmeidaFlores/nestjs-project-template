@@ -22,6 +22,7 @@ import type { GeneralUrbanRetirementDenialEntity } from '@module/customer/analys
 import type { GeneralUrbanRetirementGrantEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/general-urban-retirement-grant.entity';
 import type { InsuranceQualityAnalysisEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/insurance-quality-analysis.entity';
 import type { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
+import type { MaternityPayRejectionEntity } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/schema/entity/maternity-pay-rejection/maternity-pay-rejection.entity';
 import type { MaternityPayGrantEntity } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/maternity-pay-grant.entity';
 import type { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
 import type { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
@@ -77,6 +78,7 @@ export interface AnalysisToolRecordEntityPropsInterface extends BaseEntityPropsI
   specialRetirementGrant?: SpecialRetirementGrantEntity | null;
   bpcDisabilityDenial?: BpcDisabilityDenialEntity | null;
   bpcElderlyAnalysis?: BpcElderlyAnalysisEntity | null;
+  maternityPayRejection?: MaternityPayRejectionEntity | null;
   temporaryIncapacityBenefitRejection?: TemporaryIncapacityBenefitRejectionEntity | null;
   temporaryIncapacityBenefitTermination?: TemporaryIncapacityBenefitTerminationEntity | null;
   status: AnalysisStatusEnum;
