@@ -90,7 +90,7 @@ export class AnalyzeRuralOrHybridRetirementRejectionWorkPeriodDocumentsUseCase {
     const analysisResult =
       await this.analysisProcessorGateway.getRuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysis(
         promptResponse.prompt,
-        analysisToolClient.name ?? '',
+        this.buildClientContext(analysisToolClient.name ?? '', dto),
         dto.documents.map((document) => document.file.base64.decodeToBuffer()),
       );
 
@@ -112,10 +112,39 @@ export class AnalyzeRuralOrHybridRetirementRejectionWorkPeriodDocumentsUseCase {
             documentType: item.documentType,
             ownName: item.ownName,
             documentYear: item.documentYear,
+            shortDescription: item.shortDescription,
             technicalNote: item.technicalNote,
           },
         ),
     );
+  }
+
+  private buildClientContext(
+    clientName: string,
+    dto: AnalyzeRuralOrHybridRetirementRejectionWorkPeriodDocumentsRequestDto,
+  ): string {
+    const contextParts: string[] = [];
+    if (dto.periodStartDate !== undefined || dto.periodEndDate !== undefined) {
+      contextParts.push(
+        `Período rural: ${dto.periodStartDate} a ${dto.periodEndDate ?? 'atual'}`,
+      );
+    }
+    if (dto.workerType !== undefined) {
+      contextParts.push(`Tipo de trabalhador: ${dto.workerType}`);
+    }
+    if (dto.propertyName !== undefined) {
+      contextParts.push(`Nome da propriedade: ${dto.propertyName}`);
+    }
+    if (dto.propertyCity !== undefined && dto.propertyState !== undefined) {
+      contextParts.push(
+        `Localização: ${dto.propertyCity}/${dto.propertyState}`,
+      );
+    }
+    const periodContextStr =
+      contextParts.length > 0
+        ? `\n\nContexto do período analisado:\n${contextParts.join('\n')}`
+        : '';
+    return `Cliente: ${clientName}${periodContextStr}`;
   }
 
   private parseAnalysisResult(
@@ -163,6 +192,7 @@ export class AnalyzeRuralOrHybridRetirementRejectionWorkPeriodDocumentsUseCase {
       typeof documentAnalysis['documentType'] === 'string' &&
       typeof documentAnalysis['ownName'] === 'boolean' &&
       typeof documentAnalysis['documentYear'] === 'string' &&
+      typeof documentAnalysis['shortDescription'] === 'string' &&
       typeof documentAnalysis['technicalNote'] === 'string'
     );
   }

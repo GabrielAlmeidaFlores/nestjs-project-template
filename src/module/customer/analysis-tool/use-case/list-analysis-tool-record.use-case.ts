@@ -97,6 +97,7 @@ export class ListAnalysisToolRecordUseCase {
             analysisToolRecord.specialActivity ??
             analysisToolRecord.disabilityAssessmentForBpcAnalysis ??
             analysisToolRecord.ruralOrHybridRetirementRejection ??
+            analysisToolRecord.ruralOrHybridRetirementAnalysis ??
             analysisToolRecord.ruralTimelineAnalysis ??
             analysisToolRecord.speechGenerator ??
             analysisToolRecord.medicalQuestionGenerator ??
@@ -113,9 +114,12 @@ export class ListAnalysisToolRecordUseCase {
             analysisToolRecord.bpcDisabilityDenial ??
             analysisToolRecord.deathBenefitGrant ??
             analysisToolRecord.temporaryIncapacityBenefitRejection ??
+            analysisToolRecord.temporaryIncapacityBenefitTermination ??
             analysisToolRecord.deathBenefitRejection ??
             analysisToolRecord.bpcElderlyAnalysis ??
-            analysisToolRecord.accidentAssistanceTerminated;
+            analysisToolRecord.accidentAssistanceTerminated ??
+            analysisToolRecord.temporaryDisabilityBenefitsTerminated ??
+            analysisToolRecord.maternityPayRejection;
 
           const analysisId = analysis?.id ?? null;
 
