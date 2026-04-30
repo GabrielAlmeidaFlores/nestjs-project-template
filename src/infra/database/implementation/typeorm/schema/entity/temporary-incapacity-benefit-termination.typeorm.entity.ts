@@ -86,10 +86,14 @@ export class TemporaryIncapacityBenefitTerminationTypeormEntity extends BaseType
   )
   public workPeriods?: TemporaryIncapacityBenefitTerminationWorkPeriodsTypeormEntity[];
 
-  @OneToOne(() => AnalysisToolRecordTypeormEntity, {
-    nullable: true,
-    eager: false,
-  })
+  @OneToOne(
+    () => AnalysisToolRecordTypeormEntity,
+    (entity) => entity.temporaryIncapacityBenefitTermination,
+    {
+      nullable: true,
+      eager: false,
+    },
+  )
   public analysisToolRecord?: AnalysisToolRecordTypeormEntity;
 
   protected override readonly _type =
