@@ -2,10 +2,12 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { DisabilityRetirementPlanningGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/repository/disability-retirement-planning-grant/query/disability-retirement-planning-grant.query.repository.gateway';
 import { DisabilityRetirementPlanningGrantId } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant/value-object/disability-retirement-planning-grant-id.value-object';
 import {
+  GetDisabilityRetirementPlanningGrantAnalysisToolClientResponseDto,
   GetDisabilityRetirementPlanningGrantResponseDto,
   GetDisabilityRetirementPlanningGrantCnisDocumentResponseDto,
   GetDisabilityRetirementPlanningGrantInssBenefitResponseDto,
@@ -29,12 +31,16 @@ import {
 import { DisabilityRetirementPlanningGrantFirstAnalysisSourcePeriodInterface } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/disability-retirement-planning-grant-first-analysis-source-period.interface';
 import { DisabilityRetirementPlanningGrantFirstAnalysisInterface } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/disability-retirement-planning-grant-first-analysis.interface';
 import { parseDisabilityRetirementPlanningGrantCompleteAnalysis } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/disability-retirement-planning-grant-result.interface';
+import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 @Injectable()
 export class GetDisabilityRetirementPlanningGrantUseCase {
   protected readonly _type = GetDisabilityRetirementPlanningGrantUseCase.name;
 
   public constructor(
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(DisabilityRetirementPlanningGrantQueryRepositoryGateway)
     private readonly disabilityRetirementPlanningGrantQueryRepositoryGateway: DisabilityRetirementPlanningGrantQueryRepositoryGateway,
     @Inject(FileProcessorGateway)
@@ -42,13 +48,22 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
   ) {}
 
   public async execute(
+    sessionData: SessionDataModel,
+    organizationSessionData: OrganizationSessionDataModel,
     disabilityRetirementPlanningGrantId: DisabilityRetirementPlanningGrantId,
   ): Promise<GetDisabilityRetirementPlanningGrantResponseDto> {
-    const result =
-      await this.disabilityRetirementPlanningGrantQueryRepositoryGateway.findOneByDisabilityRetirementPlanningGrantIdOrFailWithRelations(
+    const [result, analysisToolRecord] = await Promise.all([
+      this.disabilityRetirementPlanningGrantQueryRepositoryGateway.findOneByDisabilityRetirementPlanningGrantIdOrFailWithRelations(
         disabilityRetirementPlanningGrantId,
         DisabilityRetirementPlanningGrantNotFoundError,
-      );
+      ),
+      this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByDisabilityRetirementPlanningGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        disabilityRetirementPlanningGrantId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+        DisabilityRetirementPlanningGrantNotFoundError,
+      ),
+    ]);
 
     const cnisDocumentEntity =
       result.disabilityRetirementPlanningGrantDocument?.[0] ?? null;
@@ -70,6 +85,8 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
           )
         : null;
 
+    const client = analysisToolRecord.analysisToolClient;
+
     return GetDisabilityRetirementPlanningGrantResponseDto.build({
       id: result.id,
       category: result.category,
@@ -77,6 +94,36 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
         analysisName: result.analysisName,
       }),
       longPrizeDisability: result.longPrizeDisability,
+      analysisToolClient:
+        GetDisabilityRetirementPlanningGrantAnalysisToolClientResponseDto.build(
+          {
+            analysisToolClientId: client.id,
+            ...(client.name !== null && {
+              name: client.name,
+            }),
+            ...(client.federalDocument !== null && {
+              federalDocument: client.federalDocument,
+            }),
+            ...(client.email !== null && {
+              email: client.email,
+            }),
+            ...(client.corporateEmail !== null && {
+              corporateEmail: client.corporateEmail,
+            }),
+            ...(client.phoneNumber !== null && {
+              phoneNumber: client.phoneNumber,
+            }),
+            ...(client.birthDate !== null && {
+              birthDate: client.birthDate,
+            }),
+            ...(client.gender !== null && {
+              gender: client.gender,
+            }),
+            ...(client.clientType !== null && {
+              clientType: client.clientType,
+            }),
+          },
+        ),
       ...(cnisDocument !== null && { cnisDocument }),
       createdAt: result.createdAt,
       updatedAt: result.updatedAt,
@@ -176,9 +223,15 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
                         ...(eh.indicators !== null && {
                           indicators: eh.indicators,
                         }),
-                        ...(eh.paymentDate !== null && {
-                          paymentDate: eh.paymentDate,
-                        }),
+                        ...(
+                          (() => {
+                            if (!eh.paymentDate) {
+                              return {};
+                            }
+                            const d = new Date(eh.paymentDate);
+                            return isNaN(d.getTime()) ? {} : { paymentDate: d };
+                          }) as () => { paymentDate?: Date }
+                        )(),
                         ...(eh.contribution !== null && {
                           contribution: eh.contribution,
                         }),
@@ -288,7 +341,10 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
             ).map((item) =>
               DisabilityRetirementPlanningGrantFirstAnalysisBelowMinimumContributionItemModel.build(
                 {
-                  contributionDate: new Date(item.contributionDate),
+                  contributionDate: ((): Date => {
+                    const d = new Date(item.contributionDate);
+                    return isNaN(d.getTime()) ? new Date(0) : d;
+                  })(),
                   contributionValue: item.contributionValue,
                 },
               ),
@@ -298,7 +354,10 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
                 DisabilityRetirementPlanningGrantFirstAnalysisEarningsHistoryItemModel.build(
                   {
                     ...(eh.competence !== null && {
-                      competence: new Date(eh.competence),
+                      competence: ((): Date | null => {
+                        const d = new Date(eh.competence);
+                        return isNaN(d.getTime()) ? null : d;
+                      })(),
                     }),
                     ...(eh.remuneration !== null && {
                       remuneration: eh.remuneration,
@@ -306,9 +365,13 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
                     ...(eh.indicators !== null && {
                       indicators: eh.indicators,
                     }),
-                    ...(eh.paymentDate !== null && {
-                      paymentDate: new Date(eh.paymentDate),
-                    }),
+                    ...((): { paymentDate?: Date } => {
+                      if (eh.paymentDate === null) {
+                        return {};
+                      }
+                      const d = new Date(eh.paymentDate);
+                      return isNaN(d.getTime()) ? {} : { paymentDate: d };
+                    })(),
                     ...(eh.contribution !== null && {
                       contribution: eh.contribution,
                     }),

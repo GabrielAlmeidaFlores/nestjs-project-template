@@ -75,6 +75,7 @@ src/
 │   │       ├── dto/             # Presentation layer
 │   │       │   ├── request/     # Input DTOs
 │   │       │   └── response/    # Output DTOs
+│   │       ├── interface/       # TypeScript interfaces (shared within the module)
 │   │       ├── error/           # Domain-specific errors
 │   │       ├── *.controller.ts  # HTTP controllers
 │   │       └── *.module.ts      # NestJS module
@@ -1272,7 +1273,33 @@ export class SomeService {
 - Enums that are used across multiple unrelated modules
 - True application-wide configuration (should be in dedicated config files)
 
-### 4. DTO Property Decorators
+### 4. `interface/` vs `model/` Folder Separation ⚠️ MANDATORY
+
+**CRITICAL**: TypeScript interfaces and classes are fundamentally different and MUST live in separate folders.
+
+- **`interface/`** — TypeScript `interface` declarations shared within the module (e.g. AI response shapes, query result structures, JSON schemas). Example: `rural-or-hybrid-retirement-analysis-result.interface.ts`
+- **`model/`** — TypeScript `class` declarations (plain data models that are not entities or DTOs). Example: a `SomeModel` class with methods or computed properties.
+
+**Rules:**
+
+- ✅ Interfaces go in `interface/` at the module root
+- ✅ Classes go in `model/` at the module root
+- ❌ NEVER put interface files inside `model/interface/` — `model` implies a class, not an interface
+- ❌ NEVER mix interfaces and classes in the same folder
+
+```
+src/module/customer/analysis-tool/module/{feature}/
+├── domain/
+├── dto/
+├── error/
+├── interface/   ← *.interface.ts files go here
+├── model/       ← class-based models go here (if needed)
+├── use-case/
+├── *.controller.ts
+└── *.module.ts
+```
+
+### 5. DTO Property Decorators
 
 #### Request DTO Pattern
 
@@ -3241,7 +3268,7 @@ private getMyAnalysisJsonSchema(): object {
 }
 ```
 
-The schema **must exactly match** the corresponding `*Interface` file under `model/interface/`. If the interface has key `insuredStatus: boolean`, the schema must have `insuredStatus: { type: 'boolean' }`.
+The schema **must exactly match** the corresponding `*Interface` file under `interface/`. If the interface has key `insuredStatus: boolean`, the schema must have `insuredStatus: { type: 'boolean' }`.
 
 **Rules:**
 

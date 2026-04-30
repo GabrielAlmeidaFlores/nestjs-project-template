@@ -108,6 +108,21 @@ import { BpcElderlyAnalysisLegalProceedingEntityAutoMapperProfile } from '@lib/m
 import { GetBpcElderlyAnalysisLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-legal-proceeding/get-bpc-elderly-analysis-legal-proceeding-query-result.auto-mapper.profile';
 import { BpcElderlyAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-result/bpc-elderly-analysis-result-entity.auto-mapper.profile';
 import { GetBpcElderlyAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-analysis-result/get-bpc-elderly-analysis-result-query-result.auto-mapper.profile';
+import { BpcElderlyCessationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation/bpc-elderly-cessation-entity.auto-mapper.profile';
+import { GetBpcElderlyCessationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation/get-bpc-elderly-cessation-query-result.auto-mapper.profile';
+import { GetBpcElderlyCessationWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation/get-bpc-elderly-cessation-with-relations-query-result.auto-mapper.profile';
+import { BpcElderlyCessationDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation-document/bpc-elderly-cessation-document-entity.auto-mapper.profile';
+import { GetBpcElderlyCessationDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation-document/get-bpc-elderly-cessation-document-query-result.auto-mapper.profile';
+import { BpcElderlyCessationFamilyMemberEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation-family-member/bpc-elderly-cessation-family-member-entity.auto-mapper.profile';
+import { GetBpcElderlyCessationFamilyMemberQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation-family-member/get-bpc-elderly-cessation-family-member-query-result.auto-mapper.profile';
+import { BpcElderlyCessationFamilyMemberDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation-family-member-document/bpc-elderly-cessation-family-member-document-entity.auto-mapper.profile';
+import { GetBpcElderlyCessationFamilyMemberDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation-family-member-document/get-bpc-elderly-cessation-family-member-document-query-result.auto-mapper.profile';
+import { BpcElderlyCessationInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation-inss-benefit/bpc-elderly-cessation-inss-benefit-entity.auto-mapper.profile';
+import { GetBpcElderlyCessationInssBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation-inss-benefit/get-bpc-elderly-cessation-inss-benefit-query-result.auto-mapper.profile';
+import { BpcElderlyCessationLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation-legal-proceeding/bpc-elderly-cessation-legal-proceeding-entity.auto-mapper.profile';
+import { GetBpcElderlyCessationLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation-legal-proceeding/get-bpc-elderly-cessation-legal-proceeding-query-result.auto-mapper.profile';
+import { BpcElderlyCessationResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation-result/bpc-elderly-cessation-result-entity.auto-mapper.profile';
+import { GetBpcElderlyCessationResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-elderly-cessation-result/get-bpc-elderly-cessation-result-query-result.auto-mapper.profile';
 import { CidTenEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cid-ten/cid-ten-entity.auto-mapper.profile';
 import { GetCidTenQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cid-ten/get-cid-ten-query-result.auto-mapper.profile';
 import { CnisFastAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis/cnis-fast-analysis-entity.auto-mapper.profile';
@@ -308,6 +323,15 @@ import { GetMaternityPayGrantPeriodQueryResultAutoMapperProfile } from '@lib/map
 import { MaternityPayGrantPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-grant-period/maternity-pay-grant-period-entity.auto-mapper.profile';
 import { MaternityPayGrantPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-grant-period-document/maternity-pay-grant-period-document-entity.auto-mapper.profile';
 import { MaternityPayGrantResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-grant-result/maternity-pay-grant-result-entity.auto-mapper.profile';
+import { GetMaternityPayRejectionWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-rejection/get-maternity-pay-rejection-with-relations-query-result.auto-mapper.profile';
+import { MaternityPayRejectionEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-rejection/maternity-pay-rejection-entity.auto-mapper.profile';
+import { MaternityPayRejectionDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-rejection-document/maternity-pay-rejection-document-entity.auto-mapper.profile';
+import { MaternityPayRejectionInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-rejection-inss-benefit/maternity-pay-rejection-inss-benefit-entity.auto-mapper.profile';
+import { MaternityPayRejectionLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-rejection-legal-proceeding/maternity-pay-rejection-legal-proceeding-entity.auto-mapper.profile';
+import { MaternityPayRejectionResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-rejection-result/maternity-pay-rejection-result-entity.auto-mapper.profile';
+import { MaternityPayRejectionWorkPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-rejection-work-period/maternity-pay-rejection-work-period-entity.auto-mapper.profile';
+import { MaternityPayRejectionWorkPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-rejection-work-period-document/maternity-pay-rejection-work-period-document-entity.auto-mapper.profile';
+import { MaternityPayRejectionWorkPeriodEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/maternity-pay-rejection-work-period-earnings-history/maternity-pay-rejection-work-period-earnings-history-entity.auto-mapper.profile';
 import { GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-and-social-report-objection-generator-analysis/get-medical-and-social-report-objection-generator-analysis-query-result.auto-mapper.profile';
 import { GetMedicalAndSocialReportObjectionGeneratorAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-and-social-report-objection-generator-analysis/get-medical-and-social-report-objection-generator-analysis-with-relations-query-result.auto-mapper.profile';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis-entity.auto-mapper.profile';
@@ -426,6 +450,7 @@ import { GetRetirementPlanningRppsRemunerationCalculationQueryResultAutoMapperPr
 import { RetirementPlanningRppsRemunerationCalculationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-remuneration-calculation/retirement-planning-rpps-remuneration-calculation-entity.auto-mapper.profile';
 import { GetRetirementPlanningRppsResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-result/get-retirement-planning-rpps-result-query-result.auto-mapper.profile';
 import { RetirementPlanningRppsResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-result/retirement-planning-rpps-result-entity.auto-mapper.profile';
+import { RuralOrHybridRetirementAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-or-hybrid-retirement-analysis/rural-or-hybrid-retirement-analysis-entity.auto-mapper.profile';
 import { RuralOrHybridRetirementRejectionEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-or-hybrid-retirement-rejection/rural-or-hybrid-retirement-rejection-entity.auto-mapper.profile';
 import { GetRuralTimelineAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis/get-rural-timeline-analysis-with-relations-query-result.auto-mapper.profile';
 import { RuralTimelineAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis/rural-timeline-analysis-entity.auto-mapper.profile';
@@ -542,6 +567,21 @@ import { TemporaryDisabilityBenefitsGrantPreviousBenefitsDocumentEntityAutoMappe
 import { TemporaryDisabilityBenefitsGrantResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-result/temporary-disability-benefits-grant-result-entity.auto-mapper.profile';
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-work-periods/temporary-disability-benefits-grant-work-periods-entity.auto-mapper.profile';
 import { TemporaryDisabilityBenefitsGrantWorkPeriodsEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-work-periods-earnings-history/temporary-disability-benefits-grant-work-periods-earnings-history-entity.auto-mapper.profile';
+import { GetTemporaryDisabilityBenefitsTerminatedWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated/get-temporary-disability-benefits-terminated-with-relations-query-result.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated/temporary-disability-benefits-terminated-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-disability-analysis/temporary-disability-benefits-terminated-disability-analysis-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisCidEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-disability-analysis-cid/temporary-disability-benefits-terminated-disability-analysis-cid-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-disability-analysis-document/temporary-disability-benefits-terminated-disability-analysis-document-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-document/temporary-disability-benefits-terminated-document-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-inss-benefit/temporary-disability-benefits-terminated-inss-benefit-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedInsuredStatusEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-insured-status/temporary-disability-benefits-terminated-insured-status-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedInsuredStatusDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-insured-status-document/temporary-disability-benefits-terminated-insured-status-document-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedPreviousBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-previous-benefit/temporary-disability-benefits-terminated-previous-benefit-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedPreviousBenefitDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-previous-benefit-document/temporary-disability-benefits-terminated-previous-benefit-document-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-result/temporary-disability-benefits-terminated-result-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedWorkPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-work-period-document/temporary-disability-benefits-terminated-work-period-document-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedWorkPeriodsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-work-periods/temporary-disability-benefits-terminated-work-periods-entity.auto-mapper.profile';
+import { TemporaryDisabilityBenefitsTerminatedWorkPeriodsEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-terminated-work-periods-earnings-history/temporary-disability-benefits-terminated-work-periods-earnings-history-entity.auto-mapper.profile';
 import { GetTemporaryIncapacityBenefitRejectionWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-rejection/get-temporary-incapacity-benefit-rejection-with-relations-query-result.auto-mapper.profile';
 import { TemporaryIncapacityBenefitRejectionEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection-entity.auto-mapper.profile';
 import { TemporaryIncapacityBenefitRejectionDisabilityAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-rejection-disability-analysis/temporary-incapacity-benefit-rejection-disability-analysis-entity.auto-mapper.profile';
@@ -554,6 +594,18 @@ import { TemporaryIncapacityBenefitRejectionInsuredStatusDocumentEntityAutoMappe
 import { TemporaryIncapacityBenefitRejectionResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-rejection-result/temporary-incapacity-benefit-rejection-result-entity.auto-mapper.profile';
 import { TemporaryIncapacityBenefitRejectionWorkPeriodsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-rejection-work-periods/temporary-incapacity-benefit-rejection-work-periods-entity.auto-mapper.profile';
 import { TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-rejection-work-periods-earnings-history/temporary-incapacity-benefit-rejection-work-periods-earnings-history-entity.auto-mapper.profile';
+import { GetTemporaryIncapacityBenefitTerminationWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-termination/get-temporary-incapacity-benefit-termination-with-relations-query-result.auto-mapper.profile';
+import { TemporaryIncapacityBenefitTerminationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-termination/temporary-incapacity-benefit-termination-entity.auto-mapper.profile';
+import { TemporaryIncapacityBenefitTerminationDisabilityAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-termination-disability-analysis/temporary-incapacity-benefit-termination-disability-analysis-entity.auto-mapper.profile';
+import { TemporaryIncapacityBenefitTerminationDisabilityAnalysisCidEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-termination-disability-analysis-cid/temporary-incapacity-benefit-termination-disability-analysis-cid-entity.auto-mapper.profile';
+import { TemporaryIncapacityBenefitTerminationDisabilityAnalysisDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-termination-disability-analysis-document/temporary-incapacity-benefit-termination-disability-analysis-document-entity.auto-mapper.profile';
+import { TemporaryIncapacityBenefitTerminationDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-termination-document/temporary-incapacity-benefit-termination-document-entity.auto-mapper.profile';
+import { TemporaryIncapacityBenefitTerminationInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-termination-inss-benefit/temporary-incapacity-benefit-termination-inss-benefit-entity.auto-mapper.profile';
+import { TemporaryIncapacityBenefitTerminationInsuredStatusEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-termination-insured-status/temporary-incapacity-benefit-termination-insured-status-entity.auto-mapper.profile';
+import { TemporaryIncapacityBenefitTerminationInsuredStatusDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-termination-insured-status-document/temporary-incapacity-benefit-termination-insured-status-document-entity.auto-mapper.profile';
+import { TemporaryIncapacityBenefitTerminationResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-termination-result/temporary-incapacity-benefit-termination-result-entity.auto-mapper.profile';
+import { TemporaryIncapacityBenefitTerminationWorkPeriodsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-termination-work-periods/temporary-incapacity-benefit-termination-work-periods-entity.auto-mapper.profile';
+import { TemporaryIncapacityBenefitTerminationWorkPeriodsEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-termination-work-periods-earnings-history/temporary-incapacity-benefit-termination-work-periods-earnings-history-entity.auto-mapper.profile';
 import { GetTutorialQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/tutorial/get-tutorial-query-result.auto-mapper.profile';
 import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/tutorial/tutorial-entity.auto-mapper.profile';
 
@@ -901,6 +953,33 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     TemporaryIncapacityBenefitRejectionWorkPeriodsEntityAutoMapperProfile,
     TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryEntityAutoMapperProfile,
     GetTemporaryIncapacityBenefitRejectionWithRelationsQueryResultAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedResultEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedDocumentEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedInssBenefitEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisCidEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedDisabilityAnalysisDocumentEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedInsuredStatusEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedInsuredStatusDocumentEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedWorkPeriodsEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedWorkPeriodsEarningsHistoryEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedPreviousBenefitEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedPreviousBenefitDocumentEntityAutoMapperProfile,
+    TemporaryDisabilityBenefitsTerminatedWorkPeriodDocumentEntityAutoMapperProfile,
+    GetTemporaryDisabilityBenefitsTerminatedWithRelationsQueryResultAutoMapperProfile,
+    TemporaryIncapacityBenefitTerminationEntityAutoMapperProfile,
+    TemporaryIncapacityBenefitTerminationResultEntityAutoMapperProfile,
+    TemporaryIncapacityBenefitTerminationDocumentEntityAutoMapperProfile,
+    TemporaryIncapacityBenefitTerminationInssBenefitEntityAutoMapperProfile,
+    TemporaryIncapacityBenefitTerminationDisabilityAnalysisEntityAutoMapperProfile,
+    TemporaryIncapacityBenefitTerminationDisabilityAnalysisCidEntityAutoMapperProfile,
+    TemporaryIncapacityBenefitTerminationDisabilityAnalysisDocumentEntityAutoMapperProfile,
+    TemporaryIncapacityBenefitTerminationInsuredStatusEntityAutoMapperProfile,
+    TemporaryIncapacityBenefitTerminationInsuredStatusDocumentEntityAutoMapperProfile,
+    TemporaryIncapacityBenefitTerminationWorkPeriodsEntityAutoMapperProfile,
+    TemporaryIncapacityBenefitTerminationWorkPeriodsEarningsHistoryEntityAutoMapperProfile,
+    GetTemporaryIncapacityBenefitTerminationWithRelationsQueryResultAutoMapperProfile,
     GeneralUrbanRetirementAnalysisEntityAutoMapperProfile,
     GetGeneralUrbanRetirementAnalysisDocumentQueryResultAutoMapperProfile,
     GetGeneralUrbanRetirementAnalysisLegalProceedingQueryResultAutoMapperProfile,
@@ -969,6 +1048,21 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetBpcElderlyAnalysisFamilyMemberQueryResultAutoMapperProfile,
     BpcElderlyAnalysisFamilyMemberDocumentEntityAutoMapperProfile,
     GetBpcElderlyAnalysisFamilyMemberDocumentQueryResultAutoMapperProfile,
+    BpcElderlyCessationEntityAutoMapperProfile,
+    GetBpcElderlyCessationQueryResultAutoMapperProfile,
+    GetBpcElderlyCessationWithRelationsQueryResultAutoMapperProfile,
+    BpcElderlyCessationDocumentEntityAutoMapperProfile,
+    GetBpcElderlyCessationDocumentQueryResultAutoMapperProfile,
+    BpcElderlyCessationResultEntityAutoMapperProfile,
+    GetBpcElderlyCessationResultQueryResultAutoMapperProfile,
+    BpcElderlyCessationInssBenefitEntityAutoMapperProfile,
+    GetBpcElderlyCessationInssBenefitQueryResultAutoMapperProfile,
+    BpcElderlyCessationLegalProceedingEntityAutoMapperProfile,
+    GetBpcElderlyCessationLegalProceedingQueryResultAutoMapperProfile,
+    BpcElderlyCessationFamilyMemberEntityAutoMapperProfile,
+    GetBpcElderlyCessationFamilyMemberQueryResultAutoMapperProfile,
+    BpcElderlyCessationFamilyMemberDocumentEntityAutoMapperProfile,
+    GetBpcElderlyCessationFamilyMemberDocumentQueryResultAutoMapperProfile,
     JudicialCaseAnalysisEntityAutoMapperProfile,
     GetJudicialCaseAnalysisQueryResultAutoMapperProfile,
     GetJudicialCaseAnalysisWithRelationsQueryResultAutoMapperProfile,
@@ -1107,6 +1201,16 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetSurvivorPensionAnalysisResultRetirementRuleQueryResultAutoMapperProfile,
     GetSurvivorPensionAnalysisResultDependentPensionAnalysisQueryResultAutoMapperProfile,
     RuralOrHybridRetirementRejectionEntityAutoMapperProfile,
+    MaternityPayRejectionEntityAutoMapperProfile,
+    GetMaternityPayRejectionWithRelationsQueryResultAutoMapperProfile,
+    MaternityPayRejectionResultEntityAutoMapperProfile,
+    MaternityPayRejectionInssBenefitEntityAutoMapperProfile,
+    MaternityPayRejectionLegalProceedingEntityAutoMapperProfile,
+    MaternityPayRejectionDocumentEntityAutoMapperProfile,
+    MaternityPayRejectionWorkPeriodEntityAutoMapperProfile,
+    MaternityPayRejectionWorkPeriodDocumentEntityAutoMapperProfile,
+    MaternityPayRejectionWorkPeriodEarningsHistoryEntityAutoMapperProfile,
+    RuralOrHybridRetirementAnalysisEntityAutoMapperProfile,
     MaternityPayGrantEntityAutoMapperProfile,
     GetMaternityPayGrantWithRelationsQueryResultAutoMapperProfile,
     MaternityPayGrantDocumentEntityAutoMapperProfile,

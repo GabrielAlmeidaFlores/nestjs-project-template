@@ -8,6 +8,7 @@ import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implemen
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { BpcDisabilityDenialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-denial.typeorm.entity';
 import { BpcElderlyAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis.typeorm.entity';
+import { BpcElderlyCessationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-cessation.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { DeathBenefitGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant.typeorm.entity';
 import { DeathBenefitRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-rejection.typeorm.entity';
@@ -27,6 +28,7 @@ import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/
 import { PerCapitaIncomeForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
+import { RuralOrHybridRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-analysis.typeorm.entity';
 import { RuralOrHybridRetirementRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-rejection.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
 import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
@@ -36,9 +38,13 @@ import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typ
 import { SurvivorPensionAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/survivor-pension-analysis.typeorm.entity';
 import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant.typeorm.entity';
+import { TemporaryDisabilityBenefitsTerminatedTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-terminated.typeorm.entity';
 import { TemporaryIncapacityBenefitRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-rejection.typeorm.entity';
+import { TemporaryIncapacityBenefitTerminationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-termination.typeorm.entity';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
+
+import type { MaternityPayRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-rejection.typeorm.entity';
 
 @Entity({ name: 'analysis_tool_record' })
 export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
@@ -197,6 +203,10 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({ name: 'rural_or_hybrid_retirement_rejection_id' })
   public ruralOrHybridRetirementRejection?: RuralOrHybridRetirementRejectionTypeormEntity | null;
 
+  @ManyToOne(() => RuralOrHybridRetirementAnalysisTypeormEntity)
+  @JoinColumn({ name: 'rural_or_hybrid_retirement_analysis_id' })
+  public ruralOrHybridRetirementAnalysis?: RuralOrHybridRetirementAnalysisTypeormEntity | null;
+
   @OneToOne(
     () => InsuranceQualityAnalysisTypeormEntity,
     (entity) => entity.analysisToolRecord,
@@ -242,6 +252,13 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   @ManyToOne(() => TemporaryDisabilityBenefitsGrantTypeormEntity)
   @JoinColumn({ name: 'temporary_disability_benefits_grant_id' })
   public temporaryDisabilityBenefitsGrant?: TemporaryDisabilityBenefitsGrantTypeormEntity | null;
+
+  @OneToOne(
+    () => TemporaryDisabilityBenefitsTerminatedTypeormEntity,
+    (entity) => entity.analysisToolRecord,
+  )
+  @JoinColumn({ name: 'temporary_disability_benefits_terminated_id' })
+  public temporaryDisabilityBenefitsTerminated?: TemporaryDisabilityBenefitsTerminatedTypeormEntity | null;
 
   @ManyToOne(() => AccidentBenefitRejectionTypeormEntity)
   @JoinColumn({ name: 'accident_benefit_rejection_id' })
@@ -305,9 +322,25 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({ name: 'bpc_elderly_analysis_id' })
   public bpcElderlyAnalysis?: BpcElderlyAnalysisTypeormEntity | null;
 
+  @OneToOne(
+    () => BpcElderlyCessationTypeormEntity,
+    (entity) => entity.analysisToolRecord,
+    { nullable: true },
+  )
+  @JoinColumn({ name: 'bpc_elderly_cessation_id' })
+  public bpcElderlyCessation?: BpcElderlyCessationTypeormEntity | null;
+
+  @ManyToOne('MaternityPayRejectionTypeormEntity')
+  @JoinColumn({ name: 'maternity_pay_rejection_id' })
+  public maternityPayRejection?: MaternityPayRejectionTypeormEntity | null;
+
   @ManyToOne(() => TemporaryIncapacityBenefitRejectionTypeormEntity)
   @JoinColumn({ name: 'temporary_incapacity_benefit_rejection_id' })
   public temporaryIncapacityBenefitRejection?: TemporaryIncapacityBenefitRejectionTypeormEntity | null;
+
+  @ManyToOne(() => TemporaryIncapacityBenefitTerminationTypeormEntity)
+  @JoinColumn({ name: 'temporary_incapacity_benefit_termination_id' })
+  public temporaryIncapacityBenefitTermination?: TemporaryIncapacityBenefitTerminationTypeormEntity | null;
 
   @ManyToOne(() => MaternityPayGrantTypeormEntity)
   @JoinColumn({ name: 'maternity_pay_grant_id' })
