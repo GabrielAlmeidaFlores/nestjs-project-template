@@ -82,6 +82,8 @@ export class AnalysisActivityMessageFactory {
       'Indeferimento de benefício por incapacidade temporária',
     [AnalysisToolRecordTypeEnum.MATERNITY_PAY_GRANT]:
       'Concessão de salário maternidade',
+    [AnalysisToolRecordTypeEnum.ACCIDENT_ASSISTANCE_TERMINATED]:
+      'Auxílio-acidente cessado',
   };
 
   private static readonly actionLabelMap: Record<
