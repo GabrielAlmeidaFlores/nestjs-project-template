@@ -662,6 +662,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const ruralOrHybridRetirementAnalysis =
+        source.ruralOrHybridRetirementAnalysis !== null
+          ? this.mapper.map(
+              source.ruralOrHybridRetirementAnalysis,
+              RuralOrHybridRetirementAnalysisEntity,
+              RuralOrHybridRetirementAnalysisTypeormEntity,
+            )
+          : null;
+
       const accidentBenefitRejection =
         source.accidentBenefitRejection !== null
           ? ({
@@ -809,6 +818,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         accidentBenefitRejection,
         survivorPensionAnalysis,
         ruralOrHybridRetirementRejection,
+        ruralOrHybridRetirementAnalysis,
         deathBenefitGrant,
         deathBenefitRejection,
         analysisToolClient,
