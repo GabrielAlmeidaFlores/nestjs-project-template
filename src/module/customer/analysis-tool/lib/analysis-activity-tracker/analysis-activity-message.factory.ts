@@ -54,6 +54,8 @@ export class AnalysisActivityMessageFactory {
       'Indeferimento de pensão por morte',
     [AnalysisToolRecordTypeEnum.SPECIAL_RETIREMENT_GRANT]:
       'Concessão de aposentadoria especial',
+    [AnalysisToolRecordTypeEnum.SPECIAL_RETIREMENT_REJECTION]:
+      'Indeferimento de aposentadoria especial',
     [AnalysisToolRecordTypeEnum.TEMPORARY_DISABILITY_BENEFITS_GRANT]:
       'Concessão de benefício por incapacidade temporária',
     [AnalysisToolRecordTypeEnum.RURAL_OR_HYBRID_RETIREMENT_REJECTION]:

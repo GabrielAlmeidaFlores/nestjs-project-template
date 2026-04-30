@@ -974,6 +974,39 @@ AnÃ¡lise processada do CNIS:
     );
   }
 
+  public async getSpecialRetirementRejectionFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson = true,
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANT
+- Base the technical analysis primarily on the already processed CNIS analysis in JSON format.
+- Calculate only values that are not already present in the provided CNIS analysis.
+- Return strictly a JSON object compatible with the requested schema.
+
+Processed CNIS analysis:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: asJson
+          ? ResponseConfigInputModel.build({
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema:
+                this.getSpecialRetirementRejectionFirstAnalysisJsonSchema(),
+            })
+          : null,
+      }),
+    );
+  }
+
   public async getDisabilityRetirementPlanningGrantResultAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
@@ -1103,7 +1136,48 @@ Anï¿½lise processada do CNIS:
     );
   }
 
+  public async getSpecialRetirementRejectionCompleteAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANT
+- Base the technical analysis primarily on the already processed CNIS analysis in JSON format.
+- Calculate only values that are not already present in the provided CNIS analysis.
+- Return strictly a JSON object compatible with the requested schema.
+
+Processed CNIS analysis:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getSpecialRetirementRejectionCompleteAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
   public async getSpecialRetirementGrantSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getSpecialRetirementRejectionSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null> {
@@ -4093,6 +4167,235 @@ Análise processada do CNIS:
         'technicalDiagnosis',
         'integratedTimeline',
       ],
+    };
+  }
+
+  private getSpecialRetirementRejectionFirstAnalysisJsonSchema(): object {
+    const workPeriodSchema = {
+      type: 'object',
+      properties: {
+        bondOrigin: { type: 'string' },
+        startDate: {
+          type: 'string',
+          format: 'date',
+          description: 'YYYY-MM-DD',
+        },
+        endDate: {
+          type: 'string',
+          format: 'date',
+          description: 'YYYY-MM-DD',
+        },
+        category: {
+          type: 'string',
+          enum: [
+            'segurado_empregado',
+            'segurado_contribuinte_individual',
+            'segurado_facultativo',
+            'segurado_especial',
+            'segurado_domestico',
+            'segurado_avulso',
+          ],
+        },
+        pendencyReason: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Lista de motivos de pendência do período',
+        },
+        periodConsideration: {
+          type: 'string',
+          enum: ['sim', 'nao', 'provisoriamente'],
+        },
+        contributionAverage: { type: 'string' },
+        status: { type: 'string' },
+        gracePeriod: { type: 'string' },
+        activityType: {
+          type: 'string',
+          enum: [
+            'atividade_comum',
+            'atividade_especial',
+            'periodo_sem_atividade',
+            'pendencia',
+          ],
+        },
+      },
+      required: [
+        'bondOrigin',
+        'startDate',
+        'endDate',
+        'category',
+        'pendencyReason',
+        'periodConsideration',
+        'contributionAverage',
+        'status',
+        'gracePeriod',
+        'activityType',
+      ],
+    };
+
+    return {
+      type: 'object',
+      properties: {
+        decisionAnalysis: {
+          type: 'string',
+          description: 'Análise da decisão em formato markdown',
+        },
+        specialTimeWithoutResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        specialTimeResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        specialTimeWithAccelerators: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        commonTimeWithoutResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        commonTimeResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        commonTimeWithAccelerators: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        totalTimeWithoutResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        totalTimeResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        totalTimeWithAccelerators: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        specialGracePeriodWithoutResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        specialGracePeriodResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        specialGracePeriodWithAccelerators: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        commonGracePeriodWithoutResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        commonGracePeriodResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        commonGracePeriodWithAccelerators: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        totalGracePeriodWithoutResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        totalGracePeriodResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        totalGracePeriodWithAccelerators: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        workPeriods: {
+          type: 'array',
+          items: workPeriodSchema,
+        },
+      },
+      required: [
+        'decisionAnalysis',
+        'specialTimeWithoutResolvingPendencies',
+        'specialTimeResolvingPendencies',
+        'specialTimeWithAccelerators',
+        'commonTimeWithoutResolvingPendencies',
+        'commonTimeResolvingPendencies',
+        'commonTimeWithAccelerators',
+        'totalTimeWithoutResolvingPendencies',
+        'totalTimeResolvingPendencies',
+        'totalTimeWithAccelerators',
+        'specialGracePeriodWithoutResolvingPendencies',
+        'specialGracePeriodResolvingPendencies',
+        'specialGracePeriodWithAccelerators',
+        'commonGracePeriodWithoutResolvingPendencies',
+        'commonGracePeriodResolvingPendencies',
+        'commonGracePeriodWithAccelerators',
+        'totalGracePeriodWithoutResolvingPendencies',
+        'totalGracePeriodResolvingPendencies',
+        'totalGracePeriodWithAccelerators',
+        'workPeriods',
+      ],
+    };
+  }
+
+  private getSpecialRetirementRejectionCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        retirementRules: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              ruleName: {
+                type: 'string',
+                description: 'Ex: aposentadoria especial',
+              },
+              fulfilled: {
+                type: 'boolean',
+                description: 'true se cumprida, false se não cumprida',
+              },
+              grantDate: {
+                type: 'string',
+                format: 'date',
+                description: 'Data de concessão no formato YYYY-MM-DD',
+              },
+              expectedRmi: {
+                type: 'number',
+                description: 'Ex: 2218.45',
+              },
+              causeValue: {
+                type: 'number',
+                description: 'Ex: 2218.45',
+              },
+              bestRmi: { type: 'boolean' },
+              biggestCauseValue: { type: 'boolean' },
+              detaildAnalysis: {
+                type: 'string',
+                description: 'Texto detalhado sobre a regra de aposentadoria',
+              },
+            },
+            required: [
+              'ruleName',
+              'fulfilled',
+              'grantDate',
+              'expectedRmi',
+              'causeValue',
+              'bestRmi',
+              'biggestCauseValue',
+              'detaildAnalysis',
+            ],
+          },
+        },
+        analysisResult: {
+          type: 'string',
+          description: 'Resultado completo da análise em markdown',
+        },
+      },
+      required: ['retirementRules', 'analysisResult'],
     };
   }
 
