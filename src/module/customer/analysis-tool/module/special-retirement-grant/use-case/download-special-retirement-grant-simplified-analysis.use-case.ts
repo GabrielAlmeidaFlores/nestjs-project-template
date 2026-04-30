@@ -10,7 +10,10 @@ import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { SpecialRetirementGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-result/command/special-retirement-grant-result.command.repository.gateway';
 import { SpecialRetirementGrantId } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/value-object/special-retirement-grant-id/special-retirement-grant-id.value-object';
+import { SpecialRetirementGrantDocumentTypeEnum } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-document/enum/special-retirement-grant-document-type.enum';
 import { SpecialRetirementGrantResultEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-result/special-retirement-grant-result.entity';
+import { SpecialRetirementGrantAtLeastOnePppRequiredError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-at-least-one-ppp-required.error';
+import { SpecialRetirementGrantCnisRequiredError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-cnis-required.error';
 import { SpecialRetirementGrantDoesNotContainSimplifiedAnalysisError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-does-not-contain-simplified-analysis.error';
 import { SpecialRetirementGrantNotFoundError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-not-found.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
@@ -99,6 +102,18 @@ export class DownloadSpecialRetirementGrantSimplifiedAnalysisUseCase {
         ),
         'utf-8',
       );
+
+      const hasPpp = specialRetirementGrant.specialRetirementGrantDocument.some(
+        (doc) => doc.type === SpecialRetirementGrantDocumentTypeEnum.PPP,
+      );
+
+      if (hasPpp === false) {
+        throw new SpecialRetirementGrantAtLeastOnePppRequiredError();
+      }
+
+      if (specialRetirementGrant.cnisDocument === null) {
+        throw new SpecialRetirementGrantCnisRequiredError();
+      }
 
       const cnisBuffer = await this.fileProcessorGateway.getFileBuffer(
         specialRetirementGrant.cnisDocument,
