@@ -65,6 +65,7 @@ import { SpeechGeneratorId } from '@module/customer/analysis-tool/module/speech-
 import { SurvivorPensionAnalysisId } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis/value-object/survivor-pension-analysis-id/survivor-pension-analysis-id.value-object';
 import { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
 import { TemporaryDisabilityBenefitsGrantId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/value-object/temporary-disability-benefits-grant-id.value-object';
+import { TemporaryDisabilityBenefitsTerminatedId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/schema/entity/temporary-disability-benefits-terminated/value-object/temporary-disability-benefits-terminated-id.value-object';
 import { TemporaryIncapacityBenefitRejectionId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/value-object/temporary-incapacity-benefit-rejection-id.value-object';
 import { TemporaryIncapacityBenefitTerminationId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-termination/domain/schema/entity/temporary-incapacity-benefit-termination/value-object/temporary-incapacity-benefit-termination-id.value-object';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
@@ -134,6 +135,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { generalUrbanRetirementGrant: Not(IsNull()) },
         { generalUrbanRetirementAnalysis: Not(IsNull()) },
         { temporaryDisabilityBenefitsGrant: Not(IsNull()) },
+        { temporaryDisabilityBenefitsTerminated: Not(IsNull()) },
         { accidentBenefitRejection: Not(IsNull()) },
         { deathBenefitGrant: Not(IsNull()) },
         { deathBenefitRejection: Not(IsNull()) },
@@ -2304,6 +2306,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { generalUrbanRetirementGrant: Not(IsNull()) },
         { generalUrbanRetirementAnalysis: Not(IsNull()) },
         { temporaryDisabilityBenefitsGrant: Not(IsNull()) },
+        { temporaryDisabilityBenefitsTerminated: Not(IsNull()) },
         { deathBenefitGrant: Not(IsNull()) },
         { deathBenefitRejection: Not(IsNull()) },
         { survivorPensionAnalysis: Not(IsNull()) },
@@ -2812,6 +2815,63 @@ export class AnalysisToolRecordTypeormQueryRepository
     if (!data) {
       return null;
     }
+
+    return this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+  }
+
+  public async findWithRelationsByTemporaryDisabilityBenefitsTerminatedIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    temporaryDisabilityBenefitsTerminatedId: TemporaryDisabilityBenefitsTerminatedId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          temporaryDisabilityBenefitsTerminated: {
+            id: temporaryDisabilityBenefitsTerminatedId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          temporaryDisabilityBenefitsTerminated: true,
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
 
     return this.mapperGateway.map(
       data,
@@ -3350,6 +3410,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       'deathBenefitGrant',
       'deathBenefitRejection',
       'temporaryDisabilityBenefitsGrant',
+      'temporaryDisabilityBenefitsTerminated',
       'survivorPensionAnalysis',
       'generalUrbanRetirementDenial',
       'disabilityRetirementPlanningRejection',

@@ -47,6 +47,7 @@ import { SpeechGeneratorModule } from '@module/customer/analysis-tool/module/spe
 import { SurvivorPensionAnalysisModule } from '@module/customer/analysis-tool/module/survivor-pension-analysis/survivor-pension-analysis.module';
 import { TeacherRetirementPlanningModule } from '@module/customer/analysis-tool/module/teacher-retirement-planning/teacher-retirement-planning.module';
 import { TemporaryDisabilityBenefitsGrantModule } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/temporary-disability-benefits-grant.module';
+import { TemporaryDisabilityBenefitsTerminatedModule } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/temporary-disability-benefits-terminated.module';
 import { TemporaryIncapacityBenefitRejectionModule } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.module';
 import { TemporaryIncapacityBenefitTerminationModule } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-termination/temporary-incapacity-benefit-termination.module';
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
@@ -118,6 +119,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     MaternityPayGrantModule,
     DisabilityRetirementPlanningRejectionModule,
     TemporaryDisabilityBenefitsGrantModule,
+    TemporaryDisabilityBenefitsTerminatedModule,
     TemporaryIncapacityBenefitRejectionModule,
     TemporaryIncapacityBenefitTerminationModule,
     AccidentBenefitRejectionModule,

@@ -1467,6 +1467,20 @@ AnÃ¡lise processada do CNIS:
     );
   }
 
+  public async getTemporaryDisabilityBenefitsTerminatedFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson = true,
+  ): Promise<string | null> {
+    return this.getTemporaryIncapacityBenefitRejectionFirstAnalysis(
+      systemInstruction,
+      cnisAnalysisJson,
+      files,
+      asJson,
+    );
+  }
+
   public async getDeathBenefitGrantResultAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
@@ -1522,6 +1536,18 @@ AnÃ¡lise processada do CNIS:
             this.getTemporaryDisabilityBenefitsGrantCompleteAnalysisJsonSchema(),
         }),
       }),
+    );
+  }
+
+  public async getTemporaryDisabilityBenefitsTerminatedCompleteAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return this.getTemporaryIncapacityBenefitRejectionCompleteAnalysis(
+      systemInstruction,
+      cnisAnalysisJson,
+      files,
     );
   }
 
@@ -1674,6 +1700,16 @@ Análise processada do CNIS:
         systemInstruction,
         promptFiles: files,
       }),
+    );
+  }
+
+  public async getTemporaryDisabilityBenefitsTerminatedSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return this.getTemporaryIncapacityBenefitRejectionSimplifiedAnalysis(
+      systemInstruction,
+      files,
     );
   }
 
@@ -2572,6 +2608,16 @@ Análise processada do CNIS:
         systemInstruction,
         promptFiles: files,
       }),
+    );
+  }
+
+  public async getTemporaryDisabilityBenefitsTerminatedInssDecisionAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return this.getTemporaryIncapacityBenefitRejectionInssDecisionAnalysis(
+      systemInstruction,
+      files,
     );
   }
 
