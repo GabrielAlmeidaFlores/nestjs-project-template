@@ -21,6 +21,7 @@ import { GeneralUrbanRetirementDenialTypeormEntity } from '@infra/database/imple
 import { GeneralUrbanRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant.typeorm.entity';
 import { InsuranceQualityAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis.typeorm.entity';
 import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis.typeorm.entity';
+import { MaternityPayRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-rejection.typeorm.entity';
 import { MaternityPayGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-grant.typeorm.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis.entity';
 import { MedicalQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator.typeorm.entity';
@@ -63,6 +64,7 @@ import { GeneralUrbanRetirementDenialEntity } from '@module/customer/analysis-to
 import { GeneralUrbanRetirementGrantEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/general-urban-retirement-grant.entity';
 import { InsuranceQualityAnalysisEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/insurance-quality-analysis.entity';
 import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
+import { MaternityPayRejectionEntity } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/schema/entity/maternity-pay-rejection/maternity-pay-rejection.entity';
 import { MaternityPayGrantEntity } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/maternity-pay-grant.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
 import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
@@ -237,6 +239,16 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
               source.bpcElderlyAnalysis,
               BpcElderlyAnalysisTypeormEntity,
               BpcElderlyAnalysisEntity,
+            )
+          : null;
+
+      const maternityPayRejection =
+        source.maternityPayRejection !== null &&
+        source.maternityPayRejection !== undefined
+          ? this.mapper.map(
+              source.maternityPayRejection,
+              MaternityPayRejectionTypeormEntity,
+              MaternityPayRejectionEntity,
             )
           : null;
 
@@ -459,6 +471,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         accidentBenefitRejection,
         survivorPensionAnalysis,
         ruralOrHybridRetirementRejection,
+        maternityPayRejection,
         ruralOrHybridRetirementAnalysis,
         maternityPayGrant,
       });
@@ -627,6 +640,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
               source.bpcElderlyAnalysis,
               BpcElderlyAnalysisEntity,
               BpcElderlyAnalysisTypeormEntity,
+            )
+          : null;
+
+      const maternityPayRejection =
+        source.maternityPayRejection !== null
+          ? this.mapper.map(
+              source.maternityPayRejection,
+              MaternityPayRejectionEntity,
+              MaternityPayRejectionTypeormEntity,
             )
           : null;
 
@@ -826,6 +848,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         generalUrbanRetirementDenial,
         maternityPayGrant,
         disabilityRetirementPlanningRejection,
+        maternityPayRejection,
         createdBy: {
           id: source.createdBy.toString(),
         } as OrganizationMemberTypeormEntity,

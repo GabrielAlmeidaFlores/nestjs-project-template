@@ -29,6 +29,7 @@ import { GeneralUrbanRetirementGrantModule } from '@module/customer/analysis-too
 import { InsuranceQualityAnalysisModule } from '@module/customer/analysis-tool/module/insurance-quality-analysis/insurance-quality-analysis.module';
 import { JudicialCaseAnalysisModule } from '@module/customer/analysis-tool/module/judicial-case-analysis/judicial-case-analysis.module';
 import { LegalPleadingModule } from '@module/customer/analysis-tool/module/legal-pleading/legal-pleading.module';
+import { MaternityPayRejectionModule } from '@module/customer/analysis-tool/module/maternity-pay-rejection/maternity-pay-rejection.module';
 import { MaternityPayGrantModule } from '@module/customer/analysis-tool/module/maternity-pay-grant/maternity-pay-grant.module';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisModule } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.module';
 import { MedicalQuestionGeneratorModule } from '@module/customer/analysis-tool/module/medical-question-generator/medical-question-generator.module';
@@ -118,6 +119,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     TemporaryIncapacityBenefitRejectionModule,
     TemporaryIncapacityBenefitTerminationModule,
     AccidentBenefitRejectionModule,
+    MaternityPayRejectionModule,
   ],
   controllers: [AnalysisToolController],
   providers: [

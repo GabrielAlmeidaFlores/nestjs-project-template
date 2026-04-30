@@ -2079,7 +2079,6 @@ AnÃ¡lise processada do CNIS:
 - A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
 - Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS.
 - Não incluir tag <br> na resposta.
-- Retorne estritamente um objeto JSON compatível com o schema solicitado.
 
 Análise processada do CNIS:
   ${cnisAnalysisJson}
@@ -2406,6 +2405,102 @@ Análise processada do CNIS:
   }
 
   public async getBpcElderlyAnalysisSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getMaternityPayRejectionFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS.
+- Não incluir tag <br> na resposta.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getMaternityPayRejectionSecondAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: this.getMaternityPayRejectionSecondAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getMaternityPayRejectionCompleteAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Garanta que o campo analysisResult esteja sempre preenchido com parecer conclusivo técnico e objetivo.
+- No campo causeValue, retorne string com o valor monetário correto (ex.: "R$ 12.345,67") e nunca use 0 como valor padrão.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: this.getMaternityPayRejectionCompleteAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getMaternityPayRejectionSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null> {
@@ -7249,6 +7344,227 @@ Análise processada do CNIS:
         'legalRequirementsMet',
         'perCapitaIncomeBelowQuarterMinimumWage',
         'ageEqualOrAbove65Years',
+      ],
+    };
+  }
+
+  private getMaternityPayRejectionSecondAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        insuredStatusManteined: {
+          type: 'boolean',
+          description:
+            'Indica se a qualidade de segurada foi mantida na data do evento gerador, considerando períodos de contribuição e eventual período de graça.',
+        },
+        insuredStatusAnalysisConclusion: {
+          type: 'string',
+          description:
+            'Conclusão textual objetiva sobre a qualidade de segurada, com fundamento nos dados do CNIS e documentos analisados. Deve ser texto simples, sem markdown.',
+        },
+        gracePeriod: {
+          type: 'object',
+          description:
+            'Resumo da análise de período de graça aplicável ao caso concreto.',
+          properties: {
+            withinTheGracePeriod: {
+              type: 'boolean',
+              description:
+                'Indica se a segurada estava dentro do período de graça na data relevante para o benefício.',
+            },
+            situation: {
+              type: 'string',
+              description:
+                'Descrição sintética da situação da segurada frente ao período de graça.',
+            },
+            applicableGracePeriod: {
+              type: 'string',
+              description:
+                'Período de graça aplicado ao caso (base legal e prazo considerado).',
+            },
+            endOfGracePeriod: {
+              type: 'string',
+              description:
+                'Data final do período de graça no formato YYYY-MM-DD. Quando não aplicável, explicar no texto.',
+            },
+          },
+          required: [
+            'withinTheGracePeriod',
+            'situation',
+            'applicableGracePeriod',
+            'endOfGracePeriod',
+          ],
+        },
+        benefitInformation: {
+          type: 'object',
+          description:
+            'Consolidação das informações essenciais do benefício de salário-maternidade no caso analisado.',
+          properties: {
+            situation: {
+              type: 'string',
+              description:
+                'Situação geral do benefício (deferido, indeferido, pendente ou equivalente conforme contexto do processo).',
+            },
+            duration: {
+              type: 'string',
+              description:
+                'Duração do benefício em linguagem clara (ex.: 120 dias).',
+            },
+            startDate: {
+              type: 'string',
+              description:
+                'Data de início do benefício no formato YYYY-MM-DD, quando identificável.',
+            },
+            concessionDate: {
+              type: 'string',
+              description:
+                'Data de concessão no formato YYYY-MM-DD, quando houver.',
+            },
+            startOfTheLeave: {
+              type: 'string',
+              description:
+                'Data de início do afastamento no formato YYYY-MM-DD, conforme documentação.',
+            },
+            endOfTheLeave: {
+              type: 'string',
+              description:
+                'Data de término do afastamento no formato YYYY-MM-DD, conforme documentação.',
+            },
+            totalLeaveDuration: {
+              type: 'string',
+              description:
+                'Tempo total de afastamento em formato textual objetivo (ex.: 120 dias).',
+            },
+            amountBenefit: {
+              type: 'string',
+              description:
+                'Valor do benefício em formato textual com moeda quando cabível (ex.: R$ 1.518,00).',
+            },
+            calculationBasis: {
+              type: 'string',
+              description:
+                'Base de cálculo utilizada para estimar o valor do benefício.',
+            },
+          },
+          required: [
+            'situation',
+            'duration',
+            'startDate',
+            'concessionDate',
+            'startOfTheLeave',
+            'endOfTheLeave',
+            'totalLeaveDuration',
+            'amountBenefit',
+            'calculationBasis',
+          ],
+        },
+        requirementDeadline: {
+          type: 'object',
+          description:
+            'Análise do prazo para requerimento administrativo do benefício.',
+          properties: {
+            triggeringEventDate: {
+              type: 'string',
+              description: 'Data do fato gerador no formato YYYY-MM-DD.',
+            },
+            requirementDate: {
+              type: 'string',
+              description:
+                'Data do requerimento administrativo no formato YYYY-MM-DD.',
+            },
+            statuoryDeadline: {
+              type: 'string',
+              description:
+                'Prazo legal aplicável ao requerimento, em linguagem clara e objetiva.',
+            },
+            details: {
+              type: 'string',
+              description:
+                'Detalhes relevantes sobre contagem do prazo e marcos temporais considerados.',
+            },
+            justification: {
+              type: 'string',
+              description:
+                'Justificativa técnica final sobre tempestividade ou eventual intempestividade.',
+            },
+          },
+          required: [
+            'triggeringEventDate',
+            'requirementDate',
+            'statuoryDeadline',
+            'details',
+            'justification',
+          ],
+        },
+      },
+      required: [
+        'insuredStatusManteined',
+        'insuredStatusAnalysisConclusion',
+        'gracePeriod',
+        'benefitInformation',
+        'requirementDeadline',
+      ],
+    };
+  }
+
+  private getMaternityPayRejectionCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        retirementRules: {
+          type: 'array',
+          description:
+            'Lista das regras previdenciárias analisadas para verificar repercussão no direito ao salário-maternidade e em cenários correlatos.',
+          items: {
+            type: 'object',
+            properties: {
+              ruleName: {
+                type: 'string',
+                description: 'Nome da regra analisada.',
+              },
+              fulfilled: {
+                type: 'boolean',
+                description:
+                  'Indica se os requisitos dessa regra foram cumpridos com base nos dados disponíveis.',
+              },
+              grantDate: {
+                type: 'string',
+                description:
+                  'Data provável de cumprimento dos requisitos no formato YYYY-MM-DD. Use valor textual quando não houver data objetiva.',
+              },
+              expectedRmi: {
+                type: 'number',
+                description: 'RMI estimada para a regra, quando calculável.',
+              },
+              causeValue: {
+                type: 'string',
+                description:
+                  'Valor estimado da causa em formato textual monetário (ex.: "R$ 12.345,67"). Deve refletir o cálculo correto do cenário e não pode usar 0 como preenchimento padrão.',
+              },
+              detaildAnalysis: {
+                type: 'string',
+                description:
+                  'Análise detalhada da regra, com fundamentação fática e jurídica em texto claro.',
+              },
+            },
+            required: ['ruleName', 'fulfilled', 'detaildAnalysis'],
+          },
+        },
+        isEligibleForMaternityPay: {
+          type: 'boolean',
+          description:
+            'Conclusão objetiva sobre elegibilidade ao salário-maternidade no caso concreto.',
+        },
+        analysisResult: {
+          type: 'string',
+          description:
+            'Parecer técnico conclusivo da análise completa. Deve sintetizar fundamentos, riscos, pontos favoráveis/desfavoráveis e recomendação final em texto claro, sem markdown.',
+        },
+      },
+      required: [
+        'retirementRules',
+        'isEligibleForMaternityPay',
+        'analysisResult',
       ],
     };
   }
