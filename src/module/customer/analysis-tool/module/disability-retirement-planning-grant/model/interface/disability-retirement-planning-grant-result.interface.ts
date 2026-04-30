@@ -60,6 +60,63 @@ export function parseDisabilityRetirementPlanningGrantCompleteAnalysis(
   if (cleaned.startsWith('"') && cleaned.endsWith('"')) {
     cleaned = JSON.parse(cleaned) as string;
   }
-  const parsed = JSON.parse(cleaned) as Record<string, unknown>;
-  return parsed as unknown as DisabilityRetirementPlanningGrantResultInterface;
+
+  cleaned = sanitizeJsonControlChars(cleaned);
+
+  const parsed = JSON.parse(cleaned) as DisabilityRetirementPlanningGrantResultInterface;
+
+  if (typeof parsed.analysisResult === 'string') {
+    parsed.analysisResult = parsed.analysisResult.replace(/\\n/g, '\n');
+  }
+  if (Array.isArray(parsed.retirementRules)) {
+    parsed.retirementRules = parsed.retirementRules.map((rule) => ({
+      ...rule,
+      retirementAnalysis: typeof rule.retirementAnalysis === 'string'
+        ? rule.retirementAnalysis.replace(/\\n/g, '\n')
+        : rule.retirementAnalysis,
+    }));
+  }
+
+  return parsed;
+}
+
+function sanitizeJsonControlChars(json: string): string {
+  let result = '';
+  let inString = false;
+  let escaped = false;
+
+  for (let i = 0; i < json.length; i++) {
+    const char = json[i];
+    const code = json.charCodeAt(i);
+
+    if (escaped) {
+      result += char;
+      escaped = false;
+      continue;
+    }
+
+    if (char === '\\' && inString) {
+      result += char;
+      escaped = true;
+      continue;
+    }
+
+    if (char === '"') {
+      inString = !inString;
+      result += char;
+      continue;
+    }
+
+    if (inString && code < 0x20) {
+      if (code === 0x0a) result += '\\n';
+      else if (code === 0x0d) result += '\\r';
+      else if (code === 0x09) result += '\\t';
+      else result += '\\u' + code.toString(16).padStart(4, '0');
+      continue;
+    }
+
+    result += char;
+  }
+
+  return result;
 }

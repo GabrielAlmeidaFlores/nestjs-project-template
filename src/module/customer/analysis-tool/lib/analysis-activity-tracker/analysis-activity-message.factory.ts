@@ -28,6 +28,8 @@ export class AnalysisActivityMessageFactory {
     [AnalysisToolRecordTypeEnum.SPEECH_GENERATOR]: 'Gerador de discurso',
     [AnalysisToolRecordTypeEnum.DISABILITY_ASSESSMENT_FOR_BPC_ANALYSIS]:
       'Avaliação de deficiência para BPC',
+    [AnalysisToolRecordTypeEnum.MATERNITY_PAY_REJECTION]:
+      'Indeferimento de salário maternidade',
     [AnalysisToolRecordTypeEnum.PER_CAPITA_INCOME_FOR_BPC_ANALYSIS]:
       'Análise de renda per capita para BPC',
     [AnalysisToolRecordTypeEnum.RURAL_TIMELINE_ANALYSIS]:
@@ -58,6 +60,8 @@ export class AnalysisActivityMessageFactory {
       'Concessão de benefício por incapacidade temporária',
     [AnalysisToolRecordTypeEnum.RURAL_OR_HYBRID_RETIREMENT_REJECTION]:
       'Indeferimento de aposentadoria rural ou híbrida',
+    [AnalysisToolRecordTypeEnum.RURAL_OR_HYBRID_RETIREMENT_ANALYSIS]:
+      'Análise de aposentadoria rural ou híbrida',
     [AnalysisToolRecordTypeEnum.SURVIVOR_PENSION_ANALYSIS]:
       'Análise de pensão por morte',
     [AnalysisToolRecordTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL]:
@@ -76,6 +80,8 @@ export class AnalysisActivityMessageFactory {
       'Indeferimento de benefício por incapacidade temporária',
     [AnalysisToolRecordTypeEnum.MATERNITY_PAY_GRANT]:
       'Concessão de salário maternidade',
+    [AnalysisToolRecordTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_TERMINATION]:
+      'Cessação de benefício por incapacidade temporária',
   };
 
   private static readonly actionLabelMap: Record<

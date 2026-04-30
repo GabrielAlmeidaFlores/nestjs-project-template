@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
@@ -41,6 +41,7 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 export class CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase {
   protected readonly _type =
     CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase.name;
+  private readonly logger = new Logger(CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase.name);
 
   public constructor(
     @Inject(AnalysisProcessorGateway)
@@ -229,6 +230,8 @@ export class CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase {
         cleanedJson = JSON.parse(cleanedJson) as string;
       }
 
+      cleanedJson = this.sanitizeJsonControlChars(cleanedJson);
+
       const raw = JSON.parse(
         cleanedJson,
       ) as DisabilityRetirementPlanningGrantFirstAnalysisInterface;
@@ -341,7 +344,8 @@ export class CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase {
             ),
         }),
       };
-    } catch {
+    } catch (err) {
+      this.logger.error('parseFirstAnalysisOrThrow failed', err instanceof Error ? err.stack : String(err));
       throw new InvalidDisabilityRetirementPlanningGrantFirstAnalysisJsonError();
     }
   }
@@ -561,5 +565,46 @@ export class CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase {
         });
       },
     );
+  }
+
+  private sanitizeJsonControlChars(json: string): string {
+    let result = '';
+    let inString = false;
+    let escaped = false;
+
+    for (let i = 0; i < json.length; i++) {
+      const char = json[i];
+      const code = json.charCodeAt(i);
+
+      if (escaped) {
+        result += char;
+        escaped = false;
+        continue;
+      }
+
+      if (char === '\\' && inString) {
+        result += char;
+        escaped = true;
+        continue;
+      }
+
+      if (char === '"') {
+        inString = !inString;
+        result += char;
+        continue;
+      }
+
+      if (inString && code < 0x20) {
+        if (code === 0x0a) result += '\\n';
+        else if (code === 0x0d) result += '\\r';
+        else if (code === 0x09) result += '\\t';
+        else result += '\\u' + code.toString(16).padStart(4, '0');
+        continue;
+      }
+
+      result += char;
+    }
+
+    return result;
   }
 }
