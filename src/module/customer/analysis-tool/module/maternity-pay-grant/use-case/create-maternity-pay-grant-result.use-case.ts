@@ -3,8 +3,11 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { AnalysisToolRecordNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-record-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
@@ -13,6 +16,7 @@ import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-pr
 import { CnisDocumentIsNotValidError } from '@module/customer/analysis-tool/module/cnis-fast-analysis/error/cnis-document-is-not-valid.error';
 import { MaternityPayGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant/query/maternity-pay-grant.query.repository.gateway';
 import { MaternityPayGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant-result/command/maternity-pay-grant-result.command.repository.gateway';
+import { MaternityPayGrantEntity } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/maternity-pay-grant.entity';
 import { MaternityPayGrantId } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/value-object/maternity-pay-grant-id.value-object';
 import { MaternityPayGrantResultEntity } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-result/maternity-pay-grant-result.entity';
 import {
@@ -33,10 +37,6 @@ import type {
   MaternityPayGrantResultApplicableRuleInterface,
   MaternityPayGrantResultInterface,
 } from '@module/customer/analysis-tool/module/maternity-pay-grant/model/interface/maternity-pay-grant-result.interface';
-import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
-import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
-import { MaternityPayGrantEntity } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/maternity-pay-grant.entity';
-import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 
 @Injectable()
 export class CreateMaternityPayGrantResultUseCase {
@@ -96,7 +96,8 @@ export class CreateMaternityPayGrantResultUseCase {
       throw new MaternityPayGrantCnisDocumentNotFoundError();
     }
 
-    const maternityPayGrantResultEntity = maternityPayGrantQueryResult.maternityPayGrantResult;
+    const maternityPayGrantResultEntity =
+      maternityPayGrantQueryResult.maternityPayGrantResult;
 
     if (maternityPayGrantResultEntity === null) {
       throw new MaternityPayGrantResultNotFoundError();
@@ -112,13 +113,13 @@ export class CreateMaternityPayGrantResultUseCase {
       throw new CnisDocumentIsNotValidError();
     }
 
-    const analysisToolRecordQueryResult = await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByMaternityPayGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
-      maternityPayGrantId,
-      organizationSessionData.organizationId,
-      sessionData.authIdentityId,
-      AnalysisToolRecordNotFoundError,
-    );
-
+    const analysisToolRecordQueryResult =
+      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByMaternityPayGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        maternityPayGrantId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+        AnalysisToolRecordNotFoundError,
+      );
 
     const analysisToolClient =
       await this.findAnalysisToolClientByAnalysisToolRecordOrFail(
@@ -135,7 +136,9 @@ export class CreateMaternityPayGrantResultUseCase {
       analysisToolClient,
     );
 
-    const grantDataBuffer = this.buildGrantDataBuffer(maternityPayGrantQueryResult);
+    const grantDataBuffer = this.buildGrantDataBuffer(
+      maternityPayGrantQueryResult,
+    );
 
     const promptResponse =
       await this.getPaymentPlanPaidResourcePromptUseCase.execute(

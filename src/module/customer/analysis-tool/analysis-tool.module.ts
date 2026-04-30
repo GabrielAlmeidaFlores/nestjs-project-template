@@ -16,6 +16,7 @@ import { AdministrativeProcedureInssAnalysisModule } from '@module/customer/anal
 import { AudienceQuestionGeneratorModule } from '@module/customer/analysis-tool/module/audience-question-generator/audience-question-generator.module';
 import { BpcDisabilityDenialModule } from '@module/customer/analysis-tool/module/bpc-disability-denial/bpc-disability-denial.module';
 import { BpcElderlyAnalysisModule } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/bpc-elderly-analysis.module';
+import { BpcElderlyCessationModule } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/bpc-elderly-cessation.module';
 import { CnisFastAnalysisModule } from '@module/customer/analysis-tool/module/cnis-fast-analysis/cnis-fast-analysis.module';
 import { DeathBenefitGrantModule } from '@module/customer/analysis-tool/module/death-benefit-grant/death-benefit-grant.module';
 import { DeathBenefitRejectionModule } from '@module/customer/analysis-tool/module/death-benefit-rejection/death-benefit-rejection.module';
@@ -30,11 +31,13 @@ import { InsuranceQualityAnalysisModule } from '@module/customer/analysis-tool/m
 import { JudicialCaseAnalysisModule } from '@module/customer/analysis-tool/module/judicial-case-analysis/judicial-case-analysis.module';
 import { LegalPleadingModule } from '@module/customer/analysis-tool/module/legal-pleading/legal-pleading.module';
 import { MaternityPayGrantModule } from '@module/customer/analysis-tool/module/maternity-pay-grant/maternity-pay-grant.module';
+import { MaternityPayRejectionModule } from '@module/customer/analysis-tool/module/maternity-pay-rejection/maternity-pay-rejection.module';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisModule } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.module';
 import { MedicalQuestionGeneratorModule } from '@module/customer/analysis-tool/module/medical-question-generator/medical-question-generator.module';
 import { PerCapitaIncomeForBpcAnalysisModule } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.module';
 import { RetirementPlanningRgpsModule } from '@module/customer/analysis-tool/module/retirement-planning-rgps/retirement-planning-rgps.module';
 import { RetirementPlanningRppsModule } from '@module/customer/analysis-tool/module/retirement-planning-rpps/retirement-planning-rpps.module';
+import { RuralOrHybridRetirementAnalysisModule } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/rural-or-hybrid-retirement-analysis.module';
 import { RuralOrHybridRetirementRejectionModule } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/rural-or-hybrid-retirement-rejection.module';
 import { RuralTimelineAnalysisModule } from '@module/customer/analysis-tool/module/rural-timeline-analysis/rural-timeline-analysis.module';
 import { SpecialActivityAnalysisModule } from '@module/customer/analysis-tool/module/special-activity-analysis/special-activity-analysis.module';
@@ -46,6 +49,7 @@ import { TeacherRetirementPlanningModule } from '@module/customer/analysis-tool/
 import { TemporaryDisabilityBenefitsGrantModule } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/temporary-disability-benefits-grant.module';
 import { TemporaryDisabilityBenefitsTerminatedModule } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/temporary-disability-benefits-terminated.module';
 import { TemporaryIncapacityBenefitRejectionModule } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.module';
+import { TemporaryIncapacityBenefitTerminationModule } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-termination/temporary-incapacity-benefit-termination.module';
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
 import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
 import { DeleteAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-record.use-case';
@@ -94,9 +98,11 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     PerCapitaIncomeForBpcAnalysisModule,
     BpcDisabilityDenialModule,
     BpcElderlyAnalysisModule,
+    BpcElderlyCessationModule,
     LegalPleadingModule,
     RuralTimelineAnalysisModule,
     RuralOrHybridRetirementRejectionModule,
+    RuralOrHybridRetirementAnalysisModule,
     RetirementPlanningRgpsModule,
     RetirementPlanningRppsModule,
     SpecialRetirementGrantModule,
@@ -115,7 +121,9 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     TemporaryDisabilityBenefitsGrantModule,
     TemporaryDisabilityBenefitsTerminatedModule,
     TemporaryIncapacityBenefitRejectionModule,
+    TemporaryIncapacityBenefitTerminationModule,
     AccidentBenefitRejectionModule,
+    MaternityPayRejectionModule,
   ],
   controllers: [AnalysisToolController],
   providers: [

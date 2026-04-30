@@ -19,7 +19,7 @@ export class SpecialRetirementGrantEntity extends BaseEntity<SpecialRetirementGr
   public readonly specialActivity: boolean;
 
   @Description('Documento CNIS utilizado na análise.')
-  public readonly cnisDocument: string;
+  public readonly cnisDocument: string | null;
 
   @Description('Resultado da análise.')
   public readonly specialRetirementGrantResult: SpecialRetirementGrantResultEntity | null;
@@ -50,7 +50,7 @@ export class SpecialRetirementGrantEntity extends BaseEntity<SpecialRetirementGr
 
     this.name = props.name;
     this.specialActivity = props.specialActivity;
-    this.cnisDocument = props.cnisDocument;
+    this.cnisDocument = props.cnisDocument ?? null;
     this.specialRetirementGrantResult =
       props.specialRetirementGrantResult ?? null;
     this.specialRetirementGrantDocument =
