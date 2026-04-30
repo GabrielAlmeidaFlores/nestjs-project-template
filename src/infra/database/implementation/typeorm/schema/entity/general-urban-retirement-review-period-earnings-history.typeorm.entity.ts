@@ -84,6 +84,4 @@ export class GeneralUrbanRetirementReviewEarningsHistoryTypeormEntity extends Ba
     GeneralUrbanRetirementReviewEarningsHistoryTypeormEntity.name;
 }
 
-export {
-  GeneralUrbanRetirementReviewEarningsHistoryTypeormEntity as GeneralUrbanRetirementReviewPeriodEarningsHistoryTypeormEntity,
-};
+export { GeneralUrbanRetirementReviewEarningsHistoryTypeormEntity as GeneralUrbanRetirementReviewPeriodEarningsHistoryTypeormEntity };

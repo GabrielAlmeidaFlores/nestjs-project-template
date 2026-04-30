@@ -2,6 +2,7 @@ export interface RuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisResul
   documentType: string;
   ownName: boolean;
   documentYear: string;
+  shortDescription: string;
   technicalNote: string;
 }
 

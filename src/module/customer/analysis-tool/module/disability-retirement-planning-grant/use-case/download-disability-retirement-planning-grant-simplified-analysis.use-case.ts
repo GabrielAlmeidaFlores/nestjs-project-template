@@ -13,6 +13,7 @@ import { DisabilityRetirementPlanningGrantId } from '@module/customer/analysis-t
 import { DisabilityRetirementPlanningGrantResultEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-result/disability-retirement-planning-grant-result.entity';
 import { DisabilityRetirementPlanningGrantCompleteAnalysisDownloadNotFoundError } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/error/disability-retirement-planning-grant-complete-analysis-download-not-found.error';
 import { DisabilityRetirementPlanningGrantNotFoundError } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/error/disability-retirement-planning-grant-not-found.error';
+import { DisabilityRetirementPlanningGrantResultNotFoundError } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/error/disability-retirement-planning-grant-result-not-found.error';
 import { DisabilityRetirementPlanningGrantSimplifiedAnalysisNotFoundError } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/error/disability-retirement-planning-grant-simplified-analysis-not-found.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
@@ -91,7 +92,7 @@ export class DownloadDisabilityRetirementPlanningGrantSimplifiedAnalysisUseCase 
       analysisQueryResult.disabilityRetirementPlanningGrantResult;
 
     if (disabilityRetirementPlanningGrantResult === null) {
-      throw new DisabilityRetirementPlanningGrantCompleteAnalysisDownloadNotFoundError();
+      throw new DisabilityRetirementPlanningGrantResultNotFoundError();
     }
 
     if (
