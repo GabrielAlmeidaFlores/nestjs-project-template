@@ -37,6 +37,7 @@ import { SpecialRetirementGrantNotFoundError } from '@module/customer/analysis-t
 import {
   SpecialRetirementGrantFirstAnalysisAgentModel,
   SpecialRetirementGrantFirstAnalysisEarningsHistoryItemModel,
+  SpecialRetirementGrantFirstAnalysisGracePeriodSummaryModel,
   SpecialRetirementGrantFirstAnalysisIntegratedTimelineItemModel,
   SpecialRetirementGrantFirstAnalysisIntegratedTimelineModel,
   SpecialRetirementGrantFirstAnalysisModel,
@@ -45,6 +46,7 @@ import {
   SpecialRetirementGrantFirstAnalysisSummaryModel,
   SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemModel,
   SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisModel,
+  SpecialRetirementGrantFirstAnalysisTimeSummaryModel,
 } from '@module/customer/analysis-tool/module/special-retirement-grant/model/generic/special-retirement-grant-first-analysis.model';
 import {
   SpecialRetirementGrantFirstAnalysisEarningsHistoryItemInterface,
@@ -348,24 +350,103 @@ export class CreateSpecialRetirementGrantFirstAnalysisUseCase {
         raw,
         model: SpecialRetirementGrantFirstAnalysisModel.build({
           summary: SpecialRetirementGrantFirstAnalysisSummaryModel.build({
-            ...(raw.summary.specialTime !== null && {
-              specialTime: raw.summary.specialTime,
-            }),
-            ...(raw.summary.commonTime !== null && {
-              commonTime: raw.summary.commonTime,
-            }),
-            ...(raw.summary.specialGracePeriod !== null && {
-              specialGracePeriod: raw.summary.specialGracePeriod,
-            }),
-            ...(raw.summary.commonGracePeriod !== null && {
-              commonGracePeriod: raw.summary.commonGracePeriod,
-            }),
-            ...(raw.summary.totalTime !== null && {
-              totalTime: raw.summary.totalTime,
-            }),
-            ...(raw.summary.totalGracePeriod !== null && {
-              totalGracePeriod: raw.summary.totalGracePeriod,
-            }),
+            specialTime:
+              SpecialRetirementGrantFirstAnalysisTimeSummaryModel.build({
+                ...(raw.summary.specialTime.withoutResolvingPendencies !==
+                  null && {
+                  withoutResolvingPendencies:
+                    raw.summary.specialTime.withoutResolvingPendencies,
+                }),
+                ...(raw.summary.specialTime.resolvingPendencies !== null && {
+                  resolvingPendencies:
+                    raw.summary.specialTime.resolvingPendencies,
+                }),
+                ...(raw.summary.specialTime.withAccelerators !== null && {
+                  withAccelerators: raw.summary.specialTime.withAccelerators,
+                }),
+              }),
+            commonTime:
+              SpecialRetirementGrantFirstAnalysisTimeSummaryModel.build({
+                ...(raw.summary.commonTime.withoutResolvingPendencies !==
+                  null && {
+                  withoutResolvingPendencies:
+                    raw.summary.commonTime.withoutResolvingPendencies,
+                }),
+                ...(raw.summary.commonTime.resolvingPendencies !== null && {
+                  resolvingPendencies:
+                    raw.summary.commonTime.resolvingPendencies,
+                }),
+                ...(raw.summary.commonTime.withAccelerators !== null && {
+                  withAccelerators: raw.summary.commonTime.withAccelerators,
+                }),
+              }),
+            totalTime:
+              SpecialRetirementGrantFirstAnalysisTimeSummaryModel.build({
+                ...(raw.summary.totalTime.withoutResolvingPendencies !==
+                  null && {
+                  withoutResolvingPendencies:
+                    raw.summary.totalTime.withoutResolvingPendencies,
+                }),
+                ...(raw.summary.totalTime.resolvingPendencies !== null && {
+                  resolvingPendencies:
+                    raw.summary.totalTime.resolvingPendencies,
+                }),
+                ...(raw.summary.totalTime.withAccelerators !== null && {
+                  withAccelerators: raw.summary.totalTime.withAccelerators,
+                }),
+              }),
+            specialGracePeriod:
+              SpecialRetirementGrantFirstAnalysisGracePeriodSummaryModel.build({
+                ...(raw.summary.specialGracePeriod
+                  .withoutResolvingPendencies !== null && {
+                  withoutResolvingPendencies:
+                    raw.summary.specialGracePeriod.withoutResolvingPendencies,
+                }),
+                ...(raw.summary.specialGracePeriod.resolvingPendencies !==
+                  null && {
+                  resolvingPendencies:
+                    raw.summary.specialGracePeriod.resolvingPendencies,
+                }),
+                ...(raw.summary.specialGracePeriod.withAccelerators !==
+                  null && {
+                  withAccelerators:
+                    raw.summary.specialGracePeriod.withAccelerators,
+                }),
+              }),
+            commonGracePeriod:
+              SpecialRetirementGrantFirstAnalysisGracePeriodSummaryModel.build({
+                ...(raw.summary.commonGracePeriod.withoutResolvingPendencies !==
+                  null && {
+                  withoutResolvingPendencies:
+                    raw.summary.commonGracePeriod.withoutResolvingPendencies,
+                }),
+                ...(raw.summary.commonGracePeriod.resolvingPendencies !==
+                  null && {
+                  resolvingPendencies:
+                    raw.summary.commonGracePeriod.resolvingPendencies,
+                }),
+                ...(raw.summary.commonGracePeriod.withAccelerators !== null && {
+                  withAccelerators:
+                    raw.summary.commonGracePeriod.withAccelerators,
+                }),
+              }),
+            totalGracePeriod:
+              SpecialRetirementGrantFirstAnalysisGracePeriodSummaryModel.build({
+                ...(raw.summary.totalGracePeriod.withoutResolvingPendencies !==
+                  null && {
+                  withoutResolvingPendencies:
+                    raw.summary.totalGracePeriod.withoutResolvingPendencies,
+                }),
+                ...(raw.summary.totalGracePeriod.resolvingPendencies !==
+                  null && {
+                  resolvingPendencies:
+                    raw.summary.totalGracePeriod.resolvingPendencies,
+                }),
+                ...(raw.summary.totalGracePeriod.withAccelerators !== null && {
+                  withAccelerators:
+                    raw.summary.totalGracePeriod.withAccelerators,
+                }),
+              }),
           }),
           periods: raw.periods.map((p) =>
             SpecialRetirementGrantFirstAnalysisPeriodModel.build({
