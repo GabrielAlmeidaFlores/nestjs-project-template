@@ -345,16 +345,42 @@ export abstract class AnalysisProcessorGateway {
   public abstract getRuralOrHybridRetirementRejectionSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
-  ): Promise<string | null>;
-
-  public abstract getTimeAcceleratorAnalysis(
-    systemInstruction: string,
-    files: Buffer[],
+    analysisJson?: string,
   ): Promise<string | null>;
 
   public abstract getRuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysis(
     systemInstruction: string,
     customerName: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getRuralOrHybridRetirementAnalysisFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson?: boolean,
+  ): Promise<string | null>;
+
+  public abstract getRuralOrHybridRetirementAnalysisCompleteAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getRuralOrHybridRetirementAnalysisSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+    analysisJson?: string,
+  ): Promise<string | null>;
+
+  public abstract getRuralOrHybridRetirementAnalysisWorkPeriodDocumentAnalysis(
+    systemInstruction: string,
+    customerName: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getTimeAcceleratorAnalysis(
+    systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null>;
 
@@ -518,6 +544,30 @@ export abstract class AnalysisProcessorGateway {
     files: Buffer[],
   ): Promise<string | null>;
 
+  public abstract getMaternityPayRejectionFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    useJson?: boolean,
+  ): Promise<string | null>;
+
+  public abstract getMaternityPayRejectionSecondAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getMaternityPayRejectionCompleteAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getMaternityPayRejectionSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
   public abstract getTemporaryIncapacityBenefitRejectionInssDecisionAnalysis(
     systemInstruction: string,
     files: Buffer[],
@@ -547,6 +597,29 @@ export abstract class AnalysisProcessorGateway {
   ): Promise<string | null>;
 
   public abstract getTemporaryIncapacityBenefitRejectionSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getTemporaryIncapacityBenefitTerminationInssDecisionAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getTemporaryIncapacityBenefitTerminationFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson?: boolean,
+  ): Promise<string | null>;
+
+  public abstract getTemporaryIncapacityBenefitTerminationCompleteAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getTemporaryIncapacityBenefitTerminationSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null>;

@@ -26,6 +26,7 @@ import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/
 import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
 import { PerCapitaIncomeForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.entity';
 import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
+import { RuralOrHybridRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/domain/schema/entity/rural-or-hybrid-retirement-analysis/rural-or-hybrid-retirement-analysis.entity';
 import { RuralOrHybridRetirementRejectionEntity } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/rural-or-hybrid-retirement-rejection.entity';
 import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
 import { SpecialActivityEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/special-activity-entity';
@@ -36,11 +37,13 @@ import { SurvivorPensionAnalysisEntity } from '@module/customer/analysis-tool/mo
 import { TeacherRetirementPlanningEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
 import { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/temporary-disability-benefits-grant.entity';
 import { TemporaryIncapacityBenefitRejectionEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.entity';
+import { TemporaryIncapacityBenefitTerminationEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-termination/domain/schema/entity/temporary-incapacity-benefit-termination/temporary-incapacity-benefit-termination.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { AnalysisToolRecordEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity.props.interface';
 import type { BpcElderlyAnalysisEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/bpc-elderly-analysis.entity';
 import type { DisabilityRetirementPlanningEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/disability-retirement-planning.entity';
+import type { MaternityPayRejectionEntity } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/schema/entity/maternity-pay-rejection/maternity-pay-rejection.entity';
 import type { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 
 export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
@@ -159,6 +162,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly ruralOrHybridRetirementRejection: RuralOrHybridRetirementRejectionEntity | null;
 
   @Description(
+    'Análise de aposentadoria rural ou híbrida associada ao registro da ferramenta de análise',
+  )
+  public readonly ruralOrHybridRetirementAnalysis: RuralOrHybridRetirementAnalysisEntity | null;
+
+  @Description(
     'Indeferimento de auxílio-acidente associado ao registro da ferramenta de análise',
   )
   public readonly accidentBenefitRejection: AccidentBenefitRejectionEntity | null;
@@ -214,9 +222,19 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly bpcElderlyCessation: BpcElderlyCessationEntity | null;
 
   @Description(
+    'Análise de indeferimento de salário maternidade associada ao registro da ferramenta de análise',
+  )
+  public readonly maternityPayRejection: MaternityPayRejectionEntity | null;
+
+  @Description(
     'Análise de indeferimento de benefício por incapacidade temporária associada ao registro da ferramenta de análise',
   )
   public readonly temporaryIncapacityBenefitRejection: TemporaryIncapacityBenefitRejectionEntity | null;
+
+  @Description(
+    'Análise de cessação de benefício por incapacidade temporária associada ao registro da ferramenta de análise',
+  )
+  public readonly temporaryIncapacityBenefitTermination: TemporaryIncapacityBenefitTerminationEntity | null;
 
   @Description(
     'Análise de concessão de salário-maternidade associada ao registro da ferramenta de análise',
@@ -276,6 +294,8 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
       props.temporaryDisabilityBenefitsGrant ?? null;
     this.ruralOrHybridRetirementRejection =
       props.ruralOrHybridRetirementRejection ?? null;
+    this.ruralOrHybridRetirementAnalysis =
+      props.ruralOrHybridRetirementAnalysis ?? null;
     this.accidentBenefitRejection = props.accidentBenefitRejection ?? null;
     this.survivorPensionAnalysis = props.survivorPensionAnalysis ?? null;
     this.specialCategoryRetirementAnalysis =
@@ -290,8 +310,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     this.bpcDisabilityDenial = props.bpcDisabilityDenial ?? null;
     this.bpcElderlyAnalysis = props.bpcElderlyAnalysis ?? null;
     this.bpcElderlyCessation = props.bpcElderlyCessation ?? null;
+    this.maternityPayRejection = props.maternityPayRejection ?? null;
     this.temporaryIncapacityBenefitRejection =
       props.temporaryIncapacityBenefitRejection ?? null;
+    this.temporaryIncapacityBenefitTermination =
+      props.temporaryIncapacityBenefitTermination ?? null;
     this.maternityPayGrant = props.maternityPayGrant ?? null;
     this.status = props.status;
     this.analysisToolClient = props.analysisToolClient;

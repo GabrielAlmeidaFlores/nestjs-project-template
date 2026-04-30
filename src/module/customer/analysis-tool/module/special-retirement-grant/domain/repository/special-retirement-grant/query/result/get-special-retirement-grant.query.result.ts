@@ -6,7 +6,7 @@ export class GetSpecialRetirementGrantQueryResult extends BaseBuildableObject {
   public readonly id: SpecialRetirementGrantId;
   public readonly name: string;
   public readonly specialActivity: boolean;
-  public readonly cnisDocument: string;
+  public readonly cnisDocument: string | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

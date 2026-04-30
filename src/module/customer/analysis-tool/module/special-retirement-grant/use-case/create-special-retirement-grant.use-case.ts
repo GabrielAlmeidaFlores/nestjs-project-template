@@ -19,13 +19,10 @@ import { SpecialRetirementGrantDocumentCommandRepositoryGateway } from '@module/
 import { SpecialRetirementGrantLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-legal-proceeding/command/special-retirement-grant-legal-proceeding.command.repository.gateway';
 import { SpecialRetirementGrantEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/special-retirement-grant.entity';
 import { SpecialRetirementGrantBenefitEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-benefit/special-retirement-grant-benefit.entity';
-import { SpecialRetirementGrantDocumentTypeEnum } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-document/enum/special-retirement-grant-document-type.enum';
 import { SpecialRetirementGrantDocumentEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-document/special-retirement-grant-document.entity';
 import { SpecialRetirementGrantLegalProceedingEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-legal-proceeding/special-retirement-grant-legal-proceeding.entity';
 import { CreateSpecialRetirementGrantRequestDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/request/create-special-retirement-grant.request.dto';
 import { CreateSpecialRetirementGrantResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/create-special-retirement-grant.response.dto';
-import { SpecialRetirementGrantAtLeastOnePppRequiredError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-at-least-one-ppp-required.error';
-import { SpecialRetirementGrantCnisRequiredError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-cnis-required.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { FileModel } from '@shared/system/model/generic/file.model';
@@ -72,27 +69,18 @@ export class CreateSpecialRetirementGrantUseCase {
       throw new OrganizationMemberNotFoundError();
     }
 
-    if (!dto.cnisDocument) {
-      throw new SpecialRetirementGrantCnisRequiredError();
+    let cnisDocumentKey: string | null = null;
+    if (dto.cnisDocument) {
+      const cnisBuffer = dto.cnisDocument.buffer;
+      const cnisFileModel = FileModel.build({
+        buffer: cnisBuffer,
+        originalName: dto.cnisDocument.originalName,
+        size: cnisBuffer.length,
+        encoding: 'base64',
+      });
+      cnisDocumentKey =
+        await this.fileProcessorGateway.uploadFile(cnisFileModel);
     }
-
-    const hasPpp = dto.json.documents?.some(
-      (d) => d.type === SpecialRetirementGrantDocumentTypeEnum.PPP,
-    );
-
-    if (hasPpp === false) {
-      throw new SpecialRetirementGrantAtLeastOnePppRequiredError();
-    }
-
-    const cnisBuffer = dto.cnisDocument.buffer;
-    const cnisFileModel = FileModel.build({
-      buffer: cnisBuffer,
-      originalName: dto.cnisDocument.originalName,
-      size: cnisBuffer.length,
-      encoding: 'base64',
-    });
-    const cnisDocumentKey =
-      await this.fileProcessorGateway.uploadFile(cnisFileModel);
 
     const analysisToolClientQueryResult =
       await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
