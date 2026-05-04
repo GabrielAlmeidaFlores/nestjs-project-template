@@ -1888,6 +1888,53 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise simplificada do direito ao Salário Maternidade com IA. Verifica o evento gerador, a carência e a qualidade de segurada, informando de forma objetiva sobre a elegibilidade ao benefício. Versão resumida e acessível para apresentação ao cliente.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d51'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_REJECTION_FIRST_ANALYSIS,
+      creditCost: 5,
+      title: 'INDEFERIMENTO APOSENTADORIA DO PROFESSOR - PRIMEIRO STEP',
+      description:
+        'Primeira análise do caso de indeferimento de aposentadoria do professor com IA. Combina os dados do CNIS com os dados estruturados do processo de indeferimento para gerar parecer inicial técnico sobre os períodos de magistério, carência e viabilidade de reversão do indeferimento.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d52'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_REJECTION_INSS_DECISION_ANALYSIS,
+      creditCost: 3,
+      title:
+        'INDEFERIMENTO APOSENTADORIA DO PROFESSOR - ANÁLISE DA DECISÃO DO INSS',
+      description:
+        'Análise da decisão administrativa do INSS no processo de indeferimento de aposentadoria do professor. Extrai e estrutura os motivos do indeferimento, os fundamentos legais citados e as inconsistências identificadas pelo INSS.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d53'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_REJECTION_COMPLETE_ANALYSIS,
+      creditCost: 8,
+      title: 'INDEFERIMENTO APOSENTADORIA DO PROFESSOR - ANÁLISE COMPLETA',
+      description:
+        'Análise completa do indeferimento de aposentadoria do professor com IA. Examina CNIS, documentos do processo administrativo e dados do caso para gerar parecer técnico detalhado com fundamentação legal, análise de provas de magistério, conformidade dos períodos de ensino e recomendação estratégica para recurso administrativo ou ação judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d54'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_REJECTION_SIMPLIFIED_ANALYSIS,
+      creditCost: 3,
+      title: 'INDEFERIMENTO APOSENTADORIA DO PROFESSOR - ANÁLISE SIMPLIFICADA',
+      description:
+        'Geração do documento de análise simplificada do indeferimento de aposentadoria do professor, com linguagem acessível para apresentação ao cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d55'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_REJECTION_WORK_PERIOD_DOCUMENT_ANALYSIS,
+      creditCost: 2,
+      title:
+        'INDEFERIMENTO APOSENTADORIA DO PROFESSOR - ANÁLISE DE DOCUMENTOS DO PERÍODO',
+      description:
+        'Análise individual de documentos probatórios de períodos de trabalho para o caso de indeferimento de aposentadoria do professor. Identifica o tipo de documento, o nome do titular, o ano e emite nota técnica sobre a relevância probatória para comprovação de atividade de magistério.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {
