@@ -6,10 +6,12 @@ import type { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/s
 import type { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 import type { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import type { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
+import type { GetAccidentAssistanceTerminatedQueryResult } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated/query/result/get-accident-assistance-terminated.query.result';
 import type { GetAdministrativeProcedureInssAnalysisQueryResult } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/repository/administrative-procedure-inss-analysis/query/result/get-administrative-procedure-inss-analysis.query.result';
 import type { GetAudienceQuestionGeneratorWithRelationsQueryResult } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator/query/result/get-audience-question-generator-with-relations.query.result';
 import type { GetBpcDisabilityDenialWithRelationsQueryResult } from '@module/customer/analysis-tool/module/bpc-disability-denial/domain/repository/bpc-disability-denial/query/result/get-bpc-disability-denial-with-relations.query.result';
 import type { GetBpcElderlyAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis/query/result/get-bpc-elderly-analysis-with-relations.query.result';
+import type { GetBpcElderlyCessationWithRelationsQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/domain/repository/bpc-elderly-cessation/query/result/get-bpc-elderly-cessation-with-relations.query.result';
 import type { GetCnisFastAnalysisQueryResult } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis.query.result';
 import type { GetDeathBenefitGrantWithRelationsQueryResult } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/repository/death-benefit-grant/query/result/get-death-benefit-grant-with-relations.query.result';
 import type { GetDeathBenefitRejectionWithRelationsQueryResult } from '@module/customer/analysis-tool/module/death-benefit-rejection/domain/repository/death-benefit-rejection/query/result/get-death-benefit-rejection-with-relations.query.result';
@@ -19,9 +21,11 @@ import type { GetDisabilityRetirementPlanningGrantWithRelationsQueryResult } fro
 import type { GetGeneralUrbanRetirementAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis/query/result/get-general-urban-retirement-analysis-with-relations.query.result';
 import type { GetGeneralUrbanRetirementDenialWithRelationsQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial/query/result/get-general-urban-retirement-denial-with-relations.query.result';
 import type { GetGeneralUrbanRetirementGrantWithRelationsQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant/query/result/get-general-urban-retirement-grant-with-relations.query.result';
+import type { GetGeneralUrbanRetirementReviewWithRelationsQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement-review/domain/repository/general-urban-retirement-review/query/result/get-general-urban-retirement-review-with-relations.query.result';
 import type { GetInsuranceQualityAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis/query/result/get-insurance-quality-analysis-with-relations.query.result';
 import type { GetJudicialCaseAnalysisQueryResult } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/repository/judicial-case-analysis/query/result/get-judicial-case-analysis.query.result';
 import type { GetMaternityPayGrantWithRelationsQueryResult } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/repository/maternity-pay-grant/query/result/get-maternity-pay-grant-with-relations.query.result';
+import type { GetMaternityPayRejectionWithRelationsQueryResult } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection/query/result/get-maternity-pay-rejection-with-relations.query.result';
 import type { GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResult } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/repository/medical-and-social-report-objection-generator-analysis/query/result/get-medical-and-social-report-objection-generator-analysis.query.result';
 import type { GetMedicalQuestionGeneratorWithRelationsQueryResult } from '@module/customer/analysis-tool/module/medical-question-generator/domain/repository/medical-question-generator/query/result/get-medical-question-generator-with-relations.query.result';
 import type { GetPerCapitaIncomeForBpcAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis/query/result/get-per-capita-income-for-bpc-analysis-with-relations.query.result';
@@ -38,7 +42,9 @@ import type { GetSpeechGeneratorQueryResult } from '@module/customer/analysis-to
 import type { GetSurvivorPensionAnalysisQueryResult } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis/query/result/get-survivor-pension-analysis.query.result';
 import type { GetTeacherRetirementPlanningWithRelationsQueryResult } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/query/result/get-teacher-retirement-planning-with-relations.query.result';
 import type { GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResult } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant/query/result/get-temporary-disability-benefits-grant-with-relations.query.result';
+import type { GetTemporaryDisabilityBenefitsTerminatedWithRelationsQueryResult } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/repository/temporary-disability-benefits-terminated/query/result/get-temporary-disability-benefits-terminated-with-relations.query.result';
 import type { GetTemporaryIncapacityBenefitRejectionWithRelationsQueryResult } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection/query/result/get-temporary-incapacity-benefit-rejection-with-relations.query.result';
+import type { GetTemporaryIncapacityBenefitTerminationWithRelationsQueryResult } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-termination/domain/repository/temporary-incapacity-benefit-termination/query/result/get-temporary-incapacity-benefit-termination-with-relations.query.result';
 
 export class GetAnalysisToolRecordWithRelationsQueryResult extends BaseBuildableObject {
   public readonly id: AnalysisToolRecordId;
@@ -61,12 +67,15 @@ export class GetAnalysisToolRecordWithRelationsQueryResult extends BaseBuildable
   public readonly ruralOrHybridRetirementAnalysis: RuralOrHybridRetirementAnalysisEntity | null;
   public readonly bpcDisabilityDenial: GetBpcDisabilityDenialWithRelationsQueryResult | null;
   public readonly bpcElderlyAnalysis: GetBpcElderlyAnalysisWithRelationsQueryResult | null;
+  public readonly accidentAssistanceTerminated: GetAccidentAssistanceTerminatedQueryResult | null;
+  public readonly bpcElderlyCessation: GetBpcElderlyCessationWithRelationsQueryResult | null;
   public readonly ruralTimelineAnalysis: GetRuralTimelineAnalysisWithRelationsQueryResult | null;
   public readonly insuranceQualityAnalysis: GetInsuranceQualityAnalysisWithRelationsQueryResult | null;
   public readonly teacherRetirementPlanning: GetTeacherRetirementPlanningWithRelationsQueryResult | null;
   public readonly disabilityRetirementPlanning: GetDisabilityRetirementPlanningWithRelationsQueryResult | null;
   public readonly generalUrbanRetirementGrant: GetGeneralUrbanRetirementGrantWithRelationsQueryResult | null;
   public readonly generalUrbanRetirementAnalysis: GetGeneralUrbanRetirementAnalysisWithRelationsQueryResult | null;
+  public readonly generalUrbanRetirementReview: GetGeneralUrbanRetirementReviewWithRelationsQueryResult | null;
   public readonly generalUrbanRetirementDenial: GetGeneralUrbanRetirementDenialWithRelationsQueryResult | null;
   public readonly deathBenefitGrant: GetDeathBenefitGrantWithRelationsQueryResult | null;
   public readonly deathBenefitRejection: GetDeathBenefitRejectionWithRelationsQueryResult | null;
@@ -75,8 +84,11 @@ export class GetAnalysisToolRecordWithRelationsQueryResult extends BaseBuildable
   public readonly disabilityRetirementPlanningGrant: GetDisabilityRetirementPlanningGrantWithRelationsQueryResult | null;
   public readonly disabilityRetirementPlanningRejection: GetDisabilityRetirementPlanningWithRelationsQueryResult | null;
   public readonly temporaryDisabilityBenefitsGrant: GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResult | null;
+  public readonly temporaryDisabilityBenefitsTerminated: GetTemporaryDisabilityBenefitsTerminatedWithRelationsQueryResult | null;
   public readonly temporaryIncapacityBenefitRejection: GetTemporaryIncapacityBenefitRejectionWithRelationsQueryResult | null;
+  public readonly temporaryIncapacityBenefitTermination: GetTemporaryIncapacityBenefitTerminationWithRelationsQueryResult | null;
   public readonly survivorPensionAnalysis: GetSurvivorPensionAnalysisQueryResult | null;
+  public readonly maternityPayRejection: GetMaternityPayRejectionWithRelationsQueryResult | null;
   public readonly maternityPayGrant: GetMaternityPayGrantWithRelationsQueryResult | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;

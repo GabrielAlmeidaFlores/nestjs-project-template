@@ -1726,6 +1726,43 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise simplificada de indeferimento de auxílio por incapacidade temporária com IA. Resume os principais achados da análise completa, indica a viabilidade geral do caso, os pontos críticos e os próximos passos recomendados, em linguagem acessível para apresentação ao cliente.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f7a1b2c3-d4e5-4f6a-8b9c-0d1e2f3a4b60'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_DISABILITY_BENEFITS_TERMINATED_INSS_DECISION_ANALYSIS,
+      creditCost: 5,
+      title:
+        'Análise de Decisão do INSS (Cessação Auxílio Incapacidade Temporária)',
+      description:
+        'Análise da comunicação de cessação e dos documentos do processo administrativo do INSS com IA para auxílio por incapacidade temporária. Examina o fundamento utilizado para cessar o benefício, identifica inconsistências na perícia ou no enquadramento legal, aponta irregularidades procedimentais e orienta sobre a melhor estratégia para restabelecimento administrativo ou judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f7a1b2c3-d4e5-4f6a-8b9c-0d1e2f3a4b61'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_DISABILITY_BENEFITS_TERMINATED_FIRST_ANALYSIS,
+      creditCost: 5,
+      title: 'Primeira Análise (Cessação Auxílio Incapacidade Temporária)',
+      description:
+        'Primeira análise de cessação de auxílio por incapacidade temporária com IA, combinando os dados estruturados do caso com a leitura e interpretação do CNIS. Gera parecer inicial técnico sobre qualidade de segurado, carência, períodos relevantes, manutenção da incapacidade e viabilidade preliminar de restabelecimento do benefício.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f7a1b2c3-d4e5-4f6a-8b9c-0d1e2f3a4b62'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_DISABILITY_BENEFITS_TERMINATED_COMPLETE_ANALYSIS,
+      creditCost: 8,
+      title: 'Análise Completa (Cessação Auxílio Incapacidade Temporária)',
+      description:
+        'Análise completa de cessação de auxílio por incapacidade temporária com IA. Consolida o histórico contributivo, os períodos analisados, a decisão de cessação do INSS e a condição de incapacidade, gerando parecer técnico detalhado com enquadramento nas regras aplicáveis, fundamentação jurídica, estratégia processual recomendada e perspectivas de restabelecimento do benefício.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f7a1b2c3-d4e5-4f6a-8b9c-0d1e2f3a4b63'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_DISABILITY_BENEFITS_TERMINATED_SIMPLIFIED_ANALYSIS,
+      creditCost: 3,
+      title: 'Análise Simplificada (Cessação Auxílio Incapacidade Temporária)',
+      description:
+        'Análise simplificada de cessação de auxílio por incapacidade temporária com IA. Resume os principais achados da análise completa, indica a viabilidade geral do restabelecimento do benefício, os pontos críticos e os próximos passos recomendados, em linguagem acessível para apresentação ao cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('a1c2e3f4-b5d6-4a7b-8c9d-0e1f2a3b4c5d'),
       resource:
         PaymentPlanPaidResourceTypeEnum.BPC_ELDERLY_ANALYSIS_COMPLETE_ANALYSIS,
@@ -1742,6 +1779,42 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       title: 'BPC AO IDOSO - ANÁLISE SIMPLIFICADA',
       description:
         'Análise simplificada do direito ao BPC/LOAS para idosos com IA. Verifica critério de idade (65 anos), calcula renda per capita familiar e compara com o limite legal de 1/4 do salário mínimo, informando de forma objetiva sobre a elegibilidade. Versão resumida e acessível para apresentação ao cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c3e4f5a6-b7d8-4c9d-8e1f-2a3b4c5d6e7f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_ELDERLY_CESSATION_INSS_DECISION_ANALYSIS,
+      creditCost: 3,
+      title: 'BPC AO IDOSO (CESSAÇÃO) - ANÁLISE DA DECISÃO DO INSS',
+      description:
+        'Análise da decisão administrativa de cessação ou suspensão do BPC ao Idoso com IA. Extrai NB, data da decisão, motivo da cessação ou suspensão, fundamentos jurídicos utilizados pelo INSS, prazo recursal e pontos técnicos de contestação administrativa ou judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d4f5a6b7-c8e9-4d0e-9f2a-3b4c5d6e7f8a'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_ELDERLY_CESSATION_FIRST_ANALYSIS,
+      creditCost: 5,
+      title: 'BPC AO IDOSO (CESSAÇÃO) - PRIMEIRA ANÁLISE',
+      description:
+        'Primeira análise técnica de cessação ou suspensão do BPC ao Idoso com IA. Cruza dados do formulário, cliente, CadÚnico, CNIS, composição familiar, renda e decisão do INSS, avaliando os critérios legais do BPC (idade e renda per capita) e a viabilidade preliminar de reversão.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e5a6b7c8-d9f0-4e1f-aa3b-4c5d6e7f8a9b'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_ELDERLY_CESSATION_COMPLETE_ANALYSIS,
+      creditCost: 8,
+      title: 'BPC AO IDOSO (CESSAÇÃO) - ANÁLISE COMPLETA',
+      description:
+        'Análise completa de cessação ou suspensão do BPC ao Idoso com IA. Examina todos os dados do caso, interpreta a decisão do INSS à luz da LOAS e regulamentações do BPC, verifica requisitos de idade e renda per capita, identifica regras aplicáveis e emite parecer técnico conclusivo com diagnóstico, cálculo de renda familiar e fundamentação jurídica.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f6b7c8d9-e0a1-4f2a-bb4c-5d6e7f8a9b0c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_ELDERLY_CESSATION_SIMPLIFIED_ANALYSIS,
+      creditCost: 3,
+      title: 'BPC AO IDOSO (CESSAÇÃO) - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada de cessação ou suspensão do BPC ao Idoso com IA. Resume os principais achados da análise completa, indica a viabilidade geral da reversão, os pontos críticos (renda per capita, composição familiar, prazo recursal) e os próximos passos recomendados em linguagem acessível.',
     }),
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('eaf7638a-8141-4781-a802-38a71b8f99d8'),
@@ -1782,6 +1855,42 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('c3e4f5a6-d7b8-4c9d-8e1f-2a3b4c5d6e7f'),
       resource:
+        PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_REJECTION_FIRST_ANALYSIS,
+      creditCost: 3,
+      title: 'INDEFERIMENTO SALÁRIO MATERNIDADE - PRIMEIRA ANÁLISE',
+      description:
+        'Primeira análise técnica do indeferimento de salário maternidade com IA. Avalia a manutenção da qualidade de segurada, analisa o período de graça aplicável, verifica as informações do benefício indeferido e calcula o prazo para solicitação de reembolso. Baseada prioritariamente na análise do CNIS.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d4f5a6b7-e8c9-4d0e-9f2a-3b4c5d6e7f8a'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_REJECTION_SECOND_ANALYSIS,
+      creditCost: 3,
+      title: 'INDEFERIMENTO SALÁRIO MATERNIDADE - SEGUNDA ANÁLISE',
+      description:
+        'Segunda análise técnica do indeferimento de salário maternidade com IA. Aprofunda a avaliação da situação previdenciária da segurada, identifica pontos fortes e fragilidades probatórias, e indica a estratégia mais adequada para reversão do indeferimento com orientação sobre reforço documental.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e5a6b7c8-f9d0-4e1f-aa3b-4c5d6e7f8a9b'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_REJECTION_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title: 'INDEFERIMENTO SALÁRIO MATERNIDADE - ANÁLISE COMPLETA',
+      description:
+        'Análise completa do indeferimento de salário maternidade com IA. Examina todas as regras previdenciáveis aplicáveis, determina a elegibilidade ao benefício, avalia o impacto da concessão do salário maternidade nas futuras aposentadorias e entrega conclusão estratégica orientada à tomada de decisão jurídica.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f6b7c8d9-a0e1-4f2a-ab4c-5d6e7f8a9b0c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_REJECTION_SIMPLIFIED_ANALYSIS,
+      creditCost: 2,
+      title: 'INDEFERIMENTO SALÁRIO MATERNIDADE - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada do indeferimento de salário maternidade com IA. Resume de forma clara e objetiva as chances de reversão do indeferimento, os pontos favoráveis e de atenção do caso, e indica os próximos passos recomendados em linguagem acessível ao cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c3e4f5a6-d7b8-4c9d-8e1f-2a3b4c5d6e7f'),
+      resource:
         PaymentPlanPaidResourceTypeEnum.BPC_DISABILITY_DENIAL_INSS_DECISION_ANALYSIS,
       creditCost: 4,
       title: 'INDEFERIMENTO BPC PCD - ANÁLISE DA DECISÃO INSS',
@@ -1816,6 +1925,43 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise simplificada do indeferimento do BPC para pessoa com deficiência com IA. Verifica critério de deficiência e critério de renda familiar per capita, informa de forma objetiva e acessível sobre a possibilidade de reversão do indeferimento. Versão resumida para apresentação ao cliente ou familiar.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4a7b-9c8d-1e2f3a4b5c6d'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_TERMINATION_INSS_DECISION_ANALYSIS,
+      creditCost: 5,
+      title:
+        'Análise de Decisão do INSS (Cessação Auxílio Incapacidade Temporária)',
+      description:
+        'Análise da carta de cessação e documentos do processo administrativo do INSS com IA para auxílio por incapacidade temporária. Examina o fundamento da cessação, identifica erros de cálculo ou enquadramento legal, aponta eventuais irregularidades processuais e orienta sobre a melhor estratégia de reversão — administrativa ou judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b2c3d4e5-f6a7-4b8c-ad9e-2f3a4b5c6d7e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_TERMINATION_FIRST_ANALYSIS,
+      creditCost: 5,
+      title: 'Primeira Análise (Cessação Auxílio Incapacidade Temporária)',
+      description:
+        'Primeira análise de cessação de auxílio por incapacidade temporária com IA, combinando os dados estruturados do caso com a leitura e interpretação do CNIS. Gera parecer inicial técnico sobre tempo de contribuição, carência, períodos relevantes, pontos de atenção e viabilidade preliminar de reversão da cessação.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c3d4e5f6-a7b8-4c9d-be1f-3a4b5c6d7e8f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_TERMINATION_COMPLETE_ANALYSIS,
+      creditCost: 8,
+      title: 'Análise Completa (Cessação Auxílio Incapacidade Temporária)',
+      description:
+        'Análise completa de cessação de auxílio por incapacidade temporária com IA. Consolida o histórico contributivo, os períodos analisados, a decisão de cessação do INSS e a condição de incapacidade, gerando parecer técnico detalhado com enquadramento nas regras aplicáveis, fundamentação jurídica, estratégia processual recomendada e perspectivas do caso.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d4e5f6a7-b8c9-4d0e-8f2a-4b5c6d7e8f9a'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_TERMINATION_SIMPLIFIED_ANALYSIS,
+      creditCost: 3,
+      title: 'Análise Simplificada (Cessação Auxílio Incapacidade Temporária)',
+      description:
+        'Análise simplificada de cessação de auxílio por incapacidade temporária com IA. Resume os principais achados da análise completa, indica a viabilidade geral do caso, os pontos críticos e os próximos passos recomendados, em linguagem acessível para apresentação ao cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('c3d4e5f6-a7b8-4c9d-8e1f-2a3b4c5d6e7f'),
       resource:
         PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_GRANT_FIRST_ANALYSIS,
@@ -1841,6 +1987,189 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       title: 'CONCESSÃO SALÁRIO MATERNIDADE - ANÁLISE SIMPLIFICADA',
       description:
         'Análise simplificada do direito ao Salário Maternidade com IA. Verifica o evento gerador, a carência e a qualidade de segurada, informando de forma objetiva sobre a elegibilidade ao benefício. Versão resumida e acessível para apresentação ao cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a1010101-1111-4aaa-8bbb-111111111111'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_CNIS_ANALYSIS,
+      creditCost: 5,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - ANÁLISE DO CNIS',
+      description:
+        'Leitura estruturada do CNIS para revisão de aposentadoria urbana geral, com geração de períodos, histórico remuneratório e identificação de pendências relevantes ao recálculo.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a2020202-2222-4aaa-8bbb-222222222222'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_BENEFIT_AWARD_LETTER_ANALYSIS,
+      creditCost: 4,
+      title:
+        'REVISÃO APOSENTADORIA URBANA GERAL - ANÁLISE DA CARTA DE CONCESSÃO',
+      description:
+        'Extração estruturada da carta de concessão para identificar DIB, espécie, RMI, RMA, segurado e demais dados essenciais à revisão do benefício.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a3030303-3333-4aaa-8bbb-333333333333'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_FIRST_ANALYSIS,
+      creditCost: 4,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - PRIMEIRA ANÁLISE INTEGRADA',
+      description:
+        'Consolidação inicial da revisão previdenciária com resumo do cliente, análise da carta, tempo de contribuição, carência, raio-x do CNIS e principais pendências.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a4040404-4444-4aaa-8bbb-444444444444'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_COMPARE_CNIS_CTPS,
+      creditCost: 4,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - COMPARAÇÃO CNIS E CTPS',
+      description:
+        'Comparação entre vínculos do CNIS e anotações da CTPS para identificar omissões, divergências e períodos com potencial de inclusão na revisão.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a5050505-5555-4aaa-8bbb-555555555555'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_SPECIAL_PERIOD_PPP_ANALYSIS,
+      creditCost: 6,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - ANÁLISE DE PPP',
+      description:
+        'Análise de PPP para reconhecimento de tempo especial e conversão em tempo comum no fluxo revisional da aposentadoria urbana geral.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a6060606-6666-4aaa-8bbb-666666666666'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_NO_END_DATE_DOCUMENTS_ANALYSIS,
+      creditCost: 4,
+      title:
+        'REVISÃO APOSENTADORIA URBANA GERAL - DOCUMENTOS SEM DATA DE SAÍDA',
+      description:
+        'Análise de documentos comprobatórios para resolução de vínculos sem data de saída no CNIS, com definição do melhor tratamento do período.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a7070707-7777-4aaa-8bbb-777777777777'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_RURAL_TIME_ANALYSIS,
+      creditCost: 4,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - ANÁLISE DE TEMPO RURAL',
+      description:
+        'Avaliação de documentação e contexto de atividade rural para aproveitamento revisional do período no benefício já concedido.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a8080808-8888-4aaa-8bbb-888888888888'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_MILITARY_SERVICE_ANALYSIS,
+      creditCost: 4,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - ANÁLISE DE SERVIÇO MILITAR',
+      description:
+        'Análise de serviço militar para cômputo em revisão de aposentadoria urbana geral, com verificação de prova e impacto no tempo total.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a9090909-9999-4aaa-8bbb-999999999999'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_PUBLIC_SERVICE_ANALYSIS,
+      creditCost: 5,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - ANÁLISE DE SERVIÇO PÚBLICO',
+      description:
+        'Avaliação de tempo em serviço público e documentos correlatos para eventual averbação ou aproveitamento revisional no RGPS.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('aa0a0a0a-0a0a-4aaa-8bbb-0a0a0a0a0a0a'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_CTPS_OUTSIDE_CNIS_ANALYSIS,
+      creditCost: 4,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - CTPS FORA DO CNIS',
+      description:
+        'Análise de vínculos anotados em CTPS, mas ausentes no CNIS, para estimar viabilidade de inclusão no cálculo revisional.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('ab0b0b0b-0b0b-4aaa-8bbb-0b0b0b0b0b0b'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_STUDENT_APPRENTICE_ANALYSIS,
+      creditCost: 3,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - ALUNO APRENDIZ',
+      description:
+        'Análise de período como aluno aprendiz para verificar aproveitamento revisional e reflexos no tempo de contribuição e carência.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('ac0c0c0c-0c0c-4aaa-8bbb-0c0c0c0c0c0c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_WORK_ABROAD_ANALYSIS,
+      creditCost: 5,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - TRABALHO NO EXTERIOR',
+      description:
+        'Análise de trabalho no exterior e documentos correspondentes para aferir possibilidade de contagem no contexto revisional.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('ad0d0d0d-0d0d-4aaa-8bbb-0d0d0d0d0d0d'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_INFORMAL_WORK_ANALYSIS,
+      creditCost: 4,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - TRABALHO INFORMAL',
+      description:
+        'Análise de trabalho informal e contribuições correlatas para medir chance de aproveitamento revisional e necessidade de complementação.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('ae0e0e0e-0e0e-4aaa-8bbb-0e0e0e0e0e0e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_LABOR_COURT_DECISION_ANALYSIS,
+      creditCost: 6,
+      title:
+        'REVISÃO APOSENTADORIA URBANA GERAL - DECISÃO DA JUSTIÇA DO TRABALHO',
+      description:
+        'Análise de sentença ou acordo trabalhista para verificar seus reflexos no histórico contributivo e no recálculo do benefício.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('af0f0f0f-0f0f-4aaa-8bbb-0f0f0f0f0f0f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_COMPLETE_ANALYSIS,
+      creditCost: 6,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - ANÁLISE COMPLETA',
+      description:
+        'Análise revisional completa com comparação de teses, cenários revisionais, conclusão técnica, recomendação principal e documento final.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b0101010-1010-4aaa-8bbb-101010101010'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_SIMPLIFIED_ANALYSIS,
+      creditCost: 2,
+      title: 'REVISÃO APOSENTADORIA URBANA GERAL - ANÁLISE SIMPLIFICADA',
+      description:
+        'Versão resumida da análise revisional, com linguagem objetiva para apresentação rápida do diagnóstico e dos próximos passos.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d24bad95-ffee-4d83-a4f7-61a26f5b7936'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_ASSISTANCE_TERMINATED_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title: 'DIAGNÓSTICO AUXÍLIO-ACIDENTE (RGPS) - ANÁLISE COMPLETA',
+      description:
+        'Análise completa do direito ao auxílio-acidente cessado com IA. Examina documentos do procedimento administrativo, CNIS, laudos médicos e histórico previdenciário para identificar irregularidades na cessação do benefício, verificar nexo causal com acidente de trabalho, calcular redução da capacidade laborativa e emitir parecer técnico conclusivo com fundamentação legal e jurisprudencial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('cb4c7a81-6d14-4558-9263-aebb87bf37ef'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_ASSISTANCE_TERMINATED_SIMPLIFIED_ANALYSIS,
+      creditCost: 2,
+      title: 'DIAGNÓSTICO AUXÍLIO-ACIDENTE (RGPS) - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada do direito ao auxílio-acidente cessado com IA. Verifica os principais critérios para concessão ou restabelecimento do benefício, identifica irregularidades na cessação e apresenta de forma objetiva as possibilidades de revisão ou recurso. Versão resumida e acessível para apresentação ao cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('1caa4874-ca2e-4a92-a83e-613063f6ff18'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_ASSISTANCE_TERMINATED_DECISION_DETAILS,
+      creditCost: 4,
+      title: 'DIAGNÓSTICO AUXÍLIO-ACIDENTE (RGPS) - ANÁLISE DA DECISÃO DO INSS',
+      description:
+        'Análise da carta de cessação e documentos do processo administrativo do INSS com IA para auxílio-acidente. Examina o fundamento da cessação, identifica erros de cálculo ou enquadramento legal, aponta eventuais irregularidades processuais e orienta sobre a melhor estratégia de impugnação — administrativa ou judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('2ff58edd-7a27-4de3-8d18-4524872c05ad'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_ASSISTANCE_TERMINATED_FIRST_ANALYSIS,
+      creditCost: 4,
+      title: 'DIAGNÓSTICO AUXÍLIO-ACIDENTE (RGPS) - PRIMEIRA ANÁLISE',
+      description:
+        'Primeira análise de cessação de auxílio-acidente com IA, combinando os dados estruturados do caso com a leitura e interpretação do CNIS. Gera parecer inicial técnico sobre tempo de contribuição, carência, períodos relevantes, pontos de atenção e viabilidade preliminar de reversão da cessação.',
     }),
   ];
 
