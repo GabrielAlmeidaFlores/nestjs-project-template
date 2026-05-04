@@ -16,6 +16,7 @@ import { AccidentBenefitRejectionModule } from '@module/customer/analysis-tool/m
 import { AdministrativeProcedureInssAnalysisModule } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.module';
 import { AudienceQuestionGeneratorModule } from '@module/customer/analysis-tool/module/audience-question-generator/audience-question-generator.module';
 import { BpcDisabilityDenialModule } from '@module/customer/analysis-tool/module/bpc-disability-denial/bpc-disability-denial.module';
+import { BpcDisabilityTerminationModule } from '@module/customer/analysis-tool/module/bpc-disability-termination/bpc-disability-termination.module';
 import { BpcElderlyAnalysisModule } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/bpc-elderly-analysis.module';
 import { BpcElderlyCessationModule } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/bpc-elderly-cessation.module';
 import { CnisFastAnalysisModule } from '@module/customer/analysis-tool/module/cnis-fast-analysis/cnis-fast-analysis.module';
@@ -99,6 +100,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     InsuranceQualityAnalysisModule,
     PerCapitaIncomeForBpcAnalysisModule,
     BpcDisabilityDenialModule,
+    BpcDisabilityTerminationModule,
     BpcElderlyAnalysisModule,
     AccidentAssistanceTerminatedModule,
     BpcElderlyCessationModule,
