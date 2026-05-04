@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { AnalysisToolRecordNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-record-not-found.error';
@@ -24,6 +25,7 @@ import { TeacherRetirementPlanningRejectionNotFoundError } from '@module/custome
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
+import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -80,7 +82,7 @@ export class CreateTeacherRetirementPlanningRejectionFirstAnalysisUseCase {
         TeacherRetirementPlanningRejectionNotFoundError,
       );
 
-    const cnisDocument = (rejection.documents ?? []).find(
+    const cnisDocument = rejection.documents.find(
       (document) =>
         document.type ===
         TeacherRetirementPlanningRejectionDocumentTypeEnum.CNIS,
@@ -140,10 +142,7 @@ export class CreateTeacherRetirementPlanningRejectionFirstAnalysisUseCase {
       await this.analysisProcessorGateway.getTeacherRetirementPlanningRejectionFirstAnalysis(
         promptResponse.prompt,
         JSON.stringify(cnisAnalysis),
-        [
-          this.buildRejectionDataBuffer(rejection),
-          ...documentBuffers,
-        ],
+        [this.buildRejectionDataBuffer(rejection), ...documentBuffers],
         true,
       );
 
@@ -195,12 +194,13 @@ export class CreateTeacherRetirementPlanningRejectionFirstAnalysisUseCase {
     await transaction.commit();
 
     const firstAnalysisInterface: TeacherRetirementPlanningRejectionFirstAnalysisInterface =
-      JSON.parse(parsedFirstAnalysis) as TeacherRetirementPlanningRejectionFirstAnalysisInterface;
+      JSON.parse(
+        parsedFirstAnalysis,
+      ) as TeacherRetirementPlanningRejectionFirstAnalysisInterface;
 
     return CreateTeacherRetirementPlanningRejectionFirstAnalysisResponseDto.build(
       {
-        teacherRetirementPlanningRejectionFirstAnalysis:
-          firstAnalysisInterface,
+        teacherRetirementPlanningRejectionFirstAnalysis: firstAnalysisInterface,
         cnisAnalysis,
       },
     );
@@ -208,8 +208,8 @@ export class CreateTeacherRetirementPlanningRejectionFirstAnalysisUseCase {
 
   private async findAnalysisToolClientByAnalysisToolRecordOrFail(
     teacherRetirementPlanningRejectionId: TeacherRetirementPlanningRejectionId,
-    organizationId: string,
-    authIdentityId: string,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
   ): Promise<AnalysisToolClientEntity> {
     const analysisToolRecord =
       await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByTeacherRetirementPlanningRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
@@ -236,7 +236,7 @@ export class CreateTeacherRetirementPlanningRejectionFirstAnalysisUseCase {
     cnisBuffer: Buffer,
   ): Promise<Buffer[]> {
     const otherDocumentBuffers = await Promise.all(
-      (rejection.documents ?? [])
+      rejection.documents
         .filter((doc) => doc.fileName !== cnisFileName)
         .map((doc) => this.fileProcessorGateway.getFileBuffer(doc.fileName)),
     );

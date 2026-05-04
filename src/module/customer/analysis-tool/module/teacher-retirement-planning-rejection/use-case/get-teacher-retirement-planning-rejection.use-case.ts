@@ -21,8 +21,7 @@ import { TeacherRetirementPlanningRejectionNotFoundError } from '@module/custome
 
 @Injectable()
 export class GetTeacherRetirementPlanningRejectionUseCase {
-  protected readonly _type =
-    GetTeacherRetirementPlanningRejectionUseCase.name;
+  protected readonly _type = GetTeacherRetirementPlanningRejectionUseCase.name;
 
   public constructor(
     @Inject(TeacherRetirementPlanningRejectionQueryRepositoryGateway)
@@ -47,31 +46,25 @@ export class GetTeacherRetirementPlanningRejectionUseCase {
       ),
     ]);
 
-    const [
-      allTeachingPeriodDocuments,
-      allWorkPeriodDocuments,
-    ] = await Promise.all([
-      Promise.all(
-        (result.teachingPeriods ?? []).flatMap((period) =>
-          (period.documents ?? [])
-            .filter((doc) => doc.fileName !== null)
-            .map(async (doc) => ({
+    const [allTeachingPeriodDocuments, allWorkPeriodDocuments] =
+      await Promise.all([
+        Promise.all(
+          result.teachingPeriods.flatMap((period) =>
+            period.documents.map(async (doc) => ({
               teachingPeriodId: period.id.toString(),
               ...(await this.buildSubEntityDocumentData(doc.fileName)),
             })),
+          ),
         ),
-      ),
-      Promise.all(
-        (result.workPeriods ?? []).flatMap((wp) =>
-          (wp.documents ?? [])
-            .filter((doc) => doc.fileName !== null)
-            .map(async (doc) => ({
+        Promise.all(
+          result.workPeriods.flatMap((wp) =>
+            wp.documents.map(async (doc) => ({
               workPeriodId: wp.id.toString(),
               ...(await this.buildSubEntityDocumentData(doc.fileName)),
             })),
+          ),
         ),
-      ),
-    ]);
+      ]);
 
     return GetTeacherRetirementPlanningRejectionResponseDto.build({
       id: result.id.toString(),
@@ -86,19 +79,20 @@ export class GetTeacherRetirementPlanningRejectionUseCase {
             ...(analysisToolRecord.analysisToolClient.federalDocument !==
               null && {
               federalDocument:
-                analysisToolRecord.analysisToolClient.federalDocument,
+                analysisToolRecord.analysisToolClient.federalDocument.toString(),
             }),
             ...(analysisToolRecord.analysisToolClient.email !== null && {
-              email: analysisToolRecord.analysisToolClient.email,
+              email: analysisToolRecord.analysisToolClient.email.toString(),
             }),
             ...(analysisToolRecord.analysisToolClient.birthDate !== null && {
               birthDate: analysisToolRecord.analysisToolClient.birthDate,
             }),
             ...(analysisToolRecord.analysisToolClient.gender !== null && {
-              sex: analysisToolRecord.analysisToolClient.gender,
+              sex: analysisToolRecord.analysisToolClient.gender.toString(),
             }),
             ...(analysisToolRecord.analysisToolClient.phoneNumber !== null && {
-              phone: analysisToolRecord.analysisToolClient.phoneNumber,
+              phone:
+                analysisToolRecord.analysisToolClient.phoneNumber.toString(),
             }),
           },
         ),
@@ -125,28 +119,26 @@ export class GetTeacherRetirementPlanningRejectionUseCase {
       createdAt: result.createdAt,
       updatedAt: result.updatedAt,
       ...(result.result !== null && {
-        result:
-          GetTeacherRetirementPlanningRejectionResultResponseDto.build({
-            id: result.result.id.toString(),
-            ...(result.result.inssDecisionAnalysis !== null && {
-              inssDecisionAnalysis: result.result.inssDecisionAnalysis,
-            }),
-            ...(result.result.firstAnalysis !== null && {
-              firstAnalysis: result.result.firstAnalysis,
-            }),
-            ...(result.result.completeAnalysis !== null && {
-              completeAnalysis: result.result.completeAnalysis,
-            }),
-            ...(result.result.completeAnalysisDownload !== null && {
-              completeAnalysisDownload:
-                result.result.completeAnalysisDownload,
-            }),
-            ...(result.result.simplifiedAnalysis !== null && {
-              simplifiedAnalysis: result.result.simplifiedAnalysis,
-            }),
+        result: GetTeacherRetirementPlanningRejectionResultResponseDto.build({
+          id: result.result.id.toString(),
+          ...(result.result.inssDecisionAnalysis !== null && {
+            inssDecisionAnalysis: result.result.inssDecisionAnalysis,
           }),
+          ...(result.result.firstAnalysis !== null && {
+            firstAnalysis: result.result.firstAnalysis,
+          }),
+          ...(result.result.completeAnalysis !== null && {
+            completeAnalysis: result.result.completeAnalysis,
+          }),
+          ...(result.result.completeAnalysisDownload !== null && {
+            completeAnalysisDownload: result.result.completeAnalysisDownload,
+          }),
+          ...(result.result.simplifiedAnalysis !== null && {
+            simplifiedAnalysis: result.result.simplifiedAnalysis,
+          }),
+        }),
       }),
-      documents: (result.documents ?? []).map((doc) =>
+      documents: result.documents.map((doc) =>
         GetTeacherRetirementPlanningRejectionDocumentResponseDto.build({
           id: doc.id.toString(),
           fileName: doc.fileName,
@@ -154,13 +146,13 @@ export class GetTeacherRetirementPlanningRejectionUseCase {
           type: doc.type,
         }),
       ),
-      inssBenefits: (result.inssBenefits ?? []).map((benefit) =>
+      inssBenefits: result.inssBenefits.map((benefit) =>
         GetTeacherRetirementPlanningRejectionInssBenefitResponseDto.build({
           id: benefit.id.toString(),
           inssBenefit: benefit.inssBenefit,
         }),
       ),
-      teachingPeriods: (result.teachingPeriods ?? []).map((period) =>
+      teachingPeriods: result.teachingPeriods.map((period) =>
         GetTeacherRetirementPlanningRejectionTeachingPeriodResponseDto.build({
           id: period.id.toString(),
           ...(period.startDate !== null && { startDate: period.startDate }),
@@ -190,9 +182,7 @@ export class GetTeacherRetirementPlanningRejectionUseCase {
             proofStrategy: period.proofStrategy,
           }),
           documents: allTeachingPeriodDocuments
-            .filter(
-              (doc) => doc.teachingPeriodId === period.id.toString(),
-            )
+            .filter((doc) => doc.teachingPeriodId === period.id.toString())
             .map((doc) =>
               GetTeacherRetirementPlanningRejectionTeachingPeriodDocumentResponseDto.build(
                 {
@@ -203,7 +193,7 @@ export class GetTeacherRetirementPlanningRejectionUseCase {
             ),
         }),
       ),
-      workPeriods: (result.workPeriods ?? []).map((wp) =>
+      workPeriods: result.workPeriods.map((wp) =>
         GetTeacherRetirementPlanningRejectionWorkPeriodResponseDto.build({
           id: wp.id.toString(),
           ...(wp.bondOrigin !== null && { bondOrigin: wp.bondOrigin }),
@@ -238,7 +228,7 @@ export class GetTeacherRetirementPlanningRejectionUseCase {
           ...(wp.timelineClassification !== null && {
             timelineClassification: wp.timelineClassification,
           }),
-          earningsHistory: (wp.earningsHistory ?? []).map((eh) =>
+          earningsHistory: wp.earningsHistory.map((eh) =>
             GetTeacherRetirementPlanningRejectionWorkPeriodEarningsHistoryResponseDto.build(
               {
                 id: eh.id.toString(),
@@ -278,7 +268,7 @@ export class GetTeacherRetirementPlanningRejectionUseCase {
             ),
         }),
       ),
-      timeAccelerators: (result.timeAccelerators ?? []).map((ta) =>
+      timeAccelerators: result.timeAccelerators.map((ta) =>
         GetTeacherRetirementPlanningRejectionTimeAcceleratorResponseDto.build({
           id: ta.id.toString(),
           ...(ta.timeType !== null && { timeType: ta.timeType }),
@@ -307,6 +297,6 @@ export class GetTeacherRetirementPlanningRejectionUseCase {
     const signedUrl =
       await this.fileProcessorGateway.getFileSignedUrl(fileName);
 
-    return { id: fileName, signedUrl };
+    return { id: fileName, signedUrl: signedUrl.toString() };
   }
 }

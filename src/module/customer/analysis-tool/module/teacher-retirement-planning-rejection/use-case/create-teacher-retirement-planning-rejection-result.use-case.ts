@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { AnalysisToolRecordNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-record-not-found.error';
@@ -16,6 +17,7 @@ import { TeacherRetirementPlanningRejectionResultCommandRepositoryGateway } from
 import { TeacherRetirementPlanningRejectionId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection/value-object/teacher-retirement-planning-rejection-id.value-object';
 import { TeacherRetirementPlanningRejectionDocumentTypeEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection-document/enum/teacher-retirement-planning-rejection-document-type.enum';
 import { TeacherRetirementPlanningRejectionResultEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection-result/teacher-retirement-planning-rejection-result.entity';
+import { TeacherRetirementPlanningRejectionResultId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection-result/value-object/teacher-retirement-planning-rejection-result-id.value-object';
 import { CreateTeacherRetirementPlanningRejectionResultResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/dto/response/create-teacher-retirement-planning-rejection-result.response.dto';
 import { InvalidTeacherRetirementPlanningRejectionResultJsonError } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/error/invalid-teacher-retirement-planning-rejection-result-json.error';
 import { TeacherRetirementPlanningRejectionCnisDocumentNotFoundError } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/error/teacher-retirement-planning-rejection-cnis-document-not-found.error';
@@ -23,6 +25,7 @@ import { TeacherRetirementPlanningRejectionNotFoundError } from '@module/custome
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
+import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -79,7 +82,7 @@ export class CreateTeacherRetirementPlanningRejectionResultUseCase {
         TeacherRetirementPlanningRejectionNotFoundError,
       );
 
-    const cnisDocument = (rejection.documents ?? []).find(
+    const cnisDocument = rejection.documents.find(
       (document) =>
         document.type ===
         TeacherRetirementPlanningRejectionDocumentTypeEnum.CNIS,
@@ -169,7 +172,7 @@ export class CreateTeacherRetirementPlanningRejectionResultUseCase {
 
     const resultEntity = new TeacherRetirementPlanningRejectionResultEntity({
       ...(existingResult !== null && {
-        id: existingResult.id,
+        id: new TeacherRetirementPlanningRejectionResultId(existingResult.id),
       }),
       inssDecisionAnalysis: existingResult?.inssDecisionAnalysis ?? null,
       firstAnalysis: existingResult?.firstAnalysis ?? null,
@@ -221,8 +224,8 @@ export class CreateTeacherRetirementPlanningRejectionResultUseCase {
 
   private async findAnalysisToolClientByAnalysisToolRecordOrFail(
     teacherRetirementPlanningRejectionId: TeacherRetirementPlanningRejectionId,
-    organizationId: string,
-    authIdentityId: string,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
   ): Promise<AnalysisToolClientEntity> {
     const analysisToolRecord =
       await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByTeacherRetirementPlanningRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
@@ -249,7 +252,7 @@ export class CreateTeacherRetirementPlanningRejectionResultUseCase {
     cnisBuffer: Buffer,
   ): Promise<Buffer[]> {
     const otherDocumentBuffers = await Promise.all(
-      (rejection.documents ?? [])
+      rejection.documents
         .filter((doc) => doc.fileName !== cnisFileName)
         .map((doc) => this.fileProcessorGateway.getFileBuffer(doc.fileName)),
     );

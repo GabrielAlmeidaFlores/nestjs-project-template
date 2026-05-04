@@ -80,6 +80,8 @@ export class AnalysisActivityMessageFactory {
       'Concessão de salário maternidade',
     [AnalysisToolRecordTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_TERMINATION]:
       'Cessação de benefício por incapacidade temporária',
+    [AnalysisToolRecordTypeEnum.TEACHER_RETIREMENT_PLANNING_REJECTION]:
+      'Indeferimento de aposentadoria de professor',
   };
 
   private static readonly actionLabelMap: Record<
