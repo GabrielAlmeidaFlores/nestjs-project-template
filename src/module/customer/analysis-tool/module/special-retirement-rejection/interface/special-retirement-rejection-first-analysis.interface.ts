@@ -16,19 +16,13 @@ export interface SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodInterfa
 }
 
 export interface SpecialRetirementRejectionFirstAnalysisEarningsHistoryInterface {
-  competence: string;
-  value: string;
-  pendencyType?: string | null;
-  collectedAt?: string | null;
-  contributionBelowTheMinimun: boolean;
-}
-
-export interface SpecialRetirementRejectionFirstAnalysisEarningsHistoryInterface {
-  competence: string;
-  value: string;
-  pendencyType?: string | null;
-  collectedAt?: string | null;
-  contributionBelowTheMinimun: boolean;
+  competence?: string;
+  remuneration?: string;
+  indicators?: string;
+  paymentDate?: string;
+  contribution?: string;
+  contributionSalary?: string;
+  competenceBelowTheMinimum?: boolean;
 }
 
 export interface SpecialRetirementRejectionFirstAnalysisWorkPeriodInterface {
@@ -42,6 +36,7 @@ export interface SpecialRetirementRejectionFirstAnalysisWorkPeriodInterface {
   status: string;
   gracePeriod: string;
   activityType: string;
+  earningsHistory: SpecialRetirementRejectionFirstAnalysisEarningsHistoryInterface[];
   specialPeriods: SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodInterface[];
 }
 

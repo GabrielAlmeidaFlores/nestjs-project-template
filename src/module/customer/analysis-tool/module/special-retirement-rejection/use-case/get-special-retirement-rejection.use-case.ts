@@ -8,9 +8,6 @@ import { SpecialRetirementRejectionHarmfulAgentEnum } from '@module/customer/ana
 import { SpecialRetirementRejectionRejectionReasonEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection/enum/special-retirement-rejection-rejection-reason.enum';
 import { SpecialRetirementRejectionId } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection/value-object/special-retirement-rejection-id.value-object';
 import { SpecialRetirementRejectionDocumentTypeEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-document/enum/special-retirement-rejection-document-type.enum';
-import { SpecialRetirementRejectionWorkPeriodActivityTypeEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period/enum/special-retirement-rejection-work-period-activity-type.enum';
-import { SpecialRetirementRejectionWorkPeriodCategoryEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period/enum/special-retirement-rejection-work-period-category.enum';
-import { SpecialRetirementRejectionWorkPeriodPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period/enum/special-retirement-rejection-work-period-period-consideration.enum';
 import { SpecialRetirementRejectionWorkPeriodDocumentTypeEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period-document/enum/special-retirement-rejection-work-period-document-type.enum';
 import {
   GetSpecialRetirementRejectionClientResponseDto,
@@ -265,15 +262,13 @@ export class GetSpecialRetirementRejectionUseCase {
           }),
           ...(workPeriod.endDate !== null && { endDate: workPeriod.endDate }),
           ...(workPeriod.category !== null && {
-            category:
-              workPeriod.category as SpecialRetirementRejectionWorkPeriodCategoryEnum,
+            category: workPeriod.category,
           }),
           ...(workPeriod.pendencyReason !== null && {
             pendencyReason: workPeriod.pendencyReason,
           }),
           ...(workPeriod.periodConsideration !== null && {
-            periodConsideration:
-              workPeriod.periodConsideration as SpecialRetirementRejectionWorkPeriodPeriodConsiderationEnum,
+            periodConsideration: workPeriod.periodConsideration,
           }),
           ...(workPeriod.contributionAverage !== null && {
             contributionAverage: workPeriod.contributionAverage,
@@ -285,8 +280,7 @@ export class GetSpecialRetirementRejectionUseCase {
             gracePeriod: workPeriod.gracePeriod,
           }),
           ...(workPeriod.activityType !== null && {
-            activityType:
-              workPeriod.activityType as SpecialRetirementRejectionWorkPeriodActivityTypeEnum,
+            activityType: workPeriod.activityType,
           }),
           ...(documentResponses.length > 0 && { documents: documentResponses }),
           ...(earningsHistory.length > 0 && { earningsHistory }),
@@ -319,7 +313,7 @@ export class GetSpecialRetirementRejectionUseCase {
         : [],
     );
 
-    const specialRetirementRejectionResult = await this.buildResultResponse(
+    const specialRetirementRejectionResult = this.buildResultResponse(
       specialRetirementRejection,
     );
 
@@ -399,9 +393,9 @@ export class GetSpecialRetirementRejectionUseCase {
     });
   }
 
-  private async buildResultResponse(
+  private buildResultResponse(
     specialRetirementRejection: GetSpecialRetirementRejectionWithRelationsQueryResult,
-  ): Promise<GetSpecialRetirementRejectionResultResponseDto | null> {
+  ): GetSpecialRetirementRejectionResultResponseDto | null {
     const result = specialRetirementRejection.specialRetirementRejectionResult;
 
     if (result === null) {
