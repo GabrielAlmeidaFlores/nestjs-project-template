@@ -12,6 +12,7 @@ import type { SpecialRetirementRejectionWorkSpecialPeriodEntity } from '@module/
 import type { SpecialRetirementRejectionWorkSpecialPeriodLegalFrameworkEntity } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-special-period-legal-framework/special-retirement-rejection-work-special-period-legal-framework.entity';
 
 export class GetSpecialRetirementRejectionWithRelationsQueryResult extends BaseBuildableObject {
+  public readonly id: SpecialRetirementRejectionId;
   public readonly specialRetirementRejectionId: SpecialRetirementRejectionId;
   public readonly analysisName: string | null;
   public readonly category: string | null;

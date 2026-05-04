@@ -250,6 +250,7 @@ export class GetSpecialRetirementRejectionWithRelationsQueryResultAutoMapperProf
       );
 
       return GetSpecialRetirementRejectionWithRelationsQueryResult.build({
+        id: new SpecialRetirementRejectionId(source.id),
         specialRetirementRejectionId: new SpecialRetirementRejectionId(
           source.id,
         ),
