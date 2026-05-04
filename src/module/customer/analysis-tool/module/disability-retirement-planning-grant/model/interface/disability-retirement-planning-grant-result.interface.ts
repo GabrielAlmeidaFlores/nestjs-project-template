@@ -60,6 +60,85 @@ export function parseDisabilityRetirementPlanningGrantCompleteAnalysis(
   if (cleaned.startsWith('"') && cleaned.endsWith('"')) {
     cleaned = JSON.parse(cleaned) as string;
   }
-  const parsed = JSON.parse(cleaned) as Record<string, unknown>;
-  return parsed as unknown as DisabilityRetirementPlanningGrantResultInterface;
+
+  cleaned = sanitizeJsonControlChars(cleaned);
+
+  const parsed = JSON.parse(
+    cleaned,
+  ) as DisabilityRetirementPlanningGrantResultInterface;
+
+  if (typeof parsed.analysisResult === 'string') {
+    parsed.analysisResult = parsed.analysisResult.replace(/\\n/g, '\n');
+  }
+  if (Array.isArray(parsed.retirementRules)) {
+    parsed.retirementRules = parsed.retirementRules.map((rule) => ({
+      ...rule,
+      retirementAnalysis:
+        typeof rule.retirementAnalysis === 'string'
+          ? rule.retirementAnalysis.replace(/\\n/g, '\n')
+          : rule.retirementAnalysis,
+    }));
+  }
+
+  return parsed;
+}
+
+const enum SanitizerCharCodeEnum {
+  CONTROL_CHAR_MAX = 0x20,
+  LINE_FEED = 0x0a,
+  CARRIAGE_RETURN = 0x0d,
+  HORIZONTAL_TAB = 0x09,
+  HEX_RADIX = 16,
+  UNICODE_PAD_LENGTH = 4,
+}
+
+function sanitizeJsonControlChars(json: string): string {
+  let result = '';
+  let inString = false;
+  let escaped = false;
+
+  for (let i = 0; i < json.length; i++) {
+    const char = json[i];
+    const code = json.charCodeAt(i);
+
+    if (escaped) {
+      result += char;
+      escaped = false;
+      continue;
+    }
+
+    if (char === '\\' && inString) {
+      result += char;
+      escaped = true;
+      continue;
+    }
+
+    if (char === '"') {
+      inString = !inString;
+      result += char;
+      continue;
+    }
+
+    const codeEnum = code as SanitizerCharCodeEnum;
+    if (inString && codeEnum < SanitizerCharCodeEnum.CONTROL_CHAR_MAX) {
+      if (codeEnum === SanitizerCharCodeEnum.LINE_FEED) {
+        result += '\\n';
+      } else if (codeEnum === SanitizerCharCodeEnum.CARRIAGE_RETURN) {
+        result += '\\r';
+      } else if (codeEnum === SanitizerCharCodeEnum.HORIZONTAL_TAB) {
+        result += '\\t';
+      } else {
+        result +=
+          '\\u' +
+          code
+            .toString(SanitizerCharCodeEnum.HEX_RADIX)
+            .padStart(SanitizerCharCodeEnum.UNICODE_PAD_LENGTH, '0');
+      }
+      continue;
+    }
+
+    result += char;
+  }
+
+  return result;
 }

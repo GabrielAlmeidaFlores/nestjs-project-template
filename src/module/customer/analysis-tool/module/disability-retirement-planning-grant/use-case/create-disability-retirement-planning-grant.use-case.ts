@@ -152,6 +152,7 @@ export class CreateDisabilityRetirementPlanningGrantUseCase {
 
     return CreateDisabilityRetirementPlanningGrantResponseDto.build({
       disabilityRetirementPlanningGrantId: disabilityRetirementPlanningGrant.id,
+      analysisCode: analysisToolRecord.code.toString(),
     });
   }
 
