@@ -580,6 +580,21 @@ export abstract class AnalysisProcessorGateway {
     files: Buffer[],
   ): Promise<string | null>;
 
+  public abstract getBpcDisabilityTerminationInssDecisionAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getBpcDisabilityTerminationCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getBpcDisabilityTerminationSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
   public abstract getBpcElderlyAnalysisSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],

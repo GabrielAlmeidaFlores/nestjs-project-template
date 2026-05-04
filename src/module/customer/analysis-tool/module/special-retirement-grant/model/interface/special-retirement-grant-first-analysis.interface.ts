@@ -16,13 +16,6 @@ export interface SpecialRetirementGrantFirstAnalysisEarningsHistoryItemInterface
   competenceBelowTheMinimum: boolean | null;
 }
 
-export interface SpecialRetirementGrantObservationsFirstAnalysisInterface {
-  id: string;
-  observation: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 export interface SpecialRetirementGrantFirstAnalysisPeriodInterface {
   id: string;
   employmentRelationshipSource: string | null;
@@ -34,18 +27,28 @@ export interface SpecialRetirementGrantFirstAnalysisPeriodInterface {
   agents: SpecialRetirementGrantFirstAnalysisAgentInterface[];
   status: 'valid' | 'pending' | 'invalid';
   earningsHistory: SpecialRetirementGrantFirstAnalysisEarningsHistoryItemInterface[];
-  observations?:
-    | SpecialRetirementGrantObservationsFirstAnalysisInterface[]
-    | null;
+  observations?: string[] | null;
+}
+
+export interface SpecialRetirementGrantFirstAnalysisTimeSummaryInterface {
+  withoutResolvingPendencies: string | null;
+  resolvingPendencies: string | null;
+  withAccelerators: string | null;
+}
+
+export interface SpecialRetirementGrantFirstAnalysisGracePeriodSummaryInterface {
+  withoutResolvingPendencies: number | null;
+  resolvingPendencies: number | null;
+  withAccelerators: number | null;
 }
 
 export interface SpecialRetirementGrantFirstAnalysisSummaryInterface {
-  specialTime: string | null;
-  commonTime: string | null;
-  specialGracePeriod: number | null;
-  commonGracePeriod: number | null;
-  totalTime: string | null;
-  totalGracePeriod: number | null;
+  specialTime: SpecialRetirementGrantFirstAnalysisTimeSummaryInterface;
+  commonTime: SpecialRetirementGrantFirstAnalysisTimeSummaryInterface;
+  totalTime: SpecialRetirementGrantFirstAnalysisTimeSummaryInterface;
+  specialGracePeriod: SpecialRetirementGrantFirstAnalysisGracePeriodSummaryInterface;
+  commonGracePeriod: SpecialRetirementGrantFirstAnalysisGracePeriodSummaryInterface;
+  totalGracePeriod: SpecialRetirementGrantFirstAnalysisGracePeriodSummaryInterface;
 }
 
 export interface SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemInterface {

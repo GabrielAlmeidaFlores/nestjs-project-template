@@ -530,6 +530,15 @@ import { BpcDisabilityDenialInssBenefitTypeormEntity } from '@infra/database/imp
 import { BpcDisabilityDenialLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-denial-legal-proceeding.typeorm.entity';
 import { BpcDisabilityDenialResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-denial-result.typeorm.entity';
 import { BpcDisabilityDenialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-denial.typeorm.entity';
+import { BpcDisabilityTerminationDisabilityAssessmentDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-termination-disability-assessment-document.typeorm.entity';
+import { BpcDisabilityTerminationDisabilityAssessmentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-termination-disability-assessment.typeorm.entity';
+import { BpcDisabilityTerminationDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-termination-document.typeorm.entity';
+import { BpcDisabilityTerminationFamilyMemberDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-termination-family-member-document.typeorm.entity';
+import { BpcDisabilityTerminationFamilyMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-termination-family-member.typeorm.entity';
+import { BpcDisabilityTerminationInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-termination-inss-benefit.typeorm.entity';
+import { BpcDisabilityTerminationLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-termination-legal-proceeding.typeorm.entity';
+import { BpcDisabilityTerminationResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-termination-result.typeorm.entity';
+import { BpcDisabilityTerminationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-termination.typeorm.entity';
 import { BpcElderlyAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-document.typeorm.entity';
 import { BpcElderlyAnalysisFamilyMemberDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-family-member-document.typeorm.entity';
 import { BpcElderlyAnalysisFamilyMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis-family-member.typeorm.entity';
@@ -1329,6 +1338,15 @@ export class TypeormIndex {
     BpcDisabilityDenialResultTypeormEntity,
     BpcDisabilityDenialInssBenefitTypeormEntity,
     BpcDisabilityDenialLegalProceedingTypeormEntity,
+    BpcDisabilityTerminationTypeormEntity,
+    BpcDisabilityTerminationDisabilityAssessmentTypeormEntity,
+    BpcDisabilityTerminationDisabilityAssessmentDocumentTypeormEntity,
+    BpcDisabilityTerminationDocumentTypeormEntity,
+    BpcDisabilityTerminationFamilyMemberTypeormEntity,
+    BpcDisabilityTerminationFamilyMemberDocumentTypeormEntity,
+    BpcDisabilityTerminationInssBenefitTypeormEntity,
+    BpcDisabilityTerminationLegalProceedingTypeormEntity,
+    BpcDisabilityTerminationResultTypeormEntity,
     BpcElderlyAnalysisTypeormEntity,
     BpcElderlyAnalysisDocumentTypeormEntity,
     BpcElderlyAnalysisFamilyMemberTypeormEntity,

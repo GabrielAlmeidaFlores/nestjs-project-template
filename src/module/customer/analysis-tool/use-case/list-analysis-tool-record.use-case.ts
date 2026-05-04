@@ -85,7 +85,46 @@ export class ListAnalysisToolRecordUseCase {
             ...analysisToolRecord.analysisToolClient,
           });
 
-          const analysisId = this.getAnalysisId(analysisToolRecord);
+          const analysis =
+            analysisToolRecord.cnisFastAnalysis ??
+            analysisToolRecord.retirementPlanningRpps ??
+            analysisToolRecord.retirementPlanningRgps ??
+            analysisToolRecord.disabilityRetirementPlanningGrant ??
+            analysisToolRecord.teacherRetirementPlanning ??
+            analysisToolRecord.generalUrbanRetirementGrant ??
+            analysisToolRecord.generalUrbanRetirementAnalysis ??
+            analysisToolRecord.judicialCaseAnalysis ??
+            analysisToolRecord.administrativeProcedureInssAnalysis ??
+            analysisToolRecord.medicalAndSocialReportObjectionGeneratorAnalysis ??
+            analysisToolRecord.specialActivity ??
+            analysisToolRecord.disabilityAssessmentForBpcAnalysis ??
+            analysisToolRecord.ruralOrHybridRetirementRejection ??
+            analysisToolRecord.ruralOrHybridRetirementAnalysis ??
+            analysisToolRecord.ruralTimelineAnalysis ??
+            analysisToolRecord.speechGenerator ??
+            analysisToolRecord.medicalQuestionGenerator ??
+            analysisToolRecord.perCapitaIncomeForBpcAnalysis ??
+            analysisToolRecord.insuranceQualityAnalysis ??
+            analysisToolRecord.disabilityRetirementPlanning ??
+            analysisToolRecord.audienceQuestionGenerator ??
+            analysisToolRecord.survivorPensionAnalysis ??
+            analysisToolRecord.specialRetirementGrant ??
+            analysisToolRecord.maternityPayGrant ??
+            analysisToolRecord.deathBenefitGrant ??
+            analysisToolRecord.generalUrbanRetirementDenial ??
+            analysisToolRecord.disabilityRetirementPlanningRejection ??
+            analysisToolRecord.bpcDisabilityDenial ??
+            analysisToolRecord.bpcDisabilityTermination ??
+            analysisToolRecord.deathBenefitGrant ??
+            analysisToolRecord.temporaryIncapacityBenefitRejection ??
+            analysisToolRecord.temporaryIncapacityBenefitTermination ??
+            analysisToolRecord.deathBenefitRejection ??
+            analysisToolRecord.bpcElderlyAnalysis ??
+            analysisToolRecord.accidentAssistanceTerminated ??
+            analysisToolRecord.temporaryDisabilityBenefitsTerminated ??
+            analysisToolRecord.maternityPayRejection;
+
+          const analysisId = analysis?.id ?? null;
 
           if (analysisId === null) {
             return null;
