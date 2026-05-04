@@ -2025,6 +2025,116 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Primeira análise de cessação de auxílio-acidente com IA, combinando os dados estruturados do caso com a leitura e interpretação do CNIS. Gera parecer inicial técnico sobre tempo de contribuição, carência, períodos relevantes, pontos de atenção e viabilidade preliminar de reversão da cessação.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f7a1b2c3-d4e5-4f6a-8b9c-0d1e2f3a4b60'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_DISABILITY_BENEFITS_TERMINATED_INSS_DECISION_ANALYSIS,
+      creditCost: 5,
+      title:
+        'Análise de Decisão do INSS (Cessação Auxílio Incapacidade Temporária)',
+      description:
+        'Análise da comunicação de cessação e dos documentos do processo administrativo do INSS com IA para auxílio por incapacidade temporária. Examina o fundamento utilizado para cessar o benefício, identifica inconsistências na perícia ou no enquadramento legal, aponta irregularidades procedimentais e orienta sobre a melhor estratégia para restabelecimento administrativo ou judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f7a1b2c3-d4e5-4f6a-8b9c-0d1e2f3a4b61'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_DISABILITY_BENEFITS_TERMINATED_FIRST_ANALYSIS,
+      creditCost: 5,
+      title: 'Primeira Análise (Cessação Auxílio Incapacidade Temporária)',
+      description:
+        'Primeira análise de cessação de auxílio por incapacidade temporária com IA, combinando os dados estruturados do caso com a leitura e interpretação do CNIS. Gera parecer inicial técnico sobre qualidade de segurado, carência, períodos relevantes, manutenção da incapacidade e viabilidade preliminar de restabelecimento do benefício.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f7a1b2c3-d4e5-4f6a-8b9c-0d1e2f3a4b62'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_DISABILITY_BENEFITS_TERMINATED_COMPLETE_ANALYSIS,
+      creditCost: 8,
+      title: 'Análise Completa (Cessação Auxílio Incapacidade Temporária)',
+      description:
+        'Análise completa de cessação de auxílio por incapacidade temporária com IA. Consolida o histórico contributivo, os períodos analisados, a decisão de cessação do INSS e a condição de incapacidade, gerando parecer técnico detalhado com enquadramento nas regras aplicáveis, fundamentação jurídica, estratégia processual recomendada e perspectivas de restabelecimento do benefício.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f7a1b2c3-d4e5-4f6a-8b9c-0d1e2f3a4b63'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_DISABILITY_BENEFITS_TERMINATED_SIMPLIFIED_ANALYSIS,
+      creditCost: 3,
+      title: 'Análise Simplificada (Cessação Auxílio Incapacidade Temporária)',
+      description:
+        'Análise simplificada de cessação de auxílio por incapacidade temporária com IA. Resume os principais achados da análise completa, indica a viabilidade geral do restabelecimento do benefício, os pontos críticos e os próximos passos recomendados, em linguagem acessível para apresentação ao cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c3e4f5a6-b7d8-4c9d-8e1f-2a3b4c5d6e7f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_ELDERLY_CESSATION_INSS_DECISION_ANALYSIS,
+      creditCost: 3,
+      title: 'BPC AO IDOSO (CESSAÇÃO) - ANÁLISE DA DECISÃO DO INSS',
+      description:
+        'Análise da decisão administrativa de cessação ou suspensão do BPC ao Idoso com IA. Extrai NB, data da decisão, motivo da cessação ou suspensão, fundamentos jurídicos utilizados pelo INSS, prazo recursal e pontos técnicos de contestação administrativa ou judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d4f5a6b7-c8e9-4d0e-9f2a-3b4c5d6e7f8a'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_ELDERLY_CESSATION_FIRST_ANALYSIS,
+      creditCost: 5,
+      title: 'BPC AO IDOSO (CESSAÇÃO) - PRIMEIRA ANÁLISE',
+      description:
+        'Primeira análise técnica de cessação ou suspensão do BPC ao Idoso com IA. Cruza dados do formulário, cliente, CadÚnico, CNIS, composição familiar, renda e decisão do INSS, avaliando os critérios legais do BPC (idade e renda per capita) e a viabilidade preliminar de reversão.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e5a6b7c8-d9f0-4e1f-aa3b-4c5d6e7f8a9b'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_ELDERLY_CESSATION_COMPLETE_ANALYSIS,
+      creditCost: 8,
+      title: 'BPC AO IDOSO (CESSAÇÃO) - ANÁLISE COMPLETA',
+      description:
+        'Análise completa de cessação ou suspensão do BPC ao Idoso com IA. Examina todos os dados do caso, interpreta a decisão do INSS à luz da LOAS e regulamentações do BPC, verifica requisitos de idade e renda per capita, identifica regras aplicáveis e emite parecer técnico conclusivo com diagnóstico, cálculo de renda familiar e fundamentação jurídica.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f6b7c8d9-e0a1-4f2a-bb4c-5d6e7f8a9b0c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_ELDERLY_CESSATION_SIMPLIFIED_ANALYSIS,
+      creditCost: 3,
+      title: 'BPC AO IDOSO (CESSAÇÃO) - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada de cessação ou suspensão do BPC ao Idoso com IA. Resume os principais achados da análise completa, indica a viabilidade geral da reversão, os pontos críticos (renda per capita, composição familiar, prazo recursal) e os próximos passos recomendados em linguagem acessível.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4a7b-9c8d-1e2f3a4b5c6d'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_TERMINATION_INSS_DECISION_ANALYSIS,
+      creditCost: 5,
+      title:
+        'Análise de Decisão do INSS (Cessação Auxílio Incapacidade Temporária)',
+      description:
+        'Análise da carta de cessação e documentos do processo administrativo do INSS com IA para auxílio por incapacidade temporária. Examina o fundamento da cessação, identifica erros de cálculo ou enquadramento legal, aponta eventuais irregularidades processuais e orienta sobre a melhor estratégia de reversão — administrativa ou judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b2c3d4e5-f6a7-4b8c-ad9e-2f3a4b5c6d7e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_TERMINATION_FIRST_ANALYSIS,
+      creditCost: 5,
+      title: 'Primeira Análise (Cessação Auxílio Incapacidade Temporária)',
+      description:
+        'Primeira análise de cessação de auxílio por incapacidade temporária com IA, combinando os dados estruturados do caso com a leitura e interpretação do CNIS. Gera parecer inicial técnico sobre tempo de contribuição, carência, períodos relevantes, pontos de atenção e viabilidade preliminar de reversão da cessação.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c3d4e5f6-a7b8-4c9d-be1f-3a4b5c6d7e8f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_TERMINATION_COMPLETE_ANALYSIS,
+      creditCost: 8,
+      title: 'Análise Completa (Cessação Auxílio Incapacidade Temporária)',
+      description:
+        'Análise completa de cessação de auxílio por incapacidade temporária com IA. Consolida o histórico contributivo, os períodos analisados, a decisão de cessação do INSS e a condição de incapacidade, gerando parecer técnico detalhado com enquadramento nas regras aplicáveis, fundamentação jurídica, estratégia processual recomendada e perspectivas do caso.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d4e5f6a7-b8c9-4d0e-8f2a-4b5c6d7e8f9a'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_TERMINATION_SIMPLIFIED_ANALYSIS,
+      creditCost: 3,
+      title: 'Análise Simplificada (Cessação Auxílio Incapacidade Temporária)',
+      description:
+        'Análise simplificada de cessação de auxílio por incapacidade temporária com IA. Resume os principais achados da análise completa, indica a viabilidade geral do caso, os pontos críticos e os próximos passos recomendados, em linguagem acessível para apresentação ao cliente.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {
