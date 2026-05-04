@@ -10,6 +10,7 @@ import { AccidentBenefitRejectionEntity } from '@module/customer/analysis-tool/m
 import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
 import { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
 import { BpcDisabilityDenialEntity } from '@module/customer/analysis-tool/module/bpc-disability-denial/domain/schema/entity/bpc-disability-denial/bpc-disability-denial.entity';
+import { BpcDisabilityTerminationEntity } from '@module/customer/analysis-tool/module/bpc-disability-termination/domain/schema/entity/bpc-disability-termination/bpc-disability-termination.entity';
 import { BpcElderlyCessationEntity } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/domain/schema/entity/bpc-elderly-cessation/bpc-elderly-cessation.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { DeathBenefitGrantEntity } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant/death-benefit-grant.entity';
@@ -225,6 +226,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly bpcDisabilityDenial: BpcDisabilityDenialEntity | null;
 
   @Description(
+    'Análise de BPC Pessoa com Deficiência cessado associada ao registro da ferramenta de análise',
+  )
+  public readonly bpcDisabilityTermination: BpcDisabilityTerminationEntity | null;
+
+  @Description(
     'Análise de BPC ao Idoso associada ao registro da ferramenta de análise',
   )
   public readonly bpcElderlyAnalysis: BpcElderlyAnalysisEntity | null;
@@ -330,6 +336,7 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     this.disabilityRetirementPlanningRejection =
       props.disabilityRetirementPlanningRejection ?? null;
     this.bpcDisabilityDenial = props.bpcDisabilityDenial ?? null;
+    this.bpcDisabilityTermination = props.bpcDisabilityTermination ?? null;
     this.bpcElderlyAnalysis = props.bpcElderlyAnalysis ?? null;
     this.bpcElderlyCessation = props.bpcElderlyCessation ?? null;
     this.maternityPayRejection = props.maternityPayRejection ?? null;
