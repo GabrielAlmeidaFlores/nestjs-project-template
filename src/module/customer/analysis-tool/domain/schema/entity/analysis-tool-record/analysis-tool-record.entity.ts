@@ -20,6 +20,7 @@ import { DisabilityRetirementPlanningRejectionEntity } from '@module/customer/an
 import { GeneralUrbanRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/general-urban-retirement-analysis-entity';
 import { GeneralUrbanRetirementDenialEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/general-urban-retirement-denial.entity';
 import { GeneralUrbanRetirementGrantEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/general-urban-retirement-grant.entity';
+import { GeneralUrbanRetirementReviewEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-review/domain/schema/entity/general-urban-retirement-review/general-urban-retirement-review.entity';
 import { InsuranceQualityAnalysisEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/insurance-quality-analysis.entity';
 import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
 import { MaternityPayGrantEntity } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/maternity-pay-grant.entity';
@@ -147,6 +148,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     'Análise de aposentadoria urbana geral associada ao registro da ferramenta de análise',
   )
   public readonly generalUrbanRetirementAnalysis: GeneralUrbanRetirementAnalysisEntity | null;
+
+  @Description(
+    'Revisão de aposentadoria urbana geral associada ao registro da ferramenta de análise',
+  )
+  public readonly generalUrbanRetirementReview: GeneralUrbanRetirementReviewEntity | null;
 
   @Description(
     'Concessão de aposentadoria para deficiente associada ao registro da ferramenta de análise',
@@ -300,6 +306,8 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
       props.generalUrbanRetirementGrant ?? null;
     this.generalUrbanRetirementAnalysis =
       props.generalUrbanRetirementAnalysis ?? null;
+    this.generalUrbanRetirementReview =
+      props.generalUrbanRetirementReview ?? null;
     this.disabilityRetirementPlanningGrant =
       props.disabilityRetirementPlanningGrant ?? null;
     this.temporaryDisabilityBenefitsGrant =
