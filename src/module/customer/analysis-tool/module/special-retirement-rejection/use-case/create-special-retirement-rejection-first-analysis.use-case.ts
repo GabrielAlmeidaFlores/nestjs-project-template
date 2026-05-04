@@ -15,15 +15,16 @@ import { SpecialRetirementRejectionWorkPeriodCommandRepositoryGateway } from '@m
 import { SpecialRetirementRejectionId } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection/value-object/special-retirement-rejection-id.value-object';
 import { SpecialRetirementRejectionDocumentTypeEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-document/enum/special-retirement-rejection-document-type.enum';
 import { SpecialRetirementRejectionResultEntity } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-result/special-retirement-rejection-result.entity';
-import { SpecialRetirementRejectionWorkPeriodEntity } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period/special-retirement-rejection-work-period.entity';
 import { SpecialRetirementRejectionWorkPeriodActivityTypeEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period/enum/special-retirement-rejection-work-period-activity-type.enum';
 import { SpecialRetirementRejectionWorkPeriodCategoryEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period/enum/special-retirement-rejection-work-period-category.enum';
 import { SpecialRetirementRejectionWorkPeriodPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period/enum/special-retirement-rejection-work-period-period-consideration.enum';
+import { SpecialRetirementRejectionWorkPeriodEntity } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period/special-retirement-rejection-work-period.entity';
 import { CreateSpecialRetirementRejectionFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/special-retirement-rejection/dto/response/create-special-retirement-rejection-first-analysis.response.dto';
 import { InvalidSpecialRetirementRejectionFirstAnalysisJsonError } from '@module/customer/analysis-tool/module/special-retirement-rejection/error/invalid-special-retirement-rejection-first-analysis-json.error';
 import { SpecialRetirementRejectionCnisDocumentNotFoundError } from '@module/customer/analysis-tool/module/special-retirement-rejection/error/special-retirement-rejection-cnis-document-not-found.error';
 import { SpecialRetirementRejectionNotFoundError } from '@module/customer/analysis-tool/module/special-retirement-rejection/error/special-retirement-rejection-not-found.error';
 import {
+  SpecialRetirementRejectionFirstAnalysisEarningsHistoryModel,
   SpecialRetirementRejectionFirstAnalysisModel,
   SpecialRetirementRejectionFirstAnalysisWorkPeriodModel,
   SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodModel,
@@ -312,6 +313,37 @@ export class CreateSpecialRetirementRejectionFirstAnalysisUseCase {
           status: workPeriod.status,
           gracePeriod: workPeriod.gracePeriod,
           activityType: workPeriod.activityType,
+          ...(workPeriod.earningsHistory.length > 0 && {
+            earningsHistory: workPeriod.earningsHistory.map((earningHistory) =>
+              SpecialRetirementRejectionFirstAnalysisEarningsHistoryModel.build(
+                {
+                  ...(earningHistory.competence !== undefined && {
+                    competence: earningHistory.competence,
+                  }),
+                  ...(earningHistory.remuneration !== undefined && {
+                    remuneration: earningHistory.remuneration,
+                  }),
+                  ...(earningHistory.indicators !== undefined && {
+                    indicators: earningHistory.indicators,
+                  }),
+                  ...(earningHistory.paymentDate !== undefined && {
+                    paymentDate: earningHistory.paymentDate,
+                  }),
+                  ...(earningHistory.contribution !== undefined && {
+                    contribution: earningHistory.contribution,
+                  }),
+                  ...(earningHistory.contributionSalary !== undefined && {
+                    contributionSalary: earningHistory.contributionSalary,
+                  }),
+                  ...(earningHistory.competenceBelowTheMinimum !==
+                    undefined && {
+                    competenceBelowTheMinimum:
+                      earningHistory.competenceBelowTheMinimum,
+                  }),
+                },
+              ),
+            ),
+          }),
           ...(workPeriod.specialPeriods.length > 0 && {
             specialPeriods: workPeriod.specialPeriods.map((sp) =>
               SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodModel.build(

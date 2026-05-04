@@ -53,6 +53,33 @@ export class SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodModel exten
 }
 
 @ResponseDto()
+export class SpecialRetirementRejectionFirstAnalysisEarningsHistoryModel extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty({ required: false })
+  public competence?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public remuneration?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public indicators?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public paymentDate?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public contribution?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public contributionSalary?: string;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public competenceBelowTheMinimum?: boolean;
+
+  protected override readonly _type =
+    SpecialRetirementRejectionFirstAnalysisEarningsHistoryModel.name;
+}
+
+@ResponseDto()
 export class SpecialRetirementRejectionFirstAnalysisWorkPeriodModel extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
   public bondOrigin: string;
@@ -83,6 +110,12 @@ export class SpecialRetirementRejectionFirstAnalysisWorkPeriodModel extends Base
 
   @ResponseDtoStringProperty()
   public activityType: string;
+
+  @ResponseDtoObjectProperty(
+    () => SpecialRetirementRejectionFirstAnalysisEarningsHistoryModel,
+    { isArray: true, required: false },
+  )
+  public earningsHistory?: SpecialRetirementRejectionFirstAnalysisEarningsHistoryModel[];
 
   @ResponseDtoObjectProperty(
     () => SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodModel,
