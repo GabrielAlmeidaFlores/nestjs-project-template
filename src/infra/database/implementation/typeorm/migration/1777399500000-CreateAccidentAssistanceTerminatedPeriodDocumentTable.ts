@@ -1,7 +1,7 @@
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class CreateAccidentAssistanceTerminatedPeriodDocumentTable1682700000000 implements MigrationInterface {
-  name = 'CreateAccidentAssistanceTerminatedPeriodDocumentTable1682700000000';
+export class CreateAccidentAssistanceTerminatedPeriodDocumentTable1777399500000 implements MigrationInterface {
+  name = 'CreateAccidentAssistanceTerminatedPeriodDocumentTable1777399500000';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
