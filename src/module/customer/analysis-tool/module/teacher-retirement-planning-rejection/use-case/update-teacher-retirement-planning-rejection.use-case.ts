@@ -10,6 +10,7 @@ import { TeacherRetirementPlanningRejectionInssBenefitCommandRepositoryGateway }
 import { TeacherRetirementPlanningRejectionEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection/teacher-retirement-planning-rejection.entity';
 import { TeacherRetirementPlanningRejectionId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection/value-object/teacher-retirement-planning-rejection-id.value-object';
 import { TeacherRetirementPlanningRejectionInssBenefitEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection-inss-benefit/teacher-retirement-planning-rejection-inss-benefit.entity';
+import { TeacherRetirementPlanningRejectionResultId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection-result/value-object/teacher-retirement-planning-rejection-result-id.value-object';
 import { UpdateTeacherRetirementPlanningRejectionRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/dto/request/update-teacher-retirement-planning-rejection.request.dto';
 import { UpdateTeacherRetirementPlanningRejectionResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/dto/response/update-teacher-retirement-planning-rejection.response.dto';
 import { TeacherRetirementPlanningRejectionNotFoundError } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/error/teacher-retirement-planning-rejection-not-found.error';
@@ -28,7 +29,9 @@ export class UpdateTeacherRetirementPlanningRejectionUseCase {
     private readonly teacherRetirementPlanningRejectionQueryRepositoryGateway: TeacherRetirementPlanningRejectionQueryRepositoryGateway,
     @Inject(TeacherRetirementPlanningRejectionCommandRepositoryGateway)
     private readonly teacherRetirementPlanningRejectionCommandRepositoryGateway: TeacherRetirementPlanningRejectionCommandRepositoryGateway,
-    @Inject(TeacherRetirementPlanningRejectionInssBenefitCommandRepositoryGateway)
+    @Inject(
+      TeacherRetirementPlanningRejectionInssBenefitCommandRepositoryGateway,
+    )
     private readonly teacherRetirementPlanningRejectionInssBenefitCommandRepositoryGateway: TeacherRetirementPlanningRejectionInssBenefitCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
@@ -69,7 +72,9 @@ export class UpdateTeacherRetirementPlanningRejectionUseCase {
       denialReasonDescription:
         dto.denialReasonDescription ?? existing.denialReasonDescription,
       teacherRetirementPlanningRejectionResultId:
-        existing.result?.id ?? null,
+        existing.result?.id !== undefined
+          ? new TeacherRetirementPlanningRejectionResultId(existing.result.id)
+          : null,
     });
 
     const transactions: TransactionType[] = [

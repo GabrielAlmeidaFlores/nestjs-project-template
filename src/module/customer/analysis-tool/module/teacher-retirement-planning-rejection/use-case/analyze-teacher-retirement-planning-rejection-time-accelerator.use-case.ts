@@ -98,9 +98,12 @@ export class AnalyzeTeacherRetirementPlanningRejectionTimeAcceleratorUseCase {
           ) =>
             AnalyzeTeacherRetirementPlanningRejectionTimeAcceleratorItemResponseDto.build(
               {
-                timeType: timeAccelerator.timeType,
-                recognitionInss: timeAccelerator.recognitionInss,
-                viability: timeAccelerator.viability,
+                timeType:
+                  timeAccelerator.timeType as TimeAcceleratorAnalysisTypeEnum,
+                recognitionInss:
+                  timeAccelerator.recognitionInss as TimeAcceleratorRecognitionInssEnum,
+                viability:
+                  timeAccelerator.viability as TimeAcceleratorViabilityEnum,
                 ...(timeAccelerator.technicalNote !== null && {
                   technicalNote: timeAccelerator.technicalNote,
                 }),

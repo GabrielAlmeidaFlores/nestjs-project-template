@@ -148,7 +148,7 @@ export class CreateTeacherRetirementPlanningRejectionInssDecisionAnalysisUseCase
     >,
   ): Promise<Buffer[]> {
     return Promise.all(
-      (rejection.documents ?? []).map((document) =>
+      rejection.documents.map((document) =>
         this.fileProcessorGateway.getFileBuffer(document.fileName),
       ),
     );

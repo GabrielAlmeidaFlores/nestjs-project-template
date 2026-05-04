@@ -384,4 +384,9 @@ export abstract class AnalysisToolRecordQueryRepositoryGateway {
     authIdentityId: AuthIdentityId,
     err: ConstructorType<NotFoundError>,
   ): Promise<GetAnalysisToolRecordWithRelationsQueryResult>;
+
+  public abstract findWithRelationsByTeacherRetirementPlanningRejectionIdOrFail(
+    teacherRetirementPlanningRejectionId: TeacherRetirementPlanningRejectionId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult>;
 }

@@ -2792,6 +2792,68 @@ Análise processada do CNIS:
     );
   }
 
+  public async getTeacherRetirementPlanningRejectionFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson = true,
+  ): Promise<string | null> {
+    return this.getRuralOrHybridRetirementRejectionFirstAnalysis(
+      systemInstruction,
+      cnisAnalysisJson,
+      files,
+      asJson,
+    );
+  }
+
+  public async getTeacherRetirementPlanningRejectionCompleteAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return this.getRuralOrHybridRetirementRejectionCompleteAnalysis(
+      systemInstruction,
+      cnisAnalysisJson,
+      files,
+    );
+  }
+
+  public async getTeacherRetirementPlanningRejectionSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+    analysisJson?: string,
+  ): Promise<string | null> {
+    return this.getRuralOrHybridRetirementRejectionSimplifiedAnalysis(
+      systemInstruction,
+      files,
+      analysisJson,
+    );
+  }
+
+  public async getTeacherRetirementPlanningRejectionWorkPeriodDocumentAnalysis(
+    systemInstruction: string,
+    customerName: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return this.getRuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysis(
+      systemInstruction,
+      customerName,
+      files,
+    );
+  }
+
+  public async getTeacherRetirementPlanningRejectionInssDecisionAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
   private getSurvivorPensionAnalysisResultJsonSchema(): object {
     return {
       type: 'object',

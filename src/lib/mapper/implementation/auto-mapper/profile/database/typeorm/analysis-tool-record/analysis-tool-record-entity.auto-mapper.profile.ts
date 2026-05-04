@@ -21,8 +21,8 @@ import { GeneralUrbanRetirementDenialTypeormEntity } from '@infra/database/imple
 import { GeneralUrbanRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant.typeorm.entity';
 import { InsuranceQualityAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis.typeorm.entity';
 import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis.typeorm.entity';
-import { MaternityPayRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-rejection.typeorm.entity';
 import { MaternityPayGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-grant.typeorm.entity';
+import { MaternityPayRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-rejection.typeorm.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis.entity';
 import { MedicalQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
@@ -37,6 +37,7 @@ import { SpecialCategoryRetirementAnalysisTypeormEntity } from '@infra/database/
 import { SpecialRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant.typeorm.entity';
 import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
 import { SurvivorPensionAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/survivor-pension-analysis.typeorm.entity';
+import { TeacherRetirementPlanningRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection.typeorm.entity';
 import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant.typeorm.entity';
 import { TemporaryIncapacityBenefitRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-rejection.typeorm.entity';
@@ -64,8 +65,8 @@ import { GeneralUrbanRetirementDenialEntity } from '@module/customer/analysis-to
 import { GeneralUrbanRetirementGrantEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/general-urban-retirement-grant.entity';
 import { InsuranceQualityAnalysisEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/insurance-quality-analysis.entity';
 import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
-import { MaternityPayRejectionEntity } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/schema/entity/maternity-pay-rejection/maternity-pay-rejection.entity';
 import { MaternityPayGrantEntity } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/maternity-pay-grant.entity';
+import { MaternityPayRejectionEntity } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/schema/entity/maternity-pay-rejection/maternity-pay-rejection.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
 import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
 import { PerCapitaIncomeForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.entity';
@@ -79,6 +80,7 @@ import { SpecialCategoryRetirementAnalysisEntity } from '@module/customer/analys
 import { SpecialRetirementGrantEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/special-retirement-grant.entity';
 import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
 import { SurvivorPensionAnalysisEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis/survivor-pension-analysis.entity';
+import { TeacherRetirementPlanningRejectionEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection/teacher-retirement-planning-rejection.entity';
 import { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/temporary-disability-benefits-grant.entity';
 import { TemporaryIncapacityBenefitRejectionEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.entity';
 import { TemporaryIncapacityBenefitTerminationEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-termination/domain/schema/entity/temporary-incapacity-benefit-termination/temporary-incapacity-benefit-termination.entity';
@@ -391,6 +393,16 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const teacherRetirementPlanningRejection =
+        source.teacherRetirementPlanningRejection !== null &&
+        source.teacherRetirementPlanningRejection !== undefined
+          ? this.mapper.map(
+              source.teacherRetirementPlanningRejection,
+              TeacherRetirementPlanningRejectionTypeormEntity,
+              TeacherRetirementPlanningRejectionEntity,
+            )
+          : null;
+
       const ruralOrHybridRetirementAnalysis =
         source.ruralOrHybridRetirementAnalysis !== null &&
         source.ruralOrHybridRetirementAnalysis !== undefined
@@ -471,6 +483,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         accidentBenefitRejection,
         survivorPensionAnalysis,
         ruralOrHybridRetirementRejection,
+        teacherRetirementPlanningRejection,
         maternityPayRejection,
         ruralOrHybridRetirementAnalysis,
         maternityPayGrant,
@@ -685,6 +698,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const teacherRetirementPlanningRejection =
+        source.teacherRetirementPlanningRejection !== null
+          ? this.mapper.map(
+              source.teacherRetirementPlanningRejection,
+              TeacherRetirementPlanningRejectionEntity,
+              TeacherRetirementPlanningRejectionTypeormEntity,
+            )
+          : null;
+
       const ruralOrHybridRetirementAnalysis =
         source.ruralOrHybridRetirementAnalysis !== null
           ? this.mapper.map(
@@ -841,6 +863,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         accidentBenefitRejection,
         survivorPensionAnalysis,
         ruralOrHybridRetirementRejection,
+        teacherRetirementPlanningRejection,
         ruralOrHybridRetirementAnalysis,
         deathBenefitGrant,
         deathBenefitRejection,

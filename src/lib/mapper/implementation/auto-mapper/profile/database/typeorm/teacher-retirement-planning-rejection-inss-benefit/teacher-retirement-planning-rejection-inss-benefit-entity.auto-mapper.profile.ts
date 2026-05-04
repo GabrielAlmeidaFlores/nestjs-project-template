@@ -68,7 +68,7 @@ export class TeacherRetirementPlanningRejectionInssBenefitEntityAutoMapperProfil
         ): TeacherRetirementPlanningRejectionInssBenefitTypeormEntity =>
           TeacherRetirementPlanningRejectionInssBenefitTypeormEntity.build({
             id: source.id.toString(),
-            inssBenefit: source.inssBenefit,
+            inssBenefit: source.inssBenefit ?? '',
             teacherRetirementPlanningRejection:
               TeacherRetirementPlanningRejectionTypeormEntity.build({
                 id: source.teacherRetirementPlanningRejectionId.toString(),
