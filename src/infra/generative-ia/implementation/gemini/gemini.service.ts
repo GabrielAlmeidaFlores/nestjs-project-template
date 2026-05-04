@@ -113,7 +113,7 @@ formatting rules:
   public async generateHighQualityResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
   ): Promise<string | null> {
-    const MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE = 16_000;
+    const MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE = 24_000;
     const MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE = 8_192;
 
     const maxOutputTokens = props.responseConfig
