@@ -183,6 +183,25 @@ import { GeneralUrbanRetirementGrantSpecialPeriodTypeormCommandRepository } from
 import { GeneralUrbanRetirementGrantSpecialPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant-special-period/general-urban-retirement-grant-special-period.typeorm.query.repository';
 import { GeneralUrbanRetirementGrantTimeAcceleratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant-time-accelerator/general-urban-retirement-grant-time-accelerator.typeorm.command.repository';
 import { GeneralUrbanRetirementGrantTimeAcceleratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant-time-accelerator/general-urban-retirement-grant-time-accelerator.typeorm.query.repository';
+import { GeneralUrbanRetirementReviewTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-review/general-urban-retirement-review.typeorm.command.repository';
+import { GeneralUrbanRetirementReviewTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-review/general-urban-retirement-review.typeorm.query.repository';
+import { GeneralUrbanRetirementReviewAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-review-analysis-result/general-urban-retirement-review-analysis-result.typeorm.command.repository';
+import { GeneralUrbanRetirementReviewAnalysisResultTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-review-analysis-result/general-urban-retirement-review-analysis-result.typeorm.query.repository';
+import { GeneralUrbanRetirementReviewDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-review-document/general-urban-retirement-review-document.typeorm.command.repository';
+import { GeneralUrbanRetirementReviewEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-review-earnings-history/general-urban-retirement-review-earnings-history.typeorm.command.repository';
+import { GeneralUrbanRetirementReviewEarningsHistoryTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-review-earnings-history/general-urban-retirement-review-earnings-history.typeorm.query.repository';
+import { GeneralUrbanRetirementReviewInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-review-inss-benefit/general-urban-retirement-review-inss-benefit.typeorm.command.repository';
+import { GeneralUrbanRetirementReviewLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-review-legal-proceeding/general-urban-retirement-review-legal-proceeding.typeorm.command.repository';
+import { GeneralUrbanRetirementReviewPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-review-period/general-urban-retirement-review-period.typeorm.command.repository';
+import { GeneralUrbanRetirementReviewPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-review-period/general-urban-retirement-review-period.typeorm.query.repository';
+import { GeneralUrbanRetirementReviewPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-review-period-document/general-urban-retirement-review-period-document.typeorm.command.repository';
+import { GeneralUrbanRetirementReviewPeriodDocumentTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-review-period-document/general-urban-retirement-review-period-document.typeorm.query.repository';
+import { GeneralUrbanRetirementReviewResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-review-result/general-urban-retirement-review-result.typeorm.command.repository';
+import { GeneralUrbanRetirementReviewResultTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-review-result/general-urban-retirement-review-result.typeorm.query.repository';
+import { GeneralUrbanRetirementReviewSpecialPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-review-special-period/general-urban-retirement-review-special-period.typeorm.command.repository';
+import { GeneralUrbanRetirementReviewSpecialPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-review-special-period/general-urban-retirement-review-special-period.typeorm.query.repository';
+import { GeneralUrbanRetirementReviewTimeAcceleratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-review-time-accelerator/general-urban-retirement-review-time-accelerator.typeorm.command.repository';
+import { GeneralUrbanRetirementReviewTimeAcceleratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-review-time-accelerator/general-urban-retirement-review-time-accelerator.typeorm.query.repository';
 import { InsuranceQualityAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis/insurance-quality-analysis.typeorm.command.repository';
 import { InsuranceQualityAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis/insurance-quality-analysis.typeorm.query.repository';
 import { InsuranceQualityAnalysisDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis-document/insurance-quality-analysis-document.typeorm.command.repository';
@@ -625,6 +644,17 @@ import { GeneralUrbanRetirementGrantResultTypeormEntity } from '@infra/database/
 import { GeneralUrbanRetirementGrantSpecialPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant-special-period.typeorm.entity';
 import { GeneralUrbanRetirementGrantTimeAcceleratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant-time-accelerator.typeorm.entity';
 import { GeneralUrbanRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant.typeorm.entity';
+import { GeneralUrbanRetirementReviewAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-review-analysis-result.typeorm.entity';
+import { GeneralUrbanRetirementReviewDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-review-document.typeorm.entity';
+import { GeneralUrbanRetirementReviewInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-review-inss-benefit.typeorm.entity';
+import { GeneralUrbanRetirementReviewLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-review-legal-proceeding.typeorm.entity';
+import { GeneralUrbanRetirementReviewPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-review-period-document.typeorm.entity';
+import { GeneralUrbanRetirementReviewPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-review-period-earnings-history.typeorm.entity';
+import { GeneralUrbanRetirementReviewPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-review-period.typeorm.entity';
+import { GeneralUrbanRetirementReviewResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-review-result.typeorm.entity';
+import { GeneralUrbanRetirementReviewSpecialPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-review-special-period.typeorm.entity';
+import { GeneralUrbanRetirementReviewTimeAcceleratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-review-time-accelerator.typeorm.entity';
+import { GeneralUrbanRetirementReviewTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-review.typeorm.entity';
 import { InitialPetitionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/initial-petition-generator.typeorm.entity';
 import { InsuranceQualityAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis-document.typeorm.entity';
 import { InsuranceQualityAnalysisInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis-inss-benefit.typeorm.entity';
@@ -1030,6 +1060,17 @@ export class TypeormIndex {
     GeneralUrbanRetirementGrantAnalysisResultTypeormEntity,
     GeneralUrbanRetirementGrantTimeAcceleratorTypeormEntity,
     GeneralUrbanRetirementGrantSpecialPeriodTypeormEntity,
+    GeneralUrbanRetirementReviewTypeormEntity,
+    GeneralUrbanRetirementReviewResultTypeormEntity,
+    GeneralUrbanRetirementReviewDocumentTypeormEntity,
+    GeneralUrbanRetirementReviewInssBenefitTypeormEntity,
+    GeneralUrbanRetirementReviewLegalProceedingTypeormEntity,
+    GeneralUrbanRetirementReviewPeriodTypeormEntity,
+    GeneralUrbanRetirementReviewPeriodEarningsHistoryTypeormEntity,
+    GeneralUrbanRetirementReviewPeriodDocumentTypeormEntity,
+    GeneralUrbanRetirementReviewAnalysisResultTypeormEntity,
+    GeneralUrbanRetirementReviewTimeAcceleratorTypeormEntity,
+    GeneralUrbanRetirementReviewSpecialPeriodTypeormEntity,
     RetirementPlanningRgpsTypeormEntity,
     RetirementPlanningRgpsResultTypeormEntity,
     RetirementPlanningRgpsInssBenefitTypeormEntity,
@@ -1482,6 +1523,25 @@ export class TypeormIndex {
     GeneralUrbanRetirementGrantTimeAcceleratorTypeormQueryRepository,
     GeneralUrbanRetirementGrantPeriodDocumentTypeormCommandRepository,
     GeneralUrbanRetirementGrantPeriodDocumentTypeormQueryRepository,
+    GeneralUrbanRetirementReviewTypeormCommandRepository,
+    GeneralUrbanRetirementReviewTypeormQueryRepository,
+    GeneralUrbanRetirementReviewResultTypeormCommandRepository,
+    GeneralUrbanRetirementReviewResultTypeormQueryRepository,
+    GeneralUrbanRetirementReviewAnalysisResultTypeormCommandRepository,
+    GeneralUrbanRetirementReviewAnalysisResultTypeormQueryRepository,
+    GeneralUrbanRetirementReviewPeriodTypeormCommandRepository,
+    GeneralUrbanRetirementReviewPeriodTypeormQueryRepository,
+    GeneralUrbanRetirementReviewEarningsHistoryTypeormCommandRepository,
+    GeneralUrbanRetirementReviewEarningsHistoryTypeormQueryRepository,
+    GeneralUrbanRetirementReviewInssBenefitTypeormCommandRepository,
+    GeneralUrbanRetirementReviewLegalProceedingTypeormCommandRepository,
+    GeneralUrbanRetirementReviewSpecialPeriodTypeormCommandRepository,
+    GeneralUrbanRetirementReviewSpecialPeriodTypeormQueryRepository,
+    GeneralUrbanRetirementReviewTimeAcceleratorTypeormCommandRepository,
+    GeneralUrbanRetirementReviewTimeAcceleratorTypeormQueryRepository,
+    GeneralUrbanRetirementReviewPeriodDocumentTypeormCommandRepository,
+    GeneralUrbanRetirementReviewPeriodDocumentTypeormQueryRepository,
+    GeneralUrbanRetirementReviewDocumentTypeormCommandRepository,
     OrganizationPaymentPlanAffiliateCommissionTypeormCommandRepository,
     OrganizationPaymentPlanAffiliateCommissionTypeormQueryRepository,
     RetirementPlanningRppsInssBenefitTypeormCommandRepository,
