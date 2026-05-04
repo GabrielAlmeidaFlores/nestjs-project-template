@@ -2446,12 +2446,15 @@ Análise processada do CNIS:
   ): Promise<string | null> {
     const prompt = `
 # IMPORTANTE
+- A análise técnica deve se basear prioritariamente nos dados e documentos fornecidos.
 - Retorne estritamente um objeto JSON compatível com o schema solicitado.
-- O campo \`completeAnalysisDownload\` deve conter a análise detalhada em Markdown, pronta para exportação em PDF/DOCX.
-- O campo \`analysisResult\` deve conter um resumo textual objetivo do resultado.
-- O campo \`analysisDetailedText\` deve conter a fundamentação detalhada em texto corrido.
-- Cada item de \`applicableRules\` deve representar uma regra aplicável à análise do BPC Pessoa com Deficiência.
-- Cada item de \`benefitSummaries\` deve representar um cenário ou benefício resumido para a tela final.
+- O campo \`analysisResult\` deve conter o resultado consolidado em Markdown rico, com títulos, parágrafos curtos e listas quando útil. Ele será convertido para HTML pelo backend antes de ser exibido.
+- O campo \`analysisDetailedText\` deve conter a fundamentação técnica e jurídica detalhada em Markdown rico, com hierarquia visual semelhante ao relatório de Atividade Especial: título principal, seções numeradas, subseções, listas e tabelas quando necessário. Não devolva texto corrido único.
+- O campo \`completeAnalysisDownload\` deve conter a versão completa para download em Markdown rico, pronta para conversão em HTML/PDF/DOCX pelo backend. Use headings Markdown (#, ##, ###), parágrafos, listas e tabelas. Não use tags HTML e não use tags <br>.
+- Para cada item de \`applicableRules\`, preencha \`title\` com o nome da regra/critério, \`description\` com a análise fundamentada daquele critério no caso concreto, e \`status\` com o resultado objetivo (ex.: "ATENDIDO", "NÃO ATENDIDO", "PARCIALMENTE ATENDIDO", "PENDENTE").
+- Para cada item de \`benefitSummaries\`, preencha \`benefitType\` com o tipo/cenário de benefício analisado, \`result\` com o resultado do cenário (ex.: "ELEGÍVEL", "NÃO ELEGÍVEL", "ELEGÍVEL VIA FLEXIBILIZAÇÃO JURISPRUDENCIAL"), \`dib\` com a data estimada de início do benefício quando aplicável, \`expectedMonthlyBenefit\` com o valor estimado da RMI quando calculável, e \`detailedAnalysis\` com a análise detalhada daquele cenário em Markdown estruturado.
+- Não invente dados; utilize exclusivamente as informações fornecidas.
+- Os demais campos devem respeitar as descrições e orientações do schema.
 `;
 
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
@@ -8809,16 +8812,18 @@ Análise processada do CNIS:
       properties: {
         analysisResult: {
           type: 'string',
-          description: 'Resumo principal do resultado da análise.',
+          description:
+            'Resultado consolidado em Markdown rico, com títulos, parágrafos curtos, listas e conclusão objetiva.',
         },
         analysisDetailedText: {
           type: 'string',
-          description: 'Texto detalhado da análise final.',
+          description:
+            'Fundamentação técnica e jurídica detalhada em Markdown rico, estruturada em seções numeradas para renderização em HTML.',
         },
         completeAnalysisDownload: {
           type: 'string',
           description:
-            'Versão em Markdown da análise completa, pronta para exportação.',
+            'Versão completa em Markdown rico da análise, pronta para conversão em HTML/PDF/DOCX.',
         },
         applicableRules: {
           type: 'array',
