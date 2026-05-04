@@ -75,7 +75,10 @@ export class AnalyzeRuralOrHybridRetirementRejectionTimeAcceleratorUseCase {
     const analysisResult =
       await this.analysisProcessorGateway.getTimeAcceleratorAnalysis(
         promptResponse.prompt,
-        [dto.document.base64.decodeToBuffer()],
+        [
+          Buffer.from(JSON.stringify({ timeType: dto.timeType })),
+          dto.document.base64.decodeToBuffer(),
+        ],
       );
 
     const parsedResult = this.parseAnalysisResult(analysisResult);
