@@ -9484,6 +9484,11 @@ For probativeForce, classify each document as:
                 'Fora_do_prazo_de_requiremento',
               ],
             },
+            description: {
+              type: 'string',
+              description:
+                'Descrição detalhada da análise do cumprimento dos requisitos para salário-maternidade',
+            },
             eventDate: {
               type: 'string',
               description:
