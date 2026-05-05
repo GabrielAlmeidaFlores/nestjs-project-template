@@ -39,4 +39,5 @@ export enum AnalysisToolRecordTypeEnum {
   MATERNITY_PAY_GRANT = 'concessao_salario_maternidade',
   BPC_DISABILITY_TERMINATION = 'bpc_deficiente_cessado',
   ACCIDENT_ASSISTANCE_TERMINATED = 'auxilio_acidente_cessado',
+  RETIREMENT_PERMANENT_DISABILITY_REVISION = 'revisao_aposentadoria_invalidez',
 }
