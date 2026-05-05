@@ -42,6 +42,7 @@ import { SpecialRetirementGrantTypeormEntity } from '@infra/database/implementat
 import { SpecialRetirementRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection.typeorm.entity';
 import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
 import { SurvivorPensionAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/survivor-pension-analysis.typeorm.entity';
+import { TeacherRetirementPlanningRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection.typeorm.entity';
 import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant.typeorm.entity';
 import { TemporaryDisabilityBenefitsTerminatedTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-terminated.typeorm.entity';
@@ -94,6 +95,7 @@ import { GetSpecialRetirementRejectionWithRelationsQueryResult } from '@module/c
 import { GetSpeechGeneratorQueryResult } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/query/result/get-speech-generator.query.result';
 import { GetSurvivorPensionAnalysisQueryResult } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis/query/result/get-survivor-pension-analysis.query.result';
 import { GetTeacherRetirementPlanningWithRelationsQueryResult } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/query/result/get-teacher-retirement-planning-with-relations.query.result';
+import { TeacherRetirementPlanningRejectionEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection/teacher-retirement-planning-rejection.entity';
 import { GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResult } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant/query/result/get-temporary-disability-benefits-grant-with-relations.query.result';
 import { GetTemporaryDisabilityBenefitsTerminatedWithRelationsQueryResult } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/repository/temporary-disability-benefits-terminated/query/result/get-temporary-disability-benefits-terminated-with-relations.query.result';
 import { GetTemporaryIncapacityBenefitRejectionWithRelationsQueryResult } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection/query/result/get-temporary-incapacity-benefit-rejection-with-relations.query.result';
@@ -326,6 +328,16 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         GetTeacherRetirementPlanningWithRelationsQueryResult,
       );
 
+      const teacherRetirementPlanningRejection =
+        source.teacherRetirementPlanningRejection !== undefined &&
+        source.teacherRetirementPlanningRejection !== null
+          ? this.mapper.map(
+              source.teacherRetirementPlanningRejection,
+              TeacherRetirementPlanningRejectionTypeormEntity,
+              TeacherRetirementPlanningRejectionEntity,
+            )
+          : null;
+
       const disabilityRetirementPlanning = this.mapper.map(
         source.disabilityRetirementPlanning,
         DisabilityRetirementPlanningTypeormEntity,
@@ -418,11 +430,15 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
             })()
           : null;
 
-      const specialRetirementGrant = this.mapper.map(
-        source.specialRetirementGrant,
-        SpecialRetirementGrantTypeormEntity,
-        GetSpecialRetirementGrantWithRelationsQueryResult,
-      );
+      const specialRetirementGrant =
+        source.specialRetirementGrant !== null &&
+        source.specialRetirementGrant !== undefined
+          ? this.mapper.map(
+              source.specialRetirementGrant,
+              SpecialRetirementGrantTypeormEntity,
+              GetSpecialRetirementGrantWithRelationsQueryResult,
+            )
+          : null;
 
       const specialRetirementRejection =
         source.specialRetirementRejection !== null &&
@@ -572,6 +588,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         ruralTimelineAnalysis,
         insuranceQualityAnalysis,
         teacherRetirementPlanning,
+        teacherRetirementPlanningRejection,
         disabilityRetirementPlanning,
         generalUrbanRetirementGrant,
         generalUrbanRetirementAnalysis,
@@ -780,6 +797,15 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         InsuranceQualityAnalysisTypeormEntity,
       );
 
+      const teacherRetirementPlanningRejection =
+        source.teacherRetirementPlanningRejection !== null
+          ? this.mapper.map(
+              source.teacherRetirementPlanningRejection,
+              TeacherRetirementPlanningRejectionEntity,
+              TeacherRetirementPlanningRejectionTypeormEntity,
+            )
+          : null;
+
       const disabilityRetirementPlanning = this.mapper.map(
         source.disabilityRetirementPlanning,
         GetDisabilityRetirementPlanningWithRelationsQueryResult,
@@ -913,6 +939,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         bpcElderlyCessation,
         ruralTimeline,
         insuranceQualityAnalysis,
+        teacherRetirementPlanningRejection,
         disabilityRetirementPlanning,
         generalUrbanRetirementGrant,
         generalUrbanRetirementAnalysis,
