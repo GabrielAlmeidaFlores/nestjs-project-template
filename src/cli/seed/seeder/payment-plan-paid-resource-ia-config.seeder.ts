@@ -8738,6 +8738,40 @@ Destaque: status geral, principais pendências e próximos passos.`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_REJECTION_COMPLETE_ANALYSIS,
+      ),
+      prompt: `Você é um especialista em Direito Previdenciário brasileiro e indeferimento de aposentadoria especial.
+
+Elabore a análise completa do caso com base no CNIS processado, nos documentos anexados e nos dados estruturados enviados.
+
+Priorize: validação de tempo especial, carência, enquadramento nas regras aplicáveis, identificação de pendências ou inconsistências, riscos do caso, estratégia administrativa ou judicial recomendada e conclusão técnica final.
+
+Não invente fatos. Quando faltar informação, aponte a limitação e o impacto dela na conclusão.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_REJECTION_FIRST_ANALYSIS,
+      ),
+      prompt: `Você é um especialista em Direito Previdenciário brasileiro e indeferimento de aposentadoria especial.
+
+Faça a primeira análise técnica do caso com base principalmente no CNIS processado e nos dados estruturados fornecidos, usando os documentos anexados para complementar lacunas e validar agentes nocivos e períodos especiais.
+
+Consolide vínculos, contribuições, carência, manutenção ou perda da qualidade de segurado, períodos especiais, agentes nocivos, documentos utilizados, pendências encontradas e conclusões técnicas parciais.
+
+Não invente remunerações, agentes ou períodos. Quando faltar dado, registre expressamente a limitação.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_REJECTION_SIMPLIFIED_ANALYSIS,
+      ),
+      prompt: `Você é um especialista em Direito Previdenciário brasileiro.
+
+Gere uma análise simplificada, em linguagem acessível, com no máximo 4 parágrafos, baseada na análise completa e nos documentos fornecidos.
+
+Destaque elegibilidade, pontos favoráveis, pendências, riscos e próximos passos recomendados.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
         PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_SIMPLIFIED_ANALYSIS,
       ),
       prompt: `# PROMPT PARA GERAÇÃO DE MENSAGEM WHATSAPP - ANÁLISE DE TEMPO ESPECIAL
@@ -20379,6 +20413,7 @@ export class PaymentPlanPaidResourceIaConfigSeeder implements SeederInterface {
 
   public async execute(): Promise<Array<TransactionType>> {
     const transactions: Array<TransactionType> = [];
+    const processedPaidResourceIds = new Set<string>();
 
     for (const configData of PAYMENT_PLAN_PAID_RESOURCE_IA_CONFIG_SEED) {
       const resourceFromDb =
@@ -20387,6 +20422,10 @@ export class PaymentPlanPaidResourceIaConfigSeeder implements SeederInterface {
         );
 
       if (!resourceFromDb) {
+        continue;
+      }
+
+      if (processedPaidResourceIds.has(resourceFromDb.id.toString())) {
         continue;
       }
 
@@ -20419,6 +20458,7 @@ export class PaymentPlanPaidResourceIaConfigSeeder implements SeederInterface {
       }
 
       transactions.push(action);
+      processedPaidResourceIds.add(resourceFromDb.id.toString());
     }
 
     return transactions;

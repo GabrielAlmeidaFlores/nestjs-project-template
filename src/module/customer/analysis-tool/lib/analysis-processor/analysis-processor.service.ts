@@ -38,7 +38,6 @@ import { GeneralUrbanRetirementDenialPeriodPendencyReasonEnum } from '@module/cu
 import { TeacherRetirementPlanningRejectionWorkPeriodDocumentProbativeForceEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection-work-period/enum/teacher-retirement-planning-rejection-work-period-document-probative-force.enum';
 import { TeacherRetirementPlanningRejectionWorkPeriodTimelineClassificationEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection-work-period/enum/teacher-retirement-planning-rejection-work-period-timeline-classification.enum';
 import { TemporaryIncapacityBenefitRejectionCategoryEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/enum/temporary-incapacity-benefit-rejection-category.enum';
-import { TemporaryIncapacityBenefitTerminationCategoryEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-termination/domain/schema/entity/temporary-incapacity-benefit-termination/enum/temporary-incapacity-benefit-termination-category.enum';
 import { MiniAdvisorAnalysisTypeEnum } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor-result/enum/mini-advisor-analysis-type.enum';
 
 @Injectable()
@@ -1106,6 +1105,66 @@ Análise processada do CNIS:
   }
 
   public async getSpecialRetirementGrantCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getSpecialRetirementRejectionFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson = true,
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON;
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize cálculos salariais além do que for necessário; use estritamente os fornecidos.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Para cada item de \`workPeriods\`, use prioritariamente os dados estruturados já enviados nos arquivos do prompt; não invente valores.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: asJson
+          ? ResponseConfigInputModel.build({
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema:
+                this.getSpecialRetirementRejectionFirstAnalysisJsonSchema(),
+            })
+          : null,
+      }),
+    );
+  }
+
+  public async getSpecialRetirementRejectionCompleteAnalysis(
+    systemInstruction: string,
+    _cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getSpecialRetirementRejectionSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null> {
@@ -5203,6 +5262,246 @@ For probativeForce, classify each document as:
     };
   }
 
+  private getSpecialRetirementRejectionFirstAnalysisJsonSchema(): object {
+    const workPeriodSchema = {
+      type: 'object',
+      properties: {
+        bondOrigin: { type: 'string' },
+        startDate: {
+          type: 'string',
+          format: 'date',
+          description: 'YYYY-MM-DD',
+        },
+        endDate: {
+          type: 'string',
+          format: 'date',
+          description: 'YYYY-MM-DD',
+        },
+        category: {
+          type: 'string',
+          enum: [
+            'segurado_empregado',
+            'segurado_contribuinte_individual',
+            'segurado_facultativo',
+            'segurado_especial',
+            'segurado_domestico',
+            'segurado_avulso',
+          ],
+        },
+        pendencyReason: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Lista de motivos de pendencia do período',
+        },
+        periodConsideration: {
+          type: 'string',
+          enum: ['sim', 'nao', 'provisoriamente'],
+        },
+        contributionAverage: {
+          type: 'string',
+          description:
+            'Valor numérico decimal sem símbolo de moeda, ex: "567.03". Não incluir "R$" ou qualquer formatação de moeda.',
+        },
+        status: { type: 'string' },
+        gracePeriod: { type: 'string' },
+        activityType: {
+          type: 'string',
+          enum: [
+            'atividade_comum',
+            'atividade_especial',
+            'periodo_sem_atividade',
+            'pendencia',
+          ],
+        },
+        earningsHistory: {
+          type: 'array',
+          description:
+            'Histórico de remunerações do período, com foco em competências abaixo do mínimo ou com pendências. Retornar array vazio se não houver.',
+          items: {
+            type: 'object',
+            properties: {
+              competence: {
+                type: 'string',
+                format: 'date',
+                description: 'YYYY-MM-DD',
+              },
+              remuneration: { type: 'string' },
+              indicators: { type: 'string' },
+              paymentDate: {
+                type: 'string',
+                format: 'date',
+                description: 'YYYY-MM-DD',
+              },
+              contribution: { type: 'string' },
+              contributionSalary: { type: 'string' },
+              competenceBelowTheMinimum: { type: 'boolean' },
+            },
+          },
+        },
+        specialPeriods: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              recognizedSpecialTime: { type: 'boolean' },
+              companyName: { type: 'string' },
+              cnpj: { type: 'string' },
+              position: { type: 'string' },
+              comprobatoryDocument: { type: 'string' },
+              linkedToCnis: { type: 'boolean' },
+              containsCnisRemunerationInPeriod: { type: 'boolean' },
+              technicalJustification: { type: 'string' },
+              additionalObservation: { type: 'string' },
+              lawyerObservation: { type: 'string' },
+              exposureFrequency: { type: 'string' },
+              informationSource: { type: 'string' },
+              identifiedAgents: { type: 'string' },
+              efficientEpi: { type: 'boolean' },
+            },
+            required: [
+              'recognizedSpecialTime',
+              'companyName',
+              'cnpj',
+              'position',
+              'comprobatoryDocument',
+              'linkedToCnis',
+              'containsCnisRemunerationInPeriod',
+              'technicalJustification',
+              'additionalObservation',
+              'lawyerObservation',
+              'exposureFrequency',
+              'informationSource',
+              'identifiedAgents',
+              'efficientEpi',
+            ],
+          },
+        },
+      },
+      required: [
+        'bondOrigin',
+        'startDate',
+        'endDate',
+        'category',
+        'pendencyReason',
+        'periodConsideration',
+        'contributionAverage',
+        'status',
+        'gracePeriod',
+        'activityType',
+        'earningsHistory',
+        'specialPeriods',
+      ],
+    };
+
+    return {
+      type: 'object',
+      properties: {
+        decisionAnalysis: {
+          type: 'string',
+          description: 'Análise da decisão em formato markdown',
+        },
+        specialTimeWithoutResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        specialTimeResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        specialTimeWithAccelerators: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        commonTimeWithoutResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        commonTimeResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        commonTimeWithAccelerators: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        totalTimeWithoutResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        totalTimeResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        totalTimeWithAccelerators: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        specialGracePeriodWithoutResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        specialGracePeriodResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        specialGracePeriodWithAccelerators: {
+          type: 'string',
+          description: 'Ex: 156 contribuiçõe',
+        },
+        commonGracePeriodWithoutResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        commonGracePeriodResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        commonGracePeriodWithAccelerators: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        totalGracePeriodWithoutResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        totalGracePeriodResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        totalGracePeriodWithAccelerators: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        workPeriods: {
+          type: 'array',
+          items: workPeriodSchema,
+        },
+      },
+      required: [
+        'decisionAnalysis',
+        'specialTimeWithoutResolvingPendencies',
+        'specialTimeResolvingPendencies',
+        'specialTimeWithAccelerators',
+        'commonTimeWithoutResolvingPendencies',
+        'commonTimeResolvingPendencies',
+        'commonTimeWithAccelerators',
+        'totalTimeWithoutResolvingPendencies',
+        'totalTimeResolvingPendencies',
+        'totalTimeWithAccelerators',
+        'specialGracePeriodWithoutResolvingPendencies',
+        'specialGracePeriodResolvingPendencies',
+        'specialGracePeriodWithAccelerators',
+        'commonGracePeriodWithoutResolvingPendencies',
+        'commonGracePeriodResolvingPendencies',
+        'commonGracePeriodWithAccelerators',
+        'totalGracePeriodWithoutResolvingPendencies',
+        'totalGracePeriodResolvingPendencies',
+        'totalGracePeriodWithAccelerators',
+        'workPeriods',
+      ],
+    };
+  }
+
   private getDisabilityRetirementPlanningGrantResultAnalysisJsonSchema(): object {
     return {
       type: 'object',
@@ -9097,7 +9396,7 @@ For probativeForce, classify each document as:
               category: {
                 type: 'string',
                 enum: Object.values(
-                  TemporaryIncapacityBenefitTerminationCategoryEnum,
+                  TemporaryIncapacityBenefitRejectionCategoryEnum,
                 ),
                 description:
                   'Categoria do período (ex: EMPREGADO_URBANO, MEI, CONTRIBUINTE_INDIVIDUAL_AUTONOMO)',

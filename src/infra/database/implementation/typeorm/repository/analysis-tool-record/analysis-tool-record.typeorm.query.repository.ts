@@ -64,6 +64,7 @@ import { RuralOrHybridRetirementRejectionId } from '@module/customer/analysis-to
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { SpecialActivityId } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/value-object/special-activity-id.value-object';
 import { SpecialRetirementGrantId } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/value-object/special-retirement-grant-id/special-retirement-grant-id.value-object';
+import { SpecialRetirementRejectionId } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection/value-object/special-retirement-rejection-id.value-object';
 import { SpeechGeneratorId } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/value-object/speech-generator-id/speech-generator-id.value-object';
 import { SurvivorPensionAnalysisId } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis/value-object/survivor-pension-analysis-id/survivor-pension-analysis-id.value-object';
 import { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
@@ -128,6 +129,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { perCapitaIncomeForBpcAnalysis: Not(IsNull()) },
         { specialActivity: Not(IsNull()) },
         { specialRetirementGrant: Not(IsNull()) },
+        { specialRetirementRejection: Not(IsNull()) },
         { specialCategoryRetirementAnalysis: Not(IsNull()) },
         { insuranceQualityAnalysis: Not(IsNull()) },
         { ruralTimeline: Not(IsNull()) },
@@ -926,6 +928,77 @@ export class AnalysisToolRecordTypeormQueryRepository
             organization: {
               organizationMember: true,
             },
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
+  public async findWithRelationsBySpecialRetirementRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    specialRetirementRejectionId: SpecialRetirementRejectionId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          specialRetirementRejection: {
+            id: specialRetirementRejectionId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          specialRetirementRejection: {
+            specialRetirementRejectionResult: true,
+            specialRetirementRejectionDocument: true,
+            specialRetirementRejectionInssBenefit: true,
+            specialRetirementRejectionLegalProceeding: true,
+            specialRetirementRejectionWorkPeriod: {
+              specialRetirementRejectionWorkPeriodDocument: true,
+              specialRetirementRejectionWorkPeriodEarningsHistory: true,
+              specialRetirementRejectionWorkSpecialPeriod: {
+                specialRetirementRejectionWorkSpecialPeriodLegalFramework: true,
+              },
+            },
+          },
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
           },
         },
       },
@@ -2436,6 +2509,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { perCapitaIncomeForBpcAnalysis: Not(IsNull()) },
         { specialActivity: Not(IsNull()) },
         { specialCategoryRetirementAnalysis: Not(IsNull()) },
+        { specialRetirementRejection: Not(IsNull()) },
         { insuranceQualityAnalysis: Not(IsNull()) },
         { ruralTimeline: Not(IsNull()) },
         { ruralOrHybridRetirementRejection: Not(IsNull()) },
@@ -3700,6 +3774,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       'teacherRetirementPlanning',
       'specialActivity',
       'specialRetirementGrant',
+      'specialRetirementRejection',
       'specialCategoryRetirementAnalysis',
       'administrativeProcedureInssAnalysis',
       'judicialCaseAnalysis',
