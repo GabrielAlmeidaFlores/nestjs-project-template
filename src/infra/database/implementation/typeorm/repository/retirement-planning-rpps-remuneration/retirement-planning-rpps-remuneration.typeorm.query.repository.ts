@@ -55,6 +55,9 @@ export class RetirementPlanningRppsRemunerationTypeormQueryRepository
         relations: {
           retirementPlanningRpps: true,
         },
+        order: {
+          remunerationDate: 'ASC',
+        },
       };
 
     const data = await this.list(listData, searchParams);
@@ -84,6 +87,9 @@ export class RetirementPlanningRppsRemunerationTypeormQueryRepository
       },
       relations: {
         retirementPlanningRpps: true,
+      },
+      order: {
+        remunerationDate: 'ASC',
       },
     });
 
