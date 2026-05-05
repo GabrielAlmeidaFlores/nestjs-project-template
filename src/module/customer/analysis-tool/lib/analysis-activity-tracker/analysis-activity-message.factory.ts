@@ -84,8 +84,6 @@ export class AnalysisActivityMessageFactory {
       'Indeferimento de benefício por incapacidade temporária',
     [AnalysisToolRecordTypeEnum.MATERNITY_PAY_GRANT]:
       'Concessão de salário maternidade',
-    [AnalysisToolRecordTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_TERMINATION]:
-      'Cessação de benefício por incapacidade temporária',
     [AnalysisToolRecordTypeEnum.TEACHER_RETIREMENT_PLANNING_REJECTION]:
       'Indeferimento de aposentadoria de professor',
     [AnalysisToolRecordTypeEnum.BPC_DISABILITY_TERMINATION]:
