@@ -35,6 +35,7 @@ import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/modu
 import { SpecialActivityEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/special-activity-entity';
 import { SpecialCategoryRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/special-category-retirement-analysis.entity';
 import { SpecialRetirementGrantEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/special-retirement-grant.entity';
+import { SpecialRetirementRejectionEntity } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection/special-retirement-rejection.entity';
 import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
 import { SurvivorPensionAnalysisEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis/survivor-pension-analysis.entity';
 import { TeacherRetirementPlanningEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
@@ -217,6 +218,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly specialRetirementGrant: SpecialRetirementGrantEntity | null;
 
   @Description(
+    'Análise de indeferimento de aposentadoria especial associada ao registro da ferramenta de análise',
+  )
+  public readonly specialRetirementRejection: SpecialRetirementRejectionEntity | null;
+
+  @Description(
     'Análise de indeferimento de aposentadoria urbana geral associada ao registro da ferramenta de análise',
   )
   public readonly generalUrbanRetirementDenial: GeneralUrbanRetirementDenialEntity | null;
@@ -339,6 +345,7 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     this.deathBenefitGrant = props.deathBenefitGrant ?? null;
     this.deathBenefitRejection = props.deathBenefitRejection ?? null;
     this.specialRetirementGrant = props.specialRetirementGrant ?? null;
+    this.specialRetirementRejection = props.specialRetirementRejection ?? null;
     this.generalUrbanRetirementDenial =
       props.generalUrbanRetirementDenial ?? null;
     this.disabilityRetirementPlanningRejection =
