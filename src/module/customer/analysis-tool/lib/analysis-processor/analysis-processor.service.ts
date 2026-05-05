@@ -5143,11 +5143,73 @@ For probativeForce, classify each document as:
                   periodEndDate: { type: 'string', format: 'date' },
                   recognized: { type: 'boolean' },
                   justification: { type: 'string' },
+                  company: {
+                    type: 'string',
+                    description: 'Company/employer name',
+                  },
+                  cnpj: {
+                    type: 'string',
+                    description: 'Company tax ID (CNPJ)',
+                  },
+                  role: { type: 'string', description: 'Job title/role held' },
+                  supportingDocument: {
+                    type: 'string',
+                    description:
+                      'Supporting documents used. Ex: PPP, CTPS, LTCAT',
+                  },
+                  recordedInCnis: {
+                    type: 'boolean',
+                    description:
+                      'Whether the employment record appears in the CNIS',
+                  },
+                  remunerationRecordedInCnis: {
+                    type: 'boolean',
+                    description:
+                      'Whether remunerations for this period are recorded in the CNIS',
+                  },
+                  hazardousAgents: {
+                    type: 'array',
+                    description: 'Hazardous agents identified in this period',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        intensityAndFrequency: {
+                          type: 'string',
+                          description:
+                            'Exposure intensity and frequency. Ex: 87dB - Habitual and Permanent',
+                        },
+                        identifiedAgent: {
+                          type: 'string',
+                          description:
+                            'Name of the identified hazardous agent. Ex: Noise',
+                        },
+                      },
+                      required: ['intensityAndFrequency', 'identifiedAgent'],
+                    },
+                  },
+                  informationSource: {
+                    type: 'string',
+                    description: 'Source of information used. Ex: PPP, LTCAT',
+                  },
                   legalFramework: {
                     type: 'array',
-                    items: { type: 'string' },
+                    items: {
+                      type: 'object',
+                      properties: {
+                        description: {
+                          type: 'string',
+                          description:
+                            'Legal framework description. Ex: By occupational category (Decree 53.831/64)',
+                        },
+                        code: {
+                          type: 'string',
+                          description:
+                            'Legal framework code. Ex: Code 2.5.3 - Miscellaneous operations',
+                        },
+                      },
+                      required: ['description', 'code'],
+                    },
                   },
-                  agents: { type: 'array', items: agentSchema },
                   epiEficaz: { type: 'boolean' },
                   observations: { type: 'array', items: { type: 'string' } },
                 },
@@ -5157,7 +5219,14 @@ For probativeForce, classify each document as:
                   'recognized',
                   'justification',
                   'legalFramework',
-                  'agents',
+                  'company',
+                  'cnpj',
+                  'role',
+                  'supportingDocument',
+                  'recordedInCnis',
+                  'remunerationRecordedInCnis',
+                  'hazardousAgents',
+                  'informationSource',
                 ],
               },
             },
