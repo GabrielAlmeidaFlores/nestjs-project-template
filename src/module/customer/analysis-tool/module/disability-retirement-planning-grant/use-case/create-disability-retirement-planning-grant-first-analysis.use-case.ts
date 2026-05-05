@@ -41,7 +41,9 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 export class CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase {
   protected readonly _type =
     CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase.name;
-  private readonly logger = new Logger(CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase.name);
+  private readonly logger = new Logger(
+    CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase.name,
+  );
 
   public constructor(
     @Inject(AnalysisProcessorGateway)
@@ -66,7 +68,11 @@ export class CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase {
     private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
-  ) {}
+  ) {
+    this.logger = new Logger(
+      CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase.name,
+    );
+  }
 
   public async execute(
     sessionData: SessionDataModel,
@@ -345,7 +351,10 @@ export class CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase {
         }),
       };
     } catch (err) {
-      this.logger.error('parseFirstAnalysisOrThrow failed', err instanceof Error ? err.stack : String(err));
+      this.logger.error(
+        'parseFirstAnalysisOrThrow failed',
+        err instanceof Error ? err.stack : String(err),
+      );
       throw new InvalidDisabilityRetirementPlanningGrantFirstAnalysisJsonError();
     }
   }
@@ -568,6 +577,17 @@ export class CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase {
   }
 
   private sanitizeJsonControlChars(json: string): string {
+    const CONTROL_CHAR_MAX = 0x20;
+
+    const CHAR_CODES = {
+      NEWLINE: 0x0a,
+      CARRIAGE_RETURN: 0x0d,
+      TAB: 0x09,
+    };
+
+    const CODE_TO_STRING = 16;
+    const CODE_PAD_START = 4;
+
     let result = '';
     let inString = false;
     let escaped = false;
@@ -594,11 +614,17 @@ export class CreateDisabilityRetirementPlanningGrantFirstAnalysisUseCase {
         continue;
       }
 
-      if (inString && code < 0x20) {
-        if (code === 0x0a) result += '\\n';
-        else if (code === 0x0d) result += '\\r';
-        else if (code === 0x09) result += '\\t';
-        else result += '\\u' + code.toString(16).padStart(4, '0');
+      if (inString && code < CONTROL_CHAR_MAX) {
+        if (code === CHAR_CODES.NEWLINE) {
+          result += '\\n';
+        } else if (code === CHAR_CODES.CARRIAGE_RETURN) {
+          result += '\\r';
+        } else if (code === CHAR_CODES.TAB) {
+          result += '\\t';
+        } else {
+          result +=
+            '\\u' + code.toString(CODE_TO_STRING).padStart(CODE_PAD_START, '0');
+        }
         continue;
       }
 

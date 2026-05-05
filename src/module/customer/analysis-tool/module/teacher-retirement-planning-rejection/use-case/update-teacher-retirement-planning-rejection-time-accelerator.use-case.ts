@@ -28,7 +28,9 @@ export class UpdateTeacherRetirementPlanningRejectionTimeAcceleratorUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(TeacherRetirementPlanningRejectionQueryRepositoryGateway)
     private readonly teacherRetirementPlanningRejectionQueryRepositoryGateway: TeacherRetirementPlanningRejectionQueryRepositoryGateway,
-    @Inject(TeacherRetirementPlanningRejectionTimeAcceleratorCommandRepositoryGateway)
+    @Inject(
+      TeacherRetirementPlanningRejectionTimeAcceleratorCommandRepositoryGateway,
+    )
     private readonly teacherRetirementPlanningRejectionTimeAcceleratorCommandRepositoryGateway: TeacherRetirementPlanningRejectionTimeAcceleratorCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
@@ -56,8 +58,7 @@ export class UpdateTeacherRetirementPlanningRejectionTimeAcceleratorUseCase {
         TeacherRetirementPlanningRejectionNotFoundError,
       );
 
-    const existingTimeAccelerators =
-      existingRejection.timeAccelerators ?? [];
+    const existingTimeAccelerators = existingRejection.timeAccelerators;
 
     const transactions: TransactionType[] = [
       ...existingTimeAccelerators.map((ta) =>
