@@ -46,6 +46,15 @@ import type {
   DisabilityRetirementPlanningGrantResultSystemRecommendationInterface,
 } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/model/interface/disability-retirement-planning-grant-result.interface';
 
+const enum SanitizerCharCodeEnum {
+  CONTROL_CHAR_MAX = 0x20,
+  LINE_FEED = 0x0a,
+  CARRIAGE_RETURN = 0x0d,
+  HORIZONTAL_TAB = 0x09,
+  HEX_RADIX = 16,
+  UNICODE_PAD_LENGTH = 4,
+}
+
 @Injectable()
 export class CreateDisabilityRetirementPlanningGrantResultUseCase {
   protected readonly _type =
@@ -413,17 +422,6 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
   }
 
   private sanitizeJsonControlChars(json: string): string {
-    const CONTROL_CHAR_MAX = 0x20;
-
-    const CHAR_CODES = {
-      NEWLINE: 0x0a,
-      CARRIAGE_RETURN: 0x0d,
-      TAB: 0x09,
-    };
-
-    const CODE_TO_STRING = 16;
-    const CODE_PAD_START = 4;
-
     let result = '';
     let inString = false;
     let escaped = false;
@@ -450,16 +448,20 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
         continue;
       }
 
-      if (inString && code < CONTROL_CHAR_MAX) {
-        if (code === CHAR_CODES.NEWLINE) {
+      const codeEnum = code as SanitizerCharCodeEnum;
+      if (inString && codeEnum < SanitizerCharCodeEnum.CONTROL_CHAR_MAX) {
+        if (codeEnum === SanitizerCharCodeEnum.LINE_FEED) {
           result += '\\n';
-        } else if (code === CHAR_CODES.CARRIAGE_RETURN) {
+        } else if (codeEnum === SanitizerCharCodeEnum.CARRIAGE_RETURN) {
           result += '\\r';
-        } else if (code === CHAR_CODES.TAB) {
+        } else if (codeEnum === SanitizerCharCodeEnum.HORIZONTAL_TAB) {
           result += '\\t';
         } else {
           result +=
-            '\\u' + code.toString(CODE_TO_STRING).padStart(CODE_PAD_START, '0');
+            '\\u' +
+            code
+              .toString(SanitizerCharCodeEnum.HEX_RADIX)
+              .padStart(SanitizerCharCodeEnum.UNICODE_PAD_LENGTH, '0');
         }
         continue;
       }

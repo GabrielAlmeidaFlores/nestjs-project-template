@@ -1469,6 +1469,20 @@ AnÃ¡lise processada do CNIS:
     );
   }
 
+  public async getTemporaryDisabilityBenefitsTerminatedFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson = true,
+  ): Promise<string | null> {
+    return this.getTemporaryIncapacityBenefitRejectionFirstAnalysis(
+      systemInstruction,
+      cnisAnalysisJson,
+      files,
+      asJson,
+    );
+  }
+
   public async getDeathBenefitGrantResultAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
@@ -1524,6 +1538,18 @@ AnÃ¡lise processada do CNIS:
             this.getTemporaryDisabilityBenefitsGrantCompleteAnalysisJsonSchema(),
         }),
       }),
+    );
+  }
+
+  public async getTemporaryDisabilityBenefitsTerminatedCompleteAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return this.getTemporaryIncapacityBenefitRejectionCompleteAnalysis(
+      systemInstruction,
+      cnisAnalysisJson,
+      files,
     );
   }
 
@@ -1676,6 +1702,16 @@ Análise processada do CNIS:
         systemInstruction,
         promptFiles: files,
       }),
+    );
+  }
+
+  public async getTemporaryDisabilityBenefitsTerminatedSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return this.getTemporaryIncapacityBenefitRejectionSimplifiedAnalysis(
+      systemInstruction,
+      files,
     );
   }
 
@@ -2216,6 +2252,46 @@ Análise processada do CNIS:
     );
   }
 
+  public async getBpcElderlyCessationInssDecisionAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- Analise a decisão administrativa de cessação ou suspensão do BPC ao Idoso.
+- Extraia, quando disponível, NB, data da decisão, motivo da cessação/suspensão, fundamentos usados pelo INSS, prazo recursal e pontos técnicos de contestação.
+- Não invente informações ausentes nos documentos; quando algo não estiver claro, indique a pendência.
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getBpcElderlyCessationFirstAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- Cruze os dados do formulário, cliente, CadÚnico, CNIS, composição familiar, renda, documentos anexados e decisão do INSS.
+- Foque nos critérios do BPC ao Idoso em cenário de cessação/suspensão: idade mínima, renda familiar, renda per capita, atualização cadastral, composição do grupo familiar, prazo recursal e fragilidades da decisão administrativa.
+- Não incluir tag <br> na resposta.
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+      }),
+    );
+  }
+
   public async getDisabilityRetirementPlanningRejectionTimeAcceleratorAnalysis(
     systemInstruction: string,
     files: Buffer[],
@@ -2417,6 +2493,58 @@ Análise processada do CNIS:
     );
   }
 
+  public async getBpcDisabilityTerminationInssDecisionAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getBpcDisabilityTerminationCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- O campo \`completeAnalysisDownload\` deve conter a análise detalhada em Markdown, pronta para exportação em PDF/DOCX.
+- O campo \`analysisResult\` deve conter um resumo textual objetivo do resultado.
+- O campo \`analysisDetailedText\` deve conter a fundamentação detalhada em texto corrido.
+- Cada item de \`applicableRules\` deve representar uma regra aplicável à análise do BPC Pessoa com Deficiência cessado.
+- Cada item de \`benefitSummaries\` deve representar um cenário ou benefício resumido para a tela final.
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getBpcDisabilityTerminationCompleteAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getBpcDisabilityTerminationSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
   public async getBpcElderlyAnalysisSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
@@ -2537,6 +2665,44 @@ Análise processada do CNIS:
     );
   }
 
+  public async getTemporaryDisabilityBenefitsTerminatedInssDecisionAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return this.getTemporaryIncapacityBenefitRejectionInssDecisionAnalysis(
+      systemInstruction,
+      files,
+    );
+  }
+
+  public async getBpcElderlyCessationCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- Retorne estritamente um objeto JSON válido compatível com o schema solicitado.
+- O campo \`completeAnalysisDownload\` deve conter a análise detalhada em Markdown, pronta para exportação em PDF/DOCX.
+- O campo \`analysisResult\` deve conter um resumo textual objetivo do resultado.
+- O campo \`analysisDetailedText\` deve conter a fundamentação detalhada em texto corrido.
+- Cada item de \`applicableRules\` deve representar uma regra aplicável ao BPC ao Idoso cessado/suspenso.
+- Cada item de \`benefitSummaries\` deve representar um cenário ou benefício resumido para a tela final.
+- Preencha diagnóstico, renda familiar total, renda per capita, requisitos legais, regra de renda e idade mínima com base nos documentos fornecidos.
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: this.getBpcElderlyCessationCompleteAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
   public async getTemporaryIncapacityBenefitRejectionFirstAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
@@ -2596,6 +2762,18 @@ Análise processada do CNIS:
           jsonSchema:
             this.getTemporaryIncapacityBenefitRejectionCompleteAnalysisJsonSchema(),
         }),
+      }),
+    );
+  }
+
+  public async getBpcElderlyCessationSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
       }),
     );
   }
@@ -2831,6 +3009,23 @@ Processed CNIS analysis:
     );
   }
 
+  public async getAccidentAssistanceTerminatedCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getAccidentAssistanceTerminatedCompleteAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
   public async getTeacherRetirementPlanningRejectionCompleteAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
@@ -2941,6 +3136,53 @@ For probativeForce, classify each document as:
           responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
           jsonSchema:
             this.getTeacherRetirementPlanningRejectionPppAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+  public async getAccidentAssistanceTerminatedSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getAccidentAssistanceTerminatedDecisionDetails(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getAccidentAssistanceTerminatedDecisionDetailsJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getAccidentAssistanceTerminatedFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt: cnisAnalysisJson,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getAccidentAssistanceTerminatedFirstAnalysisJsonSchema(),
         }),
       }),
     );
@@ -4607,36 +4849,162 @@ For probativeForce, classify each document as:
           type: 'object',
           properties: {
             specialTime: {
-              type: 'string',
-              description: 'Tempo especial. Ex: 23 anos e 4 meses',
+              type: 'object',
+              properties: {
+                withoutResolvingPendencies: {
+                  type: 'string',
+                  description:
+                    'Tempo especial sem resolver pendências. Ex: 23 anos e 4 meses',
+                },
+                resolvingPendencies: {
+                  type: 'string',
+                  description:
+                    'Tempo especial resolvendo pendências. Ex: 27 anos e 8 meses',
+                },
+                withAccelerators: {
+                  type: 'string',
+                  description:
+                    'Tempo especial com aceleradores. Ex: 30 anos e 2 meses',
+                },
+              },
+              required: [
+                'withoutResolvingPendencies',
+                'resolvingPendencies',
+                'withAccelerators',
+              ],
             },
             commonTime: {
-              type: 'string',
-              description: 'Tempo comum. Ex: 12 anos e 3 meses',
-            },
-            specialGracePeriod: {
-              type: 'number',
-              description: 'CarÃªncia no tempo especial (contribuiÃ§Ãµes)',
-            },
-            commonGracePeriod: {
-              type: 'number',
-              description: 'CarÃªncia no tempo comum (contribuiÃ§Ãµes)',
+              type: 'object',
+              properties: {
+                withoutResolvingPendencies: {
+                  type: 'string',
+                  description:
+                    'Tempo comum sem resolver pendências. Ex: 23 anos e 4 meses',
+                },
+                resolvingPendencies: {
+                  type: 'string',
+                  description:
+                    'Tempo comum resolvendo pendências. Ex: 27 anos e 8 meses',
+                },
+                withAccelerators: {
+                  type: 'string',
+                  description:
+                    'Tempo comum com aceleradores. Ex: 30 anos e 2 meses',
+                },
+              },
+              required: [
+                'withoutResolvingPendencies',
+                'resolvingPendencies',
+                'withAccelerators',
+              ],
             },
             totalTime: {
-              type: 'string',
-              description: 'Tempo total. Ex: 30 anos e 2 meses',
+              type: 'object',
+              properties: {
+                withoutResolvingPendencies: {
+                  type: 'string',
+                  description:
+                    'Tempo total sem resolver pendências. Ex: 23 anos e 4 meses',
+                },
+                resolvingPendencies: {
+                  type: 'string',
+                  description:
+                    'Tempo total resolvendo pendências. Ex: 27 anos e 8 meses',
+                },
+                withAccelerators: {
+                  type: 'string',
+                  description:
+                    'Tempo total com aceleradores. Ex: 30 anos e 2 meses',
+                },
+              },
+              required: [
+                'withoutResolvingPendencies',
+                'resolvingPendencies',
+                'withAccelerators',
+              ],
+            },
+            specialGracePeriod: {
+              type: 'object',
+              properties: {
+                withoutResolvingPendencies: {
+                  type: 'number',
+                  description:
+                    'Carência em tempo especial sem resolver pendências (contribuições)',
+                },
+                resolvingPendencies: {
+                  type: 'number',
+                  description:
+                    'Carência em tempo especial resolvendo pendências (contribuições)',
+                },
+                withAccelerators: {
+                  type: 'number',
+                  description:
+                    'Carência em tempo especial com aceleradores (contribuições)',
+                },
+              },
+              required: [
+                'withoutResolvingPendencies',
+                'resolvingPendencies',
+                'withAccelerators',
+              ],
+            },
+            commonGracePeriod: {
+              type: 'object',
+              properties: {
+                withoutResolvingPendencies: {
+                  type: 'number',
+                  description:
+                    'Carência em tempo comum sem resolver pendências (contribuições)',
+                },
+                resolvingPendencies: {
+                  type: 'number',
+                  description:
+                    'Carência em tempo comum resolvendo pendências (contribuições)',
+                },
+                withAccelerators: {
+                  type: 'number',
+                  description:
+                    'Carência em tempo comum com aceleradores (contribuições)',
+                },
+              },
+              required: [
+                'withoutResolvingPendencies',
+                'resolvingPendencies',
+                'withAccelerators',
+              ],
             },
             totalGracePeriod: {
-              type: 'number',
-              description: 'CarÃªncia total (contribuiÃ§Ãµes)',
+              type: 'object',
+              properties: {
+                withoutResolvingPendencies: {
+                  type: 'number',
+                  description:
+                    'Carência total sem resolver pendências (contribuições)',
+                },
+                resolvingPendencies: {
+                  type: 'number',
+                  description:
+                    'Carência total resolvendo pendências (contribuições)',
+                },
+                withAccelerators: {
+                  type: 'number',
+                  description:
+                    'Carência total com aceleradores (contribuições)',
+                },
+              },
+              required: [
+                'withoutResolvingPendencies',
+                'resolvingPendencies',
+                'withAccelerators',
+              ],
             },
           },
           required: [
             'specialTime',
             'commonTime',
+            'totalTime',
             'specialGracePeriod',
             'commonGracePeriod',
-            'totalTime',
             'totalGracePeriod',
           ],
         },
@@ -7812,6 +8180,95 @@ For probativeForce, classify each document as:
     };
   }
 
+  private getBpcElderlyCessationCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        analysisResult: {
+          type: 'string',
+          description: 'Resumo principal do resultado da análise.',
+        },
+        analysisDetailedText: {
+          type: 'string',
+          description:
+            'Texto detalhado da análise final sobre a cessação ou suspensão do BPC ao Idoso.',
+        },
+        completeAnalysisDownload: {
+          type: 'string',
+          description:
+            'Versão em Markdown da análise completa, pronta para exportação.',
+        },
+        applicableRules: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              title: { type: 'string' },
+              description: { type: 'string' },
+              status: { type: 'string' },
+            },
+            required: ['title', 'description', 'status'],
+          },
+        },
+        benefitSummaries: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              benefitType: { type: 'string' },
+              result: { type: 'string' },
+              dib: { type: 'string' },
+              expectedMonthlyBenefit: { type: 'number' },
+              detailedAnalysis: { type: 'string' },
+            },
+            required: ['benefitType', 'result'],
+          },
+        },
+        diagnosis: {
+          type: 'string',
+          description:
+            'Diagnóstico da possibilidade de reativação/manutenção do BPC ao Idoso.',
+        },
+        totalHouseholdIncome: {
+          type: 'number',
+          description: 'Renda familiar total apurada.',
+        },
+        perCapitaIncome: {
+          type: 'number',
+          description: 'Renda familiar per capita apurada.',
+        },
+        legalRequirementsMet: {
+          type: 'string',
+          description:
+            'Conclusão sobre o preenchimento dos requisitos legais do BPC ao Idoso.',
+        },
+        perCapitaIncomeBelowQuarterMinimumWage: {
+          type: 'string',
+          description:
+            'Conclusão sobre a renda per capita inferior a 1/4 do salário mínimo.',
+        },
+        ageEqualOrAbove65Years: {
+          type: 'string',
+          description:
+            'Conclusão sobre o requisito de idade igual ou superior a 65 anos.',
+        },
+      },
+      required: [
+        'analysisResult',
+        'analysisDetailedText',
+        'completeAnalysisDownload',
+        'applicableRules',
+        'benefitSummaries',
+        'diagnosis',
+        'totalHouseholdIncome',
+        'perCapitaIncome',
+        'legalRequirementsMet',
+        'perCapitaIncomeBelowQuarterMinimumWage',
+        'ageEqualOrAbove65Years',
+      ],
+    };
+  }
+
   private getMaternityPayRejectionSecondAnalysisJsonSchema(): object {
     return {
       type: 'object',
@@ -8903,6 +9360,60 @@ For probativeForce, classify each document as:
     };
   }
 
+  private getBpcDisabilityTerminationCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        analysisResult: {
+          type: 'string',
+          description: 'Resumo principal do resultado da análise.',
+        },
+        analysisDetailedText: {
+          type: 'string',
+          description: 'Texto detalhado da análise final.',
+        },
+        completeAnalysisDownload: {
+          type: 'string',
+          description:
+            'Versão em Markdown da análise completa, pronta para exportação.',
+        },
+        applicableRules: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              title: { type: 'string' },
+              description: { type: 'string' },
+              status: { type: 'string' },
+            },
+            required: ['title', 'description', 'status'],
+          },
+        },
+        benefitSummaries: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              benefitType: { type: 'string' },
+              result: { type: 'string' },
+              dib: { type: 'string' },
+              expectedMonthlyBenefit: { type: 'number' },
+              detailedAnalysis: { type: 'string' },
+            },
+            required: ['benefitType', 'result'],
+          },
+        },
+      },
+      required: [
+        'analysisResult',
+        'analysisDetailedText',
+        'completeAnalysisDownload',
+        'applicableRules',
+        'benefitSummaries',
+      ],
+    };
+  }
+
   private getMaternityPayGrantFirstAnalysisJsonSchema(): object {
     return {
       type: 'object',
@@ -9406,6 +9917,148 @@ For probativeForce, classify each document as:
         },
       },
       required: ['periods'],
+    };
+  }
+
+  private getAccidentAssistanceTerminatedDecisionDetailsJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        decision: {
+          type: 'string',
+          enum: ['TERMINATED', 'MAINTAINED'],
+          description:
+            'Decisão final sobre o termo de assistência acidente: TERMINATED (termo de assistência acidente encerrado) ou MAINTAINED (termo de assistência acidente mantido).',
+        },
+        terminationJustification: {
+          type: 'string',
+          description:
+            'Justificativa detalhada para a decisão de encerramento do termo de assistência acidente, incluindo os fundamentos legais, análise dos documentos apresentados e a situação do segurado.',
+        },
+        analysis: {
+          type: 'string',
+          description:
+            'Análise detalhada do caso, considerando os critérios para encerramento do termo de assistência acidente, a situação do segurado e a aplicação da legislação pertinente. Deve conter uma avaliação dos documentos apresentados, a situação do segurado e os fundamentos legais para a decisão tomada.',
+        },
+      },
+    };
+  }
+
+  private getAccidentAssistanceTerminatedFirstAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        qualitySecurity: {
+          type: 'object',
+          properties: {
+            status: {
+              type: 'string',
+              description:
+                'Status da qualidade de segurado se foi mantida ou não na DFG',
+              enum: ['MAINTAINED', 'NOT_MAINTAINED'],
+            },
+            description: {
+              type: 'string',
+              description:
+                'Descrição detalhada da conclusão da análise se a qualidade do segurada foi mantida na Dii',
+            },
+          },
+          required: ['status', 'description'],
+        },
+        assessmentSequelae: {
+          type: 'object',
+          properties: {
+            existsSequelae: {
+              type: 'string',
+              enum: ['Confirmada', 'Não confirmada'],
+              description:
+                'Indicação de existência de sequelas decorrentes do acidente',
+            },
+            sequelaeCompatibility: {
+              type: 'string',
+              enum: ['Confirmada', 'Não confirmada'],
+              description:
+                'Indicação de compatibilidade das sequelas decorrentes do acidente',
+            },
+            partialWorkCapacityMaintenance: {
+              type: 'string',
+              enum: [
+                'Capacidade laboral parcialmente comprometida',
+                'Capacidade laboral não comprometida',
+                'Capacidade laboral totalmente comprometida',
+              ],
+              description:
+                'Indicação de manutenção da capacidade laboral parcial decorrente do acidente',
+            },
+            description: {
+              type: 'string',
+              description:
+                'Descrição detalhada da conclusão da análise das sequelas decorrentes do acidente, incluindo a existência de sequelas, a compatibilidade das sequelas com o acidente e a manutenção da capacidade laboral parcial decorrente do acidente com a conclusão da análise',
+            },
+          },
+          required: [
+            'existsSequelae',
+            'sequelaeCompatibility',
+            'partialWorkCapacityMaintenance',
+            'description',
+          ],
+        },
+      },
+      required: ['qualitySecurity', 'assessmentSequelae'],
+    };
+  }
+
+  private getAccidentAssistanceTerminatedCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        category: {
+          type: 'string',
+          enum: ['AUXILIO_ACIDENTE'],
+          description:
+            'Modalidade da análise realizada, que é Auxílio Acidente',
+        },
+        isEligible: {
+          type: 'string',
+          enum: ['Sim', 'Não'],
+          description:
+            'Indicação de elegibilidade para manutenção do benefício de auxílio-acidente.',
+        },
+        startDate: {
+          type: 'string',
+          description:
+            'Data de início da concessão do benefício de auxílio-acidente. Retorne em YYYY-MM-DD ou null se o benefício não for elegível para manutenção ou se a data de início não puder ser determinada com base nos documentos analisados.',
+        },
+        rmiPreviuoslyGranted: {
+          type: 'string',
+          description:
+            'Valor da RMI do benefício de auxílio-acidente previsto para recebimento caso o benefício seja elegível para manutenção. Retorne como string em formato decimal (ex: "1234.56") ou null se o benefício não for elegível para manutenção ou se o valor da RMI não puder ser determinado com base nos documentos analisados.',
+        },
+        estimatedValueClaim: {
+          type: 'string',
+          description:
+            'Valor estimado do benefício de auxílio-acidente cessado a ser recebido caso o benefício seja elegível para manutenção. Retorne como string em formato decimal (ex: "1234.56") ou null se o benefício não for elegível para manutenção ou se o valor estimado do benefício não puder ser determinado com base nos documentos analisados.',
+        },
+        analysisResult: {
+          type: 'string',
+          description:
+            'Texto explicativo completo sobre o resultado da análise, perspectivas processuais e recomendações para o caso de indeferimento.',
+        },
+        completeAnalysisDownload: {
+          type: 'string',
+          description:
+            'Análise completa e detalhada do caso de auxílio-acidente cessado, incluindo a avaliação da qualidade de segurado, análise das sequelas decorrentes do acidente, aplicação das regras de manutenção do benefício e conclusão fundamentada sobre a elegibilidade para manutenção do benefício. A análise deve ser formatada em Markdown, pronta para exportação em PDF/DOCX. Deve conter todas as seções: Categoria da Análise, Elegibilidade para Manutenção do Benefício, Data de Início do Benefício, RMI Prevista e Análise Detalhada.',
+        },
+      },
+      required: [
+        'category',
+        'isEligible',
+        'startDate',
+        'rmiPreviuoslyGranted',
+        'estimatedValueClaim',
+        'analysisResult',
+        'completeAnalysisDownload',
+      ],
     };
   }
 }

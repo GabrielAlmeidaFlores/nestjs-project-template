@@ -1,12 +1,15 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 
+import { AccidentAssistanceTerminatedTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated.entity';
 import { AccidentBenefitRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection.typeorm.entity';
 import { AdministrativeProcedureInssAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis.entity';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { BpcDisabilityDenialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-denial.typeorm.entity';
+import { BpcDisabilityTerminationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-termination.typeorm.entity';
 import { BpcElderlyAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis.typeorm.entity';
+import { BpcElderlyCessationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-cessation.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { DeathBenefitGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-grant.typeorm.entity';
 import { DeathBenefitRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/death-benefit-rejection.typeorm.entity';
@@ -17,6 +20,7 @@ import { DisabilityRetirementPlanningTypeormEntity } from '@infra/database/imple
 import { GeneralUrbanRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis.typeorm.entity';
 import { GeneralUrbanRetirementDenialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial.typeorm.entity';
 import { GeneralUrbanRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant.typeorm.entity';
+import { GeneralUrbanRetirementReviewTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-review.typeorm.entity';
 import { InsuranceQualityAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis.typeorm.entity';
 import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis.typeorm.entity';
 import { MaternityPayGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/maternity-pay-grant.typeorm.entity';
@@ -37,6 +41,7 @@ import { SurvivorPensionAnalysisTypeormEntity } from '@infra/database/implementa
 import { TeacherRetirementPlanningRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection.typeorm.entity';
 import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant.typeorm.entity';
+import { TemporaryDisabilityBenefitsTerminatedTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-terminated.typeorm.entity';
 import { TemporaryIncapacityBenefitRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-rejection.typeorm.entity';
 import { TemporaryIncapacityBenefitTerminationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-termination.typeorm.entity';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
@@ -251,6 +256,13 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({ name: 'temporary_disability_benefits_grant_id' })
   public temporaryDisabilityBenefitsGrant?: TemporaryDisabilityBenefitsGrantTypeormEntity | null;
 
+  @OneToOne(
+    () => TemporaryDisabilityBenefitsTerminatedTypeormEntity,
+    (entity) => entity.analysisToolRecord,
+  )
+  @JoinColumn({ name: 'temporary_disability_benefits_terminated_id' })
+  public temporaryDisabilityBenefitsTerminated?: TemporaryDisabilityBenefitsTerminatedTypeormEntity | null;
+
   @ManyToOne(() => AccidentBenefitRejectionTypeormEntity)
   @JoinColumn({ name: 'accident_benefit_rejection_id' })
   public accidentBenefitRejection?: AccidentBenefitRejectionTypeormEntity | null;
@@ -268,6 +280,10 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   @ManyToOne(() => GeneralUrbanRetirementGrantTypeormEntity)
   @JoinColumn({ name: 'general_urban_retirement_grant_id' })
   public generalUrbanRetirementGrant?: GeneralUrbanRetirementGrantTypeormEntity | null;
+
+  @ManyToOne(() => GeneralUrbanRetirementReviewTypeormEntity)
+  @JoinColumn({ name: 'general_urban_retirement_review_id' })
+  public generalUrbanRetirementReview?: GeneralUrbanRetirementReviewTypeormEntity | null;
 
   @OneToOne(
     () => GeneralUrbanRetirementAnalysisTypeormEntity,
@@ -313,6 +329,14 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({ name: 'bpc_elderly_analysis_id' })
   public bpcElderlyAnalysis?: BpcElderlyAnalysisTypeormEntity | null;
 
+  @OneToOne(
+    () => BpcElderlyCessationTypeormEntity,
+    (entity) => entity.analysisToolRecord,
+    { nullable: true },
+  )
+  @JoinColumn({ name: 'bpc_elderly_cessation_id' })
+  public bpcElderlyCessation?: BpcElderlyCessationTypeormEntity | null;
+
   @ManyToOne('MaternityPayRejectionTypeormEntity')
   @JoinColumn({ name: 'maternity_pay_rejection_id' })
   public maternityPayRejection?: MaternityPayRejectionTypeormEntity | null;
@@ -332,6 +356,18 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   @ManyToOne(() => TeacherRetirementPlanningRejectionTypeormEntity)
   @JoinColumn({ name: 'teacher_retirement_planning_rejection_id' })
   public teacherRetirementPlanningRejection?: TeacherRetirementPlanningRejectionTypeormEntity | null;
+
+  @ManyToOne(() => BpcDisabilityTerminationTypeormEntity)
+  @JoinColumn({ name: 'bpc_disability_termination_id' })
+  public bpcDisabilityTermination?: BpcDisabilityTerminationTypeormEntity | null;
+
+  @OneToOne(
+    () => AccidentAssistanceTerminatedTypeormEntity,
+    (entity) => entity.analysisToolRecord,
+    { nullable: true },
+  )
+  @JoinColumn({ name: 'accident_assistance_terminated_id' })
+  public accidentAssistanceTerminated?: AccidentAssistanceTerminatedTypeormEntity | null;
 
   @ManyToOne(
     () => AnalysisToolClientTypeormEntity,
