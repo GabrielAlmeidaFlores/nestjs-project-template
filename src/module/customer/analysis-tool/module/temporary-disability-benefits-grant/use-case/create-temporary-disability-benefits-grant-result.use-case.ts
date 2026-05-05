@@ -1,13 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { AnalysisToolRecordNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-record-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
+import { CnisXRayAnalysisGateway } from '@module/customer/analysis-tool/lib/cnis-x-ray-analysis/cnis-x-ray-analysis.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { CnisDocumentIsNotValidError } from '@module/customer/analysis-tool/module/cnis-fast-analysis/error/cnis-document-is-not-valid.error';
 import { TemporaryDisabilityBenefitsGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant/query/temporary-disability-benefits-grant.query.repository.gateway';
@@ -35,8 +35,8 @@ export class CreateTemporaryDisabilityBenefitsGrantResultUseCase {
   public constructor(
     @Inject(AnalysisProcessorGateway)
     private readonly analysisProcessorGateway: AnalysisProcessorGateway,
-    @Inject(CnisAnalyzerGateway)
-    private readonly cnisAnalyzerGateway: CnisAnalyzerGateway,
+    @Inject(CnisXRayAnalysisGateway)
+    private readonly cnisXRayAnalysisGateway: CnisXRayAnalysisGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
     @Inject(OrganizationMemberQueryRepositoryGateway)
@@ -112,7 +112,7 @@ export class CreateTemporaryDisabilityBenefitsGrantResultUseCase {
     const cnisData =
       await this.analysisProcessorGateway.parseCnisDocument(cnisBuffer);
 
-    const cnisAnalysis = await this.cnisAnalyzerGateway.analyzeCnisDocument(
+    const cnisWorkPeriods = this.cnisXRayAnalysisGateway.analyze(
       cnisData,
       analysisToolClient,
     );
@@ -138,7 +138,7 @@ export class CreateTemporaryDisabilityBenefitsGrantResultUseCase {
     const completeAnalysis =
       await this.analysisProcessorGateway.getTemporaryDisabilityBenefitsGrantCompleteAnalysis(
         promptResponse.prompt,
-        JSON.stringify(cnisAnalysis),
+        JSON.stringify(cnisWorkPeriods),
         [
           this.buildCompleteAnalysisGrantDataBuffer(
             temporaryDisabilityBenefitsGrant,

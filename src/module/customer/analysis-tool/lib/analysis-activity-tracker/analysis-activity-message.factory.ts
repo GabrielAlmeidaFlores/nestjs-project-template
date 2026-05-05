@@ -58,6 +58,8 @@ export class AnalysisActivityMessageFactory {
       'Concessão de aposentadoria especial',
     [AnalysisToolRecordTypeEnum.TEMPORARY_DISABILITY_BENEFITS_GRANT]:
       'Concessão de benefício por incapacidade temporária',
+    [AnalysisToolRecordTypeEnum.TEMPORARY_DISABILITY_BENEFITS_TERMINATED]:
+      'Cessação de auxílio por incapacidade temporária',
     [AnalysisToolRecordTypeEnum.RURAL_OR_HYBRID_RETIREMENT_REJECTION]:
       'Indeferimento de aposentadoria rural ou híbrida',
     [AnalysisToolRecordTypeEnum.RURAL_OR_HYBRID_RETIREMENT_ANALYSIS]:
@@ -66,6 +68,8 @@ export class AnalysisActivityMessageFactory {
       'Análise de pensão por morte',
     [AnalysisToolRecordTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL]:
       'Indeferimento de aposentadoria urbana geral',
+    [AnalysisToolRecordTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW]:
+      'Revisão de aposentadoria urbana geral',
     [AnalysisToolRecordTypeEnum.ACCIDENT_BENEFIT_REJECTION]:
       'Indeferimento de auxílio-acidente',
     [AnalysisToolRecordTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION]:
@@ -74,6 +78,8 @@ export class AnalysisActivityMessageFactory {
       'Indeferimento de BPC Pessoa com Deficiência',
     [AnalysisToolRecordTypeEnum.BPC_ELDERLY_ANALYSIS]:
       'Análise de BPC ao Idoso',
+    [AnalysisToolRecordTypeEnum.BPC_ELDERLY_CESSATION]:
+      'Cessação de BPC ao Idoso',
     [AnalysisToolRecordTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_REJECTION]:
       'Indeferimento de benefício por incapacidade temporária',
     [AnalysisToolRecordTypeEnum.MATERNITY_PAY_GRANT]:
@@ -82,6 +88,10 @@ export class AnalysisActivityMessageFactory {
       'Cessação de benefício por incapacidade temporária',
     [AnalysisToolRecordTypeEnum.TEACHER_RETIREMENT_PLANNING_REJECTION]:
       'Indeferimento de aposentadoria de professor',
+    [AnalysisToolRecordTypeEnum.BPC_DISABILITY_TERMINATION]:
+      'Cessação de BPC Pessoa com Deficiência',
+    [AnalysisToolRecordTypeEnum.ACCIDENT_ASSISTANCE_TERMINATED]:
+      'Auxílio-acidente cessado',
   };
 
   private static readonly actionLabelMap: Record<

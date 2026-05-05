@@ -112,13 +112,16 @@ export class ListAnalysisToolRecordUseCase {
             analysisToolRecord.generalUrbanRetirementDenial ??
             analysisToolRecord.disabilityRetirementPlanningRejection ??
             analysisToolRecord.bpcDisabilityDenial ??
+            analysisToolRecord.bpcDisabilityTermination ??
             analysisToolRecord.deathBenefitGrant ??
             analysisToolRecord.temporaryIncapacityBenefitRejection ??
             analysisToolRecord.temporaryIncapacityBenefitTermination ??
             analysisToolRecord.deathBenefitRejection ??
             analysisToolRecord.bpcElderlyAnalysis ??
-            analysisToolRecord.maternityPayRejection ??
-            analysisToolRecord.teacherRetirementPlanningRejection;
+            analysisToolRecord.teacherRetirementPlanningRejection ??
+            analysisToolRecord.accidentAssistanceTerminated ??
+            analysisToolRecord.temporaryDisabilityBenefitsTerminated ??
+            analysisToolRecord.maternityPayRejection;
 
           const analysisId = analysis?.id ?? null;
 

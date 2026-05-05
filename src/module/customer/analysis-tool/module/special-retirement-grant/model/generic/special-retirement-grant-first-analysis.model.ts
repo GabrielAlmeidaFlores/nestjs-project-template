@@ -222,24 +222,72 @@ export class SpecialRetirementGrantFirstAnalysisPeriodModel extends BaseBuildabl
 }
 
 @ResponseDto()
+export class SpecialRetirementGrantFirstAnalysisTimeSummaryModel extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty({ required: false })
+  public readonly withoutResolvingPendencies?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly resolvingPendencies?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly withAccelerators?: string;
+
+  protected override readonly _type =
+    SpecialRetirementGrantFirstAnalysisTimeSummaryModel.name;
+}
+
+@ResponseDto()
+export class SpecialRetirementGrantFirstAnalysisGracePeriodSummaryModel extends BaseBuildableDtoObject {
+  @ResponseDtoNumberProperty({ required: false })
+  public readonly withoutResolvingPendencies?: number;
+
+  @ResponseDtoNumberProperty({ required: false })
+  public readonly resolvingPendencies?: number;
+
+  @ResponseDtoNumberProperty({ required: false })
+  public readonly withAccelerators?: number;
+
+  protected override readonly _type =
+    SpecialRetirementGrantFirstAnalysisGracePeriodSummaryModel.name;
+}
+
+@ResponseDto()
 export class SpecialRetirementGrantFirstAnalysisSummaryModel extends BaseBuildableDtoObject {
-  @ResponseDtoStringProperty({ required: false })
-  public readonly specialTime?: string;
+  @ResponseDtoObjectProperty(
+    () => SpecialRetirementGrantFirstAnalysisTimeSummaryModel,
+    { required: false },
+  )
+  public readonly specialTime?: SpecialRetirementGrantFirstAnalysisTimeSummaryModel;
 
-  @ResponseDtoStringProperty({ required: false })
-  public readonly commonTime?: string;
+  @ResponseDtoObjectProperty(
+    () => SpecialRetirementGrantFirstAnalysisTimeSummaryModel,
+    { required: false },
+  )
+  public readonly commonTime?: SpecialRetirementGrantFirstAnalysisTimeSummaryModel;
 
-  @ResponseDtoNumberProperty({ required: false })
-  public readonly specialGracePeriod?: number;
+  @ResponseDtoObjectProperty(
+    () => SpecialRetirementGrantFirstAnalysisTimeSummaryModel,
+    { required: false },
+  )
+  public readonly totalTime?: SpecialRetirementGrantFirstAnalysisTimeSummaryModel;
 
-  @ResponseDtoNumberProperty({ required: false })
-  public readonly commonGracePeriod?: number;
+  @ResponseDtoObjectProperty(
+    () => SpecialRetirementGrantFirstAnalysisGracePeriodSummaryModel,
+    { required: false },
+  )
+  public readonly specialGracePeriod?: SpecialRetirementGrantFirstAnalysisGracePeriodSummaryModel;
 
-  @ResponseDtoStringProperty({ required: false })
-  public readonly totalTime?: string;
+  @ResponseDtoObjectProperty(
+    () => SpecialRetirementGrantFirstAnalysisGracePeriodSummaryModel,
+    { required: false },
+  )
+  public readonly commonGracePeriod?: SpecialRetirementGrantFirstAnalysisGracePeriodSummaryModel;
 
-  @ResponseDtoNumberProperty({ required: false })
-  public readonly totalGracePeriod?: number;
+  @ResponseDtoObjectProperty(
+    () => SpecialRetirementGrantFirstAnalysisGracePeriodSummaryModel,
+    { required: false },
+  )
+  public readonly totalGracePeriod?: SpecialRetirementGrantFirstAnalysisGracePeriodSummaryModel;
 
   protected override readonly _type =
     SpecialRetirementGrantFirstAnalysisSummaryModel.name;
