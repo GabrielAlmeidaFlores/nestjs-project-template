@@ -547,6 +547,8 @@ import { GetSpecialRetirementGrantLegalProceedingQueryResultAutoMapperProfile } 
 import { SpecialRetirementGrantLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-legal-proceeding/special-retirement-grant-legal-proceeding-entity.auto-mapper.profile';
 import { GetSpecialRetirementGrantResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-result/get-special-retirement-grant-result-query-result.auto-mapper.profile';
 import { SpecialRetirementGrantResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-result/special-retirement-grant-result-entity.auto-mapper.profile';
+import { GetSpecialRetirementRejectionWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-rejection/get-special-retirement-rejection-with-relations-query-result.auto-mapper.profile';
+import { SpecialRetirementRejectionEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-rejection/special-retirement-rejection-entity.auto-mapper.profile';
 import { GetSpeechGeneratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator/get-speech-generator-query-result.auto-mapper.profile';
 import { GetSpeechGeneratorWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator/get-speech-generator-with-relations-query-result.auto-mapper.profile';
 import { SpeechGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator/speech-generator-entity.auto-mapper.profile';
@@ -884,6 +886,8 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetSpecialRetirementGrantDocumentQueryResultAutoMapperProfile,
     SpecialRetirementGrantResultEntityAutoMapperProfile,
     GetSpecialRetirementGrantResultQueryResultAutoMapperProfile,
+    SpecialRetirementRejectionEntityAutoMapperProfile,
+    GetSpecialRetirementRejectionWithRelationsQueryResultAutoMapperProfile,
     DisabilityAssessmentForBpcAnalysisEntityAutoMapperProfile,
     GetDisabilityAssessmentForBpcAnalysisQueryResultAutoMapperProfile,
     DisabilityAssessmentForBpcAnalysisBenefitEntityAutoMapperProfile,
