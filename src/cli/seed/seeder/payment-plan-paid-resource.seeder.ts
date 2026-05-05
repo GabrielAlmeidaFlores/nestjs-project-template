@@ -369,6 +369,33 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise simplificada da concessão de aposentadoria especial com IA. Resume elegibilidade, principais pendências e próximos passos recomendados, baseada em CNIS e PPPs.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('4e9d2c1b-6a7f-4d8e-9b3c-1f2a3d4e5b6c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_REJECTION_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title: 'INDEFERIMENTO APOSENTADORIA ESPECIAL - ANÁLISE COMPLETA',
+      description:
+        'Análise completa do indeferimento de aposentadoria especial com IA. Examina CNIS, PPPs e demais documentos para validar tempo especial, carência, requisitos das regras aplicáveis, riscos do caso e estratégia administrativa ou judicial mais adequada.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('7b1e3c4d-5a6f-4c8d-9e2b-3a1f6d7c8b9e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_REJECTION_FIRST_ANALYSIS,
+      creditCost: 5,
+      title: 'INDEFERIMENTO APOSENTADORIA ESPECIAL - FIRST ANALYSIS',
+      description:
+        'First analysis do indeferimento de aposentadoria especial com IA. Consolida vínculos, carência, qualidade de segurado, períodos especiais, agentes nocivos, pendências documentais e diagnóstico técnico inicial com base em CNIS e documentos anexados.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('9c2a5e7b-1d4f-4a8c-8e3b-6d1f2a7c5b4e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_REJECTION_SIMPLIFIED_ANALYSIS,
+      creditCost: 5,
+      title: 'INDEFERIMENTO APOSENTADORIA ESPECIAL - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada do indeferimento de aposentadoria especial com IA. Resume elegibilidade, pontos favoráveis, pendências, riscos e próximos passos recomendados para avaliação rápida da viabilidade do caso.',
+    }),
 
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('0a308887-2dc9-4194-a9dd-b2b94c3ab820'),
