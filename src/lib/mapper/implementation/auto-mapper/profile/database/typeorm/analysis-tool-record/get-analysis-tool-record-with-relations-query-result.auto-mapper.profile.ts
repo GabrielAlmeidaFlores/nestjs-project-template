@@ -416,11 +416,15 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
             })()
           : null;
 
-      const specialRetirementGrant = this.mapper.map(
-        source.specialRetirementGrant,
-        SpecialRetirementGrantTypeormEntity,
-        GetSpecialRetirementGrantWithRelationsQueryResult,
-      );
+      const specialRetirementGrant =
+        source.specialRetirementGrant !== null &&
+        source.specialRetirementGrant !== undefined
+          ? this.mapper.map(
+              source.specialRetirementGrant,
+              SpecialRetirementGrantTypeormEntity,
+              GetSpecialRetirementGrantWithRelationsQueryResult,
+            )
+          : null;
 
       const temporaryDisabilityBenefitsGrant =
         source.temporaryDisabilityBenefitsGrant !== null &&
