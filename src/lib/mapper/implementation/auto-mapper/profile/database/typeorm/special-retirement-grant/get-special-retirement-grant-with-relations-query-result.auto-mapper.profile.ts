@@ -8,7 +8,6 @@ import { SpecialRetirementGrantDocumentTypeormEntity } from '@infra/database/imp
 import { SpecialRetirementGrantLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-legal-proceeding.entity';
 import { SpecialRetirementGrantResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-result.typeorm.entity';
 import { SpecialRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant.typeorm.entity';
-import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
 import { GetSpecialRetirementGrantBenefitQueryResult } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant/query/result/get-special-retirement-grant-benefit.query.result';
 import { GetSpecialRetirementGrantDocumentQueryResult } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant/query/result/get-special-retirement-grant-document.query.result';
@@ -35,63 +34,76 @@ export class GetSpecialRetirementGrantWithRelationsQueryResultAutoMapperProfile 
     const convertOrmEntityToDomainEntity = (
       source: SpecialRetirementGrantTypeormEntity,
     ): GetSpecialRetirementGrantWithRelationsQueryResult => {
-      if (
-        source.specialRetirementGrantBenefit === undefined ||
-        source.specialRetirementGrantLegalProceeding === undefined ||
-        source.specialRetirementGrantDocument === undefined
-      ) {
-        throw new IncompleteSourceDataForMappingError({
-          destinationClass:
-            GetSpecialRetirementGrantWithRelationsQueryResult.name,
-          sourceClass: SpecialRetirementGrantTypeormEntity.name,
-        });
-      }
+      const specialRetirementGrantResult = source.specialRetirementGrantResult
+        ? this.mapper.map(
+            source.specialRetirementGrantResult,
+            SpecialRetirementGrantResultTypeormEntity,
+            GetSpecialRetirementGrantResultQueryResult,
+          )
+        : null;
 
-      const specialRetirementGrantResult = this.mapper.map(
-        source.specialRetirementGrantResult,
-        SpecialRetirementGrantResultTypeormEntity,
-        GetSpecialRetirementGrantResultQueryResult,
-      );
+      const createdBy = source.createdBy
+        ? this.mapper.map(
+            source.createdBy,
+            OrganizationMemberTypeormEntity,
+            GetOrganizationMemberWithCustomerRelationQueryResult,
+          )
+        : null;
 
-      const updatedBy = this.mapper.map(
-        source.updatedBy,
-        OrganizationMemberTypeormEntity,
-        GetOrganizationMemberWithCustomerRelationQueryResult,
-      );
+      const updatedBy = source.updatedBy
+        ? this.mapper.map(
+            source.updatedBy,
+            OrganizationMemberTypeormEntity,
+            GetOrganizationMemberWithCustomerRelationQueryResult,
+          )
+        : null;
 
-      const createdBy = this.mapper.map(
-        source.createdBy,
-        OrganizationMemberTypeormEntity,
-        GetOrganizationMemberWithCustomerRelationQueryResult,
-      );
+      const specialRetirementGrantBenefit =
+        source.specialRetirementGrantBenefit?.map((item) =>
+          this.mapper.map(
+            item,
+            SpecialRetirementGrantBenefitTypeormEntity,
+            GetSpecialRetirementGrantBenefitQueryResult,
+          ),
+        ) ?? [];
 
-      const specialRetirementGrantBenefit = this.mapper.mapArray(
-        source.specialRetirementGrantBenefit,
-        SpecialRetirementGrantBenefitTypeormEntity,
-        GetSpecialRetirementGrantBenefitQueryResult,
-      );
+      const specialRetirementGrantLegalProceeding =
+        source.specialRetirementGrantLegalProceeding?.map((item) =>
+          this.mapper.map(
+            item,
+            SpecialRetirementGrantLegalProceedingTypeormEntity,
+            GetSpecialRetirementGrantLegalProceedingQueryResult,
+          ),
+        ) ?? [];
 
-      const specialRetirementGrantLegalProceeding = this.mapper.mapArray(
-        source.specialRetirementGrantLegalProceeding,
-        SpecialRetirementGrantLegalProceedingTypeormEntity,
-        GetSpecialRetirementGrantLegalProceedingQueryResult,
-      );
-
-      const specialRetirementGrantDocument = this.mapper.mapArray(
-        source.specialRetirementGrantDocument,
-        SpecialRetirementGrantDocumentTypeormEntity,
-        GetSpecialRetirementGrantDocumentQueryResult,
-      );
+      const specialRetirementGrantDocument =
+        source.specialRetirementGrantDocument?.map((item) =>
+          this.mapper.map(
+            item,
+            SpecialRetirementGrantDocumentTypeormEntity,
+            GetSpecialRetirementGrantDocumentQueryResult,
+          ),
+        ) ?? [];
 
       return GetSpecialRetirementGrantWithRelationsQueryResult.build({
-        ...source,
         id: new SpecialRetirementGrantId(source.id),
-        specialRetirementGrantResult,
-        createdBy,
-        updatedBy,
-        specialRetirementGrantLegalProceeding,
-        specialRetirementGrantBenefit,
-        specialRetirementGrantDocument,
+        name: source.name ?? null,
+        specialActivity: source.specialActivity ?? null,
+        cnisDocument: source.cnisDocument ?? null,
+        specialRetirementGrantResult: specialRetirementGrantResult ?? null,
+        createdBy:
+          (createdBy as GetOrganizationMemberWithCustomerRelationQueryResult) ??
+          null,
+        updatedBy:
+          (updatedBy as GetOrganizationMemberWithCustomerRelationQueryResult) ??
+          null,
+        specialRetirementGrantBenefit: specialRetirementGrantBenefit ?? [],
+        specialRetirementGrantLegalProceeding:
+          specialRetirementGrantLegalProceeding ?? [],
+        specialRetirementGrantDocument: specialRetirementGrantDocument ?? [],
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt ?? null,
       });
     };
 
@@ -109,41 +121,47 @@ export class GetSpecialRetirementGrantWithRelationsQueryResultAutoMapperProfile 
     const convertDomainEntityToOrmEntity = (
       source: GetSpecialRetirementGrantWithRelationsQueryResult,
     ): SpecialRetirementGrantTypeormEntity => {
-      const specialRetirementGrantResult = this.mapper.map(
-        source.specialRetirementGrantResult,
-        GetSpecialRetirementGrantResultQueryResult,
-        SpecialRetirementGrantResultTypeormEntity,
-      );
+      const specialRetirementGrantResult =
+        this.mapper.map(
+          source.specialRetirementGrantResult,
+          GetSpecialRetirementGrantResultQueryResult,
+          SpecialRetirementGrantResultTypeormEntity,
+        ) ?? null;
 
-      const updatedBy = this.mapper.map(
-        source.updatedBy,
-        GetOrganizationMemberWithCustomerRelationQueryResult,
-        OrganizationMemberTypeormEntity,
-      );
+      const updatedBy =
+        this.mapper.map(
+          source.updatedBy,
+          GetOrganizationMemberWithCustomerRelationQueryResult,
+          OrganizationMemberTypeormEntity,
+        ) ?? null;
 
-      const createdBy = this.mapper.map(
-        source.createdBy,
-        GetOrganizationMemberWithCustomerRelationQueryResult,
-        OrganizationMemberTypeormEntity,
-      );
+      const createdBy =
+        this.mapper.map(
+          source.createdBy,
+          GetOrganizationMemberWithCustomerRelationQueryResult,
+          OrganizationMemberTypeormEntity,
+        ) ?? null;
 
-      const specialRetirementGrantBenefit = this.mapper.mapArray(
-        source.specialRetirementGrantBenefit,
-        GetSpecialRetirementGrantBenefitQueryResult,
-        SpecialRetirementGrantBenefitTypeormEntity,
-      );
+      const specialRetirementGrantBenefit =
+        this.mapper.mapArray(
+          source.specialRetirementGrantBenefit,
+          GetSpecialRetirementGrantBenefitQueryResult,
+          SpecialRetirementGrantBenefitTypeormEntity,
+        ) ?? [];
 
-      const specialRetirementGrantLegalProceeding = this.mapper.mapArray(
-        source.specialRetirementGrantLegalProceeding,
-        GetSpecialRetirementGrantLegalProceedingQueryResult,
-        SpecialRetirementGrantLegalProceedingTypeormEntity,
-      );
+      const specialRetirementGrantLegalProceeding =
+        this.mapper.mapArray(
+          source.specialRetirementGrantLegalProceeding,
+          GetSpecialRetirementGrantLegalProceedingQueryResult,
+          SpecialRetirementGrantLegalProceedingTypeormEntity,
+        ) ?? [];
 
-      const specialRetirementGrantDocument = this.mapper.mapArray(
-        source.specialRetirementGrantDocument,
-        GetSpecialRetirementGrantDocumentQueryResult,
-        SpecialRetirementGrantDocumentTypeormEntity,
-      );
+      const specialRetirementGrantDocument =
+        this.mapper.mapArray(
+          source.specialRetirementGrantDocument,
+          GetSpecialRetirementGrantDocumentQueryResult,
+          SpecialRetirementGrantDocumentTypeormEntity,
+        ) ?? [];
 
       return SpecialRetirementGrantTypeormEntity.build({
         ...source,
