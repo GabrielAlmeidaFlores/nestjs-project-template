@@ -18,7 +18,9 @@ export class DeleteTeacherRetirementPlanningRejectionWorkPeriodUseCase {
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
-    @Inject(TeacherRetirementPlanningRejectionWorkPeriodCommandRepositoryGateway)
+    @Inject(
+      TeacherRetirementPlanningRejectionWorkPeriodCommandRepositoryGateway,
+    )
     private readonly teacherRetirementPlanningRejectionWorkPeriodCommandRepositoryGateway: TeacherRetirementPlanningRejectionWorkPeriodCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,

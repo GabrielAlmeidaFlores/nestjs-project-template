@@ -39,7 +39,9 @@ export class UpdateTeacherRetirementPlanningRejectionWorkPeriodUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(TeacherRetirementPlanningRejectionQueryRepositoryGateway)
     private readonly teacherRetirementPlanningRejectionQueryRepositoryGateway: TeacherRetirementPlanningRejectionQueryRepositoryGateway,
-    @Inject(TeacherRetirementPlanningRejectionWorkPeriodCommandRepositoryGateway)
+    @Inject(
+      TeacherRetirementPlanningRejectionWorkPeriodCommandRepositoryGateway,
+    )
     private readonly teacherRetirementPlanningRejectionWorkPeriodCommandRepositoryGateway: TeacherRetirementPlanningRejectionWorkPeriodCommandRepositoryGateway,
     @Inject(
       TeacherRetirementPlanningRejectionWorkPeriodDocumentCommandRepositoryGateway,
@@ -103,10 +105,10 @@ export class UpdateTeacherRetirementPlanningRejectionWorkPeriodUseCase {
     existingRejection: GetTeacherRetirementPlanningRejectionWithRelationsQueryResult,
     transactions: TransactionType[],
   ): void {
-    const existingWorkPeriods = existingRejection.workPeriods ?? [];
+    const existingWorkPeriods = existingRejection.workPeriods;
 
     for (const existingWorkPeriod of existingWorkPeriods) {
-      for (const document of existingWorkPeriod.documents ?? []) {
+      for (const document of existingWorkPeriod.documents) {
         transactions.push(
           this.teacherRetirementPlanningRejectionWorkPeriodDocumentCommandRepositoryGateway.deleteAllByTeacherRetirementPlanningRejectionWorkPeriodId(
             new TeacherRetirementPlanningRejectionWorkPeriodId(document.id),
@@ -114,7 +116,7 @@ export class UpdateTeacherRetirementPlanningRejectionWorkPeriodUseCase {
         );
       }
 
-      for (const earningsHistory of existingWorkPeriod.earningsHistory ?? []) {
+      for (const earningsHistory of existingWorkPeriod.earningsHistory) {
         transactions.push(
           this.teacherRetirementPlanningRejectionWorkPeriodEarningsHistoryCommandRepositoryGateway.createTeacherRetirementPlanningRejectionWorkPeriodEarningsHistory(
             new TeacherRetirementPlanningRejectionWorkPeriodEarningsHistoryEntity(
@@ -166,10 +168,8 @@ export class UpdateTeacherRetirementPlanningRejectionWorkPeriodUseCase {
             wantsToComplementViaMeuINSS:
               existingWorkPeriod.wantsToComplementViaMeuINSS,
             hasSpecialPeriod: existingWorkPeriod.hasSpecialPeriod,
-            timelineClassification:
-              existingWorkPeriod.timelineClassification,
-            teacherRetirementPlanningRejectionId:
-              existingRejection.id,
+            timelineClassification: existingWorkPeriod.timelineClassification,
+            teacherRetirementPlanningRejectionId: existingRejection.id,
             deletedAt: new Date(),
           }),
         ),
@@ -182,8 +182,7 @@ export class UpdateTeacherRetirementPlanningRejectionWorkPeriodUseCase {
     workPeriodDto: TeacherRetirementPlanningRejectionWorkPeriodItemRequestDto,
     transactions: TransactionType[],
   ): Promise<void> {
-    const workPeriodId =
-      new TeacherRetirementPlanningRejectionWorkPeriodId();
+    const workPeriodId = new TeacherRetirementPlanningRejectionWorkPeriodId();
 
     transactions.push(
       this.teacherRetirementPlanningRejectionWorkPeriodCommandRepositoryGateway.createTeacherRetirementPlanningRejectionWorkPeriod(

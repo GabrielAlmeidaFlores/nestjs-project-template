@@ -18,7 +18,9 @@ export class DeleteTeacherRetirementPlanningRejectionTimeAcceleratorUseCase {
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
-    @Inject(TeacherRetirementPlanningRejectionTimeAcceleratorCommandRepositoryGateway)
+    @Inject(
+      TeacherRetirementPlanningRejectionTimeAcceleratorCommandRepositoryGateway,
+    )
     private readonly teacherRetirementPlanningRejectionTimeAcceleratorCommandRepositoryGateway: TeacherRetirementPlanningRejectionTimeAcceleratorCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,

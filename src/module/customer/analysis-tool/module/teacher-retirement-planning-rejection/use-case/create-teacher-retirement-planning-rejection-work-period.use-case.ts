@@ -37,7 +37,9 @@ export class CreateTeacherRetirementPlanningRejectionWorkPeriodUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(TeacherRetirementPlanningRejectionQueryRepositoryGateway)
     private readonly teacherRetirementPlanningRejectionQueryRepositoryGateway: TeacherRetirementPlanningRejectionQueryRepositoryGateway,
-    @Inject(TeacherRetirementPlanningRejectionWorkPeriodCommandRepositoryGateway)
+    @Inject(
+      TeacherRetirementPlanningRejectionWorkPeriodCommandRepositoryGateway,
+    )
     private readonly teacherRetirementPlanningRejectionWorkPeriodCommandRepositoryGateway: TeacherRetirementPlanningRejectionWorkPeriodCommandRepositoryGateway,
     @Inject(
       TeacherRetirementPlanningRejectionWorkPeriodDocumentCommandRepositoryGateway,
@@ -77,8 +79,7 @@ export class CreateTeacherRetirementPlanningRejectionWorkPeriodUseCase {
     const transactions: TransactionType[] = [];
 
     for (const workPeriodDto of dto.workPeriods) {
-      const workPeriodId =
-        new TeacherRetirementPlanningRejectionWorkPeriodId();
+      const workPeriodId = new TeacherRetirementPlanningRejectionWorkPeriodId();
 
       transactions.push(
         this.teacherRetirementPlanningRejectionWorkPeriodCommandRepositoryGateway.createTeacherRetirementPlanningRejectionWorkPeriod(

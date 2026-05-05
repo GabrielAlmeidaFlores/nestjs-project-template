@@ -191,7 +191,8 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
       disabilityRetirementPlanningGrantFirstAnalysis:
         disabilityRetirementPlanningGrantResult.disabilityRetirementPlanningGrantFirstAnalysis,
       disabilityRetirementPlanningGrantCompleteAnalysis: completeAnalysis,
-      disabilityRetirementPlanningGrantSimplifiedAnalysis: parsedResult.analysisResult,
+      disabilityRetirementPlanningGrantSimplifiedAnalysis:
+        parsedResult.analysisResult,
       disabilityRetirementPlanningGrantCompleteAnalysisDownload:
         disabilityRetirementPlanningGrantResult.disabilityRetirementPlanningGrantCompleteAnalysisDownload,
     });
@@ -220,8 +221,10 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
         (
           rule: DisabilityRetirementPlanningGrantResultRetirementRuleInterface,
         ) => {
-          const eligibilityDate = (() => {
-            if (!rule.eligibilityAvailableAt) return undefined;
+          const eligibilityDate = ((): Date | undefined => {
+            if (rule.eligibilityAvailableAt === null) {
+              return undefined;
+            }
             const d = new Date(rule.eligibilityAvailableAt);
             return isNaN(d.getTime()) ? undefined : d;
           })();
@@ -229,7 +232,9 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
             {
               retirementRuleName: rule.retirementRuleName,
               isEligible: rule.isEligible,
-              ...(eligibilityDate !== undefined && { eligibilityAvailableAt: eligibilityDate }),
+              ...(eligibilityDate !== undefined && {
+                eligibilityAvailableAt: eligibilityDate,
+              }),
               expectedMonthlyBenefit: rule.expectedMonthlyBenefit,
               estimatedProcessValue: rule.estimatedProcessValue,
               retirementAnalysis: rule.retirementAnalysis,
@@ -396,18 +401,29 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
       throw new InvalidDisabilityRetirementPlanningGrantResultJsonError();
     }
 
-    const result = parsed as DisabilityRetirementPlanningGrantResultInterface;
+    const result = parsed;
 
     result.analysisResult = result.analysisResult.replace(/\\n/g, '\n');
     result.retirementRules = result.retirementRules.map((rule) => ({
       ...rule,
-      retirementAnalysis: rule.retirementAnalysis?.replace(/\\n/g, '\n') ?? rule.retirementAnalysis,
+      retirementAnalysis: rule.retirementAnalysis.replace(/\\n/g, '\n'),
     }));
 
     return result;
   }
 
   private sanitizeJsonControlChars(json: string): string {
+    const CONTROL_CHAR_MAX = 0x20;
+
+    const CHAR_CODES = {
+      NEWLINE: 0x0a,
+      CARRIAGE_RETURN: 0x0d,
+      TAB: 0x09,
+    };
+
+    const CODE_TO_STRING = 16;
+    const CODE_PAD_START = 4;
+
     let result = '';
     let inString = false;
     let escaped = false;
@@ -434,11 +450,17 @@ export class CreateDisabilityRetirementPlanningGrantResultUseCase {
         continue;
       }
 
-      if (inString && code < 0x20) {
-        if (code === 0x0a) result += '\\n';
-        else if (code === 0x0d) result += '\\r';
-        else if (code === 0x09) result += '\\t';
-        else result += '\\u' + code.toString(16).padStart(4, '0');
+      if (inString && code < CONTROL_CHAR_MAX) {
+        if (code === CHAR_CODES.NEWLINE) {
+          result += '\\n';
+        } else if (code === CHAR_CODES.CARRIAGE_RETURN) {
+          result += '\\r';
+        } else if (code === CHAR_CODES.TAB) {
+          result += '\\t';
+        } else {
+          result +=
+            '\\u' + code.toString(CODE_TO_STRING).padStart(CODE_PAD_START, '0');
+        }
         continue;
       }
 
