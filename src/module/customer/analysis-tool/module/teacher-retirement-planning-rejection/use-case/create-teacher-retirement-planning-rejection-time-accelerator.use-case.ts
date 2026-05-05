@@ -28,7 +28,9 @@ export class CreateTeacherRetirementPlanningRejectionTimeAcceleratorUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(TeacherRetirementPlanningRejectionQueryRepositoryGateway)
     private readonly teacherRetirementPlanningRejectionQueryRepositoryGateway: TeacherRetirementPlanningRejectionQueryRepositoryGateway,
-    @Inject(TeacherRetirementPlanningRejectionTimeAcceleratorCommandRepositoryGateway)
+    @Inject(
+      TeacherRetirementPlanningRejectionTimeAcceleratorCommandRepositoryGateway,
+    )
     private readonly teacherRetirementPlanningRejectionTimeAcceleratorCommandRepositoryGateway: TeacherRetirementPlanningRejectionTimeAcceleratorCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
@@ -55,15 +57,14 @@ export class CreateTeacherRetirementPlanningRejectionTimeAcceleratorUseCase {
       TeacherRetirementPlanningRejectionNotFoundError,
     );
 
-    const transactions: TransactionType[] = dto.timeAccelerators.map(
-      (taDto) =>
-        this.teacherRetirementPlanningRejectionTimeAcceleratorCommandRepositoryGateway.createTeacherRetirementPlanningRejectionTimeAccelerator(
-          this.buildTimeAcceleratorEntity(
-            new TeacherRetirementPlanningRejectionTimeAcceleratorId(),
-            teacherRetirementPlanningRejectionId,
-            taDto,
-          ),
+    const transactions: TransactionType[] = dto.timeAccelerators.map((taDto) =>
+      this.teacherRetirementPlanningRejectionTimeAcceleratorCommandRepositoryGateway.createTeacherRetirementPlanningRejectionTimeAccelerator(
+        this.buildTimeAcceleratorEntity(
+          new TeacherRetirementPlanningRejectionTimeAcceleratorId(),
+          teacherRetirementPlanningRejectionId,
+          taDto,
         ),
+      ),
     );
 
     const transaction =

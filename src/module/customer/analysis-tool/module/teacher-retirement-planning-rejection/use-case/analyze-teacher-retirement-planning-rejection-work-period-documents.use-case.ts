@@ -7,6 +7,7 @@ import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/sche
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
+import { TeacherRetirementPlanningRejectionWorkPeriodDocumentProbativeForceEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection-work-period/enum/teacher-retirement-planning-rejection-work-period-document-probative-force.enum';
 import { AnalyzeTeacherRetirementPlanningRejectionWorkPeriodDocumentsRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/dto/request/analyze-teacher-retirement-planning-rejection-work-period-documents.request.dto';
 import { AnalyzeTeacherRetirementPlanningRejectionWorkPeriodDocumentAnalysisItemResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/dto/response/analyze-teacher-retirement-planning-rejection-work-period-documents.response.dto';
 import { InvalidTeacherRetirementPlanningRejectionWorkPeriodDocumentAnalysisJsonError } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/error/invalid-teacher-retirement-planning-rejection-work-period-document-analysis-json.error';
@@ -91,10 +92,9 @@ export class AnalyzeTeacherRetirementPlanningRejectionWorkPeriodDocumentsUseCase
 
     const parsedResult = this.parseAnalysisResult(analysisResult);
 
-    const transaction =
-      await this.baseTransactionRepositoryGateway.execute(
-        consumeCreditTransaction,
-      );
+    const transaction = await this.baseTransactionRepositoryGateway.execute(
+      consumeCreditTransaction,
+    );
 
     await transaction.commit();
 
@@ -109,6 +109,8 @@ export class AnalyzeTeacherRetirementPlanningRejectionWorkPeriodDocumentsUseCase
             documentYear: item.documentYear,
             shortDescription: item.shortDescription,
             technicalNote: item.technicalNote,
+            probativeForce:
+              item.probativeForce as TeacherRetirementPlanningRejectionWorkPeriodDocumentProbativeForceEnum,
           },
         ),
     );
@@ -159,7 +161,14 @@ export class AnalyzeTeacherRetirementPlanningRejectionWorkPeriodDocumentsUseCase
       cleanedJson = JSON.parse(cleanedJson) as string;
     }
 
-    const parsedResult: unknown = JSON.parse(cleanedJson);
+    const rawParsed: unknown = JSON.parse(cleanedJson);
+    const parsedResult: unknown =
+      rawParsed !== null &&
+      typeof rawParsed === 'object' &&
+      'items' in rawParsed &&
+      Array.isArray((rawParsed as { items: unknown }).items)
+        ? (rawParsed as { items: unknown }).items
+        : rawParsed;
 
     if (!this.isAnalysisResult(parsedResult)) {
       throw new InvalidTeacherRetirementPlanningRejectionWorkPeriodDocumentAnalysisJsonError();
@@ -192,7 +201,8 @@ export class AnalyzeTeacherRetirementPlanningRejectionWorkPeriodDocumentsUseCase
       typeof documentAnalysis['ownName'] === 'boolean' &&
       typeof documentAnalysis['documentYear'] === 'string' &&
       typeof documentAnalysis['shortDescription'] === 'string' &&
-      typeof documentAnalysis['technicalNote'] === 'string'
+      typeof documentAnalysis['technicalNote'] === 'string' &&
+      typeof documentAnalysis['probativeForce'] === 'string'
     );
   }
 }

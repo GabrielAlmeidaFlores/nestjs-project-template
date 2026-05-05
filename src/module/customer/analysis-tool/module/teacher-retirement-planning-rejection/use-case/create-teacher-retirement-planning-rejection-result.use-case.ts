@@ -177,10 +177,8 @@ export class CreateTeacherRetirementPlanningRejectionResultUseCase {
       inssDecisionAnalysis: existingResult?.inssDecisionAnalysis ?? null,
       firstAnalysis: existingResult?.firstAnalysis ?? null,
       completeAnalysis,
-      simplifiedAnalysis:
-        simplifiedAnalysis ?? existingResult?.simplifiedAnalysis ?? null,
-      completeAnalysisDownload:
-        existingResult?.completeAnalysisDownload ?? null,
+      simplifiedAnalysis: existingResult?.simplifiedAnalysis ?? null,
+      completeAnalysisDownload: parsedResult.completeAnalysisDownload,
     });
 
     const resultTransaction =
@@ -315,7 +313,8 @@ export class CreateTeacherRetirementPlanningRejectionResultUseCase {
       value['retirementRules'].every((item: unknown) =>
         this.isRetirementRule(item),
       ) &&
-      typeof value['analysisResult'] === 'string'
+      typeof value['analysisResult'] === 'string' &&
+      typeof value['completeAnalysisDownload'] === 'string'
     );
   }
 
@@ -330,6 +329,8 @@ export class CreateTeacherRetirementPlanningRejectionResultUseCase {
       this.isNullableString(value['retirementDate']) &&
       this.isNullableNumber(value['expectedRmi']) &&
       this.isNullableNumber(value['estimatedCauseValue']) &&
+      typeof value['bestRmi'] === 'boolean' &&
+      typeof value['highestCauseValue'] === 'boolean' &&
       typeof value['detailedAnalysis'] === 'string'
     );
   }

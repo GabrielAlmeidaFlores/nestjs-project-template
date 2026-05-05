@@ -13,6 +13,7 @@ import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/exp
 import { TeacherRetirementPlanningRejectionId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection/value-object/teacher-retirement-planning-rejection-id.value-object';
 import { TeacherRetirementPlanningRejectionTimeAcceleratorId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection-time-accelerator/value-object/teacher-retirement-planning-rejection-time-accelerator-id.value-object';
 import { TeacherRetirementPlanningRejectionWorkPeriodId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection-work-period/value-object/teacher-retirement-planning-rejection-work-period-id.value-object';
+import { AnalyzeTeacherRetirementPlanningRejectionPppRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/dto/request/analyze-teacher-retirement-planning-rejection-ppp.request.dto';
 import { AnalyzeTeacherRetirementPlanningRejectionTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/dto/request/analyze-teacher-retirement-planning-rejection-time-accelerator.request.dto';
 import { AnalyzeTeacherRetirementPlanningRejectionWorkPeriodDocumentsRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/dto/request/analyze-teacher-retirement-planning-rejection-work-period-documents.request.dto';
 import { CreateTeacherRetirementPlanningRejectionTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/dto/request/create-teacher-retirement-planning-rejection-time-accelerator.request.dto';
@@ -21,6 +22,7 @@ import { CreateTeacherRetirementPlanningRejectionRequestDto } from '@module/cust
 import { SaveTeacherRetirementPlanningRejectionTeachingPeriodsRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/dto/request/save-teacher-retirement-planning-rejection-teaching-periods.request.dto';
 import { UpdateTeacherRetirementPlanningRejectionRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/dto/request/update-teacher-retirement-planning-rejection.request.dto';
 import { UploadTeacherRetirementPlanningRejectionDocumentsRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/dto/request/upload-teacher-retirement-planning-rejection-documents.request.dto';
+import { AnalyzeTeacherRetirementPlanningRejectionPppResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/dto/response/analyze-teacher-retirement-planning-rejection-ppp.response.dto';
 import { AnalyzeTeacherRetirementPlanningRejectionTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/dto/response/analyze-teacher-retirement-planning-rejection-time-accelerator.response.dto';
 import { AnalyzeTeacherRetirementPlanningRejectionWorkPeriodDocumentAnalysisItemResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/dto/response/analyze-teacher-retirement-planning-rejection-work-period-documents.response.dto';
 import { CreateTeacherRetirementPlanningRejectionFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/dto/response/create-teacher-retirement-planning-rejection-first-analysis.response.dto';
@@ -37,6 +39,7 @@ import { UpdateTeacherRetirementPlanningRejectionTimeAcceleratorResponseDto } fr
 import { UpdateTeacherRetirementPlanningRejectionWorkPeriodResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/dto/response/update-teacher-retirement-planning-rejection-work-period.response.dto';
 import { UpdateTeacherRetirementPlanningRejectionResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/dto/response/update-teacher-retirement-planning-rejection.response.dto';
 import { UploadTeacherRetirementPlanningRejectionDocumentsResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/dto/response/upload-teacher-retirement-planning-rejection-documents.response.dto';
+import { AnalyzeTeacherRetirementPlanningRejectionPppUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/use-case/analyze-teacher-retirement-planning-rejection-ppp.use-case';
 import { AnalyzeTeacherRetirementPlanningRejectionTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/use-case/analyze-teacher-retirement-planning-rejection-time-accelerator.use-case';
 import { AnalyzeTeacherRetirementPlanningRejectionWorkPeriodDocumentsUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/use-case/analyze-teacher-retirement-planning-rejection-work-period-documents.use-case';
 import { CreateTeacherRetirementPlanningRejectionFirstAnalysisUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/use-case/create-teacher-retirement-planning-rejection-first-analysis.use-case';
@@ -86,6 +89,7 @@ export class TeacherRetirementPlanningRejectionController {
     private readonly updateTeacherRetirementPlanningRejectionTimeAcceleratorUseCase: UpdateTeacherRetirementPlanningRejectionTimeAcceleratorUseCase,
     private readonly deleteTeacherRetirementPlanningRejectionTimeAcceleratorUseCase: DeleteTeacherRetirementPlanningRejectionTimeAcceleratorUseCase,
     private readonly analyzeTeacherRetirementPlanningRejectionTimeAcceleratorUseCase: AnalyzeTeacherRetirementPlanningRejectionTimeAcceleratorUseCase,
+    private readonly analyzeTeacherRetirementPlanningRejectionPppUseCase: AnalyzeTeacherRetirementPlanningRejectionPppUseCase,
     private readonly createTeacherRetirementPlanningRejectionResultUseCase: CreateTeacherRetirementPlanningRejectionResultUseCase,
     private readonly downloadTeacherRetirementPlanningRejectionCompleteAnalysisUseCase: DownloadTeacherRetirementPlanningRejectionCompleteAnalysisUseCase,
     private readonly downloadTeacherRetirementPlanningRejectionSimplifiedAnalysisUseCase: DownloadTeacherRetirementPlanningRejectionSimplifiedAnalysisUseCase,
@@ -606,6 +610,36 @@ export class TeacherRetirementPlanningRejectionController {
     dto: AnalyzeTeacherRetirementPlanningRejectionTimeAcceleratorRequestDto,
   ): Promise<AnalyzeTeacherRetirementPlanningRejectionTimeAcceleratorResponseDto> {
     return this.analyzeTeacherRetirementPlanningRejectionTimeAcceleratorUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Analisar PPP da análise de indeferimento de aposentadoria do professor',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'ppp',
+      method: RequestMethod.POST,
+      type: AnalyzeTeacherRetirementPlanningRejectionPppRequestDto,
+    },
+    tag: ['indeferimento-aposentadoria-professor'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Análise de PPP gerada com sucesso.',
+      type: AnalyzeTeacherRetirementPlanningRejectionPppResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async analyzePpp(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Body() dto: AnalyzeTeacherRetirementPlanningRejectionPppRequestDto,
+  ): Promise<AnalyzeTeacherRetirementPlanningRejectionPppResponseDto> {
+    return this.analyzeTeacherRetirementPlanningRejectionPppUseCase.execute(
       sessionData,
       organizationSessionData,
       dto,

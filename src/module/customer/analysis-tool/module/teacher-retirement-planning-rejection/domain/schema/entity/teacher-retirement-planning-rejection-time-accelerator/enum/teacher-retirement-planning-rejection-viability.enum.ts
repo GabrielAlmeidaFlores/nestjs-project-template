@@ -1,5 +1,5 @@
 export enum TeacherRetirementPlanningRejectionViabilityEnum {
-  BAIXA = 'BAIXA',
-  MEDIA = 'MEDIA',
-  ALTA = 'ALTA',
+  BAIXA = 'baixa',
+  MEDIA = 'media',
+  ALTA = 'alta',
 }
