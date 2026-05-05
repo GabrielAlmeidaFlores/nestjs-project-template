@@ -223,15 +223,13 @@ export class GetDisabilityRetirementPlanningGrantUseCase {
                         ...(eh.indicators !== null && {
                           indicators: eh.indicators,
                         }),
-                        ...(
-                          (() => {
-                            if (!eh.paymentDate) {
-                              return {};
-                            }
-                            const d = new Date(eh.paymentDate);
-                            return isNaN(d.getTime()) ? {} : { paymentDate: d };
-                          }) as () => { paymentDate?: Date }
-                        )(),
+                        ...((): { paymentDate?: Date } => {
+                          if (!eh.paymentDate) {
+                            return {};
+                          }
+                          const d = new Date(eh.paymentDate);
+                          return isNaN(d.getTime()) ? {} : { paymentDate: d };
+                        })(),
                         ...(eh.contribution !== null && {
                           contribution: eh.contribution,
                         }),
