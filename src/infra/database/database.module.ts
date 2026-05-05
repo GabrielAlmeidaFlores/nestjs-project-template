@@ -542,6 +542,17 @@ import { TeacherRetirementPlanningLegalProceedingTypeormCommandRepository } from
 import { TeacherRetirementPlanningPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-period/teacher-retirement-planning-period.typeorm.command.repository';
 import { TeacherRetirementPlanningPeriodItemTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-period-item/teacher-retirement-planning-period-item.typeorm.command.repository';
 import { TeacherRetirementPlanningPeriodItemDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-period-item-document/teacher-retirement-planning-period-item-document.typeorm.command.repository';
+import { TeacherRetirementPlanningRejectionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-rejection/teacher-retirement-planning-rejection.typeorm.command.repository';
+import { TeacherRetirementPlanningRejectionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-rejection/teacher-retirement-planning-rejection.typeorm.query.repository';
+import { TeacherRetirementPlanningRejectionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-rejection-document/teacher-retirement-planning-rejection-document.typeorm.command.repository';
+import { TeacherRetirementPlanningRejectionInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-rejection-inss-benefit/teacher-retirement-planning-rejection-inss-benefit.typeorm.command.repository';
+import { TeacherRetirementPlanningRejectionResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-rejection-result/teacher-retirement-planning-rejection-result.typeorm.command.repository';
+import { TeacherRetirementPlanningRejectionTeachingPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-rejection-teaching-period/teacher-retirement-planning-rejection-teaching-period.typeorm.command.repository';
+import { TeacherRetirementPlanningRejectionTeachingPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-rejection-teaching-period-document/teacher-retirement-planning-rejection-teaching-period-document.typeorm.command.repository';
+import { TeacherRetirementPlanningRejectionTimeAcceleratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-rejection-time-accelerator/teacher-retirement-planning-rejection-time-accelerator.typeorm.command.repository';
+import { TeacherRetirementPlanningRejectionWorkPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-rejection-work-period/teacher-retirement-planning-rejection-work-period.typeorm.command.repository';
+import { TeacherRetirementPlanningRejectionWorkPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-rejection-work-period-document/teacher-retirement-planning-rejection-work-period-document.typeorm.command.repository';
+import { TeacherRetirementPlanningRejectionWorkPeriodEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-rejection-work-period-earnings-history/teacher-retirement-planning-rejection-work-period-earnings-history.typeorm.command.repository';
 import { TeacherRetirementPlanningRemunerationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-remuneration/teacher-retirement-planning-remuneration.typeorm.command.repository';
 import { TeacherRetirementPlanningRemunerationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-remuneration/teacher-retirement-planning-remuneration.typeorm.query.repository';
 import { TeacherRetirementPlanningResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-result/teacher-retirement-planning-result.typeorm.command.repository';
@@ -1095,6 +1106,17 @@ import { TeacherRetirementPlanningPeriodItemDocumentCommandRepositoryGateway } f
 import { TeacherRetirementPlanningRemunerationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-remuneration/command/teacher-retirement-planning-remuneration.command.repository.gateway';
 import { TeacherRetirementPlanningRemunerationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-remuneration/query/teacher-retirement-planning-remuneration.query.repository.gateway';
 import { TeacherRetirementPlanningResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-result/command/teacher-retirement-planning-result.command.repository.gateway';
+import { TeacherRetirementPlanningRejectionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/repository/teacher-retirement-planning-rejection/command/teacher-retirement-planning-rejection.command.repository.gateway';
+import { TeacherRetirementPlanningRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/repository/teacher-retirement-planning-rejection/query/teacher-retirement-planning-rejection.query.repository.gateway';
+import { TeacherRetirementPlanningRejectionDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/repository/teacher-retirement-planning-rejection-document/command/teacher-retirement-planning-rejection-document.command.repository.gateway';
+import { TeacherRetirementPlanningRejectionInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/repository/teacher-retirement-planning-rejection-inss-benefit/command/teacher-retirement-planning-rejection-inss-benefit.command.repository.gateway';
+import { TeacherRetirementPlanningRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/repository/teacher-retirement-planning-rejection-result/command/teacher-retirement-planning-rejection-result.command.repository.gateway';
+import { TeacherRetirementPlanningRejectionTeachingPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/repository/teacher-retirement-planning-rejection-teaching-period/command/teacher-retirement-planning-rejection-teaching-period.command.repository.gateway';
+import { TeacherRetirementPlanningRejectionTeachingPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/repository/teacher-retirement-planning-rejection-teaching-period-document/command/teacher-retirement-planning-rejection-teaching-period-document.command.repository.gateway';
+import { TeacherRetirementPlanningRejectionTimeAcceleratorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/repository/teacher-retirement-planning-rejection-time-accelerator/command/teacher-retirement-planning-rejection-time-accelerator.command.repository.gateway';
+import { TeacherRetirementPlanningRejectionWorkPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/repository/teacher-retirement-planning-rejection-work-period/command/teacher-retirement-planning-rejection-work-period.command.repository.gateway';
+import { TeacherRetirementPlanningRejectionWorkPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/repository/teacher-retirement-planning-rejection-work-period-document/command/teacher-retirement-planning-rejection-work-period-document.command.repository.gateway';
+import { TeacherRetirementPlanningRejectionWorkPeriodEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/repository/teacher-retirement-planning-rejection-work-period-earnings-history/command/teacher-retirement-planning-rejection-work-period-earnings-history.command.repository.gateway';
 import { TemporaryDisabilityBenefitsGrantCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant/command/temporary-disability-benefits-grant.command.repository.gateway';
 import { TemporaryDisabilityBenefitsGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant/query/temporary-disability-benefits-grant.query.repository.gateway';
 import { TemporaryDisabilityBenefitsGrantDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-document/command/temporary-disability-benefits-grant-document.command.repository.gateway';
@@ -2190,6 +2212,65 @@ const classProvider: ClassProvider[] = [
   {
     provide: TeacherRetirementPlanningResultCommandRepositoryGateway,
     useClass: TeacherRetirementPlanningResultTypeormCommandRepository,
+  },
+  {
+    provide: TeacherRetirementPlanningRejectionCommandRepositoryGateway,
+    useClass: TeacherRetirementPlanningRejectionTypeormCommandRepository,
+  },
+  {
+    provide: TeacherRetirementPlanningRejectionQueryRepositoryGateway,
+    useClass: TeacherRetirementPlanningRejectionTypeormQueryRepository,
+  },
+  {
+    provide: TeacherRetirementPlanningRejectionDocumentCommandRepositoryGateway,
+    useClass:
+      TeacherRetirementPlanningRejectionDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      TeacherRetirementPlanningRejectionInssBenefitCommandRepositoryGateway,
+    useClass:
+      TeacherRetirementPlanningRejectionInssBenefitTypeormCommandRepository,
+  },
+  {
+    provide: TeacherRetirementPlanningRejectionResultCommandRepositoryGateway,
+    useClass: TeacherRetirementPlanningRejectionResultTypeormCommandRepository,
+  },
+  {
+    provide:
+      TeacherRetirementPlanningRejectionTeachingPeriodCommandRepositoryGateway,
+    useClass:
+      TeacherRetirementPlanningRejectionTeachingPeriodTypeormCommandRepository,
+  },
+  {
+    provide:
+      TeacherRetirementPlanningRejectionTeachingPeriodDocumentCommandRepositoryGateway,
+    useClass:
+      TeacherRetirementPlanningRejectionTeachingPeriodDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      TeacherRetirementPlanningRejectionTimeAcceleratorCommandRepositoryGateway,
+    useClass:
+      TeacherRetirementPlanningRejectionTimeAcceleratorTypeormCommandRepository,
+  },
+  {
+    provide:
+      TeacherRetirementPlanningRejectionWorkPeriodCommandRepositoryGateway,
+    useClass:
+      TeacherRetirementPlanningRejectionWorkPeriodTypeormCommandRepository,
+  },
+  {
+    provide:
+      TeacherRetirementPlanningRejectionWorkPeriodDocumentCommandRepositoryGateway,
+    useClass:
+      TeacherRetirementPlanningRejectionWorkPeriodDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      TeacherRetirementPlanningRejectionWorkPeriodEarningsHistoryCommandRepositoryGateway,
+    useClass:
+      TeacherRetirementPlanningRejectionWorkPeriodEarningsHistoryTypeormCommandRepository,
   },
   {
     provide: RetirementPlanningRgpsCommandRepositoryGateway,

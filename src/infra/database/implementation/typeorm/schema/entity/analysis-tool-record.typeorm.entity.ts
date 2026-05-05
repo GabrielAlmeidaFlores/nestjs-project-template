@@ -39,6 +39,7 @@ import { SpecialRetirementGrantTypeormEntity } from '@infra/database/implementat
 import { SpecialRetirementRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection.typeorm.entity';
 import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
 import { SurvivorPensionAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/survivor-pension-analysis.typeorm.entity';
+import { TeacherRetirementPlanningRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection.typeorm.entity';
 import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant.typeorm.entity';
 import { TemporaryDisabilityBenefitsTerminatedTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-terminated.typeorm.entity';
@@ -356,6 +357,10 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   @ManyToOne(() => MaternityPayGrantTypeormEntity)
   @JoinColumn({ name: 'maternity_pay_grant_id' })
   public maternityPayGrant?: MaternityPayGrantTypeormEntity | null;
+
+  @ManyToOne(() => TeacherRetirementPlanningRejectionTypeormEntity)
+  @JoinColumn({ name: 'teacher_retirement_planning_rejection_id' })
+  public teacherRetirementPlanningRejection?: TeacherRetirementPlanningRejectionTypeormEntity | null;
 
   @ManyToOne(() => BpcDisabilityTerminationTypeormEntity)
   @JoinColumn({ name: 'bpc_disability_termination_id' })

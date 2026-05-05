@@ -868,6 +868,16 @@ import { TeacherRetirementPlanningLegalProceedingTypeormEntity } from '@infra/da
 import { TeacherRetirementPlanningPeriodItemDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-period-item-document.typeorm.entity';
 import { TeacherRetirementPlanningPeriodItemTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-period-item.typeorm.entity';
 import { TeacherRetirementPlanningPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-period.typeorm.entity';
+import { TeacherRetirementPlanningRejectionDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection-document.typeorm.entity';
+import { TeacherRetirementPlanningRejectionInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection-inss-benefit.typeorm.entity';
+import { TeacherRetirementPlanningRejectionResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection-result.typeorm.entity';
+import { TeacherRetirementPlanningRejectionTeachingPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection-teaching-period-document.typeorm.entity';
+import { TeacherRetirementPlanningRejectionTeachingPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection-teaching-period.typeorm.entity';
+import { TeacherRetirementPlanningRejectionTimeAcceleratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection-time-accelerator.typeorm.entity';
+import { TeacherRetirementPlanningRejectionWorkPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection-work-period-document.typeorm.entity';
+import { TeacherRetirementPlanningRejectionWorkPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection-work-period-earnings-history.typeorm.entity';
+import { TeacherRetirementPlanningRejectionWorkPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection-work-period.typeorm.entity';
+import { TeacherRetirementPlanningRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection.typeorm.entity';
 import { TeacherRetirementPlanningRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-remuneration.typeorm.entity';
 import { TeacherRetirementPlanningResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-result.typeorm.entity';
 import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning.typeorm.entity';
@@ -1010,6 +1020,16 @@ export class TypeormIndex {
     TeacherRetirementPlanningPeriodItemDocumentTypeormEntity,
     TeacherRetirementPlanningRemunerationTypeormEntity,
     TeacherRetirementPlanningResultTypeormEntity,
+    TeacherRetirementPlanningRejectionTypeormEntity,
+    TeacherRetirementPlanningRejectionDocumentTypeormEntity,
+    TeacherRetirementPlanningRejectionInssBenefitTypeormEntity,
+    TeacherRetirementPlanningRejectionResultTypeormEntity,
+    TeacherRetirementPlanningRejectionTeachingPeriodTypeormEntity,
+    TeacherRetirementPlanningRejectionTeachingPeriodDocumentTypeormEntity,
+    TeacherRetirementPlanningRejectionTimeAcceleratorTypeormEntity,
+    TeacherRetirementPlanningRejectionWorkPeriodTypeormEntity,
+    TeacherRetirementPlanningRejectionWorkPeriodDocumentTypeormEntity,
+    TeacherRetirementPlanningRejectionWorkPeriodEarningsHistoryTypeormEntity,
     GeneralUrbanRetirementAnalysisTypeormEntity,
     GeneralUrbanRetirementAnalysisResultTypeormEntity,
     GeneralUrbanRetirementAnalysisDocumentTypeormEntity,

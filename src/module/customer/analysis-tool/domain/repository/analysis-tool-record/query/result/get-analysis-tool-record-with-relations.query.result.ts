@@ -42,6 +42,7 @@ import type { GetSpecialRetirementRejectionWithRelationsQueryResult } from '@mod
 import type { GetSpeechGeneratorQueryResult } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/query/result/get-speech-generator.query.result';
 import type { GetSurvivorPensionAnalysisQueryResult } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis/query/result/get-survivor-pension-analysis.query.result';
 import type { GetTeacherRetirementPlanningWithRelationsQueryResult } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/query/result/get-teacher-retirement-planning-with-relations.query.result';
+import type { TeacherRetirementPlanningRejectionEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection/teacher-retirement-planning-rejection.entity';
 import type { GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResult } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant/query/result/get-temporary-disability-benefits-grant-with-relations.query.result';
 import type { GetTemporaryDisabilityBenefitsTerminatedWithRelationsQueryResult } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/repository/temporary-disability-benefits-terminated/query/result/get-temporary-disability-benefits-terminated-with-relations.query.result';
 import type { GetTemporaryIncapacityBenefitRejectionWithRelationsQueryResult } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection/query/result/get-temporary-incapacity-benefit-rejection-with-relations.query.result';
@@ -74,6 +75,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResult extends BaseBuildable
   public readonly ruralTimelineAnalysis: GetRuralTimelineAnalysisWithRelationsQueryResult | null;
   public readonly insuranceQualityAnalysis: GetInsuranceQualityAnalysisWithRelationsQueryResult | null;
   public readonly teacherRetirementPlanning: GetTeacherRetirementPlanningWithRelationsQueryResult | null;
+  public readonly teacherRetirementPlanningRejection: TeacherRetirementPlanningRejectionEntity | null;
   public readonly disabilityRetirementPlanning: GetDisabilityRetirementPlanningWithRelationsQueryResult | null;
   public readonly generalUrbanRetirementGrant: GetGeneralUrbanRetirementGrantWithRelationsQueryResult | null;
   public readonly generalUrbanRetirementAnalysis: GetGeneralUrbanRetirementAnalysisWithRelationsQueryResult | null;

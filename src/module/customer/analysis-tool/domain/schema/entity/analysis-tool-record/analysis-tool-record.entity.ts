@@ -39,6 +39,7 @@ import { SpecialRetirementRejectionEntity } from '@module/customer/analysis-tool
 import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
 import { SurvivorPensionAnalysisEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis/survivor-pension-analysis.entity';
 import { TeacherRetirementPlanningEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
+import { TeacherRetirementPlanningRejectionEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection/teacher-retirement-planning-rejection.entity';
 import { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/temporary-disability-benefits-grant.entity';
 import { TemporaryDisabilityBenefitsTerminatedEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/schema/entity/temporary-disability-benefits-terminated/temporary-disability-benefits-terminated.entity';
 import { TemporaryIncapacityBenefitRejectionEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.entity';
@@ -135,6 +136,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     'Planejamento de aposentadoria de professor associado ao registro da ferramenta de análise',
   )
   public readonly teacherRetirementPlanning: TeacherRetirementPlanningEntity | null;
+
+  @Description(
+    'Indeferimento de aposentadoria de professor associado ao registro da ferramenta de análise',
+  )
+  public readonly teacherRetirementPlanningRejection: TeacherRetirementPlanningRejectionEntity | null;
 
   @Description(
     'Planejamento de aposentadoria por invalidez associado ao registro da ferramenta de análise',
@@ -312,6 +318,8 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     this.ruralTimelineAnalysis = props.ruralTimelineAnalysis ?? null;
     this.insuranceQualityAnalysis = props.insuranceQualityAnalysis ?? null;
     this.teacherRetirementPlanning = props.teacherRetirementPlanning ?? null;
+    this.teacherRetirementPlanningRejection =
+      props.teacherRetirementPlanningRejection ?? null;
     this.disabilityRetirementPlanning =
       props.disabilityRetirementPlanning ?? null;
     this.generalUrbanRetirementGrant =
