@@ -1935,6 +1935,15 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise individual de documentos probatórios de períodos de trabalho para o caso de indeferimento de aposentadoria do professor. Identifica o tipo de documento, o nome do titular, o ano e emite nota técnica sobre a relevância probatória para comprovação de atividade de magistério.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c2d3e4f5-a6b7-4c8d-9e0f-1a2b3c4d5e66'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_REJECTION_PPP_ANALYSIS,
+      creditCost: 2,
+      title: 'INDEFERIMENTO APOSENTADORIA DO PROFESSOR - ANÁLISE DE PPP',
+      description:
+        'Análise do Perfil Profissiográfico Previdenciário (PPP) para o caso de indeferimento de aposentadoria do professor. Identifica períodos de trabalho, atividades exercidas, exposição a agentes nocivos e classifica cada período para fins previdenciários.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {

@@ -6,6 +6,7 @@ import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/anal
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
 import { TeacherRetirementPlanningRejectionController } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/teacher-retirement-planning-rejection.controller';
+import { AnalyzeTeacherRetirementPlanningRejectionPppUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/use-case/analyze-teacher-retirement-planning-rejection-ppp.use-case';
 import { AnalyzeTeacherRetirementPlanningRejectionTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/use-case/analyze-teacher-retirement-planning-rejection-time-accelerator.use-case';
 import { AnalyzeTeacherRetirementPlanningRejectionWorkPeriodDocumentsUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/use-case/analyze-teacher-retirement-planning-rejection-work-period-documents.use-case';
 import { CreateTeacherRetirementPlanningRejectionFirstAnalysisUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/use-case/create-teacher-retirement-planning-rejection-first-analysis.use-case';
@@ -58,6 +59,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     UpdateTeacherRetirementPlanningRejectionTimeAcceleratorUseCase,
     DeleteTeacherRetirementPlanningRejectionTimeAcceleratorUseCase,
     AnalyzeTeacherRetirementPlanningRejectionTimeAcceleratorUseCase,
+    AnalyzeTeacherRetirementPlanningRejectionPppUseCase,
     CreateTeacherRetirementPlanningRejectionResultUseCase,
     DownloadTeacherRetirementPlanningRejectionCompleteAnalysisUseCase,
     DownloadTeacherRetirementPlanningRejectionSimplifiedAnalysisUseCase,

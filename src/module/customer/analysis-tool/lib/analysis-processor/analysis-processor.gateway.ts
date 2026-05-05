@@ -647,4 +647,9 @@ export abstract class AnalysisProcessorGateway {
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null>;
+
+  public abstract getTeacherRetirementPlanningRejectionPppAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
 }

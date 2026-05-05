@@ -4,6 +4,7 @@ export interface TeacherRetirementPlanningRejectionWorkPeriodDocumentAnalysisRes
   documentYear: string;
   shortDescription: string;
   technicalNote: string;
+  probativeForce: string;
 }
 
 export type TeacherRetirementPlanningRejectionWorkPeriodDocumentAnalysisResultType =

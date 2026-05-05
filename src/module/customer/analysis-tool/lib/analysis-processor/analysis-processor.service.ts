@@ -35,6 +35,8 @@ import { DisabilityRetirementPlanningRejectionPeriodPendencyReasonEnum } from '@
 import { GeneralUrbanRetirementDenialPeriodCategoryEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-category.enum';
 import { GeneralUrbanRetirementDenialPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-consideration.enum';
 import { GeneralUrbanRetirementDenialPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-pendency-reason.enum';
+import { TeacherRetirementPlanningRejectionWorkPeriodDocumentProbativeForceEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection-work-period/enum/teacher-retirement-planning-rejection-work-period-document-probative-force.enum';
+import { TeacherRetirementPlanningRejectionWorkPeriodTimelineClassificationEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection-work-period/enum/teacher-retirement-planning-rejection-work-period-timeline-classification.enum';
 import { TemporaryIncapacityBenefitRejectionCategoryEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/enum/temporary-incapacity-benefit-rejection-category.enum';
 import { TemporaryIncapacityBenefitTerminationCategoryEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-termination/domain/schema/entity/temporary-incapacity-benefit-termination/enum/temporary-incapacity-benefit-termination-category.enum';
 import { MiniAdvisorAnalysisTypeEnum } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor-result/enum/mini-advisor-analysis-type.enum';
@@ -2798,11 +2800,34 @@ Análise processada do CNIS:
     files: Buffer[],
     asJson = true,
   ): Promise<string | null> {
-    return this.getRuralOrHybridRetirementRejectionFirstAnalysis(
-      systemInstruction,
-      cnisAnalysisJson,
-      files,
-      asJson,
+    const prompt = `
+# IMPORTANT
+- Base the technical analysis primarily on the already processed CNIS analysis in JSON format.
+- Calculate only values that are not already present in the provided CNIS analysis.
+- Return strictly a JSON object compatible with the requested schema.
+- For "specialTime" and "commonTime", consider "special" as exclusive teaching (magistério) time and "common" as non-teaching contribution time.
+- For each period, classify using timelineClassification: TEACHER_TIME for periods of exclusive teaching activity, COMMON_TIME for regular urban/rural contribution periods, PENDENCY_PERIOD for periods with pendencies, INACTIVITY_PERIOD for gaps without activity.
+- Include earningsHistory ONLY for competences with pendencies (below minimum, late contribution, no exit date). Return empty array when no pendencies exist.
+- CRITICAL: For nullable fields, use JSON null (not the string "null"). Example: "endDate": null (correct), "endDate": "null" (WRONG).
+
+Processed CNIS analysis:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: asJson
+          ? ResponseConfigInputModel.build({
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema:
+                this.getTeacherRetirementPlanningRejectionFirstAnalysisJsonSchema(),
+            })
+          : null,
+      }),
     );
   }
 
@@ -2811,10 +2836,27 @@ Análise processada do CNIS:
     cnisAnalysisJson: string,
     files: Buffer[],
   ): Promise<string | null> {
-    return this.getRuralOrHybridRetirementRejectionCompleteAnalysis(
-      systemInstruction,
-      cnisAnalysisJson,
-      files,
+    const prompt = `
+# IMPORTANT
+- Base the technical analysis primarily on the already processed CNIS analysis in JSON format.
+- Calculate only values that are not already present in the provided CNIS analysis.
+- Return strictly a JSON object compatible with the requested schema.
+
+Processed CNIS analysis:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getTeacherRetirementPlanningRejectionCompleteAnalysisJsonSchema(),
+        }),
+      }),
     );
   }
 
@@ -2835,10 +2877,32 @@ Análise processada do CNIS:
     customerName: string,
     files: Buffer[],
   ): Promise<string | null> {
-    return this.getRuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysis(
-      systemInstruction,
-      customerName,
-      files,
+    const prompt = `
+You will receive ${files.length} document file(s). Analyze each one individually and return EXACTLY ${files.length} item(s) in the JSON array — one item per uploaded file, in the same order they were provided. Do NOT merge multiple files into a single item.
+
+For each document, verify if the holder name matches the customer name exactly or with clear equivalent variation.
+
+Customer name: ${customerName}
+
+Set ownName as true when the document holder belongs to this customer, otherwise false.
+
+For probativeForce, classify each document as:
+- HIGH: The document has strong probative force for proving teaching activity (e.g., CTPS with teaching role, CTC - Certidão de Tempo de Contribuição, official school records, employment contracts specifying teaching).
+- LOW: The document has weak or indirect probative force (e.g., pay stubs without role specification, generic declarations, documents that only partially prove teaching activity).
+- NONE: The document has no probative force for proving teaching activity (e.g., unrelated documents, illegible documents, documents from non-teaching activities).
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getTeacherRetirementPlanningRejectionWorkPeriodDocumentAnalysisJsonSchema(),
+        }),
+      }),
     );
   }
 
@@ -2850,6 +2914,34 @@ Análise processada do CNIS:
       GenerateResponseInputModel.build({
         systemInstruction,
         promptFiles: files,
+      }),
+    );
+  }
+
+  public async getTeacherRetirementPlanningRejectionPppAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Cada item do array \`periods\` deve ser compatível com a criação de um período na análise de indeferimento de aposentadoria do professor.
+- Preencha \`endDate\`, \`pendencyReason\`, \`contributionAverage\`, \`periodConsideration\` e \`timelineClassification\` somente quando essas informações estiverem disponíveis nos documentos analisados.
+- O campo \`timelineClassification\` indica a classificação do período na linha do tempo (PCD_TIME, COMMON_TIME, INACTIVITY_PERIOD, TEACHER_TIME ou PENDENCY_PERIOD).
+- O campo \`hasSpecialPeriod\` indica se o período possui atividade especial identificada no PPP.
+- Não incluir tag <br> na resposta.
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getTeacherRetirementPlanningRejectionPppAnalysisJsonSchema(),
+        }),
       }),
     );
   }
@@ -3065,6 +3157,234 @@ Análise processada do CNIS:
         'graceExtensionDueToInvoluntaryUnemployment',
         'requestToExtendGracePeriod',
       ],
+    };
+  }
+
+  private getTeacherRetirementPlanningRejectionFirstAnalysisJsonSchema(): object {
+    const timeBreakdownSchema = (label: string): object => ({
+      type: 'object',
+      properties: {
+        withoutResolvingPendencies: {
+          type: 'string',
+          description: `${label} sem resolver pendências. Ex: 12 anos e 3 meses`,
+        },
+        resolvingPendencies: {
+          type: 'string',
+          description: `${label} resolvendo todas as pendências documentais. Ex: 14 anos e 1 mês`,
+        },
+        withAccelerators: {
+          type: 'string',
+          description: `${label} resolvendo pendências e computando aceleradores de tempo. Ex: 15 anos e 6 meses`,
+        },
+      },
+      required: [
+        'withoutResolvingPendencies',
+        'resolvingPendencies',
+        'withAccelerators',
+      ],
+    });
+
+    const gracePeriodBreakdownSchema = (label: string): object => ({
+      type: 'object',
+      properties: {
+        withoutResolvingPendencies: {
+          type: 'number',
+          description: `Quantidade de ${label} sem resolver pendências. Ex: 153`,
+        },
+        resolvingPendencies: {
+          type: 'number',
+          description: `Quantidade de ${label} resolvendo todas as pendências documentais. Ex: 168`,
+        },
+        withAccelerators: {
+          type: 'number',
+          description: `Quantidade de ${label} resolvendo pendências e computando aceleradores de tempo. Ex: 180`,
+        },
+      },
+      required: [
+        'withoutResolvingPendencies',
+        'resolvingPendencies',
+        'withAccelerators',
+      ],
+    });
+
+    return {
+      type: 'object',
+      properties: {
+        summary: {
+          type: 'object',
+          description:
+            'Resumo do tempo de contribuição e carência apurados por cenário, separando tempo de magistério (special) e tempo comum (common).',
+          properties: {
+            specialTime: {
+              ...timeBreakdownSchema(
+                'Tempo de contribuição exclusivo em magistério',
+              ),
+              description:
+                'Tempo de contribuição exclusivo em atividades de magistério (ensino infantil, fundamental e médio) apurado em cada cenário.',
+            },
+            commonTime: {
+              ...timeBreakdownSchema(
+                'Tempo de contribuição comum (não-magistério)',
+              ),
+              description:
+                'Tempo de contribuição em atividades não relacionadas ao magistério apurado em cada cenário.',
+            },
+            totalTime: {
+              ...timeBreakdownSchema('Tempo de contribuição total'),
+              description:
+                'Tempo total de contribuição (magistério + comum) apurado em cada cenário.',
+            },
+            specialGracePeriod: {
+              ...gracePeriodBreakdownSchema('meses de carência em magistério'),
+              description:
+                'Carência acumulada pelo tempo de magistério em cada cenário.',
+            },
+            commonGracePeriod: {
+              ...gracePeriodBreakdownSchema('meses de carência comum'),
+              description:
+                'Carência acumulada pelo tempo comum (não-magistério) em cada cenário.',
+            },
+            totalGracePeriod: {
+              ...gracePeriodBreakdownSchema('meses de carência total'),
+              description:
+                'Carência total acumulada (magistério + comum) em cada cenário.',
+            },
+          },
+          required: [
+            'specialTime',
+            'commonTime',
+            'totalTime',
+            'specialGracePeriod',
+            'commonGracePeriod',
+            'totalGracePeriod',
+          ],
+        },
+        periods: {
+          type: 'array',
+          description:
+            'Lista de todos os períodos contributivos identificados no CNIS, ordenados cronologicamente.',
+          items: {
+            type: 'object',
+            properties: {
+              bondOrigin: {
+                type: 'string',
+                description:
+                  'Nome do vínculo ou empregador. Ex: Escola Municipal João XXIII, INSS - Contribuinte Individual.',
+              },
+              period: {
+                type: 'string',
+                description:
+                  'Descrição do período no formato legível. Ex: 01/2010 a 12/2015.',
+              },
+              category: {
+                type: 'string',
+                description:
+                  'Categoria do vínculo. Ex: Empregado, Contribuinte Individual, Segurado Especial, Servidor Público.',
+              },
+              contributionTime: {
+                type: 'string',
+                description:
+                  'Tempo de contribuição do período. Ex: 5 anos e 11 meses.',
+              },
+              gracePeriod: {
+                type: 'string',
+                description: 'Carência do período. Ex: 71 contribuições.',
+              },
+              status: {
+                type: 'string',
+                description:
+                  'Status do período: Válido, Pendente, Concomitante, Não reconhecido.',
+              },
+              startDate: {
+                type: 'string',
+                nullable: true,
+                description:
+                  'Data de início do período no formato YYYY-MM-DD. JSON null se não disponível.',
+              },
+              endDate: {
+                type: 'string',
+                nullable: true,
+                description:
+                  'Data de fim do período no formato YYYY-MM-DD. JSON null se ainda em aberto.',
+              },
+              competenceBelowTheMinimum: {
+                type: 'boolean',
+                description:
+                  'Indica se há competências com valor abaixo do mínimo neste período.',
+              },
+              contributionAverage: {
+                type: 'string',
+                nullable: true,
+                description:
+                  'Média de contribuição do período. Ex: R$ 1.500,00. JSON null se não disponível.',
+              },
+              timelineClassification: {
+                type: 'string',
+                enum: Object.values(
+                  TeacherRetirementPlanningRejectionWorkPeriodTimelineClassificationEnum,
+                ),
+                description:
+                  'Classificação do período na linha do tempo: TEACHER_TIME para atividade exclusiva de magistério, COMMON_TIME para contribuição comum, PENDENCY_PERIOD para períodos com pendência, INACTIVITY_PERIOD para períodos sem atividade.',
+              },
+              earningsHistory: {
+                type: 'array',
+                description:
+                  'Lista APENAS das competências com pendência identificada no período (contribuições abaixo do mínimo, sem data de saída, recolhidas em atraso). Retorne array vazio quando não houver pendências.',
+                items: {
+                  type: 'object',
+                  properties: {
+                    competence: {
+                      type: 'string',
+                      description: 'Competência no formato MM/YYYY.',
+                    },
+                    remuneration: {
+                      type: 'string',
+                      description:
+                        'Valor da remuneração como string. Ex: R$ 1.320,00.',
+                    },
+                    indicators: {
+                      type: 'string',
+                      description:
+                        'Indicadores do CNIS para esta competência. Ex: IREC-INDPEND, PREC-MENOR-MIN.',
+                    },
+                    paymentDate: {
+                      type: 'string',
+                      nullable: true,
+                      description:
+                        'Data de pagamento no formato YYYY-MM-DD. JSON null se não disponível.',
+                    },
+                    contribution: {
+                      type: 'string',
+                      nullable: true,
+                      description:
+                        'Valor da contribuição. Ex: R$ 145,20. JSON null se não disponível.',
+                    },
+                    contributionSalary: {
+                      type: 'string',
+                      nullable: true,
+                      description:
+                        'Salário de contribuição. Ex: R$ 1.320,00. JSON null se não disponível.',
+                    },
+                    competenceBelowMinimum: {
+                      type: 'boolean',
+                      description:
+                        'Indica se esta competência está abaixo do salário mínimo.',
+                    },
+                  },
+                  required: ['competence', 'competenceBelowMinimum'],
+                },
+              },
+            },
+            required: [
+              'bondOrigin',
+              'competenceBelowTheMinimum',
+              'timelineClassification',
+              'earningsHistory',
+            ],
+          },
+        },
+      },
+      required: ['summary', 'periods'],
     };
   }
 
@@ -3289,6 +3609,69 @@ Análise processada do CNIS:
     };
   }
 
+  private getTeacherRetirementPlanningRejectionCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        clientData: {
+          type: 'object',
+          properties: {
+            name: { type: 'string', nullable: true },
+            cpf: { type: 'string', nullable: true },
+            birthDate: { type: 'string', nullable: true },
+          },
+          required: ['name', 'cpf', 'birthDate'],
+        },
+        retirementRules: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              modality: { type: 'string' },
+              fulfilled: { type: 'boolean' },
+              retirementDate: {
+                type: 'string',
+                nullable: true,
+                description: 'Data no formato YYYY-MM-DD',
+              },
+              expectedRmi: { type: 'number', nullable: true },
+              estimatedCauseValue: { type: 'number', nullable: true },
+              bestRmi: { type: 'boolean' },
+              highestCauseValue: { type: 'boolean' },
+              detailedAnalysis: { type: 'string' },
+            },
+            required: [
+              'modality',
+              'fulfilled',
+              'retirementDate',
+              'expectedRmi',
+              'estimatedCauseValue',
+              'bestRmi',
+              'highestCauseValue',
+              'detailedAnalysis',
+            ],
+          },
+        },
+        analysisResult: {
+          type: 'string',
+          description:
+            'Texto explicativo completo sobre o resultado da análise, perspectivas processuais e recomendações para o caso de indeferimento.',
+        },
+        completeAnalysisDownload: {
+          type: 'string',
+          description:
+            'Conteúdo HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF. Deve conter todos os dados analisados, e uma explicação técnica de todos os dados.',
+        },
+      },
+      required: [
+        'clientData',
+        'retirementRules',
+        'analysisResult',
+        'completeAnalysisDownload',
+      ],
+    };
+  }
+
   private getTimeAcceleratorAnalysisJsonSchema(): object {
     return {
       type: 'object',
@@ -3332,6 +3715,65 @@ Análise processada do CNIS:
         },
       },
       required: ['timeAccelerators'],
+    };
+  }
+
+  private getTeacherRetirementPlanningRejectionWorkPeriodDocumentAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        items: {
+          type: 'array',
+          description: 'Lista de documentos identificados e analisados',
+          items: {
+            type: 'object',
+            properties: {
+              documentType: {
+                type: 'string',
+                description:
+                  'Tipo do documento identificado. Ex: CTPS, Certidão de Tempo de Contribuição (CTC), Declaração de Tempo de Serviço, Contrato de Trabalho, Contracheque, Portaria de Nomeação',
+              },
+              ownName: {
+                type: 'boolean',
+                description:
+                  'Indica se o documento está em nome do cliente informado na requisição',
+              },
+              documentYear: {
+                type: 'string',
+                format: 'date',
+                description: 'Data do documento no formato YYYY-MM-DD',
+              },
+              shortDescription: {
+                type: 'string',
+                description:
+                  'Descrição curta de no máximo 100 caracteres resumindo a conclusão sobre o documento',
+              },
+              technicalNote: {
+                type: 'string',
+                description:
+                  'Nota técnica sobre a relevância e a força probatória do documento para comprovação de atividade de magistério no contexto de recurso ao INSS. Utilize formatação Markdown: use **negrito** para destacar pontos importantes, listas com `-` para enumerações e parágrafos separados por linha em branco.',
+              },
+              probativeForce: {
+                type: 'string',
+                enum: Object.values(
+                  TeacherRetirementPlanningRejectionWorkPeriodDocumentProbativeForceEnum,
+                ),
+                description:
+                  'Classificação da força probante do documento: HIGH para alta força probante (comprova diretamente atividade de magistério), LOW para pouca força probante (comprova indiretamente), NONE para sem força probante (não comprova atividade de magistério).',
+              },
+            },
+            required: [
+              'documentType',
+              'ownName',
+              'documentYear',
+              'shortDescription',
+              'technicalNote',
+              'probativeForce',
+            ],
+          },
+        },
+      },
+      required: ['items'],
     };
   }
 
@@ -8862,6 +9304,108 @@ Análise processada do CNIS:
         'analysisDescription',
         'completeAnalysisDownload',
       ],
+    };
+  }
+
+  private getTeacherRetirementPlanningRejectionPppAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        periods: {
+          type: 'array',
+          description:
+            'Lista de períodos identificados nos documentos PPP analisados',
+          items: {
+            type: 'object',
+            properties: {
+              bondOrigin: {
+                type: 'string',
+                description: 'Origem do vínculo empregatício, se identificada',
+              },
+              category: {
+                type: 'string',
+                description:
+                  'Categoria do período (ex: magistério, atividade administrativa, atividade especial)',
+              },
+              activityDescription: {
+                type: 'string',
+                description:
+                  'Descrição da atividade exercida no período, se aplicável',
+              },
+              startDate: {
+                type: 'string',
+                format: 'date-time',
+                description: 'Data de início do período no formato ISO 8601',
+              },
+              endDate: {
+                type: 'string',
+                format: 'date-time',
+                description: 'Data de fim do período no formato ISO 8601',
+              },
+              impactMonths: {
+                type: 'number',
+                description:
+                  'Número de meses de impacto do período. Omitir quando não disponível.',
+              },
+              graceMonths: {
+                type: 'number',
+                description:
+                  'Número de meses de carência do período. Omitir quando não disponível.',
+              },
+              isPendency: {
+                type: 'boolean',
+                description: 'Indica se o período possui pendência',
+              },
+              competenceBelowTheMinimum: {
+                type: 'boolean',
+                description: 'Indica se a competência está abaixo do mínimo',
+              },
+              contributionAverage: {
+                type: 'string',
+                description:
+                  'Média de contribuição como string decimal, se disponível',
+              },
+              pendencyReason: {
+                type: 'string',
+                description: 'Motivo da pendência, se houver',
+              },
+              periodConsideration: {
+                type: 'string',
+                description: 'Consideração do período para o benefício',
+              },
+              wantsToComplementViaMeuINSS: {
+                type: 'boolean',
+                description:
+                  'Indica se o segurado deseja complementar o período via Meu INSS.',
+              },
+              status: {
+                type: 'boolean',
+                description: 'Status do período (ativo/inativo)',
+              },
+              hasSpecialPeriod: {
+                type: 'boolean',
+                description:
+                  'Indica se o período possui atividade especial identificada no PPP',
+              },
+              timelineClassification: {
+                type: 'string',
+                enum: Object.values(
+                  TeacherRetirementPlanningRejectionWorkPeriodTimelineClassificationEnum,
+                ),
+                description:
+                  'Classificação do período na linha do tempo (PCD_TIME, COMMON_TIME, INACTIVITY_PERIOD, TEACHER_TIME ou PENDENCY_PERIOD)',
+              },
+            },
+            required: [
+              'startDate',
+              'isPendency',
+              'competenceBelowTheMinimum',
+              'status',
+            ],
+          },
+        },
+      },
+      required: ['periods'],
     };
   }
 }

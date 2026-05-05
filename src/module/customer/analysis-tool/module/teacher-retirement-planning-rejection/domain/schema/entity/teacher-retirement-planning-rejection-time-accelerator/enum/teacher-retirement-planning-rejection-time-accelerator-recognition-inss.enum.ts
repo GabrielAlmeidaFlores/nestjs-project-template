@@ -1,5 +1,5 @@
 export enum TeacherRetirementPlanningRejectionTimeAcceleratorRecognitionInssEnum {
-  PROVAVEL = 'PROVAVEL',
-  IMPARCIAL = 'IMPARCIAL',
-  IMPROVAVEL = 'IMPROVAVEL',
+  PROVAVEL = 'provavel',
+  IMPARCIAL = 'imparcial',
+  IMPROVAVEL = 'improvavel',
 }

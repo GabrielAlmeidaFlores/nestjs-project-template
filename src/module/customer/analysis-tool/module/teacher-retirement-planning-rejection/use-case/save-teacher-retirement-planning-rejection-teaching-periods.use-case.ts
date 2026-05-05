@@ -30,9 +30,13 @@ export class SaveTeacherRetirementPlanningRejectionTeachingPeriodsUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(TeacherRetirementPlanningRejectionQueryRepositoryGateway)
     private readonly teacherRetirementPlanningRejectionQueryRepositoryGateway: TeacherRetirementPlanningRejectionQueryRepositoryGateway,
-    @Inject(TeacherRetirementPlanningRejectionTeachingPeriodCommandRepositoryGateway)
+    @Inject(
+      TeacherRetirementPlanningRejectionTeachingPeriodCommandRepositoryGateway,
+    )
     private readonly teacherRetirementPlanningRejectionTeachingPeriodCommandRepositoryGateway: TeacherRetirementPlanningRejectionTeachingPeriodCommandRepositoryGateway,
-    @Inject(TeacherRetirementPlanningRejectionTeachingPeriodDocumentCommandRepositoryGateway)
+    @Inject(
+      TeacherRetirementPlanningRejectionTeachingPeriodDocumentCommandRepositoryGateway,
+    )
     private readonly teacherRetirementPlanningRejectionTeachingPeriodDocumentCommandRepositoryGateway: TeacherRetirementPlanningRejectionTeachingPeriodDocumentCommandRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
@@ -84,8 +88,7 @@ export class SaveTeacherRetirementPlanningRejectionTeachingPeriodsUseCase {
             rejectionReason: periodDto.rejectionReason ?? null,
             legalBasisForRecognition:
               periodDto.legalBasisForRecognition ?? null,
-            favorableJurisprudence:
-              periodDto.favorableJurisprudence ?? null,
+            favorableJurisprudence: periodDto.favorableJurisprudence ?? null,
             proofStrategy: periodDto.proofStrategy ?? null,
             teacherRetirementPlanningRejectionId,
           }),

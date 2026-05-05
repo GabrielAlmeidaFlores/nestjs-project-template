@@ -17,4 +17,5 @@ export interface TeacherRetirementPlanningRejectionResultInterface {
   };
   retirementRules: TeacherRetirementPlanningRejectionRetirementRuleInterface[];
   analysisResult: string;
+  completeAnalysisDownload: string;
 }
