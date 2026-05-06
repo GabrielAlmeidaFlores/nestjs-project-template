@@ -46,9 +46,11 @@ import { RuralTimelineAnalysisModule } from '@module/customer/analysis-tool/modu
 import { SpecialActivityAnalysisModule } from '@module/customer/analysis-tool/module/special-activity-analysis/special-activity-analysis.module';
 import { SpecialCategoryRetirementAnalysisModule } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/special-category-retirement-analysis.module';
 import { SpecialRetirementGrantModule } from '@module/customer/analysis-tool/module/special-retirement-grant/special-retirement-grant.module';
+import { SpecialRetirementRejectionModule } from '@module/customer/analysis-tool/module/special-retirement-rejection/special-retirement-rejection.module';
 import { SpeechGeneratorModule } from '@module/customer/analysis-tool/module/speech-generator/speech-generator.module';
 import { SurvivorPensionAnalysisModule } from '@module/customer/analysis-tool/module/survivor-pension-analysis/survivor-pension-analysis.module';
 import { TeacherRetirementPlanningModule } from '@module/customer/analysis-tool/module/teacher-retirement-planning/teacher-retirement-planning.module';
+import { TeacherRetirementPlanningRejectionModule } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/teacher-retirement-planning-rejection.module';
 import { TemporaryDisabilityBenefitsGrantModule } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/temporary-disability-benefits-grant.module';
 import { TemporaryDisabilityBenefitsTerminatedModule } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/temporary-disability-benefits-terminated.module';
 import { TemporaryIncapacityBenefitRejectionModule } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.module';
@@ -111,7 +113,9 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     RetirementPlanningRgpsModule,
     RetirementPlanningRppsModule,
     SpecialRetirementGrantModule,
+    SpecialRetirementRejectionModule,
     TeacherRetirementPlanningModule,
+    TeacherRetirementPlanningRejectionModule,
     DisabilityRetirementPlanningModule,
     DisabilityRetirementPlanningGrantModule,
     GeneralUrbanRetirementGrantModule,
