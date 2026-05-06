@@ -98,7 +98,7 @@ export class AnalysisToolRecordTypeormQueryRepository
   ): Promise<
     ListDataOutputModel<GetAnalysisToolRecordWithRelationsQueryResult>
   > {
-    const relationsClause = this.getRelationsClauseOperation();
+    const relationsClause = this.getListRelationsClauseOperation();
 
     const searchParams: FindManyOptions<AnalysisToolRecordTypeormEntity> = {
       where: [],
@@ -3727,6 +3727,31 @@ export class AnalysisToolRecordTypeormQueryRepository
     );
 
     return mappedData;
+  }
+
+  private getListRelationsClauseOperation(): FindOptionsRelations<AnalysisToolRecordTypeormEntity> {
+    return {
+      createdBy: {
+        customer: true,
+        organization: true,
+      },
+      updatedBy: {
+        customer: true,
+        organization: true,
+      },
+      analysisToolClient: {
+        createdBy: {
+          customer: true,
+          organization: true,
+        },
+        updatedBy: {
+          customer: true,
+          organization: true,
+        },
+        analysisToolClientInssBenefit: true,
+        analysisToolClientLegalProceeding: true,
+      },
+    };
   }
 
   private getRelationsClauseOperation(): FindOptionsRelations<AnalysisToolRecordTypeormEntity> {
