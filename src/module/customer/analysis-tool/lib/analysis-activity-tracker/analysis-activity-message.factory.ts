@@ -88,6 +88,8 @@ export class AnalysisActivityMessageFactory {
       'Cessação de BPC Pessoa com Deficiência',
     [AnalysisToolRecordTypeEnum.ACCIDENT_ASSISTANCE_TERMINATED]:
       'Auxílio-acidente cessado',
+    [AnalysisToolRecordTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REJECTION]:
+      'Indeferimento de aposentadoria por incapacidade permanente',
   };
 
   private static readonly actionLabelMap: Record<
