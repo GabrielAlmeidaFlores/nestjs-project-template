@@ -1661,6 +1661,46 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise do Perfil Profissiográfico Previdenciário (PPP) com IA para identificação e estruturação de períodos contributivos no contexto de indeferimento de aposentadoria da pessoa com deficiência. Extrai e organiza os dados do PPP em períodos prontos para inserção na análise, com categoria, status de deficiência, média de contribuição e origem do vínculo.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REJECTION_INSS_DECISION_ANALYSIS,
+      creditCost: 5,
+      title:
+        'INDEFERIMENTO APOSENTADORIA INCAPACIDADE PERMANENTE - ANÁLISE DA DECISÃO DO INSS',
+      description:
+        'Análise da carta de indeferimento e documentos do processo administrativo do INSS com IA para aposentadoria por incapacidade permanente. Examina o fundamento da negativa, identifica erros de avaliação médica ou enquadramento legal, aponta eventuais irregularidades processuais e orienta sobre a melhor estratégia de impugnação.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REJECTION_FIRST_ANALYSIS,
+      creditCost: 5,
+      title:
+        'INDEFERIMENTO APOSENTADORIA INCAPACIDADE PERMANENTE - PRIMEIRO STEP',
+      description:
+        'Primeira análise de indeferimento de aposentadoria por incapacidade permanente com IA, combinando os dados estruturados do caso com a leitura e interpretação do CNIS. Gera parecer inicial técnico sobre carência, qualidade de segurado, incapacidade, períodos relevantes e viabilidade preliminar de reversão do indeferimento.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REJECTION_COMPLETE_ANALYSIS,
+      creditCost: 10,
+      title:
+        'INDEFERIMENTO APOSENTADORIA INCAPACIDADE PERMANENTE - ANÁLISE COMPLETA',
+      description:
+        'Análise completa de indeferimento de aposentadoria por incapacidade permanente com IA. Consolida o histórico contributivo, os períodos analisados, os dados de incapacidade e a decisão do INSS, gerando parecer técnico detalhado com enquadramento nas regras aplicáveis, fundamentação jurídica, estratégia processual recomendada e perspectivas do caso.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c60'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REJECTION_SIMPLIFIED_ANALYSIS,
+      creditCost: 3,
+      title:
+        'INDEFERIMENTO APOSENTADORIA INCAPACIDADE PERMANENTE - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada de indeferimento de aposentadoria por incapacidade permanente com IA. Resume os principais achados da análise completa, indica a viabilidade geral do caso, os pontos críticos e os próximos passos recomendados, em linguagem acessível para apresentação ao cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('f7a1b2c3-d4e5-4f6a-8b9c-0d1e2f3a4b5c'),
       resource:
         PaymentPlanPaidResourceTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_REJECTION_INSS_DECISION_ANALYSIS,

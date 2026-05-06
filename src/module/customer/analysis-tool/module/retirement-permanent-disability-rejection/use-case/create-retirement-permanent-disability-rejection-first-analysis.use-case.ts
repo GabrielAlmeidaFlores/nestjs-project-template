@@ -1,0 +1,237 @@
+import { Inject, Injectable } from '@nestjs/common';
+
+import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
+import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
+import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisToolRecordNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-record-not-found.error';
+import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
+import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
+import { CnisDocumentIsNotValidError } from '@module/customer/analysis-tool/module/cnis-fast-analysis/error/cnis-document-is-not-valid.error';
+import { RetirementPermanentDisabilityRejectionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection/command/retirement-permanent-disability-rejection.command.repository.gateway';
+import { RetirementPermanentDisabilityRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection/query/retirement-permanent-disability-rejection.query.repository.gateway';
+import { RetirementPermanentDisabilityRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection-result/command/retirement-permanent-disability-rejection-result.command.repository.gateway';
+import { RetirementPermanentDisabilityRejectionId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection/value-object/retirement-permanent-disability-rejection-id/retirement-permanent-disability-rejection-id.value-object';
+import { RetirementPermanentDisabilityRejectionDocumentTypeEnum } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-document/enum/retirement-permanent-disability-rejection-document-type.enum';
+import { RetirementPermanentDisabilityRejectionResultEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-result/retirement-permanent-disability-rejection-result.entity';
+import { CreateRetirementPermanentDisabilityRejectionFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/dto/response/create-retirement-permanent-disability-rejection-first-analysis.response.dto';
+import { RetirementPermanentDisabilityRejectionCnisDocumentNotFoundError } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/error/retirement-permanent-disability-rejection-cnis-document-not-found.error';
+import { RetirementPermanentDisabilityRejectionNotFoundError } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/error/retirement-permanent-disability-rejection-not-found.error';
+import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
+import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
+import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
+import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+
+@Injectable()
+export class CreateRetirementPermanentDisabilityRejectionFirstAnalysisUseCase {
+  protected readonly _type =
+    CreateRetirementPermanentDisabilityRejectionFirstAnalysisUseCase.name;
+
+  public constructor(
+    @Inject(OrganizationMemberQueryRepositoryGateway)
+    private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
+    @Inject(AnalysisProcessorGateway)
+    private readonly analysisProcessorGateway: AnalysisProcessorGateway,
+    @Inject(CnisAnalyzerGateway)
+    private readonly cnisAnalyzerGateway: CnisAnalyzerGateway,
+    @Inject(FileProcessorGateway)
+    private readonly fileProcessorGateway: FileProcessorGateway,
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
+    @Inject(RetirementPermanentDisabilityRejectionQueryRepositoryGateway)
+    private readonly retirementPermanentDisabilityRejectionQueryRepositoryGateway: RetirementPermanentDisabilityRejectionQueryRepositoryGateway,
+    @Inject(RetirementPermanentDisabilityRejectionCommandRepositoryGateway)
+    private readonly retirementPermanentDisabilityRejectionCommandRepositoryGateway: RetirementPermanentDisabilityRejectionCommandRepositoryGateway,
+    @Inject(
+      RetirementPermanentDisabilityRejectionResultCommandRepositoryGateway,
+    )
+    private readonly retirementPermanentDisabilityRejectionResultCommandRepositoryGateway: RetirementPermanentDisabilityRejectionResultCommandRepositoryGateway,
+    @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
+    private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
+    @Inject(ConsumeOrganizationCreditUseCaseGateway)
+    private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
+    @Inject(BaseTransactionRepositoryGateway)
+    private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+  ) {}
+
+  public async execute(
+    sessionData: SessionDataModel,
+    organizationSessionData: OrganizationSessionDataModel,
+    retirementPermanentDisabilityRejectionId: RetirementPermanentDisabilityRejectionId,
+  ): Promise<CreateRetirementPermanentDisabilityRejectionFirstAnalysisResponseDto> {
+    const organizationMember =
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
+        sessionData.authIdentityId,
+        organizationSessionData.organizationId,
+      );
+
+    if (organizationMember === null) {
+      throw new OrganizationMemberNotFoundError();
+    }
+
+    const existing =
+      await this.retirementPermanentDisabilityRejectionQueryRepositoryGateway.findOneByRetirementPermanentDisabilityRejectionIdOrFailWithRelations(
+        retirementPermanentDisabilityRejectionId,
+        RetirementPermanentDisabilityRejectionNotFoundError,
+      );
+
+    const cnisDocument = (
+      existing.retirementPermanentDisabilityRejectionDocument ?? []
+    ).find(
+      (doc) =>
+        doc.type ===
+        RetirementPermanentDisabilityRejectionDocumentTypeEnum.CNIS,
+    );
+
+    if (!cnisDocument) {
+      throw new RetirementPermanentDisabilityRejectionCnisDocumentNotFoundError();
+    }
+
+    const existingResult =
+      existing.retirementPermanentDisabilityRejectionResult;
+
+    const cnisBuffer = await this.fileProcessorGateway.getFileBuffer(
+      cnisDocument.document,
+    );
+
+    const isCnisValid =
+      await this.analysisProcessorGateway.validateCnisDocument(cnisBuffer);
+
+    if (!isCnisValid) {
+      throw new CnisDocumentIsNotValidError();
+    }
+
+    const analysisToolClient = await this.findAnalysisToolClientOrFail(
+      retirementPermanentDisabilityRejectionId,
+      organizationSessionData.organizationId,
+      sessionData.authIdentityId,
+    );
+
+    const cnisData =
+      await this.analysisProcessorGateway.parseCnisDocument(cnisBuffer);
+
+    const cnisAnalysis = await this.cnisAnalyzerGateway.analyzeCnisDocument(
+      cnisData,
+      analysisToolClient,
+    );
+
+    const documentBuffers = await this.buildAllDocumentBuffers(
+      existing,
+      cnisDocument.document,
+      cnisBuffer,
+    );
+
+    const promptResponse =
+      await this.getPaymentPlanPaidResourcePromptUseCase.execute(
+        PaymentPlanPaidResourceTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REJECTION_FIRST_ANALYSIS,
+      );
+
+    const consumeCreditTransaction =
+      await this.consumeOrganizationCreditUseCase.execute(
+        organizationSessionData.organizationId,
+        PaymentPlanPaidResourceTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REJECTION_FIRST_ANALYSIS,
+        organizationMember.id,
+      );
+
+    const firstAnalysisRaw =
+      await this.analysisProcessorGateway.getRetirementPermanentDisabilityRejectionFirstAnalysis(
+        promptResponse.prompt,
+        JSON.stringify(cnisAnalysis),
+        documentBuffers,
+        true,
+      );
+
+    const firstAnalysisText = firstAnalysisRaw ?? '';
+
+    const resultEntity = new RetirementPermanentDisabilityRejectionResultEntity(
+      {
+        ...(existingResult !== null && { id: existingResult.id }),
+        inssDecisionAnalysis: existingResult?.inssDecisionAnalysis ?? null,
+        firstAnalysis: firstAnalysisText,
+      },
+    );
+
+    const resultTransaction =
+      existingResult !== null
+        ? this.retirementPermanentDisabilityRejectionResultCommandRepositoryGateway.updateRetirementPermanentDisabilityRejectionResult(
+            existingResult.id,
+            resultEntity,
+          )
+        : this.retirementPermanentDisabilityRejectionResultCommandRepositoryGateway.createRetirementPermanentDisabilityRejectionResult(
+            resultEntity,
+          );
+
+    const transactionOperations = [consumeCreditTransaction, resultTransaction];
+
+    if (existingResult === null) {
+      transactionOperations.push(
+        this.retirementPermanentDisabilityRejectionCommandRepositoryGateway.updateRetirementPermanentDisabilityRejectionResultId(
+          retirementPermanentDisabilityRejectionId,
+          resultEntity.id,
+        ),
+      );
+    }
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute(
+      transactionOperations,
+    );
+
+    await transaction.commit();
+
+    return CreateRetirementPermanentDisabilityRejectionFirstAnalysisResponseDto.build(
+      {
+        firstAnalysis: firstAnalysisText,
+      },
+    );
+  }
+
+  private async buildAllDocumentBuffers(
+    existing: Awaited<
+      ReturnType<
+        typeof this.retirementPermanentDisabilityRejectionQueryRepositoryGateway.findOneByRetirementPermanentDisabilityRejectionIdOrFailWithRelations
+      >
+    >,
+    cnisDocumentPath: string,
+    cnisBuffer: Buffer,
+  ): Promise<Buffer[]> {
+    const otherDocumentBuffers = await Promise.all(
+      (existing.retirementPermanentDisabilityRejectionDocument ?? [])
+        .filter((doc) => doc.document !== cnisDocumentPath)
+        .map((doc) => this.fileProcessorGateway.getFileBuffer(doc.document)),
+    );
+
+    const periodDocumentBuffers = await Promise.all(
+      (existing.retirementPermanentDisabilityRejectionPeriodDocument ?? []).map(
+        (doc) => this.fileProcessorGateway.getFileBuffer(doc.document),
+      ),
+    );
+
+    return [cnisBuffer, ...otherDocumentBuffers, ...periodDocumentBuffers];
+  }
+
+  private findAnalysisToolClientOrFail(
+    retirementPermanentDisabilityRejectionId: RetirementPermanentDisabilityRejectionId,
+    organizationId: OrganizationSessionDataModel['organizationId'],
+    authIdentityId: SessionDataModel['authIdentityId'],
+  ): Promise<AnalysisToolClientEntity> {
+    return this.analysisToolRecordQueryRepositoryGateway
+      .findWithRelationsByRetirementPermanentDisabilityRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        retirementPermanentDisabilityRejectionId,
+        organizationId,
+        authIdentityId,
+        AnalysisToolRecordNotFoundError,
+      )
+      .then((record) => {
+        const analysisToolClient = record.analysisToolClient;
+
+        return new AnalysisToolClientEntity({
+          ...analysisToolClient,
+          createdBy: analysisToolClient.createdBy.id,
+          updatedBy: analysisToolClient.updatedBy.id,
+        });
+      });
+  }
+}

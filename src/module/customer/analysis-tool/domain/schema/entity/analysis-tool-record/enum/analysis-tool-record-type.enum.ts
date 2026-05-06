@@ -30,6 +30,7 @@ export enum AnalysisToolRecordTypeEnum {
   GENERAL_URBAN_RETIREMENT_REVIEW = 'revisao_aposentadoria_urbana_geral',
   ACCIDENT_BENEFIT_REJECTION = 'indeferimento_acidente',
   DISABILITY_RETIREMENT_PLANNING_REJECTION = 'indeferimento_aposentadoria_para_deficiente',
+  RETIREMENT_PERMANENT_DISABILITY_REJECTION = 'indeferimento_aposentadoria_incapacidade_permanente',
   BPC_DISABILITY_DENIAL = 'indeferimento_bpc_deficiente',
   BPC_ELDERLY_ANALYSIS = 'bpc_ao_idoso',
   MATERNITY_PAY_REJECTION = 'indeferimento_salario_maternidade',
