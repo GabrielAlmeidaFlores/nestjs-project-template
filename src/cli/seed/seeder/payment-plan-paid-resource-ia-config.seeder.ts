@@ -3235,7 +3235,6 @@ Você receberá:
   
 ## ESTRUTURA DE SAÍDA
   
-Retorne um objeto JSON estruturado conforme o schema fornecido, contendo:
   
 ### Para CADA PPP processado:
   
@@ -3666,7 +3665,6 @@ Para cada período, gerar conclusão estruturada:
   
 ## FORMATO DE SAÍDA
   
-Retorne EXCLUSIVAMENTE um objeto JSON válido, conforme schema fornecido, sem:
 - Preâmbulos como "Aqui está o JSON..."
 - Comentários meta
 - Markdown backticks
@@ -13248,7 +13246,6 @@ Sua tarefa é analisar o documento fornecido e extrair as seguintes informaçõe
 - Para probatoryPurpose, seja conciso e objetivo (máximo 200 caracteres)
 
 **Formato de resposta:**
-Retorne APENAS um objeto JSON válido com a seguinte estrutura:
 {
   "documentYear": number | null,
   "documentHolderType": string | null,
@@ -14959,8 +14956,7 @@ REGRAS IMPORTANTES
 - Não invente períodos, graus de deficiência, documentos ou resultados.
 - Quando faltar dado, indique expressamente que não foi identificado.
 - Priorize linguagem técnica, objetiva e acionável.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoExecutivo, linhaDoTempoContributiva, periodosDeDeficiencia, aceleradoresDeTempo, beneficiosEProcessosRelevantes, viabilidadeDaConcessao, riscosELacunas, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15001,8 +14997,7 @@ REGRAS IMPORTANTES
 - Use os valores e dados do CNIS já processado como fonte principal.
 - Não invente datas, remunerações, períodos ou documentos.
 - Quando houver divergência entre fontes, registre a divergência com cautela.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoDoCaso, sinteseDoCnis, periodosRelevantesParaConcessao, impactoDosPeriodosDeDeficienciaEAceleradores, lacunasERiscosIniciais, conclusaoPreliminar, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15020,8 +15015,7 @@ REGRAS IMPORTANTES
 - Não invente prova testemunhal ou documentos ausentes.
 - Se faltar informação, registre expressamente.
 - Foque no aproveitamento do período para a concessão do benefício.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: periodosAlegados, documentosApresentados, analiseDeConsistencia, conclusaoSobreReconhecimento, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15039,8 +15033,7 @@ REGRAS IMPORTANTES
 - Baseie-se somente nos documentos enviados.
 - Se houver lacuna probatória, destaque com objetividade.
 - Não afirme contagem sem base documental mínima.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: periodoEDocumentos, analiseDeConsistencia, conclusaoSobreAproveitamento, providenciasRecomendadas.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15058,8 +15051,7 @@ REGRAS IMPORTANTES
 - Não invente dados não presentes na documentação.
 - Se houver risco de duplicidade, destaque de forma expressa.
 - Mantenha foco no impacto do período para a concessão.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoDoPeriodoPublico, auditoriaDocumental, viabilidadeDeAverbacao, riscos, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15077,8 +15069,7 @@ REGRAS IMPORTANTES
 - Não invente vínculos, datas ou documentos.
 - Se a prova estiver fraca, diga claramente.
 - Mantenha foco no aproveitamento previdenciário do período.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: vinculosAusentesNoCnis, analiseProbatoria, estrategiaDeRegularizacao, impacto, prioridade.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15096,8 +15087,7 @@ REGRAS IMPORTANTES
 - Não presuma contraprestação ou requisitos que não estejam demonstrados.
 - Se faltar documento essencial, registre explicitamente.
 - Seja objetivo e técnico.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: periodoEInstituicao, documentosAnalisados, checklistProbatorio, conclusao, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15115,8 +15105,7 @@ REGRAS IMPORTANTES
 - Não invente acordo internacional sem base nos documentos.
 - Se o país ou o acordo não estiver identificado, registre essa limitação.
 - Priorize orientações administrativas concretas.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoDoCaso, documentosEQualidadeDaProva, possibilidadeDeTotalizacaoOuAproveitamento, pendencias, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15134,8 +15123,7 @@ REGRAS IMPORTANTES
 - Não presuma recolhimento inexistente.
 - Se a prova estiver incompleta, informe com clareza.
 - Mantenha foco no aproveitamento do período para a concessão.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: periodosEvidenciados, provasDeAtividadeERecolhimento, necessidadeDeRegularizacao, riscos, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15153,8 +15141,7 @@ REGRAS IMPORTANTES
 - Não atribua eficácia previdenciária automática sem base documental.
 - Se a decisão for frágil para fins previdenciários, diga isso expressamente.
 - Seja técnico, objetivo e orientado à ação.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoDoProcesso, periodosERemuneracoesRelevantes, viabilidadePrevidenciaria, documentosNecessarios, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15317,10 +15304,7 @@ REGRAS IMPORTANTES
 - Extraia apenas os dados que estão efetivamente presentes no PPP.
 - Não invente períodos, datas, valores ou informações não constantes no documento.
 - Para campos opcionais ausentes no PPP, omita-os do objeto (não retorne null).
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- O JSON deve conter o campo "periods" com um array de objetos representando cada período identificado.
-- Cada objeto do array deve conter obrigatoriamente: startDate, category, isPendency, competenceBelowTheMinimum e status.
-- Datas devem estar no formato ISO 8601 (ex.: "2001-03-10T00:00:00.000Z").`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15339,8 +15323,7 @@ REGRAS IMPORTANTES
 - Não invente períodos, dependentes, documentos ou resultados.
 - Quando faltar dado, indique expressamente que não foi identificado.
 - Priorize linguagem técnica, objetiva e acionável.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoExecutivo, qualidadeDeSeguradoDoInstituidor, dependentesECondicaoJuridica, documentosApresentados, viabilidadeDaConcessao, riscosELacunas, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15382,8 +15365,7 @@ REGRAS IMPORTANTES
 - Use os valores e dados do CNIS já processado como fonte principal.
 - Não invente datas, remunerações, períodos ou documentos.
 - Quando houver divergência entre fontes, registre a divergência com cautela.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoDoCaso, sinteseDoCnis, qualidadeDeSeguradoNoObito, dependentesELegitimidade, lacunasERiscosIniciais, conclusaoPreliminar, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15401,8 +15383,7 @@ REGRAS IMPORTANTES
 - Não invente prova testemunhal ou documentos ausentes.
 - Se faltar informação, registre expressamente.
 - Foque no aproveitamento do período para a concessão da pensão por morte.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: periodosAlegados, documentosApresentados, analiseDeConsistencia, conclusaoSobreReconhecimento, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15420,8 +15401,7 @@ REGRAS IMPORTANTES
 - Baseie-se somente nos documentos enviados.
 - Se houver lacuna probatória, destaque com objetividade.
 - Não afirme contagem sem base documental mínima.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: periodoEDocumentos, analiseDeConsistencia, conclusaoSobreAproveitamento, providenciasRecomendadas.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15439,8 +15419,7 @@ REGRAS IMPORTANTES
 - Não invente dados não presentes na documentação.
 - Se houver risco de duplicidade, destaque de forma expressa.
 - Mantenha foco no impacto do período para a concessão da pensão por morte.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoDoPeriodoPublico, auditoriaDocumental, viabilidadeDeAverbacao, riscos, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15458,8 +15437,7 @@ REGRAS IMPORTANTES
 - Não invente vínculos, datas ou documentos.
 - Se a prova estiver fraca, diga claramente.
 - Mantenha foco no aproveitamento previdenciário do período para a concessão da pensão por morte.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: vinculosAusentesNoCnis, analiseProbatoria, estrategiaDeRegularizacao, impacto, prioridade.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15477,8 +15455,7 @@ REGRAS IMPORTANTES
 - Não presuma contraprestação ou requisitos que não estejam demonstrados.
 - Se faltar documento essencial, registre explicitamente.
 - Seja objetivo e técnico.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: periodoEInstituicao, documentosAnalisados, checklistProbatorio, conclusao, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15496,8 +15473,7 @@ REGRAS IMPORTANTES
 - Não invente acordo internacional sem base nos documentos.
 - Se o país ou o acordo não estiver identificado, registre essa limitação.
 - Priorize orientações administrativas concretas.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoDoCaso, documentosEQualidadeDaProva, possibilidadeDeTotalizacaoOuAproveitamento, pendencias, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15515,8 +15491,7 @@ REGRAS IMPORTANTES
 - Não presuma recolhimento inexistente.
 - Se a prova estiver incompleta, informe com clareza.
 - Mantenha foco no aproveitamento do período para a concessão da pensão por morte.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: periodosEvidenciados, provasDeAtividadeERecolhimento, necessidadeDeRegularizacao, riscos, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15534,8 +15509,7 @@ REGRAS IMPORTANTES
 - Não atribua eficácia previdenciária automática sem base documental.
 - Se a decisão for frágil para fins previdenciários, diga isso expressamente.
 - Seja técnico, objetivo e orientado à ação.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoDoProcesso, periodosERemuneracoesRelevantes, viabilidadePrevidenciaria, documentosNecessarios, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15555,8 +15529,7 @@ REGRAS IMPORTANTES
 - Não invente períodos, dependentes, documentos ou resultados.
 - Quando faltar dado, indique expressamente que não foi identificado.
 - Priorize linguagem técnica, objetiva e acionável.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoExecutivo, qualidadeDeSeguradoDoInstituidor, dependentesECondicaoJuridica, documentosApresentados, fundamentoDoIndeferimento, viabilidadeDaReversao, riscosELacunas, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15599,8 +15572,7 @@ REGRAS IMPORTANTES
 - Use os valores e dados do CNIS já processado como fonte principal.
 - Não invente datas, remunerações, períodos ou documentos.
 - Quando houver divergência entre fontes, registre a divergência com cautela.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoDoCaso, sinteseDoCnis, qualidadeDeSeguradoNoObito, dependentesELegitimidade, fundamentoDoIndeferimento, lacunasERiscosIniciais, conclusaoPreliminar, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15638,8 +15610,7 @@ REGRAS IMPORTANTES
 - Não invente prova testemunhal ou documentos ausentes.
 - Se faltar informação, registre expressamente.
 - Foque no aproveitamento do período para a reversão do indeferimento de pensão por morte.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: periodosAlegados, documentosApresentados, analiseDeConsistencia, conclusaoSobreReconhecimento, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15657,8 +15628,7 @@ REGRAS IMPORTANTES
 - Baseie-se somente nos documentos enviados.
 - Se houver lacuna probatória, destaque com objetividade.
 - Não afirme contagem sem base documental mínima.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: periodoEDocumentos, analiseDeConsistencia, conclusaoSobreAproveitamento, providenciasRecomendadas.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15676,8 +15646,7 @@ REGRAS IMPORTANTES
 - Não invente dados não presentes na documentação.
 - Se houver risco de duplicidade, destaque de forma expressa.
 - Mantenha foco no impacto do período para a reversão do indeferimento de pensão por morte.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoDoPeriodoPublico, auditoriaDocumental, viabilidadeDeAverbacao, riscos, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15695,8 +15664,7 @@ REGRAS IMPORTANTES
 - Não invente vínculos, datas ou documentos.
 - Se a prova estiver fraca, diga claramente.
 - Mantenha foco no aproveitamento previdenciário do período para a reversão do indeferimento de pensão por morte.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: vinculosAusentesNoCnis, analiseProbatoria, estrategiaDeRegularizacao, impacto, prioridade.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15714,8 +15682,7 @@ REGRAS IMPORTANTES
 - Não presuma contraprestação ou requisitos que não estejam demonstrados.
 - Se faltar documento essencial, registre explicitamente.
 - Seja objetivo e técnico.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: periodoEInstituicao, documentosAnalisados, checklistProbatorio, conclusao, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15733,8 +15700,7 @@ REGRAS IMPORTANTES
 - Não invente acordo internacional sem base nos documentos.
 - Se o país ou o acordo não estiver identificado, registre essa limitação.
 - Priorize orientações administrativas concretas.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoDoCaso, documentosEQualidadeDaProva, possibilidadeDeTotalizacaoOuAproveitamento, pendencias, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15752,8 +15718,7 @@ REGRAS IMPORTANTES
 - Não presuma recolhimento inexistente.
 - Se a prova estiver incompleta, informe com clareza.
 - Mantenha foco no aproveitamento do período para a reversão do indeferimento de pensão por morte.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: periodosEvidenciados, provasDeAtividadeERecolhimento, necessidadeDeRegularizacao, riscos, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15771,8 +15736,7 @@ REGRAS IMPORTANTES
 - Não atribua eficácia previdenciária automática sem base documental.
 - Se a decisão for frágil para fins previdenciários, diga isso expressamente.
 - Seja técnico, objetivo e orientado à ação.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoDoProcesso, periodosERemuneracoesRelevantes, viabilidadePrevidenciaria, documentosNecessarios, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15976,7 +15940,6 @@ Para cada período no **workPeriodsBatch**, gere um objeto JSON com os seguintes
 
 ## FORMATO DE SAÍDA
 
-Retorne **exclusivamente** um array JSON válido, sem texto adicional, sem markdown, sem explicações:
 
 \`\`\`json
 [
@@ -16059,7 +16022,6 @@ Analise as seguintes modalidades de aposentadoria especial:
 
 ## FORMATO DE SAÍDA
 
-Retorne **exclusivamente** um array JSON válido, sem texto adicional, sem markdown:
 
 \`\`\`json
 [
@@ -17786,7 +17748,6 @@ Nunca trabalhou.
 Não possui histórico de contribuição.
 ## FORMATO DE SAÍDA
 
-Retorne APENAS o seguinte JSON, sem nenhum texto adicional, sem markdown, sem explicações:
 
 {"chosenAnalysis": "<valor_do_enum>"}
 
@@ -17810,7 +17771,7 @@ REGRAS IMPORTANTES
 - Use os valores e dados do CNIS já processado como fonte principal.
 - Não invente datas, remunerações, períodos ou documentos.
 - Quando houver divergência entre fontes, registre a divergência com cautela.
-- Retorne EXCLUSIVAMENTE um JSON válido, sem markdown, sem blocos de código, sem comentários e sem nenhum texto fora do JSON.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -17830,7 +17791,7 @@ REGRAS IMPORTANTES
 - Use os valores e dados do CNIS já processado como fonte principal.
 - Não invente datas, remunerações, períodos ou documentos.
 - Quando houver divergência entre fontes, registre a divergência com cautela.
-- Retorne EXCLUSIVAMENTE um JSON válido, sem markdown, sem blocos de código, sem comentários e sem nenhum texto fora do JSON.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18069,8 +18030,7 @@ REGRAS IMPORTANTES
 - Não invente períodos, remunerações, documentos ou resultados.
 - Quando faltar dado, indique expressamente que não foi identificado.
 - Priorize linguagem técnica, objetiva e acionável.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: clientData, retirementRules, analysisResult, completeAnalysisDownload.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18131,8 +18091,7 @@ REGRAS IMPORTANTES
 - Use os valores e dados do CNIS já processado como fonte principal.
 - Não invente datas, remunerações, períodos ou documentos.
 - Quando houver divergência entre fontes, registre a divergência com cautela.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoDoCaso, sinteseDoCnis, periodosRelevantesParaReversao, lacunasERiscosIniciais, conclusaoPreliminar, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18150,8 +18109,7 @@ REGRAS IMPORTANTES
 - Não invente prova testemunhal ou documentos ausentes.
 - Se faltar informação, registre expressamente.
 - Foque no aproveitamento do período para a reversão do benefício.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: periodosAlegados, documentosApresentados, analiseDeConsistencia, conclusaoSobreReconhecimento, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18169,8 +18127,7 @@ REGRAS IMPORTANTES
 - Baseie-se somente nos documentos enviados.
 - Se houver lacuna probatória, destaque com objetividade.
 - Não afirme contagem sem base documental mínima.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: periodoEDocumentos, analiseDeConsistencia, conclusaoSobreAproveitamento, providenciasRecomendadas.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18188,8 +18145,7 @@ REGRAS IMPORTANTES
 - Não invente dados não presentes na documentação.
 - Se houver risco de duplicidade, destaque de forma expressa.
 - Mantenha foco no impacto do período para a reversão do indeferimento.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoDoPeriodoPublico, auditoriaDocumental, viabilidadeDeAverbacao, riscos, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18207,8 +18163,7 @@ REGRAS IMPORTANTES
 - Não invente vínculos, datas ou documentos.
 - Se a prova estiver fraca, diga claramente.
 - Mantenha foco no aproveitamento previdenciário do período.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: vinculosAusentesNoCnis, analiseProbatoria, estrategiaDeRegularizacao, impacto, prioridade.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18226,8 +18181,7 @@ REGRAS IMPORTANTES
 - Não presuma contraprestação ou requisitos que não estejam demonstrados.
 - Se faltar documento essencial, registre explicitamente.
 - Seja objetivo e técnico.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: periodoEInstituicao, documentosAnalisados, checklistProbatorio, conclusao, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18245,8 +18199,7 @@ REGRAS IMPORTANTES
 - Não invente acordo internacional sem base nos documentos.
 - Se o país ou o acordo não estiver identificado, registre essa limitação.
 - Priorize orientações administrativas concretas.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoDoCaso, documentosEQualidadeDaProva, possibilidadeDeTotalizacaoOuAproveitamento, pendencias, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18264,8 +18217,7 @@ REGRAS IMPORTANTES
 - Não presuma recolhimento inexistente.
 - Se a prova estiver incompleta, informe com clareza.
 - Mantenha foco no aproveitamento do período para a reversão do indeferimento.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: periodosEvidenciados, provasDeAtividadeERecolhimento, necessidadeDeRegularizacao, riscos, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18283,8 +18235,7 @@ REGRAS IMPORTANTES
 - Não atribua eficácia previdenciária automática sem base documental.
 - Se a decisão for frágil para fins previdenciários, diga isso expressamente.
 - Seja técnico, objetivo e orientado à ação.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoDoProcesso, periodosERemuneracoesRelevantes, viabilidadePrevidenciaria, documentosNecessarios, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18303,10 +18254,7 @@ REGRAS IMPORTANTES
 - Extraia apenas os dados que estão efetivamente presentes no PPP.
 - Não invente períodos, datas, valores ou informações não constantes no documento.
 - Para campos opcionais ausentes no PPP, omita-os do objeto (não retorne null).
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- O JSON deve conter o campo "periods" com um array de objetos representando cada período identificado.
-- Cada objeto do array deve conter obrigatoriamente: startDate, category, isPendency, competenceBelowTheMinimum e status.
-- Datas devem estar no formato ISO 8601 (ex.: "2001-03-10T00:00:00.000Z").`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18369,7 +18317,7 @@ REGRAS IMPORTANTES
 - Use os valores e dados do CNIS já processado como fonte principal para a análise previdenciária.
 - Não invente datas, afastamentos, diagnósticos, sequelas, profissões ou documentos.
 - Quando houver divergência entre os documentos e a narrativa do caso, registre a limitação com cautela.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18410,7 +18358,7 @@ REGRAS IMPORTANTES
 - Baseie-se exclusivamente nos dados recebidos e no CNIS já processado.
 - Não invente períodos, valores, datas, sequelas, regras cumpridas ou resultados favoráveis sem fundamento.
 - Quando faltar dado relevante, registre explicitamente a limitação.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18451,8 +18399,7 @@ REGRAS IMPORTANTES
 - Não invente períodos, remunerações, documentos ou resultados.
 - Quando faltar dado, indique expressamente que não foi identificado.
 - Priorize linguagem técnica, objetiva e acionável.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: clientData, retirementRules, analysisResult, completeAnalysisDownload.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18513,8 +18460,7 @@ REGRAS IMPORTANTES
 - Use os valores e dados do CNIS já processado como fonte principal.
 - Não invente datas, remunerações, períodos ou documentos.
 - Quando houver divergência entre fontes, registre a divergência com cautela.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoDoCaso, sinteseDoCnis, periodosRelevantesParaReversao, impactoDoGrauDeDeficiencia, lacunasERiscosIniciais, conclusaoPreliminar, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18532,8 +18478,7 @@ REGRAS IMPORTANTES
 - Não invente prova testemunhal ou documentos ausentes.
 - Se faltar informação, registre expressamente.
 - Foque no aproveitamento do período para a reversão do benefício.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: periodosAlegados, documentosApresentados, analiseDeConsistencia, conclusaoSobreReconhecimento, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18551,8 +18496,7 @@ REGRAS IMPORTANTES
 - Baseie-se somente nos documentos enviados.
 - Se houver lacuna probatória, destaque com objetividade.
 - Não afirme contagem sem base documental mínima.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: periodoEDocumentos, analiseDeConsistencia, conclusaoSobreAproveitamento, providenciasRecomendadas.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18570,8 +18514,7 @@ REGRAS IMPORTANTES
 - Não invente dados não presentes na documentação.
 - Se houver risco de duplicidade, destaque de forma expressa.
 - Mantenha foco no impacto do período para a reversão do indeferimento.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoDoPeriodoPublico, auditoriaDocumental, viabilidadeDeAverbacao, riscos, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18589,8 +18532,7 @@ REGRAS IMPORTANTES
 - Não invente vínculos, datas ou documentos.
 - Se a prova estiver fraca, diga claramente.
 - Mantenha foco no aproveitamento previdenciário do período.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: vinculosAusentesNoCnis, analiseProbatoria, estrategiaDeRegularizacao, impacto, prioridade.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18608,8 +18550,7 @@ REGRAS IMPORTANTES
 - Não presuma contraprestação ou requisitos que não estejam demonstrados.
 - Se faltar documento essencial, registre explicitamente.
 - Seja objetivo e técnico.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: periodoEInstituicao, documentosAnalisados, checklistProbatorio, conclusao, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18627,8 +18568,7 @@ REGRAS IMPORTANTES
 - Não invente acordo internacional sem base nos documentos.
 - Se o país ou o acordo não estiver identificado, registre essa limitação.
 - Priorize orientações administrativas concretas.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoDoCaso, documentosEQualidadeDaProva, possibilidadeDeTotalizacaoOuAproveitamento, pendencias, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18646,8 +18586,7 @@ REGRAS IMPORTANTES
 - Não presuma recolhimento inexistente.
 - Se a prova estiver incompleta, informe com clareza.
 - Mantenha foco no aproveitamento do período para a reversão do indeferimento.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: periodosEvidenciados, provasDeAtividadeERecolhimento, necessidadeDeRegularizacao, riscos, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18665,8 +18604,7 @@ REGRAS IMPORTANTES
 - Não atribua eficácia previdenciária automática sem base documental.
 - Se a decisão for frágil para fins previdenciários, diga isso expressamente.
 - Seja técnico, objetivo e orientado à ação.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoDoProcesso, periodosERemuneracoesRelevantes, viabilidadePrevidenciaria, documentosNecessarios, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18685,10 +18623,7 @@ REGRAS IMPORTANTES
 - Extraia apenas os dados que estão efetivamente presentes no PPP.
 - Não invente períodos, datas, valores ou informações não constantes no documento.
 - Para campos opcionais ausentes no PPP, omita-os do objeto (não retorne null).
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- O JSON deve conter o campo "periods" com um array de objetos representando cada período identificado.
-- Cada objeto do array deve conter obrigatoriamente: startDate, category, isPendency, competenceBelowTheMinimum e status.
-- Datas devem estar no formato ISO 8601 (ex.: "2001-03-10T00:00:00.000Z").`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18904,9 +18839,7 @@ Para cada documento fornecido, identifique:
 - O ano de emissão ou vigência do documento.
 - Uma nota técnica objetiva sobre a relevância e a força probatória do documento para comprovação de atividade rural no contexto de requerimento ao INSS.
 
-Baseie-se exclusivamente nos documentos fornecidos. Não invente informações.
-
-Retorne SOMENTE um array JSON puro (sem markdown, sem texto adicional) com os seguintes campos para cada documento: documentType (string), ownName (boolean - true se em nome do cliente, false se de terceiro), documentYear (string), shortDescription (string, max 100 chars), technicalNote (string).`,
+Baseie-se exclusivamente nos documentos fornecidos. Não invente informações.`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -18944,8 +18877,7 @@ REGRAS IMPORTANTES
 - Use os dados estruturados do caso como fonte principal.
 - Não invente rendas, vínculos ou documentos ausentes.
 - Quando houver divergência entre fontes, registre a divergência com cautela.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoDoCaso, criterioDeRenda, criterioDeDeficiencia, composicaoFamiliar, pontosDeFortalecimento, lacunasERiscos, conclusaoPreliminar, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -19059,9 +18991,7 @@ Emitir parecer conclusivo sobre:
 
 ## FORMATO OBRIGATÓRIO DE RETORNO
 
-Retorne exclusivamente um JSON válido, sem markdown fora do JSON, sem comentários, sem crases e sem texto explicativo adicional.
 
-O JSON deve conter exatamente estas chaves principais:
 
 {
   "analysisResult": "string",
@@ -19252,7 +19182,6 @@ Orientar de forma clara e prática:
 
 ## FORMATO PARA DOWNLOAD DA VERSÃO CLIENTE
 
-Retorne somente o conteúdo em Markdown, sem JSON, sem crases e sem comentários.
 O texto será convertido em PDF, então ele deve ter aparência de documento simples e bem organizado.
 
 Use obrigatoriamente esta estrutura:
@@ -19320,8 +19249,7 @@ REGRAS IMPORTANTES
 - Use os dados estruturados do caso como fonte principal.
 - Não invente rendas, vínculos ou documentos ausentes.
 - Quando houver divergência entre fontes, registre a divergência com cautela.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoDoCaso, criterioDeRenda, criterioDeDeficiencia, composicaoFamiliar, pontosDeFortalecimento, lacunasERiscos, conclusaoPreliminar, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -19435,9 +19363,7 @@ Emitir parecer conclusivo sobre:
 
 ## FORMATO OBRIGATÓRIO DE RETORNO
 
-Retorne exclusivamente um JSON válido, sem markdown fora do JSON, sem comentários, sem crases e sem texto explicativo adicional.
 
-O JSON deve conter exatamente estas chaves principais:
 
 {
   "analysisResult": "string",
@@ -19628,7 +19554,6 @@ Orientar de forma clara e prática:
 
 ## FORMATO PARA DOWNLOAD DA VERSÃO CLIENTE
 
-Retorne somente o conteúdo em Markdown, sem JSON, sem crases e sem comentários.
 O texto será convertido em PDF, então ele deve ter aparência de documento simples e bem organizado.
 
 Use obrigatoriamente esta estrutura:
@@ -19996,8 +19921,7 @@ REGRAS IMPORTANTES
 - Use os valores e dados do CNIS já processado como fonte principal.
 - Não invente datas, remunerações, períodos ou documentos.
 - Quando houver divergência entre fontes, registre a divergência com cautela.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoDoCaso, sinteseDoCnis, periodosRelevantesParaReversao, qualidadeDeSegurado, lacunasERiscosIniciais, conclusaoPreliminar, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -20017,8 +19941,7 @@ REGRAS IMPORTANTES
 - Não invente períodos, remunerações, documentos ou resultados.
 - Quando faltar dado, indique expressamente que não foi identificado.
 - Priorize linguagem técnica, objetiva e acionável.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: clientData, benefitRules, analysisResult, completeAnalysisDownload.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -20663,7 +20586,7 @@ REGRAS IMPORTANTES
 - Baseie-se exclusivamente nos dados recebidos.
 - Não invente períodos, rendas, composições familiares ou resultados.
 - Quando faltar dado, indique expressamente que não foi identificado.
-- Retorne estritamente um objeto JSON válido, sem markdown externo, sem comentários e sem texto fora do JSON.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -20724,8 +20647,7 @@ REGRAS IMPORTANTES
 - Use os valores e dados do CNIS já processado como fonte principal.
 - Não invente datas, remunerações, períodos ou documentos.
 - Quando houver divergência entre fontes, registre a divergência com cautela.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: resumoDoCaso, sinteseDoCnis, periodosRelevantesParaReversao, qualidadeDeSegurado, lacunasERiscosIniciais, conclusaoPreliminar, proximosPassos.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -20745,8 +20667,7 @@ REGRAS IMPORTANTES
 - Não invente períodos, remunerações, documentos ou resultados.
 - Quando faltar dado, indique expressamente que não foi identificado.
 - Priorize linguagem técnica, objetiva e acionável.
-- Retorne exclusivamente um JSON válido, sem markdown, sem comentários e sem texto fora do JSON.
-- Estruture o JSON com chaves compatíveis com a análise, incluindo no mínimo: clientData, benefitRules, analysisResult, completeAnalysisDownload.`,
+    `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
