@@ -6,7 +6,7 @@ import { RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentTypeEnum
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisTypeormEntity } from './retirement-permanent-disability-revision-disability-analysis.typeorm.entity';
 
 @Entity({
-  name: 'retirement_permanent_disability_revision_disability_analysis_document',
+  name: 'retirement_per_dis_rev_dis_analysis_document',
 })
 export class RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'file_name', type: 'varchar', length: 500 })
@@ -20,15 +20,16 @@ export class RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentType
   public type: RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentTypeEnum;
 
   @ManyToOne(
-    () =>
-      RetirementPermanentDisabilityRevisionDisabilityAnalysisTypeormEntity,
+    () => RetirementPermanentDisabilityRevisionDisabilityAnalysisTypeormEntity,
     (entity) =>
       entity.retirementPermanentDisabilityRevisionDisabilityAnalysisDocument,
   )
   @JoinColumn({
     name: 'retirement_permanent_disability_revision_disability_analysis_id',
   })
-  public retirementPermanentDisabilityRevisionDisabilityAnalysis?: RetirementPermanentDisabilityRevisionDisabilityAnalysisTypeormEntity | undefined;
+  public retirementPermanentDisabilityRevisionDisabilityAnalysis?:
+    | RetirementPermanentDisabilityRevisionDisabilityAnalysisTypeormEntity
+    | undefined;
 
   protected override readonly _type =
     RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentTypeormEntity.name;
