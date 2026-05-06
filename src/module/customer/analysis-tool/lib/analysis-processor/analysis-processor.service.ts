@@ -10434,4 +10434,18 @@ For probativeForce, classify each document as:
       ],
     };
   }
+
+  public async getAccidentAssistanceGrantFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt: cnisAnalysisJson,
+        promptFiles: files,
+      }),
+    );
+  }
 }

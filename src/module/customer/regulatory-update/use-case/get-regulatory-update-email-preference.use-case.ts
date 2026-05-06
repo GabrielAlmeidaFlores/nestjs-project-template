@@ -42,6 +42,8 @@ export class GetRegulatoryUpdateEmailPreferenceUseCase {
     return GetRegulatoryUpdateEmailPreferenceResponseDto.build({
       regulatoryUpdateEmailPreferenceId: entity.id,
       emailEnabled: entity.emailEnabled,
+      sendFrequency: entity.sendFrequency,
+      sendDays: entity.sendDays,
     });
   }
 }
