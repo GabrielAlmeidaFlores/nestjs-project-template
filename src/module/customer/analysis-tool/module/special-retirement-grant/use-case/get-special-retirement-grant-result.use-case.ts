@@ -8,7 +8,6 @@ import { GetSpecialRetirementGrantResultResponseDto } from '@module/customer/ana
 import { InvalidSpecialRetirementGrantCompleteAnalysisJsonError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/invalid-special-retirement-grant-complete-analysis-json.error';
 import { SpecialRetirementGrantNotFoundError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-not-found.error';
 import {
-  SpecialRetirementGrantFirstAnalysisAgentModel,
   SpecialRetirementGrantFirstAnalysisGracePeriodSummaryModel,
   SpecialRetirementGrantFirstAnalysisIntegratedTimelineItemModel,
   SpecialRetirementGrantFirstAnalysisIntegratedTimelineModel,
@@ -18,6 +17,8 @@ import {
   SpecialRetirementGrantFirstAnalysisPendingExitDateModel,
   SpecialRetirementGrantFirstAnalysisPeriodModel,
   SpecialRetirementGrantFirstAnalysisSummaryModel,
+  SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemHazardousAgentModel,
+  SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemLegalFrameworkModel,
   SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemModel,
   SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisModel,
   SpecialRetirementGrantFirstAnalysisTimeSummaryModel,
@@ -301,26 +302,39 @@ export class GetSpecialRetirementGrantResultUseCase {
                   ...(item.justification !== null && {
                     justification: item.justification,
                   }),
-                  ...(item.legalFramework !== null && {
-                    legalFramework: item.legalFramework,
+                  ...(item.company !== null && { company: item.company }),
+                  ...(item.cnpj !== null && { cnpj: item.cnpj }),
+                  ...(item.role !== null && { role: item.role }),
+                  ...(item.supportingDocument !== null && {
+                    supportingDocument: item.supportingDocument,
                   }),
-                  agents: item.agents.map((a) =>
-                    SpecialRetirementGrantFirstAnalysisAgentModel.build({
-                      type: a.type,
-                      ...(a.intensity !== undefined &&
-                        a.intensity !== null && { intensity: a.intensity }),
-                      ...(a.unit !== undefined &&
-                        a.unit !== null && { unit: a.unit }),
-                      ...(a.habitual !== undefined &&
-                        a.habitual !== null && { habitual: a.habitual }),
-                      ...(a.permanence !== undefined &&
-                        a.permanence !== null && { permanence: a.permanence }),
-                      ...(a.source !== undefined &&
-                        a.source !== null && { source: a.source }),
-                      ...(a.epiEficaz !== undefined &&
-                        a.epiEficaz !== null && { epiEficaz: a.epiEficaz }),
-                    }),
+                  ...(item.recordedInCnis !== null && {
+                    recordedInCnis: item.recordedInCnis,
+                  }),
+                  ...(item.remunerationRecordedInCnis !== null && {
+                    remunerationRecordedInCnis: item.remunerationRecordedInCnis,
+                  }),
+                  hazardousAgents: item.hazardousAgents.map((a) =>
+                    SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemHazardousAgentModel.build(
+                      {
+                        intensityAndFrequency: a.intensityAndFrequency,
+                        identifiedAgent: a.identifiedAgent,
+                      },
+                    ),
                   ),
+                  ...(item.informationSource !== null && {
+                    informationSource: item.informationSource,
+                  }),
+                  ...(item.legalFramework !== null && {
+                    legalFramework: item.legalFramework.map((lf) =>
+                      SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemLegalFrameworkModel.build(
+                        {
+                          description: lf.description,
+                          code: lf.code,
+                        },
+                      ),
+                    ),
+                  }),
                   ...(item.epiEficaz !== undefined &&
                     item.epiEficaz !== null && { epiEficaz: item.epiEficaz }),
                   ...(item.observations !== undefined &&

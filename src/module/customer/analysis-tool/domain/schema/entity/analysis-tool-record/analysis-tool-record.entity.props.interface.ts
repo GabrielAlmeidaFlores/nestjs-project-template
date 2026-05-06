@@ -39,9 +39,11 @@ import type { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool
 import type { SpecialActivityEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/special-activity-entity';
 import type { SpecialCategoryRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/special-category-retirement-analysis.entity';
 import type { SpecialRetirementGrantEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/special-retirement-grant.entity';
+import type { SpecialRetirementRejectionEntity } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection/special-retirement-rejection.entity';
 import type { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
 import type { SurvivorPensionAnalysisEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis/survivor-pension-analysis.entity';
 import type { TeacherRetirementPlanningEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
+import type { TeacherRetirementPlanningRejectionEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection/teacher-retirement-planning-rejection.entity';
 import type { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/temporary-disability-benefits-grant.entity';
 import type { TemporaryDisabilityBenefitsTerminatedEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/schema/entity/temporary-disability-benefits-terminated/temporary-disability-benefits-terminated.entity';
 import type { TemporaryIncapacityBenefitRejectionEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.entity';
@@ -65,6 +67,7 @@ export interface AnalysisToolRecordEntityPropsInterface extends BaseEntityPropsI
   ruralTimelineAnalysis?: RuralTimelineAnalysisEntity | null;
   insuranceQualityAnalysis?: InsuranceQualityAnalysisEntity | null;
   teacherRetirementPlanning?: TeacherRetirementPlanningEntity | null;
+  teacherRetirementPlanningRejection?: TeacherRetirementPlanningRejectionEntity | null;
   disabilityRetirementPlanning?: DisabilityRetirementPlanningEntity | null;
   generalUrbanRetirementGrant?: GeneralUrbanRetirementGrantEntity | null;
   generalUrbanRetirementAnalysis?: GeneralUrbanRetirementAnalysisEntity | null;
@@ -83,6 +86,7 @@ export interface AnalysisToolRecordEntityPropsInterface extends BaseEntityPropsI
   deathBenefitGrant?: DeathBenefitGrantEntity | null;
   deathBenefitRejection?: DeathBenefitRejectionEntity | null;
   specialRetirementGrant?: SpecialRetirementGrantEntity | null;
+  specialRetirementRejection?: SpecialRetirementRejectionEntity | null;
   bpcDisabilityDenial?: BpcDisabilityDenialEntity | null;
   bpcDisabilityTermination?: BpcDisabilityTerminationEntity | null;
   bpcElderlyAnalysis?: BpcElderlyAnalysisEntity | null;

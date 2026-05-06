@@ -160,7 +160,14 @@ export class AnalyzeRuralOrHybridRetirementRejectionWorkPeriodDocumentsUseCase {
       cleanedJson = JSON.parse(cleanedJson) as string;
     }
 
-    const parsedResult: unknown = JSON.parse(cleanedJson);
+    const rawParsed: unknown = JSON.parse(cleanedJson);
+    const parsedResult: unknown =
+      rawParsed !== null &&
+      typeof rawParsed === 'object' &&
+      'items' in rawParsed &&
+      Array.isArray((rawParsed as { items: unknown }).items)
+        ? (rawParsed as { items: unknown }).items
+        : rawParsed;
 
     if (!this.isAnalysisResult(parsedResult)) {
       throw new InvalidRuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisJsonError();

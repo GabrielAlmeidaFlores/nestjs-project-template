@@ -387,6 +387,17 @@ import { SpecialRetirementGrantPeriodOverdueContributionTypeormCommandRepository
 import { SpecialRetirementGrantPeriodPendingExitDateTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-period-pending-exit-date/special-retirement-grant-period-pending-exit-date.typeorm.command.repository';
 import { SpecialRetirementGrantPeriodUnderMinimumTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-period-under-minimum/special-retirement-grant-period-under-minimum.typeorm.command.repository';
 import { SpecialRetirementGrantResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-result/special-retirement-grant-result.typeorm.command.repository';
+import { SpecialRetirementRejectionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection/special-retirement-rejection.typeorm.command.repository';
+import { SpecialRetirementRejectionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection/special-retirement-rejection.typeorm.query.repository';
+import { SpecialRetirementRejectionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection-document/special-retirement-rejection-document.typeorm.command.repository';
+import { SpecialRetirementRejectionInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection-inss-benefit/special-retirement-rejection-inss-benefit.typeorm.command.repository';
+import { SpecialRetirementRejectionLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection-legal-proceeding/special-retirement-rejection-legal-proceeding.typeorm.command.repository';
+import { SpecialRetirementRejectionResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection-result/special-retirement-rejection-result.typeorm.command.repository';
+import { SpecialRetirementRejectionWorkPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection-work-period/special-retirement-rejection-work-period.typeorm.command.repository';
+import { SpecialRetirementRejectionWorkPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection-work-period-document/special-retirement-rejection-work-period-document.typeorm.command.repository';
+import { SpecialRetirementRejectionWorkPeriodEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection-work-period-earnings-history/special-retirement-rejection-work-period-earnings-history.typeorm.command.repository';
+import { SpecialRetirementRejectionWorkSpecialPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection-work-special-period/special-retirement-rejection-work-special-period.typeorm.command.repository';
+import { SpecialRetirementRejectionWorkSpecialPeriodLegalFrameworkTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection-work-special-period-legal-framework/special-retirement-rejection-work-special-period-legal-framework.typeorm.command.repository';
 import { SpeechGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator/speech-generator.typeorm.command.repository';
 import { SpeechGeneratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/speech-generator/speech-generator.typeorm.query.repository';
 import { SpeechGeneratorBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-benefit/speech-generator-benefit.typeorm.command.repository';
@@ -826,6 +837,16 @@ import { SpecialRetirementGrantPeriodUnderMinimumTypeormEntity } from '@infra/da
 import { SpecialRetirementGrantPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-period.typeorm.entity';
 import { SpecialRetirementGrantResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-result.typeorm.entity';
 import { SpecialRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant.typeorm.entity';
+import { SpecialRetirementRejectionDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-document.typeorm.entity';
+import { SpecialRetirementRejectionInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-inss-benefit.typeorm.entity';
+import { SpecialRetirementRejectionLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-legal-proceeding.typeorm.entity';
+import { SpecialRetirementRejectionResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-result.typeorm.entity';
+import { SpecialRetirementRejectionWorkPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-work-period-document.typeorm.entity';
+import { SpecialRetirementRejectionWorkPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-work-period-earnings-history.typeorm.entity';
+import { SpecialRetirementRejectionWorkPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-work-period.typeorm.entity';
+import { SpecialRetirementRejectionWorkSpecialPeriodLegalFrameworkTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-work-special-period-legal-framework.typeorm.entity';
+import { SpecialRetirementRejectionWorkSpecialPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-work-special-period.typeorm.entity';
+import { SpecialRetirementRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection.typeorm.entity';
 import { SpeechGeneratorBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-benefit.typeorm.entity';
 import { SpeechGeneratorDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-document.typeorm.entity';
 import { SpeechGeneratorLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-legal-proceeding.typeorm.entity';
@@ -856,6 +877,16 @@ import { TeacherRetirementPlanningLegalProceedingTypeormEntity } from '@infra/da
 import { TeacherRetirementPlanningPeriodItemDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-period-item-document.typeorm.entity';
 import { TeacherRetirementPlanningPeriodItemTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-period-item.typeorm.entity';
 import { TeacherRetirementPlanningPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-period.typeorm.entity';
+import { TeacherRetirementPlanningRejectionDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection-document.typeorm.entity';
+import { TeacherRetirementPlanningRejectionInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection-inss-benefit.typeorm.entity';
+import { TeacherRetirementPlanningRejectionResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection-result.typeorm.entity';
+import { TeacherRetirementPlanningRejectionTeachingPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection-teaching-period-document.typeorm.entity';
+import { TeacherRetirementPlanningRejectionTeachingPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection-teaching-period.typeorm.entity';
+import { TeacherRetirementPlanningRejectionTimeAcceleratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection-time-accelerator.typeorm.entity';
+import { TeacherRetirementPlanningRejectionWorkPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection-work-period-document.typeorm.entity';
+import { TeacherRetirementPlanningRejectionWorkPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection-work-period-earnings-history.typeorm.entity';
+import { TeacherRetirementPlanningRejectionWorkPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection-work-period.typeorm.entity';
+import { TeacherRetirementPlanningRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection.typeorm.entity';
 import { TeacherRetirementPlanningRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-remuneration.typeorm.entity';
 import { TeacherRetirementPlanningResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-result.typeorm.entity';
 import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning.typeorm.entity';
@@ -989,6 +1020,16 @@ export class TypeormIndex {
     TeacherRetirementPlanningPeriodItemDocumentTypeormEntity,
     TeacherRetirementPlanningRemunerationTypeormEntity,
     TeacherRetirementPlanningResultTypeormEntity,
+    TeacherRetirementPlanningRejectionTypeormEntity,
+    TeacherRetirementPlanningRejectionDocumentTypeormEntity,
+    TeacherRetirementPlanningRejectionInssBenefitTypeormEntity,
+    TeacherRetirementPlanningRejectionResultTypeormEntity,
+    TeacherRetirementPlanningRejectionTeachingPeriodTypeormEntity,
+    TeacherRetirementPlanningRejectionTeachingPeriodDocumentTypeormEntity,
+    TeacherRetirementPlanningRejectionTimeAcceleratorTypeormEntity,
+    TeacherRetirementPlanningRejectionWorkPeriodTypeormEntity,
+    TeacherRetirementPlanningRejectionWorkPeriodDocumentTypeormEntity,
+    TeacherRetirementPlanningRejectionWorkPeriodEarningsHistoryTypeormEntity,
     GeneralUrbanRetirementAnalysisTypeormEntity,
     GeneralUrbanRetirementAnalysisResultTypeormEntity,
     GeneralUrbanRetirementAnalysisDocumentTypeormEntity,
@@ -1211,6 +1252,16 @@ export class TypeormIndex {
     SpecialRetirementGrantPeriodUnderMinimumTypeormEntity,
     SpecialRetirementGrantPeriodPendingExitDateTypeormEntity,
     SpecialRetirementGrantPeriodOverdueContributionTypeormEntity,
+    SpecialRetirementRejectionTypeormEntity,
+    SpecialRetirementRejectionResultTypeormEntity,
+    SpecialRetirementRejectionDocumentTypeormEntity,
+    SpecialRetirementRejectionInssBenefitTypeormEntity,
+    SpecialRetirementRejectionLegalProceedingTypeormEntity,
+    SpecialRetirementRejectionWorkPeriodTypeormEntity,
+    SpecialRetirementRejectionWorkPeriodDocumentTypeormEntity,
+    SpecialRetirementRejectionWorkPeriodEarningsHistoryTypeormEntity,
+    SpecialRetirementRejectionWorkSpecialPeriodTypeormEntity,
+    SpecialRetirementRejectionWorkSpecialPeriodLegalFrameworkTypeormEntity,
     MiniAdvisorTypeormEntity,
     MiniAdvisorResultTypeormEntity,
     SystemActivitiesTypeormEntity,
@@ -1703,6 +1754,17 @@ export class TypeormIndex {
     SpecialRetirementGrantPeriodUnderMinimumTypeormCommandRepository,
     SpecialRetirementGrantPeriodPendingExitDateTypeormCommandRepository,
     SpecialRetirementGrantPeriodOverdueContributionTypeormCommandRepository,
+    SpecialRetirementRejectionTypeormCommandRepository,
+    SpecialRetirementRejectionTypeormQueryRepository,
+    SpecialRetirementRejectionDocumentTypeormCommandRepository,
+    SpecialRetirementRejectionInssBenefitTypeormCommandRepository,
+    SpecialRetirementRejectionLegalProceedingTypeormCommandRepository,
+    SpecialRetirementRejectionResultTypeormCommandRepository,
+    SpecialRetirementRejectionWorkPeriodTypeormCommandRepository,
+    SpecialRetirementRejectionWorkPeriodDocumentTypeormCommandRepository,
+    SpecialRetirementRejectionWorkPeriodEarningsHistoryTypeormCommandRepository,
+    SpecialRetirementRejectionWorkSpecialPeriodTypeormCommandRepository,
+    SpecialRetirementRejectionWorkSpecialPeriodLegalFrameworkTypeormCommandRepository,
     MiniAdvisorTypeormCommandRepository,
     MiniAdvisorTypeormQueryRepository,
     MiniAdvisorResultTypeormCommandRepository,
