@@ -17,6 +17,10 @@ import { GetAccidentAssistanceTerminatedPeriodQueryResultAutoMapperProfile } fro
 import { AccidentAssistanceTerminatedPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-period-document/accident-assistance-terminated-period-document-entity.auto-mapper.profile';
 import { AccidentAssistanceTerminatedResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-result/accident-assistance-terminated-result-entity.auto-mapper.profile';
 import { GetAccidentAssistanceTerminatedResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated-result/get-accident-assistance-terminated-result-query-result.auto-mapper.profile';
+import { AccidentAssistanceGrantEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-grant/accident-assistance-grant-entity.auto-mapper.profile';
+import { GetAccidentAssistanceGrantWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-grant/get-accident-assistance-grant-with-relations-query-result.auto-mapper.profile';
+import { AccidentAssistanceGrantDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-grant-document/accident-assistance-grant-document-entity.auto-mapper.profile';
+import { AccidentAssistanceGrantResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-grant-result/accident-assistance-grant-result-entity.auto-mapper.profile';
 import { AccidentBenefitRejectionEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-benefit-rejection/accident-benefit-rejection-entity.auto-mapper.profile';
 import { GetAccidentBenefitRejectionWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-benefit-rejection/get-accident-benefit-rejection-with-relations-query-result.auto-mapper.profile';
 import { AccidentBenefitRejectionDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-benefit-rejection-document/accident-benefit-rejection-document-entity.auto-mapper.profile';
@@ -1322,6 +1326,10 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     MaternityPayGrantPeriodDocumentEntityAutoMapperProfile,
     MaternityPayGrantResultEntityAutoMapperProfile,
     AccidentAssistanceTerminatedResultEntityAutoMapperProfile,
+    AccidentAssistanceGrantEntityAutoMapperProfile,
+    GetAccidentAssistanceGrantWithRelationsQueryResultAutoMapperProfile,
+    AccidentAssistanceGrantDocumentEntityAutoMapperProfile,
+    AccidentAssistanceGrantResultEntityAutoMapperProfile,
   ],
   exports: [AutoMapperService],
 })
