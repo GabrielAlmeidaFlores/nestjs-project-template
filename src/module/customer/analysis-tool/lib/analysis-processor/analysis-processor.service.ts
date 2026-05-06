@@ -3155,7 +3155,9 @@ For probativeForce, classify each document as:
         responseConfig: ResponseConfigInputModel.build({
           responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
           jsonSchema:
-            this.getTeacherRetirementPlanningRejectionWorkPeriodDocumentAnalysisJsonSchema(),
+            this.getTeacherRetirementPlanningRejectionWorkPeriodDocumentAnalysisJsonSchema(
+              files.length,
+            ),
         }),
       }),
     );
@@ -4017,65 +4019,6 @@ For probativeForce, classify each document as:
         },
       },
       required: ['timeAccelerators'],
-    };
-  }
-
-  private getTeacherRetirementPlanningRejectionWorkPeriodDocumentAnalysisJsonSchema(): object {
-    return {
-      type: 'object',
-      properties: {
-        items: {
-          type: 'array',
-          description: 'Lista de documentos identificados e analisados',
-          items: {
-            type: 'object',
-            properties: {
-              documentType: {
-                type: 'string',
-                description:
-                  'Tipo do documento identificado. Ex: CTPS, Certidão de Tempo de Contribuição (CTC), Declaração de Tempo de Serviço, Contrato de Trabalho, Contracheque, Portaria de Nomeação',
-              },
-              ownName: {
-                type: 'boolean',
-                description:
-                  'Indica se o documento está em nome do cliente informado na requisição',
-              },
-              documentYear: {
-                type: 'string',
-                format: 'date',
-                description: 'Data do documento no formato YYYY-MM-DD',
-              },
-              shortDescription: {
-                type: 'string',
-                description:
-                  'Descrição curta de no máximo 100 caracteres resumindo a conclusão sobre o documento',
-              },
-              technicalNote: {
-                type: 'string',
-                description:
-                  'Nota técnica sobre a relevância e a força probatória do documento para comprovação de atividade de magistério no contexto de recurso ao INSS. Utilize formatação Markdown: use **negrito** para destacar pontos importantes, listas com `-` para enumerações e parágrafos separados por linha em branco.',
-              },
-              probativeForce: {
-                type: 'string',
-                enum: Object.values(
-                  TeacherRetirementPlanningRejectionWorkPeriodDocumentProbativeForceEnum,
-                ),
-                description:
-                  'Classificação da força probante do documento: HIGH para alta força probante (comprova diretamente atividade de magistério), LOW para pouca força probante (comprova indiretamente), NONE para sem força probante (não comprova atividade de magistério).',
-              },
-            },
-            required: [
-              'documentType',
-              'ownName',
-              'documentYear',
-              'shortDescription',
-              'technicalNote',
-              'probativeForce',
-            ],
-          },
-        },
-      },
-      required: ['items'],
     };
   }
 
