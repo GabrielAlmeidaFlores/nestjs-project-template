@@ -188,6 +188,14 @@ import { DisabilityRetirementPlanningRemunerationTypeormCommandRepository } from
 import { DisabilityRetirementPlanningRemunerationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-remuneration/disability-retirement-planning-remuneration.typeorm.query.repository';
 import { DisabilityRetirementPlanningResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-result/disability-retirement-planning-result.typeorm.command.repository';
 import { DisabilityRetirementPlanningResultTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-result/disability-retirement-planning-result.typeorm.query.repository';
+import { ElderlyBpcRejectionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection/elderly-bpc-rejection.typeorm.command.repository';
+import { ElderlyBpcRejectionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection/elderly-bpc-rejection.typeorm.query.repository';
+import { ElderlyBpcRejectionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection-document/elderly-bpc-rejection-document.typeorm.command.repository';
+import { ElderlyBpcRejectionFamiliarGroupTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection-familiar-group/elderly-bpc-rejection-familiar-group.typeorm.command.repository';
+import { ElderlyBpcRejectionFamiliarGroupDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection-familiar-group-document/elderly-bpc-rejection-familiar-group-document.typeorm.command.repository';
+import { ElderlyBpcRejectionInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection-inss-benefit/elderly-bpc-rejection-inss-benefit.typeorm.command.repository';
+import { ElderlyBpcRejectionLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection-legal-proceeding/elderly-bpc-rejection-legal-proceeding.typeorm.command.repository';
+import { ElderlyBpcRejectionResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection-result/elderly-bpc-rejection-result.typeorm.command.repository';
 import { FullOpinionGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/full-opinion-generator-analysis-result/full-opinion-generator-analysis-result.typeorm.command.repository';
 import { FullOpinionGeneratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/full-opinion-generator-analysis-result/full-opinion-generator-analysis-result.typeorm.query.repository';
 import { GeneralUrbanRetirementAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-analysis/general-urban-retirement-analysis.typeorm.command.repository';
@@ -808,6 +816,14 @@ import { DisabilityRetirementPlanningRejectionPeriodEarningsHistoryCommandReposi
 import { DisabilityRetirementPlanningRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/repository/disability-retirement-planning-rejection-result/command/disability-retirement-planning-rejection-result.command.repository.gateway';
 import { DisabilityRetirementPlanningRejectionTimeAcceleratorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/repository/disability-retirement-planning-rejection-time-accelerator/command/disability-retirement-planning-rejection-time-accelerator.command.repository.gateway';
 import { DisabilityRetirementPlanningRejectionTimeAcceleratorQueryRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/repository/disability-retirement-planning-rejection-time-accelerator/query/disability-retirement-planning-rejection-time-accelerator.query.repository.gateway';
+import { ElderlyBpcRejectionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/repository/elderly-bpc-rejection/command/elderly-bpc-rejection.command.repository.gateway';
+import { ElderlyBpcRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/repository/elderly-bpc-rejection/query/elderly-bpc-rejection.query.repository.gateway';
+import { ElderlyBpcRejectionDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/repository/elderly-bpc-rejection-document/command/elderly-bpc-rejection-document.command.repository.gateway';
+import { ElderlyBpcRejectionFamiliarGroupCommandRepositoryGateway } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/repository/elderly-bpc-rejection-familiar-group/command/elderly-bpc-rejection-familiar-group.command.repository.gateway';
+import { ElderlyBpcRejectionFamiliarGroupDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/repository/elderly-bpc-rejection-familiar-group-document/command/elderly-bpc-rejection-familiar-group-document.command.repository.gateway';
+import { ElderlyBpcRejectionInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/repository/elderly-bpc-rejection-inss-benefit/command/elderly-bpc-rejection-inss-benefit.command.repository.gateway';
+import { ElderlyBpcRejectionLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/repository/elderly-bpc-rejection-legal-proceeding/command/elderly-bpc-rejection-legal-proceeding.command.repository.gateway';
+import { ElderlyBpcRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/repository/elderly-bpc-rejection-result/command/elderly-bpc-rejection-result.command.repository.gateway';
 import { GeneralUrbanRetirementAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis/command/general-urban-retirement-analysis.command.repository.gateway';
 import { GeneralUrbanRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis/query/general-urban-retirement-analysis.query.repository.gateway';
 import { GeneralUrbanRetirementAnalysisDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-document/command/general-urban-retirement-analysis-document.command.repository.gateway';
@@ -4112,6 +4128,38 @@ const classProvider: ClassProvider[] = [
       TemporaryIncapacityBenefitTerminationWorkPeriodsEarningsHistoryCommandRepositoryGateway,
     useClass:
       TemporaryIncapacityBenefitTerminationWorkPeriodsEarningsHistoryTypeormCommandRepository,
+  },
+  {
+    provide: ElderlyBpcRejectionQueryRepositoryGateway,
+    useClass: ElderlyBpcRejectionTypeormQueryRepository,
+  },
+  {
+    provide: ElderlyBpcRejectionCommandRepositoryGateway,
+    useClass: ElderlyBpcRejectionTypeormCommandRepository,
+  },
+  {
+    provide: ElderlyBpcRejectionResultCommandRepositoryGateway,
+    useClass: ElderlyBpcRejectionResultTypeormCommandRepository,
+  },
+  {
+    provide: ElderlyBpcRejectionInssBenefitCommandRepositoryGateway,
+    useClass: ElderlyBpcRejectionInssBenefitTypeormCommandRepository,
+  },
+  {
+    provide: ElderlyBpcRejectionLegalProceedingCommandRepositoryGateway,
+    useClass: ElderlyBpcRejectionLegalProceedingTypeormCommandRepository,
+  },
+  {
+    provide: ElderlyBpcRejectionDocumentCommandRepositoryGateway,
+    useClass: ElderlyBpcRejectionDocumentTypeormCommandRepository,
+  },
+  {
+    provide: ElderlyBpcRejectionFamiliarGroupCommandRepositoryGateway,
+    useClass: ElderlyBpcRejectionFamiliarGroupTypeormCommandRepository,
+  },
+  {
+    provide: ElderlyBpcRejectionFamiliarGroupDocumentCommandRepositoryGateway,
+    useClass: ElderlyBpcRejectionFamiliarGroupDocumentTypeormCommandRepository,
   },
 ];
 
