@@ -459,7 +459,9 @@ import { RetirementPermanentDisabilityRevisionDisabilityAnalysisEntityAutoMapper
 import { RetirementPermanentDisabilityRevisionEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-revision/retirement-permanent-disability-revision-entity.auto-mapper.profile';
 import { GetRetirementPermanentDisabilityRevisionDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-revision-document/get-retirement-permanent-disability-revision-document-query-result.auto-mapper.profile';
 import { GetRetirementPermanentDisabilityRevisionInssBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-revision-inss-benefit/get-retirement-permanent-disability-revision-inss-benefit-query-result.auto-mapper.profile';
+import { RetirementPermanentDisabilityRevisionInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-revision-inss-benefit/retirement-permanent-disability-revision-inss-benefit-entity.auto-mapper.profile';
 import { GetRetirementPermanentDisabilityRevisionLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-revision-legal-proceeding/get-retirement-permanent-disability-revision-legal-proceeding-query-result.auto-mapper.profile';
+import { RetirementPermanentDisabilityRevisionLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-revision-legal-proceeding/retirement-permanent-disability-revision-legal-proceeding-entity.auto-mapper.profile';
 import { GetRetirementPermanentDisabilityRevisionResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-revision-result/get-retirement-permanent-disability-revision-result-query-result.auto-mapper.profile';
 import { RetirementPermanentDisabilityRevisionResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-revision-result/retirement-permanent-disability-revision-result-entity.auto-mapper.profile';
 import { GetRetirementPlanningRgpsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps/get-retirement-planning-rgps-query-result.auto-mapper.profile';
@@ -889,9 +891,11 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetRetirementPermanentDisabilityRevisionQueryResultAutoMapperProfile,
     GetRetirementPermanentDisabilityRevisionWithRelationsQueryResultAutoMapperProfile,
     GetRetirementPermanentDisabilityRevisionInssBenefitQueryResultAutoMapperProfile,
+    RetirementPermanentDisabilityRevisionInssBenefitEntityAutoMapperProfile,
     RetirementPermanentDisabilityRevisionResultEntityAutoMapperProfile,
     GetRetirementPermanentDisabilityRevisionDocumentQueryResultAutoMapperProfile,
     GetRetirementPermanentDisabilityRevisionLegalProceedingQueryResultAutoMapperProfile,
+    RetirementPermanentDisabilityRevisionLegalProceedingEntityAutoMapperProfile,
     GetRetirementPermanentDisabilityRevisionResultQueryResultAutoMapperProfile,
     RetirementPermanentDisabilityRevisionDisabilityAnalysisEntityAutoMapperProfile,
     RetirementPermanentDisabilityRevisionDisabilityAnalysisAssociatedCidEntityAutoMapperProfile,
@@ -1326,8 +1330,10 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetRetirementPermanentDisabilityRevisionQueryResultAutoMapperProfile,
     GetRetirementPermanentDisabilityRevisionWithRelationsQueryResultAutoMapperProfile,
     GetRetirementPermanentDisabilityRevisionInssBenefitQueryResultAutoMapperProfile,
+    RetirementPermanentDisabilityRevisionInssBenefitEntityAutoMapperProfile,
     GetRetirementPermanentDisabilityRevisionDocumentQueryResultAutoMapperProfile,
     GetRetirementPermanentDisabilityRevisionLegalProceedingQueryResultAutoMapperProfile,
+    RetirementPermanentDisabilityRevisionLegalProceedingEntityAutoMapperProfile,
     GetRetirementPermanentDisabilityRevisionResultQueryResultAutoMapperProfile,
     RetirementPermanentDisabilityRevisionDisabilityAnalysisEntityAutoMapperProfile,
     RetirementPermanentDisabilityRevisionDisabilityAnalysisAssociatedCidEntityAutoMapperProfile,
