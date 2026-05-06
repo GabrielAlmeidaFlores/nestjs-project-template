@@ -3,11 +3,11 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 
-import { RetirementPermanentDisabilityRevisionDisabilityAnalysisTypeormEntity } from './retirement-permanent-disability-revision-disability-analysis.typeorm.entity';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidTypeormEntity } from './retirement-permanent-disability-revision-disability-analysis-benefit-associated-cid.typeorm.entity';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisTypeormEntity } from './retirement-permanent-disability-revision-disability-analysis.typeorm.entity';
 
 @Entity({
-  name: 'retirement_permanent_disability_revision_disability_analysis_benefit',
+  name: 'retirement_per_dis_rev_dis_analysis_benefit',
 })
 export class RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'has_previous_benefit', type: 'boolean' })
@@ -38,15 +38,16 @@ export class RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitTypeo
   public benefitEndDate: Date | null;
 
   @ManyToOne(
-    () =>
-      RetirementPermanentDisabilityRevisionDisabilityAnalysisTypeormEntity,
+    () => RetirementPermanentDisabilityRevisionDisabilityAnalysisTypeormEntity,
     (entity) =>
       entity.retirementPermanentDisabilityRevisionDisabilityAnalysisBenefit,
   )
   @JoinColumn({
     name: 'retirement_permanent_disability_revision_disability_analysis_id',
   })
-  public retirementPermanentDisabilityRevisionDisabilityAnalysis?: RetirementPermanentDisabilityRevisionDisabilityAnalysisTypeormEntity | undefined;
+  public retirementPermanentDisabilityRevisionDisabilityAnalysis?:
+    | RetirementPermanentDisabilityRevisionDisabilityAnalysisTypeormEntity
+    | undefined;
 
   @OneToMany(
     () =>
@@ -54,7 +55,9 @@ export class RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitTypeo
     (entity) =>
       entity.retirementPermanentDisabilityRevisionDisabilityAnalysisBenefit,
   )
-  public retirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCid?: RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidTypeormEntity[] | undefined;
+  public retirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCid?:
+    | RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidTypeormEntity[]
+    | undefined;
 
   protected override readonly _type =
     RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitTypeormEntity.name;

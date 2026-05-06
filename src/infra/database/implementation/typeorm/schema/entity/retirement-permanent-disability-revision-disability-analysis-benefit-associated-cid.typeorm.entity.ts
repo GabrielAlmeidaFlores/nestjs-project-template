@@ -5,7 +5,7 @@ import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitTypeormEntity } from './retirement-permanent-disability-revision-disability-analysis-benefit.typeorm.entity';
 
 @Entity({
-  name: 'retirement_permanent_disability_revision_disability_analysis_benefit_associated_cid',
+  name: 'retirement_perm_dis_rev_dis_analysis_benefit_associated_cid',
 })
 export class RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'cid', type: 'varchar', length: 20 })
@@ -18,9 +18,11 @@ export class RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssoc
       entity.retirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCid,
   )
   @JoinColumn({
-    name: 'retirement_permanent_disability_revision_disability_analysis_benefit_id',
+    name: 'retirement_per_dis_rev_dis_analysis_benefit_id',
   })
-  public retirementPermanentDisabilityRevisionDisabilityAnalysisBenefit?: RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitTypeormEntity | undefined;
+  public retirementPermanentDisabilityRevisionDisabilityAnalysisBenefit?:
+    | RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitTypeormEntity
+    | undefined;
 
   protected override readonly _type =
     RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidTypeormEntity.name;

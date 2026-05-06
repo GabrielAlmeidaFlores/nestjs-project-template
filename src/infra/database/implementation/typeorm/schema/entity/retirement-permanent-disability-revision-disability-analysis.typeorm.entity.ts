@@ -8,7 +8,7 @@ import { RetirementPermanentDisabilityRevisionDisabilityAnalysisAssociatedCidTyp
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitTypeormEntity } from './retirement-permanent-disability-revision-disability-analysis-benefit.typeorm.entity';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentTypeormEntity } from './retirement-permanent-disability-revision-disability-analysis-document.typeorm.entity';
 
-@Entity({ name: 'retirement_permanent_disability_revision_disability_analysis' })
+@Entity({ name: 'retirement_per_dis_rev_dis_analysis' })
 export class RetirementPermanentDisabilityRevisionDisabilityAnalysisTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'estimated_incapacity_start_date',
@@ -63,34 +63,41 @@ export class RetirementPermanentDisabilityRevisionDisabilityAnalysisTypeormEntit
 
   @ManyToOne(
     () => RetirementPermanentDisabilityRevisionTypeormEntity,
-    (entity) =>
-      entity.retirementPermanentDisabilityRevisionDisabilityAnalysis,
+    (entity) => entity.retirementPermanentDisabilityRevisionDisabilityAnalysis,
   )
   @JoinColumn({
     name: 'retirement_permanent_disability_revision_id',
   })
-  public retirementPermanentDisabilityRevision?: RetirementPermanentDisabilityRevisionTypeormEntity | undefined;
+  public retirementPermanentDisabilityRevision?:
+    | RetirementPermanentDisabilityRevisionTypeormEntity
+    | undefined;
 
   @OneToMany(
     () =>
       RetirementPermanentDisabilityRevisionDisabilityAnalysisAssociatedCidTypeormEntity,
     (entity) => entity.retirementPermanentDisabilityRevisionDisabilityAnalysis,
   )
-  public retirementPermanentDisabilityRevisionDisabilityAnalysisAssociatedCid?: RetirementPermanentDisabilityRevisionDisabilityAnalysisAssociatedCidTypeormEntity[] | undefined;
+  public retirementPermanentDisabilityRevisionDisabilityAnalysisAssociatedCid?:
+    | RetirementPermanentDisabilityRevisionDisabilityAnalysisAssociatedCidTypeormEntity[]
+    | undefined;
 
   @OneToMany(
     () =>
       RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitTypeormEntity,
     (entity) => entity.retirementPermanentDisabilityRevisionDisabilityAnalysis,
   )
-  public retirementPermanentDisabilityRevisionDisabilityAnalysisBenefit?: RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitTypeormEntity[] | undefined;
+  public retirementPermanentDisabilityRevisionDisabilityAnalysisBenefit?:
+    | RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitTypeormEntity[]
+    | undefined;
 
   @OneToMany(
     () =>
       RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentTypeormEntity,
     (entity) => entity.retirementPermanentDisabilityRevisionDisabilityAnalysis,
   )
-  public retirementPermanentDisabilityRevisionDisabilityAnalysisDocument?: RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentTypeormEntity[] | undefined;
+  public retirementPermanentDisabilityRevisionDisabilityAnalysisDocument?:
+    | RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentTypeormEntity[]
+    | undefined;
 
   protected override readonly _type =
     RetirementPermanentDisabilityRevisionDisabilityAnalysisTypeormEntity.name;
