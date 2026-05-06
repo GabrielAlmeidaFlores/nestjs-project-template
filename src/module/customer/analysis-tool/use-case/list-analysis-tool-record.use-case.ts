@@ -151,7 +151,8 @@ export class ListAnalysisToolRecordUseCase {
       analysisToolRecord.teacherRetirementPlanningRejection ??
       analysisToolRecord.accidentAssistanceTerminated ??
       analysisToolRecord.temporaryDisabilityBenefitsTerminated ??
-      analysisToolRecord.maternityPayRejection;
+      analysisToolRecord.maternityPayRejection ??
+      analysisToolRecord.elderlyBpcRejection;
 
     return analysis?.id ?? null;
   }

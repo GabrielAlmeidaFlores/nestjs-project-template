@@ -92,6 +92,8 @@ export class AnalysisActivityMessageFactory {
       'Cessação de BPC Pessoa com Deficiência',
     [AnalysisToolRecordTypeEnum.ACCIDENT_ASSISTANCE_TERMINATED]:
       'Auxílio-acidente cessado',
+    [AnalysisToolRecordTypeEnum.ELDERLY_BPC_REJECTION]:
+      'Indeferimento de BPC ao Idoso',
   };
 
   private static readonly actionLabelMap: Record<

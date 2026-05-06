@@ -17,6 +17,7 @@ import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database
 import { DisabilityRetirementPlanningGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-grant.typeorm.entity';
 import { DisabilityRetirementPlanningRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-rejection.typeorm.entity';
 import { DisabilityRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning.typeorm.entity';
+import { ElderlyBpcRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/elderly-bpc-rejection.typeorm.entity';
 import { GeneralUrbanRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis.typeorm.entity';
 import { GeneralUrbanRetirementDenialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial.typeorm.entity';
 import { GeneralUrbanRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant.typeorm.entity';
@@ -353,6 +354,10 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   @ManyToOne(() => TemporaryIncapacityBenefitTerminationTypeormEntity)
   @JoinColumn({ name: 'temporary_incapacity_benefit_termination_id' })
   public temporaryIncapacityBenefitTermination?: TemporaryIncapacityBenefitTerminationTypeormEntity | null;
+
+  @ManyToOne(() => ElderlyBpcRejectionTypeormEntity)
+  @JoinColumn({ name: 'elderly_bpc_rejection_id' })
+  public elderlyBpcRejection?: ElderlyBpcRejectionTypeormEntity | null;
 
   @ManyToOne(() => MaternityPayGrantTypeormEntity)
   @JoinColumn({ name: 'maternity_pay_grant_id' })

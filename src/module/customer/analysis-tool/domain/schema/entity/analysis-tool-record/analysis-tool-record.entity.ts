@@ -18,6 +18,7 @@ import { DeathBenefitRejectionEntity } from '@module/customer/analysis-tool/modu
 import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.entity';
 import { DisabilityRetirementPlanningGrantEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant/disability-retirement-planning-grant.entity';
 import { DisabilityRetirementPlanningRejectionEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection/disability-retirement-planning-rejection.entity';
+import { ElderlyBpcRejectionEntity } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/schema/entity/elderly-bpc-rejection/elderly-bpc-rejection.entity';
 import { GeneralUrbanRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/general-urban-retirement-analysis-entity';
 import { GeneralUrbanRetirementDenialEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/general-urban-retirement-denial.entity';
 import { GeneralUrbanRetirementGrantEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/general-urban-retirement-grant.entity';
@@ -183,6 +184,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly ruralOrHybridRetirementRejection: RuralOrHybridRetirementRejectionEntity | null;
 
   @Description(
+    'Análise de indeferimento de BPC ao Idoso associada ao registro da ferramenta de análise',
+  )
+  public readonly elderlyBpcRejection: ElderlyBpcRejectionEntity | null;
+
+  @Description(
     'Análise de aposentadoria rural ou híbrida associada ao registro da ferramenta de análise',
   )
   public readonly ruralOrHybridRetirementAnalysis: RuralOrHybridRetirementAnalysisEntity | null;
@@ -336,6 +342,7 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
       props.temporaryDisabilityBenefitsTerminated ?? null;
     this.ruralOrHybridRetirementRejection =
       props.ruralOrHybridRetirementRejection ?? null;
+    this.elderlyBpcRejection = props.elderlyBpcRejection ?? null;
     this.ruralOrHybridRetirementAnalysis =
       props.ruralOrHybridRetirementAnalysis ?? null;
     this.accidentBenefitRejection = props.accidentBenefitRejection ?? null;
