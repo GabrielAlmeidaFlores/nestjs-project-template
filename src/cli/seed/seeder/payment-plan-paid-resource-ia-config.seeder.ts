@@ -20373,7 +20373,7 @@ Retorne SOMENTE um array JSON puro (sem markdown, sem texto adicional) com os se
         PaymentPlanPaidResourceTypeEnum.ACCIDENT_ASSISTANCE_GRANT_FIRST_ANALYSIS,
       ),
       prompt: `# PROMPT PARA PRIMEIRA ANÁLISE — AUXÍLIO-ACIDENTE (RGPS) — CONCESSÃO ORIGINAL
-# Versão: 1.1.0
+# Versão: 1.2.0
 # Modelo IA recomendado: Claude Sonnet 4 ou superior
 # Caso de uso: Análise inicial de concessão de auxílio-acidente
 
@@ -20400,7 +20400,7 @@ Você receberá:
 
 ## FORMATO DA RESPOSTA
 
-Retorne estritamente um JSON com dois campos:
+Retorne estritamente um JSON com quatro campos:
 
 ### Campo \`firstAnalysis\`
 
@@ -20473,6 +20473,21 @@ Resumo objetivo em formato Markdown para exibição em tabela de regras. Use exa
 - [item 2]
 
 **Recomendação estratégica:** [1 a 2 frases sobre a melhor estratégia: requerimento administrativo, ação judicial ou complementação probatória prévia]
+
+---
+
+### Campo \`expectedRmi\`
+
+RMI prevista (Renda Mensal Inicial) do Auxílio-Acidente formatada em reais brasileiros (ex: "R$ 756,00").
+- O Auxílio-Acidente corresponde a **50% do salário de benefício**
+- Calcule o salário de benefício com base nas contribuições identificadas no CNIS (média dos últimos 12 meses de contribuição ou conforme regras vigentes)
+- Retornar **null** se não houver dados suficientes no CNIS para calcular
+
+### Campo \`estimatedCaseValue\`
+
+Valor da causa estimado formatado em reais brasileiros (ex: "R$ 18.144,00").
+- Calcule multiplicando a RMI por **24** (parcelas vencidas como referência para ação judicial)
+- Retornar **null** se a RMI não puder ser calculada
 
 ---
 

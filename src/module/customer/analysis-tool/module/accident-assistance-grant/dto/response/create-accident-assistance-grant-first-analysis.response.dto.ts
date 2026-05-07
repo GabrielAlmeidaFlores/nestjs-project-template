@@ -10,6 +10,12 @@ export class CreateAccidentAssistanceGrantFirstAnalysisResponseDto extends BaseB
   @ResponseDtoStringProperty()
   public analysisConclusion: string;
 
+  @ResponseDtoStringProperty({ required: false })
+  public expectedRmi: string | null;
+
+  @ResponseDtoStringProperty({ required: false })
+  public estimatedCaseValue: string | null;
+
   protected override readonly _type =
     CreateAccidentAssistanceGrantFirstAnalysisResponseDto.name;
 }

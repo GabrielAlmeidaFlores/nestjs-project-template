@@ -10478,6 +10478,18 @@ Análise processada do CNIS:
           description:
             'Resumo objetivo em formato Markdown focado na aplicabilidade do Auxílio-Acidente para exibição em tabela de regras. Deve incluir: viabilidade geral (Alta/Média/Baixa/Inviável), checklist de requisitos com ✅/❌/⚠️, fundamento jurídico, pontos fortes, pontos de atenção e recomendação estratégica.',
         },
+        expectedRmi: {
+          type: 'string',
+          nullable: true,
+          description:
+            'RMI prevista (Renda Mensal Inicial) do Auxílio-Acidente formatada em reais brasileiros (ex: "R$ 756,00"). Deve ser calculada com base no salário de benefício identificado no CNIS aplicando o coeficiente de 50%. Retornar null se não for possível calcular.',
+        },
+        estimatedCaseValue: {
+          type: 'string',
+          nullable: true,
+          description:
+            'Valor da causa estimado formatado em reais brasileiros (ex: "R$ 18.144,00"). Deve ser calculado multiplicando a RMI por 24 (dois anos de parcelas vencidas como referência). Retornar null se não for possível calcular.',
+        },
       },
       required: ['firstAnalysis', 'analysisConclusion'],
     };
