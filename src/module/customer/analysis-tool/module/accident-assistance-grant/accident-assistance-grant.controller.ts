@@ -1,5 +1,7 @@
-import { Body, HttpStatus, Param, RequestMethod } from '@nestjs/common';
+import { Body, HttpStatus, Param, Query, RequestMethod, StreamableFile } from '@nestjs/common';
+import { ParseEnumPipe } from '@nestjs/common/pipes';
 
+import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { AccidentAssistanceGrantId } from '@module/customer/analysis-tool/module/accident-assistance-grant/domain/schema/entity/accident-assistance-grant/value-object/accident-assistance-grant-id.value-object';
 import { CreateAccidentAssistanceGrantRequestDto } from '@module/customer/analysis-tool/module/accident-assistance-grant/dto/request/create-accident-assistance-grant.request.dto';
 import { UpdateAccidentAssistanceGrantRequestDto } from '@module/customer/analysis-tool/module/accident-assistance-grant/dto/request/update-accident-assistance-grant.request.dto';
@@ -9,6 +11,8 @@ import { GetAccidentAssistanceGrantResponseDto } from '@module/customer/analysis
 import { UpdateAccidentAssistanceGrantResponseDto } from '@module/customer/analysis-tool/module/accident-assistance-grant/dto/response/update-accident-assistance-grant.response.dto';
 import { CreateAccidentAssistanceGrantFirstAnalysisUseCase } from '@module/customer/analysis-tool/module/accident-assistance-grant/use-case/create-accident-assistance-grant-first-analysis.use-case';
 import { CreateAccidentAssistanceGrantUseCase } from '@module/customer/analysis-tool/module/accident-assistance-grant/use-case/create-accident-assistance-grant.use-case';
+import { DownloadAccidentAssistanceGrantCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/accident-assistance-grant/use-case/download-accident-assistance-grant-complete-analysis.use-case';
+import { DownloadAccidentAssistanceGrantSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/accident-assistance-grant/use-case/download-accident-assistance-grant-simplified-analysis.use-case';
 import { GetAccidentAssistanceGrantUseCase } from '@module/customer/analysis-tool/module/accident-assistance-grant/use-case/get-accident-assistance-grant.use-case';
 import { UpdateAccidentAssistanceGrantUseCase } from '@module/customer/analysis-tool/module/accident-assistance-grant/use-case/update-accident-assistance-grant.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -31,6 +35,8 @@ export class AccidentAssistanceGrantController {
     private readonly getAccidentAssistanceGrantUseCase: GetAccidentAssistanceGrantUseCase,
     private readonly updateAccidentAssistanceGrantUseCase: UpdateAccidentAssistanceGrantUseCase,
     private readonly createAccidentAssistanceGrantFirstAnalysisUseCase: CreateAccidentAssistanceGrantFirstAnalysisUseCase,
+    private readonly downloadAccidentAssistanceGrantCompleteAnalysisUseCase: DownloadAccidentAssistanceGrantCompleteAnalysisUseCase,
+    private readonly downloadAccidentAssistanceGrantSimplifiedAnalysisUseCase: DownloadAccidentAssistanceGrantSimplifiedAnalysisUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -158,6 +164,76 @@ export class AccidentAssistanceGrantController {
       sessionData,
       organizationSessionData,
       accidentAssistanceGrantId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Baixar análise completa de concessão de auxílio-acidente',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':accidentAssistanceGrantId/download/complete-version',
+      method: RequestMethod.GET,
+    },
+    tag: ['concessao-auxilio-acidente'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Arquivo da análise completa retornado para download.',
+      type: Buffer,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async downloadCompleteAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'accidentAssistanceGrantId',
+      new ParseValueObjectPipe(AccidentAssistanceGrantId),
+    )
+    accidentAssistanceGrantId: AccidentAssistanceGrantId,
+    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
+    format: ExportDocumentFormatEnum,
+  ): Promise<StreamableFile> {
+    return await this.downloadAccidentAssistanceGrantCompleteAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      accidentAssistanceGrantId,
+      format,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Baixar análise simplificada de concessão de auxílio-acidente',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':accidentAssistanceGrantId/download/simplified-version',
+      method: RequestMethod.GET,
+    },
+    tag: ['concessao-auxilio-acidente'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Arquivo da análise simplificada retornado para download.',
+      type: Buffer,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async downloadSimplifiedAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'accidentAssistanceGrantId',
+      new ParseValueObjectPipe(AccidentAssistanceGrantId),
+    )
+    accidentAssistanceGrantId: AccidentAssistanceGrantId,
+    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
+    format: ExportDocumentFormatEnum,
+  ): Promise<StreamableFile> {
+    return await this.downloadAccidentAssistanceGrantSimplifiedAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      accidentAssistanceGrantId,
+      format,
     );
   }
 }
