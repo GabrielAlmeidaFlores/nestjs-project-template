@@ -38,8 +38,6 @@ export class ElderlyBpcRejectionResultEntityAutoMapperProfile {
         id: new ElderlyBpcRejectionResultId(source.id),
         completeAnalysis: source.completeAnalysis,
         simplifiedAnalysis: source.simplifiedAnalysis,
-        completeAnalysisDownload: source.completeAnalysisDownload,
-        simplifiedAnalysisDownload: source.simplifiedAnalysisDownload,
         elderlyBpcRejectionId: new ElderlyBpcRejectionId(
           source.elderlyBpcRejection.id,
         ),
@@ -71,8 +69,6 @@ export class ElderlyBpcRejectionResultEntityAutoMapperProfile {
         id: source.id.toString(),
         completeAnalysis: source.completeAnalysis,
         simplifiedAnalysis: source.simplifiedAnalysis,
-        completeAnalysisDownload: source.completeAnalysisDownload,
-        simplifiedAnalysisDownload: source.simplifiedAnalysisDownload,
         elderlyBpcRejection,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,

@@ -11,20 +11,6 @@ export class ElderlyBpcRejectionResultTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'simplified_analysis', type: 'longtext', nullable: true })
   public simplifiedAnalysis: string | null;
 
-  @Column({
-    name: 'complete_analysis_download',
-    type: 'longtext',
-    nullable: true,
-  })
-  public completeAnalysisDownload: string | null;
-
-  @Column({
-    name: 'simplified_analysis_download',
-    type: 'longtext',
-    nullable: true,
-  })
-  public simplifiedAnalysisDownload: string | null;
-
   @OneToOne(
     () => ElderlyBpcRejectionTypeormEntity,
     (entity) => entity.elderlyBpcRejectionResult,

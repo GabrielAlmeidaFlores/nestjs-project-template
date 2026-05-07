@@ -445,4 +445,10 @@ export abstract class AnalysisToolRecordQueryRepositoryGateway {
     authIdentityId: AuthIdentityId,
     err: ConstructorType<NotFoundError>,
   ): Promise<GetAnalysisToolRecordWithRelationsQueryResult>;
+
+  public abstract findWithRelationsByElderlyBpcRejectionIdAndOrganizationIdOrFail(
+    elderlyBpcRejectionId: ElderlyBpcRejectionId,
+    organizationId: OrganizationId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult>;
 }

@@ -5,7 +5,5 @@ import type { ElderlyBpcRejectionResultId } from '@module/customer/analysis-tool
 export interface ElderlyBpcRejectionResultEntityPropsInterface extends BaseEntityPropsInterface<ElderlyBpcRejectionResultId> {
   completeAnalysis?: string | null;
   simplifiedAnalysis?: string | null;
-  completeAnalysisDownload?: string | null;
-  simplifiedAnalysisDownload?: string | null;
   elderlyBpcRejectionId: ElderlyBpcRejectionId;
 }
