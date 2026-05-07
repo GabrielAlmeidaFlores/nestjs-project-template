@@ -456,6 +456,7 @@ import { RetirementPermanentDisabilityRejectionDocumentEntityAutoMapperProfile }
 import { RetirementPermanentDisabilityRejectionIncapacityEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-rejection-incapacity/retirement-permanent-disability-rejection-incapacity-entity.auto-mapper.profile';
 import { RetirementPermanentDisabilityRejectionIncapacityCidEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-rejection-incapacity-cid/retirement-permanent-disability-rejection-incapacity-cid-entity.auto-mapper.profile';
 import { RetirementPermanentDisabilityRejectionIncapacityDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-rejection-incapacity-document/retirement-permanent-disability-rejection-incapacity-document-entity.auto-mapper.profile';
+import { RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-rejection-incapacity-previous-benefit/retirement-permanent-disability-rejection-incapacity-previous-benefit-entity.auto-mapper.profile';
 import { RetirementPermanentDisabilityRejectionInsuredQualityEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-rejection-insured-quality/retirement-permanent-disability-rejection-insured-quality-entity.auto-mapper.profile';
 import { RetirementPermanentDisabilityRejectionInsuredQualityDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-rejection-insured-quality-document/retirement-permanent-disability-rejection-insured-quality-document-entity.auto-mapper.profile';
 import { RetirementPermanentDisabilityRejectionPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-rejection-period/retirement-permanent-disability-rejection-period-entity.auto-mapper.profile';
@@ -952,6 +953,7 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     RetirementPermanentDisabilityRejectionIncapacityEntityAutoMapperProfile,
     RetirementPermanentDisabilityRejectionIncapacityCidEntityAutoMapperProfile,
     RetirementPermanentDisabilityRejectionIncapacityDocumentEntityAutoMapperProfile,
+    RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitEntityAutoMapperProfile,
     RetirementPermanentDisabilityRejectionInsuredQualityEntityAutoMapperProfile,
     RetirementPermanentDisabilityRejectionInsuredQualityDocumentEntityAutoMapperProfile,
     RetirementPermanentDisabilityRejectionPeriodEntityAutoMapperProfile,

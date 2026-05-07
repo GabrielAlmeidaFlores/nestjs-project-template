@@ -6,6 +6,7 @@ import type { RetirementPermanentDisabilityRejectionDocumentEntity } from '@modu
 import type { RetirementPermanentDisabilityRejectionIncapacityEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-incapacity/retirement-permanent-disability-rejection-incapacity.entity';
 import type { RetirementPermanentDisabilityRejectionIncapacityCidEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-incapacity-cid/retirement-permanent-disability-rejection-incapacity-cid.entity';
 import type { RetirementPermanentDisabilityRejectionIncapacityDocumentEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-incapacity-document/retirement-permanent-disability-rejection-incapacity-document.entity';
+import type { RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-incapacity-previous-benefit/retirement-permanent-disability-rejection-incapacity-previous-benefit.entity';
 import type { RetirementPermanentDisabilityRejectionInsuredQualityEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-insured-quality/retirement-permanent-disability-rejection-insured-quality.entity';
 import type { RetirementPermanentDisabilityRejectionInsuredQualityDocumentEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-insured-quality-document/retirement-permanent-disability-rejection-insured-quality-document.entity';
 import type { RetirementPermanentDisabilityRejectionPeriodEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-period/retirement-permanent-disability-rejection-period.entity';
@@ -32,6 +33,9 @@ export class GetRetirementPermanentDisabilityRejectionWithRelationsQueryResult e
     | null;
   public readonly retirementPermanentDisabilityRejectionIncapacityDocument:
     | RetirementPermanentDisabilityRejectionIncapacityDocumentEntity[]
+    | null;
+  public readonly retirementPermanentDisabilityRejectionIncapacityPreviousBenefit:
+    | RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitEntity[]
     | null;
   public readonly retirementPermanentDisabilityRejectionInsuredQuality: RetirementPermanentDisabilityRejectionInsuredQualityEntity | null;
   public readonly retirementPermanentDisabilityRejectionInsuredQualityDocument:

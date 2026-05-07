@@ -15,9 +15,6 @@ export class RetirementPermanentDisabilityRejectionIncapacityEntity extends Base
   public readonly seriousDiseaseStartDate: Date | null;
   public readonly needsPermanentAssistance: boolean;
   public readonly hasPreviousIncapacityBenefit: boolean;
-  public readonly previousBenefitNumber: string | null;
-  public readonly previousBenefitStartDate: Date | null;
-  public readonly previousBenefitEndDate: Date | null;
 
   protected readonly _type =
     RetirementPermanentDisabilityRejectionIncapacityEntity.name;
@@ -38,8 +35,5 @@ export class RetirementPermanentDisabilityRejectionIncapacityEntity extends Base
     this.seriousDiseaseStartDate = props.seriousDiseaseStartDate ?? null;
     this.needsPermanentAssistance = props.needsPermanentAssistance;
     this.hasPreviousIncapacityBenefit = props.hasPreviousIncapacityBenefit;
-    this.previousBenefitNumber = props.previousBenefitNumber ?? null;
-    this.previousBenefitStartDate = props.previousBenefitStartDate ?? null;
-    this.previousBenefitEndDate = props.previousBenefitEndDate ?? null;
   }
 }
