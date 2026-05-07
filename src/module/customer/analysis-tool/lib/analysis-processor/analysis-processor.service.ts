@@ -10440,12 +10440,46 @@ For probativeForce, classify each document as:
     cnisAnalysisJson: string,
     files: Buffer[],
   ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         systemInstruction,
-        prompt: cnisAnalysisJson,
+        prompt,
         promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: this.getAccidentAssistanceGrantFirstAnalysisJsonSchema(),
+        }),
       }),
     );
+  }
+
+  private getAccidentAssistanceGrantFirstAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        firstAnalysis: {
+          type: 'string',
+          description:
+            'Análise técnica completa e detalhada em formato Markdown, cobrindo: 1) Perfil do Segurado e Qualidade de Segurado, 2) Análise do Acidente e da Sequela Definitiva, 3) Requisitos Legais (checklist com ✅/❌/⚠️), 4) Análise do Histórico Previdenciário (CNIS), 5) Diagnóstico e Viabilidade, 6) Pendências e Recomendações.',
+        },
+        analysisConclusion: {
+          type: 'string',
+          description:
+            'Resumo objetivo em formato Markdown focado na aplicabilidade do Auxílio-Acidente para exibição em tabela de regras. Deve incluir: viabilidade geral (Alta/Média/Baixa/Inviável), checklist de requisitos com ✅/❌/⚠️, fundamento jurídico, pontos fortes, pontos de atenção e recomendação estratégica.',
+        },
+      },
+      required: ['firstAnalysis', 'analysisConclusion'],
+    };
   }
 }
