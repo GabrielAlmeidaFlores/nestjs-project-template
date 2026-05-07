@@ -77,6 +77,21 @@ export class GetRetirementPermanentDisabilityRejectionIncapacityDocumentResponse
 }
 
 @ResponseDto()
+export class GetRetirementPermanentDisabilityRejectionIncapacityPreviousBenefitResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty()
+  public benefitNumber: string;
+
+  @ResponseDtoDateProperty({ required: false })
+  public startDate?: Date;
+
+  @ResponseDtoDateProperty({ required: false })
+  public endDate?: Date;
+
+  protected override readonly _type =
+    GetRetirementPermanentDisabilityRejectionIncapacityPreviousBenefitResponseDto.name;
+}
+
+@ResponseDto()
 export class GetRetirementPermanentDisabilityRejectionIncapacityResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoDateProperty({ required: false })
   public incapacityStartDate?: Date;
@@ -111,14 +126,12 @@ export class GetRetirementPermanentDisabilityRejectionIncapacityResponseDto exte
   @ResponseDtoBooleanProperty()
   public hasPreviousIncapacityBenefit: boolean;
 
-  @ResponseDtoStringProperty({ required: false })
-  public previousBenefitNumber?: string;
-
-  @ResponseDtoDateProperty({ required: false })
-  public previousBenefitStartDate?: Date;
-
-  @ResponseDtoDateProperty({ required: false })
-  public previousBenefitEndDate?: Date;
+  @ResponseDtoObjectProperty(
+    () =>
+      GetRetirementPermanentDisabilityRejectionIncapacityPreviousBenefitResponseDto,
+    { isArray: true, required: false },
+  )
+  public previousBenefits?: GetRetirementPermanentDisabilityRejectionIncapacityPreviousBenefitResponseDto[];
 
   @ResponseDtoObjectProperty(
     () =>

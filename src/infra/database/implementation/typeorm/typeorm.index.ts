@@ -740,6 +740,7 @@ import { RegulatoryUpdateTypeormEntity } from '@infra/database/implementation/ty
 import { RetirementPermanentDisabilityRejectionDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-document.typeorm.entity';
 import { RetirementPermanentDisabilityRejectionIncapacityCidTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-incapacity-cid.typeorm.entity';
 import { RetirementPermanentDisabilityRejectionIncapacityDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-incapacity-document.typeorm.entity';
+import { RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-incapacity-previous-benefit.typeorm.entity';
 import { RetirementPermanentDisabilityRejectionIncapacityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-incapacity.typeorm.entity';
 import { RetirementPermanentDisabilityRejectionInsuredQualityDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-insured-quality-document.typeorm.entity';
 import { RetirementPermanentDisabilityRejectionInsuredQualityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-insured-quality.typeorm.entity';
@@ -1096,6 +1097,7 @@ export class TypeormIndex {
     RetirementPermanentDisabilityRejectionIncapacityTypeormEntity,
     RetirementPermanentDisabilityRejectionIncapacityCidTypeormEntity,
     RetirementPermanentDisabilityRejectionIncapacityDocumentTypeormEntity,
+    RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitTypeormEntity,
     RetirementPermanentDisabilityRejectionInsuredQualityTypeormEntity,
     RetirementPermanentDisabilityRejectionInsuredQualityDocumentTypeormEntity,
     RetirementPermanentDisabilityRejectionPeriodTypeormEntity,

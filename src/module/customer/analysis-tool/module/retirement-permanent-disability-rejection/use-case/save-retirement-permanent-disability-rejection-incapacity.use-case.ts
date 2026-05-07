@@ -10,6 +10,7 @@ import { RetirementPermanentDisabilityRejectionQueryRepositoryGateway } from '@m
 import { RetirementPermanentDisabilityRejectionIncapacityCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection-incapacity/command/retirement-permanent-disability-rejection-incapacity.command.repository.gateway';
 import { RetirementPermanentDisabilityRejectionIncapacityCidCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection-incapacity-cid/command/retirement-permanent-disability-rejection-incapacity-cid.command.repository.gateway';
 import { RetirementPermanentDisabilityRejectionIncapacityDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection-incapacity-document/command/retirement-permanent-disability-rejection-incapacity-document.command.repository.gateway';
+import { RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection-incapacity-previous-benefit/command/retirement-permanent-disability-rejection-incapacity-previous-benefit.command.repository.gateway';
 import { RetirementPermanentDisabilityRejectionId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection/value-object/retirement-permanent-disability-rejection-id/retirement-permanent-disability-rejection-id.value-object';
 import { RetirementPermanentDisabilityRejectionIncapacityEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-incapacity/retirement-permanent-disability-rejection-incapacity.entity';
 import { RetirementPermanentDisabilityRejectionIncapacityId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-incapacity/value-object/retirement-permanent-disability-rejection-incapacity-id/retirement-permanent-disability-rejection-incapacity-id.value-object';
@@ -19,6 +20,8 @@ import { RetirementPermanentDisabilityRejectionIncapacityCidId } from '@module/c
 import { RetirementPermanentDisabilityRejectionIncapacityDocumentTypeEnum } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-incapacity-document/enum/retirement-permanent-disability-rejection-incapacity-document-type.enum';
 import { RetirementPermanentDisabilityRejectionIncapacityDocumentEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-incapacity-document/retirement-permanent-disability-rejection-incapacity-document.entity';
 import { RetirementPermanentDisabilityRejectionIncapacityDocumentId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-incapacity-document/value-object/retirement-permanent-disability-rejection-incapacity-document-id/retirement-permanent-disability-rejection-incapacity-document-id.value-object';
+import { RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-incapacity-previous-benefit/retirement-permanent-disability-rejection-incapacity-previous-benefit.entity';
+import { RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-incapacity-previous-benefit/value-object/retirement-permanent-disability-rejection-incapacity-previous-benefit-id/retirement-permanent-disability-rejection-incapacity-previous-benefit-id.value-object';
 import { SaveRetirementPermanentDisabilityRejectionIncapacityRequestDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/dto/request/save-retirement-permanent-disability-rejection-incapacity.request.dto';
 import { SaveRetirementPermanentDisabilityRejectionIncapacityResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/dto/response/save-retirement-permanent-disability-rejection-incapacity.response.dto';
 import { RetirementPermanentDisabilityRejectionNotFoundError } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/error/retirement-permanent-disability-rejection-not-found.error';
@@ -50,6 +53,10 @@ export class SaveRetirementPermanentDisabilityRejectionIncapacityUseCase {
       RetirementPermanentDisabilityRejectionIncapacityDocumentCommandRepositoryGateway,
     )
     private readonly retirementPermanentDisabilityRejectionIncapacityDocumentCommandRepositoryGateway: RetirementPermanentDisabilityRejectionIncapacityDocumentCommandRepositoryGateway,
+    @Inject(
+      RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitCommandRepositoryGateway,
+    )
+    private readonly retirementPermanentDisabilityRejectionIncapacityPreviousBenefitCommandRepositoryGateway: RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitCommandRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -100,9 +107,6 @@ export class SaveRetirementPermanentDisabilityRejectionIncapacityUseCase {
         seriousDiseaseStartDate: dto.seriousDiseaseStartDate ?? null,
         needsPermanentAssistance: dto.needsPermanentAssistance,
         hasPreviousIncapacityBenefit: dto.hasPreviousIncapacityBenefit,
-        previousBenefitNumber: dto.previousBenefitNumber ?? null,
-        previousBenefitStartDate: dto.previousBenefitStartDate ?? null,
-        previousBenefitEndDate: dto.previousBenefitEndDate ?? null,
       });
 
     const transactions: TransactionType[] = [];
@@ -113,6 +117,9 @@ export class SaveRetirementPermanentDisabilityRejectionIncapacityUseCase {
           incapacityId,
         ),
         this.retirementPermanentDisabilityRejectionIncapacityDocumentCommandRepositoryGateway.deleteAllRetirementPermanentDisabilityRejectionIncapacityDocumentsByIncapacityId(
+          incapacityId,
+        ),
+        this.retirementPermanentDisabilityRejectionIncapacityPreviousBenefitCommandRepositoryGateway.deleteAllRetirementPermanentDisabilityRejectionIncapacityPreviousBenefitsByIncapacityId(
           incapacityId,
         ),
         this.retirementPermanentDisabilityRejectionIncapacityCommandRepositoryGateway.updateRetirementPermanentDisabilityRejectionIncapacity(
@@ -154,6 +161,22 @@ export class SaveRetirementPermanentDisabilityRejectionIncapacityUseCase {
             type: RetirementPermanentDisabilityRejectionIncapacityCidTypeEnum.PREVIOUS_BENEFIT,
             retirementPermanentDisabilityRejectionIncapacityId: incapacityId,
           }),
+        ),
+      );
+    }
+
+    for (const pb of dto.previousBenefits ?? []) {
+      transactions.push(
+        this.retirementPermanentDisabilityRejectionIncapacityPreviousBenefitCommandRepositoryGateway.createRetirementPermanentDisabilityRejectionIncapacityPreviousBenefit(
+          new RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitEntity(
+            {
+              id: new RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitId(),
+              benefitNumber: pb.benefitNumber,
+              startDate: pb.startDate ?? null,
+              endDate: pb.endDate ?? null,
+              retirementPermanentDisabilityRejectionIncapacityId: incapacityId,
+            },
+          ),
         ),
       );
     }

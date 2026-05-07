@@ -13,7 +13,4 @@ export interface RetirementPermanentDisabilityRejectionIncapacityEntityPropsInte
   seriousDiseaseStartDate?: Date | null;
   needsPermanentAssistance: boolean;
   hasPreviousIncapacityBenefit: boolean;
-  previousBenefitNumber?: string | null;
-  previousBenefitStartDate?: Date | null;
-  previousBenefitEndDate?: Date | null;
 }

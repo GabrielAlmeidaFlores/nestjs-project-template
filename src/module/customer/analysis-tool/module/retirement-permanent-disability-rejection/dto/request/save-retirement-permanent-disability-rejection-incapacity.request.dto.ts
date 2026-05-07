@@ -1,4 +1,5 @@
 import { RetirementPermanentDisabilityRejectionSeriousDiseaseEnum } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-incapacity/enum/retirement-permanent-disability-rejection-serious-disease.enum';
+import { SaveRetirementPermanentDisabilityRejectionIncapacityPreviousBenefitRequestDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/dto/request/save-retirement-permanent-disability-rejection-incapacity-previous-benefit.request.dto';
 import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
 import { RequestDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-boolean-property/request-dto-boolean-property.decorator';
 import { RequestDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-date-property/request-dto-date-property.decorator';
@@ -52,14 +53,12 @@ export class SaveRetirementPermanentDisabilityRejectionIncapacityRequestDto exte
   @RequestDtoBooleanProperty()
   public hasPreviousIncapacityBenefit: boolean;
 
-  @RequestDtoStringProperty({ required: false })
-  public previousBenefitNumber?: string;
-
-  @RequestDtoDateProperty({ required: false })
-  public previousBenefitStartDate?: Date;
-
-  @RequestDtoDateProperty({ required: false })
-  public previousBenefitEndDate?: Date;
+  @RequestDtoObjectProperty(
+    () =>
+      SaveRetirementPermanentDisabilityRejectionIncapacityPreviousBenefitRequestDto,
+    { isArray: true, required: false },
+  )
+  public previousBenefits?: SaveRetirementPermanentDisabilityRejectionIncapacityPreviousBenefitRequestDto[];
 
   @RequestDtoStringProperty({ required: false, isArray: true })
   public previousBenefitCids?: string[];

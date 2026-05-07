@@ -6,6 +6,7 @@ import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.v
 import { RetirementPermanentDisabilityRejectionDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-document.typeorm.entity';
 import { RetirementPermanentDisabilityRejectionIncapacityCidTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-incapacity-cid.typeorm.entity';
 import { RetirementPermanentDisabilityRejectionIncapacityDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-incapacity-document.typeorm.entity';
+import { RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-incapacity-previous-benefit.typeorm.entity';
 import { RetirementPermanentDisabilityRejectionIncapacityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-incapacity.typeorm.entity';
 import { RetirementPermanentDisabilityRejectionInsuredQualityDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-insured-quality-document.typeorm.entity';
 import { RetirementPermanentDisabilityRejectionInsuredQualityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-insured-quality.typeorm.entity';
@@ -24,6 +25,8 @@ import { RetirementPermanentDisabilityRejectionIncapacityCidEntity } from '@modu
 import { RetirementPermanentDisabilityRejectionIncapacityCidId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-incapacity-cid/value-object/retirement-permanent-disability-rejection-incapacity-cid-id/retirement-permanent-disability-rejection-incapacity-cid-id.value-object';
 import { RetirementPermanentDisabilityRejectionIncapacityDocumentEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-incapacity-document/retirement-permanent-disability-rejection-incapacity-document.entity';
 import { RetirementPermanentDisabilityRejectionIncapacityDocumentId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-incapacity-document/value-object/retirement-permanent-disability-rejection-incapacity-document-id/retirement-permanent-disability-rejection-incapacity-document-id.value-object';
+import { RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-incapacity-previous-benefit/retirement-permanent-disability-rejection-incapacity-previous-benefit.entity';
+import { RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-incapacity-previous-benefit/value-object/retirement-permanent-disability-rejection-incapacity-previous-benefit-id/retirement-permanent-disability-rejection-incapacity-previous-benefit-id.value-object';
 import { RetirementPermanentDisabilityRejectionInsuredQualityEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-insured-quality/retirement-permanent-disability-rejection-insured-quality.entity';
 import { RetirementPermanentDisabilityRejectionInsuredQualityId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-insured-quality/value-object/retirement-permanent-disability-rejection-insured-quality-id/retirement-permanent-disability-rejection-insured-quality-id.value-object';
 import { RetirementPermanentDisabilityRejectionInsuredQualityDocumentEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-insured-quality-document/retirement-permanent-disability-rejection-insured-quality-document.entity';
@@ -104,6 +107,20 @@ export class GetRetirementPermanentDisabilityRejectionWithRelationsQueryResultAu
             )
           : [];
 
+        const incapacityPreviousBenefits = incapacityEntity
+          ? (
+              incapacityEntity.retirementPermanentDisabilityRejectionIncapacityPreviousBenefit ??
+              []
+            ).map((pb) =>
+              this.mapIncapacityPreviousBenefit(
+                pb,
+                new RetirementPermanentDisabilityRejectionIncapacityId(
+                  incapacityEntity.id,
+                ),
+              ),
+            )
+          : [];
+
         const insuredQuality =
           source.retirementPermanentDisabilityRejectionInsuredQuality
             ? this.mapInsuredQuality(
@@ -165,6 +182,8 @@ export class GetRetirementPermanentDisabilityRejectionWithRelationsQueryResultAu
             retirementPermanentDisabilityRejectionIncapacityCid: incapacityCids,
             retirementPermanentDisabilityRejectionIncapacityDocument:
               incapacityDocuments,
+            retirementPermanentDisabilityRejectionIncapacityPreviousBenefit:
+              incapacityPreviousBenefits,
             retirementPermanentDisabilityRejectionInsuredQuality:
               insuredQuality,
             retirementPermanentDisabilityRejectionInsuredQualityDocument:
@@ -226,13 +245,30 @@ export class GetRetirementPermanentDisabilityRejectionWithRelationsQueryResultAu
       seriousDiseaseStartDate: source.seriousDiseaseStartDate,
       needsPermanentAssistance: source.needsPermanentAssistance,
       hasPreviousIncapacityBenefit: source.hasPreviousIncapacityBenefit,
-      previousBenefitNumber: source.previousBenefitNumber,
-      previousBenefitStartDate: source.previousBenefitStartDate,
-      previousBenefitEndDate: source.previousBenefitEndDate,
       createdAt: source.createdAt,
       updatedAt: source.updatedAt,
       deletedAt: source.deletedAt,
     });
+  }
+
+  private mapIncapacityPreviousBenefit(
+    source: RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitTypeormEntity,
+    incapacityId: RetirementPermanentDisabilityRejectionIncapacityId,
+  ): RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitEntity {
+    return new RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitEntity(
+      {
+        id: new RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitId(
+          source.id,
+        ),
+        benefitNumber: source.benefitNumber,
+        startDate: source.startDate,
+        endDate: source.endDate,
+        retirementPermanentDisabilityRejectionIncapacityId: incapacityId,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
+      },
+    );
   }
 
   private mapIncapacityCid(

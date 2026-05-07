@@ -364,6 +364,7 @@ import { RetirementPermanentDisabilityRejectionDocumentTypeormCommandRepository 
 import { RetirementPermanentDisabilityRejectionIncapacityTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-rejection-incapacity/retirement-permanent-disability-rejection-incapacity.typeorm.command.repository';
 import { RetirementPermanentDisabilityRejectionIncapacityCidTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-rejection-incapacity-cid/retirement-permanent-disability-rejection-incapacity-cid.typeorm.command.repository';
 import { RetirementPermanentDisabilityRejectionIncapacityDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-rejection-incapacity-document/retirement-permanent-disability-rejection-incapacity-document.typeorm.command.repository';
+import { RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-rejection-incapacity-previous-benefit/retirement-permanent-disability-rejection-incapacity-previous-benefit.typeorm.command.repository';
 import { RetirementPermanentDisabilityRejectionInsuredQualityTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-rejection-insured-quality/retirement-permanent-disability-rejection-insured-quality.typeorm.command.repository';
 import { RetirementPermanentDisabilityRejectionInsuredQualityDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-rejection-insured-quality-document/retirement-permanent-disability-rejection-insured-quality-document.typeorm.command.repository';
 import { RetirementPermanentDisabilityRejectionPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-rejection-period/retirement-permanent-disability-rejection-period.typeorm.command.repository';
@@ -926,6 +927,7 @@ import { RetirementPermanentDisabilityRejectionDocumentCommandRepositoryGateway 
 import { RetirementPermanentDisabilityRejectionIncapacityCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection-incapacity/command/retirement-permanent-disability-rejection-incapacity.command.repository.gateway';
 import { RetirementPermanentDisabilityRejectionIncapacityCidCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection-incapacity-cid/command/retirement-permanent-disability-rejection-incapacity-cid.command.repository.gateway';
 import { RetirementPermanentDisabilityRejectionIncapacityDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection-incapacity-document/command/retirement-permanent-disability-rejection-incapacity-document.command.repository.gateway';
+import { RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection-incapacity-previous-benefit/command/retirement-permanent-disability-rejection-incapacity-previous-benefit.command.repository.gateway';
 import { RetirementPermanentDisabilityRejectionInsuredQualityCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection-insured-quality/command/retirement-permanent-disability-rejection-insured-quality.command.repository.gateway';
 import { RetirementPermanentDisabilityRejectionInsuredQualityDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection-insured-quality-document/command/retirement-permanent-disability-rejection-insured-quality-document.command.repository.gateway';
 import { RetirementPermanentDisabilityRejectionPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection-period/command/retirement-permanent-disability-rejection-period.command.repository.gateway';
@@ -4007,6 +4009,12 @@ const classProvider: ClassProvider[] = [
       RetirementPermanentDisabilityRejectionIncapacityCidCommandRepositoryGateway,
     useClass:
       RetirementPermanentDisabilityRejectionIncapacityCidTypeormCommandRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitTypeormCommandRepository,
   },
   {
     provide:

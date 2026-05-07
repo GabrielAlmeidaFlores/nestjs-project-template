@@ -6,6 +6,7 @@ import { RetirementPermanentDisabilityRejectionDocumentEntity } from '@module/cu
 import { RetirementPermanentDisabilityRejectionIncapacityEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-incapacity/retirement-permanent-disability-rejection-incapacity.entity';
 import { RetirementPermanentDisabilityRejectionIncapacityCidEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-incapacity-cid/retirement-permanent-disability-rejection-incapacity-cid.entity';
 import { RetirementPermanentDisabilityRejectionIncapacityDocumentEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-incapacity-document/retirement-permanent-disability-rejection-incapacity-document.entity';
+import { RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-incapacity-previous-benefit/retirement-permanent-disability-rejection-incapacity-previous-benefit.entity';
 import { RetirementPermanentDisabilityRejectionInsuredQualityEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-insured-quality/retirement-permanent-disability-rejection-insured-quality.entity';
 import { RetirementPermanentDisabilityRejectionInsuredQualityDocumentEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-insured-quality-document/retirement-permanent-disability-rejection-insured-quality-document.entity';
 import { RetirementPermanentDisabilityRejectionPeriodEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-period/retirement-permanent-disability-rejection-period.entity';
@@ -16,6 +17,7 @@ import {
   GetRetirementPermanentDisabilityRejectionDocumentResponseDto,
   GetRetirementPermanentDisabilityRejectionIncapacityAuditCidResponseDto,
   GetRetirementPermanentDisabilityRejectionIncapacityDocumentResponseDto,
+  GetRetirementPermanentDisabilityRejectionIncapacityPreviousBenefitResponseDto,
   GetRetirementPermanentDisabilityRejectionIncapacityResponseDto,
   GetRetirementPermanentDisabilityRejectionInsuredQualityDocumentResponseDto,
   GetRetirementPermanentDisabilityRejectionInsuredQualityResponseDto,
@@ -56,6 +58,9 @@ export class GetRetirementPermanentDisabilityRejectionUseCase {
       denial.retirementPermanentDisabilityRejectionIncapacityCid ?? [];
     const incapacityDocuments =
       denial.retirementPermanentDisabilityRejectionIncapacityDocument ?? [];
+    const incapacityPreviousBenefits =
+      denial.retirementPermanentDisabilityRejectionIncapacityPreviousBenefit ??
+      [];
     const insuredQualityDocuments =
       denial.retirementPermanentDisabilityRejectionInsuredQualityDocument ?? [];
 
@@ -96,6 +101,7 @@ export class GetRetirementPermanentDisabilityRejectionUseCase {
             denial.retirementPermanentDisabilityRejectionIncapacity,
             incapacityCids,
             incapacityDocuments,
+            incapacityPreviousBenefits,
           ),
       }),
       ...(denial.retirementPermanentDisabilityRejectionInsuredQuality !==
@@ -143,6 +149,7 @@ export class GetRetirementPermanentDisabilityRejectionUseCase {
     incapacity: RetirementPermanentDisabilityRejectionIncapacityEntity,
     cids: RetirementPermanentDisabilityRejectionIncapacityCidEntity[],
     documents: RetirementPermanentDisabilityRejectionIncapacityDocumentEntity[],
+    previousBenefits: RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitEntity[],
   ): GetRetirementPermanentDisabilityRejectionIncapacityResponseDto {
     return GetRetirementPermanentDisabilityRejectionIncapacityResponseDto.build(
       {
@@ -171,14 +178,16 @@ export class GetRetirementPermanentDisabilityRejectionUseCase {
         }),
         needsPermanentAssistance: incapacity.needsPermanentAssistance,
         hasPreviousIncapacityBenefit: incapacity.hasPreviousIncapacityBenefit,
-        ...(incapacity.previousBenefitNumber !== null && {
-          previousBenefitNumber: incapacity.previousBenefitNumber,
-        }),
-        ...(incapacity.previousBenefitStartDate !== null && {
-          previousBenefitStartDate: incapacity.previousBenefitStartDate,
-        }),
-        ...(incapacity.previousBenefitEndDate !== null && {
-          previousBenefitEndDate: incapacity.previousBenefitEndDate,
+        ...(previousBenefits.length > 0 && {
+          previousBenefits: previousBenefits.map((pb) =>
+            GetRetirementPermanentDisabilityRejectionIncapacityPreviousBenefitResponseDto.build(
+              {
+                benefitNumber: pb.benefitNumber,
+                ...(pb.startDate !== null && { startDate: pb.startDate }),
+                ...(pb.endDate !== null && { endDate: pb.endDate }),
+              },
+            ),
+          ),
         }),
         ...(cids.length > 0 && {
           cids: cids.map((cid) =>

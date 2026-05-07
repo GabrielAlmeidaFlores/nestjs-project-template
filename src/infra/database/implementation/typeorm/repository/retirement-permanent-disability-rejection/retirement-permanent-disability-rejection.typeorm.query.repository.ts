@@ -40,6 +40,7 @@ export class RetirementPermanentDisabilityRejectionTypeormQueryRepository
           retirementPermanentDisabilityRejectionIncapacity: {
             retirementPermanentDisabilityRejectionIncapacityCid: true,
             retirementPermanentDisabilityRejectionIncapacityDocument: true,
+            retirementPermanentDisabilityRejectionIncapacityPreviousBenefit: true,
           },
           retirementPermanentDisabilityRejectionInsuredQuality: {
             retirementPermanentDisabilityRejectionInsuredQualityDocument: true,

@@ -3,6 +3,7 @@ import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { RetirementPermanentDisabilityRejectionIncapacityCidTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-incapacity-cid.typeorm.entity';
 import { RetirementPermanentDisabilityRejectionIncapacityDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-incapacity-document.typeorm.entity';
+import { RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-incapacity-previous-benefit.typeorm.entity';
 import { RetirementPermanentDisabilityRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection.typeorm.entity';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 import { RetirementPermanentDisabilityRejectionSeriousDiseaseEnum } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-incapacity/enum/retirement-permanent-disability-rejection-serious-disease.enum';
@@ -62,30 +63,6 @@ export class RetirementPermanentDisabilityRejectionIncapacityTypeormEntity exten
   @Column({ name: 'has_previous_incapacity_benefit', type: 'boolean' })
   public hasPreviousIncapacityBenefit: boolean;
 
-  @Column({
-    name: 'previous_benefit_number',
-    type: 'varchar',
-    length: 50,
-    nullable: true,
-  })
-  public previousBenefitNumber: string | null;
-
-  @Column({
-    name: 'previous_benefit_start_date',
-    type: 'date',
-    nullable: true,
-    transformer: DateOnlyTransformer,
-  })
-  public previousBenefitStartDate: Date | null;
-
-  @Column({
-    name: 'previous_benefit_end_date',
-    type: 'date',
-    nullable: true,
-    transformer: DateOnlyTransformer,
-  })
-  public previousBenefitEndDate: Date | null;
-
   @OneToOne(
     () => RetirementPermanentDisabilityRejectionTypeormEntity,
     (entity) => entity.retirementPermanentDisabilityRejectionIncapacity,
@@ -103,6 +80,13 @@ export class RetirementPermanentDisabilityRejectionIncapacityTypeormEntity exten
     (entity) => entity.retirementPermanentDisabilityRejectionIncapacity,
   )
   public retirementPermanentDisabilityRejectionIncapacityDocument?: RetirementPermanentDisabilityRejectionIncapacityDocumentTypeormEntity[];
+
+  @OneToMany(
+    () =>
+      RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitTypeormEntity,
+    (entity) => entity.retirementPermanentDisabilityRejectionIncapacity,
+  )
+  public retirementPermanentDisabilityRejectionIncapacityPreviousBenefit?: RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitTypeormEntity[];
 
   protected override readonly _type =
     RetirementPermanentDisabilityRejectionIncapacityTypeormEntity.name;
