@@ -1,6 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 
+import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { Email } from '@core/domain/schema/value-object/email/email.value-object';
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
+import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { GetTemporaryDisabilityBenefitsTerminatedWithRelationsQueryResult } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/repository/temporary-disability-benefits-terminated/query/result/get-temporary-disability-benefits-terminated-with-relations.query.result';
@@ -93,8 +97,22 @@ export class GetTemporaryDisabilityBenefitsTerminatedUseCase {
             ...(result.analysisToolClient.name !== null && {
               name: result.analysisToolClient.name,
             }),
+            ...(result.analysisToolClient.federalDocument !== null && {
+              federalDocument: new FederalDocument(
+                result.analysisToolClient.federalDocument,
+              ),
+            }),
+            ...(result.analysisToolClient.email !== null && {
+              email: new Email(result.analysisToolClient.email),
+            }),
+            ...(result.analysisToolClient.phone !== null && {
+              phoneNumber: new PhoneNumber(result.analysisToolClient.phone),
+            }),
             ...(result.analysisToolClient.birthDate !== null && {
               birthDate: result.analysisToolClient.birthDate,
+            }),
+            ...(result.analysisToolClient.sex !== null && {
+              gender: result.analysisToolClient.sex as GenderEnum,
             }),
           },
         ),
