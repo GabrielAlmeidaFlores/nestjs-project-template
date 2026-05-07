@@ -92,6 +92,8 @@ export class AnalysisActivityMessageFactory {
       'Cessação de BPC Pessoa com Deficiência',
     [AnalysisToolRecordTypeEnum.ACCIDENT_ASSISTANCE_TERMINATED]:
       'Auxílio-acidente cessado',
+    [AnalysisToolRecordTypeEnum.ACCIDENT_ASSISTANCE_GRANT]:
+      'Concessão de auxílio-acidente',
   };
 
   private static readonly actionLabelMap: Record<
