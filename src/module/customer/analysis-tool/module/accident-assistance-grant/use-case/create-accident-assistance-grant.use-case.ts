@@ -3,6 +3,13 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
+import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
+import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
+import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
+import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
@@ -33,6 +40,10 @@ export class CreateAccidentAssistanceGrantUseCase {
     private readonly fileProcessorGateway: FileProcessorGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordCommandRepositoryGateway)
+    private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
   ) {}
 
   public async execute(
@@ -50,11 +61,18 @@ export class CreateAccidentAssistanceGrantUseCase {
       throw new OrganizationMemberNotFoundError();
     }
 
-    await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
-      dto.analysisToolClientId,
-      organizationSessionData.organizationId,
-      AnalysisToolClientNotFoundError,
-    );
+    const analysisToolClientQueryResult =
+      await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
+        dto.analysisToolClientId,
+        organizationSessionData.organizationId,
+        AnalysisToolClientNotFoundError,
+      );
+
+    const analysisToolClient = new AnalysisToolClientEntity({
+      ...analysisToolClientQueryResult,
+      createdBy: analysisToolClientQueryResult.createdBy.id,
+      updatedBy: analysisToolClientQueryResult.updatedBy.id,
+    });
 
     const grant = new AccidentAssistanceGrantEntity({
       analysisToolClientId: dto.analysisToolClientId,
@@ -77,6 +95,22 @@ export class CreateAccidentAssistanceGrantUseCase {
 
     const documentFiles = await this.buildDocuments(dto, grant);
 
+    const maxCode =
+      await this.analysisToolRecordQueryRepositoryGateway.findMaxCodeByOrganizationIdAndAuthIdentityId(
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+      );
+
+    const analysisToolRecord = new AnalysisToolRecordEntity({
+      code: new AnalysisToolRecordCode(maxCode + 1),
+      type: AnalysisToolRecordTypeEnum.ACCIDENT_ASSISTANCE_GRANT,
+      accidentAssistanceGrant: grant,
+      analysisToolClient,
+      status: AnalysisStatusEnum.IN_PROGRESS,
+      createdBy: organizationMember.id,
+      updatedBy: organizationMember.id,
+    });
+
     const grantTransaction =
       this.accidentAssistanceGrantCommandRepositoryGateway.createAccidentAssistanceGrant(
         grant,
@@ -88,9 +122,15 @@ export class CreateAccidentAssistanceGrantUseCase {
       ),
     );
 
+    const analysisToolRecordTransaction =
+      this.analysisToolRecordCommandRepositoryGateway.createAnalysisToolRecord(
+        analysisToolRecord,
+      );
+
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       grantTransaction,
       ...documentTransactions,
+      analysisToolRecordTransaction,
     ]);
 
     await transaction.commit();
