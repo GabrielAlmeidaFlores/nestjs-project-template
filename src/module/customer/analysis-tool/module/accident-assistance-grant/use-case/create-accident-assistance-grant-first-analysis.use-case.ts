@@ -142,6 +142,15 @@ export class CreateAccidentAssistanceGrantFirstAnalysisUseCase {
       throw new AccidentAssistanceGrantNotFoundError();
     }
 
+    let detailedAnalysis = firstAnalysisResponse;
+    let rulesSummary = firstAnalysisResponse;
+
+    try {
+      const parsed = JSON.parse(firstAnalysisResponse) as { firstAnalysis?: string; analysisConclusion?: string };
+      if (parsed.firstAnalysis) detailedAnalysis = parsed.firstAnalysis;
+      if (parsed.analysisConclusion) rulesSummary = parsed.analysisConclusion;
+    } catch {}
+
     const existingResult = grant.accidentAssistanceGrantResult;
 
     const resultEntity = new AccidentAssistanceGrantResultEntity({
@@ -178,8 +187,8 @@ export class CreateAccidentAssistanceGrantFirstAnalysisUseCase {
     await transaction.commit();
 
     return CreateAccidentAssistanceGrantFirstAnalysisResponseDto.build({
-      firstAnalysis: firstAnalysisResponse,
-      analysisConclusion: firstAnalysisResponse,
+      firstAnalysis: detailedAnalysis,
+      analysisConclusion: rulesSummary,
     });
   }
 }
