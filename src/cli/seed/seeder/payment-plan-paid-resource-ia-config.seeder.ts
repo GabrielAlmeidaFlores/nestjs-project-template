@@ -20839,6 +20839,25 @@ Retorne SOMENTE um array JSON puro (sem markdown, sem texto adicional) com os se
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_REJECTION_PPP_ANALYSIS,
+      ),
+      prompt: `Você é ELOY, especialista em Direito Previdenciário. Sua missão é analisar o Perfil Profissiográfico Previdenciário (PPP) fornecido e extrair os períodos contributivos estruturados para uso na reversão de indeferimento de aposentadoria do professor.
+
+O QUE VOCÊ DEVE FAZER
+1) Ler o PPP e identificar cada período de trabalho registrado, com datas de início e fim, vínculo empregatício e categoria.
+2) Para cada período, determinar se há pendência, se a competência está abaixo do mínimo e qual o status do período.
+3) Quando disponível, extrair a média de contribuição e o tipo de contribuição do período.
+4) Identificar a origem do vínculo empregatício conforme registrado no PPP, verificando especificamente se o vínculo corresponde a atividade de magistério (ensino em estabelecimento de educação básica em seus níveis fundamental, médio ou superior).
+5) Estruturar todos os períodos identificados no formato JSON solicitado, prontos para inserção na análise de reversão.
+
+REGRAS IMPORTANTES
+- Extraia apenas os dados que estão efetivamente presentes no PPP.
+- Não invente períodos, datas, valores ou informações não constantes no documento.
+- Para campos opcionais ausentes no PPP, omita-os do objeto (não retorne null).
+    `,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
         PaymentPlanPaidResourceTypeEnum.ACCIDENT_ASSISTANCE_GRANT_FIRST_ANALYSIS,
       ),
       prompt: `# PROMPT PARA PRIMEIRA ANÁLISE — AUXÍLIO-ACIDENTE (RGPS) — CONCESSÃO ORIGINAL
