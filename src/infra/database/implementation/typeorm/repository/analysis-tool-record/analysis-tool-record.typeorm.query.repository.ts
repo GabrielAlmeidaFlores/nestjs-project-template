@@ -32,6 +32,7 @@ import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/sche
 import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
+import { AccidentAssistanceGrantId } from '@module/customer/analysis-tool/module/accident-assistance-grant/domain/schema/entity/accident-assistance-grant/value-object/accident-assistance-grant-id.value-object';
 import { AccidentAssistanceTerminatedId } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated/value-object/accident-assistance-terminated-id/accident-assistance-terminated-id.value-object';
 import { AccidentBenefitRejectionId } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection/value-object/accident-benefit-rejection-id.value-object';
 import { AdministrativeProcedureInssAnalysisId } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/value-object/administrative-procedure-inss-analysis-id/administrative-procedure-inss-analysis-id.value-object';
@@ -171,6 +172,8 @@ export class AnalysisToolRecordTypeormQueryRepository
         'bpcDisabilityTermination',
       [AnalysisToolRecordTypeEnum.ACCIDENT_ASSISTANCE_TERMINATED]:
         'accidentAssistanceTerminated',
+      [AnalysisToolRecordTypeEnum.ACCIDENT_ASSISTANCE_GRANT]:
+        'accidentAssistanceGrant',
     };
   }
 
@@ -1968,6 +1971,65 @@ export class AnalysisToolRecordTypeormQueryRepository
     );
   }
 
+  public async findWithRelationsByAccidentAssistanceGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    accidentAssistanceGrantId: AccidentAssistanceGrantId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          accidentAssistanceGrant: {
+            id: accidentAssistanceGrantId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          accidentAssistanceGrant: true,
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
   public async findWithRelationsByBpcElderlyAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
     bpcElderlyAnalysisId: BpcElderlyAnalysisId,
     organizationId: OrganizationId,
@@ -2574,6 +2636,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { maternityPayGrant: Not(IsNull()) },
         { teacherRetirementPlanningRejection: Not(IsNull()) },
         { accidentAssistanceTerminated: Not(IsNull()) },
+        { accidentAssistanceGrant: Not(IsNull()) },
       ];
 
     for (const relationalClause of atLeastOneRelationNotNull) {
@@ -3911,6 +3974,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       'maternityPayGrant',
       'teacherRetirementPlanningRejection',
       'accidentAssistanceTerminated',
+      'accidentAssistanceGrant',
     ];
   }
 }
