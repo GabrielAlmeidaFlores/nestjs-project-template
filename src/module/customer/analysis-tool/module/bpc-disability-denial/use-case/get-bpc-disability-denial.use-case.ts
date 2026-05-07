@@ -4,6 +4,7 @@ import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-obj
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { BpcDisabilityDenialQueryRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-denial/domain/repository/bpc-disability-denial/query/bpc-disability-denial.query.repository.gateway';
 import { GetBpcDisabilityDenialDocumentQueryResult } from '@module/customer/analysis-tool/module/bpc-disability-denial/domain/repository/bpc-disability-denial/query/result/get-bpc-disability-denial-document.query.result';
@@ -45,6 +46,8 @@ export class GetBpcDisabilityDenialUseCase {
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(BpcDisabilityDenialQueryRepositoryGateway)
     private readonly bpcDisabilityDenialQueryRepositoryGateway: BpcDisabilityDenialQueryRepositoryGateway,
+    @Inject(ExportDocumentGateway)
+    private readonly exportDocumentGateway: ExportDocumentGateway,
   ) {}
 
   public async execute(
@@ -148,7 +151,7 @@ export class GetBpcDisabilityDenialUseCase {
         livesAlone: bpcDisabilityDenialQueryResult.livesAlone,
       }),
       ...(bpcDisabilityDenialQueryResult.bpcDisabilityDenialResult !== null && {
-        bpcDisabilityDenialResult: this.buildResultResponseDto(
+        bpcDisabilityDenialResult: await this.buildResultResponseDto(
           bpcDisabilityDenialQueryResult.bpcDisabilityDenialResult,
         ),
       }),
@@ -249,9 +252,9 @@ export class GetBpcDisabilityDenialUseCase {
     });
   }
 
-  private buildResultResponseDto(
+  private async buildResultResponseDto(
     result: GetBpcDisabilityDenialResultQueryResult,
-  ): GetBpcDisabilityDenialResultResponseDto {
+  ): Promise<GetBpcDisabilityDenialResultResponseDto> {
     const applicableRules =
       this.parseJsonArray<BpcDisabilityDenialApplicableRuleInterface>(
         result.applicableRules,
@@ -282,6 +285,13 @@ export class GetBpcDisabilityDenialUseCase {
         }),
       );
 
+    const analysisDetailedTextHtml =
+      result.analysisDetailedText !== null
+        ? await this.exportDocumentGateway.convertMarkdownToHtml(
+            result.analysisDetailedText,
+          )
+        : null;
+
     return GetBpcDisabilityDenialResultResponseDto.build({
       ...(result.inssDecisionAnalysis !== null && {
         inssDecisionAnalysis: result.inssDecisionAnalysis,
@@ -298,8 +308,8 @@ export class GetBpcDisabilityDenialUseCase {
       ...(result.simplifiedAnalysis !== null && {
         simplifiedAnalysis: result.simplifiedAnalysis,
       }),
-      ...(result.analysisDetailedText !== null && {
-        analysisDetailedText: result.analysisDetailedText,
+      ...(analysisDetailedTextHtml !== null && {
+        analysisDetailedText: analysisDetailedTextHtml,
       }),
       ...(applicableRules.length > 0 && { applicableRules }),
       ...(benefitSummaries.length > 0 && { benefitSummaries }),
