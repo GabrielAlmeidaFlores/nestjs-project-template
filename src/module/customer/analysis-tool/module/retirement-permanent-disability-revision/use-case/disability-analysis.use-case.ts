@@ -10,15 +10,18 @@ import { RetirementPermanentDisabilityRevisionDisabilityAnalysisCommandRepositor
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisAssociatedCidCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-disability-analysis-associated-cid/command/retirement-permanent-disability-revision-disability-analysis-associated-cid.command.repository.gateway';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-disability-analysis-benefit/command/retirement-permanent-disability-revision-disability-analysis-benefit.command.repository.gateway';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-disability-analysis-benefit-associated-cid/command/retirement-permanent-disability-revision-disability-analysis-benefit-associated-cid.command.repository.gateway';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclarationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-disability-analysis-benefit-declaration/command/retirement-permanent-disability-revision-disability-analysis-benefit-declaration.command.repository.gateway';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-disability-analysis-document/command/retirement-permanent-disability-revision-disability-analysis-document.command.repository.gateway';
 import { RetirementPermanentDisabilityRevisionId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision/value-object/retirement-permanent-disability-revision-id.value-object';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentTypeEnum } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-disability-analysis/enum/retirement-permanent-disability-revision-disability-analysis-document-type.enum';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-disability-analysis/retirement-permanent-disability-revision-disability-analysis.entity';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-disability-analysis/value-object/retirement-permanent-disability-revision-disability-analysis-id.value-object';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisAssociatedCidEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-disability-analysis-associated-cid/retirement-permanent-disability-revision-disability-analysis-associated-cid.entity';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-disability-analysis-benefit/retirement-permanent-disability-revision-disability-analysis-benefit.entity';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-disability-analysis-benefit-associated-cid/retirement-permanent-disability-revision-disability-analysis-benefit-associated-cid.entity';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclarationEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-disability-analysis-benefit-declaration/retirement-permanent-disability-revision-disability-analysis-benefit-declaration.entity';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-disability-analysis-document/retirement-permanent-disability-revision-disability-analysis-document.entity';
-import { RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentTypeEnum } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-disability-analysis/enum/retirement-permanent-disability-revision-disability-analysis-document-type.enum';
+import { PreviousBenefitRequestDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/request/previous-benefit.request.dto';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisRequestDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/request/retirement-permanent-disability-revision-disability-analysis.request.dto';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/response/retirement-permanent-disability-revision-disability-analysis.response.dto';
 import { RetirementPermanentDisabilityRevisionNotFoundError } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/error/retirement-permanent-disability-revision-not-found.error';
@@ -26,8 +29,6 @@ import { OrganizationSessionDataModel } from '@shared/api/util/decorator/propert
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { Base64FileRequestDto } from '@shared/api/util/dto/request/base64-file.request.dto';
 import { FileModel } from '@shared/system/model/generic/file.model';
-
-import { PreviousBenefitRequestDto } from '../dto/request/previous-benefit.request.dto';
 
 @Injectable()
 export class DisabilityAnalysisUseCase {
@@ -54,6 +55,10 @@ export class DisabilityAnalysisUseCase {
       RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidCommandRepositoryGateway,
     )
     private readonly disabilityAnalysisBenefitAssociatedCidCommandRepositoryGateway: RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidCommandRepositoryGateway,
+    @Inject(
+      RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclarationCommandRepositoryGateway,
+    )
+    private readonly disabilityAnalysisBenefitDeclarationCommandRepositoryGateway: RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclarationCommandRepositoryGateway,
     @Inject(
       RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentCommandRepositoryGateway,
     )
@@ -85,26 +90,54 @@ export class DisabilityAnalysisUseCase {
       RetirementPermanentDisabilityRevisionNotFoundError,
     );
 
-    const [medicalDocumentFileNames, previousMedicalReportFileNames, benefitDeclarationFileNames] =
-      await Promise.all([
-        Promise.all((dto.medicalDocuments ?? []).map((f) => this.uploadFile(f))),
-        Promise.all((dto.previousMedicalReports ?? []).map((f) => this.uploadFile(f))),
-        Promise.all((dto.benefitDeclarations ?? []).map((f) => this.uploadFile(f))),
-      ]);
+    const [
+      medicalDocumentFileNames,
+      previousMedicalReportFileNames,
+      benefitsWithUploadedDeclarations,
+    ] = await Promise.all([
+      Promise.all((dto.medicalDocuments ?? []).map((f) => this.uploadFile(f))),
+      Promise.all(
+        (dto.previousMedicalReports ?? []).map((f) => this.uploadFile(f)),
+      ),
+      Promise.all(
+        (dto.benefits ?? []).map(async (benefit) => ({
+          benefit,
+          benefitDeclarationFileNames: await Promise.all(
+            (benefit.benefitDeclarations ?? []).map((f) => this.uploadFile(f)),
+          ),
+        })),
+      ),
+    ]);
 
     const disabilityAnalysisEntity =
       new RetirementPermanentDisabilityRevisionDisabilityAnalysisEntity({
         retirementPermanentDisabilityRevisionId,
         ...(dto.estimatedIncapacityStartDate != null && {
-          estimatedIncapacityStartDate: new Date(dto.estimatedIncapacityStartDate),
+          estimatedIncapacityStartDate: new Date(
+            dto.estimatedIncapacityStartDate,
+          ),
         }),
-        ...(dto.medicalDescription != null && { medicalDescription: dto.medicalDescription }),
-        ...(dto.isAccidentRelated != null && { isAccidentRelated: dto.isAccidentRelated }),
-        ...(dto.accidentDescription != null && { accidentDescription: dto.accidentDescription }),
-        ...(dto.isSevereDisease != null && { isSevereDisease: dto.isSevereDisease }),
-        ...(dto.severeDiseaseType != null && { severeDiseaseType: dto.severeDiseaseType }),
-        ...(dto.severeDiseaseName != null && { severeDiseaseName: dto.severeDiseaseName }),
-        ...(dto.diseaseStartDate != null && { diseaseStartDate: new Date(dto.diseaseStartDate) }),
+        ...(dto.medicalDescription != null && {
+          medicalDescription: dto.medicalDescription,
+        }),
+        ...(dto.isAccidentRelated != null && {
+          isAccidentRelated: dto.isAccidentRelated,
+        }),
+        ...(dto.accidentDescription != null && {
+          accidentDescription: dto.accidentDescription,
+        }),
+        ...(dto.isSevereDisease != null && {
+          isSevereDisease: dto.isSevereDisease,
+        }),
+        ...(dto.severeDiseaseType != null && {
+          severeDiseaseType: dto.severeDiseaseType,
+        }),
+        ...(dto.severeDiseaseName != null && {
+          severeDiseaseName: dto.severeDiseaseName,
+        }),
+        ...(dto.diseaseStartDate != null && {
+          diseaseStartDate: new Date(dto.diseaseStartDate),
+        }),
         ...(dto.needsPermanentAssistance != null && {
           needsPermanentAssistance: dto.needsPermanentAssistance,
         }),
@@ -119,18 +152,25 @@ export class DisabilityAnalysisUseCase {
     for (const cid of dto.associatedCids ?? []) {
       transactions.push(
         this.disabilityAnalysisAssociatedCidCommandRepositoryGateway.createRetirementPermanentDisabilityRevisionDisabilityAnalysisAssociatedCid(
-          new RetirementPermanentDisabilityRevisionDisabilityAnalysisAssociatedCidEntity({
-            retirementPermanentDisabilityRevisionDisabilityAnalysisId: disabilityAnalysisEntity.id,
-            cid,
-          }),
+          new RetirementPermanentDisabilityRevisionDisabilityAnalysisAssociatedCidEntity(
+            {
+              retirementPermanentDisabilityRevisionDisabilityAnalysisId:
+                disabilityAnalysisEntity.id,
+              cid,
+            },
+          ),
         ),
       );
     }
 
-    for (const benefit of dto.benefits ?? []) {
+    for (const {
+      benefit,
+      benefitDeclarationFileNames: perBenefitDeclarationFileNames,
+    } of benefitsWithUploadedDeclarations) {
       this.buildBenefitTransactions(
         disabilityAnalysisEntity.id,
         benefit,
+        perBenefitDeclarationFileNames,
         transactions,
       );
     }
@@ -138,11 +178,14 @@ export class DisabilityAnalysisUseCase {
     for (const fileName of medicalDocumentFileNames) {
       transactions.push(
         this.disabilityAnalysisDocumentCommandRepositoryGateway.createRetirementPermanentDisabilityRevisionDisabilityAnalysisDocument(
-          new RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentEntity({
-            retirementPermanentDisabilityRevisionDisabilityAnalysisId: disabilityAnalysisEntity.id,
-            fileName,
-            type: RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentTypeEnum.MEDICAL_DOCUMENT,
-          }),
+          new RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentEntity(
+            {
+              retirementPermanentDisabilityRevisionDisabilityAnalysisId:
+                disabilityAnalysisEntity.id,
+              fileName,
+              type: RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentTypeEnum.MEDICAL_DOCUMENT,
+            },
+          ),
         ),
       );
     }
@@ -150,23 +193,14 @@ export class DisabilityAnalysisUseCase {
     for (const fileName of previousMedicalReportFileNames) {
       transactions.push(
         this.disabilityAnalysisDocumentCommandRepositoryGateway.createRetirementPermanentDisabilityRevisionDisabilityAnalysisDocument(
-          new RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentEntity({
-            retirementPermanentDisabilityRevisionDisabilityAnalysisId: disabilityAnalysisEntity.id,
-            fileName,
-            type: RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentTypeEnum.PREVIOUS_MEDICAL_REPORT,
-          }),
-        ),
-      );
-    }
-
-    for (const fileName of benefitDeclarationFileNames) {
-      transactions.push(
-        this.disabilityAnalysisDocumentCommandRepositoryGateway.createRetirementPermanentDisabilityRevisionDisabilityAnalysisDocument(
-          new RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentEntity({
-            retirementPermanentDisabilityRevisionDisabilityAnalysisId: disabilityAnalysisEntity.id,
-            fileName,
-            type: RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentTypeEnum.BENEFIT_DECLARATION,
-          }),
+          new RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentEntity(
+            {
+              retirementPermanentDisabilityRevisionDisabilityAnalysisId:
+                disabilityAnalysisEntity.id,
+              fileName,
+              type: RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentTypeEnum.PREVIOUS_MEDICAL_REPORT,
+            },
+          ),
         ),
       );
     }
@@ -176,22 +210,28 @@ export class DisabilityAnalysisUseCase {
 
     await transaction.commit();
 
-    return RetirementPermanentDisabilityRevisionDisabilityAnalysisResponseDto.build({
-      retirementPermanentDisabilityRevisionDisabilityAnalysisId:
-        disabilityAnalysisEntity.id,
-    });
+    return RetirementPermanentDisabilityRevisionDisabilityAnalysisResponseDto.build(
+      {
+        retirementPermanentDisabilityRevisionDisabilityAnalysisId:
+          disabilityAnalysisEntity.id,
+      },
+    );
   }
 
   private buildBenefitTransactions(
     disabilityAnalysisId: RetirementPermanentDisabilityRevisionDisabilityAnalysisId,
     benefit: PreviousBenefitRequestDto,
+    benefitDeclarationFileNames: string[],
     transactions: TransactionType[],
   ): void {
     const benefitEntity =
       new RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitEntity({
-        retirementPermanentDisabilityRevisionDisabilityAnalysisId: disabilityAnalysisId,
+        retirementPermanentDisabilityRevisionDisabilityAnalysisId:
+          disabilityAnalysisId,
         hasPreviousBenefit: benefit.hasPreviousBenefit,
-        ...(benefit.benefitNumber != null && { benefitNumber: benefit.benefitNumber }),
+        ...(benefit.benefitNumber != null && {
+          benefitNumber: benefit.benefitNumber,
+        }),
         ...(benefit.benefitStartDate != null && {
           benefitStartDate: new Date(benefit.benefitStartDate),
         }),
@@ -209,10 +249,27 @@ export class DisabilityAnalysisUseCase {
     for (const cid of benefit.associatedCids ?? []) {
       transactions.push(
         this.disabilityAnalysisBenefitAssociatedCidCommandRepositoryGateway.createRetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCid(
-          new RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidEntity({
-            retirementPermanentDisabilityRevisionDisabilityAnalysisBenefitId: benefitEntity.id,
-            cid,
-          }),
+          new RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidEntity(
+            {
+              retirementPermanentDisabilityRevisionDisabilityAnalysisBenefitId:
+                benefitEntity.id,
+              cid,
+            },
+          ),
+        ),
+      );
+    }
+
+    for (const fileName of benefitDeclarationFileNames) {
+      transactions.push(
+        this.disabilityAnalysisBenefitDeclarationCommandRepositoryGateway.createRetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclaration(
+          new RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclarationEntity(
+            {
+              retirementPermanentDisabilityRevisionDisabilityAnalysisBenefitId:
+                benefitEntity.id,
+              fileName,
+            },
+          ),
         ),
       );
     }

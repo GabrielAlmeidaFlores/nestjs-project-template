@@ -51,12 +51,6 @@ export class RetirementPermanentDisabilityRevisionDisabilityAnalysisRequestDto e
   })
   public previousMedicalReports?: Base64FileRequestDto[];
 
-  @RequestDtoObjectProperty(() => Base64FileRequestDto, {
-    required: false,
-    isArray: true,
-  })
-  public benefitDeclarations?: Base64FileRequestDto[];
-
   @RequestDtoObjectProperty(() => PreviousBenefitRequestDto, {
     required: false,
     isArray: true,

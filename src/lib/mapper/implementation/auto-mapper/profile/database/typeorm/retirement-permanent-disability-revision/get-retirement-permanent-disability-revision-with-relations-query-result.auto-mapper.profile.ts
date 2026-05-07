@@ -113,6 +113,7 @@ export class GetRetirementPermanentDisabilityRevisionWithRelationsQueryResultAut
         id: source.id.toString(),
         analysisName: null,
         category: null,
+        myInssPassword: null,
         retirementPermanentDisabilityRevisionResult: result,
         retirementPermanentDisabilityRevisionInssBenefit: benefit,
         retirementPermanentDisabilityRevisionLegalProceeding: legalProceeding,

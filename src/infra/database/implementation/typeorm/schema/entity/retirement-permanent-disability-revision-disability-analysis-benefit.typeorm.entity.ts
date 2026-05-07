@@ -4,6 +4,7 @@ import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidTypeormEntity } from './retirement-permanent-disability-revision-disability-analysis-benefit-associated-cid.typeorm.entity';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclarationTypeormEntity } from './retirement-permanent-disability-revision-disability-analysis-benefit-declaration.typeorm.entity';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisTypeormEntity } from './retirement-permanent-disability-revision-disability-analysis.typeorm.entity';
 
 @Entity({
@@ -57,6 +58,16 @@ export class RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitTypeo
   )
   public retirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCid?:
     | RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () =>
+      RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclarationTypeormEntity,
+    (entity) =>
+      entity.retirementPermanentDisabilityRevisionDisabilityAnalysisBenefit,
+  )
+  public retirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclaration?:
+    | RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclarationTypeormEntity[]
     | undefined;
 
   protected override readonly _type =
