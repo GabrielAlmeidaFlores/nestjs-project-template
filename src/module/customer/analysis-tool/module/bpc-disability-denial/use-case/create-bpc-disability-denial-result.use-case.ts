@@ -223,10 +223,18 @@ export class CreateBpcDisabilityDenialResultUseCase {
       await this.exportDocumentGateway.convertMarkdownToHtml(
         parsedResult.completeAnalysisDownload,
       );
+    const analysisResultHtml =
+      await this.exportDocumentGateway.convertMarkdownToHtml(
+        parsedResult.analysisResult,
+      );
+    const analysisDetailedTextHtml =
+      await this.exportDocumentGateway.convertMarkdownToHtml(
+        parsedResult.analysisDetailedText,
+      );
 
     return CreateBpcDisabilityDenialResultResponseDto.build({
-      analysisResult: parsedResult.analysisResult,
-      analysisDetailedText: parsedResult.analysisDetailedText,
+      analysisResult: analysisResultHtml,
+      analysisDetailedText: analysisDetailedTextHtml,
       completeAnalysisDownloadHtml,
       applicableRules: parsedResult.applicableRules.map((item) =>
         BpcDisabilityDenialApplicableRuleResponseDto.build({
