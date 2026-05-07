@@ -52,6 +52,7 @@ export class GetRetirementPermanentDisabilityRevisionQueryResultAutoMapperProfil
         deletedAt: null,
         analysisName: null,
         category: null,
+        myInssPassword: null,
         retirementPermanentDisabilityRevisionResult: undefined,
       });
     };

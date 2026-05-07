@@ -174,11 +174,13 @@ export class CreateRetirementPermanentDisabilityRevisionUseCase {
         analysisToolRecord,
       );
 
-    await this.baseTransactionRepositoryGateway.execute([
+    const transaction = await this.baseTransactionRepositoryGateway.execute([
       retirementPermanentDisabilityTransacion,
       ...inssBenefitTransactions,
       ...legalProceedingTransactions,
       analysisToolRecordTransaction,
     ]);
+
+    await transaction.commit();
   }
 }

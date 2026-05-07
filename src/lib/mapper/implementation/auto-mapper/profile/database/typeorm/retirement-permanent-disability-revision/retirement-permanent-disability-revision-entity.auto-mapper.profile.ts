@@ -30,6 +30,7 @@ export class RetirementPermanentDisabilityRevisionEntityAutoMapperProfile {
         id: new RetirementPermanentDisabilityRevisionId(source.id),
         analysisName: source.analysisName,
         category: source.category,
+        myInssPassword: source.myInssPassword ?? null,
         retirementPermanentDisabilityRevisionResultId:
           source.retirementPermanentDisabilityRevisionResult?.id != null
             ? new RetirementPermanentDisabilityRevisionResultId(
@@ -61,6 +62,7 @@ export class RetirementPermanentDisabilityRevisionEntityAutoMapperProfile {
         analysisName: source.analysisName,
         category:
           source.category as RetirementPermanentDisabilityRevisionCategoryEnum | null,
+        myInssPassword: source.myInssPassword,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,

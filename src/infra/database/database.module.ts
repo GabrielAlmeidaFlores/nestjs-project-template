@@ -460,6 +460,7 @@ import { RetirementPermanentDisabilityRevisionResultTypeormCommandRepository } f
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisAssociatedCidTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision/retirement-permanent-disability-revision-disability-analysis-associated-cid.typeorm.command.repository';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision/retirement-permanent-disability-revision-disability-analysis-benefit.typeorm.command.repository';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision/retirement-permanent-disability-revision-disability-analysis-benefit-associated-cid.typeorm.command.repository';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclarationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision/retirement-permanent-disability-revision-disability-analysis-benefit-declaration.typeorm.command.repository';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision/retirement-permanent-disability-revision-disability-analysis-document.typeorm.command.repository';
 import { SpecialActivityTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-activity/special-activity.typeorm.command.repository';
 import { SpecialActivityTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-activity/special-activity.typeorm.query.repository';
@@ -1021,6 +1022,7 @@ import { RetirementPermanentDisabilityRevisionDisabilityAnalysisCommandRepositor
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisAssociatedCidCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-disability-analysis-associated-cid/command/retirement-permanent-disability-revision-disability-analysis-associated-cid.command.repository.gateway';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-disability-analysis-benefit/command/retirement-permanent-disability-revision-disability-analysis-benefit.command.repository.gateway';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-disability-analysis-benefit-associated-cid/command/retirement-permanent-disability-revision-disability-analysis-benefit-associated-cid.command.repository.gateway';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclarationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-disability-analysis-benefit-declaration/command/retirement-permanent-disability-revision-disability-analysis-benefit-declaration.command.repository.gateway';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-disability-analysis-document/command/retirement-permanent-disability-revision-disability-analysis-document.command.repository.gateway';
 import { SpecialActivityAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis/command/special-activity-analysis.command.repository.gateway';
 import { SpecialActivityAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis/query/special-activity-analysis.query.repository.gateway';
@@ -3024,6 +3026,12 @@ const classProvider: ClassProvider[] = [
       RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidCommandRepositoryGateway,
     useClass:
       RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidTypeormCommandRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclarationCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclarationTypeormCommandRepository,
   },
   {
     provide:
