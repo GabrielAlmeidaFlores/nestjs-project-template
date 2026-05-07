@@ -41,4 +41,5 @@ export enum AnalysisToolRecordTypeEnum {
   TEACHER_RETIREMENT_PLANNING_REJECTION = 'indeferimento_aposentadoria_professor',
   BPC_DISABILITY_TERMINATION = 'bpc_deficiente_cessado',
   ACCIDENT_ASSISTANCE_TERMINATED = 'auxilio_acidente_cessado',
+  ACCIDENT_ASSISTANCE_GRANT = 'concessao_auxilio_acidente',
 }
