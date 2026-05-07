@@ -125,22 +125,10 @@ export class CreateElderlyBpcRejectionResultUseCase {
         PaymentPlanPaidResourceTypeEnum.ELDERLY_BPC_REJECTION_COMPLETE_ANALYSIS,
       );
 
-    const simplifiedPromptResponse =
-      await this.getPaymentPlanPaidResourcePromptUseCase.execute(
-        PaymentPlanPaidResourceTypeEnum.ELDERLY_BPC_REJECTION_SIMPLIFIED_ANALYSIS,
-      );
-
     const consumeCreditTransaction =
       await this.consumeOrganizationCreditUseCase.execute(
         organizationSessionData.organizationId,
         PaymentPlanPaidResourceTypeEnum.ELDERLY_BPC_REJECTION_COMPLETE_ANALYSIS,
-        organizationMember.id,
-      );
-
-    const consumeSimplifiedCreditTransaction =
-      await this.consumeOrganizationCreditUseCase.execute(
-        organizationSessionData.organizationId,
-        PaymentPlanPaidResourceTypeEnum.ELDERLY_BPC_REJECTION_SIMPLIFIED_ANALYSIS,
         organizationMember.id,
       );
 
@@ -157,24 +145,10 @@ export class CreateElderlyBpcRejectionResultUseCase {
 
     const parsedResult = this.parseResultAnalysis(completeAnalysis);
 
-    const simplifiedAnalysis =
-      await this.analysisProcessorGateway.getElderlyBpcRejectionSimplifiedAnalysis(
-        simplifiedPromptResponse.prompt,
-        [],
-        completeAnalysis,
-      );
-
     const resultEntity = new ElderlyBpcRejectionResultEntity({
       ...(rejectionResult !== null && { id: rejectionResult.id }),
       completeAnalysis,
-      simplifiedAnalysis:
-        simplifiedAnalysis ?? rejectionResult?.simplifiedAnalysis ?? null,
-      completeAnalysisDownload:
-        rejectionResult?.completeAnalysisDownload ?? null,
-      simplifiedAnalysisDownload:
-        simplifiedAnalysis ??
-        rejectionResult?.simplifiedAnalysisDownload ??
-        null,
+      simplifiedAnalysis: rejectionResult?.simplifiedAnalysis ?? null,
       elderlyBpcRejectionId,
     });
 
@@ -187,11 +161,7 @@ export class CreateElderlyBpcRejectionResultUseCase {
             resultEntity,
           );
 
-    const transactionOperations = [
-      consumeCreditTransaction,
-      consumeSimplifiedCreditTransaction,
-      resultTransaction,
-    ];
+    const transactionOperations = [consumeCreditTransaction, resultTransaction];
 
     if (rejectionResult === null) {
       transactionOperations.push(
@@ -210,9 +180,6 @@ export class CreateElderlyBpcRejectionResultUseCase {
 
     return CreateElderlyBpcRejectionResultResponseDto.build({
       elderlyBpcRejectionCompleteAnalysis: parsedResult,
-      ...(simplifiedAnalysis !== null && {
-        elderlyBpcRejectionSimplifiedAnalysis: simplifiedAnalysis,
-      }),
     });
   }
 

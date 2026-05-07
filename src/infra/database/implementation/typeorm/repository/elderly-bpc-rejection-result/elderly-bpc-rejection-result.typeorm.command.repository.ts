@@ -47,8 +47,6 @@ export class ElderlyBpcRejectionResultTypeormCommandRepository
       id: props.id.toString(),
       completeAnalysis: props.completeAnalysis,
       simplifiedAnalysis: props.simplifiedAnalysis,
-      completeAnalysisDownload: props.completeAnalysisDownload,
-      simplifiedAnalysisDownload: props.simplifiedAnalysisDownload,
       elderlyBpcRejection: ElderlyBpcRejectionTypeormEntity.build({
         id: props.elderlyBpcRejectionId.toString(),
       } as ElderlyBpcRejectionTypeormEntity),

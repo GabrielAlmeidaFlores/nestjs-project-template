@@ -97,9 +97,7 @@ export class DownloadElderlyBpcRejectionSimplifiedAnalysisUseCase {
       throw new ElderlyBpcRejectionCompleteAnalysisNotFoundError();
     }
 
-    let responseAi =
-      currentResult.simplifiedAnalysisDownload ??
-      currentResult.simplifiedAnalysis;
+    let responseAi = currentResult.simplifiedAnalysis;
 
     if (responseAi === null) {
       const simplifiedAnalysis =
@@ -113,7 +111,6 @@ export class DownloadElderlyBpcRejectionSimplifiedAnalysisUseCase {
         currentResult,
         {
           simplifiedAnalysis,
-          simplifiedAnalysisDownload: simplifiedAnalysis,
         },
         elderlyBpcRejectionId,
       );
@@ -148,7 +145,6 @@ export class DownloadElderlyBpcRejectionSimplifiedAnalysisUseCase {
     currentResult: ElderlyBpcRejectionResultEntity,
     overrides: {
       simplifiedAnalysis?: string | null;
-      simplifiedAnalysisDownload?: string | null;
     },
     elderlyBpcRejectionId: ElderlyBpcRejectionId,
   ): ElderlyBpcRejectionResultEntity {
@@ -157,10 +153,6 @@ export class DownloadElderlyBpcRejectionSimplifiedAnalysisUseCase {
       completeAnalysis: currentResult.completeAnalysis,
       simplifiedAnalysis:
         overrides.simplifiedAnalysis ?? currentResult.simplifiedAnalysis,
-      completeAnalysisDownload: currentResult.completeAnalysisDownload,
-      simplifiedAnalysisDownload:
-        overrides.simplifiedAnalysisDownload ??
-        currentResult.simplifiedAnalysisDownload,
       elderlyBpcRejectionId,
     });
   }

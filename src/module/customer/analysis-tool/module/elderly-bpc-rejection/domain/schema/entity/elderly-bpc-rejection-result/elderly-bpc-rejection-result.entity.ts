@@ -7,8 +7,6 @@ import type { ElderlyBpcRejectionResultEntityPropsInterface } from '@module/cust
 export class ElderlyBpcRejectionResultEntity extends BaseEntity<ElderlyBpcRejectionResultId> {
   public readonly completeAnalysis: string | null;
   public readonly simplifiedAnalysis: string | null;
-  public readonly completeAnalysisDownload: string | null;
-  public readonly simplifiedAnalysisDownload: string | null;
   public readonly elderlyBpcRejectionId: ElderlyBpcRejectionId;
 
   protected readonly _type = ElderlyBpcRejectionResultEntity.name;
@@ -17,8 +15,6 @@ export class ElderlyBpcRejectionResultEntity extends BaseEntity<ElderlyBpcReject
     super(ElderlyBpcRejectionResultId, props);
     this.completeAnalysis = props.completeAnalysis ?? null;
     this.simplifiedAnalysis = props.simplifiedAnalysis ?? null;
-    this.completeAnalysisDownload = props.completeAnalysisDownload ?? null;
-    this.simplifiedAnalysisDownload = props.simplifiedAnalysisDownload ?? null;
     this.elderlyBpcRejectionId = props.elderlyBpcRejectionId;
   }
 }

@@ -1,8 +1,8 @@
+import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { ElderlyBpcRejectionCategoryEnum } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/schema/entity/elderly-bpc-rejection/enum/elderly-bpc-rejection-category.enum';
 import { ElderlyBpcRejectionMaritalStatusEnum } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/schema/entity/elderly-bpc-rejection/enum/elderly-bpc-rejection-marital-status.enum';
 import { ElderlyBpcRejectionId } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/schema/entity/elderly-bpc-rejection/value-object/elderly-bpc-rejection-id/elderly-bpc-rejection-id.value-object';
 import { ElderlyBpcRejectionDocumentTypeEnum } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/schema/entity/elderly-bpc-rejection-document/enum/elderly-bpc-rejection-document-type.enum';
-import { ElderlyBpcRejectionDocumentId } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/schema/entity/elderly-bpc-rejection-document/value-object/elderly-bpc-rejection-document-id/elderly-bpc-rejection-document-id.value-object';
 import { ElderlyBpcRejectionFamiliarGroupIncomeTypeEnum } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/schema/entity/elderly-bpc-rejection-familiar-group/enum/elderly-bpc-rejection-familiar-group-income-type.enum';
 import { ElderlyBpcRejectionFamiliarGroupKinshipEnum } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/schema/entity/elderly-bpc-rejection-familiar-group/enum/elderly-bpc-rejection-familiar-group-kinship.enum';
 import { ElderlyBpcRejectionFamiliarGroupId } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/schema/entity/elderly-bpc-rejection-familiar-group/value-object/elderly-bpc-rejection-familiar-group-id/elderly-bpc-rejection-familiar-group-id.value-object';
@@ -38,13 +38,14 @@ export class GetElderlyBpcRejectionLegalProceedingResponseDto extends BaseBuilda
 
 @ResponseDto()
 export class GetElderlyBpcRejectionDocumentResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoValueObjectProperty(ElderlyBpcRejectionDocumentId)
-  public elderlyBpcRejectionDocumentId: ElderlyBpcRejectionDocumentId;
+  @ResponseDtoValueObjectProperty(Base64)
+  public base64: Base64;
 
-  @ResponseDtoEnumProperty(ElderlyBpcRejectionDocumentTypeEnum, {
-    required: false,
-  })
-  public type?: ElderlyBpcRejectionDocumentTypeEnum;
+  @ResponseDtoStringProperty()
+  public originalFileName: string;
+
+  @ResponseDtoEnumProperty(ElderlyBpcRejectionDocumentTypeEnum)
+  public type: ElderlyBpcRejectionDocumentTypeEnum;
 
   protected override readonly _type =
     GetElderlyBpcRejectionDocumentResponseDto.name;
@@ -157,7 +158,7 @@ export class GetElderlyBpcRejectionResponseDto extends BaseBuildableDtoObject {
     required: false,
     isArray: true,
   })
-  public elderlyBpcRejectionDocument?: GetElderlyBpcRejectionDocumentResponseDto[];
+  public documents?: GetElderlyBpcRejectionDocumentResponseDto[];
 
   @ResponseDtoObjectProperty(
     () => GetElderlyBpcRejectionFamiliarGroupResponseDto,

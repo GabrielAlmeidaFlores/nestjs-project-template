@@ -1,5 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
+import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
+import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { ElderlyBpcRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/repository/elderly-bpc-rejection/query/elderly-bpc-rejection.query.repository.gateway';
 import { ElderlyBpcRejectionId } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/schema/entity/elderly-bpc-rejection/value-object/elderly-bpc-rejection-id/elderly-bpc-rejection-id.value-object';
 import {
@@ -13,6 +15,7 @@ import {
 } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/dto/response/get-elderly-bpc-rejection.response.dto';
 import { ElderlyBpcRejectionNotFoundError } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/error/elderly-bpc-rejection-not-found.error';
 
+import type { ElderlyBpcRejectionDocumentEntity } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/schema/entity/elderly-bpc-rejection-document/elderly-bpc-rejection-document.entity';
 import type { ElderlyBpcRejectionCompleteAnalysisInterface } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/interface/elderly-bpc-rejection-complete-analysis.interface';
 
 @Injectable()
@@ -22,6 +25,8 @@ export class GetElderlyBpcRejectionUseCase {
   public constructor(
     @Inject(ElderlyBpcRejectionQueryRepositoryGateway)
     private readonly elderlyBpcRejectionQueryRepositoryGateway: ElderlyBpcRejectionQueryRepositoryGateway,
+    @Inject(FileProcessorGateway)
+    private readonly fileProcessorGateway: FileProcessorGateway,
   ) {}
 
   public async execute(
@@ -33,13 +38,13 @@ export class GetElderlyBpcRejectionUseCase {
         ElderlyBpcRejectionNotFoundError,
       );
 
-    const documentDtos = (result.elderlyBpcRejectionDocument ?? []).map(
-      (doc) => {
-        return GetElderlyBpcRejectionDocumentResponseDto.build({
-          elderlyBpcRejectionDocumentId: doc.id,
-          ...(doc.type !== null && { type: doc.type }),
-        });
-      },
+    const validDocuments = (result.elderlyBpcRejectionDocument ?? []).filter(
+      (doc: ElderlyBpcRejectionDocumentEntity) =>
+        doc.document !== null && doc.type !== null,
+    );
+
+    const documentDtos = await Promise.all(
+      validDocuments.map((document) => this.buildDocumentResponse(document)),
     );
 
     const inssBenefitDtos = (result.elderlyBpcRejectionInssBenefit ?? []).map(
@@ -137,7 +142,7 @@ export class GetElderlyBpcRejectionUseCase {
         elderlyBpcRejectionLegalProceeding: legalProceedingDtos,
       }),
       ...(documentDtos.length > 0 && {
-        elderlyBpcRejectionDocument: documentDtos,
+        documents: documentDtos,
       }),
       ...(familiarGroupDtos.length > 0 && {
         elderlyBpcRejectionFamiliarGroup: familiarGroupDtos,
@@ -160,5 +165,22 @@ export class GetElderlyBpcRejectionUseCase {
     return JSON.parse(
       cleanedJson,
     ) as ElderlyBpcRejectionCompleteAnalysisInterface;
+  }
+
+  private async buildDocumentResponse(
+    document: ElderlyBpcRejectionDocumentEntity,
+  ): Promise<GetElderlyBpcRejectionDocumentResponseDto> {
+    const [buffer, originalFileName] = await Promise.all([
+      this.fileProcessorGateway.getFileBuffer(document.document as string),
+      this.fileProcessorGateway.getOriginalFileName(
+        document.document as string,
+      ),
+    ]);
+
+    return GetElderlyBpcRejectionDocumentResponseDto.build({
+      base64: new Base64(buffer.toString('base64')),
+      originalFileName,
+      type: document.type as NonNullable<typeof document.type>,
+    });
   }
 }

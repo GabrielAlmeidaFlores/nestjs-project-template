@@ -3799,6 +3799,67 @@ export class AnalysisToolRecordTypeormQueryRepository
     return mappedData;
   }
 
+  public async findWithRelationsByElderlyBpcRejectionIdAndOrganizationIdOrFail(
+    elderlyBpcRejectionId: ElderlyBpcRejectionId,
+    organizationId: OrganizationId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          elderlyBpcRejection: {
+            id: elderlyBpcRejectionId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          elderlyBpcRejection: {
+            elderlyBpcRejectionResult: true,
+            elderlyBpcRejectionDocument: true,
+            elderlyBpcRejectionInssBenefit: true,
+            elderlyBpcRejectionLegalProceeding: true,
+            elderlyBpcRejectionFamiliarGroup: {
+              elderlyBpcRejectionFamiliarGroupDocument: true,
+            },
+          },
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
   private getRelationsClauseOperation(): FindOptionsRelations<AnalysisToolRecordTypeormEntity> {
     const relationsClause: FindOptionsRelations<AnalysisToolRecordTypeormEntity> =
       {
