@@ -30,20 +30,20 @@ import { ListTeacherRetirementPlanningRemunerationResponseDto } from '@module/cu
 import { UpdateTeacherRetirementPlanningPeriodResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/update-teacher-retirement-planning-period.response.dto';
 import { UpdateTeacherRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/update-teacher-retirement-planning-remuneration.response.dto';
 import { UpdateTeacherRetirementPlanningResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/update-teacher-retirement-planning.response.dto';
-import { AnalyzeTeacherRetirementPlanningAdministrativeProcessUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/analyze-teacher-retirement-planning-administrative-process.use-case';
-import { CreateTeacherRetirementPlanningPeriodUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-period.use-case';
-import { CreateTeacherRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-remuneration.use-case';
-import { CreateTeacherRetirementPlanningResultUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-result.use-case';
+import { AnalyzeTeacherRetirementPlanningAdministrativeProcessRppsUseCase } from './use-case/analyze-teacher-retirement-planning-administrative-process-rpps.use-case';
+import { CreateTeacherRetirementPlanningPeriodRppsUseCase } from './use-case/create-teacher-retirement-planning-period-rpps.use-case';
+import { CreateTeacherRetirementPlanningRemunerationRppsUseCase } from './use-case/create-teacher-retirement-planning-remuneration-rpps.use-case';
+import { CreateTeacherRetirementPlanningResultRppsUseCase } from './use-case/create-teacher-retirement-planning-result-rpps.use-case';
 import { CreateTeacherRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/use-case/create-teacher-retirement-planning-rpps.use-case';
-import { DeleteTeacherRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/delete-teacher-retirement-planning.use-case';
-import { DownloadTeacherRetirementPlanningCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/download-teacher-retirement-planning-complete-analysis.use-case';
-import { DownloadTeacherRetirementPlanningSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/download-teacher-retirement-planning-simplified-analysis.use-case';
-import { GetTeacherRetirementPlanningRemunerationCalculationUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/get-teacher-retirement-planning-remuneration-calculation.use-case';
-import { GetTeacherRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/get-teacher-retirement-planning.use-case';
-import { ListTeacherRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/list-teacher-retirement-planning-remuneration.use-case';
-import { UpdateTeacherRetirementPlanningPeriodUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/update-teacher-retirement-planning-period.use-case';
-import { UpdateTeacherRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/update-teacher-retirement-planning-remuneration.use-case';
-import { UpdateTeacherRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/update-teacher-retirement-planning.use-case';
+import { DeleteTeacherRetirementPlanningRppsUseCase } from './use-case/delete-teacher-retirement-planning-rpps.use-case';
+import { DownloadTeacherRetirementPlanningCompleteAnalysisRppsUseCase } from './use-case/download-teacher-retirement-planning-complete-analysis-rpps.use-case';
+import { DownloadTeacherRetirementPlanningSimplifiedAnalysisRppsUseCase } from './use-case/download-teacher-retirement-planning-simplified-analysis-rpps.use-case';
+import { GetTeacherRetirementPlanningRemunerationCalculationRppsUseCase } from './use-case/get-teacher-retirement-planning-remuneration-calculation-rpps.use-case';
+import { GetTeacherRetirementPlanningRppsUseCase } from './use-case/get-teacher-retirement-planning-rpps.use-case';
+import { ListTeacherRetirementPlanningRemunerationRppsUseCase } from './use-case/list-teacher-retirement-planning-remuneration-rpps.use-case';
+import { UpdateTeacherRetirementPlanningPeriodRppsUseCase } from './use-case/update-teacher-retirement-planning-period-rpps.use-case';
+import { UpdateTeacherRetirementPlanningRemunerationRppsUseCase } from './use-case/update-teacher-retirement-planning-remuneration-rpps.use-case';
+import { UpdateTeacherRetirementPlanningRppsUseCase } from './use-case/update-teacher-retirement-planning-rpps.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
@@ -61,19 +61,19 @@ export class TeacherRetirementPlanningRppsController {
 
   public constructor(
     private readonly createTeacherRetirementPlanningUseCase: CreateTeacherRetirementPlanningRppsUseCase,
-    private readonly updateTeacherRetirementPlanningUseCase: UpdateTeacherRetirementPlanningUseCase,
-    private readonly getTeacherRetirementPlanningUseCase: GetTeacherRetirementPlanningUseCase,
-    private readonly deleteTeacherRetirementPlanningUseCase: DeleteTeacherRetirementPlanningUseCase,
-    private readonly createTeacherRetirementPlanningResultUseCase: CreateTeacherRetirementPlanningResultUseCase,
-    private readonly downloadTeacherRetirementPlanningCompleteAnalysisUseCase: DownloadTeacherRetirementPlanningCompleteAnalysisUseCase,
-    private readonly downloadTeacherRetirementPlanningSimplifiedAnalysisUseCase: DownloadTeacherRetirementPlanningSimplifiedAnalysisUseCase,
-    private readonly createTeacherRetirementPlanningPeriodUseCase: CreateTeacherRetirementPlanningPeriodUseCase,
-    private readonly createTeacherRetirementPlanningRemunerationUseCase: CreateTeacherRetirementPlanningRemunerationUseCase,
-    private readonly updateTeacherRetirementPlanningPeriodUseCase: UpdateTeacherRetirementPlanningPeriodUseCase,
-    private readonly updateTeacherRetirementPlanningRemunerationUseCase: UpdateTeacherRetirementPlanningRemunerationUseCase,
-    private readonly listTeacherRetirementPlanningRemunerationUseCase: ListTeacherRetirementPlanningRemunerationUseCase,
-    private readonly getTeacherRetirementPlanningRemunerationCalculationUseCase: GetTeacherRetirementPlanningRemunerationCalculationUseCase,
-    private readonly analyzeTeacherRetirementPlanningAdministrativeProcessUseCase: AnalyzeTeacherRetirementPlanningAdministrativeProcessUseCase,
+    private readonly updateTeacherRetirementPlanningUseCase: UpdateTeacherRetirementPlanningRppsUseCase,
+    private readonly getTeacherRetirementPlanningUseCase: GetTeacherRetirementPlanningRppsUseCase,
+    private readonly deleteTeacherRetirementPlanningUseCase: DeleteTeacherRetirementPlanningRppsUseCase,
+    private readonly createTeacherRetirementPlanningResultUseCase: CreateTeacherRetirementPlanningResultRppsUseCase,
+    private readonly downloadTeacherRetirementPlanningCompleteAnalysisUseCase: DownloadTeacherRetirementPlanningCompleteAnalysisRppsUseCase,
+    private readonly downloadTeacherRetirementPlanningSimplifiedAnalysisUseCase: DownloadTeacherRetirementPlanningSimplifiedAnalysisRppsUseCase,
+    private readonly createTeacherRetirementPlanningPeriodUseCase: CreateTeacherRetirementPlanningPeriodRppsUseCase,
+    private readonly createTeacherRetirementPlanningRemunerationUseCase: CreateTeacherRetirementPlanningRemunerationRppsUseCase,
+    private readonly updateTeacherRetirementPlanningPeriodUseCase: UpdateTeacherRetirementPlanningPeriodRppsUseCase,
+    private readonly updateTeacherRetirementPlanningRemunerationUseCase: UpdateTeacherRetirementPlanningRemunerationRppsUseCase,
+    private readonly listTeacherRetirementPlanningRemunerationUseCase: ListTeacherRetirementPlanningRemunerationRppsUseCase,
+    private readonly getTeacherRetirementPlanningRemunerationCalculationUseCase: GetTeacherRetirementPlanningRemunerationCalculationRppsUseCase,
+    private readonly analyzeTeacherRetirementPlanningAdministrativeProcessUseCase: AnalyzeTeacherRetirementPlanningAdministrativeProcessRppsUseCase,
   ) {}
 
   @BuildEndpointSpecification({
