@@ -40,6 +40,8 @@ export class AnalysisActivityMessageFactory {
       'Análise da qualidade do segurado',
     [AnalysisToolRecordTypeEnum.TEACHER_RETIREMENT_PLANNING]:
       'Planejamento previdenciário para professores',
+    [AnalysisToolRecordTypeEnum.TEACHER_RETIREMENT_PLANNING_RPPS]:
+      'Aposentadoria do Professor (RPPS)',
     [AnalysisToolRecordTypeEnum.DISABILITY_RETIREMENT_PLANNING]:
       'Planejamento de aposentadoria para deficiente',
     [AnalysisToolRecordTypeEnum.GENERAL_URBAN_RETIREMENT_GRANT]:
