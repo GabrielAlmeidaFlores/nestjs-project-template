@@ -20,7 +20,10 @@ export class RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryEnti
   public constructor(
     props: RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryEntityPropsInterface,
   ) {
-    super(RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryId, props);
+    super(
+      RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryId,
+      props,
+    );
     this.competence = props.competence ?? null;
     this.remuneration = props.remuneration ?? null;
     this.indicators = props.indicators ?? null;
