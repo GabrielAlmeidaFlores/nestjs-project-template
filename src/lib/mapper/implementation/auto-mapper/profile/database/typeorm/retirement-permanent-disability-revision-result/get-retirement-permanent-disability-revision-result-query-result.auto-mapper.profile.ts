@@ -26,6 +26,8 @@ export class GetRetirementPermanentDisabilityRevisionResultQueryResultAutoMapper
     ): GetRetirementPermanentDisabilityRevisionResultQueryResult => {
       return GetRetirementPermanentDisabilityRevisionResultQueryResult.build({
         id: new RetirementPermanentDisabilityRevisionResultId(source.id),
+        retirementPermanentDisabilityRevisionFirstAnalysis:
+          source.retirementPermanentDisabilityRevisionFirstAnalysis,
         retirementPermanentDisabilityRevisionCompleteAnalysis:
           source.retirementPermanentDisabilityRevisionCompleteAnalysis,
         retirementPermanentDisabilityRevisionSimplifiedAnalysis:
@@ -52,6 +54,8 @@ export class GetRetirementPermanentDisabilityRevisionResultQueryResultAutoMapper
     ): RetirementPermanentDisabilityRevisionResultTypeormEntity => {
       return RetirementPermanentDisabilityRevisionResultTypeormEntity.build({
         id: source.id.toString(),
+        retirementPermanentDisabilityRevisionFirstAnalysis:
+          source.retirementPermanentDisabilityRevisionFirstAnalysis,
         retirementPermanentDisabilityRevisionCompleteAnalysis:
           source.retirementPermanentDisabilityRevisionCompleteAnalysis,
         retirementPermanentDisabilityRevisionSimplifiedAnalysis:

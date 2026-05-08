@@ -14,11 +14,12 @@ import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/ana
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { RetirementPermanentDisabilityRevisionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision/command/retirement-permanent-disability-revision.command.repository.gateway';
 import { RetirementPermanentDisabilityRevisionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision/query/retirement-permanent-disability-revision.query.repository.gateway';
-import { RetirementPermanentDisabilityRevisionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-result/command/retirement-permanent-disability-revision-result.command.repository.gateway';
 import { GetRetirementPermanentDisabilityRevisionDocumentQueryResult } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-document/query/result/get-retirement-permanent-disability-revision-document.query.result';
-import { RetirementPermanentDisabilityRevisionId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision/value-object/retirement-permanent-disability-revision-id.value-object';
+import { RetirementPermanentDisabilityRevisionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-result/command/retirement-permanent-disability-revision-result.command.repository.gateway';
 import { RetirementPermanentDisabilityRevisionEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision/retirement-permanent-disability-revision.entity';
+import { RetirementPermanentDisabilityRevisionId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision/value-object/retirement-permanent-disability-revision-id.value-object';
 import { RetirementPermanentDisabilityRevisionResultEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-result/retirement-permanent-disability-revision-result.entity';
+import { RetirementPermanentDisabilityRevisionResultId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-result/value-object/retirement-permanent-disability-revision-result-id/retirement-permanent-disability-revision-result-id.value-object';
 import { CreateRetirementPermanentDisabilityRevisionResultResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/response/create-retirement-permanent-disability-revision-result.response.dto';
 import { RetirementPermanentDisabilityRevisionNotFoundError } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/error/retirement-permanent-disability-revision-not-found.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
@@ -101,9 +102,13 @@ export class CreateRetirementPermanentDisabilityRevisionResultUseCase {
       );
 
     const documentBuffers = await Promise.all(
-      analysisQueryResult.document.map(async (doc: GetRetirementPermanentDisabilityRevisionDocumentQueryResult) => {
-        return await this.fileProcessorGateway.getFileBuffer(doc.document);
-      }),
+      analysisQueryResult.document.map(
+        async (
+          doc: GetRetirementPermanentDisabilityRevisionDocumentQueryResult,
+        ) => {
+          return await this.fileProcessorGateway.getFileBuffer(doc.document);
+        },
+      ),
     );
 
     const clientDataBuffer = Buffer.from(
@@ -117,10 +122,22 @@ export class CreateRetirementPermanentDisabilityRevisionResultUseCase {
         [...documentBuffers, clientDataBuffer],
       );
 
+    const existingResult = analysisQueryResult.result;
+
+    const resultId = existingResult
+      ? existingResult.id
+      : new RetirementPermanentDisabilityRevisionResultId();
+
     const revisionResult =
       new RetirementPermanentDisabilityRevisionResultEntity({
+        id: resultId,
+        retirementPermanentDisabilityRevisionFirstAnalysis:
+          existingResult?.retirementPermanentDisabilityRevisionFirstAnalysis ??
+          null,
         retirementPermanentDisabilityRevisionCompleteAnalysis: completeAnalysis,
-        retirementPermanentDisabilityRevisionSimplifiedAnalysis: null,
+        retirementPermanentDisabilityRevisionSimplifiedAnalysis:
+          existingResult?.retirementPermanentDisabilityRevisionSimplifiedAnalysis ??
+          null,
       });
 
     const revision = new RetirementPermanentDisabilityRevisionEntity({
@@ -185,10 +202,14 @@ export class CreateRetirementPermanentDisabilityRevisionResultUseCase {
         analysisToolRecord,
       );
 
-    const createResultTransaction =
-      this.retirementPermanentDisabilityRevisionResultCommandRepositoryGateway.createRetirementPermanentDisabilityRevisionResult(
-        revisionResult,
-      );
+    const createResultTransaction = existingResult
+      ? this.retirementPermanentDisabilityRevisionResultCommandRepositoryGateway.updateRetirementPermanentDisabilityRevisionResult(
+          revisionResult.id,
+          revisionResult,
+        )
+      : this.retirementPermanentDisabilityRevisionResultCommandRepositoryGateway.createRetirementPermanentDisabilityRevisionResult(
+          revisionResult,
+        );
 
     const updateRevisionTransaction =
       this.retirementPermanentDisabilityRevisionCommandRepositoryGateway.updateRetirementPermanentDisabilityRevision(

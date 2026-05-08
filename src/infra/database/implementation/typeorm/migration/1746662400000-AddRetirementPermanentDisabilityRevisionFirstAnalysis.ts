@@ -15,7 +15,7 @@ export class AddRetirementPermanentDisabilityRevisionFirstAnalysis1746662400000 
         \`amount\` decimal(15,2) NOT NULL,
         \`reason_not_considered\` varchar(500) NOT NULL,
         \`action\` varchar(255) NOT NULL,
-        \`retirement_permanent_disability_revision_id\` varchar(36) NULL,
+        \`retirement_permanent_disability_revision_id\` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL,
         \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
         \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
         \`deleted_at\` datetime(6) NULL,
