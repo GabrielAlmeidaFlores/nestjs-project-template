@@ -91,13 +91,13 @@ export class CreateTeacherRetirementPlanningResultRppsUseCase {
 
     const promptResponse =
       await this.getPaymentPlanPaidResourcePromptUseCase.execute(
-        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_COMPLETE_ANALYSIS,
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_RPPS_COMPLETE_ANALYSIS,
       );
 
     const consumeCreditTransaction =
       await this.consumeOrganizationCreditUseCase.execute(
         organizationSessionData.organizationId,
-        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_COMPLETE_ANALYSIS,
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_RPPS_COMPLETE_ANALYSIS,
         organizationMember.id,
       );
 

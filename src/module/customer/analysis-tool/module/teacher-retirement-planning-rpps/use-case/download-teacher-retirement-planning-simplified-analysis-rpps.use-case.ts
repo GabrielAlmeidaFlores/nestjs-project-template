@@ -59,13 +59,13 @@ export class DownloadTeacherRetirementPlanningSimplifiedAnalysisRppsUseCase {
 
     const promptResponse =
       await this.getPaymentPlanPaidResourcePromptUseCase.execute(
-        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_SIMPLIFIED_ANALYSIS,
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_RPPS_SIMPLIFIED_ANALYSIS,
       );
 
     const consumeCreditTransaction =
       await this.consumeOrganizationCreditUseCase.execute(
         organizationSessionData.organizationId,
-        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_SIMPLIFIED_ANALYSIS,
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_RPPS_SIMPLIFIED_ANALYSIS,
         organizationMember.id,
       );
 
