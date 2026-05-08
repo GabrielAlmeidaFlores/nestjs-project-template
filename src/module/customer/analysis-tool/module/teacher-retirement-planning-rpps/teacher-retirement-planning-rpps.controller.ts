@@ -34,7 +34,7 @@ import { AnalyzeTeacherRetirementPlanningAdministrativeProcessUseCase } from '@m
 import { CreateTeacherRetirementPlanningPeriodUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-period.use-case';
 import { CreateTeacherRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-remuneration.use-case';
 import { CreateTeacherRetirementPlanningResultUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-result.use-case';
-import { CreateTeacherRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning.use-case';
+import { CreateTeacherRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/use-case/create-teacher-retirement-planning-rpps.use-case';
 import { DeleteTeacherRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/delete-teacher-retirement-planning.use-case';
 import { DownloadTeacherRetirementPlanningCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/download-teacher-retirement-planning-complete-analysis.use-case';
 import { DownloadTeacherRetirementPlanningSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/download-teacher-retirement-planning-simplified-analysis.use-case';
@@ -44,7 +44,6 @@ import { ListTeacherRetirementPlanningRemunerationUseCase } from '@module/custom
 import { UpdateTeacherRetirementPlanningPeriodUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/update-teacher-retirement-planning-period.use-case';
 import { UpdateTeacherRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/update-teacher-retirement-planning-remuneration.use-case';
 import { UpdateTeacherRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/update-teacher-retirement-planning.use-case';
-import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
@@ -61,7 +60,7 @@ export class TeacherRetirementPlanningRppsController {
   protected readonly _type = TeacherRetirementPlanningRppsController.name;
 
   public constructor(
-    private readonly createTeacherRetirementPlanningUseCase: CreateTeacherRetirementPlanningUseCase,
+    private readonly createTeacherRetirementPlanningUseCase: CreateTeacherRetirementPlanningRppsUseCase,
     private readonly updateTeacherRetirementPlanningUseCase: UpdateTeacherRetirementPlanningUseCase,
     private readonly getTeacherRetirementPlanningUseCase: GetTeacherRetirementPlanningUseCase,
     private readonly deleteTeacherRetirementPlanningUseCase: DeleteTeacherRetirementPlanningUseCase,
@@ -104,7 +103,6 @@ export class TeacherRetirementPlanningRppsController {
       sessionData,
       organizationSessionData,
       dto,
-      AnalysisToolRecordTypeEnum.TEACHER_RETIREMENT_PLANNING_RPPS,
     );
   }
 
