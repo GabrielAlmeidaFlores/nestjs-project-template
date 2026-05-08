@@ -154,8 +154,8 @@ export class CreateAccidentAssistanceGrantFirstAnalysisUseCase {
 
     let detailedAnalysis = firstAnalysisResponse;
     let rulesSummary = firstAnalysisResponse;
-    let expectedRmi: string | undefined = undefined;
-    let estimatedCaseValue: string | undefined = undefined;
+    let expectedRmi: string | null = null;
+    let estimatedCaseValue: string | null = null;
 
     try {
       const parsed = JSON.parse(firstAnalysisResponse) as {
@@ -173,8 +173,8 @@ export class CreateAccidentAssistanceGrantFirstAnalysisUseCase {
       ) {
         rulesSummary = parsed.analysisConclusion;
       }
-      expectedRmi = parsed.expectedRmi ?? undefined;
-      estimatedCaseValue = parsed.estimatedCaseValue ?? undefined;
+      expectedRmi = parsed.expectedRmi ?? null;
+      estimatedCaseValue = parsed.estimatedCaseValue ?? null;
     } catch {}
 
     const existingResult = grant.accidentAssistanceGrantResult;
@@ -231,8 +231,8 @@ export class CreateAccidentAssistanceGrantFirstAnalysisUseCase {
     return CreateAccidentAssistanceGrantFirstAnalysisResponseDto.build({
       firstAnalysis: detailedAnalysis,
       analysisConclusion: rulesSummary,
-      expectedRmi,
-      estimatedCaseValue,
+      ...(expectedRmi !== null && { expectedRmi }),
+      ...(estimatedCaseValue !== null && { estimatedCaseValue }),
     });
   }
 }
