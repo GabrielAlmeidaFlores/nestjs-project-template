@@ -4,16 +4,16 @@ import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/t
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
-import { TeacherRetirementPlanningQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/query/teacher-retirement-planning.query.repository.gateway';
-import { TeacherRetirementPlanningRemunerationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-remuneration/command/teacher-retirement-planning-remuneration.command.repository.gateway';
-import { TeacherRetirementPlanningRemunerationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-remuneration/query/teacher-retirement-planning-remuneration.query.repository.gateway';
-import { TeacherRetirementPlanningEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
-import { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
-import { TeacherRetirementPlanningRemunerationEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-remuneration/teacher-retirement-planning-remuneration.entity';
-import { TeacherRetirementPlanningRemunerationId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-remuneration/value-object/teacher-retirement-planning-remuneration-id.value-object';
-import { UpdateTeacherRetirementPlanningRemunerationRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/update-teacher-retirement-planning-remuneration.request.dto';
-import { UpdateTeacherRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/update-teacher-retirement-planning-remuneration.response.dto';
-import { TeacherRetirementPlanningNotFoundError } from '@module/customer/analysis-tool/module/teacher-retirement-planning/error/teacher-retirement-planning-not-found.error';
+import { TeacherRetirementPlanningRppsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning/query/teacher-retirement-planning.query.repository.gateway';
+import { TeacherRetirementPlanningRppsRemunerationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning-remuneration/command/teacher-retirement-planning-remuneration.command.repository.gateway';
+import { TeacherRetirementPlanningRppsRemunerationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning-remuneration/query/teacher-retirement-planning-remuneration.query.repository.gateway';
+import { TeacherRetirementPlanningRppsEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
+import { TeacherRetirementPlanningRppsId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
+import { TeacherRetirementPlanningRppsRemunerationEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning-remuneration/teacher-retirement-planning-remuneration.entity';
+import { TeacherRetirementPlanningRppsRemunerationId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning-remuneration/value-object/teacher-retirement-planning-remuneration-id.value-object';
+import { UpdateTeacherRetirementPlanningRemunerationRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/request/update-teacher-retirement-planning-remuneration.request.dto';
+import { UpdateTeacherRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/response/update-teacher-retirement-planning-remuneration.response.dto';
+import { TeacherRetirementPlanningRppsNotFoundError } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/error/teacher-retirement-planning-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -25,12 +25,12 @@ export class UpdateTeacherRetirementPlanningRemunerationRppsUseCase {
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
-    @Inject(TeacherRetirementPlanningQueryRepositoryGateway)
-    private readonly teacherRetirementPlanningQueryRepositoryGateway: TeacherRetirementPlanningQueryRepositoryGateway,
-    @Inject(TeacherRetirementPlanningRemunerationQueryRepositoryGateway)
-    private readonly teacherRetirementPlanningRemunerationQueryRepositoryGateway: TeacherRetirementPlanningRemunerationQueryRepositoryGateway,
-    @Inject(TeacherRetirementPlanningRemunerationCommandRepositoryGateway)
-    private readonly teacherRetirementPlanningRemunerationCommandRepositoryGateway: TeacherRetirementPlanningRemunerationCommandRepositoryGateway,
+    @Inject(TeacherRetirementPlanningRppsQueryRepositoryGateway)
+    private readonly teacherRetirementPlanningQueryRepositoryGateway: TeacherRetirementPlanningRppsQueryRepositoryGateway,
+    @Inject(TeacherRetirementPlanningRppsRemunerationQueryRepositoryGateway)
+    private readonly teacherRetirementPlanningRemunerationQueryRepositoryGateway: TeacherRetirementPlanningRppsRemunerationQueryRepositoryGateway,
+    @Inject(TeacherRetirementPlanningRppsRemunerationCommandRepositoryGateway)
+    private readonly teacherRetirementPlanningRemunerationCommandRepositoryGateway: TeacherRetirementPlanningRppsRemunerationCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
   ) {}
@@ -38,7 +38,7 @@ export class UpdateTeacherRetirementPlanningRemunerationRppsUseCase {
   public async execute(
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
-    teacherRetirementPlanningId: TeacherRetirementPlanningId,
+    teacherRetirementPlanningId: TeacherRetirementPlanningRppsId,
     dto: UpdateTeacherRetirementPlanningRemunerationRequestDto,
   ): Promise<UpdateTeacherRetirementPlanningRemunerationResponseDto> {
     const organizationMember =
@@ -57,7 +57,7 @@ export class UpdateTeacherRetirementPlanningRemunerationRppsUseCase {
       );
 
     if (planning === null) {
-      throw new TeacherRetirementPlanningNotFoundError();
+      throw new TeacherRetirementPlanningRppsNotFoundError();
     }
 
     const currentRemunerations =
@@ -65,7 +65,7 @@ export class UpdateTeacherRetirementPlanningRemunerationRppsUseCase {
         teacherRetirementPlanningId,
       );
 
-    const planningEntity = new TeacherRetirementPlanningEntity({
+    const planningEntity = new TeacherRetirementPlanningRppsEntity({
       id: planning.id,
       federativeEntity: planning.federativeEntity,
       state: planning.state,
@@ -90,8 +90,8 @@ export class UpdateTeacherRetirementPlanningRemunerationRppsUseCase {
     for (const remunerationDto of dto.remunerations) {
       transactions.push(
         this.teacherRetirementPlanningRemunerationCommandRepositoryGateway.createTeacherRetirementPlanningRemuneration(
-          new TeacherRetirementPlanningRemunerationEntity({
-            id: new TeacherRetirementPlanningRemunerationId(),
+          new TeacherRetirementPlanningRppsRemunerationEntity({
+            id: new TeacherRetirementPlanningRppsRemunerationId(),
             contributionDate: remunerationDto.contributionDate,
             amount: remunerationDto.amount,
             teacherRetirementPlanning: planningEntity,

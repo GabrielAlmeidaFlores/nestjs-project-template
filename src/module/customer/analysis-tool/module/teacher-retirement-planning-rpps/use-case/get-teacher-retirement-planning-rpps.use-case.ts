@@ -9,24 +9,24 @@ import {
 } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client.response.dto';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
-import { TeacherRetirementPlanningQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/query/teacher-retirement-planning.query.repository.gateway';
-import { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
+import { TeacherRetirementPlanningRppsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning/query/teacher-retirement-planning.query.repository.gateway';
+import { TeacherRetirementPlanningRppsId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
 import {
-  TeacherRetirementPlanningCompleteAnalysisResultResponseDto,
-  TeacherRetirementPlanningCompleteAnalysisRetirementRuleResponseDto,
-  TeacherRetirementPlanningCompleteAnalysisTimelineItemResponseDto,
-} from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning-result.response.dto';
+  TeacherRetirementPlanningRppsCompleteAnalysisResultResponseDto,
+  TeacherRetirementPlanningRppsCompleteAnalysisRetirementRuleResponseDto,
+  TeacherRetirementPlanningRppsCompleteAnalysisTimelineItemResponseDto,
+} from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/response/create-teacher-retirement-planning-result.response.dto';
 import {
-  GetTeacherRetirementPlanningDocumentResponseDto,
-  GetTeacherRetirementPlanningPeriodItemDocumentResponseDto,
-  GetTeacherRetirementPlanningPeriodItemResponseDto,
-  GetTeacherRetirementPlanningPeriodResponseDto,
-  GetTeacherRetirementPlanningRemunerationResponseDto,
-  GetTeacherRetirementPlanningResponseDto,
-  GetTeacherRetirementPlanningResultResponseDto,
-} from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/get-teacher-retirement-planning.response.dto';
-import { TeacherRetirementPlanningNotFoundError } from '@module/customer/analysis-tool/module/teacher-retirement-planning/error/teacher-retirement-planning-not-found.error';
-import { TeacherRetirementPlanningCompleteAnalysisDataInterface } from '@module/customer/analysis-tool/module/teacher-retirement-planning/model/generic/teacher-retirement-planning-complete-analysis-data.model';
+  GetTeacherRetirementPlanningRppsDocumentResponseDto,
+  GetTeacherRetirementPlanningRppsPeriodItemDocumentResponseDto,
+  GetTeacherRetirementPlanningRppsPeriodItemResponseDto,
+  GetTeacherRetirementPlanningRppsPeriodResponseDto,
+  GetTeacherRetirementPlanningRppsRemunerationResponseDto,
+  GetTeacherRetirementPlanningRppsResponseDto,
+  GetTeacherRetirementPlanningRppsResultResponseDto,
+} from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/response/get-teacher-retirement-planning.response.dto';
+import { TeacherRetirementPlanningRppsNotFoundError } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/error/teacher-retirement-planning-not-found.error';
+import { TeacherRetirementPlanningRppsCompleteAnalysisDataInterface } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/model/generic/teacher-retirement-planning-complete-analysis-data.model';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -37,8 +37,8 @@ export class GetTeacherRetirementPlanningRppsUseCase {
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
-    @Inject(TeacherRetirementPlanningQueryRepositoryGateway)
-    private readonly teacherRetirementPlanningQueryRepositoryGateway: TeacherRetirementPlanningQueryRepositoryGateway,
+    @Inject(TeacherRetirementPlanningRppsQueryRepositoryGateway)
+    private readonly teacherRetirementPlanningQueryRepositoryGateway: TeacherRetirementPlanningRppsQueryRepositoryGateway,
     @Inject(AnalysisToolRecordQueryRepositoryGateway)
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(FileProcessorGateway)
@@ -48,8 +48,8 @@ export class GetTeacherRetirementPlanningRppsUseCase {
   public async execute(
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
-    teacherRetirementPlanningId: TeacherRetirementPlanningId,
-  ): Promise<GetTeacherRetirementPlanningResponseDto> {
+    teacherRetirementPlanningId: TeacherRetirementPlanningRppsId,
+  ): Promise<GetTeacherRetirementPlanningRppsResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
@@ -66,15 +66,15 @@ export class GetTeacherRetirementPlanningRppsUseCase {
       );
 
     if (planning === null) {
-      throw new TeacherRetirementPlanningNotFoundError();
+      throw new TeacherRetirementPlanningRppsNotFoundError();
     }
 
     const recordQueryResult =
       await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByTeacherRetirementPlanningIdAndOrganizationIdAndAuthIdentityIdOrFail(
-        teacherRetirementPlanningId,
+        teacherRetirementPlanningId as any,
         organizationSessionData.organizationId,
         sessionData.authIdentityId,
-        TeacherRetirementPlanningNotFoundError,
+        TeacherRetirementPlanningRppsNotFoundError,
       );
 
     const client = recordQueryResult.analysisToolClient;
@@ -99,7 +99,7 @@ export class GetTeacherRetirementPlanningRppsUseCase {
 
     const periods = await Promise.all(
       planning.periods.map(async (period) =>
-        GetTeacherRetirementPlanningPeriodResponseDto.build({
+        GetTeacherRetirementPlanningRppsPeriodResponseDto.build({
           startDate: period.startDate,
           endDate: period.endDate,
           positionName: period.positionName,
@@ -108,7 +108,7 @@ export class GetTeacherRetirementPlanningRppsUseCase {
           department: period.department,
           items: await Promise.all(
             period.items.map(async (item) =>
-              GetTeacherRetirementPlanningPeriodItemResponseDto.build({
+              GetTeacherRetirementPlanningRppsPeriodItemResponseDto.build({
                 startDate: item.startDate,
                 endDate: item.endDate,
                 institutionName: item.institutionName,
@@ -125,7 +125,7 @@ export class GetTeacherRetirementPlanningRppsUseCase {
                       await this.fileProcessorGateway.getOriginalFileName(
                         document.document,
                       );
-                    return GetTeacherRetirementPlanningPeriodItemDocumentResponseDto.build(
+                    return GetTeacherRetirementPlanningRppsPeriodItemDocumentResponseDto.build(
                       {
                         document: Base64.encodeBuffer(fileBuffer).toString(),
                         originalFileName,
@@ -149,7 +149,7 @@ export class GetTeacherRetirementPlanningRppsUseCase {
           await this.fileProcessorGateway.getOriginalFileName(
             document.document,
           );
-        return GetTeacherRetirementPlanningDocumentResponseDto.build({
+        return GetTeacherRetirementPlanningRppsDocumentResponseDto.build({
           document: Base64.encodeBuffer(fileBuffer).toString(),
           originalFileName,
         });
@@ -157,25 +157,25 @@ export class GetTeacherRetirementPlanningRppsUseCase {
     );
 
     const remunerations = planning.remunerations.map((remuneration) =>
-      GetTeacherRetirementPlanningRemunerationResponseDto.build({
+      GetTeacherRetirementPlanningRppsRemunerationResponseDto.build({
         contributionDate: remuneration.contributionDate,
         amount: remuneration.amount,
       }),
     );
 
     const teacherRetirementPlanningResult = planning.result
-      ? GetTeacherRetirementPlanningResultResponseDto.build({
+      ? GetTeacherRetirementPlanningRppsResultResponseDto.build({
           ...(planning.result.teacherRetirementPlanningCompleteAnalysis !==
             null && {
             teacherRetirementPlanningCompleteAnalysis:
-              ((): TeacherRetirementPlanningCompleteAnalysisResultResponseDto => {
+              ((): TeacherRetirementPlanningRppsCompleteAnalysisResultResponseDto => {
                 const analysisData = JSON.parse(
                   planning.result.teacherRetirementPlanningCompleteAnalysis,
-                ) as TeacherRetirementPlanningCompleteAnalysisDataInterface;
-                return TeacherRetirementPlanningCompleteAnalysisResultResponseDto.build(
+                ) as TeacherRetirementPlanningRppsCompleteAnalysisDataInterface;
+                return TeacherRetirementPlanningRppsCompleteAnalysisResultResponseDto.build(
                   {
                     timeline: analysisData.timeline.map((item) =>
-                      TeacherRetirementPlanningCompleteAnalysisTimelineItemResponseDto.build(
+                      TeacherRetirementPlanningRppsCompleteAnalysisTimelineItemResponseDto.build(
                         {
                           startDate: item.startDate,
                           endDate: item.endDate,
@@ -186,7 +186,7 @@ export class GetTeacherRetirementPlanningRppsUseCase {
                       ),
                     ),
                     retirementRules: analysisData.retirementRules.map((rule) =>
-                      TeacherRetirementPlanningCompleteAnalysisRetirementRuleResponseDto.build(
+                      TeacherRetirementPlanningRppsCompleteAnalysisRetirementRuleResponseDto.build(
                         {
                           ruleName: rule.ruleName,
                           ...(rule.result !== undefined && {
@@ -222,7 +222,7 @@ export class GetTeacherRetirementPlanningRppsUseCase {
         })
       : undefined;
 
-    const response = GetTeacherRetirementPlanningResponseDto.build({
+    const response = GetTeacherRetirementPlanningRppsResponseDto.build({
       teacherRetirementPlanningId: planning.id,
       federativeEntity: planning.federativeEntity,
       ...(planning.state !== null && { state: planning.state.toString() }),
