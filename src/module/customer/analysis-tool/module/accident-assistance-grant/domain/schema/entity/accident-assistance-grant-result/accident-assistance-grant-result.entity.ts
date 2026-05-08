@@ -10,9 +10,7 @@ export class AccidentAssistanceGrantResultEntity extends BaseEntity<AccidentAssi
 
   protected readonly _type = AccidentAssistanceGrantResultEntity.name;
 
-  public constructor(
-    props: AccidentAssistanceGrantResultEntityPropsInterface,
-  ) {
+  public constructor(props: AccidentAssistanceGrantResultEntityPropsInterface) {
     super(AccidentAssistanceGrantResultId, props);
     this.firstAnalysis = props.firstAnalysis ?? null;
     this.simplifiedAnalysis = props.simplifiedAnalysis ?? null;

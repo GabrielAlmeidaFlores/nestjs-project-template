@@ -16,8 +16,7 @@ export class AccidentAssistanceGrantTypeormQueryRepository
   extends BaseTypeormQueryRepository<AccidentAssistanceGrantTypeormEntity>
   implements AccidentAssistanceGrantQueryRepositoryGateway
 {
-  protected readonly _type =
-    AccidentAssistanceGrantTypeormQueryRepository.name;
+  protected readonly _type = AccidentAssistanceGrantTypeormQueryRepository.name;
 
   public constructor(
     @InjectRepository(AccidentAssistanceGrantTypeormEntity)

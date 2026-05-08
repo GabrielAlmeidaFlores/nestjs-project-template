@@ -47,7 +47,8 @@ export class DownloadAccidentAssistanceGrantCompleteAnalysisUseCase {
         AccidentAssistanceGrantNotFoundError,
       );
 
-    const rawAnalysis = grant.accidentAssistanceGrantResult?.firstAnalysis ?? null;
+    const rawAnalysis =
+      grant.accidentAssistanceGrantResult?.firstAnalysis ?? null;
 
     if (rawAnalysis === null) {
       throw new AccidentAssistanceGrantAnalysisDownloadNotFoundError();
@@ -59,7 +60,8 @@ export class DownloadAccidentAssistanceGrantCompleteAnalysisUseCase {
       throw new AccidentAssistanceGrantAnalysisDownloadNotFoundError();
     }
 
-    const htmlContent = await this.exportDocumentGateway.convertMarkdownToHtml(analysisText);
+    const htmlContent =
+      await this.exportDocumentGateway.convertMarkdownToHtml(analysisText);
 
     return this.exportDocumentGateway.downloadFileAsStreamable(
       htmlContent,
@@ -71,7 +73,9 @@ export class DownloadAccidentAssistanceGrantCompleteAnalysisUseCase {
   private extractField(raw: string, field: string): string | null {
     try {
       const parsed = JSON.parse(raw) as Record<string, unknown>;
-      return typeof parsed[field] === 'string' ? (parsed[field] as string) : null;
+      return typeof parsed[field] === 'string'
+        ? (parsed[field] as string)
+        : null;
     } catch {
       return raw;
     }
