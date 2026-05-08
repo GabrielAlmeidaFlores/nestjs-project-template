@@ -11,10 +11,13 @@ export class UpdateRegulatoryUpdateEmailPreferenceRequestDto extends BaseBuildab
   public emailEnabled: boolean;
 
   @RequestDtoNumberProperty({ required: false })
-  public sendFrequency?: number | null;
+  public sendFrequency?: number;
 
-  @RequestDtoEnumProperty(RegulatoryUpdateEmailPreferenceSendDayEnum, { required: false, isArray: true })
-  public sendDays?: RegulatoryUpdateEmailPreferenceSendDayEnum[] | null;
+  @RequestDtoEnumProperty(RegulatoryUpdateEmailPreferenceSendDayEnum, {
+    required: false,
+    isArray: true,
+  })
+  public sendDays?: RegulatoryUpdateEmailPreferenceSendDayEnum[];
 
   protected override readonly _type =
     UpdateRegulatoryUpdateEmailPreferenceRequestDto.name;
