@@ -10,10 +10,6 @@ import { AccidentAssistanceTerminatedPeriodTypeormCommandRepository } from '@inf
 import { AccidentAssistanceTerminatedPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated-period/accident-assistance-terminated-period.typeorm.query.repository';
 import { AccidentAssistanceTerminatedPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated-period-document/accident-assistance-terminated-period-document.typeorm.command.repository';
 import { AccidentAssistanceTerminatedResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated-result/accident-assistance-terminated-result.typeorm.command.repository';
-import { AccidentAssistanceGrantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-grant/accident-assistance-grant.typeorm.command.repository';
-import { AccidentAssistanceGrantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-grant/accident-assistance-grant.typeorm.query.repository';
-import { AccidentAssistanceGrantDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-grant-document/accident-assistance-grant-document.typeorm.command.repository';
-import { AccidentAssistanceGrantResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-grant-result/accident-assistance-grant-result.typeorm.command.repository';
 import { AccidentBenefitRejectionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection/accident-benefit-rejection.typeorm.command.repository';
 import { AccidentBenefitRejectionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection/accident-benefit-rejection.typeorm.query.repository';
 import { AccidentBenefitRejectionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection-document/accident-benefit-rejection-document.typeorm.command.repository';
@@ -391,6 +387,8 @@ import { SpecialRetirementGrantPeriodOverdueContributionTypeormCommandRepository
 import { SpecialRetirementGrantPeriodPendingExitDateTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-period-pending-exit-date/special-retirement-grant-period-pending-exit-date.typeorm.command.repository';
 import { SpecialRetirementGrantPeriodUnderMinimumTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-period-under-minimum/special-retirement-grant-period-under-minimum.typeorm.command.repository';
 import { SpecialRetirementGrantResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-result/special-retirement-grant-result.typeorm.command.repository';
+import { SpecialRetirementGrantTechnicalDiagnosisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-technical-diagnosis/special-retirement-grant-technical-diagnosis.typeorm.command.repository';
+import { SpecialRetirementGrantTechnicalDiagnosisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-technical-diagnosis/special-retirement-grant-technical-diagnosis.typeorm.query.repository';
 import { SpecialRetirementRejectionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection/special-retirement-rejection.typeorm.command.repository';
 import { SpecialRetirementRejectionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection/special-retirement-rejection.typeorm.query.repository';
 import { SpecialRetirementRejectionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection-document/special-retirement-rejection-document.typeorm.command.repository';
@@ -504,9 +502,9 @@ import { AccidentAssistanceTerminatedPeriodDocumentTypeormEntity } from '@infra/
 import { AccidentAssistanceTerminatedPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-period.typeorm.entity';
 import { AccidentAssistanceTerminatedResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated-result.entity';
 import { AccidentAssistanceTerminatedTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated.entity';
-import { AccidentAssistanceGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-grant/accident-assistance-grant.typeorm.entity';
 import { AccidentAssistanceGrantDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-grant-document/accident-assistance-grant-document.typeorm.entity';
 import { AccidentAssistanceGrantResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-grant-result/accident-assistance-grant-result.typeorm.entity';
+import { AccidentAssistanceGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-grant/accident-assistance-grant.typeorm.entity';
 import { AccidentBenefitRejectionDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection-document.typeorm.entity';
 import { AccidentBenefitRejectionEventDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection-event-document.typeorm.entity';
 import { AccidentBenefitRejectionEventTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection-event.typeorm.entity';
@@ -843,6 +841,7 @@ import { SpecialRetirementGrantPeriodPendingExitDateTypeormEntity } from '@infra
 import { SpecialRetirementGrantPeriodUnderMinimumTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-period-under-minimum.typeorm.entity';
 import { SpecialRetirementGrantPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-period.typeorm.entity';
 import { SpecialRetirementGrantResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-result.typeorm.entity';
+import { SpecialRetirementGrantTechnicalDiagnosisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-technical-diagnosis.typeorm.entity';
 import { SpecialRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant.typeorm.entity';
 import { SpecialRetirementRejectionDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-document.typeorm.entity';
 import { SpecialRetirementRejectionInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-inss-benefit.typeorm.entity';
@@ -1255,6 +1254,7 @@ export class TypeormIndex {
     SpecialRetirementGrantLegalProceedingTypeormEntity,
     SpecialRetirementGrantPeriodTypeormEntity,
     SpecialRetirementGrantEarningsHistoryTypeormEntity,
+    SpecialRetirementGrantTechnicalDiagnosisTypeormEntity,
     SpecialRetirementGrantPeriodObservationTypeormEntity,
     SpecialRetirementGrantPeriodUnderMinimumTypeormEntity,
     SpecialRetirementGrantPeriodPendingExitDateTypeormEntity,
@@ -1396,6 +1396,9 @@ export class TypeormIndex {
     MaternityPayGrantPeriodTypeormEntity,
     MaternityPayGrantPeriodDocumentTypeormEntity,
     MaternityPayGrantResultTypeormEntity,
+    AccidentAssistanceGrantTypeormEntity,
+    AccidentAssistanceGrantDocumentTypeormEntity,
+    AccidentAssistanceGrantResultTypeormEntity,
     AccidentAssistanceTerminatedTypeormEntity,
     AccidentAssistanceTerminatedBenefitTypeormEntity,
     AccidentAssistanceTerminatedCidTypeormEntity,
@@ -1404,9 +1407,6 @@ export class TypeormIndex {
     AccidentAssistanceTerminatedResultTypeormEntity,
     AccidentAssistanceTerminatedPeriodTypeormEntity,
     AccidentAssistanceTerminatedPeriodDocumentTypeormEntity,
-    AccidentAssistanceGrantTypeormEntity,
-    AccidentAssistanceGrantDocumentTypeormEntity,
-    AccidentAssistanceGrantResultTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [
@@ -1431,10 +1431,6 @@ export class TypeormIndex {
     AccidentAssistanceTerminatedPeriodTypeormCommandRepository,
     AccidentAssistanceTerminatedPeriodTypeormQueryRepository,
     AccidentAssistanceTerminatedPeriodDocumentTypeormCommandRepository,
-    AccidentAssistanceGrantTypeormCommandRepository,
-    AccidentAssistanceGrantTypeormQueryRepository,
-    AccidentAssistanceGrantDocumentTypeormCommandRepository,
-    AccidentAssistanceGrantResultTypeormCommandRepository,
     DisabilityAssessmentForBpcAnalysisTypeormCommandRepository,
     DisabilityAssessmentForBpcAnalysisTypeormQueryRepository,
     DisabilityAssessmentForBpcAnalysisBenefitTypeormCommandRepository,
@@ -1762,6 +1758,8 @@ export class TypeormIndex {
     SpecialRetirementGrantLegalProceedingTypeormCommandRepository,
     SpecialRetirementGrantDocumentTypeormCommandRepository,
     SpecialRetirementGrantResultTypeormCommandRepository,
+    SpecialRetirementGrantTechnicalDiagnosisTypeormCommandRepository,
+    SpecialRetirementGrantTechnicalDiagnosisTypeormQueryRepository,
     SpecialRetirementGrantPeriodTypeormCommandRepository,
     SpecialRetirementGrantPeriodTypeormQueryRepository,
     SpecialRetirementGrantEarningsHistoryTypeormCommandRepository,
