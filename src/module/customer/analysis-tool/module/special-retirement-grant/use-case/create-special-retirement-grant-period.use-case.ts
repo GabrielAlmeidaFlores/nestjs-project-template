@@ -127,7 +127,8 @@ export class CreateSpecialRetirementGrantPeriodUseCase {
           size: buffer.length,
           encoding: '7bit',
         });
-        const documentUrl = await this.fileProcessorGateway.uploadFile(fileModel);
+        const documentUrl =
+          await this.fileProcessorGateway.uploadFile(fileModel);
         return new SpecialRetirementGrantPeriodDocumentEntity({
           type: docDto.type,
           document: documentUrl,

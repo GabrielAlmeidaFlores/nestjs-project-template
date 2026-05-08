@@ -104,8 +104,15 @@ export class UpdateSpecialRetirementGrantPeriodUseCase {
     const periodsData = await Promise.all(
       dto.periods.map(async (p) => {
         const period = this.buildPeriodEntity(p, grant);
-        const documents = await this.uploadAndBuildDocuments(period, p.documents);
-        const earningsTx = this.buildEarningsTransactions(period, grant, p.earningsHistory);
+        const documents = await this.uploadAndBuildDocuments(
+          period,
+          p.documents,
+        );
+        const earningsTx = this.buildEarningsTransactions(
+          period,
+          grant,
+          p.earningsHistory,
+        );
         return { period, documents, earningsTx };
       }),
     );
@@ -122,17 +129,19 @@ export class UpdateSpecialRetirementGrantPeriodUseCase {
       ),
     );
 
-    const createTransactions = periodsData.flatMap(({ period, documents, earningsTx }) => [
-      this.specialRetirementGrantPeriodCommandRepositoryGateway.createSpecialRetirementGrantPeriod(
-        period,
-      ),
-      ...earningsTx,
-      ...documents.map((doc) =>
-        this.specialRetirementGrantPeriodDocumentCommandRepositoryGateway.createSpecialRetirementGrantPeriodDocument(
-          doc,
+    const createTransactions = periodsData.flatMap(
+      ({ period, documents, earningsTx }) => [
+        this.specialRetirementGrantPeriodCommandRepositoryGateway.createSpecialRetirementGrantPeriod(
+          period,
         ),
-      ),
-    ]);
+        ...earningsTx,
+        ...documents.map((doc) =>
+          this.specialRetirementGrantPeriodDocumentCommandRepositoryGateway.createSpecialRetirementGrantPeriodDocument(
+            doc,
+          ),
+        ),
+      ],
+    );
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       ...deleteDocumentTransactions,
@@ -171,7 +180,9 @@ export class UpdateSpecialRetirementGrantPeriodUseCase {
     period: SpecialRetirementGrantPeriodEntity,
     grant: SpecialRetirementGrantEntity,
     earningsHistory: CreateSpecialRetirementGrantPeriodRequestDto['earningsHistory'],
-  ): ReturnType<SpecialRetirementGrantEarningsHistoryCommandRepositoryGateway['createSpecialRetirementGrantEarningsHistory']>[] {
+  ): ReturnType<
+    SpecialRetirementGrantEarningsHistoryCommandRepositoryGateway['createSpecialRetirementGrantEarningsHistory']
+  >[] {
     return (earningsHistory ?? []).map((eh) =>
       this.specialRetirementGrantEarningsHistoryCommandRepositoryGateway.createSpecialRetirementGrantEarningsHistory(
         new SpecialRetirementGrantEarningsHistoryEntity({
@@ -204,7 +215,8 @@ export class UpdateSpecialRetirementGrantPeriodUseCase {
           size: buffer.length,
           encoding: '7bit',
         });
-        const documentUrl = await this.fileProcessorGateway.uploadFile(fileModel);
+        const documentUrl =
+          await this.fileProcessorGateway.uploadFile(fileModel);
         return new SpecialRetirementGrantPeriodDocumentEntity({
           type: docDto.type,
           document: documentUrl,
