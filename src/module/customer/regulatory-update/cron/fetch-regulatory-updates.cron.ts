@@ -54,7 +54,9 @@ export class FetchRegulatoryUpdatesCron implements OnModuleInit {
         .findAllTitlesAndDates()
         .then((existing) => {
           if (existing.length === 0) {
-            this.logger.log('No existing updates found. Running initial fetch...');
+            this.logger.log(
+              'No existing updates found. Running initial fetch...',
+            );
             this.execute().catch((err) =>
               this.logger.error(
                 'Initial fetch failed',

@@ -4,8 +4,7 @@ import type { AccidentAssistanceGrantCategoryEnum } from '@module/customer/analy
 import type { AccidentAssistanceGrantId } from '@module/customer/analysis-tool/module/accident-assistance-grant/domain/schema/entity/accident-assistance-grant/value-object/accident-assistance-grant-id.value-object';
 import type { AccidentAssistanceGrantResultId } from '@module/customer/analysis-tool/module/accident-assistance-grant/domain/schema/entity/accident-assistance-grant-result/value-object/accident-assistance-grant-result-id.value-object';
 
-export interface AccidentAssistanceGrantEntityPropsInterface
-  extends BaseEntityPropsInterface<AccidentAssistanceGrantId> {
+export interface AccidentAssistanceGrantEntityPropsInterface extends BaseEntityPropsInterface<AccidentAssistanceGrantId> {
   analysisToolClientId: AnalysisToolClientId;
   analysisName?: string | null;
   category?: AccidentAssistanceGrantCategoryEnum | null;
