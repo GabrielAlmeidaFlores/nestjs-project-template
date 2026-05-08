@@ -2743,8 +2743,9 @@ Análise processada do CNIS:
 # IMPORTANTE
 - Retorne estritamente um objeto JSON válido compatível com o schema solicitado.
 - O campo \`completeAnalysisDownload\` deve conter a análise detalhada em Markdown, pronta para exportação em PDF/DOCX.
-- O campo \`analysisResult\` deve conter um resumo textual objetivo do resultado.
-- O campo \`analysisDetailedText\` deve conter a fundamentação detalhada em texto corrido.
+- O campo \`analysisResult\` deve conter um resumo objetivo em Markdown, com títulos curtos e bullets.
+- O campo \`analysisDetailedText\` deve conter a fundamentação detalhada em Markdown estruturado para renderização na tela "Resultado Final da Análise".
+- Não gere \`analysisDetailedText\` em parágrafo único; use títulos, subtítulos, listas curtas e tabelas quando houver dados objetivos.
 - Cada item de \`applicableRules\` deve representar uma regra aplicável ao BPC ao Idoso cessado/suspenso.
 - Cada item de \`benefitSummaries\` deve representar um cenário ou benefício resumido para a tela final.
 - Preencha diagnóstico, renda familiar total, renda per capita, requisitos legais, regra de renda e idade mínima com base nos documentos fornecidos.
@@ -8548,7 +8549,7 @@ For probativeForce, classify each document as:
         analysisDetailedText: {
           type: 'string',
           description:
-            'Texto detalhado da análise final sobre a cessação ou suspensão do BPC ao Idoso.',
+            'Texto detalhado da análise final sobre a cessação ou suspensão do BPC ao Idoso em Markdown estruturado, com títulos, listas e tabelas quando aplicável.',
         },
         completeAnalysisDownload: {
           type: 'string',
