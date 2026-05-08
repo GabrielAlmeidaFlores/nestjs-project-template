@@ -11,23 +11,31 @@ import {
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { RetirementPermanentDisabilityRevisionId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision/value-object/retirement-permanent-disability-revision-id.value-object';
 import { CreateRetirementPermanentDisabilityRevisionRequestDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/request/create-retirement-permanent-disability-revision.request.dto';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisRequestDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/request/retirement-permanent-disability-revision-disability-analysis.request.dto';
 import { UpdateRetirementPermanentDisabilityRevisionRequestDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/request/update-retirement-permanent-disability-revision.request.dto';
 import { UploadRetirementPermanentDisabilityRevisionDocumentsRequestDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/request/upload-retirement-permanent-disability-revision-document.request.dto';
+import { CreateRetirementPermanentDisabilityRevisionWorkPeriodsRequestDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/request/create-retirement-permanent-disability-revision-work-periods.request.dto';
+import { UpdateRetirementPermanentDisabilityRevisionWorkPeriodsRequestDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/request/update-retirement-permanent-disability-revision-work-periods.request.dto';
+import { CreateRetirementPermanentDisabilityRevisionFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/response/create-retirement-permanent-disability-revision-first-analysis.response.dto';
 import { CreateRetirementPermanentDisabilityRevisionResultResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/response/create-retirement-permanent-disability-revision-result.response.dto';
 import { CreateRetirementPermanentDisabilityRevisionResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/response/create-retirement-permanent-disability-revision.response.dto';
 import { GetRetirementPermanentDisabilityRevisionResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/response/get-retirement-permanent-disability-revision.response.dto';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/response/retirement-permanent-disability-revision-disability-analysis.response.dto';
 import { UpdateRetirementPermanentDisabilityRevisionResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/response/update-retirement-permanent-disability-revision.response.dto';
 import { UploadRetirementPermanentDisabilityRevisionDocumentsResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/response/upload-retirement-permanent-disability-revision-document.response.dto';
+import { CreateRetirementPermanentDisabilityRevisionWorkPeriodsResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/response/create-retirement-permanent-disability-revision-work-periods.response.dto';
+import { UpdateRetirementPermanentDisabilityRevisionWorkPeriodsResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/response/update-retirement-permanent-disability-revision-work-periods.response.dto';
+import { CreateRetirementPermanentDisabilityRevisionFirstAnalysisUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/create-retirement-permanent-disability-revision-first-analysis.use-case';
 import { CreateRetirementPermanentDisabilityRevisionResultUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/create-retirement-permanent-disability-revision-result.use-case';
 import { CreateRetirementPermanentDisabilityRevisionUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/create-retirement-permanent-disability-revision.use-case';
+import { DisabilityAnalysisUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/disability-analysis.use-case';
 import { DownloadRetirementPermanentDisabilityRevisionCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/download-retirement-permanent-disability-revision-complete-analysis.use-case';
 import { DownloadRetirementPermanentDisabilityRevisionSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/download-retirement-permanent-disability-revision-simplified-analysis.use-case';
 import { GetRetirementPermanentDisabilityRevisionUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/get-retirement-permanent-disability-revision.use-case';
 import { UpdateRetirementPermanentDisabilityRevisionUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/update-retirement-permanent-disability-revision.use-case';
 import { UploadRetirementPermanentDisabilityRevisionDocumentsUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/upload-retirement-permanent-disability-revision-documents.use-case';
-import { DisabilityAnalysisUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/disability-analysis.use-case';
-import { RetirementPermanentDisabilityRevisionDisabilityAnalysisRequestDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/request/retirement-permanent-disability-revision-disability-analysis.request.dto';
-import { RetirementPermanentDisabilityRevisionDisabilityAnalysisResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/response/retirement-permanent-disability-revision-disability-analysis.response.dto';
+import { CreateRetirementPermanentDisabilityRevisionWorkPeriodsUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/create-retirement-permanent-disability-revision-work-periods.use-case';
+import { UpdateRetirementPermanentDisabilityRevisionWorkPeriodsUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/update-retirement-permanent-disability-revision-work-periods.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
@@ -49,12 +57,15 @@ export class RetirementPermanentDisabilityRevisionController {
   public constructor(
     private readonly createRetirementPermanentDisabilityRevisionUseCase: CreateRetirementPermanentDisabilityRevisionUseCase,
     private readonly createRetirementPermanentDisabilityRevisionResultUseCase: CreateRetirementPermanentDisabilityRevisionResultUseCase,
+    private readonly createRetirementPermanentDisabilityRevisionFirstAnalysisUseCase: CreateRetirementPermanentDisabilityRevisionFirstAnalysisUseCase,
     private readonly getRetirementPermanentDisabilityRevisionUseCase: GetRetirementPermanentDisabilityRevisionUseCase,
     private readonly updateRetirementPermanentDisabilityRevisionUseCase: UpdateRetirementPermanentDisabilityRevisionUseCase,
     private readonly downloadRetirementPermanentDisabilityRevisionCompleteAnalysisUseCase: DownloadRetirementPermanentDisabilityRevisionCompleteAnalysisUseCase,
     private readonly downloadRetirementPermanentDisabilityRevisionSimplifiedAnalysisUseCase: DownloadRetirementPermanentDisabilityRevisionSimplifiedAnalysisUseCase,
     private readonly uploadRetirementPermanentDisabilityRevisionDocumentsUseCase: UploadRetirementPermanentDisabilityRevisionDocumentsUseCase,
     private readonly disabilityAnalysisUseCase: DisabilityAnalysisUseCase,
+    private readonly createRetirementPermanentDisabilityRevisionWorkPeriodsUseCase: CreateRetirementPermanentDisabilityRevisionWorkPeriodsUseCase,
+    private readonly updateRetirementPermanentDisabilityRevisionWorkPeriodsUseCase: UpdateRetirementPermanentDisabilityRevisionWorkPeriodsUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -329,6 +340,116 @@ export class RetirementPermanentDisabilityRevisionController {
     dto: RetirementPermanentDisabilityRevisionDisabilityAnalysisRequestDto,
   ): Promise<RetirementPermanentDisabilityRevisionDisabilityAnalysisResponseDto> {
     return await this.disabilityAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      retirementPermanentDisabilityRevisionId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Executar primeira análise da revisão de aposentadoria por invalidez permanente',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':retirementPermanentDisabilityRevisionId/first-analysis',
+      method: RequestMethod.POST,
+    },
+    tag: ['revisao-aposentadoria-invalidez-permanente'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description:
+        'Primeira análise da revisão de aposentadoria por invalidez permanente executada com sucesso.',
+      type: CreateRetirementPermanentDisabilityRevisionFirstAnalysisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createRetirementPermanentDisabilityRevisionFirstAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'retirementPermanentDisabilityRevisionId',
+      new ParseValueObjectPipe(RetirementPermanentDisabilityRevisionId),
+    )
+    retirementPermanentDisabilityRevisionId: RetirementPermanentDisabilityRevisionId,
+  ): Promise<CreateRetirementPermanentDisabilityRevisionFirstAnalysisResponseDto> {
+    return await this.createRetirementPermanentDisabilityRevisionFirstAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      retirementPermanentDisabilityRevisionId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Criar períodos trabalhados da revisão de aposentadoria por invalidez permanente',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':retirementPermanentDisabilityRevisionId/work-periods',
+      method: RequestMethod.POST,
+      type: CreateRetirementPermanentDisabilityRevisionWorkPeriodsRequestDto,
+    },
+    tag: ['revisao-aposentadoria-invalidez-permanente'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description:
+        'Períodos trabalhados da revisão de aposentadoria por invalidez permanente criados com sucesso.',
+      type: CreateRetirementPermanentDisabilityRevisionWorkPeriodsResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createRetirementPermanentDisabilityRevisionWorkPeriods(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'retirementPermanentDisabilityRevisionId',
+      new ParseValueObjectPipe(RetirementPermanentDisabilityRevisionId),
+    )
+    retirementPermanentDisabilityRevisionId: RetirementPermanentDisabilityRevisionId,
+    @Body()
+    dto: CreateRetirementPermanentDisabilityRevisionWorkPeriodsRequestDto,
+  ): Promise<CreateRetirementPermanentDisabilityRevisionWorkPeriodsResponseDto> {
+    return await this.createRetirementPermanentDisabilityRevisionWorkPeriodsUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      retirementPermanentDisabilityRevisionId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Atualizar períodos trabalhados da revisão de aposentadoria por invalidez permanente',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':retirementPermanentDisabilityRevisionId/work-periods',
+      method: RequestMethod.PATCH,
+      type: UpdateRetirementPermanentDisabilityRevisionWorkPeriodsRequestDto,
+    },
+    tag: ['revisao-aposentadoria-invalidez-permanente'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Períodos trabalhados da revisão de aposentadoria por invalidez permanente atualizados com sucesso.',
+      type: UpdateRetirementPermanentDisabilityRevisionWorkPeriodsResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateRetirementPermanentDisabilityRevisionWorkPeriods(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'retirementPermanentDisabilityRevisionId',
+      new ParseValueObjectPipe(RetirementPermanentDisabilityRevisionId),
+    )
+    retirementPermanentDisabilityRevisionId: RetirementPermanentDisabilityRevisionId,
+    @Body()
+    dto: UpdateRetirementPermanentDisabilityRevisionWorkPeriodsRequestDto,
+  ): Promise<UpdateRetirementPermanentDisabilityRevisionWorkPeriodsResponseDto> {
+    return await this.updateRetirementPermanentDisabilityRevisionWorkPeriodsUseCase.execute(
       sessionData,
       organizationSessionData,
       retirementPermanentDisabilityRevisionId,

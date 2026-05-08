@@ -4,6 +4,9 @@ import { RetirementPermanentDisabilityRevisionResultId } from '@module/customer/
 import type { RetirementPermanentDisabilityRevisionResultEntityPropsInterface } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-result/retirement-permanent-disability-revision-result.entity.props.interface';
 
 export class RetirementPermanentDisabilityRevisionResultEntity extends BaseEntity<RetirementPermanentDisabilityRevisionResultId> {
+  public readonly retirementPermanentDisabilityRevisionFirstAnalysis:
+    | string
+    | null;
   public readonly retirementPermanentDisabilityRevisionCompleteAnalysis:
     | string
     | null;
@@ -19,6 +22,8 @@ export class RetirementPermanentDisabilityRevisionResultEntity extends BaseEntit
   ) {
     super(RetirementPermanentDisabilityRevisionResultId, props);
 
+    this.retirementPermanentDisabilityRevisionFirstAnalysis =
+      props.retirementPermanentDisabilityRevisionFirstAnalysis ?? null;
     this.retirementPermanentDisabilityRevisionCompleteAnalysis =
       props.retirementPermanentDisabilityRevisionCompleteAnalysis ?? null;
     this.retirementPermanentDisabilityRevisionSimplifiedAnalysis =

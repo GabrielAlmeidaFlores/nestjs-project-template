@@ -4,6 +4,9 @@ import type { RetirementPermanentDisabilityRevisionResultId } from '@module/cust
 
 export class GetRetirementPermanentDisabilityRevisionResultQueryResult extends BaseBuildableDtoObject {
   public readonly id: RetirementPermanentDisabilityRevisionResultId;
+  public readonly retirementPermanentDisabilityRevisionFirstAnalysis!:
+    | string
+    | null;
   public readonly retirementPermanentDisabilityRevisionCompleteAnalysis!:
     | string
     | null;

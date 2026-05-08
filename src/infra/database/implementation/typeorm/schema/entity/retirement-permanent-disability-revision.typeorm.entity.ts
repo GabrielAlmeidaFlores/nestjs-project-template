@@ -7,6 +7,7 @@ import { RetirementPermanentDisabilityRevisionInssBenefitTypeormEntity } from '@
 import { RetirementPermanentDisabilityRevisionLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-legal-proceeding.typeorm.entity';
 import { RetirementPermanentDisabilityRevisionResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-result.typeorm.entity';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-disability-analysis.typeorm.entity';
+import { RetirementPermanentDisabilityRevisionWorkPeriodsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-work-periods.typeorm.entity';
 import { RetirementPermanentDisabilityRevisionCategoryEnum } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/enum/retirement-permanent-disability-revision-category.enum';
 
 @Entity({ name: 'retirement_permanent_disability_revision' })
@@ -76,6 +77,14 @@ export class RetirementPermanentDisabilityRevisionTypeormEntity extends BaseType
   )
   public retirementPermanentDisabilityRevisionDisabilityAnalysis?:
     | RetirementPermanentDisabilityRevisionDisabilityAnalysisTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => RetirementPermanentDisabilityRevisionWorkPeriodsTypeormEntity,
+    (entity) => entity.retirementPermanentDisabilityRevision,
+  )
+  public retirementPermanentDisabilityRevisionWorkPeriods?:
+    | RetirementPermanentDisabilityRevisionWorkPeriodsTypeormEntity[]
     | undefined;
 
   protected override readonly _type =

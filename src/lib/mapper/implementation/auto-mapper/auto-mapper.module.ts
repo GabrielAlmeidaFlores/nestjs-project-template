@@ -458,6 +458,9 @@ import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitEntityAut
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-revision/retirement-permanent-disability-revision-disability-analysis-document-entity.auto-mapper.profile';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-revision/retirement-permanent-disability-revision-disability-analysis-entity.auto-mapper.profile';
 import { RetirementPermanentDisabilityRevisionEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-revision/retirement-permanent-disability-revision-entity.auto-mapper.profile';
+import { RetirementPermanentDisabilityRevisionWorkPeriodsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-revision/retirement-permanent-disability-revision-work-periods-entity.auto-mapper.profile';
+import { RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-revision/retirement-permanent-disability-revision-work-periods-earnings-history-entity.auto-mapper.profile';
+import { RetirementPermanentDisabilityRevisionConcessionLetterBreakdownEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-revision-concession-letter-breakdown/retirement-permanent-disability-revision-concession-letter-breakdown-entity.auto-mapper.profile';
 import { GetRetirementPermanentDisabilityRevisionDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-revision-document/get-retirement-permanent-disability-revision-document-query-result.auto-mapper.profile';
 import { RetirementPermanentDisabilityRevisionDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-revision-document/retirement-permanent-disability-revision-document-entity.auto-mapper.profile';
 import { GetRetirementPermanentDisabilityRevisionInssBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-revision-inss-benefit/get-retirement-permanent-disability-revision-inss-benefit-query-result.auto-mapper.profile';
@@ -895,6 +898,9 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetRetirementPermanentDisabilityRevisionInssBenefitQueryResultAutoMapperProfile,
     RetirementPermanentDisabilityRevisionInssBenefitEntityAutoMapperProfile,
     RetirementPermanentDisabilityRevisionResultEntityAutoMapperProfile,
+    RetirementPermanentDisabilityRevisionConcessionLetterBreakdownEntityAutoMapperProfile,
+    RetirementPermanentDisabilityRevisionWorkPeriodsEntityAutoMapperProfile,
+    RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryEntityAutoMapperProfile,
     GetRetirementPermanentDisabilityRevisionDocumentQueryResultAutoMapperProfile,
     RetirementPermanentDisabilityRevisionDocumentEntityAutoMapperProfile,
     GetRetirementPermanentDisabilityRevisionLegalProceedingQueryResultAutoMapperProfile,

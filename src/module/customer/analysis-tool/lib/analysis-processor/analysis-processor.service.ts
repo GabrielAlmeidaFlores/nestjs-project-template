@@ -3059,6 +3059,146 @@ Análise processada do CNIS:
     );
   }
 
+    public async getRetirementPermanentDisabilityRevisionFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson = true,
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANT
+- Base the technical analysis primarily on the already processed CNIS analysis in JSON format.
+- Calculate only values that are not already present in the provided CNIS analysis.
+- Return strictly a JSON object compatible with the requested schema.
+
+Processed CNIS analysis:
+${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: asJson
+          ? ResponseConfigInputModel.build({
+              responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema: this.getRetirementPermanentDisabilityRevisionFirstAnalysisJsonSchema(),
+            })
+          : null,
+      }),
+    );
+  }
+
+  private getRetirementPermanentDisabilityRevisionFirstAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        benefitAnalysis: {
+          type: 'object',
+          properties: {
+            benefitType: {
+              type: 'string',
+              description: 'Tipo de benefício previdenciário concedido.',
+            },
+            dib: {
+              type: 'string',
+              description: 'DIB no formato DD/MM/YYYY.',
+            },
+            initialMonthlyIncome: {
+              type: 'number',
+              description: 'RMI - Renda Mensal Inicial.',
+            },
+            updatedMonthlyIncome: {
+              type: 'number',
+              description: 'RMA - Renda Mensal Atualizada.',
+            },
+            insuredName: {
+              type: 'string',
+              description: 'Nome completo do segurado.',
+            },
+          },
+          required: [
+            'benefitType',
+            'dib',
+            'initialMonthlyIncome',
+            'updatedMonthlyIncome',
+            'insuredName',
+          ],
+        },
+        contributionTime: {
+          type: 'object',
+          properties: {
+            minimumRequired: {
+              type: 'object',
+              properties: {
+                withoutPendingIssues: {
+                  type: 'string',
+                  description:
+                    'Tempo reconhecido sem resolver pendências. Ex: 23 years and 4 months.',
+                },
+                afterResolvingPendingIssues: {
+                  type: 'string',
+                  description:
+                    'Tempo após regularização das pendências. Ex: 27 years and 8 months.',
+                },
+                withCollaborators: {
+                  type: 'string',
+                  description:
+                    'Tempo considerando vínculos adicionais. Ex: 30 years and 2 months.',
+                },
+              },
+              required: [
+                'withoutPendingIssues',
+                'afterResolvingPendingIssues',
+                'withCollaborators',
+              ],
+            },
+            description: {
+              type: 'string',
+              description:
+                'Texto explicativo sobre regras de tempo de contribuição.',
+            },
+          },
+          required: ['minimumRequired', 'description'],
+        },
+        concessionLetterBreakdown: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              competence: {
+                type: 'string',
+                description: 'Competência no formato MM/YYYY.',
+              },
+              amount: {
+                type: 'number',
+                description: 'Valor do salário de contribuição.',
+              },
+              reasonNotConsidered: {
+                type: 'string',
+                description:
+                  'Motivo pelo qual a competência não foi considerada.',
+              },
+              action: {
+                type: 'string',
+                description:
+                  'Ação recomendada para regularizar ou incluir a competência.',
+              },
+            },
+            required: ['competence', 'amount', 'reasonNotConsidered', 'action'],
+          },
+        },
+      },
+      required: [
+        'benefitAnalysis',
+        'contributionTime',
+        'concessionLetterBreakdown',
+      ],
+    };
+  }
+
+
   private getSurvivorPensionAnalysisResultJsonSchema(): object {
     return {
       type: 'object',

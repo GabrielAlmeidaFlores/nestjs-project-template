@@ -39,6 +39,9 @@ export class RetirementPermanentDisabilityRevisionTypeormQueryRepository
           retirementPermanentDisabilityRevisionInssBenefit: true,
           retirementPermanentDisabilityRevisionLegalProceeding: true,
           retirementPermanentDisabilityRevisionDocument: true,
+          retirementPermanentDisabilityRevisionWorkPeriods: {
+            retirementPermanentDisabilityRevisionWorkPeriodsEarningsHistory: true,
+          },
         },
       },
       err,

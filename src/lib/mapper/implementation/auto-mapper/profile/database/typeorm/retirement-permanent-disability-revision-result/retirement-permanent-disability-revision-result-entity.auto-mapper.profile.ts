@@ -26,6 +26,8 @@ export class RetirementPermanentDisabilityRevisionResultEntityAutoMapperProfile 
     ): RetirementPermanentDisabilityRevisionResultEntity => {
       return new RetirementPermanentDisabilityRevisionResultEntity({
         id: new RetirementPermanentDisabilityRevisionResultId(source.id),
+        retirementPermanentDisabilityRevisionFirstAnalysis:
+          source.retirementPermanentDisabilityRevisionFirstAnalysis,
         retirementPermanentDisabilityRevisionCompleteAnalysis:
           source.retirementPermanentDisabilityRevisionCompleteAnalysis,
         retirementPermanentDisabilityRevisionSimplifiedAnalysis:
@@ -52,6 +54,8 @@ export class RetirementPermanentDisabilityRevisionResultEntityAutoMapperProfile 
     ): RetirementPermanentDisabilityRevisionResultTypeormEntity => {
       return RetirementPermanentDisabilityRevisionResultTypeormEntity.build({
         id: source.id.toString(),
+        retirementPermanentDisabilityRevisionFirstAnalysis:
+          source.retirementPermanentDisabilityRevisionFirstAnalysis,
         retirementPermanentDisabilityRevisionCompleteAnalysis:
           source.retirementPermanentDisabilityRevisionCompleteAnalysis,
         retirementPermanentDisabilityRevisionSimplifiedAnalysis:
