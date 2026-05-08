@@ -103,6 +103,63 @@ export class GetSpecialRetirementGrantResultResponseDto extends BaseBuildableDto
 }
 
 @ResponseDto()
+export class GetSpecialRetirementGrantTechnicalDiagnosisResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoDateProperty()
+  public periodStartDate: Date;
+
+  @ResponseDtoDateProperty()
+  public periodEndDate: Date;
+
+  @ResponseDtoBooleanProperty()
+  public recognized: boolean;
+
+  @ResponseDtoStringProperty()
+  public justification: string;
+
+  @ResponseDtoStringProperty()
+  public company: string;
+
+  @ResponseDtoStringProperty()
+  public cnpj: string;
+
+  @ResponseDtoStringProperty()
+  public role: string;
+
+  @ResponseDtoStringProperty()
+  public supportingDocument: string;
+
+  @ResponseDtoBooleanProperty()
+  public recordedInCnis: boolean;
+
+  @ResponseDtoBooleanProperty()
+  public remunerationRecordedInCnis: boolean;
+
+  @ResponseDtoStringProperty()
+  public hazardousAgents: string;
+
+  @ResponseDtoStringProperty()
+  public informationSource: string;
+
+  @ResponseDtoStringProperty()
+  public legalFramework: string;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public epiEficaz?: boolean;
+
+  @ResponseDtoStringProperty({ required: false })
+  public observations?: string;
+
+  @ResponseDtoDateProperty()
+  public createdAt: Date;
+
+  @ResponseDtoDateProperty()
+  public updatedAt: Date;
+
+  protected override readonly _type =
+    GetSpecialRetirementGrantTechnicalDiagnosisResponseDto.name;
+}
+
+@ResponseDto()
 export class GetSpecialRetirementGrantPeriodOverdueContributionResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(
     SpecialRetirementGrantPeriodOverdueContributionId,
@@ -296,6 +353,14 @@ export class GetSpecialRetirementGrantResponseDto extends BaseBuildableDtoObject
     required: false,
   })
   public specialRetirementGrantResult?: GetSpecialRetirementGrantResultResponseDto;
+
+  @ResponseDtoObjectProperty(
+    () => GetSpecialRetirementGrantTechnicalDiagnosisResponseDto,
+    {
+      required: false,
+    },
+  )
+  public technicalDiagnosis?: GetSpecialRetirementGrantTechnicalDiagnosisResponseDto;
 
   @ResponseDtoDateProperty()
   public createdAt: Date;
