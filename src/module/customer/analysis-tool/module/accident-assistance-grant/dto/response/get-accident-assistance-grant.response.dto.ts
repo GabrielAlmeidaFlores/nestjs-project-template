@@ -113,9 +113,12 @@ export class GetAccidentAssistanceGrantResponseDto extends BaseBuildableDtoObjec
   @ResponseDtoDateProperty()
   public updatedAt: Date;
 
-  @ResponseDtoObjectProperty(() => GetAccidentAssistanceGrantClientResponseDto, {
-    required: false,
-  })
+  @ResponseDtoObjectProperty(
+    () => GetAccidentAssistanceGrantClientResponseDto,
+    {
+      required: false,
+    },
+  )
   public client?: GetAccidentAssistanceGrantClientResponseDto;
 
   @ResponseDtoObjectProperty(

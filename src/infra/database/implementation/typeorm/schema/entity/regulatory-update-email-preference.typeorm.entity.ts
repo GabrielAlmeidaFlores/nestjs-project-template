@@ -12,10 +12,20 @@ export class RegulatoryUpdateEmailPreferenceTypeormEntity extends BaseTypeormEnt
   @Column({ name: 'email_enabled', type: 'boolean', default: false })
   public emailEnabled: boolean;
 
-  @Column({ name: 'send_frequency', type: 'int', nullable: true, default: null })
+  @Column({
+    name: 'send_frequency',
+    type: 'int',
+    nullable: true,
+    default: null,
+  })
   public sendFrequency: number | null;
 
-  @Column({ name: 'send_days', type: 'simple-array', nullable: true, default: null })
+  @Column({
+    name: 'send_days',
+    type: 'simple-array',
+    nullable: true,
+    default: null,
+  })
   public sendDays: RegulatoryUpdateEmailPreferenceSendDayEnum[] | null;
 
   @ManyToOne(() => CustomerTypeormEntity, { nullable: false })
