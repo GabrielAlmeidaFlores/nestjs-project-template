@@ -3,7 +3,6 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
-import { RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-work-periods-earnings-history.typeorm.entity';
 import { RetirementPermanentDisabilityRevisionWorkPeriodsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-work-periods.typeorm.entity';
 import { RetirementPermanentDisabilityRevisionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';

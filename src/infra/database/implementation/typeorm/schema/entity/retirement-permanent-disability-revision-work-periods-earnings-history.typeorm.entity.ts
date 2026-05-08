@@ -5,7 +5,7 @@ import { RetirementPermanentDisabilityRevisionWorkPeriodsTypeormEntity } from '@
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 
 @Entity({
-  name: 'retirement_permanent_disability_revision_work_periods_earnings_history',
+  name: 'ret_per_dis_rev_work_periods_earnings_history',
 })
 export class RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryTypeormEntity extends BaseTypeormEntity {
   @Column({

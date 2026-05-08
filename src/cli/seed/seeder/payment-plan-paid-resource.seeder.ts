@@ -2155,7 +2155,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise simplificada de revisão de aposentadoria por invalidez permanente com IA. Resume os principais achados, indica a viabilidade geral da revisão, os pontos críticos e os próximos passos recomendados, em linguagem acessível para apresentação ao cliente.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('a3c4d5e6-f7a8-4b9c-0d1e-2f3a4b5c6d7e'),
+      id: new PaymentPlanPaidResourceId('a3c4d5e6-f7a8-4b9c-8d1e-2f3a4b5c6d7e'),
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REVISION_FIRST_ANALYSIS,
       creditCost: 4,
