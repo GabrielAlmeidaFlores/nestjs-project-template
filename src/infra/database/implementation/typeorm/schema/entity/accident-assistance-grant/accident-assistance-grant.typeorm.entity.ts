@@ -81,6 +81,5 @@ export class AccidentAssistanceGrantTypeormEntity extends BaseTypeormEntity {
     | AccidentAssistanceGrantDocumentTypeormEntity[]
     | undefined;
 
-  protected override readonly _type =
-    AccidentAssistanceGrantTypeormEntity.name;
+  protected override readonly _type = AccidentAssistanceGrantTypeormEntity.name;
 }

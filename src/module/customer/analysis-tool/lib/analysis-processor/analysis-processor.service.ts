@@ -10426,6 +10426,7 @@ For probativeForce, classify each document as:
     };
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   public async getAccidentAssistanceGrantFirstAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,

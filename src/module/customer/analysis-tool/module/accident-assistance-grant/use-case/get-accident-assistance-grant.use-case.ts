@@ -104,7 +104,7 @@ export class GetAccidentAssistanceGrantUseCase {
           })
         : undefined;
 
-    const documents = await this.buildDocuments(
+    const documents = this.buildDocuments(
       result.accidentAssistanceGrantDocument ?? [],
     );
 
@@ -135,26 +135,24 @@ export class GetAccidentAssistanceGrantUseCase {
     });
   }
 
-  private async buildDocuments(
+  private buildDocuments(
     docs: Awaited<
       ReturnType<
         typeof this.accidentAssistanceGrantQueryRepositoryGateway.findOneByAccidentAssistanceGrantIdOrFailWithRelations
       >
     >['accidentAssistanceGrantDocument'],
-  ): Promise<GetAccidentAssistanceGrantDocumentResponseDto[]> {
+  ): GetAccidentAssistanceGrantDocumentResponseDto[] {
     if (!docs || docs.length === 0) {
       return [];
     }
 
-    return Promise.all(
-      docs
-        .filter((d) => d.type !== AccidentAssistanceGrantDocumentTypeEnum.CNIS)
-        .map(async (doc) => {
-          return GetAccidentAssistanceGrantDocumentResponseDto.build({
-            accidentAssistanceGrantDocumentId: doc.id,
-            ...(doc.type !== null && { type: doc.type }),
-          });
-        }),
-    );
+    return docs
+      .filter((d) => d.type !== AccidentAssistanceGrantDocumentTypeEnum.CNIS)
+      .map((doc) => {
+        return GetAccidentAssistanceGrantDocumentResponseDto.build({
+          accidentAssistanceGrantDocumentId: doc.id,
+          ...(doc.type !== null && { type: doc.type }),
+        });
+      });
   }
 }
