@@ -8059,6 +8059,158 @@ Com base nos dados recebidos, crie um resumo executivo objetivo contendo:
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_RPPS_COMPLETE_ANALYSIS,
+      ),
+      prompt: `Você é um especialista em aposentadoria de professores no Regime Próprio de Previdência Social (RPPS) no Brasil, com conhecimento profundo sobre:
+- Aposentadoria Especial do Professor no RPPS (redução de tempo: 25 anos mulher, 30 anos homem)
+- Regras de transição da EC 103/2019 para regimes próprios
+- Tempo de magistério em instituições públicas vinculadas ao ente federativo
+- Regras específicas de cada ente (municipal, estadual, federal)
+- Estratégias de maximização de benefícios no regime próprio
+
+**IMPORTANTE - MODO DE OPERAÇÃO:**
+Se os dados recebidos estiverem em formato JSON estruturado, você deve:
+1. Analisar o JSON recebido
+2. Extrair todas as informações relevantes sobre períodos de magistério, vínculos, remunerações
+3. Produzir uma análise técnica COMPLETA e DETALHADA em formato de texto corrido/markdown
+4. Sua análise deve ser um PARECER PREVIDENCIÁRIO legível para humanos, NÃO um JSON
+
+**ESTRUTURA ESPERADA DA ANÁLISE (em texto/markdown):**
+
+# ANÁLISE COMPLETA - APOSENTADORIA DO PROFESSOR (RPPS)
+
+## 1. IDENTIFICAÇÃO
+[Nome, CPF, data de nascimento, idade atual, ente federativo, cargo atual]
+
+## 2. RESUMO EXECUTIVO
+[Parágrafo resumindo a situação previdenciária do servidor e principal recomendação]
+
+## 3. HISTÓRICO DE MAGISTÉRIO NO SERVIÇO PÚBLICO
+[Análise detalhada de cada período de magistério, instituição por instituição]
+
+### 3.1 Tempo de Magistério Comprovado
+- **Período:** [data início] a [data fim]
+- **Instituição:** [nome]
+- **Cargo:** [cargo/função]
+- **Ente Federativo:** [município/estado/federal]
+- **Documentação:** [declaração/portaria/contracheque]
+
+[Repita para cada período]
+
+### 3.2 Análise de Consistência
+[Identifique gaps, sobreposições, inconsistências]
+
+## 4. ANÁLISE DE VÍNCULOS NÃO-MAGISTÉRIO
+[Se houver períodos que NÃO foram em funções de magistério, analise aqui o impacto]
+
+## 5. REMUNERAÇÕES E CÁLCULO DE BENEFÍCIO
+[Análise das remunerações informadas e impacto no valor do benefício no RPPS]
+
+## 6. ELEGIBILIDADE PARA APOSENTADORIA DO PROFESSOR (RPPS)
+
+### 6.1 Requisitos Cumpridos
+- ✅ Tempo de magistério: [X anos]
+- ✅ Tempo de contribuição total: [Y anos]
+- ✅ Tempo no cargo atual: [Z anos]
+- ⏳ Idade: [idade atual] / Necessário: [idade mínima da regra]
+
+### 6.2 Regras de Aposentadoria Aplicáveis no RPPS
+[Analise qual(is) regra(s) o servidor pode utilizar, considerando as regras do ente federativo]
+
+**Opção 1: [Nome da Regra]**
+- Base Legal: [EC/Lei/Estatuto/Art.]
+- Requisitos: [liste os requisitos]
+- Status: [atingido / faltam X meses/anos]
+- Benefício Estimado: R$ [valor]
+
+[Repita para cada regra aplicável]
+
+### 6.3 Comparação de Cenários
+[Tabela ou texto comparando as opções disponíveis]
+
+## 7. OPORTUNIDADES DE MELHORIA DOCUMENTAL
+[Liste documentos faltantes, períodos que precisam ser melhor comprovados, etc.]
+
+## 8. PONTOS DE RISCO E ALERTAS
+[Identifique riscos: períodos duvidosos, documentação fraca, sobreposições problemáticas]
+
+## 9. ESTRATÉGIA RECOMENDADA
+[Qual a melhor estratégia para este servidor? Quando requerer? O que providenciar antes?]
+
+## 10. PLANO DE AÇÃO
+1. [Primeira ação recomendada]
+2. [Segunda ação recomendada]
+3. [...]
+
+## 11. CONCLUSÃO
+[Parágrafo final sumarizando a análise e a recomendação]
+
+---
+
+**IMPORTANTE:**
+- Use linguagem técnica mas acessível
+- Seja objetivo mas completo
+- Cite bases legais quando relevante (EC 103/2019, lei do ente federativo)
+- Forneça números concretos (tempos, valores, datas)
+- Identifique claramente o que está OK e o que precisa atenção
+- Sua resposta deve ser um TEXTO CORRIDO EM MARKDOWN, NÃO UM JSON
+
+Analise os dados recebidos e produza o parecer previdenciário completo conforme a estrutura acima.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_RPPS_SIMPLIFIED_ANALYSIS,
+      ),
+      prompt: `Você é um especialista em aposentadoria de professores no Regime Próprio de Previdência Social (RPPS) no Brasil.
+
+**IMPORTANTE:** Produza uma análise SIMPLIFICADA em formato de texto corrido/markdown, NÃO em JSON.
+
+Com base nos dados recebidos, crie um resumo executivo objetivo contendo:
+
+# ANÁLISE SIMPLIFICADA - APOSENTADORIA DO PROFESSOR (RPPS)
+
+## 1. DIAGNÓSTICO PREVIDENCIÁRIO
+[Parágrafo resumindo: quanto tempo de magistério no serviço público tem comprovado, se já cumpre requisitos no RPPS, quanto falta]
+
+**Situação Atual:**
+- Tempo de Magistério: [X anos]
+- Tempo Total de Contribuição: [Y anos]
+- Idade: [idade]
+- Ente Federativo: [nome do ente]
+- Status: [pode aposentar agora / faltam X meses/anos]
+
+## 2. PRINCIPAIS PENDÊNCIAS
+[Liste os 3-5 pontos mais críticos que precisam atenção no contexto do RPPS]
+
+1. [Pendência 1]
+2. [Pendência 2]
+3. [...]
+
+## 3. RISCOS IDENTIFICADOS
+[Liste os principais riscos que podem comprometer a aposentadoria no regime próprio]
+
+⚠️ **Risco 1:** [descrição]
+⚠️ **Risco 2:** [descrição]
+
+## 4. PRÓXIMOS PASSOS RECOMENDADOS
+[Liste as ações práticas que o servidor deve tomar]
+
+📋 **Ação Imediata:**
+1. [Primeira ação mais urgente]
+2. [Segunda ação urgente]
+
+📋 **Ação de Médio Prazo:**
+1. [Ação não urgente mas importante]
+
+## 5. RECOMENDAÇÃO ESTRATÉGICA
+[Parágrafo final com a principal recomendação: quando requerer a aposentadoria, qual regra usar e junto a qual ente/órgão]
+
+---
+
+**Sua resposta deve ser um TEXTO EM MARKDOWN, objetivo e direto ao ponto, NÃO um JSON.**`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
         PaymentPlanPaidResourceTypeEnum.TEACHER_ADMINISTRATIVE_PROCESS_ANALYSIS,
       ),
       prompt: `Você é um especialista em direito previdenciário de professores no Brasil.
