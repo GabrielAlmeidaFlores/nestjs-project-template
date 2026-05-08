@@ -955,6 +955,7 @@ export class AnalysisToolRecordTypeormQueryRepository
             specialRetirementGrantBenefit: true,
             specialRetirementGrantLegalProceeding: true,
             specialRetirementGrantDocument: true,
+            specialRetirementGrantTechnicalDiagnosis: true,
             specialRetirementGrantResult: true,
           },
           createdBy: {
@@ -2007,7 +2008,10 @@ export class AnalysisToolRecordTypeormQueryRepository
               organization: true,
             },
           },
-          accidentAssistanceGrant: true,
+          accidentAssistanceGrant: {
+            accidentAssistanceGrantResult: true,
+            accidentAssistanceGrantDocument: true,
+          },
           createdBy: {
             customer: true,
             organization: true,
@@ -2021,13 +2025,11 @@ export class AnalysisToolRecordTypeormQueryRepository
       err,
     );
 
-    const mappedData = this.mapperGateway.map(
+    return this.mapperGateway.map(
       data,
       AnalysisToolRecordTypeormEntity,
       GetAnalysisToolRecordWithRelationsQueryResult,
     );
-
-    return mappedData;
   }
 
   public async findWithRelationsByBpcElderlyAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
@@ -3921,8 +3923,19 @@ export class AnalysisToolRecordTypeormQueryRepository
       };
     }
 
+    if (analysisRelationKeys.includes('accidentAssistanceGrant')) {
+      relationsClause.accidentAssistanceGrant = {
+        accidentAssistanceGrantResult: true,
+        accidentAssistanceGrantDocument: true,
+      };
+    }
+
     for (const key of analysisRelationKeys) {
-      if (key === 'speechGenerator' || key === 'ruralTimeline') {
+      if (
+        key === 'speechGenerator' ||
+        key === 'ruralTimeline' ||
+        key === 'accidentAssistanceGrant'
+      ) {
         continue;
       }
 

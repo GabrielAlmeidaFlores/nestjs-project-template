@@ -10,6 +10,7 @@ import {
   GetSpecialRetirementGrantDocumentResponseDto,
   GetSpecialRetirementGrantResponseDto,
   GetSpecialRetirementGrantResultResponseDto,
+  GetSpecialRetirementGrantTechnicalDiagnosisResponseDto,
 } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/get-special-retirement-grant.response.dto';
 import { InvalidSpecialRetirementGrantCompleteAnalysisJsonError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/invalid-special-retirement-grant-complete-analysis-json.error';
 import { SpecialRetirementGrantNotFoundError } from '@module/customer/analysis-tool/module/special-retirement-grant/error/special-retirement-grant-not-found.error';
@@ -164,6 +165,45 @@ export class GetSpecialRetirementGrantUseCase {
         specialRetirementGrant.specialRetirementGrantBenefit.map(
           (b) => b.inssBenefitNumber,
         ),
+      ...(specialRetirementGrant.technicalDiagnosis !== null && {
+        technicalDiagnosis:
+          GetSpecialRetirementGrantTechnicalDiagnosisResponseDto.build({
+            periodStartDate:
+              specialRetirementGrant.technicalDiagnosis.periodStartDate,
+            periodEndDate:
+              specialRetirementGrant.technicalDiagnosis.periodEndDate,
+            recognized: specialRetirementGrant.technicalDiagnosis.recognized,
+            justification:
+              specialRetirementGrant.technicalDiagnosis.justification,
+            company: specialRetirementGrant.technicalDiagnosis.company,
+            cnpj: specialRetirementGrant.technicalDiagnosis.cnpj,
+            role: specialRetirementGrant.technicalDiagnosis.role,
+            supportingDocument:
+              specialRetirementGrant.technicalDiagnosis.supportingDocument,
+            recordedInCnis:
+              specialRetirementGrant.technicalDiagnosis.recordedInCnis,
+            remunerationRecordedInCnis:
+              specialRetirementGrant.technicalDiagnosis
+                .remunerationRecordedInCnis,
+            hazardousAgents:
+              specialRetirementGrant.technicalDiagnosis.hazardousAgents,
+            informationSource:
+              specialRetirementGrant.technicalDiagnosis.informationSource,
+            legalFramework:
+              specialRetirementGrant.technicalDiagnosis.legalFramework,
+            ...(specialRetirementGrant.technicalDiagnosis.epiEficaz !==
+              null && {
+              epiEficaz: specialRetirementGrant.technicalDiagnosis.epiEficaz,
+            }),
+            ...(specialRetirementGrant.technicalDiagnosis.observations !==
+              null && {
+              observations:
+                specialRetirementGrant.technicalDiagnosis.observations,
+            }),
+            createdAt: specialRetirementGrant.technicalDiagnosis.createdAt,
+            updatedAt: specialRetirementGrant.technicalDiagnosis.updatedAt,
+          }),
+      }),
       specialRetirementGrantResult:
         specialRetirementGrant.specialRetirementGrantResult
           ? GetSpecialRetirementGrantResultResponseDto.build({

@@ -13,6 +13,7 @@ import { CreateSpecialRetirementGrantFirstAnalysisUseCase } from '@module/custom
 import { CreateSpecialRetirementGrantPeriodObservationUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/create-special-retirement-grant-period-observation.use-case';
 import { CreateSpecialRetirementGrantPeriodUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/create-special-retirement-grant-period.use-case';
 import { CreateSpecialRetirementGrantResultUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/create-special-retirement-grant-result.use-case';
+import { CreateSpecialRetirementGrantTechnicalDiagnosisUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/create-special-retirement-grant-technical-diagnosis.use-case';
 import { CreateSpecialRetirementGrantUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/create-special-retirement-grant.use-case';
 import { DeleteSpecialRetirementGrantPeriodObservationUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/delete-special-retirement-grant-period-observation.use-case';
 import { DownloadSpecialRetirementGrantCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/download-special-retirement-grant-complete-analysis.use-case';
@@ -21,6 +22,7 @@ import { GetSpecialRetirementGrantResultUseCase } from '@module/customer/analysi
 import { GetSpecialRetirementGrantUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/get-special-retirement-grant.use-case';
 import { UpdateSpecialRetirementGrantPeriodObservationUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/update-special-retirement-grant-period-observation.use-case';
 import { UpdateSpecialRetirementGrantPeriodUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/update-special-retirement-grant-period.use-case';
+import { UpdateSpecialRetirementGrantTechnicalDiagnosisUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/update-special-retirement-grant-technical-diagnosis.use-case';
 import { UpdateSpecialRetirementGrantUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/update-special-retirement-grant.use-case';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
 import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
@@ -48,6 +50,8 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateSpecialRetirementGrantFirstAnalysisUseCase,
     CreateSpecialRetirementGrantPeriodUseCase,
     UpdateSpecialRetirementGrantPeriodUseCase,
+    CreateSpecialRetirementGrantTechnicalDiagnosisUseCase,
+    UpdateSpecialRetirementGrantTechnicalDiagnosisUseCase,
     CreateSpecialRetirementGrantPeriodObservationUseCase,
     UpdateSpecialRetirementGrantPeriodObservationUseCase,
     DeleteSpecialRetirementGrantPeriodObservationUseCase,
