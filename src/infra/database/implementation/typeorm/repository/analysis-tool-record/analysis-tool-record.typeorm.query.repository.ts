@@ -104,6 +104,8 @@ export class AnalysisToolRecordTypeormQueryRepository
         'retirementPlanningRpps',
       [AnalysisToolRecordTypeEnum.TEACHER_RETIREMENT_PLANNING]:
         'teacherRetirementPlanning',
+      [AnalysisToolRecordTypeEnum.TEACHER_RETIREMENT_PLANNING_RPPS]:
+        'teacherRetirementPlanning',
       [AnalysisToolRecordTypeEnum.SPECIAL_ACTIVITY]: 'specialActivity',
       [AnalysisToolRecordTypeEnum.JUDICIAL_CASE_ANALYSIS]:
         'judicialCaseAnalysis',
