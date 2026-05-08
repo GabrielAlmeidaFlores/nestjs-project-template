@@ -122,8 +122,11 @@ export class CreateAccidentAssistanceGrantFirstAnalysisUseCase {
 
     const otherDocumentBuffers = await Promise.all(
       (grant.accidentAssistanceGrantDocument ?? [])
-        .filter((d) => d.document !== null && d.document !== cnisDoc.document)
-        .map((d) => this.fileProcessorGateway.getFileBuffer(d.document!)),
+        .filter(
+          (d): d is typeof d & { document: string } =>
+            d.document !== null && d.document !== cnisDoc.document,
+        )
+        .map((d) => this.fileProcessorGateway.getFileBuffer(d.document)),
     );
 
     const promptResponse =
@@ -151,15 +154,27 @@ export class CreateAccidentAssistanceGrantFirstAnalysisUseCase {
 
     let detailedAnalysis = firstAnalysisResponse;
     let rulesSummary = firstAnalysisResponse;
-    let expectedRmi: string | null = null;
-    let estimatedCaseValue: string | null = null;
+    let expectedRmi: string | undefined = undefined;
+    let estimatedCaseValue: string | undefined = undefined;
 
     try {
-      const parsed = JSON.parse(firstAnalysisResponse) as { firstAnalysis?: string; analysisConclusion?: string; expectedRmi?: string | null; estimatedCaseValue?: string | null };
-      if (parsed.firstAnalysis) detailedAnalysis = parsed.firstAnalysis;
-      if (parsed.analysisConclusion) rulesSummary = parsed.analysisConclusion;
-      expectedRmi = parsed.expectedRmi ?? null;
-      estimatedCaseValue = parsed.estimatedCaseValue ?? null;
+      const parsed = JSON.parse(firstAnalysisResponse) as {
+        firstAnalysis?: string;
+        analysisConclusion?: string;
+        expectedRmi?: string;
+        estimatedCaseValue?: string;
+      };
+      if (parsed.firstAnalysis !== undefined && parsed.firstAnalysis !== '') {
+        detailedAnalysis = parsed.firstAnalysis;
+      }
+      if (
+        parsed.analysisConclusion !== undefined &&
+        parsed.analysisConclusion !== ''
+      ) {
+        rulesSummary = parsed.analysisConclusion;
+      }
+      expectedRmi = parsed.expectedRmi ?? undefined;
+      estimatedCaseValue = parsed.estimatedCaseValue ?? undefined;
     } catch {}
 
     const existingResult = grant.accidentAssistanceGrantResult;

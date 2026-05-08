@@ -16,10 +16,13 @@ export class GetRegulatoryUpdateEmailPreferenceResponseDto extends BaseBuildable
   public emailEnabled: boolean;
 
   @ResponseDtoNumberProperty({ required: false })
-  public sendFrequency: number | null;
+  public sendFrequency?: number;
 
-  @ResponseDtoEnumProperty(RegulatoryUpdateEmailPreferenceSendDayEnum, { required: false, isArray: true })
-  public sendDays: RegulatoryUpdateEmailPreferenceSendDayEnum[] | null;
+  @ResponseDtoEnumProperty(RegulatoryUpdateEmailPreferenceSendDayEnum, {
+    required: false,
+    isArray: true,
+  })
+  public sendDays?: RegulatoryUpdateEmailPreferenceSendDayEnum[];
 
   protected override readonly _type =
     GetRegulatoryUpdateEmailPreferenceResponseDto.name;
