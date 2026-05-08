@@ -5,8 +5,7 @@ import type { RetirementPermanentDisabilityRevisionWorkPeriodsPendencyReasonEnum
 import type { RetirementPermanentDisabilityRevisionWorkPeriodsPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-work-periods/enum/retirement-permanent-disability-revision-work-periods-period-consideration.enum';
 import type { RetirementPermanentDisabilityRevisionWorkPeriodsId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-work-periods/value-object/retirement-permanent-disability-revision-work-periods-id.value-object';
 
-export interface RetirementPermanentDisabilityRevisionWorkPeriodsEntityPropsInterface
-  extends BaseEntityPropsInterface<RetirementPermanentDisabilityRevisionWorkPeriodsId> {
+export interface RetirementPermanentDisabilityRevisionWorkPeriodsEntityPropsInterface extends BaseEntityPropsInterface<RetirementPermanentDisabilityRevisionWorkPeriodsId> {
   bondOrigin: string;
   startDate: Date;
   endDate?: Date | null;
