@@ -7,22 +7,22 @@ import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analy
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
-import { TeacherRetirementPlanningCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/command/teacher-retirement-planning.command.repository.gateway';
-import { TeacherRetirementPlanningQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/query/teacher-retirement-planning.query.repository.gateway';
-import { TeacherRetirementPlanningDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-document/command/teacher-retirement-planning-document.command.repository.gateway';
-import { TeacherRetirementPlanningInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-inss-benefit/command/teacher-retirement-planning-inss-benefit.command.repository.gateway';
-import { TeacherRetirementPlanningLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-legal-proceeding/command/teacher-retirement-planning-legal-proceeding.command.repository.gateway';
-import { TeacherRetirementPlanningEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
-import { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
-import { TeacherRetirementPlanningDocumentEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-document/teacher-retirement-planning-document.entity';
-import { TeacherRetirementPlanningDocumentId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-document/value-object/teacher-retirement-planning-document-id.value-object';
-import { TeacherRetirementPlanningInssBenefitEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-inss-benefit/teacher-retirement-planning-inss-benefit.entity';
-import { TeacherRetirementPlanningInssBenefitId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-inss-benefit/value-object/teacher-retirement-planning-inss-benefit-id.value-object';
-import { TeacherRetirementPlanningLegalProceedingEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-legal-proceeding/teacher-retirement-planning-legal-proceeding.entity';
-import { TeacherRetirementPlanningLegalProceedingId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-legal-proceeding/value-object/teacher-retirement-planning-legal-proceeding-id.value-object';
-import { UpdateTeacherRetirementPlanningRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/update-teacher-retirement-planning.request.dto';
-import { UpdateTeacherRetirementPlanningResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/update-teacher-retirement-planning.response.dto';
-import { TeacherRetirementPlanningNotFoundError } from '@module/customer/analysis-tool/module/teacher-retirement-planning/error/teacher-retirement-planning-not-found.error';
+import { TeacherRetirementPlanningRppsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning/command/teacher-retirement-planning.command.repository.gateway';
+import { TeacherRetirementPlanningRppsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning/query/teacher-retirement-planning.query.repository.gateway';
+import { TeacherRetirementPlanningRppsDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning-document/command/teacher-retirement-planning-document.command.repository.gateway';
+import { TeacherRetirementPlanningRppsInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning-inss-benefit/command/teacher-retirement-planning-inss-benefit.command.repository.gateway';
+import { TeacherRetirementPlanningRppsLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning-legal-proceeding/command/teacher-retirement-planning-legal-proceeding.command.repository.gateway';
+import { TeacherRetirementPlanningRppsEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
+import { TeacherRetirementPlanningRppsId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
+import { TeacherRetirementPlanningRppsDocumentEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning-document/teacher-retirement-planning-document.entity';
+import { TeacherRetirementPlanningRppsDocumentId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning-document/value-object/teacher-retirement-planning-document-id.value-object';
+import { TeacherRetirementPlanningRppsInssBenefitEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning-inss-benefit/teacher-retirement-planning-inss-benefit.entity';
+import { TeacherRetirementPlanningRppsInssBenefitId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning-inss-benefit/value-object/teacher-retirement-planning-inss-benefit-id.value-object';
+import { TeacherRetirementPlanningRppsLegalProceedingEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning-legal-proceeding/teacher-retirement-planning-legal-proceeding.entity';
+import { TeacherRetirementPlanningRppsLegalProceedingId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning-legal-proceeding/value-object/teacher-retirement-planning-legal-proceeding-id.value-object';
+import { UpdateTeacherRetirementPlanningRppsRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/request/update-teacher-retirement-planning.request.dto';
+import { UpdateTeacherRetirementPlanningRppsResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/response/update-teacher-retirement-planning.response.dto';
+import { TeacherRetirementPlanningRppsNotFoundError } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/error/teacher-retirement-planning-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { FileModel } from '@shared/system/model/generic/file.model';
@@ -38,16 +38,16 @@ export class UpdateTeacherRetirementPlanningRppsUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(AnalysisToolClientQueryRepositoryGateway)
     private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
-    @Inject(TeacherRetirementPlanningQueryRepositoryGateway)
-    private readonly teacherRetirementPlanningQueryRepositoryGateway: TeacherRetirementPlanningQueryRepositoryGateway,
-    @Inject(TeacherRetirementPlanningCommandRepositoryGateway)
-    private readonly teacherRetirementPlanningCommandRepositoryGateway: TeacherRetirementPlanningCommandRepositoryGateway,
-    @Inject(TeacherRetirementPlanningDocumentCommandRepositoryGateway)
-    private readonly teacherRetirementPlanningDocumentCommandRepositoryGateway: TeacherRetirementPlanningDocumentCommandRepositoryGateway,
-    @Inject(TeacherRetirementPlanningInssBenefitCommandRepositoryGateway)
-    private readonly teacherRetirementPlanningInssBenefitCommandRepositoryGateway: TeacherRetirementPlanningInssBenefitCommandRepositoryGateway,
-    @Inject(TeacherRetirementPlanningLegalProceedingCommandRepositoryGateway)
-    private readonly teacherRetirementPlanningLegalProceedingCommandRepositoryGateway: TeacherRetirementPlanningLegalProceedingCommandRepositoryGateway,
+    @Inject(TeacherRetirementPlanningRppsQueryRepositoryGateway)
+    private readonly teacherRetirementPlanningQueryRepositoryGateway: TeacherRetirementPlanningRppsQueryRepositoryGateway,
+    @Inject(TeacherRetirementPlanningRppsCommandRepositoryGateway)
+    private readonly teacherRetirementPlanningCommandRepositoryGateway: TeacherRetirementPlanningRppsCommandRepositoryGateway,
+    @Inject(TeacherRetirementPlanningRppsDocumentCommandRepositoryGateway)
+    private readonly teacherRetirementPlanningDocumentCommandRepositoryGateway: TeacherRetirementPlanningRppsDocumentCommandRepositoryGateway,
+    @Inject(TeacherRetirementPlanningRppsInssBenefitCommandRepositoryGateway)
+    private readonly teacherRetirementPlanningInssBenefitCommandRepositoryGateway: TeacherRetirementPlanningRppsInssBenefitCommandRepositoryGateway,
+    @Inject(TeacherRetirementPlanningRppsLegalProceedingCommandRepositoryGateway)
+    private readonly teacherRetirementPlanningLegalProceedingCommandRepositoryGateway: TeacherRetirementPlanningRppsLegalProceedingCommandRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -57,9 +57,9 @@ export class UpdateTeacherRetirementPlanningRppsUseCase {
   public async execute(
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
-    teacherRetirementPlanningId: TeacherRetirementPlanningId,
-    dto: UpdateTeacherRetirementPlanningRequestDto,
-  ): Promise<UpdateTeacherRetirementPlanningResponseDto> {
+    teacherRetirementPlanningId: TeacherRetirementPlanningRppsId,
+    dto: UpdateTeacherRetirementPlanningRppsRequestDto,
+  ): Promise<UpdateTeacherRetirementPlanningRppsResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
@@ -82,10 +82,10 @@ export class UpdateTeacherRetirementPlanningRppsUseCase {
       );
 
     if (currentPlanning === null) {
-      throw new TeacherRetirementPlanningNotFoundError();
+      throw new TeacherRetirementPlanningRppsNotFoundError();
     }
 
-    const teacherRetirementPlanning = new TeacherRetirementPlanningEntity({
+    const teacherRetirementPlanning = new TeacherRetirementPlanningRppsEntity({
       id: currentPlanning.id,
       federativeEntity: dto.federativeEntity,
       state: dto.state !== undefined ? (dto.state as StateCodeEnum) : null,
@@ -131,8 +131,8 @@ export class UpdateTeacherRetirementPlanningRppsUseCase {
 
     if (dto.inssBenefitNumber) {
       for (const inssBenefitNumber of dto.inssBenefitNumber) {
-        const inssBenefit = new TeacherRetirementPlanningInssBenefitEntity({
-          id: new TeacherRetirementPlanningInssBenefitId(),
+        const inssBenefit = new TeacherRetirementPlanningRppsInssBenefitEntity({
+          id: new TeacherRetirementPlanningRppsInssBenefitId(),
           inssBenefitNumber,
           teacherRetirementPlanning,
         });
@@ -148,8 +148,8 @@ export class UpdateTeacherRetirementPlanningRppsUseCase {
     if (dto.legalProceedingNumber) {
       for (const legalProceedingNumber of dto.legalProceedingNumber) {
         const legalProceeding =
-          new TeacherRetirementPlanningLegalProceedingEntity({
-            id: new TeacherRetirementPlanningLegalProceedingId(),
+          new TeacherRetirementPlanningRppsLegalProceedingEntity({
+            id: new TeacherRetirementPlanningRppsLegalProceedingId(),
             legalProceedingNumber,
             teacherRetirementPlanning,
           });
@@ -169,8 +169,8 @@ export class UpdateTeacherRetirementPlanningRppsUseCase {
           documentDto.document.originalFileName,
         );
 
-        const document = new TeacherRetirementPlanningDocumentEntity({
-          id: new TeacherRetirementPlanningDocumentId(),
+        const document = new TeacherRetirementPlanningRppsDocumentEntity({
+          id: new TeacherRetirementPlanningRppsDocumentId(),
           document: documentUrl,
           teacherRetirementPlanning,
         });
@@ -189,7 +189,7 @@ export class UpdateTeacherRetirementPlanningRppsUseCase {
 
     await transaction.commit();
 
-    return UpdateTeacherRetirementPlanningResponseDto.build({
+    return UpdateTeacherRetirementPlanningRppsResponseDto.build({
       teacherRetirementPlanningId,
     });
   }

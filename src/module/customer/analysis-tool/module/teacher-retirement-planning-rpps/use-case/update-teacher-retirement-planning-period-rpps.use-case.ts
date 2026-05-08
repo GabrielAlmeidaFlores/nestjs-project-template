@@ -5,24 +5,24 @@ import { TransactionType } from '@core/domain/repository/base/transaction/type/t
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
-import { TeacherRetirementPlanningQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/query/teacher-retirement-planning.query.repository.gateway';
-import { TeacherRetirementPlanningPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-period/command/teacher-retirement-planning-period.command.repository.gateway';
-import { TeacherRetirementPlanningPeriodItemCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-period-item/command/teacher-retirement-planning-period-item.command.repository.gateway';
-import { TeacherRetirementPlanningPeriodItemDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-period-item-document/command/teacher-retirement-planning-period-item-document.command.repository.gateway';
-import { TeacherRetirementPlanningEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
-import { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
-import { TeacherRetirementPlanningPeriodEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period/teacher-retirement-planning-period.entity';
-import { TeacherRetirementPlanningPeriodId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period/value-object/teacher-retirement-planning-period-id.value-object';
-import { TeacherRetirementPlanningPeriodItemWorkloadTypeEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period-item/enum/teacher-retirement-planning-period-item-workload-type.enum';
-import { TeacherRetirementPlanningPeriodItemEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period-item/teacher-retirement-planning-period-item.entity';
-import { TeacherRetirementPlanningPeriodItemId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period-item/value-object/teacher-retirement-planning-period-item-id.value-object';
-import { TeacherRetirementPlanningPeriodItemDocumentEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period-item-document/teacher-retirement-planning-period-item-document.entity';
-import { TeacherRetirementPlanningPeriodItemDocumentId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period-item-document/value-object/teacher-retirement-planning-period-item-document-id.value-object';
-import { CreateTeacherRetirementPlanningPeriodItemRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/create-teacher-retirement-planning-period.request.dto';
-import { UpdateTeacherRetirementPlanningPeriodRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/update-teacher-retirement-planning-period.request.dto';
-import { UpdateTeacherRetirementPlanningPeriodResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/update-teacher-retirement-planning-period.response.dto';
-import { TeacherRetirementPlanningNotFoundError } from '@module/customer/analysis-tool/module/teacher-retirement-planning/error/teacher-retirement-planning-not-found.error';
-import { TeacherRetirementPlanningPeriodItemDatesRequiredForPartTimeError } from '@module/customer/analysis-tool/module/teacher-retirement-planning/error/teacher-retirement-planning-period-item-dates-required-for-part-time.error';
+import { TeacherRetirementPlanningRppsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning/query/teacher-retirement-planning.query.repository.gateway';
+import { TeacherRetirementPlanningRppsPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning-period/command/teacher-retirement-planning-period.command.repository.gateway';
+import { TeacherRetirementPlanningRppsPeriodItemCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning-period-item/command/teacher-retirement-planning-period-item.command.repository.gateway';
+import { TeacherRetirementPlanningRppsPeriodItemDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning-period-item-document/command/teacher-retirement-planning-period-item-document.command.repository.gateway';
+import { TeacherRetirementPlanningRppsEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
+import { TeacherRetirementPlanningRppsId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
+import { TeacherRetirementPlanningRppsPeriodEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning-period/teacher-retirement-planning-period.entity';
+import { TeacherRetirementPlanningRppsPeriodId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning-period/value-object/teacher-retirement-planning-period-id.value-object';
+import { TeacherRetirementPlanningRppsPeriodItemWorkloadTypeEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning-period-item/enum/teacher-retirement-planning-period-item-workload-type.enum';
+import { TeacherRetirementPlanningRppsPeriodItemEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning-period-item/teacher-retirement-planning-period-item.entity';
+import { TeacherRetirementPlanningRppsPeriodItemId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning-period-item/value-object/teacher-retirement-planning-period-item-id.value-object';
+import { TeacherRetirementPlanningRppsPeriodItemDocumentEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning-period-item-document/teacher-retirement-planning-period-item-document.entity';
+import { TeacherRetirementPlanningRppsPeriodItemDocumentId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning-period-item-document/value-object/teacher-retirement-planning-period-item-document-id.value-object';
+import { CreateTeacherRetirementPlanningPeriodItemRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/request/create-teacher-retirement-planning-period.request.dto';
+import { UpdateTeacherRetirementPlanningPeriodRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/request/update-teacher-retirement-planning-period.request.dto';
+import { UpdateTeacherRetirementPlanningPeriodResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/response/update-teacher-retirement-planning-period.response.dto';
+import { TeacherRetirementPlanningRppsNotFoundError } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/error/teacher-retirement-planning-not-found.error';
+import { TeacherRetirementPlanningRppsPeriodItemDatesRequiredForPartTimeError } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/error/teacher-retirement-planning-period-item-dates-required-for-part-time.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { FileModel } from '@shared/system/model/generic/file.model';
@@ -34,14 +34,14 @@ export class UpdateTeacherRetirementPlanningPeriodRppsUseCase {
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
-    @Inject(TeacherRetirementPlanningQueryRepositoryGateway)
-    private readonly teacherRetirementPlanningQueryRepositoryGateway: TeacherRetirementPlanningQueryRepositoryGateway,
-    @Inject(TeacherRetirementPlanningPeriodCommandRepositoryGateway)
-    private readonly teacherRetirementPlanningPeriodCommandRepositoryGateway: TeacherRetirementPlanningPeriodCommandRepositoryGateway,
-    @Inject(TeacherRetirementPlanningPeriodItemCommandRepositoryGateway)
-    private readonly teacherRetirementPlanningPeriodItemCommandRepositoryGateway: TeacherRetirementPlanningPeriodItemCommandRepositoryGateway,
-    @Inject(TeacherRetirementPlanningPeriodItemDocumentCommandRepositoryGateway)
-    private readonly teacherRetirementPlanningPeriodItemDocumentCommandRepositoryGateway: TeacherRetirementPlanningPeriodItemDocumentCommandRepositoryGateway,
+    @Inject(TeacherRetirementPlanningRppsQueryRepositoryGateway)
+    private readonly teacherRetirementPlanningQueryRepositoryGateway: TeacherRetirementPlanningRppsQueryRepositoryGateway,
+    @Inject(TeacherRetirementPlanningRppsPeriodCommandRepositoryGateway)
+    private readonly teacherRetirementPlanningPeriodCommandRepositoryGateway: TeacherRetirementPlanningRppsPeriodCommandRepositoryGateway,
+    @Inject(TeacherRetirementPlanningRppsPeriodItemCommandRepositoryGateway)
+    private readonly teacherRetirementPlanningPeriodItemCommandRepositoryGateway: TeacherRetirementPlanningRppsPeriodItemCommandRepositoryGateway,
+    @Inject(TeacherRetirementPlanningRppsPeriodItemDocumentCommandRepositoryGateway)
+    private readonly teacherRetirementPlanningPeriodItemDocumentCommandRepositoryGateway: TeacherRetirementPlanningRppsPeriodItemDocumentCommandRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -51,7 +51,7 @@ export class UpdateTeacherRetirementPlanningPeriodRppsUseCase {
   public async execute(
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
-    teacherRetirementPlanningId: TeacherRetirementPlanningId,
+    teacherRetirementPlanningId: TeacherRetirementPlanningRppsId,
     dto: UpdateTeacherRetirementPlanningPeriodRequestDto,
   ): Promise<UpdateTeacherRetirementPlanningPeriodResponseDto> {
     const organizationMember =
@@ -70,10 +70,10 @@ export class UpdateTeacherRetirementPlanningPeriodRppsUseCase {
       );
 
     if (planning === null) {
-      throw new TeacherRetirementPlanningNotFoundError();
+      throw new TeacherRetirementPlanningRppsNotFoundError();
     }
 
-    const planningEntity = new TeacherRetirementPlanningEntity({
+    const planningEntity = new TeacherRetirementPlanningRppsEntity({
       id: planning.id,
       federativeEntity: planning.federativeEntity,
       state: planning.state,
@@ -112,8 +112,8 @@ export class UpdateTeacherRetirementPlanningPeriodRppsUseCase {
     }
 
     for (const periodDto of dto.periods) {
-      const period = new TeacherRetirementPlanningPeriodEntity({
-        id: new TeacherRetirementPlanningPeriodId(),
+      const period = new TeacherRetirementPlanningRppsPeriodEntity({
+        id: new TeacherRetirementPlanningRppsPeriodId(),
         startDate: periodDto.startDate,
         endDate: periodDto.endDate,
         positionName: periodDto.positionName,
@@ -139,8 +139,8 @@ export class UpdateTeacherRetirementPlanningPeriodRppsUseCase {
           itemDto,
         );
 
-        const item = new TeacherRetirementPlanningPeriodItemEntity({
-          id: new TeacherRetirementPlanningPeriodItemId(),
+        const item = new TeacherRetirementPlanningRppsPeriodItemEntity({
+          id: new TeacherRetirementPlanningRppsPeriodItemId(),
           startDate,
           endDate,
           institutionName: itemDto.institutionName,
@@ -167,8 +167,8 @@ export class UpdateTeacherRetirementPlanningPeriodRppsUseCase {
           );
 
           const itemDocument =
-            new TeacherRetirementPlanningPeriodItemDocumentEntity({
-              id: new TeacherRetirementPlanningPeriodItemDocumentId(),
+            new TeacherRetirementPlanningRppsPeriodItemDocumentEntity({
+              id: new TeacherRetirementPlanningRppsPeriodItemDocumentId(),
               document: documentUrl,
               teacherRetirementPlanningPeriodItem: item,
             });
@@ -202,7 +202,7 @@ export class UpdateTeacherRetirementPlanningPeriodRppsUseCase {
   ): { startDate: Date; endDate: Date } {
     if (
       itemDto.workloadType ===
-      TeacherRetirementPlanningPeriodItemWorkloadTypeEnum.FULL_TIME
+      TeacherRetirementPlanningRppsPeriodItemWorkloadTypeEnum.FULL_TIME
     ) {
       return {
         startDate: periodDto.startDate,
@@ -211,7 +211,7 @@ export class UpdateTeacherRetirementPlanningPeriodRppsUseCase {
     }
 
     if (!itemDto.startDate || !itemDto.endDate) {
-      throw new TeacherRetirementPlanningPeriodItemDatesRequiredForPartTimeError();
+      throw new TeacherRetirementPlanningRppsPeriodItemDatesRequiredForPartTimeError();
     }
 
     return {

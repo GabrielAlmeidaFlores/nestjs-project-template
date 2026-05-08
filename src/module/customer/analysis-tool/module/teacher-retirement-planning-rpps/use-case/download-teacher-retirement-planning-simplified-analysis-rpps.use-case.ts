@@ -6,12 +6,12 @@ import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
-import { TeacherRetirementPlanningQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/query/teacher-retirement-planning.query.repository.gateway';
-import { TeacherRetirementPlanningResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-result/command/teacher-retirement-planning-result.command.repository.gateway';
-import { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
-import { TeacherRetirementPlanningResultEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-result/teacher-retirement-planning-result.entity';
-import { TeacherRetirementPlanningNotFoundError } from '@module/customer/analysis-tool/module/teacher-retirement-planning/error/teacher-retirement-planning-not-found.error';
-import { TeacherRetirementPlanningResultNotFoundError } from '@module/customer/analysis-tool/module/teacher-retirement-planning/error/teacher-retirement-planning-result-not-found.error';
+import { TeacherRetirementPlanningRppsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning/query/teacher-retirement-planning.query.repository.gateway';
+import { TeacherRetirementPlanningRppsResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning-result/command/teacher-retirement-planning-result.command.repository.gateway';
+import { TeacherRetirementPlanningRppsId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
+import { TeacherRetirementPlanningRppsResultEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning-result/teacher-retirement-planning-result.entity';
+import { TeacherRetirementPlanningRppsNotFoundError } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/error/teacher-retirement-planning-not-found.error';
+import { TeacherRetirementPlanningRppsResultNotFoundError } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/error/teacher-retirement-planning-result-not-found.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
@@ -25,10 +25,10 @@ export class DownloadTeacherRetirementPlanningSimplifiedAnalysisRppsUseCase {
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
-    @Inject(TeacherRetirementPlanningQueryRepositoryGateway)
-    private readonly teacherRetirementPlanningQueryRepositoryGateway: TeacherRetirementPlanningQueryRepositoryGateway,
-    @Inject(TeacherRetirementPlanningResultCommandRepositoryGateway)
-    private readonly teacherRetirementPlanningResultCommandRepositoryGateway: TeacherRetirementPlanningResultCommandRepositoryGateway,
+    @Inject(TeacherRetirementPlanningRppsQueryRepositoryGateway)
+    private readonly teacherRetirementPlanningQueryRepositoryGateway: TeacherRetirementPlanningRppsQueryRepositoryGateway,
+    @Inject(TeacherRetirementPlanningRppsResultCommandRepositoryGateway)
+    private readonly teacherRetirementPlanningResultCommandRepositoryGateway: TeacherRetirementPlanningRppsResultCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(ExportDocumentGateway)
@@ -44,7 +44,7 @@ export class DownloadTeacherRetirementPlanningSimplifiedAnalysisRppsUseCase {
   public async execute(
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
-    teacherRetirementPlanningId: TeacherRetirementPlanningId,
+    teacherRetirementPlanningId: TeacherRetirementPlanningRppsId,
     format: ExportDocumentFormatEnum,
   ): Promise<StreamableFile> {
     const organizationMember =
@@ -75,18 +75,18 @@ export class DownloadTeacherRetirementPlanningSimplifiedAnalysisRppsUseCase {
       );
 
     if (planning === null) {
-      throw new TeacherRetirementPlanningNotFoundError();
+      throw new TeacherRetirementPlanningRppsNotFoundError();
     }
 
     if (planning.result === null) {
-      throw new TeacherRetirementPlanningResultNotFoundError();
+      throw new TeacherRetirementPlanningRppsResultNotFoundError();
     }
 
     if (
       planning.result.teacherRetirementPlanningCompleteAnalysis === null ||
       planning.result.teacherRetirementPlanningCompleteAnalysis === ''
     ) {
-      throw new TeacherRetirementPlanningResultNotFoundError();
+      throw new TeacherRetirementPlanningRppsResultNotFoundError();
     }
 
     let responseAi =
@@ -104,7 +104,7 @@ export class DownloadTeacherRetirementPlanningSimplifiedAnalysisRppsUseCase {
           ],
         );
 
-      const updatedResult = new TeacherRetirementPlanningResultEntity({
+      const updatedResult = new TeacherRetirementPlanningRppsResultEntity({
         ...planning.result,
         teacherRetirementPlanningSimplifiedAnalysis: simplifiedAnalysis,
       });
@@ -125,7 +125,7 @@ export class DownloadTeacherRetirementPlanningSimplifiedAnalysisRppsUseCase {
     }
 
     if (responseAi === null) {
-      throw new TeacherRetirementPlanningResultNotFoundError();
+      throw new TeacherRetirementPlanningRppsResultNotFoundError();
     }
 
     const htmlContent =

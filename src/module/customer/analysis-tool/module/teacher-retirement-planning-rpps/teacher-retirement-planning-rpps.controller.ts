@@ -9,27 +9,27 @@ import {
 } from '@nestjs/common';
 
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
-import { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
-import { AnalyzeTeacherRetirementPlanningAdministrativeProcessRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/analyze-teacher-retirement-planning-administrative-process.request.dto';
-import { CreateTeacherRetirementPlanningPeriodRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/create-teacher-retirement-planning-period.request.dto';
-import { CreateTeacherRetirementPlanningRemunerationRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/create-teacher-retirement-planning-remuneration.request.dto';
-import { CreateTeacherRetirementPlanningRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/create-teacher-retirement-planning.request.dto';
-import { ListTeacherRetirementPlanningRemunerationRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/list-teacher-retirement-planning-remuneration.request.dto';
-import { UpdateTeacherRetirementPlanningPeriodRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/update-teacher-retirement-planning-period.request.dto';
-import { UpdateTeacherRetirementPlanningRemunerationRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/update-teacher-retirement-planning-remuneration.request.dto';
-import { UpdateTeacherRetirementPlanningRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/update-teacher-retirement-planning.request.dto';
-import { AnalyzeTeacherRetirementPlanningAdministrativeProcessResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/analyze-teacher-retirement-planning-administrative-process.response.dto';
-import { CreateTeacherRetirementPlanningPeriodResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning-period.response.dto';
-import { CreateTeacherRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning-remuneration.response.dto';
-import { CreateTeacherRetirementPlanningResultResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning-result.response.dto';
-import { CreateTeacherRetirementPlanningResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning.response.dto';
-import { DeleteTeacherRetirementPlanningResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/delete-teacher-retirement-planning.response.dto';
-import { GetTeacherRetirementPlanningRemunerationCalculationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/get-teacher-retirement-planning-remuneration-calculation.response.dto';
-import { GetTeacherRetirementPlanningResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/get-teacher-retirement-planning.response.dto';
-import { ListTeacherRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/list-teacher-retirement-planning-remuneration.response.dto';
-import { UpdateTeacherRetirementPlanningPeriodResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/update-teacher-retirement-planning-period.response.dto';
-import { UpdateTeacherRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/update-teacher-retirement-planning-remuneration.response.dto';
-import { UpdateTeacherRetirementPlanningResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/update-teacher-retirement-planning.response.dto';
+import { TeacherRetirementPlanningRppsId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
+import { AnalyzeTeacherRetirementPlanningAdministrativeProcessRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/request/analyze-teacher-retirement-planning-administrative-process.request.dto';
+import { CreateTeacherRetirementPlanningPeriodRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/request/create-teacher-retirement-planning-period.request.dto';
+import { CreateTeacherRetirementPlanningRemunerationRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/request/create-teacher-retirement-planning-remuneration.request.dto';
+import { CreateTeacherRetirementPlanningRppsRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/request/create-teacher-retirement-planning.request.dto';
+import { ListTeacherRetirementPlanningRemunerationRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/request/list-teacher-retirement-planning-remuneration.request.dto';
+import { UpdateTeacherRetirementPlanningPeriodRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/request/update-teacher-retirement-planning-period.request.dto';
+import { UpdateTeacherRetirementPlanningRemunerationRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/request/update-teacher-retirement-planning-remuneration.request.dto';
+import { UpdateTeacherRetirementPlanningRppsRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/request/update-teacher-retirement-planning.request.dto';
+import { AnalyzeTeacherRetirementPlanningAdministrativeProcessResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/response/analyze-teacher-retirement-planning-administrative-process.response.dto';
+import { CreateTeacherRetirementPlanningPeriodResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/response/create-teacher-retirement-planning-period.response.dto';
+import { CreateTeacherRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/response/create-teacher-retirement-planning-remuneration.response.dto';
+import { CreateTeacherRetirementPlanningResultResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/response/create-teacher-retirement-planning-result.response.dto';
+import { CreateTeacherRetirementPlanningRppsResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/response/create-teacher-retirement-planning.response.dto';
+import { DeleteTeacherRetirementPlanningRppsResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/response/delete-teacher-retirement-planning.response.dto';
+import { GetTeacherRetirementPlanningRemunerationCalculationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/response/get-teacher-retirement-planning-remuneration-calculation.response.dto';
+import { GetTeacherRetirementPlanningRppsResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/response/get-teacher-retirement-planning.response.dto';
+import { ListTeacherRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/response/list-teacher-retirement-planning-remuneration.response.dto';
+import { UpdateTeacherRetirementPlanningPeriodResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/response/update-teacher-retirement-planning-period.response.dto';
+import { UpdateTeacherRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/response/update-teacher-retirement-planning-remuneration.response.dto';
+import { UpdateTeacherRetirementPlanningRppsResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/dto/response/update-teacher-retirement-planning.response.dto';
 import { AnalyzeTeacherRetirementPlanningAdministrativeProcessRppsUseCase } from './use-case/analyze-teacher-retirement-planning-administrative-process-rpps.use-case';
 import { CreateTeacherRetirementPlanningPeriodRppsUseCase } from './use-case/create-teacher-retirement-planning-period-rpps.use-case';
 import { CreateTeacherRetirementPlanningRemunerationRppsUseCase } from './use-case/create-teacher-retirement-planning-remuneration-rpps.use-case';
@@ -62,18 +62,18 @@ export class TeacherRetirementPlanningRppsController {
   public constructor(
     private readonly createTeacherRetirementPlanningUseCase: CreateTeacherRetirementPlanningRppsUseCase,
     private readonly updateTeacherRetirementPlanningUseCase: UpdateTeacherRetirementPlanningRppsUseCase,
-    private readonly getTeacherRetirementPlanningUseCase: GetTeacherRetirementPlanningRppsUseCase,
+    private readonly getTeacherRetirementPlanningRppsUseCase: GetTeacherRetirementPlanningRppsUseCase,
     private readonly deleteTeacherRetirementPlanningUseCase: DeleteTeacherRetirementPlanningRppsUseCase,
-    private readonly createTeacherRetirementPlanningResultUseCase: CreateTeacherRetirementPlanningResultRppsUseCase,
-    private readonly downloadTeacherRetirementPlanningCompleteAnalysisUseCase: DownloadTeacherRetirementPlanningCompleteAnalysisRppsUseCase,
-    private readonly downloadTeacherRetirementPlanningSimplifiedAnalysisUseCase: DownloadTeacherRetirementPlanningSimplifiedAnalysisRppsUseCase,
-    private readonly createTeacherRetirementPlanningPeriodUseCase: CreateTeacherRetirementPlanningPeriodRppsUseCase,
-    private readonly createTeacherRetirementPlanningRemunerationUseCase: CreateTeacherRetirementPlanningRemunerationRppsUseCase,
-    private readonly updateTeacherRetirementPlanningPeriodUseCase: UpdateTeacherRetirementPlanningPeriodRppsUseCase,
-    private readonly updateTeacherRetirementPlanningRemunerationUseCase: UpdateTeacherRetirementPlanningRemunerationRppsUseCase,
-    private readonly listTeacherRetirementPlanningRemunerationUseCase: ListTeacherRetirementPlanningRemunerationRppsUseCase,
-    private readonly getTeacherRetirementPlanningRemunerationCalculationUseCase: GetTeacherRetirementPlanningRemunerationCalculationRppsUseCase,
-    private readonly analyzeTeacherRetirementPlanningAdministrativeProcessUseCase: AnalyzeTeacherRetirementPlanningAdministrativeProcessRppsUseCase,
+    private readonly createTeacherRetirementPlanningRppsResultUseCase: CreateTeacherRetirementPlanningResultRppsUseCase,
+    private readonly downloadTeacherRetirementPlanningRppsCompleteAnalysisUseCase: DownloadTeacherRetirementPlanningCompleteAnalysisRppsUseCase,
+    private readonly downloadTeacherRetirementPlanningRppsSimplifiedAnalysisUseCase: DownloadTeacherRetirementPlanningSimplifiedAnalysisRppsUseCase,
+    private readonly createTeacherRetirementPlanningRppsPeriodUseCase: CreateTeacherRetirementPlanningPeriodRppsUseCase,
+    private readonly createTeacherRetirementPlanningRppsRemunerationUseCase: CreateTeacherRetirementPlanningRemunerationRppsUseCase,
+    private readonly updateTeacherRetirementPlanningRppsPeriodUseCase: UpdateTeacherRetirementPlanningPeriodRppsUseCase,
+    private readonly updateTeacherRetirementPlanningRppsRemunerationUseCase: UpdateTeacherRetirementPlanningRemunerationRppsUseCase,
+    private readonly listTeacherRetirementPlanningRppsRemunerationUseCase: ListTeacherRetirementPlanningRemunerationRppsUseCase,
+    private readonly getTeacherRetirementPlanningRppsRemunerationCalculationUseCase: GetTeacherRetirementPlanningRemunerationCalculationRppsUseCase,
+    private readonly analyzeTeacherRetirementPlanningRppsAdministrativeProcessUseCase: AnalyzeTeacherRetirementPlanningAdministrativeProcessRppsUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -82,14 +82,14 @@ export class TeacherRetirementPlanningRppsController {
     http: {
       path: '',
       method: RequestMethod.POST,
-      type: CreateTeacherRetirementPlanningRequestDto,
+      type: CreateTeacherRetirementPlanningRppsRequestDto,
     },
     tag: ['planejamento-aposentadoria-professor-rpps'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
       description:
         'Planejamento de aposentadoria de professor (RPPS) criado com sucesso.',
-      type: CreateTeacherRetirementPlanningResponseDto,
+      type: CreateTeacherRetirementPlanningRppsResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
   })
@@ -97,8 +97,8 @@ export class TeacherRetirementPlanningRppsController {
     @GetSessionData() sessionData: SessionDataModel,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
-    @Body() dto: CreateTeacherRetirementPlanningRequestDto,
-  ): Promise<CreateTeacherRetirementPlanningResponseDto> {
+    @Body() dto: CreateTeacherRetirementPlanningRppsRequestDto,
+  ): Promise<CreateTeacherRetirementPlanningRppsResponseDto> {
     return this.createTeacherRetirementPlanningUseCase.execute(
       sessionData,
       organizationSessionData,
@@ -112,14 +112,14 @@ export class TeacherRetirementPlanningRppsController {
     http: {
       path: ':teacherRetirementPlanningId',
       method: RequestMethod.PATCH,
-      type: UpdateTeacherRetirementPlanningRequestDto,
+      type: UpdateTeacherRetirementPlanningRppsRequestDto,
     },
     tag: ['planejamento-aposentadoria-professor-rpps'],
     successResponse: {
       statusCode: HttpStatus.OK,
       description:
         'Planejamento de aposentadoria de professor (RPPS) atualizado com sucesso.',
-      type: UpdateTeacherRetirementPlanningResponseDto,
+      type: UpdateTeacherRetirementPlanningRppsResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
   })
@@ -129,11 +129,11 @@ export class TeacherRetirementPlanningRppsController {
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
       'teacherRetirementPlanningId',
-      new ParseValueObjectPipe(TeacherRetirementPlanningId),
+      new ParseValueObjectPipe(TeacherRetirementPlanningRppsId),
     )
-    teacherRetirementPlanningId: TeacherRetirementPlanningId,
-    @Body() dto: UpdateTeacherRetirementPlanningRequestDto,
-  ): Promise<UpdateTeacherRetirementPlanningResponseDto> {
+    teacherRetirementPlanningId: TeacherRetirementPlanningRppsId,
+    @Body() dto: UpdateTeacherRetirementPlanningRppsRequestDto,
+  ): Promise<UpdateTeacherRetirementPlanningRppsResponseDto> {
     return this.updateTeacherRetirementPlanningUseCase.execute(
       sessionData,
       organizationSessionData,
@@ -154,7 +154,7 @@ export class TeacherRetirementPlanningRppsController {
       statusCode: HttpStatus.OK,
       description:
         'Planejamento de aposentadoria de professor (RPPS) retornado com sucesso.',
-      type: GetTeacherRetirementPlanningResponseDto,
+      type: GetTeacherRetirementPlanningRppsResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
   })
@@ -164,11 +164,11 @@ export class TeacherRetirementPlanningRppsController {
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
       'teacherRetirementPlanningId',
-      new ParseValueObjectPipe(TeacherRetirementPlanningId),
+      new ParseValueObjectPipe(TeacherRetirementPlanningRppsId),
     )
-    teacherRetirementPlanningId: TeacherRetirementPlanningId,
-  ): Promise<GetTeacherRetirementPlanningResponseDto> {
-    return this.getTeacherRetirementPlanningUseCase.execute(
+    teacherRetirementPlanningId: TeacherRetirementPlanningRppsId,
+  ): Promise<GetTeacherRetirementPlanningRppsResponseDto> {
+    return this.getTeacherRetirementPlanningRppsUseCase.execute(
       sessionData,
       organizationSessionData,
       teacherRetirementPlanningId,
@@ -187,7 +187,7 @@ export class TeacherRetirementPlanningRppsController {
       statusCode: HttpStatus.OK,
       description:
         'Planejamento de aposentadoria de professor (RPPS) excluído com sucesso.',
-      type: DeleteTeacherRetirementPlanningResponseDto,
+      type: DeleteTeacherRetirementPlanningRppsResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
   })
@@ -197,10 +197,10 @@ export class TeacherRetirementPlanningRppsController {
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
       'teacherRetirementPlanningId',
-      new ParseValueObjectPipe(TeacherRetirementPlanningId),
+      new ParseValueObjectPipe(TeacherRetirementPlanningRppsId),
     )
-    teacherRetirementPlanningId: TeacherRetirementPlanningId,
-  ): Promise<DeleteTeacherRetirementPlanningResponseDto> {
+    teacherRetirementPlanningId: TeacherRetirementPlanningRppsId,
+  ): Promise<DeleteTeacherRetirementPlanningRppsResponseDto> {
     return this.deleteTeacherRetirementPlanningUseCase.execute(
       sessionData,
       organizationSessionData,
@@ -231,11 +231,11 @@ export class TeacherRetirementPlanningRppsController {
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
       'teacherRetirementPlanningId',
-      new ParseValueObjectPipe(TeacherRetirementPlanningId),
+      new ParseValueObjectPipe(TeacherRetirementPlanningRppsId),
     )
-    teacherRetirementPlanningId: TeacherRetirementPlanningId,
+    teacherRetirementPlanningId: TeacherRetirementPlanningRppsId,
   ): Promise<CreateTeacherRetirementPlanningResultResponseDto> {
-    return this.createTeacherRetirementPlanningResultUseCase.execute(
+    return this.createTeacherRetirementPlanningRppsResultUseCase.execute(
       sessionData,
       organizationSessionData,
       teacherRetirementPlanningId,
@@ -265,7 +265,7 @@ export class TeacherRetirementPlanningRppsController {
     organizationSessionData: OrganizationSessionDataModel,
     @Body() dto: CreateTeacherRetirementPlanningPeriodRequestDto,
   ): Promise<CreateTeacherRetirementPlanningPeriodResponseDto> {
-    return this.createTeacherRetirementPlanningPeriodUseCase.execute(
+    return this.createTeacherRetirementPlanningRppsPeriodUseCase.execute(
       sessionData,
       organizationSessionData,
       dto,
@@ -295,12 +295,12 @@ export class TeacherRetirementPlanningRppsController {
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
       'teacherRetirementPlanningId',
-      new ParseValueObjectPipe(TeacherRetirementPlanningId),
+      new ParseValueObjectPipe(TeacherRetirementPlanningRppsId),
     )
-    teacherRetirementPlanningId: TeacherRetirementPlanningId,
+    teacherRetirementPlanningId: TeacherRetirementPlanningRppsId,
     @Body() dto: UpdateTeacherRetirementPlanningPeriodRequestDto,
   ): Promise<UpdateTeacherRetirementPlanningPeriodResponseDto> {
-    return this.updateTeacherRetirementPlanningPeriodUseCase.execute(
+    return this.updateTeacherRetirementPlanningRppsPeriodUseCase.execute(
       sessionData,
       organizationSessionData,
       teacherRetirementPlanningId,
@@ -331,12 +331,12 @@ export class TeacherRetirementPlanningRppsController {
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
       'teacherRetirementPlanningId',
-      new ParseValueObjectPipe(TeacherRetirementPlanningId),
+      new ParseValueObjectPipe(TeacherRetirementPlanningRppsId),
     )
-    teacherRetirementPlanningId: TeacherRetirementPlanningId,
+    teacherRetirementPlanningId: TeacherRetirementPlanningRppsId,
     @Body() dto: CreateTeacherRetirementPlanningRemunerationRequestDto,
   ): Promise<CreateTeacherRetirementPlanningRemunerationResponseDto> {
-    return this.createTeacherRetirementPlanningRemunerationUseCase.execute(
+    return this.createTeacherRetirementPlanningRppsRemunerationUseCase.execute(
       sessionData,
       organizationSessionData,
       teacherRetirementPlanningId,
@@ -367,12 +367,12 @@ export class TeacherRetirementPlanningRppsController {
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
       'teacherRetirementPlanningId',
-      new ParseValueObjectPipe(TeacherRetirementPlanningId),
+      new ParseValueObjectPipe(TeacherRetirementPlanningRppsId),
     )
-    teacherRetirementPlanningId: TeacherRetirementPlanningId,
+    teacherRetirementPlanningId: TeacherRetirementPlanningRppsId,
     @Body() dto: UpdateTeacherRetirementPlanningRemunerationRequestDto,
   ): Promise<UpdateTeacherRetirementPlanningRemunerationResponseDto> {
-    return this.updateTeacherRetirementPlanningRemunerationUseCase.execute(
+    return this.updateTeacherRetirementPlanningRppsRemunerationUseCase.execute(
       sessionData,
       organizationSessionData,
       teacherRetirementPlanningId,
@@ -402,12 +402,12 @@ export class TeacherRetirementPlanningRppsController {
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
       'teacherRetirementPlanningId',
-      new ParseValueObjectPipe(TeacherRetirementPlanningId),
+      new ParseValueObjectPipe(TeacherRetirementPlanningRppsId),
     )
-    teacherRetirementPlanningId: TeacherRetirementPlanningId,
+    teacherRetirementPlanningId: TeacherRetirementPlanningRppsId,
     @Query() dto: ListTeacherRetirementPlanningRemunerationRequestDto,
   ): Promise<ListTeacherRetirementPlanningRemunerationResponseDto> {
-    return this.listTeacherRetirementPlanningRemunerationUseCase.execute(
+    return this.listTeacherRetirementPlanningRppsRemunerationUseCase.execute(
       sessionData,
       organizationSessionData,
       teacherRetirementPlanningId,
@@ -437,11 +437,11 @@ export class TeacherRetirementPlanningRppsController {
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
       'teacherRetirementPlanningId',
-      new ParseValueObjectPipe(TeacherRetirementPlanningId),
+      new ParseValueObjectPipe(TeacherRetirementPlanningRppsId),
     )
-    teacherRetirementPlanningId: TeacherRetirementPlanningId,
+    teacherRetirementPlanningId: TeacherRetirementPlanningRppsId,
   ): Promise<GetTeacherRetirementPlanningRemunerationCalculationResponseDto> {
-    return this.getTeacherRetirementPlanningRemunerationCalculationUseCase.execute(
+    return this.getTeacherRetirementPlanningRppsRemunerationCalculationUseCase.execute(
       sessionData,
       organizationSessionData,
       teacherRetirementPlanningId,
@@ -470,13 +470,13 @@ export class TeacherRetirementPlanningRppsController {
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
       'teacherRetirementPlanningId',
-      new ParseValueObjectPipe(TeacherRetirementPlanningId),
+      new ParseValueObjectPipe(TeacherRetirementPlanningRppsId),
     )
-    teacherRetirementPlanningId: TeacherRetirementPlanningId,
+    teacherRetirementPlanningId: TeacherRetirementPlanningRppsId,
     @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
     format: ExportDocumentFormatEnum,
   ): Promise<StreamableFile> {
-    return this.downloadTeacherRetirementPlanningCompleteAnalysisUseCase.execute(
+    return this.downloadTeacherRetirementPlanningRppsCompleteAnalysisUseCase.execute(
       sessionData,
       organizationSessionData,
       teacherRetirementPlanningId,
@@ -506,13 +506,13 @@ export class TeacherRetirementPlanningRppsController {
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
       'teacherRetirementPlanningId',
-      new ParseValueObjectPipe(TeacherRetirementPlanningId),
+      new ParseValueObjectPipe(TeacherRetirementPlanningRppsId),
     )
-    teacherRetirementPlanningId: TeacherRetirementPlanningId,
+    teacherRetirementPlanningId: TeacherRetirementPlanningRppsId,
     @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
     format: ExportDocumentFormatEnum,
   ): Promise<StreamableFile> {
-    return this.downloadTeacherRetirementPlanningSimplifiedAnalysisUseCase.execute(
+    return this.downloadTeacherRetirementPlanningRppsSimplifiedAnalysisUseCase.execute(
       sessionData,
       organizationSessionData,
       teacherRetirementPlanningId,
@@ -544,7 +544,7 @@ export class TeacherRetirementPlanningRppsController {
     @Body()
     dto: AnalyzeTeacherRetirementPlanningAdministrativeProcessRequestDto,
   ): Promise<AnalyzeTeacherRetirementPlanningAdministrativeProcessResponseDto> {
-    return this.analyzeTeacherRetirementPlanningAdministrativeProcessUseCase.execute(
+    return this.analyzeTeacherRetirementPlanningRppsAdministrativeProcessUseCase.execute(
       sessionData,
       organizationSessionData,
       dto,
