@@ -14,25 +14,30 @@ import { SpecialRetirementGrantPeriodId } from '@module/customer/analysis-tool/m
 import { SpecialRetirementGrantPeriodObservationId } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-period-observation/value-object/special-retirement-grant-period-observation-id/special-retirement-grant-period-observation-id.value-object';
 import { CreateSpecialRetirementGrantPeriodObservationRequestDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/request/create-special-retirement-grant-period-observation.request.dto';
 import { CreateSpecialRetirementGrantPeriodRequestDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/request/create-special-retirement-grant-period.request.dto';
+import { CreateSpecialRetirementGrantTechnicalDiagnosisRequestDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/request/create-special-retirement-grant-technical-diagnosis.request.dto';
 import { CreateSpecialRetirementGrantRequestDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/request/create-special-retirement-grant.request.dto';
 import { UpdateSpecialRetirementGrantPeriodObservationRequestDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/request/update-special-retirement-grant-period-observation.request.dto';
 import { UpdateSpecialRetirementGrantPeriodRequestDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/request/update-special-retirement-grant-period.request.dto';
+import { UpdateSpecialRetirementGrantTechnicalDiagnosisRequestDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/request/update-special-retirement-grant-technical-diagnosis.request.dto';
 import { UpdateSpecialRetirementGrantRequestDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/request/update-special-retirement-grant.request.dto';
 import { CreateSpecialRetirementGrantFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/create-special-retirement-grant-first-analysis.response.dto';
 import { CreateSpecialRetirementGrantPeriodObservationResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/create-special-retirement-grant-period-observation.response.dto';
 import { CreateSpecialRetirementGrantPeriodResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/create-special-retirement-grant-period.response.dto';
 import { CreateSpecialRetirementGrantResultResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/create-special-retirement-grant-result.response.dto';
+import { CreateSpecialRetirementGrantTechnicalDiagnosisResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/create-special-retirement-grant-technical-diagnosis.response.dto';
 import { CreateSpecialRetirementGrantResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/create-special-retirement-grant.response.dto';
 import { DeleteSpecialRetirementGrantPeriodObservationResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/delete-special-retirement-grant-period-observation.response.dto';
 import { GetSpecialRetirementGrantResultResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/get-special-retirement-grant-result.response.dto';
 import { GetSpecialRetirementGrantResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/get-special-retirement-grant.response.dto';
 import { UpdateSpecialRetirementGrantPeriodObservationResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/update-special-retirement-grant-period-observation.response.dto';
 import { UpdateSpecialRetirementGrantPeriodResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/update-special-retirement-grant-period.response.dto';
+import { UpdateSpecialRetirementGrantTechnicalDiagnosisResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/update-special-retirement-grant-technical-diagnosis.response.dto';
 import { UpdateSpecialRetirementGrantResponseDto } from '@module/customer/analysis-tool/module/special-retirement-grant/dto/response/update-special-retirement-grant.response.dto';
 import { CreateSpecialRetirementGrantFirstAnalysisUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/create-special-retirement-grant-first-analysis.use-case';
 import { CreateSpecialRetirementGrantPeriodObservationUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/create-special-retirement-grant-period-observation.use-case';
 import { CreateSpecialRetirementGrantPeriodUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/create-special-retirement-grant-period.use-case';
 import { CreateSpecialRetirementGrantResultUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/create-special-retirement-grant-result.use-case';
+import { CreateSpecialRetirementGrantTechnicalDiagnosisUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/create-special-retirement-grant-technical-diagnosis.use-case';
 import { CreateSpecialRetirementGrantUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/create-special-retirement-grant.use-case';
 import { DeleteSpecialRetirementGrantPeriodObservationUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/delete-special-retirement-grant-period-observation.use-case';
 import { DownloadSpecialRetirementGrantCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/download-special-retirement-grant-complete-analysis.use-case';
@@ -41,6 +46,7 @@ import { GetSpecialRetirementGrantResultUseCase } from '@module/customer/analysi
 import { GetSpecialRetirementGrantUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/get-special-retirement-grant.use-case';
 import { UpdateSpecialRetirementGrantPeriodObservationUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/update-special-retirement-grant-period-observation.use-case';
 import { UpdateSpecialRetirementGrantPeriodUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/update-special-retirement-grant-period.use-case';
+import { UpdateSpecialRetirementGrantTechnicalDiagnosisUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/update-special-retirement-grant-technical-diagnosis.use-case';
 import { UpdateSpecialRetirementGrantUseCase } from '@module/customer/analysis-tool/module/special-retirement-grant/use-case/update-special-retirement-grant.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
@@ -62,6 +68,8 @@ export class SpecialRetirementGrantController {
     private readonly createSpecialRetirementGrantFirstAnalysisUseCase: CreateSpecialRetirementGrantFirstAnalysisUseCase,
     private readonly createSpecialRetirementGrantPeriodUseCase: CreateSpecialRetirementGrantPeriodUseCase,
     private readonly updateSpecialRetirementGrantPeriodUseCase: UpdateSpecialRetirementGrantPeriodUseCase,
+    private readonly createSpecialRetirementGrantTechnicalDiagnosisUseCase: CreateSpecialRetirementGrantTechnicalDiagnosisUseCase,
+    private readonly updateSpecialRetirementGrantTechnicalDiagnosisUseCase: UpdateSpecialRetirementGrantTechnicalDiagnosisUseCase,
     private readonly createSpecialRetirementGrantPeriodObservationUseCase: CreateSpecialRetirementGrantPeriodObservationUseCase,
     private readonly updateSpecialRetirementGrantPeriodObservationUseCase: UpdateSpecialRetirementGrantPeriodObservationUseCase,
     private readonly deleteSpecialRetirementGrantPeriodObservationUseCase: DeleteSpecialRetirementGrantPeriodObservationUseCase,
@@ -332,6 +340,78 @@ export class SpecialRetirementGrantController {
     @Body() dto: UpdateSpecialRetirementGrantPeriodRequestDto,
   ): Promise<UpdateSpecialRetirementGrantPeriodResponseDto> {
     return await this.updateSpecialRetirementGrantPeriodUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      specialRetirementGrantId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Adicionar diagnóstico técnico na concessão de aposentadoria especial',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':specialRetirementGrantId/technical-diagnosis',
+      method: RequestMethod.POST,
+      type: CreateSpecialRetirementGrantTechnicalDiagnosisRequestDto,
+    },
+    tag: ['concessao-aposentadoria-especial'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Diagnóstico técnico criado com sucesso.',
+      type: CreateSpecialRetirementGrantTechnicalDiagnosisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createTechnicalDiagnosis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'specialRetirementGrantId',
+      new ParseValueObjectPipe(SpecialRetirementGrantId),
+    )
+    specialRetirementGrantId: SpecialRetirementGrantId,
+    @Body() dto: CreateSpecialRetirementGrantTechnicalDiagnosisRequestDto,
+  ): Promise<CreateSpecialRetirementGrantTechnicalDiagnosisResponseDto> {
+    return await this.createSpecialRetirementGrantTechnicalDiagnosisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      specialRetirementGrantId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Atualizar diagnóstico técnico da concessão de aposentadoria especial',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':specialRetirementGrantId/technical-diagnosis',
+      method: RequestMethod.PATCH,
+      type: UpdateSpecialRetirementGrantTechnicalDiagnosisRequestDto,
+    },
+    tag: ['concessao-aposentadoria-especial'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Diagnóstico técnico atualizado com sucesso.',
+      type: UpdateSpecialRetirementGrantTechnicalDiagnosisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateTechnicalDiagnosis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'specialRetirementGrantId',
+      new ParseValueObjectPipe(SpecialRetirementGrantId),
+    )
+    specialRetirementGrantId: SpecialRetirementGrantId,
+    @Body() dto: UpdateSpecialRetirementGrantTechnicalDiagnosisRequestDto,
+  ): Promise<UpdateSpecialRetirementGrantTechnicalDiagnosisResponseDto> {
+    return await this.updateSpecialRetirementGrantTechnicalDiagnosisUseCase.execute(
       sessionData,
       organizationSessionData,
       specialRetirementGrantId,

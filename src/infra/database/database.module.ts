@@ -3,6 +3,10 @@ import { ClassProvider, Module } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { AccidentAssistanceTerminatedTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated/accident-assistance-terminated.typeorm.command.repository';
 import { AccidentAssistanceTerminatedTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated/accident-assistance-terminated.typeorm.query.repository';
+import { AccidentAssistanceGrantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-grant/accident-assistance-grant.typeorm.command.repository';
+import { AccidentAssistanceGrantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-grant/accident-assistance-grant.typeorm.query.repository';
+import { AccidentAssistanceGrantDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-grant-document/accident-assistance-grant-document.typeorm.command.repository';
+import { AccidentAssistanceGrantResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-grant-result/accident-assistance-grant-result.typeorm.command.repository';
 import { AccidentAssistanceTerminatedBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated-benefit/accident-assistance-terminated-benefit.typeorm.command.repository';
 import { AccidentAssistanceTerminatedCidTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated-cid/accident-assistance-terminated-cid.typeorm.command.repository';
 import { AccidentAssistanceTerminatedDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated-document/accident-assistance-terminated-document.typeorm.command.repository';
@@ -11,10 +15,6 @@ import { AccidentAssistanceTerminatedPeriodTypeormCommandRepository } from '@inf
 import { AccidentAssistanceTerminatedPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated-period/accident-assistance-terminated-period.typeorm.query.repository';
 import { AccidentAssistanceTerminatedPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated-period-document/accident-assistance-terminated-period-document.typeorm.command.repository';
 import { AccidentAssistanceTerminatedResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-terminated-result/accident-assistance-terminated-result.typeorm.command.repository';
-import { AccidentAssistanceGrantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-grant/accident-assistance-grant.typeorm.command.repository';
-import { AccidentAssistanceGrantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-grant/accident-assistance-grant.typeorm.query.repository';
-import { AccidentAssistanceGrantDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-grant-document/accident-assistance-grant-document.typeorm.command.repository';
-import { AccidentAssistanceGrantResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-assistance-grant-result/accident-assistance-grant-result.typeorm.command.repository';
 import { AccidentBenefitRejectionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection/accident-benefit-rejection.typeorm.command.repository';
 import { AccidentBenefitRejectionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection/accident-benefit-rejection.typeorm.query.repository';
 import { AccidentBenefitRejectionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/accident-benefit-rejection-document/accident-benefit-rejection-document.typeorm.command.repository';
@@ -488,6 +488,8 @@ import { SpecialRetirementGrantPeriodOverdueContributionTypeormCommandRepository
 import { SpecialRetirementGrantPeriodPendingExitDateTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-period-pending-exit-date/special-retirement-grant-period-pending-exit-date.typeorm.command.repository';
 import { SpecialRetirementGrantPeriodUnderMinimumTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-period-under-minimum/special-retirement-grant-period-under-minimum.typeorm.command.repository';
 import { SpecialRetirementGrantResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-result/special-retirement-grant-result.typeorm.command.repository';
+import { SpecialRetirementGrantTechnicalDiagnosisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-technical-diagnosis/special-retirement-grant-technical-diagnosis.typeorm.command.repository';
+import { SpecialRetirementGrantTechnicalDiagnosisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-technical-diagnosis/special-retirement-grant-technical-diagnosis.typeorm.query.repository';
 import { SpecialRetirementRejectionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection/special-retirement-rejection.typeorm.command.repository';
 import { SpecialRetirementRejectionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection/special-retirement-rejection.typeorm.query.repository';
 import { SpecialRetirementRejectionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection-document/special-retirement-rejection-document.typeorm.command.repository';
@@ -665,6 +667,10 @@ import { SystemActivitiesCommandRepositoryGateway } from '@module/customer/analy
 import { SystemActivitiesQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/system-activities/query/system-activities.query.repository.gateway';
 import { AccidentAssistanceTerminatedCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated/command/accident-assistance-terminated.command.repository.gateway';
 import { AccidentAssistanceTerminatedQueryRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated/query/accident-assistance-terminated.query.repository.gateway';
+import { AccidentAssistanceGrantCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-grant/domain/repository/accident-assistance-grant/command/accident-assistance-grant.command.repository.gateway';
+import { AccidentAssistanceGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-grant/domain/repository/accident-assistance-grant/query/accident-assistance-grant.query.repository.gateway';
+import { AccidentAssistanceGrantDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-grant/domain/repository/accident-assistance-grant-document/command/accident-assistance-grant-document.command.repository.gateway';
+import { AccidentAssistanceGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-grant/domain/repository/accident-assistance-grant-result/command/accident-assistance-grant-result.command.repository.gateway';
 import { AccidentAssistanceTerminatedBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated-benefit/command/accident-assistance-terminated-benefit.command.repository.gateway';
 import { AccidentAssistanceTerminatedCidCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated-cid/command/accident-assistance-terminated-cid.command.repository.gateway';
 import { AccidentAssistanceTerminatedDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated-document/command/accident-assistance-terminated-document.command.repository.gateway';
@@ -673,10 +679,6 @@ import { AccidentAssistanceTerminatedPeriodCommandRepositoryGateway } from '@mod
 import { AccidentAssistanceTerminatedPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated-period/query/accident-assistance-terminated-period.query.repository.gateway';
 import { AccidentAssistanceTerminatedPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated-period-document/command/accident-assistance-terminated-period-document.command.repository.gateway';
 import { AccidentAssistanceTerminatedResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated-result/command/accident-assistance-terminated-result.command.repository.gateway';
-import { AccidentAssistanceGrantCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-grant/domain/repository/accident-assistance-grant/command/accident-assistance-grant.command.repository.gateway';
-import { AccidentAssistanceGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-grant/domain/repository/accident-assistance-grant/query/accident-assistance-grant.query.repository.gateway';
-import { AccidentAssistanceGrantDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-grant/domain/repository/accident-assistance-grant-document/command/accident-assistance-grant-document.command.repository.gateway';
-import { AccidentAssistanceGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-grant/domain/repository/accident-assistance-grant-result/command/accident-assistance-grant-result.command.repository.gateway';
 import { AccidentBenefitRejectionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/repository/accident-benefit-rejection/command/accident-benefit-rejection.command.repository.gateway';
 import { AccidentBenefitRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/repository/accident-benefit-rejection/query/accident-benefit-rejection.query.repository.gateway';
 import { AccidentBenefitRejectionDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/repository/accident-benefit-rejection-document/command/accident-benefit-rejection-document.command.repository.gateway';
@@ -1064,6 +1066,8 @@ import { SpecialRetirementGrantPeriodOverdueContributionCommandRepositoryGateway
 import { SpecialRetirementGrantPeriodPendingExitDateCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-period-pending-exit-date/command/special-retirement-grant-period-pending-exit-date.command.repository.gateway';
 import { SpecialRetirementGrantPeriodUnderMinimumCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-period-under-minimum/command/special-retirement-grant-period-under-minimum.command.repository.gateway';
 import { SpecialRetirementGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-result/command/special-retirement-grant-result.command.repository.gateway';
+import { SpecialRetirementGrantTechnicalDiagnosisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-technical-diagnosis/command/special-retirement-grant-technical-diagnosis.command.repository.gateway';
+import { SpecialRetirementGrantTechnicalDiagnosisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-technical-diagnosis/query/special-retirement-grant-technical-diagnosis.query.repository.gateway';
 import { SpecialRetirementRejectionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/repository/special-retirement-rejection/command/special-retirement-rejection.command.repository.gateway';
 import { SpecialRetirementRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/repository/special-retirement-rejection/query/special-retirement-rejection.query.repository.gateway';
 import { SpecialRetirementRejectionDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/repository/special-retirement-rejection-document/command/special-retirement-rejection-document.command.repository.gateway';
@@ -1357,6 +1361,22 @@ const classProvider: ClassProvider[] = [
     useClass: AccidentAssistanceTerminatedTypeormQueryRepository,
   },
   {
+    provide: AccidentAssistanceGrantCommandRepositoryGateway,
+    useClass: AccidentAssistanceGrantTypeormCommandRepository,
+  },
+  {
+    provide: AccidentAssistanceGrantQueryRepositoryGateway,
+    useClass: AccidentAssistanceGrantTypeormQueryRepository,
+  },
+  {
+    provide: AccidentAssistanceGrantDocumentCommandRepositoryGateway,
+    useClass: AccidentAssistanceGrantDocumentTypeormCommandRepository,
+  },
+  {
+    provide: AccidentAssistanceGrantResultCommandRepositoryGateway,
+    useClass: AccidentAssistanceGrantResultTypeormCommandRepository,
+  },
+  {
     provide: AccidentAssistanceTerminatedBenefitCommandRepositoryGateway,
     useClass: AccidentAssistanceTerminatedBenefitTypeormCommandRepository,
   },
@@ -1390,22 +1410,6 @@ const classProvider: ClassProvider[] = [
   {
     provide: AccidentAssistanceTerminatedCidCommandRepositoryGateway,
     useClass: AccidentAssistanceTerminatedCidTypeormCommandRepository,
-  },
-  {
-    provide: AccidentAssistanceGrantCommandRepositoryGateway,
-    useClass: AccidentAssistanceGrantTypeormCommandRepository,
-  },
-  {
-    provide: AccidentAssistanceGrantQueryRepositoryGateway,
-    useClass: AccidentAssistanceGrantTypeormQueryRepository,
-  },
-  {
-    provide: AccidentAssistanceGrantDocumentCommandRepositoryGateway,
-    useClass: AccidentAssistanceGrantDocumentTypeormCommandRepository,
-  },
-  {
-    provide: AccidentAssistanceGrantResultCommandRepositoryGateway,
-    useClass: AccidentAssistanceGrantResultTypeormCommandRepository,
   },
   {
     provide: AdministrativeProcedureInssAnalysisBenefitCommandRepositoryGateway,
@@ -1459,6 +1463,14 @@ const classProvider: ClassProvider[] = [
   {
     provide: SpecialRetirementGrantPeriodObservationCommandRepositoryGateway,
     useClass: SpecialRetirementGrantPeriodObservationTypeormCommandRepository,
+  },
+  {
+    provide: SpecialRetirementGrantTechnicalDiagnosisCommandRepositoryGateway,
+    useClass: SpecialRetirementGrantTechnicalDiagnosisTypeormCommandRepository,
+  },
+  {
+    provide: SpecialRetirementGrantTechnicalDiagnosisQueryRepositoryGateway,
+    useClass: SpecialRetirementGrantTechnicalDiagnosisTypeormQueryRepository,
   },
   {
     provide: SpecialRetirementGrantPeriodQueryRepositoryGateway,
