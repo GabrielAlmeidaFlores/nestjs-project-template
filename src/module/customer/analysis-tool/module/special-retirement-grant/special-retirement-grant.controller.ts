@@ -597,5 +597,4 @@ export class SpecialRetirementGrantController {
       format,
     );
   }
-
 }
