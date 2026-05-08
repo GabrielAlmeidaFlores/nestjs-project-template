@@ -711,4 +711,11 @@ export abstract class AnalysisProcessorGateway {
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null>;
+
+  public abstract getRetirementPermanentDisabilityRevisionFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson?: boolean,
+  ): Promise<string | null>;
 }

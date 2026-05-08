@@ -6,6 +6,13 @@ import { RetirementPermanentDisabilityRevisionTypeormEntity } from '@infra/datab
 @Entity({ name: 'retirement_permanent_disability_revision_result' })
 export class RetirementPermanentDisabilityRevisionResultTypeormEntity extends BaseTypeormEntity {
   @Column({
+    name: 'retirement_permanent_disability_revision_first_analysis',
+    type: 'longtext',
+    nullable: true,
+  })
+  public retirementPermanentDisabilityRevisionFirstAnalysis: string | null;
+
+  @Column({
     name: 'retirement_permanent_disability_revision_complete_analysis',
     type: 'longtext',
     nullable: true,

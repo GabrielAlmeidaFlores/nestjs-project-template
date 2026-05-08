@@ -310,6 +310,10 @@ import { RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentTypeormC
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision/retirement-permanent-disability-revision-disability-analysis.typeorm.command.repository';
 import { RetirementPermanentDisabilityRevisionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision/retirement-permanent-disability-revision.typeorm.command.repository';
 import { RetirementPermanentDisabilityRevisionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision/retirement-permanent-disability-revision.typeorm.query.repository';
+import { RetirementPermanentDisabilityRevisionWorkPeriodsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision/retirement-permanent-disability-revision-work-periods.typeorm.command.repository';
+import { RetirementPermanentDisabilityRevisionWorkPeriodsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision/retirement-permanent-disability-revision-work-periods.typeorm.query.repository';
+import { RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision/retirement-permanent-disability-revision-work-periods-earnings-history.typeorm.command.repository';
+import { RetirementPermanentDisabilityRevisionConcessionLetterBreakdownTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision-concession-letter-breakdown/retirement-permanent-disability-revision-concession-letter-breakdown.typeorm.command.repository';
 import { RetirementPermanentDisabilityRevisionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision-document/retirement-permanent-disability-revision-document.typeorm.command.repository';
 import { RetirementPermanentDisabilityRevisionInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision-inss-benefit/retirement-permanent-disability-revision-inss-benefit.typeorm.command.repository';
 import { RetirementPermanentDisabilityRevisionLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision-legal-proceeding/retirement-permanent-disability-revision-legal-proceeding.typeorm.command.repository';
@@ -749,6 +753,7 @@ import { RegulatoryUpdateEmailPreferenceTypeormEntity } from '@infra/database/im
 import { RegulatoryUpdateMainChangeTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/regulatory-update-main-change.typeorm.entity';
 import { RegulatoryUpdateMonitoredSourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/regulatory-update-monitored-source.typeorm.entity';
 import { RegulatoryUpdateTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/regulatory-update.typeorm.entity';
+import { RetirementPermanentDisabilityRevisionConcessionLetterBreakdownTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-concession-letter-breakdown.typeorm.entity';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisAssociatedCidTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-disability-analysis-associated-cid.typeorm.entity';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-disability-analysis-benefit-associated-cid.typeorm.entity';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclarationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-disability-analysis-benefit-declaration.typeorm.entity';
@@ -760,6 +765,8 @@ import { RetirementPermanentDisabilityRevisionInssBenefitTypeormEntity } from '@
 import { RetirementPermanentDisabilityRevisionLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-legal-proceeding.typeorm.entity';
 import { RetirementPermanentDisabilityRevisionResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-result.typeorm.entity';
 import { RetirementPermanentDisabilityRevisionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision.typeorm.entity';
+import { RetirementPermanentDisabilityRevisionWorkPeriodsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-work-periods.typeorm.entity';
+import { RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-work-periods-earnings-history.typeorm.entity';
 import { RetirementPlanningRgpsAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-analysis-result.typeorm.entity';
 import { RetirementPlanningRgpsEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-earnings-history.typeorm.entity';
 import { RetirementPlanningRgpsInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-inss-benefit.typeorm.entity';
@@ -1380,6 +1387,9 @@ export class TypeormIndex {
     RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidTypeormEntity,
     RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclarationTypeormEntity,
     RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentTypeormEntity,
+    RetirementPermanentDisabilityRevisionConcessionLetterBreakdownTypeormEntity,
+    RetirementPermanentDisabilityRevisionWorkPeriodsTypeormEntity,
+    RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [
@@ -1806,6 +1816,10 @@ export class TypeormIndex {
     RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidTypeormCommandRepository,
     RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclarationTypeormCommandRepository,
     RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentTypeormCommandRepository,
+    RetirementPermanentDisabilityRevisionConcessionLetterBreakdownTypeormCommandRepository,
+    RetirementPermanentDisabilityRevisionWorkPeriodsTypeormCommandRepository,
+    RetirementPermanentDisabilityRevisionWorkPeriodsTypeormQueryRepository,
+    RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryTypeormCommandRepository,
     SurvivorPensionAnalysisTypeormCommandRepository,
     SurvivorPensionAnalysisTypeormQueryRepository,
     SurvivorPensionAnalysisCustomerProfileIdentificationTypeormCommandRepository,
