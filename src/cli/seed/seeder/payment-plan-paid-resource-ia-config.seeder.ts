@@ -8770,6 +8770,16 @@ Destaque elegibilidade, pontos favoráveis, pendências, riscos e próximos pass
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.PERIOD_NO_END_DATE_DOCUMENT_ANALYSIS,
+      ),
+      prompt: `Você é um especialista em Direito Previdenciário brasileiro e análise documental de vínculos e períodos.
+
+Com base no documento enviado, identifique a data de encerramento do período e elabore uma observação técnica detalhada sobre o vínculo ou período analisado.
+
+Considere: data de rescisão contratual, último registro de contribuição, informações de afastamento, coerência entre documentos. Se não for possível determinar com precisão, indique o período mais provável com base nas evidências disponíveis e explique a fundamentação técnica.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
         PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_SIMPLIFIED_ANALYSIS,
       ),
       prompt: `# PROMPT PARA GERAÇÃO DE MENSAGEM WHATSAPP - ANÁLISE DE TEMPO ESPECIAL
