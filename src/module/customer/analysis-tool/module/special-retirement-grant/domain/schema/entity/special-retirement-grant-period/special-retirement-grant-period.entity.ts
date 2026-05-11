@@ -1,6 +1,8 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { SpecialRetirementGrantEntity } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/special-retirement-grant.entity';
+import { SpecialRetirementGrantPeriodBelowTheMinimumEnum } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-period/enum/special-retirement-grant-period-below-the-minimum.enum';
+import { SpecialRetirementGrantPeriodLeaveDateEnum } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-period/enum/special-retirement-grant-period-leave-date.enum';
 import { SpecialRetirementGrantPeriodStatusEnum } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-period/enum/special-retirement-grant-period-status.enum';
 import { SpecialRetirementGrantPeriodEntityPropsInterface } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-period/special-retirement-grant-period.entity.props.interface';
 import { SpecialRetirementGrantPeriodId } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-period/value-object/special-retirement-grant-period-id/special-retirement-grant-period-id.value-object';
@@ -39,6 +41,12 @@ export class SpecialRetirementGrantPeriodEntity extends BaseEntity<SpecialRetire
   @Description('Chave do documento CNIS associado à geração do período.')
   public readonly cnisDocument: string | null;
 
+  @Description('Indicação de tratamento de competências abaixo do mínimo.')
+  public readonly belowTheMinimum: SpecialRetirementGrantPeriodBelowTheMinimumEnum | null;
+
+  @Description('Indicação de tratamento da data de saída do vínculo.')
+  public readonly leaveDate: SpecialRetirementGrantPeriodLeaveDateEnum | null;
+
   @Description('Concessão de aposentadoria especial associada ao período.')
   public readonly specialRetirementGrant: SpecialRetirementGrantEntity;
 
@@ -58,6 +66,8 @@ export class SpecialRetirementGrantPeriodEntity extends BaseEntity<SpecialRetire
     this.shouldConsiderLastRemunerationAsExitDate =
       props.shouldConsiderLastRemunerationAsExitDate;
     this.cnisDocument = props.cnisDocument ?? null;
+    this.belowTheMinimum = props.belowTheMinimum ?? null;
+    this.leaveDate = props.leaveDate ?? null;
     this.specialRetirementGrant = props.specialRetirementGrant;
   }
 }

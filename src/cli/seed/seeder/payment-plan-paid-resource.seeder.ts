@@ -370,6 +370,15 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise simplificada da concessão de aposentadoria especial com IA. Resume elegibilidade, principais pendências e próximos passos recomendados, baseada em CNIS e PPPs.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('3d6a2e4f-7c2b-4a6e-8f5d-2b1c0e9a7d3f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.PERIOD_NO_END_DATE_DOCUMENT_ANALYSIS,
+      creditCost: 2,
+      title: 'ANÁLISE DE DOCUMENTO DE PERÍODO SEM DATA FIM',
+      description:
+        'Análise de documento de período sem data fim com IA. Com base no arquivo enviado, a IA identifica a data de encerramento do vínculo ou período e elabora observação técnica detalhada em markdown com os elementos relevantes encontrados.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('4e9d2c1b-6a7f-4d8e-9b3c-1f2a3d4e5b6c'),
       resource:
         PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_REJECTION_COMPLETE_ANALYSIS,
