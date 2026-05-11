@@ -10,6 +10,9 @@ export class GetRetirementPermanentDisabilityRevisionResultQueryResult extends B
   public readonly retirementPermanentDisabilityRevisionCompleteAnalysis!:
     | string
     | null;
+  public readonly retirementPermanentDisabilityRevisionCompleteAnalysisDownload!:
+    | string
+    | null;
   public readonly retirementPermanentDisabilityRevisionSimplifiedAnalysis!:
     | string
     | null;

@@ -30,6 +30,8 @@ export class GetRetirementPermanentDisabilityRevisionResultQueryResultAutoMapper
           source.retirementPermanentDisabilityRevisionFirstAnalysis,
         retirementPermanentDisabilityRevisionCompleteAnalysis:
           source.retirementPermanentDisabilityRevisionCompleteAnalysis,
+        retirementPermanentDisabilityRevisionCompleteAnalysisDownload:
+          source.retirementPermanentDisabilityRevisionCompleteAnalysisDownload,
         retirementPermanentDisabilityRevisionSimplifiedAnalysis:
           source.retirementPermanentDisabilityRevisionSimplifiedAnalysis,
         createdAt: source.createdAt,
@@ -58,6 +60,8 @@ export class GetRetirementPermanentDisabilityRevisionResultQueryResultAutoMapper
           source.retirementPermanentDisabilityRevisionFirstAnalysis,
         retirementPermanentDisabilityRevisionCompleteAnalysis:
           source.retirementPermanentDisabilityRevisionCompleteAnalysis,
+        retirementPermanentDisabilityRevisionCompleteAnalysisDownload:
+          source.retirementPermanentDisabilityRevisionCompleteAnalysisDownload,
         retirementPermanentDisabilityRevisionSimplifiedAnalysis:
           source.retirementPermanentDisabilityRevisionSimplifiedAnalysis,
         createdAt: source.createdAt,

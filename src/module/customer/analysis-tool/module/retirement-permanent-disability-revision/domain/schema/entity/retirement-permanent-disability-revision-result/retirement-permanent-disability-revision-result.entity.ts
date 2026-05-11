@@ -10,6 +10,9 @@ export class RetirementPermanentDisabilityRevisionResultEntity extends BaseEntit
   public readonly retirementPermanentDisabilityRevisionCompleteAnalysis:
     | string
     | null;
+  public readonly retirementPermanentDisabilityRevisionCompleteAnalysisDownload:
+    | string
+    | null;
   public readonly retirementPermanentDisabilityRevisionSimplifiedAnalysis:
     | string
     | null;
@@ -26,6 +29,9 @@ export class RetirementPermanentDisabilityRevisionResultEntity extends BaseEntit
       props.retirementPermanentDisabilityRevisionFirstAnalysis ?? null;
     this.retirementPermanentDisabilityRevisionCompleteAnalysis =
       props.retirementPermanentDisabilityRevisionCompleteAnalysis ?? null;
+    this.retirementPermanentDisabilityRevisionCompleteAnalysisDownload =
+      props.retirementPermanentDisabilityRevisionCompleteAnalysisDownload ??
+      null;
     this.retirementPermanentDisabilityRevisionSimplifiedAnalysis =
       props.retirementPermanentDisabilityRevisionSimplifiedAnalysis ?? null;
   }

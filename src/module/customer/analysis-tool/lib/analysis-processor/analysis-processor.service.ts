@@ -3043,6 +3043,11 @@ Análise processada do CNIS:
       GenerateResponseInputModel.build({
         systemInstruction,
         promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getRetirementPermanentDisabilityRevisionCompleteAnalysisJsonSchema(),
+        }),
       }),
     );
   }
@@ -3059,7 +3064,7 @@ Análise processada do CNIS:
     );
   }
 
-    public async getRetirementPermanentDisabilityRevisionFirstAnalysis(
+  public async getRetirementPermanentDisabilityRevisionFirstAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
     files: Buffer[],
@@ -3082,8 +3087,10 @@ ${cnisAnalysisJson}
         promptFiles: files,
         responseConfig: asJson
           ? ResponseConfigInputModel.build({
-              responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
-              jsonSchema: this.getRetirementPermanentDisabilityRevisionFirstAnalysisJsonSchema(),
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema:
+                this.getRetirementPermanentDisabilityRevisionFirstAnalysisJsonSchema(),
             })
           : null,
       }),
@@ -3197,7 +3204,6 @@ ${cnisAnalysisJson}
       ],
     };
   }
-
 
   private getSurvivorPensionAnalysisResultJsonSchema(): object {
     return {
@@ -9617,6 +9623,142 @@ ${cnisAnalysisJson}
         'estimatedValueClaim',
         'analysisResult',
         'completeAnalysisDownload',
+      ],
+    };
+  }
+
+  private getRetirementPermanentDisabilityRevisionCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        benefitReviewEligible: {
+          type: 'string',
+          description: 'Indica se o cliente possui direito à revisão.',
+        },
+        benefitReviewStatusMessage: {
+          type: 'string',
+          description: 'Mensagem principal exibida no topo.',
+        },
+        benefitReviewSummary: {
+          type: 'string',
+          description: 'Resumo da conclusão da análise.',
+        },
+        benefitReviewAlertType: {
+          type: 'string',
+          description: 'Tipo visual do alerta da interface.',
+        },
+        introductoryText: {
+          type: 'string',
+          description: 'Texto introdutório/contextual.',
+        },
+        informationBoxType: {
+          type: 'string',
+          description: 'Tipo do box de informação.',
+        },
+        reviewTheses: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              thesisName: {
+                type: 'string',
+                description: 'Nome da tese revisional.',
+              },
+              thesisDescription: {
+                type: 'string',
+                description: 'Descrição detalhada da tese.',
+              },
+              thesisApplicable: {
+                type: 'string',
+                description: 'Indica se a tese é aplicável.',
+              },
+            },
+            required: ['thesisName', 'thesisDescription', 'thesisApplicable'],
+          },
+        },
+        benefitType: {
+          type: 'string',
+          description: 'Tipo do benefício analisado.',
+        },
+        reviewPossible: {
+          type: 'string',
+          description: 'Indica se existe possibilidade de revisão.',
+        },
+        reviewTypes: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              reviewTypeName: {
+                type: 'string',
+                description: 'Nome do tipo de revisão.',
+              },
+              reviewTypeStatus: {
+                type: 'string',
+                description: 'Status da revisão.',
+              },
+            },
+            required: ['reviewTypeName', 'reviewTypeStatus'],
+          },
+        },
+        originalRMI: {
+          type: 'string',
+          description: 'Valor original da RMI.',
+        },
+        originalRMA: {
+          type: 'string',
+          description: 'Valor original da RMA.',
+        },
+        revisedRMI: {
+          type: 'string',
+          description: 'Valor revisado da RMI.',
+        },
+        revisedRMA: {
+          type: 'string',
+          description: 'Valor revisado da RMA.',
+        },
+        estimatedCaseValue: {
+          type: 'string',
+          description: 'Valor estimado da causa.',
+        },
+        detailedAnalysisText: {
+          type: 'string',
+          description: 'Texto completo da análise detalhada.',
+        },
+        analysisResultsText: {
+          type: 'string',
+          description: 'Resultado final da análise.',
+        },
+        analysisResultType: {
+          type: 'string',
+          description: 'Tipo do resultado final.',
+        },
+        downloadContent: {
+          type: 'string',
+          description:
+            'Conteúdo completo da análise em Markdown para geração do download.',
+        },
+      },
+      required: [
+        'benefitReviewEligible',
+        'benefitReviewStatusMessage',
+        'benefitReviewSummary',
+        'benefitReviewAlertType',
+        'introductoryText',
+        'informationBoxType',
+        'reviewTheses',
+        'benefitType',
+        'reviewPossible',
+        'reviewTypes',
+        'originalRMI',
+        'originalRMA',
+        'revisedRMI',
+        'revisedRMA',
+        'estimatedCaseValue',
+        'detailedAnalysisText',
+        'analysisResultsText',
+        'analysisResultType',
+        'downloadContent',
       ],
     };
   }

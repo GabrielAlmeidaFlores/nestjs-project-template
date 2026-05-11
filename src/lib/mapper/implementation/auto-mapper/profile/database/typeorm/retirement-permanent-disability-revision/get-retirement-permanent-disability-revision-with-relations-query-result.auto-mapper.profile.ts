@@ -70,6 +70,9 @@ export class GetRetirementPermanentDisabilityRevisionWithRelationsQueryResultAut
       return GetRetirementPermanentDisabilityRevisionWithRelationsQueryResult.build(
         {
           id: new RetirementPermanentDisabilityRevisionId(source.id),
+          analysisName: source.analysisName,
+          category: source.category,
+          myInssPassword: source.myInssPassword,
           result,
           benefit,
           legalProceeding,

@@ -12,7 +12,9 @@ import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-pr
 import { CnisDocumentIsNotValidError } from '@module/customer/analysis-tool/module/cnis-fast-analysis/error/cnis-document-is-not-valid.error';
 import { RetirementPermanentDisabilityRevisionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision/query/retirement-permanent-disability-revision.query.repository.gateway';
 import { RetirementPermanentDisabilityRevisionConcessionLetterBreakdownCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-concession-letter-breakdown/command/retirement-permanent-disability-revision-concession-letter-breakdown.command.repository.gateway';
+import { RetirementPermanentDisabilityRevisionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision/command/retirement-permanent-disability-revision.command.repository.gateway';
 import { RetirementPermanentDisabilityRevisionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-result/command/retirement-permanent-disability-revision-result.command.repository.gateway';
+import { RetirementPermanentDisabilityRevisionEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision/retirement-permanent-disability-revision.entity';
 import { RetirementPermanentDisabilityRevisionId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision/value-object/retirement-permanent-disability-revision-id.value-object';
 import { RetirementPermanentDisabilityRevisionConcessionLetterBreakdownEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-concession-letter-breakdown/retirement-permanent-disability-revision-concession-letter-breakdown.entity';
 import { RetirementPermanentDisabilityRevisionDocumentTypeEnum } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-document/enum/retirement-permanent-disability-revision-document-type.enum';
@@ -60,6 +62,8 @@ export class CreateRetirementPermanentDisabilityRevisionFirstAnalysisUseCase {
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(RetirementPermanentDisabilityRevisionQueryRepositoryGateway)
     private readonly retirementPermanentDisabilityRevisionQueryRepositoryGateway: RetirementPermanentDisabilityRevisionQueryRepositoryGateway,
+    @Inject(RetirementPermanentDisabilityRevisionCommandRepositoryGateway)
+    private readonly retirementPermanentDisabilityRevisionCommandRepositoryGateway: RetirementPermanentDisabilityRevisionCommandRepositoryGateway,
     @Inject(RetirementPermanentDisabilityRevisionResultCommandRepositoryGateway)
     private readonly retirementPermanentDisabilityRevisionResultCommandRepositoryGateway: RetirementPermanentDisabilityRevisionResultCommandRepositoryGateway,
     @Inject(
@@ -184,6 +188,9 @@ export class CreateRetirementPermanentDisabilityRevisionFirstAnalysisUseCase {
         retirementPermanentDisabilityRevisionCompleteAnalysis:
           existingResult?.retirementPermanentDisabilityRevisionCompleteAnalysis ??
           null,
+        retirementPermanentDisabilityRevisionCompleteAnalysisDownload:
+          existingResult?.retirementPermanentDisabilityRevisionCompleteAnalysisDownload ??
+          null,
         retirementPermanentDisabilityRevisionSimplifiedAnalysis:
           existingResult?.retirementPermanentDisabilityRevisionSimplifiedAnalysis ??
           null,
@@ -214,11 +221,26 @@ export class CreateRetirementPermanentDisabilityRevisionFirstAnalysisUseCase {
       ),
     );
 
+    const updateRevisionTransaction =
+      existingResult === null
+        ? this.retirementPermanentDisabilityRevisionCommandRepositoryGateway.updateRetirementPermanentDisabilityRevision(
+            retirementPermanentDisabilityRevisionId,
+            new RetirementPermanentDisabilityRevisionEntity({
+              id: retirementPermanentDisabilityRevisionId,
+              analysisName: analysisQueryResult.analysisName,
+              category: analysisQueryResult.category,
+              myInssPassword: analysisQueryResult.myInssPassword,
+              retirementPermanentDisabilityRevisionResultId: resultId,
+            }),
+          )
+        : null;
+
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       deleteBreakdownTransaction,
       consumeCreditTransaction,
       resultTransaction,
       ...createBreakdownTransactions,
+      ...(updateRevisionTransaction !== null ? [updateRevisionTransaction] : []),
     ]);
 
     await transaction.commit();

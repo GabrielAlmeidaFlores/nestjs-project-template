@@ -20,6 +20,15 @@ export class RetirementPermanentDisabilityRevisionResultTypeormEntity extends Ba
   public retirementPermanentDisabilityRevisionCompleteAnalysis: string | null;
 
   @Column({
+    name: 'complete_analysis_download',
+    type: 'longtext',
+    nullable: true,
+  })
+  public retirementPermanentDisabilityRevisionCompleteAnalysisDownload:
+    | string
+    | null;
+
+  @Column({
     name: 'retirement_permanent_disability_revision_simplified_analysis',
     type: 'text',
     nullable: true,

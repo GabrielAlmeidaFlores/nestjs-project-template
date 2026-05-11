@@ -9,6 +9,7 @@ import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { RetirementPermanentDisabilityRevisionConcessionLetterBreakdownCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-concession-letter-breakdown/command/retirement-permanent-disability-revision-concession-letter-breakdown.command.repository.gateway';
 import { RetirementPermanentDisabilityRevisionId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision/value-object/retirement-permanent-disability-revision-id.value-object';
 import { RetirementPermanentDisabilityRevisionConcessionLetterBreakdownEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-concession-letter-breakdown/retirement-permanent-disability-revision-concession-letter-breakdown.entity';
+import { RetirementPermanentDisabilityRevisionConcessionLetterBreakdownId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-concession-letter-breakdown/value-object/retirement-permanent-disability-revision-concession-letter-breakdown-id/retirement-permanent-disability-revision-concession-letter-breakdown-id.value-object';
 
 @Injectable()
 export class RetirementPermanentDisabilityRevisionConcessionLetterBreakdownTypeormCommandRepository
@@ -39,6 +40,19 @@ export class RetirementPermanentDisabilityRevisionConcessionLetterBreakdownTypeo
     );
 
     return this.create(mappedData);
+  }
+
+  public updateRetirementPermanentDisabilityRevisionConcessionLetterBreakdown(
+    id: RetirementPermanentDisabilityRevisionConcessionLetterBreakdownId,
+    entity: RetirementPermanentDisabilityRevisionConcessionLetterBreakdownEntity,
+  ): TransactionType {
+    const mappedData = this.mapperGateway.map(
+      entity,
+      RetirementPermanentDisabilityRevisionConcessionLetterBreakdownEntity,
+      RetirementPermanentDisabilityRevisionConcessionLetterBreakdownTypeormEntity,
+    );
+
+    return this.update(id.toString(), mappedData);
   }
 
   public deleteByRetirementPermanentDisabilityRevisionId(
