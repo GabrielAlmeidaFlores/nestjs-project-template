@@ -48,12 +48,6 @@ export class RetirementPermanentDisabilityRejectionPeriodTypeormEntity extends B
   })
   public workType: RetirementPermanentDisabilityRejectionPeriodWorkTypeEnum;
 
-  @Column({ name: 'impact_months', type: 'int', nullable: true })
-  public impactMonths: number | null;
-
-  @Column({ name: 'grace_months', type: 'int', nullable: true })
-  public graceMonths: number | null;
-
   @Column({ name: 'is_pendency', type: 'boolean' })
   public isPendency: boolean;
 

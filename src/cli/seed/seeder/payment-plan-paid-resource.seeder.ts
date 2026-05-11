@@ -1661,7 +1661,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise do Perfil Profissiográfico Previdenciário (PPP) com IA para identificação e estruturação de períodos contributivos no contexto de indeferimento de aposentadoria da pessoa com deficiência. Extrai e organiza os dados do PPP em períodos prontos para inserção na análise, com categoria, status de deficiência, média de contribuição e origem do vínculo.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d'),
+      id: new PaymentPlanPaidResourceId('e2aff6fe-3f94-489a-a206-ed48a65b8d1b'),
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REJECTION_INSS_DECISION_ANALYSIS,
       creditCost: 5,

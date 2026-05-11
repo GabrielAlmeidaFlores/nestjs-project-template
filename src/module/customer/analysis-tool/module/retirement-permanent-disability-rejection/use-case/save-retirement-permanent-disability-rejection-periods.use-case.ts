@@ -105,8 +105,6 @@ export class SaveRetirementPermanentDisabilityRejectionPeriodsUseCase {
             startDate: periodDto.startDate,
             endDate: periodDto.endDate ?? null,
             workType: periodDto.workType,
-            impactMonths: periodDto.impactMonths ?? null,
-            graceMonths: periodDto.graceMonths ?? null,
             isPendency: periodDto.isPendency,
             competenceBelowTheMinimum: periodDto.competenceBelowTheMinimum,
             contributionAverage: periodDto.contributionAverage ?? null,

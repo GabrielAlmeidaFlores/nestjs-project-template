@@ -14,8 +14,6 @@ export interface RetirementPermanentDisabilityRejectionPeriodEntityPropsInterfac
   startDate: Date;
   endDate?: Date | null;
   workType: RetirementPermanentDisabilityRejectionPeriodWorkTypeEnum;
-  impactMonths?: number | null;
-  graceMonths?: number | null;
   isPendency: boolean;
   competenceBelowTheMinimum: boolean;
   contributionAverage?: DecimalValue | null;
