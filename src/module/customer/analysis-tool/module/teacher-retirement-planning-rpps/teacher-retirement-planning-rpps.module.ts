@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
 
-import { TeacherRetirementPlanningTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning/teacher-retirement-planning.typeorm.command.repository';
-import { TeacherRetirementPlanningTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning/teacher-retirement-planning.typeorm.query.repository';
-import { TeacherRetirementPlanningDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-document/teacher-retirement-planning-document.typeorm.command.repository';
-import { TeacherRetirementPlanningInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-inss-benefit/teacher-retirement-planning-inss-benefit.typeorm.command.repository';
-import { TeacherRetirementPlanningLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-legal-proceeding/teacher-retirement-planning-legal-proceeding.typeorm.command.repository';
-import { TeacherRetirementPlanningPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-period/teacher-retirement-planning-period.typeorm.command.repository';
-import { TeacherRetirementPlanningPeriodItemTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-period-item/teacher-retirement-planning-period-item.typeorm.command.repository';
-import { TeacherRetirementPlanningPeriodItemDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-period-item-document/teacher-retirement-planning-period-item-document.typeorm.command.repository';
-import { TeacherRetirementPlanningRemunerationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-remuneration/teacher-retirement-planning-remuneration.typeorm.command.repository';
-import { TeacherRetirementPlanningRemunerationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-remuneration/teacher-retirement-planning-remuneration.typeorm.query.repository';
-import { TeacherRetirementPlanningResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/teacher-retirement-planning-result/teacher-retirement-planning-result.typeorm.command.repository';
 import { DatabaseModule } from '@infra/database/database.module';
+import { TeacherRetirementPlanningCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/command/teacher-retirement-planning.command.repository.gateway';
+import { TeacherRetirementPlanningQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/query/teacher-retirement-planning.query.repository.gateway';
+import { TeacherRetirementPlanningDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-document/command/teacher-retirement-planning-document.command.repository.gateway';
+import { TeacherRetirementPlanningInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-inss-benefit/command/teacher-retirement-planning-inss-benefit.command.repository.gateway';
+import { TeacherRetirementPlanningLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-legal-proceeding/command/teacher-retirement-planning-legal-proceeding.command.repository.gateway';
+import { TeacherRetirementPlanningPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-period/command/teacher-retirement-planning-period.command.repository.gateway';
+import { TeacherRetirementPlanningPeriodItemCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-period-item/command/teacher-retirement-planning-period-item.command.repository.gateway';
+import { TeacherRetirementPlanningPeriodItemDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-period-item-document/command/teacher-retirement-planning-period-item-document.command.repository.gateway';
+import { TeacherRetirementPlanningRemunerationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-remuneration/command/teacher-retirement-planning-remuneration.command.repository.gateway';
+import { TeacherRetirementPlanningRemunerationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-remuneration/query/teacher-retirement-planning-remuneration.query.repository.gateway';
+import { TeacherRetirementPlanningResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-result/command/teacher-retirement-planning-result.command.repository.gateway';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
@@ -63,47 +63,47 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
   providers: [
     {
       provide: TeacherRetirementPlanningRppsCommandRepositoryGateway,
-      useClass: TeacherRetirementPlanningTypeormCommandRepository,
+      useExisting: TeacherRetirementPlanningCommandRepositoryGateway,
     },
     {
       provide: TeacherRetirementPlanningRppsQueryRepositoryGateway,
-      useClass: TeacherRetirementPlanningTypeormQueryRepository,
+      useExisting: TeacherRetirementPlanningQueryRepositoryGateway,
     },
     {
       provide: TeacherRetirementPlanningRppsDocumentCommandRepositoryGateway,
-      useClass: TeacherRetirementPlanningDocumentTypeormCommandRepository,
+      useExisting: TeacherRetirementPlanningDocumentCommandRepositoryGateway,
     },
     {
       provide: TeacherRetirementPlanningRppsInssBenefitCommandRepositoryGateway,
-      useClass: TeacherRetirementPlanningInssBenefitTypeormCommandRepository,
+      useExisting: TeacherRetirementPlanningInssBenefitCommandRepositoryGateway,
     },
     {
       provide: TeacherRetirementPlanningRppsLegalProceedingCommandRepositoryGateway,
-      useClass: TeacherRetirementPlanningLegalProceedingTypeormCommandRepository,
+      useExisting: TeacherRetirementPlanningLegalProceedingCommandRepositoryGateway,
     },
     {
       provide: TeacherRetirementPlanningRppsPeriodCommandRepositoryGateway,
-      useClass: TeacherRetirementPlanningPeriodTypeormCommandRepository,
+      useExisting: TeacherRetirementPlanningPeriodCommandRepositoryGateway,
     },
     {
       provide: TeacherRetirementPlanningRppsPeriodItemCommandRepositoryGateway,
-      useClass: TeacherRetirementPlanningPeriodItemTypeormCommandRepository,
+      useExisting: TeacherRetirementPlanningPeriodItemCommandRepositoryGateway,
     },
     {
       provide: TeacherRetirementPlanningRppsPeriodItemDocumentCommandRepositoryGateway,
-      useClass: TeacherRetirementPlanningPeriodItemDocumentTypeormCommandRepository,
+      useExisting: TeacherRetirementPlanningPeriodItemDocumentCommandRepositoryGateway,
     },
     {
       provide: TeacherRetirementPlanningRppsRemunerationCommandRepositoryGateway,
-      useClass: TeacherRetirementPlanningRemunerationTypeormCommandRepository,
+      useExisting: TeacherRetirementPlanningRemunerationCommandRepositoryGateway,
     },
     {
       provide: TeacherRetirementPlanningRppsRemunerationQueryRepositoryGateway,
-      useClass: TeacherRetirementPlanningRemunerationTypeormQueryRepository,
+      useExisting: TeacherRetirementPlanningRemunerationQueryRepositoryGateway,
     },
     {
       provide: TeacherRetirementPlanningRppsResultCommandRepositoryGateway,
-      useClass: TeacherRetirementPlanningResultTypeormCommandRepository,
+      useExisting: TeacherRetirementPlanningResultCommandRepositoryGateway,
     },
     CreateTeacherRetirementPlanningRppsUseCase,
     UpdateTeacherRetirementPlanningRppsUseCase,
