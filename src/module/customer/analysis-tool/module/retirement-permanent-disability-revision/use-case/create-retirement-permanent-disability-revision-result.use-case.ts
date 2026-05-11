@@ -13,6 +13,7 @@ import { AnalysisActivityActionEnum } from '@module/customer/analysis-tool/lib/a
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { RetirementPermanentDisabilityRevisionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision/command/retirement-permanent-disability-revision.command.repository.gateway';
+import { GetRetirementPermanentDisabilityRevisionWithRelationsQueryResult } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision/query/result/get-retirement-permanent-disability-revision-with-relations.query.result';
 import { RetirementPermanentDisabilityRevisionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision/query/retirement-permanent-disability-revision.query.repository.gateway';
 import { GetRetirementPermanentDisabilityRevisionDocumentQueryResult } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-document/query/result/get-retirement-permanent-disability-revision-document.query.result';
 import { RetirementPermanentDisabilityRevisionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-result/command/retirement-permanent-disability-revision-result.command.repository.gateway';
@@ -21,7 +22,9 @@ import { RetirementPermanentDisabilityRevisionId } from '@module/customer/analys
 import { RetirementPermanentDisabilityRevisionResultEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-result/retirement-permanent-disability-revision-result.entity';
 import { RetirementPermanentDisabilityRevisionResultId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-result/value-object/retirement-permanent-disability-revision-result-id/retirement-permanent-disability-revision-result-id.value-object';
 import { CreateRetirementPermanentDisabilityRevisionResultResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/response/create-retirement-permanent-disability-revision-result.response.dto';
+import { InvalidRetirementPermanentDisabilityRevisionCompleteAnalysisJsonError } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/error/invalid-retirement-permanent-disability-revision-complete-analysis-json.error';
 import { RetirementPermanentDisabilityRevisionNotFoundError } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/error/retirement-permanent-disability-revision-not-found.error';
+import { BenefitReviewAnalysisInterface } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/interface/benefit-review-analysis.interface';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
@@ -116,11 +119,18 @@ export class CreateRetirementPermanentDisabilityRevisionResultUseCase {
       'utf-8',
     );
 
-    const completeAnalysis =
+    const supplementaryDataBuffer =
+      this.buildSupplementaryDataBuffer(analysisQueryResult);
+
+    const completeAnalysisRaw =
       await this.analysisProcessorGateway.getRetirementPermanentDisabilityRevisionCompleteAnalysis(
         promptResponse.prompt,
-        [...documentBuffers, clientDataBuffer],
+        [...documentBuffers, clientDataBuffer, supplementaryDataBuffer],
       );
+
+    const parsedAnalysis = this.parseCompleteAnalysis(completeAnalysisRaw);
+
+    const completeAnalysisDownload = this.extractDownloadText(parsedAnalysis);
 
     const existingResult = analysisQueryResult.result;
 
@@ -134,7 +144,10 @@ export class CreateRetirementPermanentDisabilityRevisionResultUseCase {
         retirementPermanentDisabilityRevisionFirstAnalysis:
           existingResult?.retirementPermanentDisabilityRevisionFirstAnalysis ??
           null,
-        retirementPermanentDisabilityRevisionCompleteAnalysis: completeAnalysis,
+        retirementPermanentDisabilityRevisionCompleteAnalysis:
+          completeAnalysisRaw,
+        retirementPermanentDisabilityRevisionCompleteAnalysisDownload:
+          completeAnalysisDownload,
         retirementPermanentDisabilityRevisionSimplifiedAnalysis:
           existingResult?.retirementPermanentDisabilityRevisionSimplifiedAnalysis ??
           null,
@@ -142,6 +155,9 @@ export class CreateRetirementPermanentDisabilityRevisionResultUseCase {
 
     const revision = new RetirementPermanentDisabilityRevisionEntity({
       id: analysisQueryResult.id,
+      analysisName: analysisQueryResult.analysisName,
+      category: analysisQueryResult.category,
+      myInssPassword: analysisQueryResult.myInssPassword,
       retirementPermanentDisabilityRevisionResultId: revisionResult.id,
     });
 
@@ -245,9 +261,57 @@ export class CreateRetirementPermanentDisabilityRevisionResultUseCase {
         clientFederalDocument: client.federalDocument,
       }),
       ...(client.birthDate !== null && { clientBirthDate: client.birthDate }),
-      ...(completeAnalysis !== null && {
-        retirementPermanentDisabilityRevisionCompleteAnalysis: completeAnalysis,
+      ...(completeAnalysisRaw !== null && {
+        retirementPermanentDisabilityRevisionCompleteAnalysis:
+          completeAnalysisRaw,
       }),
     });
+  }
+
+  private buildSupplementaryDataBuffer(
+    analysisQueryResult: GetRetirementPermanentDisabilityRevisionWithRelationsQueryResult,
+  ): Buffer {
+    const supplementaryData = {
+      inssBenefits: analysisQueryResult.benefit,
+      legalProceedings: analysisQueryResult.legalProceeding,
+      workPeriods:
+        analysisQueryResult.retirementPermanentDisabilityRevisionWorkPeriods,
+      firstAnalysis:
+        analysisQueryResult.result
+          ?.retirementPermanentDisabilityRevisionFirstAnalysis ?? null,
+      concessionLetterBreakdown: analysisQueryResult.concessionLetterBreakdown,
+    };
+
+    return Buffer.from(JSON.stringify(supplementaryData, null, 2), 'utf-8');
+  }
+
+  private parseCompleteAnalysis(
+    raw: string | null,
+  ): BenefitReviewAnalysisInterface | null {
+    if (raw === null) {
+      return null;
+    }
+
+    try {
+      let cleaned = raw;
+
+      if (cleaned.startsWith('"') && cleaned.endsWith('"')) {
+        cleaned = JSON.parse(cleaned) as string;
+      }
+
+      return JSON.parse(cleaned) as BenefitReviewAnalysisInterface;
+    } catch {
+      throw new InvalidRetirementPermanentDisabilityRevisionCompleteAnalysisJsonError();
+    }
+  }
+
+  private extractDownloadText(
+    parsed: BenefitReviewAnalysisInterface | null,
+  ): string | null {
+    if (parsed === null) {
+      return null;
+    }
+
+    return parsed.downloadContent || null;
   }
 }

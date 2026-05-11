@@ -9,7 +9,6 @@ import { RetirementPermanentDisabilityRevisionQueryRepositoryGateway } from '@mo
 import { RetirementPermanentDisabilityRevisionId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision/value-object/retirement-permanent-disability-revision-id.value-object';
 import { RetirementPermanentDisabilityRevisionCompleteAnalysisDownloadNotFoundError } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/error/retirement-permanent-disability-revision-complete-analysis-download-not-found.error';
 import { RetirementPermanentDisabilityRevisionNotFoundError } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/error/retirement-permanent-disability-revision-not-found.error';
-import { RetirementPermanentDisabilityRevisionResultInterface } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/interface/retirement-permanent-disability-revision-result.interface';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -58,50 +57,21 @@ export class DownloadRetirementPermanentDisabilityRevisionCompleteAnalysisUseCas
         RetirementPermanentDisabilityRevisionNotFoundError,
       );
 
-    const completeAnalysisJson =
+    const downloadText =
       analysisQueryResult.result
-        ?.retirementPermanentDisabilityRevisionCompleteAnalysis ?? null;
+        ?.retirementPermanentDisabilityRevisionCompleteAnalysisDownload ?? null;
 
-    if (completeAnalysisJson === null) {
-      throw new RetirementPermanentDisabilityRevisionCompleteAnalysisDownloadNotFoundError();
-    }
-
-    const analysisDescription =
-      this.extractAnalysisDescription(completeAnalysisJson);
-
-    if (analysisDescription === null) {
+    if (downloadText === null) {
       throw new RetirementPermanentDisabilityRevisionCompleteAnalysisDownloadNotFoundError();
     }
 
     const htmlContent =
-      await this.exportDocumentGateway.convertMarkdownToHtml(
-        analysisDescription,
-      );
+      await this.exportDocumentGateway.convertMarkdownToHtml(downloadText);
 
     return this.exportDocumentGateway.downloadFileAsStreamable(
       htmlContent,
       format,
       'analise_completa_revisao_aposentadoria_invalidez_permanente',
     );
-  }
-
-  private extractAnalysisDescription(raw: string): string | null {
-    try {
-      let cleanedJson = raw;
-
-      if (cleanedJson.startsWith('"') && cleanedJson.endsWith('"')) {
-        cleanedJson = JSON.parse(cleanedJson) as string;
-      }
-
-      const parsed = JSON.parse(
-        cleanedJson,
-      ) as RetirementPermanentDisabilityRevisionResultInterface;
-
-      return typeof parsed.completeAnalysisDownload === 'string'
-        ? parsed.completeAnalysisDownload
-        : null;
-    } catch {
-      return null;
-    }
   }
 }
