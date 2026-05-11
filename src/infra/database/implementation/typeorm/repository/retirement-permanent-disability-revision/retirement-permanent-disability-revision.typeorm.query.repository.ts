@@ -42,6 +42,7 @@ export class RetirementPermanentDisabilityRevisionTypeormQueryRepository
           retirementPermanentDisabilityRevisionWorkPeriods: {
             retirementPermanentDisabilityRevisionWorkPeriodsEarningsHistory: true,
           },
+          retirementPermanentDisabilityRevisionConcessionLetterBreakdown: true,
         },
       },
       err,

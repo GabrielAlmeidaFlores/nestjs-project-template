@@ -14,7 +14,6 @@ import { RetirementPermanentDisabilityRevisionResultEntity } from '@module/custo
 import { RetirementPermanentDisabilityRevisionResultId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-result/value-object/retirement-permanent-disability-revision-result-id/retirement-permanent-disability-revision-result-id.value-object';
 import { RetirementPermanentDisabilityRevisionDoesNotContainSimplifiedAnalysisError } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/error/retirement-permanent-disability-revision-does-not-contain-simplified-analysis.error';
 import { RetirementPermanentDisabilityRevisionNotFoundError } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/error/retirement-permanent-disability-revision-not-found.error';
-
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
@@ -150,10 +149,9 @@ export class DownloadRetirementPermanentDisabilityRevisionSimplifiedAnalysisUseC
       throw new RetirementPermanentDisabilityRevisionDoesNotContainSimplifiedAnalysisError();
     }
 
-    const htmlContent =
-      await this.exportDocumentGateway.convertMarkdownToHtml(
-        simplifiedAnalysisJson,
-      );
+    const htmlContent = await this.exportDocumentGateway.convertMarkdownToHtml(
+      simplifiedAnalysisJson,
+    );
 
     return this.exportDocumentGateway.downloadFileAsStreamable(
       htmlContent,
@@ -161,5 +159,4 @@ export class DownloadRetirementPermanentDisabilityRevisionSimplifiedAnalysisUseC
       'analise_simplificada_revisao_aposentadoria_invalidez_permanente',
     );
   }
-
 }

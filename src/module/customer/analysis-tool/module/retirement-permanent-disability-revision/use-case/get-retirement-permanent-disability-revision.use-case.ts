@@ -12,6 +12,8 @@ import {
   GetRetirementPermanentDisabilityRevisionResultResponseDto,
   GetRetirementPermanentDisabilityRevisionResponsibleResponseDto,
   GetRetirementPermanentDisabilityRevisionDocumentResponseDto,
+  GetRetirementPermanentDisabilityRevisionWorkPeriodResponseDto,
+  GetRetirementPermanentDisabilityRevisionConcessionLetterBreakdownResponseDto,
 } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/response/get-retirement-permanent-disability-revision.response.dto';
 import { RetirementPermanentDisabilityRevisionNotFoundError } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/error/retirement-permanent-disability-revision-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -67,6 +69,15 @@ export class GetRetirementPermanentDisabilityRevisionUseCase {
       status: analysisToolRecordQueryResult.status,
       createdAt: analysisToolRecordQueryResult.createdAt,
       updatedAt: analysisToolRecordQueryResult.updatedAt,
+      ...(analysisQueryResult.analysisName !== null && {
+        analysisName: analysisQueryResult.analysisName,
+      }),
+      ...(analysisQueryResult.category !== null && {
+        category: analysisQueryResult.category,
+      }),
+      ...(analysisQueryResult.myInssPassword !== null && {
+        myInssPassword: analysisQueryResult.myInssPassword,
+      }),
       analysisToolClient:
         GetRetirementPermanentDisabilityRevisionClientResponseDto.build({
           ...analysisToolRecordQueryResult.analysisToolClient,
@@ -81,11 +92,65 @@ export class GetRetirementPermanentDisabilityRevisionUseCase {
           (b) => b.inssBenefitNumber,
         ),
       }),
+      ...(analysisQueryResult.retirementPermanentDisabilityRevisionWorkPeriods
+        .length > 0 && {
+        workPeriods:
+          analysisQueryResult.retirementPermanentDisabilityRevisionWorkPeriods.map(
+            (wp) =>
+              GetRetirementPermanentDisabilityRevisionWorkPeriodResponseDto.build(
+                {
+                  retirementPermanentDisabilityRevisionWorkPeriodsId:
+                    wp.retirementPermanentDisabilityRevisionWorkPeriodsId,
+                  bondOrigin: wp.bondOrigin,
+                  startDate: wp.startDate,
+                  ...(wp.endDate !== null && { endDate: wp.endDate }),
+                  category: wp.category,
+                  competenceBelowTheMinimum: wp.competenceBelowTheMinimum,
+                  ...(wp.pendencyReason !== null && {
+                    pendencyReason: wp.pendencyReason,
+                  }),
+                  ...(wp.periodConsideration !== null && {
+                    periodConsideration: wp.periodConsideration,
+                  }),
+                  ...(wp.contributionAverage !== null && {
+                    contributionAverage: wp.contributionAverage,
+                  }),
+                  status: wp.status,
+                  gracePeriod: wp.gracePeriod,
+                  createdAt: wp.createdAt,
+                  updatedAt: wp.updatedAt,
+                },
+              ),
+          ),
+      }),
+      ...(analysisQueryResult.concessionLetterBreakdown.length > 0 && {
+        concessionLetterBreakdown:
+          analysisQueryResult.concessionLetterBreakdown.map((clb) =>
+            GetRetirementPermanentDisabilityRevisionConcessionLetterBreakdownResponseDto.build(
+              {
+                retirementPermanentDisabilityRevisionConcessionLetterBreakdownId:
+                  clb.id,
+                competence: clb.competence,
+                amount: clb.amount,
+                reasonNotConsidered: clb.reasonNotConsidered,
+                action: clb.action,
+                createdAt: clb.createdAt,
+                updatedAt: clb.updatedAt,
+              },
+            ),
+          ),
+      }),
       ...(analysisQueryResult.result !== null && {
         retirementPermanentDisabilityRevisionResult:
           GetRetirementPermanentDisabilityRevisionResultResponseDto.build({
             createdAt: analysisQueryResult.result.createdAt,
             updatedAt: analysisQueryResult.result.updatedAt,
+            ...(analysisQueryResult.result
+              .retirementPermanentDisabilityRevisionFirstAnalysis !== null && {
+              retirementPermanentDisabilityRevisionFirstAnalysis:
+                analysisQueryResult.result
+                  .retirementPermanentDisabilityRevisionFirstAnalysis,
+            }),
             ...(analysisQueryResult.result
               .retirementPermanentDisabilityRevisionCompleteAnalysis !==
               null && {
