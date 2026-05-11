@@ -2,6 +2,7 @@ import { Entity, JoinColumn, OneToOne, OneToMany, Column } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
+import { RetirementPermanentDisabilityRevisionConcessionLetterBreakdownTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-concession-letter-breakdown.typeorm.entity';
 import { RetirementPermanentDisabilityRevisionDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-document.typeorm.entity';
 import { RetirementPermanentDisabilityRevisionInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-inss-benefit.typeorm.entity';
 import { RetirementPermanentDisabilityRevisionLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-legal-proceeding.typeorm.entity';
@@ -85,6 +86,15 @@ export class RetirementPermanentDisabilityRevisionTypeormEntity extends BaseType
   )
   public retirementPermanentDisabilityRevisionWorkPeriods?:
     | RetirementPermanentDisabilityRevisionWorkPeriodsTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () =>
+      RetirementPermanentDisabilityRevisionConcessionLetterBreakdownTypeormEntity,
+    (entity) => entity.retirementPermanentDisabilityRevision,
+  )
+  public retirementPermanentDisabilityRevisionConcessionLetterBreakdown?:
+    | RetirementPermanentDisabilityRevisionConcessionLetterBreakdownTypeormEntity[]
     | undefined;
 
   protected override readonly _type =

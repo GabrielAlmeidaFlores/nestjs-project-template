@@ -516,8 +516,7 @@ export class RetirementPermanentDisabilityRevisionController {
     tag: ['revisao-aposentadoria-invalidez-permanente'],
     successResponse: {
       statusCode: HttpStatus.NO_CONTENT,
-      description:
-        'Pendência do período trabalhado resolvida com sucesso.',
+      description: 'Pendência do período trabalhado resolvida com sucesso.',
     },
     guard: [AuthGuard, OrganizationSessionGuard],
   })
@@ -529,7 +528,9 @@ export class RetirementPermanentDisabilityRevisionController {
     _retirementPermanentDisabilityRevisionId: RetirementPermanentDisabilityRevisionId,
     @Param(
       'retirementPermanentDisabilityRevisionWorkPeriodsId',
-      new ParseValueObjectPipe(RetirementPermanentDisabilityRevisionWorkPeriodsId),
+      new ParseValueObjectPipe(
+        RetirementPermanentDisabilityRevisionWorkPeriodsId,
+      ),
     )
     retirementPermanentDisabilityRevisionWorkPeriodsId: RetirementPermanentDisabilityRevisionWorkPeriodsId,
     @Body()
