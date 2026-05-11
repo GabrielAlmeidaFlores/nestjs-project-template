@@ -14,13 +14,16 @@ import { RetirementPermanentDisabilityRevisionWorkPeriodsId } from '@module/cust
 @Injectable()
 export class RetirementPermanentDisabilityRevisionWorkPeriodsTypeormCommandRepository
   extends BaseTypeormCommandRepository<RetirementPermanentDisabilityRevisionWorkPeriodsTypeormEntity>
-  implements RetirementPermanentDisabilityRevisionWorkPeriodsCommandRepositoryGateway
+  implements
+    RetirementPermanentDisabilityRevisionWorkPeriodsCommandRepositoryGateway
 {
   protected readonly _type =
     RetirementPermanentDisabilityRevisionWorkPeriodsTypeormCommandRepository.name;
 
   public constructor(
-    @InjectRepository(RetirementPermanentDisabilityRevisionWorkPeriodsTypeormEntity)
+    @InjectRepository(
+      RetirementPermanentDisabilityRevisionWorkPeriodsTypeormEntity,
+    )
     repository: Repository<RetirementPermanentDisabilityRevisionWorkPeriodsTypeormEntity>,
     private readonly mapperGateway: MapperGateway,
   ) {
@@ -58,7 +61,9 @@ export class RetirementPermanentDisabilityRevisionWorkPeriodsTypeormCommandRepos
     return async (executor: unknown) => {
       const manager = executor as EntityManager;
       await manager
-        .getRepository(RetirementPermanentDisabilityRevisionWorkPeriodsTypeormEntity)
+        .getRepository(
+          RetirementPermanentDisabilityRevisionWorkPeriodsTypeormEntity,
+        )
         .softDelete({
           retirementPermanentDisabilityRevision: {
             id: retirementPermanentDisabilityRevisionId.toString(),

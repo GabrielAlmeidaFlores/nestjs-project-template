@@ -6,8 +6,7 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @RequestDto()
 export class UpdateRetirementPermanentDisabilityRevisionWorkPeriodsRequestDto extends BaseBuildableDtoObject {
   @RequestDtoObjectProperty(
-    () =>
-      CreateRetirementPermanentDisabilityRevisionWorkPeriodsItemRequestDto,
+    () => CreateRetirementPermanentDisabilityRevisionWorkPeriodsItemRequestDto,
     { isArray: true },
   )
   public workPeriods: CreateRetirementPermanentDisabilityRevisionWorkPeriodsItemRequestDto[];

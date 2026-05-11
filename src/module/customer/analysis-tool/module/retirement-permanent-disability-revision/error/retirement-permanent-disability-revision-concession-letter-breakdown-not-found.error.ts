@@ -5,8 +5,6 @@ export class RetirementPermanentDisabilityRevisionConcessionLetterBreakdownNotFo
     RetirementPermanentDisabilityRevisionConcessionLetterBreakdownNotFoundError.name;
 
   public constructor() {
-    super(
-      'Item do detalhamento da carta de concessão não encontrado.',
-    );
+    super('Item do detalhamento da carta de concessão não encontrado.');
   }
 }

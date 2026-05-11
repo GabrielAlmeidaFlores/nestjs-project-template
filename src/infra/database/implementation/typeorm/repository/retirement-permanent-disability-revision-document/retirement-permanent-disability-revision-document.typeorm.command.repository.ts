@@ -7,9 +7,9 @@ import { BaseTypeormCommandRepository } from '@infra/database/implementation/typ
 import { RetirementPermanentDisabilityRevisionDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-document.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { RetirementPermanentDisabilityRevisionDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-document/command/retirement-permanent-disability-revision-document.command.repository.gateway';
+import { RetirementPermanentDisabilityRevisionId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision/value-object/retirement-permanent-disability-revision-id.value-object';
 import { RetirementPermanentDisabilityRevisionDocumentTypeEnum } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-document/enum/retirement-permanent-disability-revision-document-type.enum';
 import { RetirementPermanentDisabilityRevisionDocumentEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-document/retirement-permanent-disability-revision-document.entity';
-import { RetirementPermanentDisabilityRevisionId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision/value-object/retirement-permanent-disability-revision-id.value-object';
 
 @Injectable()
 export class RetirementPermanentDisabilityRevisionDocumentTypeormCommandRepository
@@ -48,7 +48,9 @@ export class RetirementPermanentDisabilityRevisionDocumentTypeormCommandReposito
     return async (executor: unknown) => {
       const manager = executor as EntityManager;
       await manager
-        .getRepository(RetirementPermanentDisabilityRevisionDocumentTypeormEntity)
+        .getRepository(
+          RetirementPermanentDisabilityRevisionDocumentTypeormEntity,
+        )
         .softDelete({
           retirementPermanentDisabilityRevision: {
             id: retirementPermanentDisabilityRevisionId.toString(),

@@ -12,7 +12,8 @@ import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitEntity } 
 @Injectable()
 export class RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitTypeormCommandRepository
   extends BaseTypeormCommandRepository<RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitTypeormEntity>
-  implements RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitCommandRepositoryGateway
+  implements
+    RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitCommandRepositoryGateway
 {
   protected readonly _type =
     RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitTypeormCommandRepository.name;

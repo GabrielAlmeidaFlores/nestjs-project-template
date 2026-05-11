@@ -28,7 +28,9 @@ export class CreateRetirementPermanentDisabilityRevisionWorkPeriodsUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(RetirementPermanentDisabilityRevisionQueryRepositoryGateway)
     private readonly retirementPermanentDisabilityRevisionQueryRepositoryGateway: RetirementPermanentDisabilityRevisionQueryRepositoryGateway,
-    @Inject(RetirementPermanentDisabilityRevisionWorkPeriodsCommandRepositoryGateway)
+    @Inject(
+      RetirementPermanentDisabilityRevisionWorkPeriodsCommandRepositoryGateway,
+    )
     private readonly retirementPermanentDisabilityRevisionWorkPeriodsCommandRepositoryGateway: RetirementPermanentDisabilityRevisionWorkPeriodsCommandRepositoryGateway,
     @Inject(
       RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryCommandRepositoryGateway,

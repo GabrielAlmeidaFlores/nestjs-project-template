@@ -90,8 +90,7 @@ export class CreateRetirementPermanentDisabilityRevisionWorkPeriodsItemRequestDt
 @RequestDto()
 export class CreateRetirementPermanentDisabilityRevisionWorkPeriodsRequestDto extends BaseBuildableDtoObject {
   @RequestDtoObjectProperty(
-    () =>
-      CreateRetirementPermanentDisabilityRevisionWorkPeriodsItemRequestDto,
+    () => CreateRetirementPermanentDisabilityRevisionWorkPeriodsItemRequestDto,
     { isArray: true },
   )
   public workPeriods: CreateRetirementPermanentDisabilityRevisionWorkPeriodsItemRequestDto[];
