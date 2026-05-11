@@ -353,8 +353,6 @@ export class GetRetirementPermanentDisabilityRejectionWithRelationsQueryResultAu
       startDate: source.startDate,
       endDate: source.endDate,
       workType: source.workType,
-      impactMonths: source.impactMonths,
-      graceMonths: source.graceMonths,
       isPendency: source.isPendency,
       competenceBelowTheMinimum: source.competenceBelowTheMinimum,
       contributionAverage:

@@ -16,8 +16,6 @@ export class RetirementPermanentDisabilityRejectionPeriodEntity extends BaseEnti
   public readonly startDate: Date;
   public readonly endDate: Date | null;
   public readonly workType: RetirementPermanentDisabilityRejectionPeriodWorkTypeEnum;
-  public readonly impactMonths: number | null;
-  public readonly graceMonths: number | null;
   public readonly isPendency: boolean;
   public readonly competenceBelowTheMinimum: boolean;
   public readonly contributionAverage: DecimalValue | null;
@@ -41,8 +39,6 @@ export class RetirementPermanentDisabilityRejectionPeriodEntity extends BaseEnti
     this.startDate = props.startDate;
     this.endDate = props.endDate ?? null;
     this.workType = props.workType;
-    this.impactMonths = props.impactMonths ?? null;
-    this.graceMonths = props.graceMonths ?? null;
     this.isPendency = props.isPendency;
     this.competenceBelowTheMinimum = props.competenceBelowTheMinimum;
     this.contributionAverage = props.contributionAverage ?? null;

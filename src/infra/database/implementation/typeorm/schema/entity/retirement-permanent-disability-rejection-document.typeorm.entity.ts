@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { RetirementPermanentDisabilityRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection.typeorm.entity';
@@ -20,6 +20,7 @@ export class RetirementPermanentDisabilityRejectionDocumentTypeormEntity extends
     () => RetirementPermanentDisabilityRejectionTypeormEntity,
     (entity) => entity.retirementPermanentDisabilityRejectionDocument,
   )
+  @JoinColumn({ name: 'retirement_permanent_disability_rejection_id' })
   public retirementPermanentDisabilityRejection?: RetirementPermanentDisabilityRejectionTypeormEntity;
 
   protected override readonly _type =
