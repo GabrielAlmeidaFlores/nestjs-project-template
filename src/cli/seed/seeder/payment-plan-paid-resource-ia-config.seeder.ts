@@ -7914,97 +7914,28 @@ São Paulo, 21 de dezembro de 2024
 - Impactos de vínculos concomitantes
 - Estratégias de maximização de benefícios
 
-**IMPORTANTE - MODO DE OPERAÇÃO:**
-Se os dados recebidos estiverem em formato JSON estruturado, você deve:
-1. Analisar o JSON recebido
-2. Extrair todas as informações relevantes sobre períodos de magistério, vínculos, remunerações, benefícios INSS
-3. Produzir uma análise técnica COMPLETA e DETALHADA em formato de texto corrido/markdown
-4. Sua análise deve ser um PARECER PREVIDENCIÁRIO legível para humanos, NÃO um JSON
+Você receberá os dados do planejamento em JSON e, se houver, o documento CNIS do segurado em PDF.
 
-**ESTRUTURA ESPERADA DA ANÁLISE (em texto/markdown):**
+Sua tarefa é analisar TODOS os dados e retornar um JSON estruturado conforme o schema fornecido.
 
-# ANÁLISE COMPLETA - APOSENTADORIA DO PROFESSOR
+**INSTRUÇÕES PARA O CAMPO "timeline":**
+A timeline deve cobrir TODA a vida contributiva do segurado de forma contínua. OBRIGATÓRIO:
+- Inclua um item para CADA período de vínculo ativo (magistério ou outros) encontrado no CNIS ou nos dados fornecidos
+- Para CADA intervalo/lacuna entre vínculos onde não havia contribuição ativa, inclua um item com activityType: "periodo_sem_atividade"
+- A timeline deve ser uma sequência cronológica sem buracos — cada período termina onde o próximo começa
+- Use activityType: "atividade_professor" para magistério, "atividade_comum" para outros vínculos (CLT, servidor público, contribuinte individual etc.), "periodo_sem_atividade" para lacunas sem nenhum vínculo
 
-## 1. IDENTIFICAÇÃO
-[Nome, CPF, data de nascimento, idade atual]
+**INSTRUÇÕES PARA O CAMPO "retirementRules":**
+Analise todas as regras de aposentadoria de professor aplicáveis: regra geral, regras de transição da EC 103/2019 (pedágio 50%, pedágio 100%, pontos progressivos, idade mínima).
 
-## 2. RESUMO EXECUTIVO
-[Parágrafo resumindo a situação previdenciária do cliente e principal recomendação]
+**INSTRUÇÕES PARA OS CAMPOS DE TEMPO:**
+- teacherTime: tempo total exclusivamente em magistério (atividade_professor)
+- commonTime: tempo em outros vínculos não-magistério (atividade_comum)
+- totalContributionTime: soma total de contribuição (professor + comum, sem contar lacunas)
+- publicServiceTime: tempo no serviço público (se aplicável)
+- positionTenureTime: tempo no cargo atual (se aplicável)
 
-## 3. HISTÓRICO DE MAGISTÉRIO
-[Análise detalhada de cada período de magistério, instituição por instituição]
-
-### 3.1 Tempo de Magistério Comprovado
-- **Período:** [data início] a [data fim]
-- **Instituição:** [nome]
-- **Cargo:** [cargo/função]
-- **Natureza:** [pública/privada]
-- **Documentação:** [ctps/contrato/declaração]
-
-[Repita para cada período]
-
-### 3.2 Análise de Consistência
-[Identifique gaps, sobreposições, inconsistências]
-
-## 4. ANÁLISE DE VÍNCULOS NÃO-MAGISTÉRIO
-[Se houver períodos que NÃO foram em funções de magistério, analise aqui o impacto]
-
-## 5. REMUNERAÇÕES E CÁLCULO DE RMI
-[Análise das remunerações informadas e impacto no valor do benefício]
-
-## 6. BENEFÍCIOS INSS E PROCESSOS JUDICIAIS
-[Analise benefícios já recebidos, processos em andamento, impactos na aposentadoria]
-
-## 7. ELEGIBILIDADE PARA APOSENTADORIA DO PROFESSOR
-
-### 7.1 Requisitos Cumpridos
-- ✅ Tempo de magistério: [X anos]
-- ✅ Tempo de contribuição total: [Y anos]
-- ✅ Tempo no cargo atual: [Z anos]
-- ⏳ Idade: [idade atual] / Necessário: [idade mínima da regra]
-
-### 7.2 Regras de Aposentadoria Aplicáveis
-[Analise qual(is) regra(s) o cliente pode utilizar]
-
-**Opção 1: [Nome da Regra]**
-- Base Legal: [EC/Lei/Art.]
-- Requisitos: [liste os requisitos]
-- Status: [atingido / faltam X meses/anos]
-- RMI Estimada: R$ [valor]
-
-[Repita para cada regra aplicável]
-
-### 7.3 Comparação de Cenários
-[Tabela ou texto comparando as opções disponíveis]
-
-## 8. OPORTUNIDADES DE MELHORIA DOCUMENTAL
-[Liste documentos faltantes, períodos que precisam ser melhor comprovados, etc.]
-
-## 9. PONTOS DE RISCO E ALERTAS
-[Identifique riscos: períodos duvidosos, documentação fraca, sobreposições problemáticas]
-
-## 10. ESTRATÉGIA RECOMENDADA
-[Qual a melhor estratégia para este cliente? Quando requerer? O que providenciar antes?]
-
-## 11. PLANO DE AÇÃO
-1. [Primeira ação recomendada]
-2. [Segunda ação recomendada]
-3. [...]
-
-## 12. CONCLUSÃO
-[Parágrafo final sumarizando a análise e a recomendação]
-
----
-
-**IMPORTANTE:**
-- Use linguagem técnica mas acessível
-- Seja objetivo mas completo
-- Cite bases legais quando relevante
-- Forneça números concretos (tempos, valores, datas)
-- Identifique claramente o que está OK e o que precisa atenção
-- Sua resposta deve ser um TEXTO CORRIDO EM MARKDOWN, NÃO UM JSON
-
-Analise os dados recebidos e produza o parecer previdenciário completo conforme a estrutura acima.`,
+Forneça valores precisos com base nos dados recebidos. Se o CNIS estiver disponível, extraia todos os vínculos dele para compor a timeline completa.`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
