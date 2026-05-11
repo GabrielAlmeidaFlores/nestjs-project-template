@@ -483,6 +483,8 @@ import { SpecialRetirementGrantEarningsHistoryTypeormQueryRepository } from '@in
 import { SpecialRetirementGrantLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-legal-proceeding/special-retirement-grant-legal-proceeding.typeorm.command.repository';
 import { SpecialRetirementGrantPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-period/special-retirement-grant-period.typeorm.command.repository';
 import { SpecialRetirementGrantPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-period/special-retirement-grant-period.typeorm.query.repository';
+import { SpecialRetirementGrantPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-period-document/special-retirement-grant-period-document.typeorm.command.repository';
+import { SpecialRetirementGrantPeriodDocumentTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-period-document/special-retirement-grant-period-document.typeorm.query.repository';
 import { SpecialRetirementGrantPeriodObservationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-period-observation/special-retirement-grant-period-observation.typeorm.command.repository';
 import { SpecialRetirementGrantPeriodOverdueContributionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-period-overdue-contribution/special-retirement-grant-period-overdue-contribution.typeorm.command.repository';
 import { SpecialRetirementGrantPeriodPendingExitDateTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-grant-period-pending-exit-date/special-retirement-grant-period-pending-exit-date.typeorm.command.repository';
@@ -1061,6 +1063,8 @@ import { SpecialRetirementGrantEarningsHistoryQueryRepositoryGateway } from '@mo
 import { SpecialRetirementGrantLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-legal-proceeding/command/special-retirement-grant-legal-proceeding.command.repository.gateway';
 import { SpecialRetirementGrantPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-period/command/special-retirement-grant-period.command.repository.gateway';
 import { SpecialRetirementGrantPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-period/query/special-retirement-grant-period.query.repository.gateway';
+import { SpecialRetirementGrantPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-period-document/command/special-retirement-grant-period-document.command.repository.gateway';
+import { SpecialRetirementGrantPeriodDocumentQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-period-document/query/special-retirement-grant-period-document.query.repository.gateway';
 import { SpecialRetirementGrantPeriodObservationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-period-observation/command/special-retirement-grant-period-observation.command.repository.gateway';
 import { SpecialRetirementGrantPeriodOverdueContributionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-period-overdue-contribution/command/special-retirement-grant-period-overdue-contribution.command.repository.gateway';
 import { SpecialRetirementGrantPeriodPendingExitDateCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-period-pending-exit-date/command/special-retirement-grant-period-pending-exit-date.command.repository.gateway';
@@ -1499,6 +1503,14 @@ const classProvider: ClassProvider[] = [
       SpecialRetirementGrantPeriodOverdueContributionCommandRepositoryGateway,
     useClass:
       SpecialRetirementGrantPeriodOverdueContributionTypeormCommandRepository,
+  },
+  {
+    provide: SpecialRetirementGrantPeriodDocumentCommandRepositoryGateway,
+    useClass: SpecialRetirementGrantPeriodDocumentTypeormCommandRepository,
+  },
+  {
+    provide: SpecialRetirementGrantPeriodDocumentQueryRepositoryGateway,
+    useClass: SpecialRetirementGrantPeriodDocumentTypeormQueryRepository,
   },
   {
     provide: SpecialRetirementRejectionCommandRepositoryGateway,
