@@ -266,6 +266,8 @@ Análise processada do CNIS:
                 properties: {
                   timeline: {
                     type: 'array',
+                    description:
+                      'Linha do tempo COMPLETA cobrindo TODOS os períodos desde o início da vida contributiva até hoje. OBRIGATÓRIO: incluir períodos com activityType "periodo_sem_atividade" para TODOS os intervalos entre contribuições onde não havia nenhum vínculo ativo. Não deixe buracos na linha do tempo.',
                     items: {
                       type: 'object',
                       properties: {
@@ -284,7 +286,8 @@ Análise processada do CNIS:
                             'atividade_comum',
                             'periodo_sem_atividade',
                           ],
-                          description: 'Tipo de atividade exercida',
+                          description:
+                            'Tipo de atividade: "atividade_professor" para períodos de magistério, "atividade_comum" para outros vínculos (CLT, servidor, etc.), "periodo_sem_atividade" para lacunas/intervalos sem nenhum vínculo contributivo',
                         },
                         type: {
                           type: 'string',
@@ -292,7 +295,7 @@ Análise processada do CNIS:
                         },
                         location: {
                           type: 'string',
-                          description: 'Local do periodo',
+                          description: 'Local do periodo ou nome do vínculo',
                         },
                       },
                       required: [
