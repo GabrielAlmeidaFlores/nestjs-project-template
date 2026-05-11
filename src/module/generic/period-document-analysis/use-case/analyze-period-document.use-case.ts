@@ -15,7 +15,7 @@ import { AnalyzePeriodDocumentResponseDto } from '@module/generic/period-documen
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
-interface AnalyzePeriodDocumentAiResult {
+interface AnalyzePeriodDocumentAiResultInterface {
   observacaoTecnica: string;
   dataFim?: string;
 }
@@ -24,8 +24,7 @@ interface AnalyzePeriodDocumentAiResult {
 export class AnalyzePeriodDocumentUseCase {
   protected readonly _type = AnalyzePeriodDocumentUseCase.name;
 
-  private readonly resourceType =
-    PaymentPlanPaidResourceTypeEnum.PERIOD_NO_END_DATE_DOCUMENT_ANALYSIS;
+  private readonly resourceType: PaymentPlanPaidResourceTypeEnum;
 
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
@@ -38,7 +37,10 @@ export class AnalyzePeriodDocumentUseCase {
     private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
-  ) {}
+  ) {
+    this.resourceType =
+      PaymentPlanPaidResourceTypeEnum.PERIOD_NO_END_DATE_DOCUMENT_ANALYSIS;
+  }
 
   public async execute(
     sessionData: SessionDataModel,
@@ -90,7 +92,7 @@ export class AnalyzePeriodDocumentUseCase {
 
     return AnalyzePeriodDocumentResponseDto.build({
       technicalObservation: result.observacaoTecnica,
-      ...(result.dataFim != null &&
+      ...(result.dataFim !== null &&
         result.dataFim !== '' && { endDate: result.dataFim }),
     });
   }
@@ -114,7 +116,9 @@ export class AnalyzePeriodDocumentUseCase {
     };
   }
 
-  private parseResult(rawResult: string): AnalyzePeriodDocumentAiResult {
+  private parseResult(
+    rawResult: string,
+  ): AnalyzePeriodDocumentAiResultInterface {
     let cleaned = rawResult.trim();
 
     if (cleaned.startsWith('```')) {
@@ -124,7 +128,9 @@ export class AnalyzePeriodDocumentUseCase {
         .trim();
     }
 
-    const parsed = JSON.parse(cleaned) as AnalyzePeriodDocumentAiResult;
+    const parsed = JSON.parse(
+      cleaned,
+    ) as AnalyzePeriodDocumentAiResultInterface;
     return parsed;
   }
 }
