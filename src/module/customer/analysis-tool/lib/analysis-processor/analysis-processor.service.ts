@@ -35,6 +35,7 @@ import { DisabilityRetirementPlanningRejectionPeriodPendencyReasonEnum } from '@
 import { GeneralUrbanRetirementDenialPeriodCategoryEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-category.enum';
 import { GeneralUrbanRetirementDenialPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-consideration.enum';
 import { GeneralUrbanRetirementDenialPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-pendency-reason.enum';
+import { RetirementPermanentDisabilityRejectionPeriodCategoryEnum } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-period/enum/retirement-permanent-disability-rejection-period-category.enum';
 import { TemporaryIncapacityBenefitRejectionCategoryEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/enum/temporary-incapacity-benefit-rejection-category.enum';
 import { TemporaryIncapacityBenefitTerminationCategoryEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-termination/domain/schema/entity/temporary-incapacity-benefit-termination/enum/temporary-incapacity-benefit-termination-category.enum';
 import { MiniAdvisorAnalysisTypeEnum } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor-result/enum/mini-advisor-analysis-type.enum';
@@ -7693,87 +7694,247 @@ Análise processada do CNIS:
     return {
       type: 'object',
       properties: {
-        periods: {
+        clientData: {
+          type: 'object',
+          description: 'Dados do cliente extraídos dos documentos',
+          properties: {
+            name: {
+              type: 'string',
+              description: 'Nome completo do cliente',
+            },
+            cpf: {
+              type: 'string',
+              description: 'CPF do cliente',
+            },
+            birthDate: {
+              type: 'string',
+              description:
+                'Data de nascimento do cliente no formato DD/MM/AAAA',
+            },
+            category: {
+              type: 'string',
+              description:
+                'Categoria previdenciária do segurado (ex: MEI, Empregado, Contribuinte Individual)',
+            },
+            nb: {
+              type: 'string',
+              description: 'Número do Benefício (NB)',
+            },
+            judicialProcessNumber: {
+              type: 'string',
+              description: 'Número do processo judicial, se houver',
+            },
+            incapacityStartDate: {
+              type: 'string',
+              description:
+                'Data de Início da Incapacidade (DII) no formato DD/MM/AAAA',
+            },
+          },
+          required: ['name'],
+        },
+        insuredStatus: {
+          type: 'boolean',
+          description:
+            'Indica se o segurado possui qualidade de segurado na Data de Início da Incapacidade (DII)',
+        },
+        gracePeriodStatus: {
+          type: 'string',
+          description:
+            'Indica a situação do período de graça do segurado na DII',
+        },
+        gracePeriods: {
           type: 'array',
-          description: 'Lista de períodos contributivos analisados.',
+          description:
+            'Lista de eventos que geraram ou sustentam o período de graça',
           items: {
             type: 'object',
             properties: {
+              event: {
+                type: 'string',
+                description:
+                  'Nome do evento que gerou ou sustenta o período de graça. Ex: Último vínculo empregatício, Desemprego involuntário, Afastamento por doença',
+              },
+              date: {
+                type: 'string',
+                description: 'Data do evento no formato DD/MM/AAAA',
+              },
+              observation: {
+                type: 'string',
+                description:
+                  'Análise técnica sobre como esse evento impacta o período de graça',
+              },
+            },
+            required: ['event', 'date', 'observation'],
+          },
+        },
+        analysisConclusion: {
+          type: 'string',
+          description:
+            'Conclusão técnica completa da análise, incluindo carência, qualidade de segurado, pontos de atenção e viabilidade preliminar do benefício',
+        },
+        graceExtensionDueToInvoluntaryUnemployment: {
+          type: 'boolean',
+          description:
+            'Indica se há direito à extensão do período de graça em razão de desemprego involuntário (art. 15, §2º da Lei 8.213/91)',
+        },
+        requestToExtendGracePeriod: {
+          type: 'boolean',
+          description:
+            'Indica se é recomendável requerer prorrogação do período de graça administrativamente',
+        },
+        graceExempt: {
+          type: 'boolean',
+          description:
+            'Indica se o segurado é isento de carência para o benefício',
+        },
+        graceValidation: {
+          type: 'string',
+          description:
+            'Observação sobre a validação de carência na Data de Início da Incapacidade (DII)',
+        },
+        contributionTimeWithoutResolvingPendencies: {
+          type: 'string',
+          description: 'Tempo de contribuição total sem resolver pendências',
+        },
+        contributionTimeResolvingPendencies: {
+          type: 'string',
+          description: 'Tempo de contribuição total resolvendo pendências',
+        },
+        contributionTimeWithAccelerators: {
+          type: 'string',
+          description: 'Tempo de contribuição total com aceleradores',
+        },
+        periods: {
+          type: 'array',
+          description:
+            'Lista de períodos de contribuição extraídos do CNIS (Raio-X do CNIS)',
+          items: {
+            type: 'object',
+            properties: {
+              bondOrigin: {
+                type: 'string',
+                description:
+                  'Origem do vínculo (nome da empresa ou empregador)',
+              },
+              category: {
+                type: 'string',
+                enum: Object.values(
+                  RetirementPermanentDisabilityRejectionPeriodCategoryEnum,
+                ),
+                description:
+                  'Categoria do período (ex: EMPREGADO_URBANO, MEI, CONTRIBUINTE_INDIVIDUAL_AUTONOMO)',
+              },
               startDate: {
                 type: 'string',
-                format: 'date',
-                description: 'Data de início do período no formato YYYY-MM-DD.',
+                description: 'Data de início do período no formato DD/MM/AAAA',
               },
               endDate: {
                 type: 'string',
-                format: 'date',
-                description:
-                  'Data de término do período no formato YYYY-MM-DD.',
+                description: 'Data de fim do período no formato DD/MM/AAAA',
               },
-              workType: {
-                type: 'string',
-                description: 'Tipo de vínculo trabalhista do período.',
-              },
-              bondOrigin: {
-                type: 'string',
-                description: 'Origem do vínculo.',
-              },
-              contributionAverage: {
+              impactMonths: {
                 type: 'number',
-                description: 'Média das remunerações do período.',
+                description: 'Tempo de contribuição do período em meses',
+              },
+              graceMonths: {
+                type: 'number',
+                description: 'Carência do período em meses',
               },
               isPendency: {
                 type: 'boolean',
-                description: 'Indica se o período possui pendência.',
+                description: 'Indica se o período possui pendência',
               },
               competenceBelowTheMinimum: {
                 type: 'boolean',
-                description: 'Indica se há competências abaixo do mínimo.',
+                description:
+                  'Indica se há competências abaixo do mínimo no período',
+              },
+              contributionAverage: {
+                type: 'string',
+                description:
+                  'Média contributiva do período em formato decimal (ex: 1213.50)',
               },
               pendencyReason: {
                 type: 'string',
-                description: 'Motivo da pendência, se houver.',
+                description:
+                  'Motivo da pendência (ex: LEAVE_DATE, COMPETENCE_BELOW_MINIMUM, INCONSISTENT_COMPETENCE)',
               },
               periodConsideration: {
                 type: 'string',
-                description: 'Consideração sobre o período.',
+                description:
+                  'Consideração do período (ex: SIM, NAO, PROVISORIO)',
+              },
+              wantsToComplementViaMeuINSS: {
+                type: 'boolean',
+                description:
+                  'Indica se deseja fazer a complementação via Meu INSS',
               },
               status: {
                 type: 'boolean',
-                description: 'Status do período.',
+                description:
+                  'Status do período (true = válido, false = inválido)',
               },
               earningsHistory: {
                 type: 'array',
-                description: 'Competências com pendência.',
+                description: 'Histórico de remunerações do período',
                 items: {
                   type: 'object',
                   properties: {
                     competence: {
                       type: 'string',
-                      format: 'date',
-                      description: 'Competência no formato YYYY-MM-DD.',
+                      description: 'Competência no formato MM/AAAA',
                     },
                     value: {
                       type: 'string',
-                      description: 'Valor da remuneração.',
+                      description: 'Valor da remuneração em formato decimal',
+                    },
+                    pendencyType: {
+                      type: 'string',
+                      description:
+                        'Tipo de pendência da competência (ex: COMPETENCE_BELOW_MINIMUM)',
+                    },
+                    collectedAt: {
+                      type: 'string',
+                      description: 'Data de recolhimento no formato DD/MM/AAAA',
                     },
                   },
-                  required: ['competence', 'value'],
                 },
               },
             },
             required: [
               'startDate',
-              'workType',
               'isPendency',
               'competenceBelowTheMinimum',
               'status',
+              'category',
+              'endDate',
+              'impactMonths',
+              'graceMonths',
+              'wantsToComplementViaMeuINSS',
+              'bondOrigin',
+              'contributionAverage',
+              'pendencyReason',
+              'periodConsideration',
               'earningsHistory',
             ],
           },
         },
       },
-      required: ['periods'],
+      required: [
+        'clientData',
+        'insuredStatus',
+        'gracePeriodStatus',
+        'gracePeriods',
+        'analysisConclusion',
+        'graceExtensionDueToInvoluntaryUnemployment',
+        'requestToExtendGracePeriod',
+        'graceExempt',
+        'graceValidation',
+        'contributionTimeWithoutResolvingPendencies',
+        'contributionTimeResolvingPendencies',
+        'contributionTimeWithAccelerators',
+        'periods',
+      ],
     };
   }
 
