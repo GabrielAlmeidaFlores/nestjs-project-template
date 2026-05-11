@@ -3,8 +3,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { DataLeaveIsEmptyError } from '@module/customer/analysis-tool/error/data-leave-is-empty.error';
 import { RetirementPermanentDisabilityRevisionWorkPeriodsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-work-periods/command/retirement-permanent-disability-revision-work-periods.command.repository.gateway';
-import { RetirementPermanentDisabilityRevisionWorkPeriodsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-work-periods/query/retirement-permanent-disability-revision-work-periods.query.repository.gateway';
 import { GetRetirementPermanentDisabilityRevisionWorkPeriodsQueryResult } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-work-periods/query/result/get-retirement-permanent-disability-revision-work-periods.query.result';
+import { RetirementPermanentDisabilityRevisionWorkPeriodsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-work-periods/query/retirement-permanent-disability-revision-work-periods.query.repository.gateway';
 import { RetirementPermanentDisabilityRevisionId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision/value-object/retirement-permanent-disability-revision-id.value-object';
 import { RetirementPermanentDisabilityRevisionWorkPeriodsPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-work-periods/enum/retirement-permanent-disability-revision-work-periods-period-consideration.enum';
 import { RetirementPermanentDisabilityRevisionWorkPeriodsEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-work-periods/retirement-permanent-disability-revision-work-periods.entity';
@@ -23,9 +23,13 @@ export class ResolveRetirementPermanentDisabilityRevisionWorkPeriodsPendencyUseC
   public constructor(
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
-    @Inject(RetirementPermanentDisabilityRevisionWorkPeriodsCommandRepositoryGateway)
+    @Inject(
+      RetirementPermanentDisabilityRevisionWorkPeriodsCommandRepositoryGateway,
+    )
     private readonly workPeriodsCommandRepositoryGateway: RetirementPermanentDisabilityRevisionWorkPeriodsCommandRepositoryGateway,
-    @Inject(RetirementPermanentDisabilityRevisionWorkPeriodsQueryRepositoryGateway)
+    @Inject(
+      RetirementPermanentDisabilityRevisionWorkPeriodsQueryRepositoryGateway,
+    )
     private readonly workPeriodsQueryRepositoryGateway: RetirementPermanentDisabilityRevisionWorkPeriodsQueryRepositoryGateway,
   ) {}
 
@@ -90,14 +94,13 @@ export class ResolveRetirementPermanentDisabilityRevisionWorkPeriodsPendencyUseC
     retirementPermanentDisabilityRevisionWorkPeriodsId: RetirementPermanentDisabilityRevisionWorkPeriodsId,
     workPeriod: GetRetirementPermanentDisabilityRevisionWorkPeriodsQueryResult,
   ): Promise<void> {
-    const updatedWorkPeriod = new RetirementPermanentDisabilityRevisionWorkPeriodsEntity(
-      {
+    const updatedWorkPeriod =
+      new RetirementPermanentDisabilityRevisionWorkPeriodsEntity({
         ...workPeriod,
         id: workPeriod.retirementPermanentDisabilityRevisionWorkPeriodsId,
         retirementPermanentDisabilityRevisionId,
         deletedAt: new Date(),
-      },
-    );
+      });
 
     const updateTransaction =
       this.workPeriodsCommandRepositoryGateway.updateRetirementPermanentDisabilityRevisionWorkPeriods(
@@ -116,16 +119,15 @@ export class ResolveRetirementPermanentDisabilityRevisionWorkPeriodsPendencyUseC
     retirementPermanentDisabilityRevisionWorkPeriodsId: RetirementPermanentDisabilityRevisionWorkPeriodsId,
     workPeriod: GetRetirementPermanentDisabilityRevisionWorkPeriodsQueryResult,
   ): Promise<void> {
-    const updatedWorkPeriod = new RetirementPermanentDisabilityRevisionWorkPeriodsEntity(
-      {
+    const updatedWorkPeriod =
+      new RetirementPermanentDisabilityRevisionWorkPeriodsEntity({
         ...workPeriod,
         id: workPeriod.retirementPermanentDisabilityRevisionWorkPeriodsId,
         retirementPermanentDisabilityRevisionId,
         pendencyReason: null,
         periodConsideration:
           RetirementPermanentDisabilityRevisionWorkPeriodsPeriodConsiderationEnum.SIM,
-      },
-    );
+      });
 
     const updateTransaction =
       this.workPeriodsCommandRepositoryGateway.updateRetirementPermanentDisabilityRevisionWorkPeriods(
@@ -144,16 +146,15 @@ export class ResolveRetirementPermanentDisabilityRevisionWorkPeriodsPendencyUseC
     retirementPermanentDisabilityRevisionWorkPeriodsId: RetirementPermanentDisabilityRevisionWorkPeriodsId,
     workPeriod: GetRetirementPermanentDisabilityRevisionWorkPeriodsQueryResult,
   ): Promise<void> {
-    const updatedWorkPeriod = new RetirementPermanentDisabilityRevisionWorkPeriodsEntity(
-      {
+    const updatedWorkPeriod =
+      new RetirementPermanentDisabilityRevisionWorkPeriodsEntity({
         ...workPeriod,
         id: workPeriod.retirementPermanentDisabilityRevisionWorkPeriodsId,
         retirementPermanentDisabilityRevisionId,
         pendencyReason: null,
         periodConsideration:
           RetirementPermanentDisabilityRevisionWorkPeriodsPeriodConsiderationEnum.PROVISORIO,
-      },
-    );
+      });
 
     const updateTransaction =
       this.workPeriodsCommandRepositoryGateway.updateRetirementPermanentDisabilityRevisionWorkPeriods(
@@ -177,8 +178,8 @@ export class ResolveRetirementPermanentDisabilityRevisionWorkPeriodsPendencyUseC
       throw new DataLeaveIsEmptyError();
     }
 
-    const updatedWorkPeriod = new RetirementPermanentDisabilityRevisionWorkPeriodsEntity(
-      {
+    const updatedWorkPeriod =
+      new RetirementPermanentDisabilityRevisionWorkPeriodsEntity({
         ...workPeriod,
         id: workPeriod.retirementPermanentDisabilityRevisionWorkPeriodsId,
         retirementPermanentDisabilityRevisionId,
@@ -186,8 +187,7 @@ export class ResolveRetirementPermanentDisabilityRevisionWorkPeriodsPendencyUseC
         pendencyReason: null,
         periodConsideration:
           RetirementPermanentDisabilityRevisionWorkPeriodsPeriodConsiderationEnum.SIM,
-      },
-    );
+      });
 
     const updateTransaction =
       this.workPeriodsCommandRepositoryGateway.updateRetirementPermanentDisabilityRevisionWorkPeriods(

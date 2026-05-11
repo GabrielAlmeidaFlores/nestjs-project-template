@@ -16,13 +16,16 @@ import { ConstructorType } from '@shared/system/type/constructor.type';
 @Injectable()
 export class RetirementPermanentDisabilityRevisionWorkPeriodsTypeormQueryRepository
   extends BaseTypeormQueryRepository<RetirementPermanentDisabilityRevisionWorkPeriodsTypeormEntity>
-  implements RetirementPermanentDisabilityRevisionWorkPeriodsQueryRepositoryGateway
+  implements
+    RetirementPermanentDisabilityRevisionWorkPeriodsQueryRepositoryGateway
 {
   protected readonly _type =
     RetirementPermanentDisabilityRevisionWorkPeriodsTypeormQueryRepository.name;
 
   public constructor(
-    @InjectRepository(RetirementPermanentDisabilityRevisionWorkPeriodsTypeormEntity)
+    @InjectRepository(
+      RetirementPermanentDisabilityRevisionWorkPeriodsTypeormEntity,
+    )
     repository: Repository<RetirementPermanentDisabilityRevisionWorkPeriodsTypeormEntity>,
   ) {
     super(repository);
@@ -54,29 +57,31 @@ export class RetirementPermanentDisabilityRevisionWorkPeriodsTypeormQueryReposit
       });
     }
 
-    return GetRetirementPermanentDisabilityRevisionWorkPeriodsQueryResult.build({
-      retirementPermanentDisabilityRevisionWorkPeriodsId:
-        new RetirementPermanentDisabilityRevisionWorkPeriodsId(data.id),
-      bondOrigin: data.bondOrigin,
-      startDate: data.startDate,
-      endDate: data.endDate,
-      category: data.category,
-      competenceBelowTheMinimum: data.competenceBelowTheMinimum,
-      pendencyReason: data.pendencyReason,
-      periodConsideration: data.periodConsideration,
-      contributionAverage:
-        data.contributionAverage !== null
-          ? new DecimalValue(data.contributionAverage)
-          : null,
-      status: data.status,
-      gracePeriod: data.gracePeriod,
-      retirementPermanentDisabilityRevisionId:
-        new RetirementPermanentDisabilityRevisionId(
-          data.retirementPermanentDisabilityRevision.id,
-        ),
-      createdAt: data.createdAt,
-      updatedAt: data.updatedAt,
-      deletedAt: data.deletedAt,
-    });
+    return GetRetirementPermanentDisabilityRevisionWorkPeriodsQueryResult.build(
+      {
+        retirementPermanentDisabilityRevisionWorkPeriodsId:
+          new RetirementPermanentDisabilityRevisionWorkPeriodsId(data.id),
+        bondOrigin: data.bondOrigin,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        category: data.category,
+        competenceBelowTheMinimum: data.competenceBelowTheMinimum,
+        pendencyReason: data.pendencyReason,
+        periodConsideration: data.periodConsideration,
+        contributionAverage:
+          data.contributionAverage !== null
+            ? new DecimalValue(data.contributionAverage)
+            : null,
+        status: data.status,
+        gracePeriod: data.gracePeriod,
+        retirementPermanentDisabilityRevisionId:
+          new RetirementPermanentDisabilityRevisionId(
+            data.retirementPermanentDisabilityRevision.id,
+          ),
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt,
+        deletedAt: data.deletedAt,
+      },
+    );
   }
 }

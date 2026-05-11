@@ -45,7 +45,9 @@ export class RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssoc
           ),
           retirementPermanentDisabilityRevisionDisabilityAnalysisBenefitId:
             new RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitId(
-              source.retirementPermanentDisabilityRevisionDisabilityAnalysisBenefit.id,
+              source
+                .retirementPermanentDisabilityRevisionDisabilityAnalysisBenefit
+                .id,
             ),
           cid: source.cid,
           createdAt: source.createdAt,

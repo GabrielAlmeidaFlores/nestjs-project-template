@@ -12,13 +12,16 @@ import { RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryEntity }
 @Injectable()
 export class RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryTypeormCommandRepository
   extends BaseTypeormCommandRepository<RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryTypeormEntity>
-  implements RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryCommandRepositoryGateway
+  implements
+    RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryCommandRepositoryGateway
 {
   protected readonly _type =
     RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryTypeormCommandRepository.name;
 
   public constructor(
-    @InjectRepository(RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryTypeormEntity)
+    @InjectRepository(
+      RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryTypeormEntity,
+    )
     repository: Repository<RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryTypeormEntity>,
     private readonly mapperGateway: MapperGateway,
   ) {

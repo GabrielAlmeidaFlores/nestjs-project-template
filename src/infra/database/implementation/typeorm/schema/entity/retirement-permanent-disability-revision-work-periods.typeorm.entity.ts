@@ -90,7 +90,8 @@ export class RetirementPermanentDisabilityRevisionWorkPeriodsTypeormEntity exten
   public retirementPermanentDisabilityRevision?: RetirementPermanentDisabilityRevisionTypeormEntity | null;
 
   @OneToMany(
-    () => RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryTypeormEntity,
+    () =>
+      RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryTypeormEntity,
     (entity) => entity.retirementPermanentDisabilityRevisionWorkPeriods,
   )
   public retirementPermanentDisabilityRevisionWorkPeriodsEarningsHistory?:

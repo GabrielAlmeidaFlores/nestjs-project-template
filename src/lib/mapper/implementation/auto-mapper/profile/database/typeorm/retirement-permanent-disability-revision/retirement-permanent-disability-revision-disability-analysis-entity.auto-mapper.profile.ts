@@ -40,9 +40,10 @@ export class RetirementPermanentDisabilityRevisionDisabilityAnalysisEntityAutoMa
         id: new RetirementPermanentDisabilityRevisionDisabilityAnalysisId(
           source.id,
         ),
-        retirementPermanentDisabilityRevisionId: new RetirementPermanentDisabilityRevisionId(
-          source.retirementPermanentDisabilityRevision.id,
-        ),
+        retirementPermanentDisabilityRevisionId:
+          new RetirementPermanentDisabilityRevisionId(
+            source.retirementPermanentDisabilityRevision.id,
+          ),
         estimatedIncapacityStartDate: source.estimatedIncapacityStartDate,
         medicalDescription: source.medicalDescription,
         isAccidentRelated: source.isAccidentRelated,
