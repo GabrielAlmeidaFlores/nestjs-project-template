@@ -128,7 +128,11 @@ export class CreateSpecialRetirementGrantResultUseCase {
             ],
           },
         },
-        resultadoDaAnalise: { type: 'string' },
+        resultadoDaAnalise: {
+          type: 'string',
+          description:
+            'Análise detalhada em resultado Markdown formatada, com todas as informações relevantes sobre a análise realizada.',
+        },
       },
       required: [
         'regrasAplicaveis',
@@ -268,16 +272,22 @@ export class CreateSpecialRetirementGrantResultUseCase {
       ? normalizedIaResponse.periodosReconhecidos
       : [];
 
+    const resultadoDaAnalise =
+      typeof normalizedIaResponse?.resultadoDaAnalise === 'string'
+        ? normalizedIaResponse.resultadoDaAnalise
+        : '';
+
     const specialRetirementGrantCompleteAnalysis = JSON.stringify(
-      { regrasAplicaveis, periodosReconhecidos },
+      {
+        regrasAplicaveis,
+        periodosReconhecidos,
+        resultadoDaAnalise,
+      },
       null,
       2,
     );
 
-    const specialRetirementGrantCompleteAnalysisDownload =
-      typeof normalizedIaResponse?.resultadoDaAnalise === 'string'
-        ? normalizedIaResponse.resultadoDaAnalise
-        : '';
+    const specialRetirementGrantCompleteAnalysisDownload = resultadoDaAnalise;
 
     let specialRetirementGrantResult: SpecialRetirementGrantResultEntity;
     if (
@@ -396,6 +406,7 @@ export class CreateSpecialRetirementGrantResultUseCase {
       specialRetirementGrantCompleteAnalysis: {
         regrasAplicaveis,
         periodosReconhecidos,
+        resultadoDaAnalise,
       },
       specialRetirementGrantCompleteAnalysisDownload:
         specialRetirementGrantCompleteAnalysisDownload,

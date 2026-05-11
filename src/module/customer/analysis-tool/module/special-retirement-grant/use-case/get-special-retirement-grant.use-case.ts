@@ -123,6 +123,16 @@ export class GetSpecialRetirementGrantUseCase {
 
     if (
       parsedComplete !== null &&
+      typeof parsedComplete['resultadoDaAnalise'] === 'string'
+    ) {
+      parsedComplete['resultadoDaAnalise'] =
+        await this.exportDocumentGateway.convertMarkdownToHtml(
+          parsedComplete['resultadoDaAnalise'],
+        );
+    }
+
+    if (
+      parsedComplete !== null &&
       typeof parsedComplete['analysisResult'] === 'string'
     ) {
       parsedComplete['analysisResult'] =
