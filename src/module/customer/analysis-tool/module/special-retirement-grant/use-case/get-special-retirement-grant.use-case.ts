@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
+import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
@@ -70,30 +71,33 @@ export class GetSpecialRetirementGrantUseCase {
       throw new SpecialRetirementGrantNotFoundError();
     }
 
-    let cnisDocument: URL | null = null;
+    let cnisDocument: string | null = null;
     let cnisDocumentOriginalFileName: string | null = null;
 
     if (specialRetirementGrant.cnisDocument !== null) {
-      cnisDocument = await this.fileProcessorGateway.getFileSignedUrl(
-        specialRetirementGrant.cnisDocument,
-      );
-
-      cnisDocumentOriginalFileName =
-        await this.fileProcessorGateway.getOriginalFileName(
+      const [cnisDocumentBuffer, originalFileName] = await Promise.all([
+        this.fileProcessorGateway.getFileBuffer(
           specialRetirementGrant.cnisDocument,
-        );
+        ),
+        this.fileProcessorGateway.getOriginalFileName(
+          specialRetirementGrant.cnisDocument,
+        ),
+      ]);
+
+      cnisDocument = Base64.encodeBuffer(cnisDocumentBuffer).toString();
+      cnisDocumentOriginalFileName = originalFileName;
     }
 
     const documents = await Promise.all(
       specialRetirementGrant.specialRetirementGrantDocument.map(async (doc) => {
-        const document = await this.fileProcessorGateway.getFileSignedUrl(
-          doc.document,
-        );
-        const documentOriginalFileName =
-          await this.fileProcessorGateway.getOriginalFileName(doc.document);
+        const [documentBuffer, documentOriginalFileName] = await Promise.all([
+          this.fileProcessorGateway.getFileBuffer(doc.document),
+          this.fileProcessorGateway.getOriginalFileName(doc.document),
+        ]);
+
         return GetSpecialRetirementGrantDocumentResponseDto.build({
           id: doc.id.toString(),
-          document: document.toString(),
+          document: Base64.encodeBuffer(documentBuffer).toString(),
           documentOriginalFileName: documentOriginalFileName.toString(),
           type: doc.type,
           createdAt: doc.createdAt,
@@ -141,7 +145,7 @@ export class GetSpecialRetirementGrantUseCase {
       id: specialRetirementGrant.id,
       name: specialRetirementGrant.name,
       specialActivity: specialRetirementGrant.specialActivity,
-      cnisDocument: cnisDocument !== null ? cnisDocument.toString() : null,
+      cnisDocument,
       cnisDocumentOriginalFileName,
       documents,
       status: analysisToolRecordQueryResult.status,
