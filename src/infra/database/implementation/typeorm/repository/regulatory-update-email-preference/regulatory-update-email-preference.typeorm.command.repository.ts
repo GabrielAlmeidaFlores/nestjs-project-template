@@ -41,12 +41,16 @@ export class RegulatoryUpdateEmailPreferenceTypeormCommandRepository
 
       if (existing) {
         existing.emailEnabled = props.emailEnabled;
+        existing.sendFrequency = props.sendFrequency ?? null;
+        existing.sendDays = props.sendDays ?? null;
         existing.updatedAt = new Date();
         await repository.save(existing);
       } else {
         const newRecord = repository.create({
           id: props.id.toString(),
           emailEnabled: props.emailEnabled,
+          sendFrequency: props.sendFrequency ?? null,
+          sendDays: props.sendDays ?? null,
           customer: { id: customerId.toString() } as CustomerTypeormEntity,
           createdAt: new Date(),
           updatedAt: new Date(),

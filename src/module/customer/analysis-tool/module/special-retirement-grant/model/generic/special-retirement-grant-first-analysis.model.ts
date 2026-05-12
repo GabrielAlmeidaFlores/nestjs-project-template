@@ -294,6 +294,30 @@ export class SpecialRetirementGrantFirstAnalysisSummaryModel extends BaseBuildab
 }
 
 @ResponseDto()
+export class SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemHazardousAgentModel extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty()
+  public readonly intensityAndFrequency: string;
+
+  @ResponseDtoStringProperty()
+  public readonly identifiedAgent: string;
+
+  protected override readonly _type =
+    SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemHazardousAgentModel.name;
+}
+
+@ResponseDto()
+export class SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemLegalFrameworkModel extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty()
+  public readonly description: string;
+
+  @ResponseDtoStringProperty()
+  public readonly code: string;
+
+  protected override readonly _type =
+    SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemLegalFrameworkModel.name;
+}
+
+@ResponseDto()
 export class SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemModel extends BaseBuildableDtoObject {
   @ResponseDtoDateProperty()
   public readonly periodStartDate: Date;
@@ -307,17 +331,40 @@ export class SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemModel exte
   @ResponseDtoStringProperty({ required: false })
   public readonly justification?: string;
 
-  @ResponseDtoStringProperty({ required: false, isArray: true })
-  public readonly legalFramework?: string[];
+  @ResponseDtoStringProperty({ required: false })
+  public readonly company?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly cnpj?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly role?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly supportingDocument?: string;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public readonly recordedInCnis?: boolean;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public readonly remunerationRecordedInCnis?: boolean;
 
   @ResponseDtoObjectProperty(
-    () => SpecialRetirementGrantFirstAnalysisAgentModel,
-    {
-      isArray: true,
-      required: false,
-    },
+    () =>
+      SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemHazardousAgentModel,
+    { isArray: true, required: false },
   )
-  public readonly agents?: SpecialRetirementGrantFirstAnalysisAgentModel[];
+  public readonly hazardousAgents?: SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemHazardousAgentModel[];
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly informationSource?: string;
+
+  @ResponseDtoObjectProperty(
+    () =>
+      SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemLegalFrameworkModel,
+    { isArray: true, required: false },
+  )
+  public readonly legalFramework?: SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemLegalFrameworkModel[];
 
   @ResponseDtoBooleanProperty({ required: false })
   public readonly epiEficaz?: boolean;

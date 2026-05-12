@@ -25,7 +25,6 @@ import { ObservabilityModule } from '@shared/system/observability/observability.
     GenericModule,
     CustomerModule,
     SupportModule,
-    AdminModule,
     NestjsFormDataModule.config({
       isGlobal: true,
       storage: MemoryStoredFile,

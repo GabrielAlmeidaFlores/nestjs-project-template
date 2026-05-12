@@ -369,6 +369,42 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise simplificada da concessão de aposentadoria especial com IA. Resume elegibilidade, principais pendências e próximos passos recomendados, baseada em CNIS e PPPs.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('3d6a2e4f-7c2b-4a6e-8f5d-2b1c0e9a7d3f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.PERIOD_NO_END_DATE_DOCUMENT_ANALYSIS,
+      creditCost: 2,
+      title: 'ANÁLISE DE DOCUMENTO DE PERÍODO SEM DATA FIM',
+      description:
+        'Análise de documento de período sem data fim com IA. Com base no arquivo enviado, a IA identifica a data de encerramento do vínculo ou período e elabora observação técnica detalhada em markdown com os elementos relevantes encontrados.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('4e9d2c1b-6a7f-4d8e-9b3c-1f2a3d4e5b6c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_REJECTION_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title: 'INDEFERIMENTO APOSENTADORIA ESPECIAL - ANÁLISE COMPLETA',
+      description:
+        'Análise completa do indeferimento de aposentadoria especial com IA. Examina CNIS, PPPs e demais documentos para validar tempo especial, carência, requisitos das regras aplicáveis, riscos do caso e estratégia administrativa ou judicial mais adequada.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('7b1e3c4d-5a6f-4c8d-9e2b-3a1f6d7c8b9e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_REJECTION_FIRST_ANALYSIS,
+      creditCost: 5,
+      title: 'INDEFERIMENTO APOSENTADORIA ESPECIAL - FIRST ANALYSIS',
+      description:
+        'First analysis do indeferimento de aposentadoria especial com IA. Consolida vínculos, carência, qualidade de segurado, períodos especiais, agentes nocivos, pendências documentais e diagnóstico técnico inicial com base em CNIS e documentos anexados.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('9c2a5e7b-1d4f-4a8c-8e3b-6d1f2a7c5b4e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_REJECTION_SIMPLIFIED_ANALYSIS,
+      creditCost: 5,
+      title: 'INDEFERIMENTO APOSENTADORIA ESPECIAL - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada do indeferimento de aposentadoria especial com IA. Resume elegibilidade, pontos favoráveis, pendências, riscos e próximos passos recomendados para avaliação rápida da viabilidade do caso.',
+    }),
 
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('0a308887-2dc9-4194-a9dd-b2b94c3ab820'),
@@ -2026,6 +2062,33 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Primeira análise de cessação de auxílio-acidente com IA, combinando os dados estruturados do caso com a leitura e interpretação do CNIS. Gera parecer inicial técnico sobre tempo de contribuição, carência, períodos relevantes, pontos de atenção e viabilidade preliminar de reversão da cessação.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('636d4d00-3c9c-499f-adf7-61b63d2fe430'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_ASSISTANCE_GRANT_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title: 'AUXÍLIO-ACIDENTE (RGPS) CONCESSÃO - ANÁLISE COMPLETA',
+      description:
+        'Análise completa do direito à concessão de auxílio-acidente com IA. Examina documentos do caso, CNIS, laudos médicos e histórico previdenciário para verificar a presença de acidente de trabalho, o nexo causal, a redução da capacidade laborativa e os requisitos legais para concessão do benefício, emitindo parecer técnico conclusivo com fundamentação legal e jurisprudencial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('4fb3901a-7495-48ce-97e2-43b402fa1111'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_ASSISTANCE_GRANT_SIMPLIFIED_ANALYSIS,
+      creditCost: 2,
+      title: 'AUXÍLIO-ACIDENTE (RGPS) CONCESSÃO - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada do direito à concessão de auxílio-acidente com IA. Verifica os principais critérios para concessão do benefício, identifica os pontos fortes e fracos do caso e apresenta de forma objetiva as possibilidades de êxito. Versão resumida e acessível para apresentação ao cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('0f6692b8-b3cb-4b94-b497-bdf7fb9a2389'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_ASSISTANCE_GRANT_FIRST_ANALYSIS,
+      creditCost: 4,
+      title: 'AUXÍLIO-ACIDENTE (RGPS) CONCESSÃO - PRIMEIRA ANÁLISE',
+      description:
+        'Primeira análise de concessão de auxílio-acidente com IA, combinando os dados estruturados do caso com a leitura e interpretação do CNIS. Gera parecer inicial técnico sobre a ocorrência do acidente, nexo causal, redução da capacidade laborativa, períodos relevantes e viabilidade preliminar de concessão do benefício.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('f7a1b2c3-d4e5-4f6a-8b9c-0d1e2f3a4b60'),
       resource:
         PaymentPlanPaidResourceTypeEnum.TEMPORARY_DISABILITY_BENEFITS_TERMINATED_INSS_DECISION_ANALYSIS,
@@ -2134,6 +2197,62 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       title: 'Análise Simplificada (Cessação Auxílio Incapacidade Temporária)',
       description:
         'Análise simplificada de cessação de auxílio por incapacidade temporária com IA. Resume os principais achados da análise completa, indica a viabilidade geral do caso, os pontos críticos e os próximos passos recomendados, em linguagem acessível para apresentação ao cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d51'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_REJECTION_FIRST_ANALYSIS,
+      creditCost: 5,
+      title: 'INDEFERIMENTO APOSENTADORIA DO PROFESSOR - PRIMEIRO STEP',
+      description:
+        'Primeira análise do caso de indeferimento de aposentadoria do professor com IA. Combina os dados do CNIS com os dados estruturados do processo de indeferimento para gerar parecer inicial técnico sobre os períodos de magistério, carência e viabilidade de reversão do indeferimento.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d52'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_REJECTION_INSS_DECISION_ANALYSIS,
+      creditCost: 3,
+      title:
+        'INDEFERIMENTO APOSENTADORIA DO PROFESSOR - ANÁLISE DA DECISÃO DO INSS',
+      description:
+        'Análise da decisão administrativa do INSS no processo de indeferimento de aposentadoria do professor. Extrai e estrutura os motivos do indeferimento, os fundamentos legais citados e as inconsistências identificadas pelo INSS.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d53'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_REJECTION_COMPLETE_ANALYSIS,
+      creditCost: 8,
+      title: 'INDEFERIMENTO APOSENTADORIA DO PROFESSOR - ANÁLISE COMPLETA',
+      description:
+        'Análise completa do indeferimento de aposentadoria do professor com IA. Examina CNIS, documentos do processo administrativo e dados do caso para gerar parecer técnico detalhado com fundamentação legal, análise de provas de magistério, conformidade dos períodos de ensino e recomendação estratégica para recurso administrativo ou ação judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d54'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_REJECTION_SIMPLIFIED_ANALYSIS,
+      creditCost: 3,
+      title: 'INDEFERIMENTO APOSENTADORIA DO PROFESSOR - ANÁLISE SIMPLIFICADA',
+      description:
+        'Geração do documento de análise simplificada do indeferimento de aposentadoria do professor, com linguagem acessível para apresentação ao cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d55'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_REJECTION_WORK_PERIOD_DOCUMENT_ANALYSIS,
+      creditCost: 2,
+      title:
+        'INDEFERIMENTO APOSENTADORIA DO PROFESSOR - ANÁLISE DE DOCUMENTOS DO PERÍODO',
+      description:
+        'Análise individual de documentos probatórios de períodos de trabalho para o caso de indeferimento de aposentadoria do professor. Identifica o tipo de documento, o nome do titular, o ano e emite nota técnica sobre a relevância probatória para comprovação de atividade de magistério.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c2d3e4f5-a6b7-4c8d-9e0f-1a2b3c4d5e66'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_REJECTION_PPP_ANALYSIS,
+      creditCost: 2,
+      title: 'INDEFERIMENTO APOSENTADORIA DO PROFESSOR - ANÁLISE DE PPP',
+      description:
+        'Análise do Perfil Profissiográfico Previdenciário (PPP) para o caso de indeferimento de aposentadoria do professor. Identifica períodos de trabalho, atividades exercidas, exposição a agentes nocivos e classifica cada período para fins previdenciários.',
     }),
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('e1a2b3c4-d5e6-4f7a-8b9c-0d1e2f3a4b5c'),

@@ -43,6 +43,8 @@ export class SpecialRetirementGrantPeriodTypeormCommandRepository
       shouldConsiderPeriod: props.shouldConsiderPeriod,
       shouldConsiderLastRemunerationAsExitDate:
         props.shouldConsiderLastRemunerationAsExitDate,
+      belowTheMinimum: props.belowTheMinimum ?? null,
+      leaveDate: props.leaveDate ?? null,
       cnisDocument: props.cnisDocument ?? null,
       specialRetirementGrant: {
         id: props.specialRetirementGrant.id.toString(),
