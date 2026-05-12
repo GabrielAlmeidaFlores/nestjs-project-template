@@ -92,7 +92,7 @@ export class AnalyzePeriodDocumentUseCase {
 
     return AnalyzePeriodDocumentResponseDto.build({
       technicalObservation: result.observacaoTecnica,
-      ...(result.dataFim !== null &&
+      ...(result.dataFim !== undefined &&
         result.dataFim !== '' && { endDate: result.dataFim }),
     });
   }
