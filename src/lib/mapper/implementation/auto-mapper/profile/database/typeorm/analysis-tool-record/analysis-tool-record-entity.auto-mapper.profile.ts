@@ -527,7 +527,8 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
           : null;
 
       const retirementPermanentDisabilityRevision =
-        source.retirementPermanentDisabilityRevision != null
+        source.retirementPermanentDisabilityRevision !== null &&
+        source.retirementPermanentDisabilityRevision !== undefined
           ? this.mapper.map(
               source.retirementPermanentDisabilityRevision,
               RetirementPermanentDisabilityRevisionTypeormEntity,
