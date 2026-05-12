@@ -2,12 +2,15 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { SpecialRetirementGrantEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-earnings-history.typeorm.entity';
+import { SpecialRetirementGrantPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-period-document.typeorm.entity';
 import { SpecialRetirementGrantPeriodObservationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-period-observation.typeorm.entity';
 import { SpecialRetirementGrantPeriodOverdueContributionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-period-overdue-contribution.typeorm.entity';
 import { SpecialRetirementGrantPeriodPendingExitDateTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-period-pending-exit-date.typeorm.entity';
 import { SpecialRetirementGrantPeriodUnderMinimumTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-period-under-minimum.typeorm.entity';
 import { SpecialRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant.typeorm.entity';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
+import { SpecialRetirementGrantPeriodBelowTheMinimumEnum } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-period/enum/special-retirement-grant-period-below-the-minimum.enum';
+import { SpecialRetirementGrantPeriodLeaveDateEnum } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-period/enum/special-retirement-grant-period-leave-date.enum';
 import { SpecialRetirementGrantPeriodStatusEnum } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-period/enum/special-retirement-grant-period-status.enum';
 
 @Entity({ name: 'special_retirement_grant_period' })
@@ -90,6 +93,22 @@ export class SpecialRetirementGrantPeriodTypeormEntity extends BaseTypeormEntity
   })
   public cnisDocument?: string | null;
 
+  @Column({
+    name: 'below_the_minimum',
+    type: 'varchar',
+    length: 50,
+    nullable: true,
+  })
+  public belowTheMinimum?: SpecialRetirementGrantPeriodBelowTheMinimumEnum | null;
+
+  @Column({
+    name: 'leave_date',
+    type: 'varchar',
+    length: 50,
+    nullable: true,
+  })
+  public leaveDate?: SpecialRetirementGrantPeriodLeaveDateEnum | null;
+
   @ManyToOne(
     () => SpecialRetirementGrantTypeormEntity,
     (entity) => entity.specialRetirementGrantPeriod,
@@ -136,6 +155,14 @@ export class SpecialRetirementGrantPeriodTypeormEntity extends BaseTypeormEntity
   )
   public specialRetirementGrantPeriodObservation?:
     | SpecialRetirementGrantPeriodObservationTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => SpecialRetirementGrantPeriodDocumentTypeormEntity,
+    (entity) => entity.specialRetirementGrantPeriod,
+  )
+  public specialRetirementGrantPeriodDocument?:
+    | SpecialRetirementGrantPeriodDocumentTypeormEntity[]
     | undefined;
 
   protected override readonly _type =
