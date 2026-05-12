@@ -7928,6 +7928,20 @@ A timeline deve cobrir TODA a vida contributiva do segurado de forma contínua. 
 **INSTRUÇÕES PARA O CAMPO "retirementRules":**
 Analise todas as regras de aposentadoria de professor aplicáveis: regra geral, regras de transição da EC 103/2019 (pedágio 50%, pedágio 100%, pontos progressivos, idade mínima).
 
+Para o campo \`detailedRuleAnalysis\` de cada regra, use MARKDOWN ESTRUTURADO obrigatoriamente:
+
+## [Nome da Regra]
+
+### Requisitos
+- ✅ ou ❌ [Requisito 1]: necessário [valor] / possui [valor atual]
+- ✅ ou ❌ [Requisito 2]: necessário [valor] / possui [valor atual]
+
+### Situação Atual
+[Parágrafo explicando o que já foi cumprido e o que ainda falta]
+
+### Estratégia
+[Parágrafo com orientação prática: quando poderá se aposentar por esta regra, ou por que é/não é a melhor opção]
+
 **INSTRUÇÕES PARA OS CAMPOS DE TEMPO:**
 - teacherTime: tempo total exclusivamente em magistério (atividade_professor)
 - commonTime: tempo em outros vínculos não-magistério (atividade_comum)
@@ -7935,7 +7949,51 @@ Analise todas as regras de aposentadoria de professor aplicáveis: regra geral, 
 - publicServiceTime: tempo no serviço público (se aplicável)
 - positionTenureTime: tempo no cargo atual (se aplicável)
 
-Forneça valores precisos com base nos dados recebidos. Se o CNIS estiver disponível, extraia todos os vínculos dele para compor a timeline completa.`,
+Forneça valores precisos com base nos dados recebidos. Se o CNIS estiver disponível, extraia todos os vínculos dele para compor a timeline completa.
+
+**INSTRUÇÕES PARA O CAMPO "finalAnalysis":**
+O campo finalAnalysis DEVE ser um texto em MARKDOWN ESTRUTURADO, rico e completo. Siga OBRIGATORIAMENTE esta estrutura:
+
+# Observação Técnica
+
+## 1. Diagnóstico Previdenciário
+[Parágrafo contextual sobre a situação do professor]
+
+**Situação Atual:**
+- Tempo de Magistério: [X anos e Y meses]
+- Tempo Comum: [X anos e Y meses]
+- Tempo Total de Contribuição: [X anos e Y meses]
+- Tempo em Serviço Público: [X anos / Não aplicável]
+- Status: [Pode aposentar agora / Faltam X anos e Y meses]
+
+## 2. Regras Aplicáveis
+[Para cada regra analisada, indique se é elegível ou não e o que falta]
+
+1. **[Nome da Regra]:** [Elegível / Não elegível] — [motivo breve]
+2. **[Nome da Regra]:** [Elegível / Não elegível] — [motivo breve]
+
+## 3. Pendências Identificadas
+[Liste os pontos críticos que precisam atenção]
+
+1. **[Pendência 1]:** [descrição detalhada]
+2. **[Pendência 2]:** [descrição detalhada]
+
+## 4. Riscos Identificados
+⚠️ **[Risco 1]:** [descrição]
+⚠️ **[Risco 2]:** [descrição]
+
+## 5. Recomendações Estratégicas
+
+📋 **Ações Imediatas:**
+1. [Primeira ação mais urgente]
+2. [Segunda ação urgente]
+
+📋 **Ações de Médio Prazo:**
+1. [Ação não urgente mas importante]
+
+---
+
+[Parágrafo conclusivo com a principal recomendação estratégica: quando e qual regra usar para maximizar o benefício]`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(

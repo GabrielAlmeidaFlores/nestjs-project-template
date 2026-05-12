@@ -338,7 +338,8 @@ Análise processada do CNIS:
                         },
                         detailedRuleAnalysis: {
                           type: 'string',
-                          description: 'Analise detalhada da regra',
+                          description:
+                            'Análise detalhada da regra em MARKDOWN estruturado. OBRIGATÓRIO conter: (1) título da regra com "##"; (2) seção de requisitos com lista "- " mostrando cada requisito, tempo necessário vs tempo atual, e se foi cumprido (✅ ou ❌); (3) seção "### Situação Atual" com o que falta ou por que foi cumprida; (4) seção "### Estratégia" com orientação prática. Exemplo: "## Regra X\\n\\n### Requisitos\\n- ✅ Tempo de magistério: necessário 25 anos / possui 26 anos\\n- ❌ Idade mínima: necessário 57 anos / possui 52 anos\\n\\n### Situação Atual\\n[parágrafo]\\n\\n### Estratégia\\n[parágrafo com recomendação]"',
                         },
                       },
                       required: [
@@ -352,7 +353,8 @@ Análise processada do CNIS:
                   },
                   finalAnalysis: {
                     type: 'string',
-                    description: 'Analise final consolidada',
+                    description:
+                      'Análise técnica final completa em formato MARKDOWN estruturado. OBRIGATÓRIO conter: (1) um título principal com "#"; (2) pelo menos 3 seções com "##" cobrindo: diagnóstico previdenciário, pendências identificadas, e recomendações estratégicas; (3) listas com "- " ou "1." dentro das seções; (4) texto em negrito "**...**" para destacar pontos críticos; (5) um parágrafo conclusivo. Exemplo de estrutura: "# Observação Técnica\\n\\n## 1. Diagnóstico Previdenciário\\n[parágrafo]\\n\\n**Situação Atual:**\\n- Tempo de Magistério: X\\n- ...\\n\\n## 2. Pendências Identificadas\\n1. ...\\n\\n## 3. Recomendações Estratégicas\\n..."',
                   },
                   teacherTime: {
                     type: 'string',
