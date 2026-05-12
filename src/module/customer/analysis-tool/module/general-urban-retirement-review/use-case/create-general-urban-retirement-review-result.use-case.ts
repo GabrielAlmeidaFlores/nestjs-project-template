@@ -32,6 +32,8 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 type ParsedIaResponseType = {
   analiseCompletaJson?: unknown;
   analiseCompletaMarkdown?: unknown;
+  recomendacaoDoSistema?: unknown;
+  resultadosDaAnalise?: unknown;
 };
 
 @Injectable()
@@ -340,8 +342,21 @@ export class CreateGeneralUrbanRetirementReviewResultUseCase {
       typeof normalizedIaResponse?.analiseCompletaMarkdown === 'string'
         ? normalizedIaResponse.analiseCompletaMarkdown
         : '';
+    const recomendacaoDoSistema =
+      typeof normalizedIaResponse?.recomendacaoDoSistema === 'object' &&
+      normalizedIaResponse.recomendacaoDoSistema !== null
+        ? normalizedIaResponse.recomendacaoDoSistema
+        : null;
+    const resultadosDaAnalise =
+      typeof normalizedIaResponse?.resultadosDaAnalise === 'string'
+        ? normalizedIaResponse.resultadosDaAnalise
+        : '';
     const generalUrbanRetirementReviewCompleteAnalysis = JSON.stringify(
-      analiseCompletaJson,
+      {
+        analiseCompletaJson,
+        recomendacaoDoSistema,
+        resultadosDaAnalise,
+      },
       null,
       2,
     );

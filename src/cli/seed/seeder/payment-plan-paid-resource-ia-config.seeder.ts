@@ -20176,7 +20176,16 @@ Orientar de forma clara e prática:
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
         PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_BENEFIT_AWARD_LETTER_ANALYSIS,
       ),
-      prompt: `Você é ELOY, especialista em carta de concessão previdenciária. Extraia exclusivamente em JSON válido os dados da carta de concessão do benefício a revisar. Inclua no mínimo: benefitType, dib, rmi, rma, insuredName, nb, legalBasis, observations e inconsistencies.`,
+      prompt: `Você é ELOY, especialista em carta de concessão previdenciária. Analise a carta de concessão enviada e retorne EXCLUSIVAMENTE JSON válido com os seguintes campos obrigatórios:
+
+- tipoBeneficio: tipo do benefício previdenciário concedido (ex: "Aposentadoria por Tempo de Contribuição")
+- nomeSegurado: nome completo do segurado beneficiário
+- dib: data de início do benefício no formato DD/MM/AAAA
+- rmi: renda mensal inicial do benefício (ex: "R$ 1.234,56")
+- rma: renda mensal atual do benefício (ex: "R$ 1.234,56")
+- competenciasNaoConsideradas: lista de competências (meses/anos de contribuição) que NÃO foram incluídas no cálculo do benefício pelo INSS. Para cada competência excluída identifique: o mês/ano no formato MM/AAAA, o valor da contribuição e o motivo pelo qual foi desconsiderada (ex: contribuição abaixo do teto, contribuição fora do período de cálculo, vínculo não reconhecido, etc.). Se não houver competências não consideradas, retorne uma lista vazia.
+
+Busque ativamente na carta de concessão por competências que foram omitidas ou desconsideradas no cálculo do benefício, pois estas representam potencial de revisão favorável ao segurado.`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
