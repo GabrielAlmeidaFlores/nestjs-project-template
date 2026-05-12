@@ -71,13 +71,21 @@ export class GetSpecialRetirementGrantResultUseCase {
     const simplifiedRaw =
       result.specialRetirementGrantSimplifiedAnalysis ?? null;
     const firstRaw = result.specialRetirementGrantFirstAnalysis ?? null;
-    const downloadRaw =
-      result.specialRetirementGrantCompleteAnalysisDownload ?? null;
 
     const parsedComplete: Record<string, unknown> | null =
       completeRaw !== null
         ? (this.safeJsonParseOrThrow(completeRaw) as Record<string, unknown>)
         : null;
+
+    if (
+      parsedComplete !== null &&
+      typeof parsedComplete['resultadoDaAnalise'] === 'string'
+    ) {
+      parsedComplete['resultadoDaAnalise'] =
+        await this.exportDocumentGateway.convertMarkdownToHtml(
+          parsedComplete['resultadoDaAnalise'],
+        );
+    }
 
     if (
       parsedComplete !== null &&
@@ -102,9 +110,6 @@ export class GetSpecialRetirementGrantResultUseCase {
     return GetSpecialRetirementGrantResultResponseDto.build({
       ...(parsedComplete !== null && {
         specialRetirementGrantCompleteAnalysis: parsedComplete,
-      }),
-      ...(downloadRaw !== null && {
-        specialRetirementGrantCompleteAnalysisDownload: downloadRaw,
       }),
       ...(parsedSimplified !== null && {
         specialRetirementGrantSimplifiedAnalysis: parsedSimplified,
