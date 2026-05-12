@@ -15,6 +15,7 @@ import { SpecialRetirementGrantDocumentTypeormEntity } from '@infra/database/imp
 import { SpecialRetirementGrantLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-legal-proceeding.entity';
 import { SpecialRetirementGrantPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-period.typeorm.entity';
 import { SpecialRetirementGrantResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-result.typeorm.entity';
+import { SpecialRetirementGrantTechnicalDiagnosisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-technical-diagnosis.typeorm.entity';
 
 @Entity({ name: 'special_retirement_grant' })
 export class SpecialRetirementGrantTypeormEntity extends BaseTypeormEntity {
@@ -87,6 +88,14 @@ export class SpecialRetirementGrantTypeormEntity extends BaseTypeormEntity {
   )
   public specialRetirementGrantPeriod?:
     | SpecialRetirementGrantPeriodTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => SpecialRetirementGrantTechnicalDiagnosisTypeormEntity,
+    (entity) => entity.specialRetirementGrant,
+  )
+  public specialRetirementGrantTechnicalDiagnosis?:
+    | SpecialRetirementGrantTechnicalDiagnosisTypeormEntity[]
     | undefined;
 
   @ManyToOne(() => OrganizationMemberTypeormEntity)

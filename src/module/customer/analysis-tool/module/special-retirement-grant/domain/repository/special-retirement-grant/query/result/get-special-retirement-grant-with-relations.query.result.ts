@@ -5,6 +5,7 @@ import type { GetSpecialRetirementGrantBenefitQueryResult } from '@module/custom
 import type { GetSpecialRetirementGrantDocumentQueryResult } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant/query/result/get-special-retirement-grant-document.query.result';
 import type { GetSpecialRetirementGrantLegalProceedingQueryResult } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant/query/result/get-special-retirement-grant-legal-proceeding.query.result';
 import type { GetSpecialRetirementGrantResultQueryResult } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-result/query/result/get-special-retirement-grant-result.query.result';
+import type { GetSpecialRetirementGrantTechnicalDiagnosisQueryResult } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant-technical-diagnosis/query/result/get-special-retirement-grant-technical-diagnosis.query.result';
 import type { SpecialRetirementGrantId } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/value-object/special-retirement-grant-id/special-retirement-grant-id.value-object';
 
 export class GetSpecialRetirementGrantWithRelationsQueryResult extends BaseBuildableObject {
@@ -16,6 +17,7 @@ export class GetSpecialRetirementGrantWithRelationsQueryResult extends BaseBuild
   public readonly specialRetirementGrantLegalProceeding: GetSpecialRetirementGrantLegalProceedingQueryResult[];
   public readonly specialRetirementGrantBenefit: GetSpecialRetirementGrantBenefitQueryResult[];
   public readonly specialRetirementGrantDocument: GetSpecialRetirementGrantDocumentQueryResult[];
+  public readonly technicalDiagnosis: GetSpecialRetirementGrantTechnicalDiagnosisQueryResult | null;
   public readonly createdBy: GetOrganizationMemberWithCustomerRelationQueryResult;
   public readonly updatedBy: GetOrganizationMemberWithCustomerRelationQueryResult;
   public readonly createdAt: Date;

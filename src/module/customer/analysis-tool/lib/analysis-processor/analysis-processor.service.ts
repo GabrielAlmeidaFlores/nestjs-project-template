@@ -35,8 +35,9 @@ import { DisabilityRetirementPlanningRejectionPeriodPendencyReasonEnum } from '@
 import { GeneralUrbanRetirementDenialPeriodCategoryEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-category.enum';
 import { GeneralUrbanRetirementDenialPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-consideration.enum';
 import { GeneralUrbanRetirementDenialPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-pendency-reason.enum';
+import { TeacherRetirementPlanningRejectionWorkPeriodDocumentProbativeForceEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection-work-period/enum/teacher-retirement-planning-rejection-work-period-document-probative-force.enum';
+import { TeacherRetirementPlanningRejectionWorkPeriodTimelineClassificationEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection-work-period/enum/teacher-retirement-planning-rejection-work-period-timeline-classification.enum';
 import { TemporaryIncapacityBenefitRejectionCategoryEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/enum/temporary-incapacity-benefit-rejection-category.enum';
-import { TemporaryIncapacityBenefitTerminationCategoryEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-termination/domain/schema/entity/temporary-incapacity-benefit-termination/enum/temporary-incapacity-benefit-termination-category.enum';
 import { MiniAdvisorAnalysisTypeEnum } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor-result/enum/mini-advisor-analysis-type.enum';
 
 @Injectable()
@@ -65,15 +66,15 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
   ): Promise<string | null> {
     const prompt = `
 # IMPORTANTE
-- A anï¿½lise tï¿½cnica deve se basear prioritariamente na anï¿½lise jï¿½ processada do CNIS em formato JSON;
-- Calcule somente os valores que nï¿½o estiverem presentes na anï¿½lise jï¿½ fornecida do CNIS, nï¿½o realize calculos como valores salï¿½riais, use estritamente os fornecidos.
-- Nï¿½o incluir tag <br> na resposta.
-Para a Seï¿½ï¿½o 6 (Cï¿½LCULOS), siga rigorosamente as instruï¿½ï¿½es abaixo:
-1. Para cï¿½lculos ja efetuados, nï¿½o calcule novamente, use os valores fornecidos na anï¿½lise do CNIS.
-2. Garanta precisï¿½o absoluta nos cï¿½lculos numï¿½ricos e de datas que precisar fazer.
-3. Formate todos os valores monetï¿½rios no padrï¿½o brasileiro: prefixo "R$ ", milhar com ponto e decimal com vï¿½rgula (ex.: R$ 1.234,56).
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON;
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize calculos como valores salariais, use estritamente os fornecidos.
+- Não incluir tag <br> na resposta.
+Para a Seção 6 (CÁLCULOS), siga rigorosamente as instruções abaixo:
+1. Para cálculos ja efetuados, não calcule novamente, use os valores fornecidos na análise do CNIS.
+2. Garanta precisão absoluta nos cálculos numéricos e de datas que precisar fazer.
+3. Formate todos os valores monetários no padrão brasileiro: prefixo "R$ ", milhar com ponto e decimal com vírgula (ex.: R$ 1.234,56).
 
-Anï¿½lise processada do CNIS:
+Análise processada do CNIS:
   ${cnisAnalysisJson}
 `;
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
@@ -149,12 +150,12 @@ Anï¿½lise processada do CNIS:
               totalContributionTime: {
                 type: 'string',
                 description:
-                  'Tempo total de contribuiï¿½ï¿½o de serviï¿½o. Exemplo: 44 anos, 3 meses e 12 dias',
+                  'Tempo total de contribuição de serviço. Exemplo: 44 anos, 3 meses e 12 dias',
               },
               publicServiceContributionTime: {
                 type: 'string',
                 description:
-                  'Tempo total de contribuiï¿½ï¿½o em serviï¿½o pï¿½blico. Exemplo: 30 anos, 2 meses e 5 dias',
+                  'Tempo total de contribuição em serviço público. Exemplo: 30 anos, 2 meses e 5 dias',
               },
               positionTenureTime: {
                 type: 'string',
@@ -168,17 +169,17 @@ Anï¿½lise processada do CNIS:
               },
               insuredProfession: {
                 type: 'string',
-                description: 'Profissï¿½o do segurado',
+                description: 'Profissão do segurado',
               },
               totalCareerTime: {
                 type: 'string',
                 description:
-                  'Tempo total de carreira. Exemplo: 50 anos, 1 mï¿½s e 20 dias',
+                  'Tempo total de carreira. Exemplo: 50 anos, 1 mês e 20 dias',
               },
               publicServiceStartDate: {
                 type: 'string',
                 format: 'date-time',
-                description: 'Data de ingresso no serviï¿½o pï¿½blico',
+                description: 'Data de ingresso no serviço público',
               },
               retirementOptions: {
                 type: 'array',
@@ -202,22 +203,22 @@ Anï¿½lise processada do CNIS:
                     hasHighestAdvantageValue: {
                       type: 'boolean',
                       description:
-                        'Indica se a regra oferece o maior valor no cenï¿½rio mais vantajoso',
+                        'Indica se a regra oferece o maior valor no cenário mais vantajoso',
                     },
                     retirementAnalysis: {
                       type: 'string',
                       description:
-                        'Anï¿½lise detalhada da aposentadoria em formato markdown',
+                        'Análise detalhada da aposentadoria em formato markdown',
                     },
                     isEligible: {
                       type: 'boolean',
                       description:
-                        'Indica se o segurado ï¿½ elegï¿½vel para a regra',
+                        'Indica se o segurado é elegível para a regra',
                     },
                     eligibilityAvailableAt: {
                       type: 'string',
                       description:
-                        'Data em que o segurado se tornarï¿½ elegï¿½vel para a regra, se aplicï¿½vel',
+                        'Data em que o segurado se tornará elegível para a regra, se aplicável',
                     },
                   },
                   required: [
@@ -363,12 +364,12 @@ Anï¿½lise processada do CNIS:
                   totalContributionTime: {
                     type: 'string',
                     description:
-                      'Tempo total de contribuiï¿½ï¿½o. Exemplo: 29 anos e 3 meses',
+                      'Tempo total de contribuição. Exemplo: 29 anos e 3 meses',
                   },
                   publicServiceTime: {
                     type: 'string',
                     description:
-                      'Tempo no serviï¿½o pï¿½blico. Exemplo: 25 anos e 1 mï¿½s',
+                      'Tempo no serviço público. Exemplo: 25 anos e 1 mês',
                   },
                   positionTenureTime: {
                     type: 'string',
@@ -411,27 +412,26 @@ Anï¿½lise processada do CNIS:
                   periods: {
                     type: 'array',
                     description:
-                      'Lista de perï¿½odos de atividade especial analisados',
+                      'Lista de períodos de atividade especial analisados',
                     items: {
                       type: 'object',
                       properties: {
                         label: {
                           type: 'string',
-                          description: 'Rï¿½tulo descritivo do perï¿½odo',
+                          description: 'Rótulo descritivo do período',
                         },
                         start: {
                           type: 'string',
-                          description: 'Data de inï¿½cio no formato YYYY-MM-DD',
+                          description: 'Data de início no formato YYYY-MM-DD',
                         },
                         end: {
                           type: 'string',
-                          description:
-                            'Data de tï¿½rmino no formato YYYY-MM-DD',
+                          description: 'Data de término no formato YYYY-MM-DD',
                         },
                         recognized: {
                           type: 'boolean',
                           description:
-                            'Indica se o perï¿½odo foi reconhecido como atividade especial',
+                            'Indica se o período foi reconhecido como atividade especial',
                         },
                         companyName: {
                           type: 'string',
@@ -443,23 +443,23 @@ Anï¿½lise processada do CNIS:
                         },
                         role: {
                           type: 'string',
-                          description: 'Cargo/funï¿½ï¿½o exercida',
+                          description: 'Cargo/função exercida',
                         },
                         employmentLinkStartDate: {
                           type: 'string',
-                          description: 'Data de inï¿½cio do vï¿½nculo',
+                          description: 'Data de início do vínculo',
                         },
                         employmentLinkEndDate: {
                           type: 'string',
-                          description: 'Data de tï¿½rmino do vï¿½nculo',
+                          description: 'Data de término do vínculo',
                         },
                         employmentLinkSupportingDocument: {
                           type: 'string',
-                          description: 'Documento comprobatï¿½rio do vï¿½nculo',
+                          description: 'Documento comprobatório do vínculo',
                         },
                         employmentLinkPresentInCNIS: {
                           type: 'boolean',
-                          description: 'Indica se o vï¿½nculo consta no CNIS',
+                          description: 'Indica se o vínculo consta no CNIS',
                         },
                         employmentLinkEarningsInCNIS: {
                           type: 'boolean',
@@ -469,7 +469,7 @@ Anï¿½lise processada do CNIS:
                         harmfulAgentsHasAny: {
                           type: 'boolean',
                           description:
-                            'Indica se hï¿½ agentes nocivos identificados',
+                            'Indica se há agentes nocivos identificados',
                         },
                         harmfulAgentsExposureFrequency: {
                           type: 'array',
@@ -510,45 +510,44 @@ Anï¿½lise processada do CNIS:
                         harmfulAgentsEffectivePPE: {
                           type: 'boolean',
                           description:
-                            'Indica se havia EPI (Equipamento de Proteï¿½ï¿½o Individual) eficaz',
+                            'Indica se havia EPI (Equipamento de Proteção Individual) eficaz',
                         },
                         legalFrameworkOccupationalCategoryDecree: {
                           type: 'string',
                           description:
-                            'Decreto aplicï¿½vel ï¿½ categoria profissional',
+                            'Decreto aplicável à categoria profissional',
                         },
                         legalFrameworkOccupationalCategoryCode: {
                           type: 'string',
-                          description: 'Cï¿½digo da categoria profissional',
+                          description: 'Código da categoria profissional',
                         },
                         legalFrameworkOccupationalCategoryDescription: {
                           type: 'string',
-                          description:
-                            'Descriï¿½ï¿½o da categoria profissional',
+                          description: 'Descrição da categoria profissional',
                         },
                         legalFrameworkHarmfulAgentDecree: {
                           type: 'string',
-                          description: 'Decreto aplicï¿½vel ao agente nocivo',
+                          description: 'Decreto aplicável ao agente nocivo',
                         },
                         legalFrameworkHarmfulAgentCode: {
                           type: 'string',
-                          description: 'Cï¿½digo do agente nocivo',
+                          description: 'Código do agente nocivo',
                         },
                         legalFrameworkHarmfulAgentDescription: {
                           type: 'string',
-                          description: 'Descriï¿½ï¿½o do agente nocivo',
+                          description: 'Descrição do agente nocivo',
                         },
                         legalFrameworkCaseLawOrTechnicalStandardReference: {
                           type: 'string',
-                          description: 'Referï¿½ncia da jurisprudï¿½ncia/norma',
+                          description: 'Referência da jurisprudência/norma',
                         },
                         legalFrameworkCaseLawOrTechnicalStandardCode: {
                           type: 'string',
-                          description: 'Cï¿½digo da norma tï¿½cnica',
+                          description: 'Código da norma técnica',
                         },
                         legalFrameworkCaseLawOrTechnicalStandardDescription: {
                           type: 'string',
-                          description: 'Descriï¿½ï¿½o da norma tï¿½cnica',
+                          description: 'Descrição da norma técnica',
                         },
                         technicalConclusionSpecialTimeRecognized: {
                           type: 'boolean',
@@ -557,11 +556,11 @@ Anï¿½lise processada do CNIS:
                         },
                         technicalConclusionJustification: {
                           type: 'string',
-                          description: 'Justificativa da conclusï¿½o tï¿½cnica',
+                          description: 'Justificativa da conclusão técnica',
                         },
                         additionalNotes: {
                           type: 'string',
-                          description: 'Observaï¿½ï¿½es adicionais relevantes',
+                          description: 'Observações adicionais relevantes',
                         },
                       },
                       required: [
@@ -599,7 +598,7 @@ Anï¿½lise processada do CNIS:
                   },
                   analysisResult: {
                     type: 'string',
-                    description: 'Anï¿½lise completa em formato markdown',
+                    description: 'Análise completa em formato markdown',
                   },
                 },
                 required: ['periods', 'analysisResult'],
@@ -948,14 +947,14 @@ Análise processada do CNIS:
   ): Promise<string | null> {
     const prompt = `
 # IMPORTANTE
-- A anÃ¡lise tÃ©cnica deve se basear prioritariamente na anÃ¡lise jÃ¡ processada do CNIS em formato JSON;
-- Calcule somente os valores que nÃ£o estiverem presentes na anÃ¡lise jÃ¡ fornecida do CNIS, nÃ£o realize cÃ¡lculos salariais alÃ©m do que for necessÃ¡rio; use estritamente os fornecidos.
-- NÃ£o incluir tag <br> na resposta.
-- Retorne estritamente um objeto JSON compatÃ­vel com o schema solicitado.
-- Para cada item de \`periods\`, use prioritariamente os dados estruturados jÃ¡ enviados nos arquivos do prompt; nÃ£o invente valores.
-- O campo \`agents\` NÃƒO vem do CNIS analisado; extraia e consolide agentes nocivos a partir dos documentos anexados (PPP, LTCAT, etc.) e devolva no formato estruturado.
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON;
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize cálculos salariais além do que for necessário; use estritamente os fornecidos.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Para cada item de \`periods\`, use prioritariamente os dados estruturados já enviados nos arquivos do prompt; não invente valores.
+- O campo \`agents\` NÃO vem do CNIS analisado; extraia e consolide agentes nocivos a partir dos documentos anexados (PPP, LTCAT, etc.) e devolva no formato estruturado.
 
-AnÃ¡lise processada do CNIS:
+Análise processada do CNIS:
   ${cnisAnalysisJson}
 `;
 
@@ -1115,6 +1114,66 @@ Análise processada do CNIS:
     );
   }
 
+  public async getSpecialRetirementRejectionFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson = true,
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON;
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize cálculos salariais além do que for necessário; use estritamente os fornecidos.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Para cada item de \`workPeriods\`, use prioritariamente os dados estruturados já enviados nos arquivos do prompt; não invente valores.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: asJson
+          ? ResponseConfigInputModel.build({
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema:
+                this.getSpecialRetirementRejectionFirstAnalysisJsonSchema(),
+            })
+          : null,
+      }),
+    );
+  }
+
+  public async getSpecialRetirementRejectionCompleteAnalysis(
+    systemInstruction: string,
+    _cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getSpecialRetirementRejectionSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
   public async getSpecialRetirementGrantSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
@@ -1163,44 +1222,42 @@ Análise processada do CNIS:
             properties: {
               items: {
                 type: 'array',
-                description: 'Lista de itens de conversï¿½o de tempo especial',
+                description: 'Lista de itens de conversão de tempo especial',
                 items: {
                   type: 'object',
                   properties: {
                     originJobTitleDescription: {
                       type: 'string',
-                      description:
-                        'Descriï¿½ï¿½o do cargo/funï¿½ï¿½o de origem',
+                      description: 'Descrição do cargo/função de origem',
                     },
                     periodDateRangeText: {
                       type: 'string',
                       description:
-                        'Texto descritivo do perï¿½odo (ex: 01/2010 a 12/2015)',
+                        'Texto descritivo do período (ex: 01/2010 a 12/2015)',
                     },
                     harmfulExposureAgentsText: {
                       type: 'string',
                       description:
-                        'Descriï¿½ï¿½o dos agentes nocivos identificados',
+                        'Descrição dos agentes nocivos identificados',
                     },
                     specialTimeDurationText: {
                       type: 'string',
                       description:
-                        'Duraï¿½ï¿½o do tempo especial em formato textual',
+                        'Duração do tempo especial em formato textual',
                     },
                     convertedTimeDurationText: {
                       type: 'string',
                       description:
-                        'Duraï¿½ï¿½o do tempo convertido em formato textual',
+                        'Duração do tempo convertido em formato textual',
                     },
                     conversionFactorValue: {
                       type: 'number',
-                      description:
-                        'Fator de conversï¿½o aplicado (ex: 1.4, 1.2)',
+                      description: 'Fator de conversão aplicado (ex: 1.4, 1.2)',
                     },
                     recognitionStatusEnum: {
                       type: 'string',
                       description:
-                        'Status de reconhecimento do perï¿½odo especial',
+                        'Status de reconhecimento do período especial',
                     },
                   },
                 },
@@ -1227,7 +1284,7 @@ Análise processada do CNIS:
             properties: {
               items: {
                 type: 'array',
-                description: 'Lista de regras previdenciï¿½rias analisadas',
+                description: 'Lista de regras previdenciárias analisadas',
                 items: {
                   type: 'object',
                   properties: {
@@ -1252,12 +1309,11 @@ Análise processada do CNIS:
                     },
                     isBestFinancialOption: {
                       type: 'boolean',
-                      description:
-                        'Indica se ï¿½ a melhor opï¿½ï¿½o financeira',
+                      description: 'Indica se à a melhor opção financeira',
                     },
                     ruleDetailedExplanationText: {
                       type: 'string',
-                      description: 'Explicaï¿½ï¿½o detalhada da regra',
+                      description: 'Explicação detalhada da regra',
                       nullable: true,
                     },
                   },
@@ -1287,18 +1343,18 @@ Análise processada do CNIS:
                 type: 'string',
                 enum: Object.values(MiniAdvisorAnalysisTypeEnum),
                 description:
-                  'Tipo de anÃ¡lise mais recomendada para o perfil do cliente com base nas informaï¿½ï¿½es recebidas',
+                  'Tipo de análise mais recomendada para o perfil do cliente com base nas informações recebidas',
               },
               benefitDescription: {
                 type: 'string',
                 description:
-                  'DescriÃ§Ã£o do benefÃ­cio previdenciÃ¡rio mais indicado',
+                  'Descrição do benefício previdenciário mais indicado',
                 nullable: true,
               },
               attentionNote: {
                 type: 'string',
                 description:
-                  'ObservaÃ§Ã£o de atenÃ§Ã£o ou alerta importante para o caso',
+                  'Observação de atenção ou alerta importante para o caso',
                 nullable: true,
               },
             },
@@ -1327,11 +1383,11 @@ Análise processada do CNIS:
   ): Promise<string | null> {
     const prompt = `
 # IMPORTANTE
-- Retorne estritamente um objeto JSON compatï¿½vel com o schema solicitado.
-- Use exclusivamente os valores de enum fornecidos no schema para os campos de categoria, grau de deficiï¿½ncia, motivo de pendï¿½ncia e consideraï¿½ï¿½o do perï¿½odo.
-- Cada item do array \`periods\` deve ser compatï¿½vel com a criaï¿½ï¿½o de um perï¿½odo na anï¿½lise de concessï¿½o de aposentadoria da pessoa com deficiï¿½ncia.
-- Preencha \`endDate\`, \`pendencyReason\`, \`typeOfContribution\`, \`contributionAverage\`, \`disabilityStatus\` e \`periodConsideration\` somente quando essas informaï¿½ï¿½es estiverem disponï¿½veis nos documentos analisados.
-- Nï¿½o incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Use exclusivamente os valores de enum fornecidos no schema para os campos de categoria, grau de deficiência, motivo de pendência e consideração do período.
+- Cada item do array \`periods\` deve ser compatível com a criação de um período na análise de concessão de aposentadoria da pessoa com deficiência.
+- Preencha \`endDate\`, \`pendencyReason\`, \`typeOfContribution\`, \`contributionAverage\`, \`disabilityStatus\` e \`periodConsideration\` somente quando essas informações estiverem disponíveis nos documentos analisados.
+- Não incluir tag <br> na resposta.
 `;
 
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
@@ -1366,11 +1422,11 @@ Análise processada do CNIS:
   ): Promise<string | null> {
     const prompt = `
 # IMPORTANTE
-- Retorne estritamente um objeto JSON compatÃ­vel com o schema solicitado.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
 - Use exclusivamente os valores de enum fornecidos no schema para os campos de reconhecimento e viabilidade.
-- Cada item de \`timeAccelerators\` deve ser compatÃ­vel com a criaÃ§Ã£o de um perÃ­odo de acelerador de tempo.
-- Preencha \`technicalNote\`, \`startDate\`, \`endDate\` e \`institution\` quando essas informaÃ§Ãµes estiverem disponÃ­veis nos documentos analisados.
-- NÃ£o incluir tag <br> na resposta.
+- Cada item de \`timeAccelerators\` deve ser compatível com a criação de um período de acelerador de tempo.
+- Preencha \`technicalNote\`, \`startDate\`, \`endDate\` e \`institution\` quando essas informações estiverem disponíveis nos documentos analisados.
+- Não incluir tag <br> na resposta.
 `;
 
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
@@ -1395,26 +1451,26 @@ Análise processada do CNIS:
   ): Promise<string | null> {
     const prompt = `
 # IMPORTANTE
-- A anÃ¡lise tÃ©cnica deve se basear prioritariamente na anÃ¡lise jÃ¡ processada do CNIS em formato JSON;
-- Calcule somente os valores que nÃ£o estiverem presentes na anÃ¡lise jÃ¡ fornecida do CNIS, nÃ£o realize calculos como valores salariais, use estritamente os fornecidos.
-- NÃ£o incluir tag <br> na resposta.
-- Retorne estritamente um objeto JSON compatÃ­vel com o schema solicitado.
-- Para cada item de \`periods\`, use prioritariamente os dados estruturados jÃ¡ enviados nos arquivos do prompt; nÃ£o invente valores.
-- O campo \`contributionAverage\` representa a mÃ©dia das remuneraÃ§Ãµes do perÃ­odo jÃ¡ informada nos dados estruturados; quando esse valor estiver disponÃ­vel, reutilize exatamente esse valor e nÃ£o retorne \`0\`.
-- O campo \`contributionAverage\` nÃ£o Ã© uma lista de contribuiÃ§Ãµes e nÃ£o deve ser calculado como soma zerada por ausÃªncia de detalhamento mensal.
-- Quando o valor de \`contributionAverage\` nÃ£o estiver presente nos dados estruturados do perÃ­odo, omita esse campo em vez de retornar \`0\`.
-- O campo \`belowMinimumContributions\` deve conter somente as competÃªncias cujos valores ficaram abaixo do mÃ­nimo.
-- NÃ£o liste em \`belowMinimumContributions\` contribuiÃ§Ãµes que nÃ£o estejam abaixo do mÃ­nimo.
-- Quando nÃ£o houver competÃªncias abaixo do mÃ­nimo, retorne \`belowMinimumContributions: []\`.
-- O campo \`competenceBelowTheMinimum\` deve ser \`true\` somente quando houver ao menos um item em \`belowMinimumContributions\`; caso contrÃ¡rio, deve ser \`false\`.
-- O campo \`isPendency\` deve indicar se o perÃ­odo possui qualquer pendÃªncia relevante.
-- O campo \`reasonPendency\` sÃ³ deve ser preenchido quando realmente existir pendÃªncia no perÃ­odo.
-- Analise a qualidade de segurado do instituidor falecido com base nos perÃ­odos e data do Ã³bito.
-- Analise o direito Ã  aposentadoria programada do instituidor falecido antes do Ã³bito.
-- Analise o direito Ã  aposentadoria por incapacidade permanente do instituidor falecido.
-- Analise a comprovaÃ§Ã£o da qualidade de dependente de cada dependente com base nos documentos anexados.
-- Para cada regra de aposentadoria aplicÃ¡vel ao instituidor falecido, retorne o resumo com resultado, data do direito, RMI prevista, e a anÃ¡lise detalhada.
-AnÃ¡lise processada do CNIS:
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON;
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize calculos como valores salariais, use estritamente os fornecidos.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Para cada item de \`periods\`, use prioritariamente os dados estruturados já enviados nos arquivos do prompt; não invente valores.
+- O campo \`contributionAverage\` representa a média das remunerações do período já informada nos dados estruturados; quando esse valor estiver disponível, reutilize exatamente esse valor e não retorne \`0\`.
+- O campo \`contributionAverage\` não é uma lista de contribuições e não deve ser calculado como soma zerada por ausência de detalhamento mensal.
+- Quando o valor de \`contributionAverage\` não estiver presente nos dados estruturados do período, omita esse campo em vez de retornar \`0\`.
+- O campo \`belowMinimumContributions\` deve conter somente as competências cujos valores ficaram abaixo do mínimo.
+- Não liste em \`belowMinimumContributions\` contribuições que não estejam abaixo do mínimo.
+- Quando não houver competências abaixo do mínimo, retorne \`belowMinimumContributions: []\`.
+- O campo \`competenceBelowTheMinimum\` deve ser \`true\` somente quando houver ao menos um item em \`belowMinimumContributions\`; caso contrário, deve ser \`false\`.
+- O campo \`isPendency\` deve indicar se o período possui qualquer pendência relevante.
+- O campo \`reasonPendency\` só deve ser preenchido quando realmente existir pendência no período.
+- Analise a qualidade de segurado do instituidor falecido com base nos períodos e data do óbito.
+- Analise o direito à aposentadoria programada do instituidor falecido antes do óbito.
+- Analise o direito à aposentadoria por incapacidade permanente do instituidor falecido.
+- Analise a comprovação da qualidade de dependente de cada dependente com base nos documentos anexados.
+- Para cada regra de aposentadoria aplicável ao instituidor falecido, retorne o resumo com resultado, data do direito, RMI prevista, e a análise detalhada.
+Análise processada do CNIS:
   ${cnisAnalysisJson}
 `;
 
@@ -1441,12 +1497,12 @@ AnÃ¡lise processada do CNIS:
   ): Promise<string | null> {
     const prompt = `
 # IMPORTANTE
-- A anÃ¡lise tÃ©cnica deve se basear prioritariamente na anÃ¡lise jÃ¡ processada do CNIS em formato JSON.
-- Calcule somente os valores que nÃ£o estiverem presentes na anÃ¡lise jÃ¡ fornecida do CNIS.
-- NÃ£o incluir tag <br> na resposta.
-- Retorne estritamente um objeto JSON compatÃ­vel com o schema solicitado.
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
 
-AnÃ¡lise processada do CNIS:
+Análise processada do CNIS:
   ${cnisAnalysisJson}
 `;
 
@@ -1488,12 +1544,12 @@ AnÃ¡lise processada do CNIS:
   ): Promise<string | null> {
     const prompt = `
 # IMPORTANTE
-- A anÃ¡lise tÃ©cnica deve se basear prioritariamente na anÃ¡lise jÃ¡ processada do CNIS em formato JSON.
-- Calcule somente os valores que nÃ£o estiverem presentes na anÃ¡lise jÃ¡ fornecida do CNIS; nÃ£o realize cÃ¡lculos como valores salariais, use estritamente os fornecidos.
-- NÃ£o incluir tag <br> na resposta.
-- Retorne estritamente um objeto JSON compatÃ­vel com o schema solicitado.
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS; não realize cálculos como valores salariais, use estritamente os fornecidos.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
 
-AnÃ¡lise processada do CNIS:
+Análise processada do CNIS:
   ${cnisAnalysisJson}
 `;
 
@@ -1516,12 +1572,12 @@ AnÃ¡lise processada do CNIS:
   ): Promise<string | null> {
     const prompt = `
 # IMPORTANTE
-- A anÃ¡lise tÃ©cnica deve se basear prioritariamente na anÃ¡lise jÃ¡ processada do CNIS em formato JSON.
-- Calcule somente os valores que nÃ£o estiverem presentes na anÃ¡lise jÃ¡ fornecida do CNIS.
-- NÃ£o incluir tag <br> na resposta.
-- Retorne estritamente um objeto JSON compatÃ­vel com o schema solicitado.
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
 
-AnÃ¡lise processada do CNIS:
+Análise processada do CNIS:
   ${cnisAnalysisJson}
 `;
 
@@ -1822,10 +1878,11 @@ You will receive ${files.length} document file(s). Analyze each one individually
 
 For each document, verify if the holder name matches the customer name exactly or with clear equivalent variation.
 
-Customer name: ${customerName}
+Base your analysis exclusively on the provided documents. Do not invent information.
+Return strictly JSON compatible with the requested schema, with no external markdown, no comments, and no additional text.
 
-Set ownName as true when the document holder belongs to this customer, otherwise false.
-`;
+    Customer name: ${customerName}
+    `;
 
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
@@ -1835,7 +1892,9 @@ Set ownName as true when the document holder belongs to this customer, otherwise
         responseConfig: ResponseConfigInputModel.build({
           responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
           jsonSchema:
-            this.getRuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisJsonSchema(),
+            this.getRuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisJsonSchema(
+              files.length,
+            ),
         }),
       }),
     );
@@ -1983,11 +2042,11 @@ Set ownName as true when the document holder belongs to this customer, otherwise
   ): Promise<string | null> {
     const prompt = `
 # IMPORTANTE
-- Retorne estritamente um objeto JSON compatÃ­vel com o schema solicitado.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
 - Use exclusivamente os valores de enum fornecidos no schema para os campos de reconhecimento e viabilidade.
-- Cada item de \`timeAccelerators\` deve ser compatÃ­vel com a criaÃ§Ã£o de um perÃ­odo de acelerador de tempo.
-- Preencha \`technicalNote\`, \`startDate\`, \`endDate\` e \`institution\` quando essas informaÃ§Ãµes estiverem disponÃ­veis nos documentos analisados.
-- NÃ£o incluir tag <br> na resposta.
+- Cada item de \`timeAccelerators\` deve ser compatível com a criação de um período de acelerador de tempo.
+- Preencha \`technicalNote\`, \`startDate\`, \`endDate\` e \`institution\` quando essas informações estiverem disponíveis nos documentos analisados.
+- Não incluir tag <br> na resposta.
 `;
 
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
@@ -2012,19 +2071,19 @@ Set ownName as true when the document holder belongs to this customer, otherwise
   ): Promise<string | null> {
     const prompt = `
 # IMPORTANTE
-- A anÃ¡lise tÃ©cnica deve se basear prioritariamente na anÃ¡lise jÃ¡ processada do CNIS em formato JSON;
-- Calcule somente os valores que nÃ£o estiverem presentes na anÃ¡lise jÃ¡ fornecida do CNIS, nÃ£o realize cÃ¡lculos salariais alÃ©m do que for necessÃ¡rio; use estritamente os fornecidos.
-- NÃ£o incluir tag <br> na resposta.
-- Retorne estritamente um objeto JSON compatÃ­vel com o schema solicitado.
-- Para cada item de \`periods\`, use prioritariamente os dados estruturados jÃ¡ enviados nos arquivos do prompt; nÃ£o invente valores.
-- O campo \`contributionAverage\` representa a mÃ©dia das remuneraÃ§Ãµes do perÃ­odo jÃ¡ informada nos dados estruturados; quando esse valor estiver disponÃ­vel, reutilize exatamente esse valor.
-- Quando o valor de \`contributionAverage\` nÃ£o estiver presente nos dados estruturados do perÃ­odo, omita esse campo.
-- O campo \`competenceBelowTheMinimum\` deve ser \`true\` somente quando houver competÃªncias abaixo do mÃ­nimo no histÃ³rico de remuneraÃ§Ãµes.
-- O campo \`isPendency\` deve indicar se o perÃ­odo possui qualquer pendÃªncia relevante.
-- O campo \`pendencyReason\` sÃ³ deve ser preenchido quando realmente existir pendÃªncia no perÃ­odo.
-- O campo \`earningsHistory\` de cada perÃ­odo deve conter APENAS as competÃªncias com pendÃªncia, classificadas por \`pendencyType\`:\n  - \`COMPETENCE_BELOW_MINIMUM\`: remuneraÃ§Ã£o abaixo do salÃ¡rio mÃ­nimo vigente na competÃªncia;\n  - \`NO_EXIT_DATE\`: competÃªncias registradas apÃ³s a data em que o perÃ­odo deveria ter encerrado (perÃ­odo sem data de saÃ­da no CNIS);\n  - \`LATE_CONTRIBUTION\`: contribuiÃ§Ã£o recolhida fora do prazo — preencher \`collectedAt\` com a data real do recolhimento.\n  NÃ£o inclua competÃªncias sem pendÃªncia. Retorne array vazio quando nÃ£o houver nenhuma.
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON;
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize cálculos salariais além do que for necessário; use estritamente os fornecidos.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Para cada item de \`periods\`, use prioritariamente os dados estruturados já enviados nos arquivos do prompt; não invente valores.
+- O campo \`contributionAverage\` representa a média das remunerações do período já informada nos dados estruturados; quando esse valor estiver disponível, reutilize exatamente esse valor.
+- Quando o valor de \`contributionAverage\` não estiver presente nos dados estruturados do período, omita esse campo.
+- O campo \`competenceBelowTheMinimum\` deve ser \`true\` somente quando houver competências abaixo do mínimo no histórico de remunerações.
+- O campo \`isPendency\` deve indicar se o período possui qualquer pendência relevante.
+- O campo \`pendencyReason\` só deve ser preenchido quando realmente existir pendência no período.
+- O campo \`earningsHistory\` de cada período deve conter APENAS as competências com pendência, classificadas por \`pendencyType\`:\n  - \`COMPETENCE_BELOW_MINIMUM\`: remuneração abaixo do salário mínimo vigente na competência;\n  - \`NO_EXIT_DATE\`: competências registradas após a data em que o período deveria ter encerrado (período sem data de saída no CNIS);\n  - \`LATE_CONTRIBUTION\`: contribuição recolhida fora do prazo — preencher \`collectedAt\` com a data real do recolhimento.\n  Não inclua competências sem pendência. Retorne array vazio quando não houver nenhuma.
 
-AnÃ¡lise processada do CNIS:
+Análise processada do CNIS:
   ${cnisAnalysisJson}
 `;
 
@@ -2051,11 +2110,11 @@ AnÃ¡lise processada do CNIS:
   ): Promise<string | null> {
     const prompt = `
 # IMPORTANTE
-- Retorne estritamente um objeto JSON compatÃ­vel com o schema solicitado.
-- Use exclusivamente os valores de enum fornecidos no schema para os campos de categoria, motivo de pendÃªncia e consideraÃ§Ã£o do perÃ­odo.
-- Cada item do array \`periods\` deve ser compatÃ­vel com a criaÃ§Ã£o de um perÃ­odo na anÃ¡lise de indeferimento de aposentadoria urbana comum.
-- Preencha \`endDate\`, \`pendencyReason\`, \`typeOfContribution\`, \`contributionAverage\` e \`periodConsideration\` somente quando essas informaÃ§Ãµes estiverem disponÃ­veis nos documentos analisados.
-- NÃ£o incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Use exclusivamente os valores de enum fornecidos no schema para os campos de categoria, motivo de pendência e consideração do período.
+- Cada item do array \`periods\` deve ser compatível com a criação de um período na análise de indeferimento de aposentadoria urbana comum.
+- Preencha \`endDate\`, \`pendencyReason\`, \`typeOfContribution\`, \`contributionAverage\` e \`periodConsideration\` somente quando essas informações estiverem disponíveis nos documentos analisados.
+- Não incluir tag <br> na resposta.
 `;
 
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
@@ -2079,13 +2138,13 @@ AnÃ¡lise processada do CNIS:
   ): Promise<string | null> {
     const prompt = `
 # IMPORTANTE
-- A anÃ¡lise tÃ©cnica deve se basear prioritariamente na anÃ¡lise jÃ¡ processada do CNIS em formato JSON.
-- Retorne estritamente um objeto JSON compatÃ­vel com o schema solicitado.
-- O campo \`completeAnalysisDownload\` deve conter HTML completo e bem formatado com toda a anÃ¡lise detalhada, pronto para conversÃ£o em PDF.
-- O campo \`analysisResult\` deve conter um texto explicativo completo sobre o resultado da anÃ¡lise e as perspectivas processuais do caso.
-- NÃ£o incluir tag <br> na resposta no campo \`analysisResult\`.
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- O campo \`completeAnalysisDownload\` deve conter HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.
+- O campo \`analysisResult\` deve conter um texto explicativo completo sobre o resultado da análise e as perspectivas processuais do caso.
+- Não incluir tag <br> na resposta no campo \`analysisResult\`.
 
-AnÃ¡lise processada do CNIS:
+Análise processada do CNIS:
   ${cnisAnalysisJson}
 `;
 
@@ -2446,12 +2505,15 @@ Análise processada do CNIS:
   ): Promise<string | null> {
     const prompt = `
 # IMPORTANTE
+- A análise técnica deve se basear prioritariamente nos dados e documentos fornecidos.
 - Retorne estritamente um objeto JSON compatível com o schema solicitado.
-- O campo \`completeAnalysisDownload\` deve conter a análise detalhada em Markdown, pronta para exportação em PDF/DOCX.
-- O campo \`analysisResult\` deve conter um resumo textual objetivo do resultado.
-- O campo \`analysisDetailedText\` deve conter a fundamentação detalhada em texto corrido.
-- Cada item de \`applicableRules\` deve representar uma regra aplicável à análise do BPC Pessoa com Deficiência.
-- Cada item de \`benefitSummaries\` deve representar um cenário ou benefício resumido para a tela final.
+- O campo \`analysisResult\` deve conter o resultado consolidado em Markdown rico, com títulos, parágrafos curtos e listas quando útil. Ele será convertido para HTML pelo backend antes de ser exibido.
+- O campo \`analysisDetailedText\` deve conter a fundamentação técnica e jurídica detalhada em Markdown rico, com hierarquia visual semelhante ao relatório de Atividade Especial: título principal, seções numeradas, subseções, listas e tabelas quando necessário. Não devolva texto corrido único.
+- O campo \`completeAnalysisDownload\` deve conter a versão completa para download em Markdown rico, pronta para conversão em HTML/PDF/DOCX pelo backend. Use headings Markdown (#, ##, ###), parágrafos, listas e tabelas. Não use tags HTML e não use tags <br>.
+- Para cada item de \`applicableRules\`, preencha \`title\` com o nome da regra/critério, \`description\` com a análise fundamentada daquele critério no caso concreto, e \`status\` com o resultado objetivo (ex.: "ATENDIDO", "NÃO ATENDIDO", "PARCIALMENTE ATENDIDO", "PENDENTE").
+- Para cada item de \`benefitSummaries\`, preencha \`benefitType\` com o tipo/cenário de benefício analisado, \`result\` com o resultado do cenário (ex.: "ELEGÍVEL", "NÃO ELEGÍVEL", "ELEGÍVEL VIA FLEXIBILIZAÇÃO JURISPRUDENCIAL"), \`dib\` com a data estimada de início do benefício quando aplicável, \`expectedMonthlyBenefit\` com o valor estimado da RMI quando calculável, e \`detailedAnalysis\` com a análise detalhada daquele cenário em Markdown estruturado.
+- Não invente dados; utilize exclusivamente as informações fornecidas.
+- Os demais campos devem respeitar as descrições e orientações do schema.
 `;
 
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
@@ -2970,6 +3032,43 @@ Análise processada do CNIS:
     );
   }
 
+  public async getTeacherRetirementPlanningRejectionFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson = true,
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANT
+- Base the technical analysis primarily on the already processed CNIS analysis in JSON format.
+- Calculate only values that are not already present in the provided CNIS analysis.
+- Return strictly a JSON object compatible with the requested schema.
+- For "specialTime" and "commonTime", consider "special" as exclusive teaching (magistério) time and "common" as non-teaching contribution time.
+- For each period, classify using timelineClassification: TEACHER_TIME for periods of exclusive teaching activity, COMMON_TIME for regular urban/rural contribution periods, PENDENCY_PERIOD for periods with pendencies, INACTIVITY_PERIOD for gaps without activity.
+- Include earningsHistory ONLY for competences with pendencies (below minimum, late contribution, no exit date). Return empty array when no pendencies exist.
+- CRITICAL: For nullable fields, use JSON null (not the string "null"). Example: "endDate": null (correct), "endDate": "null" (WRONG).
+
+Processed CNIS analysis:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: asJson
+          ? ResponseConfigInputModel.build({
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema:
+                this.getTeacherRetirementPlanningRejectionFirstAnalysisJsonSchema(),
+            })
+          : null,
+      }),
+    );
+  }
+
   public async getAccidentAssistanceTerminatedCompleteAnalysis(
     systemInstruction: string,
     files: Buffer[],
@@ -2987,6 +3086,122 @@ Análise processada do CNIS:
     );
   }
 
+  public async getTeacherRetirementPlanningRejectionCompleteAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANT
+- Base the technical analysis primarily on the already processed CNIS analysis in JSON format.
+- Calculate only values that are not already present in the provided CNIS analysis.
+- Return strictly a JSON object compatible with the requested schema.
+
+Processed CNIS analysis:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getTeacherRetirementPlanningRejectionCompleteAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getTeacherRetirementPlanningRejectionSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+    analysisJson?: string,
+  ): Promise<string | null> {
+    return this.getRuralOrHybridRetirementRejectionSimplifiedAnalysis(
+      systemInstruction,
+      files,
+      analysisJson,
+    );
+  }
+
+  public async getTeacherRetirementPlanningRejectionWorkPeriodDocumentAnalysis(
+    systemInstruction: string,
+    customerName: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+You will receive ${files.length} document file(s). Analyze each one individually and return EXACTLY ${files.length} item(s) in the JSON array — one item per uploaded file, in the same order they were provided. Do NOT merge multiple files into a single item.
+
+For each document, verify if the holder name matches the customer name exactly or with clear equivalent variation.
+
+Customer name: ${customerName}
+
+Set ownName as true when the document holder belongs to this customer, otherwise false.
+
+For probativeForce, classify each document as:
+- HIGH: The document has strong probative force for proving teaching activity (e.g., CTPS with teaching role, CTC - Certidão de Tempo de Contribuição, official school records, employment contracts specifying teaching).
+- LOW: The document has weak or indirect probative force (e.g., pay stubs without role specification, generic declarations, documents that only partially prove teaching activity).
+- NONE: The document has no probative force for proving teaching activity (e.g., unrelated documents, illegible documents, documents from non-teaching activities).
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getTeacherRetirementPlanningRejectionWorkPeriodDocumentAnalysisJsonSchema(
+              files.length,
+            ),
+        }),
+      }),
+    );
+  }
+
+  public async getTeacherRetirementPlanningRejectionInssDecisionAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getTeacherRetirementPlanningRejectionPppAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Cada item do array \`periods\` deve ser compatível com a criação de um período na análise de indeferimento de aposentadoria do professor.
+- Preencha \`endDate\`, \`pendencyReason\`, \`contributionAverage\`, \`periodConsideration\` e \`timelineClassification\` somente quando essas informações estiverem disponíveis nos documentos analisados.
+- O campo \`timelineClassification\` indica a classificação do período na linha do tempo (PCD_TIME, COMMON_TIME, INACTIVITY_PERIOD, TEACHER_TIME ou PENDENCY_PERIOD).
+- O campo \`hasSpecialPeriod\` indica se o período possui atividade especial identificada no PPP.
+- Não incluir tag <br> na resposta.
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getTeacherRetirementPlanningRejectionPppAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
   public async getAccidentAssistanceTerminatedSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
@@ -3212,12 +3427,12 @@ ${cnisAnalysisJson}
         isInsuredStatusConfirmed: {
           type: 'boolean',
           description:
-            'Indica se o falecido possuÃ­a qualidade de segurado na data do Ã³bito.',
+            'Indica se o falecido possuía qualidade de segurado na data do óbito.',
         },
         insuredStatusSummary: {
           type: 'string',
           description:
-            'Resumo curto e direto sobre a qualidade de segurado do falecido. Deve ser texto simples, sem formataÃ§Ã£o markdown, sem asteriscos, sem hashtags, sem tabelas. MÃ¡ximo de 255 caracteres.',
+            'Resumo curto e direto sobre a qualidade de segurado do falecido. Deve ser texto simples, sem formatação markdown, sem asteriscos, sem hashtags, sem tabelas. Máximo de 255 caracteres.',
         },
         isRetirementRightConfirmed: {
           type: 'boolean',
@@ -3227,12 +3442,12 @@ ${cnisAnalysisJson}
         retirementRightSummary: {
           type: 'string',
           description:
-            'Resumo curto e direto sobre o direito Ã  aposentadoria do falecido no momento do Ã³bito. Deve ser texto simples, sem formataÃ§Ã£o markdown, sem asteriscos, sem hashtags, sem tabelas. MÃ¡ximo de 255 caracteres.',
+            'Resumo curto e direto sobre o direito à aposentadoria do falecido no momento do óbito. Deve ser texto simples, sem formatação markdown, sem asteriscos, sem hashtags, sem tabelas. Máximo de 255 caracteres.',
         },
         completeAnalysis: {
           type: 'string',
           description:
-            'AnÃ¡lise completa e detalhada em formato Markdown. Deve conter: (1) anÃ¡lise da qualidade de segurado e carÃªncia; (2) situaÃ§Ã£o dos dependentes; (3) regras de aposentadoria verificadas; (4) parecer tÃ©cnico conclusivo com recomendaÃ§Ãµes. Use tÃ­tulos (##), negrito (**), listas (-) e parÃ¡grafos para estruturar o texto.',
+            'Análise completa e detalhada em formato Markdown. Deve conter: (1) análise da qualidade de segurado e carência; (2) situação dos dependentes; (3) regras de aposentadoria verificadas; (4) parecer técnico conclusivo com recomendações. Use títulos (##), negrito (**), listas (-) e parágrafos para estruturar o texto.',
         },
       },
       required: [
@@ -3267,12 +3482,12 @@ ${cnisAnalysisJson}
               entitlementDate: {
                 type: 'string',
                 description:
-                  'Data em que o requisito foi ou seria cumprido, no formato YYYY-MM-DD. Null se nÃ£o aplicÃ¡vel.',
+                  'Data em que o requisito foi ou seria cumprido, no formato YYYY-MM-DD. Null se não aplicável.',
               },
               estimatedRmi: {
                 type: 'number',
                 description:
-                  'Valor decimal da RMI estimada para essa regra. Null se nÃ£o calculÃ¡vel.',
+                  'Valor decimal da RMI estimada para essa regra. Null se não calculável.',
               },
               isBestRmi: {
                 type: 'boolean',
@@ -3282,12 +3497,12 @@ ${cnisAnalysisJson}
               isHighestClaimValue: {
                 type: 'boolean',
                 description:
-                  'Indica se esta regra gera o maior valor de benefÃ­cio considerando todas as variÃ¡veis.',
+                  'Indica se esta regra gera o maior valor de benefício considerando todas as variáveis.',
               },
               detailedAnalysis: {
                 type: 'string',
                 description:
-                  'AnÃ¡lise detalhada dos requisitos e resultado para esta regra especÃ­fica. Retorne texto simples sem markdown, sem asteriscos, sem hashtags. Use \\n para separar cada linha. Estruture em trÃªs blocos separados por uma linha em branco (\\n\\n): (1) "ðŸ“Š Requisitos analisados:" seguido de cada requisito em linha separada com "â†’ âœ…" ou "â†’ âŒ"; (2) "ðŸ’° CÃ¡lculo da RMI:" com cada item em linha separada (mÃ©dia salarial, coeficiente, RMI estimada); (3) "âš ï¸ Valor da causa:" com cada item em linha separada (DIB, DER, tempo de atraso, valor em R$). Omita blocos cujos dados nÃ£o estejam disponÃ­veis.',
+                  'Análise detalhada dos requisitos e resultado para esta regra específica. Retorne texto simples sem markdown, sem asteriscos, sem hashtags. Use \\n para separar cada linha. Estruture em três blocos separados por uma linha em branco (\\n\\n): (1) "📊 Requisitos analisados:" seguido de cada requisito em linha separada com "→ ✅" ou "→ ❌"; (2) "💰 Cálculo da RMI:" com cada item em linha separada (média salarial, coeficiente, RMI estimada); (3) "⚠️ Valor da causa:" com cada item em linha separada (DIB, DER, tempo de atraso, valor em R$). Omita blocos cujos dados não estejam disponíveis.',
               },
             },
             required: [
@@ -3311,7 +3526,7 @@ ${cnisAnalysisJson}
         dependentPensionAnalyses: {
           type: 'array',
           description:
-            'Lista das anÃ¡lises de pensÃ£o para cada dependente identificado.',
+            'Lista das análises de pensão para cada dependente identificado.',
           items: {
             type: 'object',
             properties: {
@@ -3322,22 +3537,22 @@ ${cnisAnalysisJson}
               dependencyDegree: {
                 type: 'string',
                 description:
-                  'Grau de dependÃªncia (ex: cÃ´njuge, filho menor, pai/mÃ£e).',
+                  'Grau de dependência (ex: cônjuge, filho menor, pai/mãe).',
               },
               isDependencyVerified: {
                 type: 'boolean',
                 description:
-                  'Indica se a dependÃªncia econÃ´mica ou legal foi verificada.',
+                  'Indica se a dependência econômica ou legal foi verificada.',
               },
               pensionStartDate: {
                 type: 'string',
                 description:
-                  'Data estimada de inÃ­cio da pensÃ£o no formato YYYY-MM-DD. Null se nÃ£o aplicÃ¡vel.',
+                  'Data estimada de início da pensão no formato YYYY-MM-DD. Null se não aplicável.',
               },
               estimatedPensionDuration: {
                 type: 'string',
                 description:
-                  'DuraÃ§Ã£o estimada da pensÃ£o em formato curto e direto. Retorne apenas a duraÃ§Ã£o, sem citar artigos de lei ou explicaÃ§Ãµes jurÃ­dicas. Exemplos de formato esperado: "4 meses", "1 ano", "2 anos e 3 meses", "AtÃ© 21 anos", "4 meses ou atÃ© a cessaÃ§Ã£o da condiÃ§Ã£o", "Enquanto durar a invalidez". MÃ¡ximo 50 caracteres.',
+                  'Duração estimada da pensão em formato curto e direto. Retorne apenas a duração, sem citar artigos de lei ou explicações jurídicas. Exemplos de formato esperado: "4 meses", "1 ano", "2 anos e 3 meses", "Até 21 anos", "4 meses ou até a cessação da condição", "Enquanto durar a invalidez". Máximo 50 caracteres.',
               },
             },
             required: [
@@ -3360,24 +3575,24 @@ ${cnisAnalysisJson}
         insuredStatus: {
           type: 'boolean',
           description:
-            'Indica se o segurado possui qualidade de segurado na Data de InÃ­cio da Incapacidade (DII)',
+            'Indica se o segurado possui qualidade de segurado na Data de Início da Incapacidade (DII)',
         },
         gracePeriodStatus: {
           type: 'boolean',
           description:
-            'Indica se o segurado estÃ¡ em perÃ­odo de graÃ§a na Data de InÃ­cio da Incapacidade (DII)',
+            'Indica se o segurado está em período de graça na Data de Início da Incapacidade (DII)',
         },
         gracePeriods: {
           type: 'array',
           description:
-            'Lista de eventos que geraram ou sustentam o perÃ­odo de graÃ§a',
+            'Lista de eventos que geraram ou sustentam o período de graça',
           items: {
             type: 'object',
             properties: {
               event: {
                 type: 'string',
                 description:
-                  'Nome do evento que gerou ou sustenta o perÃ­odo de graÃ§a. Ex: Ãšltimo vÃ­nculo empregatÃ­cio, Desemprego involuntÃ¡rio, Afastamento por doenÃ§a',
+                  'Nome do evento que gerou ou sustenta o período de graça. Ex: Último vínculo empregatício, Desemprego involuntário, Afastamento por doença',
               },
               date: {
                 type: 'string',
@@ -3386,7 +3601,7 @@ ${cnisAnalysisJson}
               observation: {
                 type: 'string',
                 description:
-                  'AnÃ¡lise tÃ©cnica sobre como esse evento impacta o perÃ­odo de graÃ§a',
+                  'Análise técnica sobre como esse evento impacta o período de graça',
               },
             },
             required: ['event', 'date', 'observation'],
@@ -3395,17 +3610,17 @@ ${cnisAnalysisJson}
         analysisConclusion: {
           type: 'string',
           description:
-            'ConclusÃ£o tÃ©cnica completa da anÃ¡lise, incluindo carÃªncia, qualidade de segurado, pontos de atenÃ§Ã£o e viabilidade preliminar do benefÃ­cio',
+            'Conclusão técnica completa da análise, incluindo carência, qualidade de segurado, pontos de atenção e viabilidade preliminar do benefício',
         },
         graceExtensionDueToInvoluntaryUnemployment: {
           type: 'boolean',
           description:
-            'Indica se hÃ¡ direito Ã  extensÃ£o do perÃ­odo de graÃ§a em razÃ£o de desemprego involuntÃ¡rio (art. 15, Â§2Âº da Lei 8.213/91)',
+            'Indica se há direito à extensão do período de graça em razão de desemprego involuntário (art. 15, §2º da Lei 8.213/91)',
         },
         requestToExtendGracePeriod: {
           type: 'boolean',
           description:
-            'Indica se Ã© recomendÃ¡vel requerer prorrogaÃ§Ã£o do perÃ­odo de graÃ§a administrativamente',
+            'Indica se é recomendável requerer prorrogação do período de graça administrativamente',
         },
       },
       required: [
@@ -3416,6 +3631,234 @@ ${cnisAnalysisJson}
         'graceExtensionDueToInvoluntaryUnemployment',
         'requestToExtendGracePeriod',
       ],
+    };
+  }
+
+  private getTeacherRetirementPlanningRejectionFirstAnalysisJsonSchema(): object {
+    const timeBreakdownSchema = (label: string): object => ({
+      type: 'object',
+      properties: {
+        withoutResolvingPendencies: {
+          type: 'string',
+          description: `${label} sem resolver pendências. Ex: 12 anos e 3 meses`,
+        },
+        resolvingPendencies: {
+          type: 'string',
+          description: `${label} resolvendo todas as pendências documentais. Ex: 14 anos e 1 mês`,
+        },
+        withAccelerators: {
+          type: 'string',
+          description: `${label} resolvendo pendências e computando aceleradores de tempo. Ex: 15 anos e 6 meses`,
+        },
+      },
+      required: [
+        'withoutResolvingPendencies',
+        'resolvingPendencies',
+        'withAccelerators',
+      ],
+    });
+
+    const gracePeriodBreakdownSchema = (label: string): object => ({
+      type: 'object',
+      properties: {
+        withoutResolvingPendencies: {
+          type: 'number',
+          description: `Quantidade de ${label} sem resolver pendências. Ex: 153`,
+        },
+        resolvingPendencies: {
+          type: 'number',
+          description: `Quantidade de ${label} resolvendo todas as pendências documentais. Ex: 168`,
+        },
+        withAccelerators: {
+          type: 'number',
+          description: `Quantidade de ${label} resolvendo pendências e computando aceleradores de tempo. Ex: 180`,
+        },
+      },
+      required: [
+        'withoutResolvingPendencies',
+        'resolvingPendencies',
+        'withAccelerators',
+      ],
+    });
+
+    return {
+      type: 'object',
+      properties: {
+        summary: {
+          type: 'object',
+          description:
+            'Resumo do tempo de contribuição e carência apurados por cenário, separando tempo de magistério (special) e tempo comum (common).',
+          properties: {
+            specialTime: {
+              ...timeBreakdownSchema(
+                'Tempo de contribuição exclusivo em magistério',
+              ),
+              description:
+                'Tempo de contribuição exclusivo em atividades de magistério (ensino infantil, fundamental e médio) apurado em cada cenário.',
+            },
+            commonTime: {
+              ...timeBreakdownSchema(
+                'Tempo de contribuição comum (não-magistério)',
+              ),
+              description:
+                'Tempo de contribuição em atividades não relacionadas ao magistério apurado em cada cenário.',
+            },
+            totalTime: {
+              ...timeBreakdownSchema('Tempo de contribuição total'),
+              description:
+                'Tempo total de contribuição (magistério + comum) apurado em cada cenário.',
+            },
+            specialGracePeriod: {
+              ...gracePeriodBreakdownSchema('meses de carência em magistério'),
+              description:
+                'Carência acumulada pelo tempo de magistério em cada cenário.',
+            },
+            commonGracePeriod: {
+              ...gracePeriodBreakdownSchema('meses de carência comum'),
+              description:
+                'Carência acumulada pelo tempo comum (não-magistério) em cada cenário.',
+            },
+            totalGracePeriod: {
+              ...gracePeriodBreakdownSchema('meses de carência total'),
+              description:
+                'Carência total acumulada (magistério + comum) em cada cenário.',
+            },
+          },
+          required: [
+            'specialTime',
+            'commonTime',
+            'totalTime',
+            'specialGracePeriod',
+            'commonGracePeriod',
+            'totalGracePeriod',
+          ],
+        },
+        periods: {
+          type: 'array',
+          description:
+            'Lista de todos os períodos contributivos identificados no CNIS, ordenados cronologicamente.',
+          items: {
+            type: 'object',
+            properties: {
+              bondOrigin: {
+                type: 'string',
+                description:
+                  'Nome do vínculo ou empregador. Ex: Escola Municipal João XXIII, INSS - Contribuinte Individual.',
+              },
+              period: {
+                type: 'string',
+                description:
+                  'Descrição do período no formato legível. Ex: 01/2010 a 12/2015.',
+              },
+              category: {
+                type: 'string',
+                description:
+                  'Categoria do vínculo. Ex: Empregado, Contribuinte Individual, Segurado Especial, Servidor Público.',
+              },
+              contributionTime: {
+                type: 'string',
+                description:
+                  'Tempo de contribuição do período. Ex: 5 anos e 11 meses.',
+              },
+              gracePeriod: {
+                type: 'string',
+                description: 'Carência do período. Ex: 71 contribuições.',
+              },
+              status: {
+                type: 'string',
+                description:
+                  'Status do período: Válido, Pendente, Concomitante, Não reconhecido.',
+              },
+              startDate: {
+                type: 'string',
+                nullable: true,
+                description:
+                  'Data de início do período no formato YYYY-MM-DD. JSON null se não disponível.',
+              },
+              endDate: {
+                type: 'string',
+                nullable: true,
+                description:
+                  'Data de fim do período no formato YYYY-MM-DD. JSON null se ainda em aberto.',
+              },
+              competenceBelowTheMinimum: {
+                type: 'boolean',
+                description:
+                  'Indica se há competências com valor abaixo do mínimo neste período.',
+              },
+              contributionAverage: {
+                type: 'string',
+                nullable: true,
+                description:
+                  'Média de contribuição do período. Ex: R$ 1.500,00. JSON null se não disponível.',
+              },
+              timelineClassification: {
+                type: 'string',
+                enum: Object.values(
+                  TeacherRetirementPlanningRejectionWorkPeriodTimelineClassificationEnum,
+                ),
+                description:
+                  'Classificação do período na linha do tempo: TEACHER_TIME para atividade exclusiva de magistério, COMMON_TIME para contribuição comum, PENDENCY_PERIOD para períodos com pendência, INACTIVITY_PERIOD para períodos sem atividade.',
+              },
+              earningsHistory: {
+                type: 'array',
+                description:
+                  'Lista APENAS das competências com pendência identificada no período (contribuições abaixo do mínimo, sem data de saída, recolhidas em atraso). Retorne array vazio quando não houver pendências.',
+                items: {
+                  type: 'object',
+                  properties: {
+                    competence: {
+                      type: 'string',
+                      description: 'Competência no formato MM/YYYY.',
+                    },
+                    remuneration: {
+                      type: 'string',
+                      description:
+                        'Valor da remuneração como string. Ex: R$ 1.320,00.',
+                    },
+                    indicators: {
+                      type: 'string',
+                      description:
+                        'Indicadores do CNIS para esta competência. Ex: IREC-INDPEND, PREC-MENOR-MIN.',
+                    },
+                    paymentDate: {
+                      type: 'string',
+                      nullable: true,
+                      description:
+                        'Data de pagamento no formato YYYY-MM-DD. JSON null se não disponível.',
+                    },
+                    contribution: {
+                      type: 'string',
+                      nullable: true,
+                      description:
+                        'Valor da contribuição. Ex: R$ 145,20. JSON null se não disponível.',
+                    },
+                    contributionSalary: {
+                      type: 'string',
+                      nullable: true,
+                      description:
+                        'Salário de contribuição. Ex: R$ 1.320,00. JSON null se não disponível.',
+                    },
+                    competenceBelowMinimum: {
+                      type: 'boolean',
+                      description:
+                        'Indica se esta competência está abaixo do salário mínimo.',
+                    },
+                  },
+                  required: ['competence', 'competenceBelowMinimum'],
+                },
+              },
+            },
+            required: [
+              'bondOrigin',
+              'competenceBelowTheMinimum',
+              'timelineClassification',
+              'earningsHistory',
+            ],
+          },
+        },
+      },
+      required: ['summary', 'periods'],
     };
   }
 
@@ -3640,6 +4083,69 @@ ${cnisAnalysisJson}
     };
   }
 
+  private getTeacherRetirementPlanningRejectionCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        clientData: {
+          type: 'object',
+          properties: {
+            name: { type: 'string', nullable: true },
+            cpf: { type: 'string', nullable: true },
+            birthDate: { type: 'string', nullable: true },
+          },
+          required: ['name', 'cpf', 'birthDate'],
+        },
+        retirementRules: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              modality: { type: 'string' },
+              fulfilled: { type: 'boolean' },
+              retirementDate: {
+                type: 'string',
+                nullable: true,
+                description: 'Data no formato YYYY-MM-DD',
+              },
+              expectedRmi: { type: 'number', nullable: true },
+              estimatedCauseValue: { type: 'number', nullable: true },
+              bestRmi: { type: 'boolean' },
+              highestCauseValue: { type: 'boolean' },
+              detailedAnalysis: { type: 'string' },
+            },
+            required: [
+              'modality',
+              'fulfilled',
+              'retirementDate',
+              'expectedRmi',
+              'estimatedCauseValue',
+              'bestRmi',
+              'highestCauseValue',
+              'detailedAnalysis',
+            ],
+          },
+        },
+        analysisResult: {
+          type: 'string',
+          description:
+            'Texto explicativo completo sobre o resultado da análise, perspectivas processuais e recomendações para o caso de indeferimento.',
+        },
+        completeAnalysisDownload: {
+          type: 'string',
+          description:
+            'Conteúdo HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF. Deve conter todos os dados analisados, e uma explicação técnica de todos os dados.',
+        },
+      },
+      required: [
+        'clientData',
+        'retirementRules',
+        'analysisResult',
+        'completeAnalysisDownload',
+      ],
+    };
+  }
+
   private getTimeAcceleratorAnalysisJsonSchema(): object {
     return {
       type: 'object',
@@ -3686,13 +4192,81 @@ ${cnisAnalysisJson}
     };
   }
 
-  private getRuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisJsonSchema(): object {
+  private getTeacherRetirementPlanningRejectionWorkPeriodDocumentAnalysisJsonSchema(
+    totalFiles: number,
+  ): object {
     return {
       type: 'object',
       properties: {
         items: {
           type: 'array',
-          description: 'Lista de documentos identificados e analisados',
+          description: `Lista de documentos identificados e analisados. Deve conter exatamente ${totalFiles} item(ns), com um item para cada arquivo enviado, preservando a mesma ordem dos arquivos recebidos.`,
+          minItems: totalFiles,
+          maxItems: totalFiles,
+          items: {
+            type: 'object',
+            properties: {
+              documentType: {
+                type: 'string',
+                description:
+                  'Tipo do documento identificado. Ex: CTPS, Certidão de Tempo de Contribuição (CTC), Declaração de Tempo de Serviço, Contrato de Trabalho, Contracheque, Portaria de Nomeação',
+              },
+              ownName: {
+                type: 'boolean',
+                description:
+                  'Use true quando o titular do documento pertencer ao cliente informado na requisição. Use false quando o documento estiver em nome de terceiro.',
+              },
+              documentYear: {
+                type: 'string',
+                description:
+                  'Ano de emissão ou vigência do documento. Use YYYY quando só o ano estiver disponível, ou YYYY-MM-DD quando a data completa constar no documento.',
+              },
+              shortDescription: {
+                type: 'string',
+                maxLength: 100,
+                description:
+                  'Descrição curta de no máximo 100 caracteres resumindo a conclusão sobre o documento',
+              },
+              technicalNote: {
+                type: 'string',
+                description:
+                  'Nota técnica sobre a relevância e a força probatória do documento para comprovação de atividade de magistério no contexto de recurso ao INSS. Utilize formatação Markdown: use **negrito** para destacar pontos importantes, listas com `-` para enumerações e parágrafos separados por linha em branco.',
+              },
+              probativeForce: {
+                type: 'string',
+                enum: Object.values(
+                  TeacherRetirementPlanningRejectionWorkPeriodDocumentProbativeForceEnum,
+                ),
+                description:
+                  'Classificação da força probante do documento: HIGH para alta força probante (comprova diretamente atividade de magistério), LOW para pouca força probante (comprova indiretamente), NONE para sem força probante (não comprova atividade de magistério).',
+              },
+            },
+            required: [
+              'documentType',
+              'ownName',
+              'documentYear',
+              'shortDescription',
+              'technicalNote',
+              'probativeForce',
+            ],
+          },
+        },
+      },
+      required: ['items'],
+    };
+  }
+
+  private getRuralOrHybridRetirementRejectionWorkPeriodDocumentAnalysisJsonSchema(
+    totalFiles: number,
+  ): object {
+    return {
+      type: 'object',
+      properties: {
+        items: {
+          type: 'array',
+          description: `Lista de documentos identificados e analisados. Deve conter exatamente ${totalFiles} item(ns), com um item para cada arquivo enviado, preservando a mesma ordem dos arquivos recebidos.`,
+          minItems: totalFiles,
+          maxItems: totalFiles,
           items: {
             type: 'object',
             properties: {
@@ -3704,15 +4278,16 @@ ${cnisAnalysisJson}
               ownName: {
                 type: 'boolean',
                 description:
-                  'Indica se o documento está em nome do cliente informado na requisição',
+                  'Use true quando o titular do documento pertencer ao cliente informado na requisição. Use false quando o documento estiver em nome de terceiro.',
               },
               documentYear: {
                 type: 'string',
-                format: 'date',
-                description: 'Data do documento no formato YYYY-MM-DD',
+                description:
+                  'Ano de emissão ou vigência do documento. Use YYYY quando só o ano estiver disponível, ou YYYY-MM-DD quando a data completa constar no documento.',
               },
               shortDescription: {
                 type: 'string',
+                maxLength: 100,
                 description:
                   'Descrição curta de no máximo 100 caracteres resumindo a conclusão sobre o documento',
               },
@@ -3729,10 +4304,12 @@ ${cnisAnalysisJson}
               'shortDescription',
               'technicalNote',
             ],
+            additionalProperties: false,
           },
         },
       },
       required: ['items'],
+      additionalProperties: false,
     };
   }
 
@@ -3743,25 +4320,25 @@ ${cnisAnalysisJson}
         isEligibleForTemporaryDisabilityBenefits: {
           type: 'boolean',
           description:
-            'Indica se o segurado tem direito ao benefÃ­cio por incapacidade temporÃ¡ria',
+            'Indica se o segurado tem direito ao benefício por incapacidade temporária',
         },
         gracePeriodAnalysis: {
           type: 'object',
-          description: 'AnÃ¡lise da carÃªncia previdenciÃ¡ria',
+          description: 'Análise da carência previdenciária',
           properties: {
             totalContribution: {
               type: 'string',
               description:
-                'Total de contribuiÃ§Ãµes computadas para fins de carÃªncia. Ex: 36 contribuiÃ§Ãµes',
+                'Total de contribuições computadas para fins de carência. Ex: 36 contribuições',
             },
             minimumGracePeriodRequired: {
               type: 'string',
               description:
-                'CarÃªncia mÃ­nima exigida para o benefÃ­cio. Ex: 12 contribuiÃ§Ãµes',
+                'Carência mínima exigida para o benefício. Ex: 12 contribuições',
             },
             status: {
               type: 'boolean',
-              description: 'Indica se a carÃªncia foi cumprida',
+              description: 'Indica se a carência foi cumprida',
             },
           },
           required: [
@@ -3772,23 +4349,22 @@ ${cnisAnalysisJson}
         },
         insuredStatus: {
           type: 'object',
-          description:
-            'SituaÃ§Ã£o de segurado na Data de InÃ­cio da Incapacidade',
+          description: 'Situação de segurado na Data de Início da Incapacidade',
           properties: {
             lastContributionDate: {
               type: 'string',
               description:
-                'Data da Ãºltima contribuiÃ§Ã£o encontrada no CNIS no formato DD/MM/AAAA',
+                'Data da última contribuição encontrada no CNIS no formato DD/MM/AAAA',
             },
             disabilityStartDate: {
               type: 'string',
               description:
-                'Data de InÃ­cio da Incapacidade (DII) informada no caso no formato DD/MM/AAAA',
+                'Data de Início da Incapacidade (DII) informada no caso no formato DD/MM/AAAA',
             },
             gracePeriod: {
               type: 'boolean',
               description:
-                'Indica se o segurado estÃ¡ em perÃ­odo de graÃ§a na DII',
+                'Indica se o segurado está em período de graça na DII',
             },
             status: {
               type: 'boolean',
@@ -3806,18 +4382,18 @@ ${cnisAnalysisJson}
         disabilityAnalysis: {
           type: 'object',
           description:
-            'AnÃ¡lise da incapacidade com base nos documentos mÃ©dicos',
+            'Análise da incapacidade com base nos documentos médicos',
           properties: {
             informedCids: {
               type: 'array',
               description:
-                'Lista dos CIDs informados no caso. Cada item deve conter o cÃ³digo CID seguido de hÃ­fen e descriÃ§Ã£o. Ex: ["M51.1 - DegeneraÃ§Ã£o de disco intervertebral", "G43 - Enxaqueca"]',
+                'Lista dos CIDs informados no caso. Cada item deve conter o código CID seguido de hífen e descrição. Ex: ["M51.1 - Degeneração de disco intervertebral", "G43 - Enxaqueca"]',
               items: { type: 'string' },
             },
             preliminaryAnalysis: {
               type: 'string',
               description:
-                'AnÃ¡lise preliminar da incapacidade com base nos documentos e CIDs, avaliando gravidade, impacto laboral e perspectivas de concessÃ£o',
+                'Análise preliminar da incapacidade com base nos documentos e CIDs, avaliando gravidade, impacto laboral e perspectivas de concessão',
             },
           },
           required: ['informedCids', 'preliminaryAnalysis'],
@@ -3825,7 +4401,7 @@ ${cnisAnalysisJson}
         retirementRules: {
           type: 'array',
           description:
-            'Lista das regras de aposentadoria que o segurado pode ter direito, caso seja elegÃ­vel',
+            'Lista das regras de aposentadoria que o segurado pode ter direito, caso seja elegível',
           items: {
             type: 'object',
             properties: {
@@ -3841,22 +4417,22 @@ ${cnisAnalysisJson}
               retirementDate: {
                 type: 'string',
                 description:
-                  'Data estimada de aposentadoria no formato DD/MM/AAAA, ou vazio se nÃ£o aplicÃ¡vel',
+                  'Data estimada de aposentadoria no formato DD/MM/AAAA, ou vazio se não aplicável',
               },
               expectedRmi: {
                 type: 'number',
                 description:
-                  'RMI (Renda Mensal Inicial) estimada em reais para esta regra de aposentadoria. Calcule com base no histÃ³rico de contribuiÃ§Ãµes do CNIS usando a mÃ©dia dos 80% maiores salÃ¡rios de contribuiÃ§Ã£o corrigidos. Nunca use 0 â€” sempre estime um valor com base nos dados disponÃ­veis.',
+                  'RMI (Renda Mensal Inicial) estimada em reais para esta regra de aposentadoria. Calcule com base no histórico de contribuições do CNIS usando a média dos 80% maiores salários de contribuição corrigidos. Nunca use 0 — sempre estime um valor com base nos dados disponíveis.',
               },
               causeValue: {
                 type: 'number',
                 description:
-                  'Valor de causa estimado em reais para fins de uma eventual aÃ§Ã£o judicial. Calcule como o produto do RMI estimado pelo nÃºmero de meses de competÃªncia (prescriÃ§Ã£o quinquenal de 60 meses). Nunca use 0 â€” sempre estime com base nos dados disponÃ­veis.',
+                  'Valor de causa estimado em reais para fins de uma eventual ação judicial. Calcule como o produto do RMI estimado pelo número de meses de competência (prescrição quinquenal de 60 meses). Nunca use 0 — sempre estime com base nos dados disponíveis.',
               },
               detailedAnalysis: {
                 type: 'string',
                 description:
-                  'AnÃ¡lise detalhada dos requisitos e resultado para esta regra especÃ­fica. Retorne texto simples sem markdown, sem asteriscos, sem hashtags. Use \\n para separar cada linha. Estruture em trÃªs blocos separados por uma linha em branco (\\n\\n): (1) "ðŸ“Š Requisitos analisados:" seguido de cada requisito em linha separada com "â†’ âœ…" ou "â†’ âŒ"; (2) "ðŸ’° CÃ¡lculo da RMI:" com cada item em linha separada (mÃ©dia salarial, coeficiente, RMI estimada); (3) "âš ï¸ Valor da causa:" com cada item em linha separada (DIB, DER, tempo de atraso, valor em R$). Omita blocos cujos dados nÃ£o estejam disponÃ­veis.',
+                  'Análise detalhada dos requisitos e resultado para esta regra específica. Retorne texto simples sem markdown, sem asteriscos, sem hashtags. Use \\n para separar cada linha. Estruture em três blocos separados por uma linha em branco (\\n\\n): (1) "📊 Requisitos analisados:" seguido de cada requisito em linha separada com "→ ✅" ou "→ ❌"; (2) "💰 Cálculo da RMI:" com cada item em linha separada (média salarial, coeficiente, RMI estimada); (3) "⚠️ Valor da causa:" com cada item em linha separada (DIB, DER, tempo de atraso, valor em R$). Omita blocos cujos dados não estejam disponíveis.',
               },
             },
             required: [
@@ -3872,7 +4448,7 @@ ${cnisAnalysisJson}
         analysisResult: {
           type: 'string',
           description:
-            'Parecer tÃ©cnico conclusivo completo da anÃ¡lise, incluindo verificaÃ§Ã£o de carÃªncia, qualidade de segurado, anÃ¡lise de incapacidade, regras de aposentadoria aplicÃ¡veis e recomendaÃ§Ãµes tÃ©cnicas. Retorne em formato Markdown (use ##, ###, **negrito**, listas com - e parÃ¡grafos)',
+            'Parecer técnico conclusivo completo da análise, incluindo verificação de carência, qualidade de segurado, análise de incapacidade, regras de aposentadoria aplicáveis e recomendações técnicas. Retorne em formato Markdown (use ##, ###, **negrito**, listas com - e parágrafos)',
         },
       },
       required: [
@@ -3889,35 +4465,34 @@ ${cnisAnalysisJson}
   private getDisabilityRetirementPlanningCompleteAnalysisJsonSchema(): object {
     const disabilityAnalysisSchema = {
       type: 'object',
-      description:
-        'Anï¿½lise da Deficiï¿½ncia com base nos documentos mï¿½dicos',
+      description: 'Análise da Deficiência com base nos documentos médicos',
       properties: {
         predominantDisabilityDegree: {
           type: 'string',
-          description: 'Grau preponderante da deficiï¿½ncia. Ex: Grave: 75%',
+          description: 'Grau preponderante da deficiência. Ex: Grave: 75%',
         },
         lightDisabilityPercentage: {
           type: 'number',
-          description: 'Percentual de tempo com deficiï¿½ncia leve. Ex: 15',
+          description: 'Percentual de tempo com deficiência leve. Ex: 15',
         },
         moderateDisabilityPercentage: {
           type: 'number',
-          description: 'Percentual de tempo com deficiï¿½ncia moderada. Ex: 15',
+          description: 'Percentual de tempo com deficiência moderada. Ex: 15',
         },
         severeDisabilityPercentage: {
           type: 'number',
-          description: 'Percentual de tempo com deficiï¿½ncia grave. Ex: 75',
+          description: 'Percentual de tempo com deficiência grave. Ex: 75',
         },
         documents: {
           type: 'array',
-          description: 'Lista de documentos mï¿½dicos analisados',
+          description: 'Lista de documentos médicos analisados',
           items: {
             type: 'object',
             properties: {
               documentName: {
                 type: 'string',
                 description:
-                  'Nome ou tipo do documento. Ex: Laudo Mï¿½dico - Ortopedia',
+                  'Nome ou tipo do documento. Ex: Laudo Médico - Ortopedia',
               },
               viability: {
                 type: 'string',
@@ -3926,17 +4501,17 @@ ${cnisAnalysisJson}
                   'media_viabilidade',
                   'baixa_viabilidade',
                 ],
-                description: 'Nï¿½vel de viabilidade do documento',
+                description: 'Nível de viabilidade do documento',
               },
               cid: {
                 type: 'string',
                 description:
-                  'Cï¿½digo e descriï¿½ï¿½o do CID. Ex: M54.5 (Dor lombar baixa)',
+                  'Código e descrição do CID. Ex: M54.5 (Dor lombar baixa)',
               },
               degree: {
                 type: 'string',
                 description:
-                  'Grau da deficiï¿½ncia indicado no documento. Ex: Moderado, Nï¿½o Especificado, Alto',
+                  'Grau da deficiência indicado no documento. Ex: Moderado, Não Especificado, Alto',
               },
               date: {
                 type: 'string',
@@ -3945,12 +4520,12 @@ ${cnisAnalysisJson}
               },
               crm: {
                 type: 'string',
-                description: 'CRM do mï¿½dico responsï¿½vel. Ex: 123456-7',
+                description: 'CRM do médico responsável. Ex: 123456-7',
               },
               observations: {
                 type: 'array',
                 items: { type: 'string' },
-                description: 'Observaï¿½ï¿½es sobre o documento',
+                description: 'Observações sobre o documento',
               },
             },
             required: [
@@ -3979,20 +4554,19 @@ ${cnisAnalysisJson}
       properties: {
         timeline: {
           type: 'array',
-          description: 'Lista de perï¿½odos da linha do tempo do segurado',
+          description: 'Lista de períodos da linha do tempo do segurado',
           items: {
             type: 'object',
             properties: {
               startDate: {
                 type: 'string',
                 format: 'date',
-                description:
-                  'Data de inï¿½cio do perï¿½odo no formato YYYY-MM-DD',
+                description: 'Data de início do período no formato YYYY-MM-DD',
               },
               endDate: {
                 type: 'string',
                 format: 'date',
-                description: 'Data de fim do perï¿½odo no formato YYYY-MM-DD',
+                description: 'Data de fim do período no formato YYYY-MM-DD',
               },
               activityType: {
                 type: 'string',
@@ -4004,12 +4578,12 @@ ${cnisAnalysisJson}
                   'periodo_sem_atividade',
                 ],
                 description:
-                  'Tipo de atividade do perï¿½odo: PCD_LEVE, PCD_MODERADA, PCD_GRAVE, ATIVIDADE_COMUM ou PERIODO_SEM_ATIVIDADE',
+                  'Tipo de atividade do período: PCD_LEVE, PCD_MODERADA, PCD_GRAVE, ATIVIDADE_COMUM ou PERIODO_SEM_ATIVIDADE',
               },
               location: {
                 type: 'string',
                 description:
-                  'Local do perï¿½odo. Exemplo: Assentamento Nova Vida, municï¿½pio de Araraquara/SP',
+                  'Local do período. Exemplo: Assentamento Nova Vida, município de Araraquara/SP',
               },
             },
             required: ['startDate', 'endDate', 'activityType', 'location'],
@@ -4028,12 +4602,12 @@ ${cnisAnalysisJson}
               isEligible: {
                 type: 'boolean',
                 description:
-                  'Indica se o segurado jï¿½ atingiu o direito (true) ou ainda estï¿½ aguardando (false)',
+                  'Indica se o segurado já atingiu o direito (true) ou ainda está aguardando (false)',
               },
               eligibilityAvailableAt: {
                 type: 'string',
                 description:
-                  'Data do direito, se jï¿½ atingido. Formato YYYY-MM-DD',
+                  'Data do direito, se já atingido. Formato YYYY-MM-DD',
               },
               expectedMonthlyBenefit: {
                 type: 'number',
@@ -4051,7 +4625,7 @@ ${cnisAnalysisJson}
               retirementAnalysis: {
                 type: 'string',
                 description:
-                  'Anï¿½lise detalhada desta regra em formato markdown',
+                  'Análise detalhada desta regra em formato markdown',
               },
             },
             required: [
@@ -4066,7 +4640,7 @@ ${cnisAnalysisJson}
         },
         analysisResult: {
           type: 'string',
-          description: 'Resultado geral da anï¿½lise em formato markdown',
+          description: 'Resultado geral da análise em formato markdown',
         },
         disabilityTime: {
           type: 'string',
@@ -4081,7 +4655,7 @@ ${cnisAnalysisJson}
         totalContributionTime: {
           type: 'string',
           description:
-            'Tempo total de contribuiï¿½ï¿½o. Exemplo: 35 anos, 10 meses e 14 dias',
+            'Tempo total de contribuição. Exemplo: 35 anos, 10 meses e 14 dias',
         },
         positionTenureTime: {
           type: 'string',
@@ -4091,12 +4665,12 @@ ${cnisAnalysisJson}
         publicServiceTime: {
           type: 'string',
           description:
-            'Tempo no serviï¿½o pï¿½blico. Exemplo: 30 anos, 2 meses e 5 dias',
+            'Tempo no serviço público. Exemplo: 30 anos, 2 meses e 5 dias',
         },
         totalCareerTime: {
           type: 'string',
           description:
-            'Tempo total de carreira. Exemplo: 42 anos, 1 mï¿½s e 20 dias',
+            'Tempo total de carreira. Exemplo: 42 anos, 1 mês e 20 dias',
         },
         insuredAge: {
           type: 'string',
@@ -4107,7 +4681,7 @@ ${cnisAnalysisJson}
           type: 'string',
           format: 'date',
           description:
-            'Data de ingresso no serviï¿½o pï¿½blico no formato YYYY-MM-DD',
+            'Data de ingresso no serviço público no formato YYYY-MM-DD',
         },
         disabilityAnalysis: disabilityAnalysisSchema,
       },
@@ -4131,24 +4705,23 @@ ${cnisAnalysisJson}
   private getDisabilityRetirementPlanningGrantFirstAnalysisJsonSchema(): object {
     const disabilityAnalysisSchema = {
       type: 'object',
-      description:
-        'Anï¿½lise da deficiï¿½ncia com base nos documentos mï¿½dicos',
+      description: 'Análise da deficiência com base nos documentos médicos',
       properties: {
         predominantDisabilityDegree: {
           type: 'string',
-          description: 'Grau preponderante da deficiï¿½ncia. Ex: Grave: 75%',
+          description: 'Grau preponderante da deficiência. Ex: Grave: 75%',
         },
         lightDisabilityPercentage: {
           type: 'number',
-          description: 'Percentual de tempo com deficiï¿½ncia leve. Ex: 15',
+          description: 'Percentual de tempo com deficiência leve. Ex: 15',
         },
         moderateDisabilityPercentage: {
           type: 'number',
-          description: 'Percentual de tempo com deficiï¿½ncia moderada. Ex: 15',
+          description: 'Percentual de tempo com deficiência moderada. Ex: 15',
         },
         severeDisabilityPercentage: {
           type: 'number',
-          description: 'Percentual de tempo com deficiï¿½ncia grave. Ex: 75',
+          description: 'Percentual de tempo com deficiência grave. Ex: 75',
         },
         summaryTable: {
           type: 'object',
@@ -4269,7 +4842,7 @@ ${cnisAnalysisJson}
         },
         documents: {
           type: 'array',
-          description: 'Lista de documentos mï¿½dicos analisados',
+          description: 'Lista de documentos médicos analisados',
           items: {
             type: 'object',
             properties: {
@@ -4284,15 +4857,15 @@ ${cnisAnalysisJson}
                   'media_viabilidade',
                   'baixa_viabilidade',
                 ],
-                description: 'Nï¿½vel de viabilidade do documento',
+                description: 'Nível de viabilidade do documento',
               },
               cid: {
                 type: 'string',
-                description: 'Cï¿½digo e descriï¿½ï¿½o do CID',
+                description: 'Código e descrição do CID',
               },
               degree: {
                 type: 'string',
-                description: 'Grau da deficiï¿½ncia indicado no documento',
+                description: 'Grau da deficiência indicado no documento',
               },
               date: {
                 type: 'string',
@@ -4301,12 +4874,12 @@ ${cnisAnalysisJson}
               },
               crm: {
                 type: 'string',
-                description: 'CRM do mï¿½dico responsï¿½vel',
+                description: 'CRM do médico responsável',
               },
               observations: {
                 type: 'array',
                 items: { type: 'string' },
-                description: 'Observaï¿½ï¿½es sobre o documento',
+                description: 'Observações sobre o documento',
               },
             },
             required: [
@@ -4337,79 +4910,74 @@ ${cnisAnalysisJson}
         periods: {
           type: 'array',
           description:
-            'Perï¿½odos analisados a partir do CNIS e dos dados do fluxo',
+            'Períodos analisados a partir do CNIS e dos dados do fluxo',
           items: {
             type: 'object',
             properties: {
               name: {
                 type: 'string',
-                description: 'Nome da instituiï¿½ï¿½o ou vï¿½nculo principal',
+                description: 'Nome da instituição ou vínculo principal',
               },
               startDate: {
                 type: 'string',
                 format: 'date',
-                description:
-                  'Data de inï¿½cio do perï¿½odo no formato YYYY-MM-DD',
+                description: 'Data de início do período no formato YYYY-MM-DD',
               },
               endDate: {
                 type: 'string',
                 format: 'date',
-                description: 'Data de fim do perï¿½odo no formato YYYY-MM-DD',
+                description: 'Data de fim do período no formato YYYY-MM-DD',
               },
               category: {
                 type: 'string',
                 enum: Object.values(
                   DisabilityRetirementPlanningGrantCategoryEnum,
                 ),
-                description: 'Categoria previdenciï¿½ria do vï¿½nculo',
+                description: 'Categoria previdenciária do vínculo',
               },
               gracePeriod: {
                 type: 'number',
-                description:
-                  'Quantidade de competï¿½ncias vï¿½lidas no perï¿½odo',
+                description: 'Quantidade de competências válidas no período',
               },
               statusPCD: {
                 type: 'string',
                 enum: Object.values(
                   DisabilityRetirementPlanningGrantDisabilityDegreeEnum,
                 ),
-                description: 'Grau PCD considerado para o perï¿½odo',
+                description: 'Grau PCD considerado para o período',
               },
               status: {
                 type: 'boolean',
-                description: 'Indica se o perï¿½odo foi considerado vï¿½lido',
+                description: 'Indica se o período foi considerado válido',
               },
               isPendency: {
                 type: 'boolean',
-                description: 'Indica se existe alguma pendï¿½ncia no perï¿½odo',
+                description: 'Indica se existe alguma pendência no período',
               },
               competenceBelowTheMinimum: {
                 type: 'boolean',
-                description:
-                  'Indica se existem competï¿½ncias abaixo do mï¿½nimo',
+                description: 'Indica se existem competências abaixo do mínimo',
               },
               contributionAverage: {
                 type: 'string',
                 description:
-                  'Valor mï¿½dio das remuneraï¿½ï¿½es consideradas naquele perï¿½odo',
+                  'Valor médio das remunerações consideradas naquele período',
               },
               belowMinimumContributions: {
                 type: 'array',
                 description:
-                  'Lista apenas das competï¿½ncias cujas contribuiï¿½ï¿½es ficaram abaixo do mï¿½nimo',
+                  'Lista apenas das competências cujas contribuições ficaram abaixo do mínimo',
                 items: {
                   type: 'object',
                   properties: {
                     contributionDate: {
                       type: 'string',
                       format: 'date',
-                      description:
-                        'Data da contribuiï¿½ï¿½o no formato YYYY-MM-DD',
+                      description: 'Data da contribuição no formato YYYY-MM-DD',
                     },
                     contributionValue: {
                       type: 'string',
-                      description:
-                        'Valor da contribuiï¿½ï¿½o abaixo do mï¿½nimo',
+                      description: 'Valor da contribuição abaixo do mínimo',
                     },
                   },
                   required: ['contributionDate', 'contributionValue'],
@@ -4420,8 +4988,7 @@ ${cnisAnalysisJson}
                 enum: Object.values(
                   DisabilityRetirementPlanningGrantPeriodPendencyReasonEnum,
                 ),
-                description:
-                  'Motivo da pendï¿½ncia do perï¿½odo, quando houver',
+                description: 'Motivo da pendência do período, quando houver',
               },
             },
             required: [
@@ -4449,32 +5016,32 @@ ${cnisAnalysisJson}
       properties: {
         type: {
           type: 'string',
-          description: 'Tipo do agente nocivo. Ex: RuÃ­do, Calor, QuÃ­micos',
+          description: 'Tipo do agente nocivo. Ex: Ruído, Calor, Químicos',
         },
         intensity: {
           type: 'string',
-          description: 'Intensidade/mediÃ§Ã£o (quando houver). Ex: 87dB',
+          description: 'Intensidade/medição (quando houver). Ex: 87dB',
         },
         unit: {
           type: 'string',
-          description: 'Unidade da mediÃ§Ã£o. Ex: dB, Â°C',
+          description: 'Unidade da medição. Ex: dB, °C',
         },
         habitual: {
           type: 'boolean',
-          description: 'ExposiÃ§Ã£o habitual.',
+          description: 'Exposição habitual.',
         },
         permanence: {
           type: 'boolean',
-          description: 'ExposiÃ§Ã£o permanente.',
+          description: 'Exposição permanente.',
         },
         source: {
           type: 'string',
-          description: 'Fonte da informaÃ§Ã£o. Ex: PPP, LTCAT',
+          description: 'Fonte da informação. Ex: PPP, LTCAT',
         },
         epiEficaz: {
           type: 'boolean',
           description:
-            'Indica se EPI foi considerado eficaz, quando aplicÃ¡vel.',
+            'Indica se EPI foi considerado eficaz, quando aplicável.',
         },
       },
       required: ['type'],
@@ -4486,9 +5053,9 @@ ${cnisAnalysisJson}
         competence: {
           type: 'string',
           format: 'date',
-          description: 'CompetÃªncia no formato YYYY-MM-DD',
+          description: 'Competência no formato YYYY-MM-DD',
         },
-        remuneration: { type: 'string', description: 'RemuneraÃ§Ã£o' },
+        remuneration: { type: 'string', description: 'Remuneração' },
         indicators: { type: 'string', description: 'Indicadores CNIS' },
         paymentDate: {
           type: 'string',
@@ -4497,7 +5064,7 @@ ${cnisAnalysisJson}
         },
         competenceBelowTheMinimum: {
           type: 'boolean',
-          description: 'Indica competÃªncia abaixo do mÃ­nimo',
+          description: 'Indica competência abaixo do mínimo',
         },
       },
       required: [
@@ -4682,21 +5249,21 @@ ${cnisAnalysisJson}
             properties: {
               employmentRelationshipSource: {
                 type: 'string',
-                description: 'Origem do vÃ­nculo (empregador/vÃ­nculo).',
+                description: 'Origem do vínculo (empregador/vínculo).',
               },
               startDate: {
                 type: 'string',
                 format: 'date',
-                description: 'Data de inÃ­cio do perÃ­odo (YYYY-MM-DD).',
+                description: 'Data de início do período (YYYY-MM-DD).',
               },
               endDate: {
                 type: 'string',
                 format: 'date',
-                description: 'Data de fim do perÃ­odo (YYYY-MM-DD) ou null.',
+                description: 'Data de fim do período (YYYY-MM-DD) ou null.',
               },
               category: {
                 type: 'string',
-                description: 'Categoria do vÃ­nculo.',
+                description: 'Categoria do vínculo.',
               },
               impact: {
                 type: 'string',
@@ -4704,7 +5271,7 @@ ${cnisAnalysisJson}
               },
               gracePeriod: {
                 type: 'number',
-                description: 'CarÃªncia do perÃ­odo (contribuiÃ§Ãµes).',
+                description: 'Carência do período (contribuições).',
               },
               agents: {
                 type: 'array',
@@ -4718,12 +5285,12 @@ ${cnisAnalysisJson}
               earningsHistory: {
                 type: 'array',
                 items: earningsSchema,
-                description: 'RemuneraÃ§Ãµes do perÃ­odo (CNIS).',
+                description: 'Remunerações do período (CNIS).',
               },
               observations: {
                 type: 'array',
                 items: { type: 'string' },
-                description: 'ObservaÃ§Ãµes do perÃ­odo (quando houver).',
+                description: 'Observações do período (quando houver).',
               },
             },
             required: [
@@ -4751,11 +5318,73 @@ ${cnisAnalysisJson}
                   periodEndDate: { type: 'string', format: 'date' },
                   recognized: { type: 'boolean' },
                   justification: { type: 'string' },
+                  company: {
+                    type: 'string',
+                    description: 'Company/employer name',
+                  },
+                  cnpj: {
+                    type: 'string',
+                    description: 'Company tax ID (CNPJ)',
+                  },
+                  role: { type: 'string', description: 'Job title/role held' },
+                  supportingDocument: {
+                    type: 'string',
+                    description:
+                      'Supporting documents used. Ex: PPP, CTPS, LTCAT',
+                  },
+                  recordedInCnis: {
+                    type: 'boolean',
+                    description:
+                      'Whether the employment record appears in the CNIS',
+                  },
+                  remunerationRecordedInCnis: {
+                    type: 'boolean',
+                    description:
+                      'Whether remunerations for this period are recorded in the CNIS',
+                  },
+                  hazardousAgents: {
+                    type: 'array',
+                    description: 'Hazardous agents identified in this period',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        intensityAndFrequency: {
+                          type: 'string',
+                          description:
+                            'Exposure intensity and frequency. Ex: 87dB - Habitual and Permanent',
+                        },
+                        identifiedAgent: {
+                          type: 'string',
+                          description:
+                            'Name of the identified hazardous agent. Ex: Noise',
+                        },
+                      },
+                      required: ['intensityAndFrequency', 'identifiedAgent'],
+                    },
+                  },
+                  informationSource: {
+                    type: 'string',
+                    description: 'Source of information used. Ex: PPP, LTCAT',
+                  },
                   legalFramework: {
                     type: 'array',
-                    items: { type: 'string' },
+                    items: {
+                      type: 'object',
+                      properties: {
+                        description: {
+                          type: 'string',
+                          description:
+                            'Legal framework description. Ex: By occupational category (Decree 53.831/64)',
+                        },
+                        code: {
+                          type: 'string',
+                          description:
+                            'Legal framework code. Ex: Code 2.5.3 - Miscellaneous operations',
+                        },
+                      },
+                      required: ['description', 'code'],
+                    },
                   },
-                  agents: { type: 'array', items: agentSchema },
                   epiEficaz: { type: 'boolean' },
                   observations: { type: 'array', items: { type: 'string' } },
                 },
@@ -4765,7 +5394,14 @@ ${cnisAnalysisJson}
                   'recognized',
                   'justification',
                   'legalFramework',
-                  'agents',
+                  'company',
+                  'cnpj',
+                  'role',
+                  'supportingDocument',
+                  'recordedInCnis',
+                  'remunerationRecordedInCnis',
+                  'hazardousAgents',
+                  'informationSource',
                 ],
               },
             },
@@ -4801,6 +5437,246 @@ ${cnisAnalysisJson}
     };
   }
 
+  private getSpecialRetirementRejectionFirstAnalysisJsonSchema(): object {
+    const workPeriodSchema = {
+      type: 'object',
+      properties: {
+        bondOrigin: { type: 'string' },
+        startDate: {
+          type: 'string',
+          format: 'date',
+          description: 'YYYY-MM-DD',
+        },
+        endDate: {
+          type: 'string',
+          format: 'date',
+          description: 'YYYY-MM-DD',
+        },
+        category: {
+          type: 'string',
+          enum: [
+            'segurado_empregado',
+            'segurado_contribuinte_individual',
+            'segurado_facultativo',
+            'segurado_especial',
+            'segurado_domestico',
+            'segurado_avulso',
+          ],
+        },
+        pendencyReason: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Lista de motivos de pendencia do período',
+        },
+        periodConsideration: {
+          type: 'string',
+          enum: ['sim', 'nao', 'provisoriamente'],
+        },
+        contributionAverage: {
+          type: 'string',
+          description:
+            'Valor numérico decimal sem símbolo de moeda, ex: "567.03". Não incluir "R$" ou qualquer formatação de moeda.',
+        },
+        status: { type: 'string' },
+        gracePeriod: { type: 'string' },
+        activityType: {
+          type: 'string',
+          enum: [
+            'atividade_comum',
+            'atividade_especial',
+            'periodo_sem_atividade',
+            'pendencia',
+          ],
+        },
+        earningsHistory: {
+          type: 'array',
+          description:
+            'Histórico de remunerações do período, com foco em competências abaixo do mínimo ou com pendências. Retornar array vazio se não houver.',
+          items: {
+            type: 'object',
+            properties: {
+              competence: {
+                type: 'string',
+                format: 'date',
+                description: 'YYYY-MM-DD',
+              },
+              remuneration: { type: 'string' },
+              indicators: { type: 'string' },
+              paymentDate: {
+                type: 'string',
+                format: 'date',
+                description: 'YYYY-MM-DD',
+              },
+              contribution: { type: 'string' },
+              contributionSalary: { type: 'string' },
+              competenceBelowTheMinimum: { type: 'boolean' },
+            },
+          },
+        },
+        specialPeriods: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              recognizedSpecialTime: { type: 'boolean' },
+              companyName: { type: 'string' },
+              cnpj: { type: 'string' },
+              position: { type: 'string' },
+              comprobatoryDocument: { type: 'string' },
+              linkedToCnis: { type: 'boolean' },
+              containsCnisRemunerationInPeriod: { type: 'boolean' },
+              technicalJustification: { type: 'string' },
+              additionalObservation: { type: 'string' },
+              lawyerObservation: { type: 'string' },
+              exposureFrequency: { type: 'string' },
+              informationSource: { type: 'string' },
+              identifiedAgents: { type: 'string' },
+              efficientEpi: { type: 'boolean' },
+            },
+            required: [
+              'recognizedSpecialTime',
+              'companyName',
+              'cnpj',
+              'position',
+              'comprobatoryDocument',
+              'linkedToCnis',
+              'containsCnisRemunerationInPeriod',
+              'technicalJustification',
+              'additionalObservation',
+              'lawyerObservation',
+              'exposureFrequency',
+              'informationSource',
+              'identifiedAgents',
+              'efficientEpi',
+            ],
+          },
+        },
+      },
+      required: [
+        'bondOrigin',
+        'startDate',
+        'endDate',
+        'category',
+        'pendencyReason',
+        'periodConsideration',
+        'contributionAverage',
+        'status',
+        'gracePeriod',
+        'activityType',
+        'earningsHistory',
+        'specialPeriods',
+      ],
+    };
+
+    return {
+      type: 'object',
+      properties: {
+        decisionAnalysis: {
+          type: 'string',
+          description: 'Análise da decisão em formato markdown',
+        },
+        specialTimeWithoutResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        specialTimeResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        specialTimeWithAccelerators: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        commonTimeWithoutResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        commonTimeResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        commonTimeWithAccelerators: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        totalTimeWithoutResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        totalTimeResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        totalTimeWithAccelerators: {
+          type: 'string',
+          description: 'Ex: 23 anos e 4 meses',
+        },
+        specialGracePeriodWithoutResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        specialGracePeriodResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        specialGracePeriodWithAccelerators: {
+          type: 'string',
+          description: 'Ex: 156 contribuiçõe',
+        },
+        commonGracePeriodWithoutResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        commonGracePeriodResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        commonGracePeriodWithAccelerators: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        totalGracePeriodWithoutResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        totalGracePeriodResolvingPendencies: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        totalGracePeriodWithAccelerators: {
+          type: 'string',
+          description: 'Ex: 156 contribuições',
+        },
+        workPeriods: {
+          type: 'array',
+          items: workPeriodSchema,
+        },
+      },
+      required: [
+        'decisionAnalysis',
+        'specialTimeWithoutResolvingPendencies',
+        'specialTimeResolvingPendencies',
+        'specialTimeWithAccelerators',
+        'commonTimeWithoutResolvingPendencies',
+        'commonTimeResolvingPendencies',
+        'commonTimeWithAccelerators',
+        'totalTimeWithoutResolvingPendencies',
+        'totalTimeResolvingPendencies',
+        'totalTimeWithAccelerators',
+        'specialGracePeriodWithoutResolvingPendencies',
+        'specialGracePeriodResolvingPendencies',
+        'specialGracePeriodWithAccelerators',
+        'commonGracePeriodWithoutResolvingPendencies',
+        'commonGracePeriodResolvingPendencies',
+        'commonGracePeriodWithAccelerators',
+        'totalGracePeriodWithoutResolvingPendencies',
+        'totalGracePeriodResolvingPendencies',
+        'totalGracePeriodWithAccelerators',
+        'workPeriods',
+      ],
+    };
+  }
+
   private getDisabilityRetirementPlanningGrantResultAnalysisJsonSchema(): object {
     return {
       type: 'object',
@@ -4817,7 +5693,7 @@ ${cnisAnalysisJson}
               isEligible: {
                 type: 'boolean',
                 description:
-                  'Indica se o segurado jï¿½ atingiu o direito ou ainda estï¿½ aguardando',
+                  'Indica se o segurado já atingiu o direito ou ainda está aguardando',
               },
               eligibilityAvailableAt: {
                 type: 'string',
@@ -4854,7 +5730,7 @@ ${cnisAnalysisJson}
             properties: {
               optionName: {
                 type: 'string',
-                description: 'Nome da opï¿½ï¿½o recomendada pelo sistema',
+                description: 'Nome da opção recomendada pelo sistema',
               },
               retirementRuleName: {
                 type: 'string',
@@ -4864,7 +5740,7 @@ ${cnisAnalysisJson}
                 type: 'string',
                 format: 'date',
                 description:
-                  'Data de inï¿½cio do benefï¿½cio no formato YYYY-MM-DD',
+                  'Data de início do benefício no formato YYYY-MM-DD',
               },
               rmi: {
                 type: 'number',
@@ -4891,11 +5767,11 @@ ${cnisAnalysisJson}
             properties: {
               suggestionTitle: {
                 type: 'string',
-                description: 'Tï¿½tulo da sugestï¿½o processual',
+                description: 'Título da sugestáo processual',
               },
               suggestionDescription: {
                 type: 'string',
-                description: 'Descriï¿½ï¿½o da sugestï¿½o processual',
+                description: 'Descrição da sugestáo processual',
               },
               bulletPoints: {
                 type: 'array',
@@ -4917,15 +5793,15 @@ ${cnisAnalysisJson}
           properties: {
             benefit: {
               type: 'string',
-              description: 'Benefï¿½cio analisado',
+              description: 'Benefício analisado',
             },
             compatibility: {
               type: 'boolean',
-              description: 'Indica a compatibilidade do benefï¿½cio',
+              description: 'Indica a compatibilidade do benefício',
             },
             observations: {
               type: 'string',
-              description: 'Observaï¿½ï¿½es sobre a compatibilidade',
+              description: 'Observações sobre a compatibilidade',
             },
           },
           required: ['benefit', 'compatibility', 'observations'],
@@ -4953,7 +5829,7 @@ ${cnisAnalysisJson}
         timeAccelerators: {
           type: 'array',
           description:
-            'Lista de perï¿½odos de acelerador de tempo identificados nos documentos analisados',
+            'Lista de períodos de acelerador de tempo identificados nos documentos analisados',
           items: {
             type: 'object',
             properties: {
@@ -4976,33 +5852,30 @@ ${cnisAnalysisJson}
                 enum: Object.values(
                   DisabilityRetirementPlanningGrantViabilityEnum,
                 ),
-                description: 'Nï¿½vel de viabilidade do perï¿½odo analisado',
+                description: 'Nível de viabilidade do período analisado',
               },
               technicalNote: {
                 type: 'string',
-                description:
-                  'Nota tï¿½cnica resumindo os fundamentos do perï¿½odo',
+                description: 'Nota técnica resumindo os fundamentos do período',
               },
               startDate: {
                 type: 'string',
                 format: 'date-time',
-                description:
-                  'Data de inï¿½cio do perï¿½odo no formato ISO 8601',
+                description: 'Data de início do período no formato ISO 8601',
               },
               endDate: {
                 type: 'string',
                 format: 'date-time',
-                description: 'Data de fim do perï¿½odo no formato ISO 8601',
+                description: 'Data de fim do período no formato ISO 8601',
               },
               institution: {
                 type: 'string',
-                description:
-                  'Instituiï¿½ï¿½o ou empregador relacionado ao perï¿½odo',
+                description: 'Instituição ou empregador relacionado ao período',
               },
               affectsQualifyingPeriod: {
                 type: 'boolean',
                 description:
-                  'Indica se o perï¿½odo afeta carï¿½ncia ou tempo qualificï¿½vel',
+                  'Indica se o período afeta carência ou tempo qualificável',
               },
             },
             required: [
@@ -5029,76 +5902,72 @@ ${cnisAnalysisJson}
         periods: {
           type: 'array',
           description:
-            'Lista de perï¿½odos identificados nos documentos PPP analisados',
+            'Lista de períodos identificados nos documentos PPP analisados',
           items: {
             type: 'object',
             properties: {
               startDate: {
                 type: 'string',
                 format: 'date-time',
-                description:
-                  'Data de inï¿½cio do perï¿½odo no formato ISO 8601',
+                description: 'Data de início do período no formato ISO 8601',
               },
               endDate: {
                 type: 'string',
                 format: 'date-time',
-                description: 'Data de fim do perï¿½odo no formato ISO 8601',
+                description: 'Data de fim do período no formato ISO 8601',
               },
               category: {
                 type: 'string',
                 enum: Object.values(
                   DisabilityRetirementPlanningGrantCategoryEnum,
                 ),
-                description: 'Categoria do perï¿½odo',
+                description: 'Categoria do período',
               },
               isPendency: {
                 type: 'boolean',
-                description: 'Indica se o perï¿½odo possui pendï¿½ncia',
+                description: 'Indica se o período possui pendência',
               },
               competenceBelowTheMinimum: {
                 type: 'boolean',
-                description:
-                  'Indica se a competï¿½ncia estï¿½ abaixo do mï¿½nimo',
+                description: 'Indica se a competência está abaixo do mínimo',
               },
               pendencyReason: {
                 type: 'string',
                 enum: Object.values(
                   DisabilityRetirementPlanningGrantPeriodPendencyReasonEnum,
                 ),
-                description: 'Motivo da pendï¿½ncia, se houver',
+                description: 'Motivo da pendência, se houver',
               },
               typeOfContribution: {
                 type: 'string',
-                description: 'Tipo de contribuiï¿½ï¿½o, se aplicï¿½vel',
+                description: 'Tipo de contribuição, se aplicável',
               },
               status: {
                 type: 'boolean',
-                description: 'Status do perï¿½odo (ativo/inativo)',
+                description: 'Status do período (ativo/inativo)',
               },
               contributionAverage: {
                 type: 'string',
                 description:
-                  'Mï¿½dia de contribuiï¿½ï¿½o como string decimal, se disponï¿½vel',
+                  'Média de contribuição como string decimal, se disponível',
               },
               disabilityStatus: {
                 type: 'string',
                 enum: Object.values(
                   DisabilityRetirementPlanningGrantDisabilityDegreeEnum,
                 ),
-                description:
-                  'Grau de deficiï¿½ncia no perï¿½odo, se aplicï¿½vel',
+                description: 'Grau de deficiência no período, se aplicável',
               },
               periodConsideration: {
                 type: 'string',
                 enum: Object.values(
                   DisabilityRetirementPlanningGrantPeriodConsiderationEnum,
                 ),
-                description: 'Consideraï¿½ï¿½o do perï¿½odo para o benefï¿½cio',
+                description: 'Consideração do período para o benefício',
               },
               bondOrigin: {
                 type: 'string',
-                description:
-                  'Origem do vï¿½nculo empregatï¿½cio, se identificada',
+                description: 'Origem do vínculo empregatício, se identificada',
               },
             },
             required: [
@@ -5121,42 +5990,42 @@ ${cnisAnalysisJson}
       properties: {
         label: {
           type: 'string',
-          description: 'Rï¿½tulo descritivo do perï¿½odo',
+          description: 'Rótulo descritivo do período',
         },
         start: {
           type: 'string',
-          description: 'Data de inï¿½cio no formato YYYY-MM-DD',
+          description: 'Data de início no formato YYYY-MM-DD',
         },
         end: {
           type: 'string',
-          description: 'Data de tï¿½rmino no formato YYYY-MM-DD',
+          description: 'Data de término no formato YYYY-MM-DD',
         },
         recognized: {
           type: 'boolean',
-          description: 'Indica se o perï¿½odo foi reconhecido',
+          description: 'Indica se o período foi reconhecido',
         },
         companyName: { type: 'string', description: 'Nome da empresa' },
         companyCNPJ: { type: 'string', description: 'CNPJ da empresa' },
-        role: { type: 'string', description: 'Cargo/funï¿½ï¿½o' },
+        role: { type: 'string', description: 'Cargo/função' },
         employmentLinkStartDate: {
           type: 'string',
-          description: 'Inï¿½cio do vï¿½nculo',
+          description: 'Início do vínculo',
         },
         employmentLinkEndDate: {
           type: 'string',
-          description: 'Fim do vï¿½nculo',
+          description: 'Fim do vínculo',
         },
         employmentLinkSupportingDocument: {
           type: 'string',
-          description: 'Documento comprobatï¿½rio',
+          description: 'Documento comprobatório',
         },
         employmentLinkPresentInCNIS: {
           type: 'boolean',
-          description: 'Vï¿½nculo consta no CNIS',
+          description: 'Vínculo consta no CNIS',
         },
         employmentLinkEarningsInCNIS: {
           type: 'boolean',
-          description: 'Remuneraï¿½ï¿½es no CNIS',
+          description: 'Remunerações no CNIS',
         },
         harmfulAgentsExposureFrequency: {
           type: 'array',
@@ -5220,9 +6089,9 @@ ${cnisAnalysisJson}
     const pcdPeriodSchema = {
       type: 'object',
       properties: {
-        label: { type: 'string', description: 'Rï¿½tulo do perï¿½odo PCD' },
-        start: { type: 'string', description: 'Data de inï¿½cio YYYY-MM-DD' },
-        end: { type: 'string', description: 'Data de tï¿½rmino YYYY-MM-DD' },
+        label: { type: 'string', description: 'Rótulo do período PCD' },
+        start: { type: 'string', description: 'Data de início YYYY-MM-DD' },
+        end: { type: 'string', description: 'Data de término YYYY-MM-DD' },
         recognized: {
           type: 'boolean',
           description: 'Tempo como PCD reconhecido',
@@ -5237,7 +6106,7 @@ ${cnisAnalysisJson}
         employmentLinkEarningsInCNIS: { type: 'boolean' },
         disabilityType: {
           type: 'string',
-          description: 'Tipo de deficiï¿½ncia (ex: Fï¿½sica)',
+          description: 'Tipo de deficiência (ex: Física)',
         },
         cidCodes: {
           type: 'array',
@@ -5246,11 +6115,11 @@ ${cnisAnalysisJson}
         },
         cifClassification: {
           type: 'string',
-          description: 'Classificaï¿½ï¿½o CIF',
+          description: 'Classificação CIF',
         },
         disabilityDegree: {
           type: 'string',
-          description: 'Grau da deficiï¿½ncia (Leve, Moderado, Grave)',
+          description: 'Grau da deficiência (Leve, Moderado, Grave)',
         },
         legalFrameworkByDisabilityType: { type: 'string' },
         legalFrameworkMainLaw: { type: 'string' },
@@ -5305,7 +6174,7 @@ ${cnisAnalysisJson}
             ni: { type: 'string', description: 'NI' },
             lawsuitNumber: {
               type: 'string',
-              description: 'Nï¿½mero do processo judicial',
+              description: 'Número do processo judicial',
             },
           },
           required: ['name', 'birthDate'],
@@ -5313,7 +6182,7 @@ ${cnisAnalysisJson}
         rulesSummary: {
           type: 'object',
           description:
-            'Nï¿½mero total de regras analisadas, elegï¿½veis e nï¿½o elegï¿½veis',
+            'Número total de regras analisadas, elegíveis e não elegíveis',
           properties: {
             totalAnalyzed: {
               type: 'number',
@@ -5321,11 +6190,11 @@ ${cnisAnalysisJson}
             },
             eligibleCount: {
               type: 'number',
-              description: 'Quantidade de regras elegï¿½veis',
+              description: 'Quantidade de regras elegíveis',
             },
             nonEligibleCount: {
               type: 'number',
-              description: 'Quantidade de regras nï¿½o elegï¿½veis',
+              description: 'Quantidade de regras não elegíveis',
             },
           },
           required: ['totalAnalyzed', 'eligibleCount', 'nonEligibleCount'],
@@ -5346,12 +6215,12 @@ ${cnisAnalysisJson}
               },
               result: {
                 type: 'boolean',
-                description: 'Se o segurado ï¿½ elegï¿½vel',
+                description: 'Se o segurado à elegível',
               },
               rightDate: {
                 type: 'string',
                 description:
-                  'Data do direito no formato YYYY-MM-DD (quando elegï¿½vel)',
+                  'Data do direito no formato YYYY-MM-DD (quando elegível)',
               },
               estimatedRMI: {
                 type: 'number',
@@ -5363,12 +6232,12 @@ ${cnisAnalysisJson}
               },
               highestLawsuitValue: {
                 type: 'boolean',
-                description: 'Indica se possui o maior valor de aï¿½ï¿½o',
+                description: 'Indica se possui o maior valor de ação',
               },
               detailedRuleAnalysis: {
                 type: 'string',
                 description:
-                  'Anï¿½lise detalhada da regra (requisitos, cï¿½lculo RMI, valor da causa)',
+                  'Análise detalhada da regra (requisitos, cálculo RMI, valor da causa)',
               },
             },
             required: [
@@ -5388,7 +6257,7 @@ ${cnisAnalysisJson}
             properties: {
               startDate: {
                 type: 'string',
-                description: 'Data de inï¿½cio YYYY-MM-DD',
+                description: 'Data de início YYYY-MM-DD',
               },
               endDate: {
                 type: 'string',
@@ -5407,12 +6276,12 @@ ${cnisAnalysisJson}
               },
               type: {
                 type: 'string',
-                description: 'Classificaï¿½ï¿½o do perï¿½odo',
+                description: 'Classificação do período',
               },
-              location: { type: 'string', description: 'Local do perï¿½odo' },
+              location: { type: 'string', description: 'Local do período' },
               duration: {
                 type: 'string',
-                description: 'Duraï¿½ï¿½o (ex: 4 anos)',
+                description: 'Duração (ex: 4 anos)',
               },
             },
             required: [
@@ -5427,27 +6296,27 @@ ${cnisAnalysisJson}
         specialTimeAnalysis: {
           type: 'array',
           description:
-            'Anï¿½lise do tempo especial (perï¿½odos com agentes nocivos)',
+            'Análise do tempo especial (períodos com agentes nocivos)',
           items: specialTimePeriodSchema,
         },
         pcdTimeAnalysis: {
           type: 'array',
           description:
-            'Anï¿½lise do tempo PCD (perï¿½odos como pessoa com deficiï¿½ncia)',
+            'Análise do tempo PCD (períodos como pessoa com deficiência)',
           items: pcdPeriodSchema,
         },
         contributionTimeSummary: {
           type: 'object',
-          description: 'Tempo de Serviï¿½o/Contribuiï¿½ï¿½o',
+          description: 'Tempo de serviço/contribuição',
           properties: {
             totalContributionTime: {
               type: 'string',
               description:
-                'Tempo total de contribuiï¿½ï¿½o. Ex: 44 anos, 5 meses e 22 dias',
+                'Tempo total de contribuição. Ex: 44 anos, 5 meses e 22 dias',
             },
             publicServiceContributionTime: {
               type: 'string',
-              description: 'Tempo no serviï¿½o pï¿½blico',
+              description: 'Tempo no serviço público',
             },
             positionTenureTime: {
               type: 'string',
@@ -5464,7 +6333,7 @@ ${cnisAnalysisJson}
             publicServiceStartDate: {
               type: 'string',
               description:
-                'Ingresso no serviï¿½o pï¿½blico (anterior/posterior a 16/12/1998 ou data)',
+                'Ingresso no serviço público (anterior/posterior a 16/12/1998 ou data)',
             },
             pcdTime: {
               type: 'string',
@@ -5477,17 +6346,17 @@ ${cnisAnalysisJson}
             contributionTimeWithoutResolvingOutstandingIssues: {
               type: 'string',
               description:
-                'Tempo de contribuiï¿½ï¿½o sem resolver pendï¿½ncias. Ex: 10 anos 2 meses',
+                'Tempo de contribuição sem resolver pendências. Ex: 10 anos 2 meses',
             },
             contributionTimeAfterResolvingOutstandingIssues: {
               type: 'string',
               description:
-                'Tempo de contribuiï¿½ï¿½o apï¿½s resolver pendï¿½ncias. Ex: 22 anos 5 meses',
+                'Tempo de contribuição após resolver pendências. Ex: 22 anos 5 meses',
             },
             contributionTimeWithAccelerators: {
               type: 'string',
               description:
-                'Tempo de contribuiï¿½ï¿½o considerando aceleradores. Ex: 30 anos 8 meses',
+                'Tempo de contribuição considerando aceleradores. Ex: 30 anos 8 meses',
             },
           },
           required: [
@@ -5501,16 +6370,16 @@ ${cnisAnalysisJson}
         rppsSummary: {
           type: 'string',
           description:
-            'Resumo de Regras Aplicï¿½veis para Aposentadoria Urbana Comum (RPPS)',
+            'Resumo de Regras Aplicáveis para Aposentadoria Urbana Comum (RPPS)',
         },
         finalAnalysis: {
           type: 'string',
-          description: 'Anï¿½lise final consolidada',
+          description: 'Análise final consolidada',
         },
         completeAnalysisReport: {
           type: 'string',
           description:
-            'Relatï¿½rio completo da anï¿½lise em Markdown, pronto para exportaï¿½ï¿½o em PDF/DOCX. Deve conter todas as seï¿½ï¿½es: Dados do cliente, Tempo de Serviï¿½o/Contribuiï¿½ï¿½o, Anï¿½lise de Regras de Aposentadoria, resumo e lista de regras (elegï¿½veis e nï¿½o elegï¿½veis), Linha do tempo integrada, Anï¿½lise do tempo especial, Anï¿½lise do tempo PCD, Resumo de Regras Aplicï¿½veis para Aposentadoria Urbana Comum (RPPS) e Anï¿½lise final. Formate com tï¿½tulos (##), listas e tabelas em Markdown quando aplicï¿½vel.',
+            'Relatório completo da análise em Markdown, pronto para exportação em PDF/DOCX. Deve conter todas as seções: Dados do cliente, Tempo de serviço/contribuição, Análise de Regras de Aposentadoria, resumo e lista de regras (elegíveis e não elegíveis), Linha do tempo integrada, Análise do tempo especial, Análise do tempo PCD, Resumo de Regras Aplicáveis para Aposentadoria Urbana Comum (RPPS) e Análise final. Formate com títulos (##), listas e tabelas em Markdown quando aplicável.',
         },
       },
       required: [
@@ -5535,87 +6404,86 @@ ${cnisAnalysisJson}
         periods: {
           type: 'array',
           description:
-            'Lista de perÃ­odos identificados nos documentos PPP analisados',
+            'Lista de períodos identificados nos documentos PPP analisados',
           items: {
             type: 'object',
             properties: {
               bondOrigin: {
                 type: 'string',
-                description:
-                  'Origem do vÃ­nculo empregatÃ­cio, se identificada',
+                description: 'Origem do vínculo empregatício, se identificada',
               },
               category: {
                 type: 'string',
                 enum: Object.values(
                   GeneralUrbanRetirementDenialPeriodCategoryEnum,
                 ),
-                description: 'Categoria do perÃ­odo',
+                description: 'Categoria do período',
               },
               activityDescription: {
                 type: 'string',
                 description:
-                  'DescriÃ§Ã£o da atividade exercida no perÃ­odo, se aplicÃ¡vel',
+                  'Descrição da atividade exercida no período, se aplicável',
               },
               startDate: {
                 type: 'string',
                 format: 'date-time',
-                description: 'Data de inÃ­cio do perÃ­odo no formato ISO 8601',
+                description: 'Data de início do período no formato ISO 8601',
               },
               endDate: {
                 type: 'string',
                 format: 'date-time',
-                description: 'Data de fim do perÃ­odo no formato ISO 8601',
+                description: 'Data de fim do período no formato ISO 8601',
               },
               workType: {
                 type: 'string',
                 enum: ['URBAN', 'RURAL'],
-                description: 'Tipo de trabalho do perÃ­odo',
+                description: 'Tipo de trabalho do período',
               },
               impactMonths: {
                 type: 'number',
                 description:
-                  'NÃºmero de meses de impacto do perÃ­odo. Omitir quando nÃ£o disponÃ­vel.',
+                  'Número de meses de impacto do período. Omitir quando não disponível.',
               },
               graceMonths: {
                 type: 'number',
                 description:
-                  'NÃºmero de meses de carÃªncia do perÃ­odo. Omitir quando nÃ£o disponÃ­vel.',
+                  'Número de meses de carência do período. Omitir quando não disponível.',
               },
               isPendency: {
                 type: 'boolean',
-                description: 'Indica se o perÃ­odo possui pendÃªncia',
+                description: 'Indica se o período possui pendência',
               },
               competenceBelowTheMinimum: {
                 type: 'boolean',
-                description: 'Indica se a competÃªncia estÃ¡ abaixo do mÃ­nimo',
+                description: 'Indica se a competência está abaixo do mínimo',
               },
               contributionAverage: {
                 type: 'string',
                 description:
-                  'MÃ©dia de contribuiÃ§Ã£o como string decimal, se disponÃ­vel',
+                  'Média de contribuição como string decimal, se disponível',
               },
               pendencyReason: {
                 type: 'string',
                 enum: Object.values(
                   GeneralUrbanRetirementDenialPeriodPendencyReasonEnum,
                 ),
-                description: 'Motivo da pendÃªncia, se houver',
+                description: 'Motivo da pendência, se houver',
               },
               periodConsideration: {
                 type: 'string',
                 enum: Object.values(
                   GeneralUrbanRetirementDenialPeriodConsiderationEnum,
                 ),
-                description: 'ConsideraÃ§Ã£o do perÃ­odo para o benefÃ­cio',
+                description: 'Consideração do período para o benefício',
               },
               wantsToComplementViaMeuINSS: {
                 type: 'boolean',
                 description:
-                  'Indica se o segurado deseja complementar o perÃ­odo via Meu INSS.',
+                  'Indica se o segurado deseja complementar o período via Meu INSS.',
               },
               status: {
                 type: 'boolean',
-                description: 'Status do perÃ­odo (ativo/inativo)',
+                description: 'Status do período (ativo/inativo)',
               },
             },
             required: [
@@ -5639,21 +6507,21 @@ ${cnisAnalysisJson}
       properties: {
         clientData: {
           type: 'object',
-          description: 'Dados do segurado extraÃ­dos do CNIS.',
+          description: 'Dados do segurado extraídos do CNIS.',
           properties: {
             name: { type: 'string', description: 'Nome completo do segurado.' },
             cpf: {
               type: 'string',
-              description: 'CPF do segurado. Null se nÃ£o encontrado.',
+              description: 'CPF do segurado. Null se não encontrado.',
             },
             nit: {
               type: 'string',
-              description: 'NIT/PIS do segurado. Null se nÃ£o encontrado.',
+              description: 'NIT/PIS do segurado. Null se não encontrado.',
             },
             birthDate: {
               type: 'string',
               description:
-                'Data de nascimento no formato YYYY-MM-DD. Null se nÃ£o encontrada.',
+                'Data de nascimento no formato YYYY-MM-DD. Null se não encontrada.',
             },
           },
           required: ['name', 'cpf', 'nit', 'birthDate'],
@@ -5661,21 +6529,21 @@ ${cnisAnalysisJson}
         timeSummary: {
           type: 'object',
           description:
-            'Resumo do tempo de contribuiÃ§Ã£o e carÃªncia apurados por cenÃ¡rio.',
+            'Resumo do tempo de contribuição e carência apurados por cenário.',
           properties: {
             contributionTime: {
               type: 'object',
-              description: 'Tempo de contribuiÃ§Ã£o em cada cenÃ¡rio.',
+              description: 'Tempo de contribuição em cada cenário.',
               properties: {
                 withoutResolvingPendencies: {
                   type: 'string',
                   description:
-                    'Tempo sem resolver pendÃªncias. Ex: 23 anos e 4 meses.',
+                    'Tempo sem resolver pendências. Ex: 23 anos e 4 meses.',
                 },
                 resolvingPendencies: {
                   type: 'string',
                   description:
-                    'Tempo resolvendo todas as pendÃªncias. Ex: 27 anos e 8 meses.',
+                    'Tempo resolvendo todas as pendências. Ex: 27 anos e 8 meses.',
                 },
                 withTimeAccelerators: {
                   type: 'string',
@@ -5692,22 +6560,22 @@ ${cnisAnalysisJson}
             gracePeriod: {
               type: 'object',
               description:
-                'CarÃªncia (nÃºmero de contribuiÃ§Ãµes) em cada cenÃ¡rio.',
+                'Carência (número de contribuições) em cada cenário.',
               properties: {
                 withoutResolvingPendencies: {
                   type: 'string',
                   description:
-                    'ContribuiÃ§Ãµes sem resolver pendÃªncias. Ex: 156 contribuiÃ§Ãµes.',
+                    'Contribuições sem resolver pendências. Ex: 156 contribuições.',
                 },
                 resolvingPendencies: {
                   type: 'string',
                   description:
-                    'ContribuiÃ§Ãµes resolvendo todas as pendÃªncias. Ex: 172 contribuiÃ§Ãµes.',
+                    'Contribuições resolvendo todas as pendências. Ex: 172 contribuições.',
                 },
                 withTimeAccelerators: {
                   type: 'string',
                   description:
-                    'ContribuiÃ§Ãµes com aceleradores de tempo. Ex: 180 contribuiÃ§Ãµes.',
+                    'Contribuições com aceleradores de tempo. Ex: 180 contribuições.',
                 },
               },
               required: [
@@ -5727,98 +6595,97 @@ ${cnisAnalysisJson}
             properties: {
               bondOrigin: {
                 type: 'string',
-                description: 'Nome do vÃ­nculo ou empregador.',
+                description: 'Nome do vínculo ou empregador.',
               },
               category: {
                 type: 'string',
                 enum: Object.values(
                   GeneralUrbanRetirementDenialPeriodCategoryEnum,
                 ),
-                description: 'Categoria do perÃ­odo.',
+                description: 'Categoria do período.',
               },
               activityDescription: {
                 type: 'string',
-                description: 'DescriÃ§Ã£o da atividade exercida no perÃ­odo.',
+                description: 'Descrição da atividade exercida no período.',
               },
               startDate: {
                 type: 'string',
                 GeneralUrbanRetirementDenialPeriodPendencyReasonEnum,
-                description:
-                  'Data de inÃ­cio do perÃ­odo no formato YYYY-MM-DD.',
+                description: 'Data de início do período no formato YYYY-MM-DD.',
               },
               endDate: {
                 type: 'string',
                 format: 'date-time',
                 description:
-                  'Data de fim do perÃ­odo no formato YYYY-MM-DD. Null se ainda em aberto.',
+                  'Data de fim do período no formato YYYY-MM-DD. Null se ainda em aberto.',
               },
               workType: {
                 type: 'string',
                 enum: ['URBAN', 'RURAL'],
-                description: 'Tipo de trabalho do perÃ­odo.',
+                description: 'Tipo de trabalho do período.',
               },
               impactMonths: {
                 type: 'number',
                 description:
-                  'NÃºmero de meses de impacto do perÃ­odo. Omitir quando nÃ£o disponÃ­vel.',
+                  'Número de meses de impacto do período. Omitir quando não disponível.',
               },
               graceMonths: {
                 type: 'number',
                 description:
-                  'NÃºmero de meses de carÃªncia do perÃ­odo. Omitir quando nÃ£o disponÃ­vel.',
+                  'Número de meses de carência do período. Omitir quando não disponível.',
               },
               isPendency: {
                 type: 'boolean',
-                description: 'Indica se o perÃ­odo possui pendÃªncia.',
+                description: 'Indica se o período possui pendência.',
               },
               competenceBelowTheMinimum: {
                 type: 'boolean',
                 description:
-                  'Indica se hÃ¡ competÃªncias com valor abaixo do mÃ­nimo.',
+                  'Indica se há competências com valor abaixo do mínimo.',
               },
               pendencyReason: {
                 type: 'string',
                 enum: Object.values(
                   GeneralUrbanRetirementDenialPeriodPendencyReasonEnum,
                 ),
-                description: 'Motivo da pendÃªncia, se houver.',
+                description: 'Motivo da pendência, se houver.',
               },
               periodConsideration: {
                 type: 'string',
                 enum: Object.values(
                   GeneralUrbanRetirementDenialPeriodConsiderationEnum,
                 ),
-                description: 'IndicaÃ§Ã£o de consideraÃ§Ã£o do perÃ­odo.',
+                description: 'Indicação de consideração do período.',
               },
               wantsToComplementViaMeuINSS: {
                 type: 'boolean',
                 description:
-                  'Indica se o segurado deseja complementar o perÃ­odo via Meu INSS.',
+                  'Indica se o segurado deseja complementar o período via Meu INSS.',
               },
               status: {
                 type: 'boolean',
                 description:
-                  'Status do perÃ­odo (favorÃ¡vel/desfavorÃ¡vel para o segurado).',
+                  'Status do período (favorável/desfavorável para o segurado).',
               },
               contributionAverage: {
                 type: 'number',
                 description:
-                  'MÃ©dia de contribuiÃ§Ã£o do perÃ­odo. Omitir quando nÃ£o disponÃ­vel.',
+                  'Média de contribuição do período. Omitir quando não disponível.',
               },
               earningsHistory: {
                 type: 'array',
                 description:
-                  'Lista APENAS das competÃªncias com pendÃªncia identificada no perÃ­odo. Inclua: competÃªncias abaixo do mÃ­nimo (COMPETENCE_BELOW_MINIMUM), competÃªncias apï¿½s data de saÃ­da ausente (NO_EXIT_DATE) e contribuiÃ§Ãµes recolhidas em atraso (LATE_CONTRIBUTION). NÃ£o inclua competÃªncias normais. Retorne array vazio quando nÃ£o houver nenhuma pendÃªncia.',
+                  'Lista APENAS das competências com pendência identificada no período. Inclua: competências abaixo do mínimo (COMPETENCE_BELOW_MINIMUM), competências após data de saída ausente (NO_EXIT_DATE) e contribuições recolhidas em atraso (LATE_CONTRIBUTION). Não inclua competências normais. Retorne array vazio quando não houver nenhuma pendência.',
                 items: {
                   type: 'object',
                   properties: {
                     competence: {
                       type: 'string',
-                      description: 'CompetÃªncia no formato YYYY-MM-DD.',
+                      description: 'Competência no formato YYYY-MM-DD.',
                     },
                     value: {
                       type: 'string',
-                      description: 'Valor da remuneraÃ§Ã£o como string.',
+                      description: 'Valor da remuneração como string.',
                     },
                     pendencyType: {
                       type: 'string',
@@ -5826,12 +6693,12 @@ ${cnisAnalysisJson}
                         GeneralUrbanRetirementDenialPeriodPendencyReasonEnum,
                       ),
                       description:
-                        'Tipo de pendÃªncia: COMPETENCE_BELOW_MINIMUM (contribuiÃ§Ã£o abaixo do mÃ­nimo), NO_EXIT_DATE (perÃ­odo sem data de saÃ­da), LATE_CONTRIBUTION (contribuiÃ§Ã£o recolhida em atraso).',
+                        'Tipo de pendência: COMPETENCE_BELOW_MINIMUM (contribuição abaixo do mínimo), NO_EXIT_DATE (período sem data de saída), LATE_CONTRIBUTION (contribuição recolhida em atraso).',
                     },
                     collectedAt: {
                       type: 'string',
                       description:
-                        'Data em que a contribuiÃ§Ã£o foi efetivamente recolhida, no formato YYYY-MM-DD. Preencher apenas quando pendencyType for LATE_CONTRIBUTION.',
+                        'Data em que a contribuição foi efetivamente recolhida, no formato YYYY-MM-DD. Preencher apenas quando pendencyType for LATE_CONTRIBUTION.',
                     },
                   },
                   required: ['competence', 'value', 'pendencyType'],
@@ -5860,7 +6727,7 @@ ${cnisAnalysisJson}
         timeAccelerators: {
           type: 'array',
           description:
-            'Lista de perÃ­odos de acelerador de tempo identificados nos documentos analisados',
+            'Lista de períodos de acelerador de tempo identificados nos documentos analisados',
           items: {
             type: 'object',
             properties: {
@@ -5877,32 +6744,30 @@ ${cnisAnalysisJson}
               viability: {
                 type: 'string',
                 enum: ['ALTA', 'MEDIA', 'BAIXA'],
-                description: 'NÃ­vel de viabilidade do perÃ­odo analisado',
+                description: 'Nível de viabilidade do período analisado',
               },
               technicalNote: {
                 type: 'string',
-                description:
-                  'Nota tÃ©cnica resumindo os fundamentos do perÃ­odo',
+                description: 'Nota técnica resumindo os fundamentos do período',
               },
               startDate: {
                 type: 'string',
                 format: 'date-time',
-                description: 'Data de inÃ­cio do perÃ­odo no formato ISO 8601',
+                description: 'Data de início do período no formato ISO 8601',
               },
               endDate: {
                 type: 'string',
                 format: 'date-time',
-                description: 'Data de fim do perÃ­odo no formato ISO 8601',
+                description: 'Data de fim do período no formato ISO 8601',
               },
               institution: {
                 type: 'string',
-                description:
-                  'InstituiÃ§Ã£o ou empregador relacionado ao perÃ­odo',
+                description: 'Instituição ou empregador relacionado ao período',
               },
               affectsQualifyingPeriod: {
                 type: 'boolean',
                 description:
-                  'Indica se o perÃ­odo afeta carÃªncia ou tempo qualificÃ¡vel',
+                  'Indica se o período afeta carência ou tempo qualificável',
               },
             },
             required: [
@@ -5928,7 +6793,7 @@ ${cnisAnalysisJson}
       properties: {
         clientData: {
           type: 'object',
-          description: 'Dados do segurado extraÃ­dos do CNIS.',
+          description: 'Dados do segurado extraídos do CNIS.',
           properties: {
             name: {
               type: 'string',
@@ -5942,13 +6807,13 @@ ${cnisAnalysisJson}
               type: 'string',
               format: 'date',
               description:
-                'Data da Ãºltima filiaÃ§Ã£o no formato YYYY-MM-DD. Null se nÃ£o encontrada.',
+                'Data da última filiação no formato YYYY-MM-DD. Null se não encontrada.',
             },
             birthDate: {
               type: 'string',
               format: 'date',
               description:
-                'Data de nascimento no formato YYYY-MM-DD. Null se nÃ£o encontrada.',
+                'Data de nascimento no formato YYYY-MM-DD. Null se não encontrada.',
             },
             gender: {
               type: 'string',
@@ -5960,7 +6825,7 @@ ${cnisAnalysisJson}
         retirementRules: {
           type: 'array',
           description:
-            'Resumo de regras aplicÃ¡veis para aposentadoria urbana comum (RGPS).',
+            'Resumo de regras aplicáveis para aposentadoria urbana comum (RGPS).',
           items: {
             type: 'object',
             properties: {
@@ -5976,7 +6841,7 @@ ${cnisAnalysisJson}
                 type: 'string',
                 format: 'date',
                 description:
-                  'Data do direito no formato YYYY-MM-DD. Null se nÃ£o atingido ou nÃ£o calculÃ¡vel.',
+                  'Data do direito no formato YYYY-MM-DD. Null se não atingido ou não calculável.',
               },
               expectedMonthlyBenefit: {
                 type: 'number',
@@ -5994,7 +6859,7 @@ ${cnisAnalysisJson}
               retirementAnalysis: {
                 type: 'string',
                 description:
-                  'AnÃ¡lise detalhada desta regra de aposentadoria, incluindo requisitos, cÃ¡lculo da RMI e valor da causa.',
+                  'Análise detalhada desta regra de aposentadoria, incluindo requisitos, cálculo da RMI e valor da causa.',
               },
             },
             required: [
@@ -6010,12 +6875,12 @@ ${cnisAnalysisJson}
         analysisResult: {
           type: 'string',
           description:
-            'Texto explicativo completo sobre o resultado da anÃ¡lise, perspectivas processuais e recomendaÃ§Ãµes para o caso de indeferimento.',
+            'Texto explicativo completo sobre o resultado da análise, perspectivas processuais e recomendações para o caso de indeferimento.',
         },
         completeAnalysisDownload: {
           type: 'string',
           description:
-            'ConteÃºdo HTML completo e bem formatado com toda a anÃ¡lise detalhada, pronto para conversÃ£o em PDF.',
+            'Conteúdo HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.',
         },
       },
       required: [
@@ -6034,17 +6899,17 @@ ${cnisAnalysisJson}
         insuredQualityAnalysis: {
           type: 'object',
           description:
-            'AnÃ¡lise da qualidade de segurado do instituidor falecido na data do Ã³bito',
+            'Análise da qualidade de segurado do instituidor falecido na data do óbito',
           properties: {
             isConfirmed: {
               type: 'boolean',
               description:
-                'Indica se a qualidade de segurado foi confirmada na data do Ã³bito',
+                'Indica se a qualidade de segurado foi confirmada na data do óbito',
             },
             description: {
               type: 'string',
               description:
-                'DescriÃ§Ã£o detalhada da anÃ¡lise da qualidade de segurado',
+                'Descrição detalhada da análise da qualidade de segurado',
             },
           },
           required: ['isConfirmed', 'description'],
@@ -6052,17 +6917,17 @@ ${cnisAnalysisJson}
         scheduledRetirementRightAnalysis: {
           type: 'object',
           description:
-            'AnÃ¡lise do direito Ã  aposentadoria programada do instituidor falecido',
+            'Análise do direito à aposentadoria programada do instituidor falecido',
           properties: {
             isConfirmed: {
               type: 'boolean',
               description:
-                'Indica se o direito Ã  aposentadoria programada foi confirmado antes do Ã³bito',
+                'Indica se o direito à aposentadoria programada foi confirmado antes do óbito',
             },
             description: {
               type: 'string',
               description:
-                'DescriÃ§Ã£o detalhada da anÃ¡lise do direito Ã  aposentadoria programada',
+                'Descrição detalhada da análise do direito à aposentadoria programada',
             },
           },
           required: ['isConfirmed', 'description'],
@@ -6070,17 +6935,17 @@ ${cnisAnalysisJson}
         disabilityRetirementRightAnalysis: {
           type: 'object',
           description:
-            'AnÃ¡lise do direito Ã  aposentadoria por incapacidade permanente do instituidor falecido',
+            'Análise do direito à aposentadoria por incapacidade permanente do instituidor falecido',
           properties: {
             isConfirmed: {
               type: 'boolean',
               description:
-                'Indica se o direito Ã  aposentadoria por incapacidade foi confirmado',
+                'Indica se o direito à aposentadoria por incapacidade foi confirmado',
             },
             description: {
               type: 'string',
               description:
-                'DescriÃ§Ã£o detalhada da anÃ¡lise do direito Ã  aposentadoria por incapacidade',
+                'Descrição detalhada da análise do direito à aposentadoria por incapacidade',
             },
           },
           required: ['isConfirmed', 'description'],
@@ -6088,7 +6953,7 @@ ${cnisAnalysisJson}
         dependentQualityAnalysis: {
           type: 'array',
           description:
-            'AnÃ¡lise da comprovaÃ§Ã£o da qualidade de dependente para cada dependente',
+            'Análise da comprovação da qualidade de dependente para cada dependente',
           items: {
             type: 'object',
             properties: {
@@ -6099,7 +6964,7 @@ ${cnisAnalysisJson}
               dependencyDegree: {
                 type: 'string',
                 description:
-                  'Grau da dependÃªncia (ex: Conjuge, companheiro, separado de fato com alimentos, divorciado com alimentos, filho menor de 21 anos, filho invÃ¡lido, etc.)',
+                  'Grau da dependência (ex: Conjuge, companheiro, separado de fato com alimentos, divorciado com alimentos, filho menor de 21 anos, filho inválido, etc.)',
               },
               isQualityConfirmed: {
                 type: 'boolean',
@@ -6109,12 +6974,12 @@ ${cnisAnalysisJson}
               pensionStartDate: {
                 type: 'string',
                 description:
-                  'Data de inÃ­cio estimada da pensÃ£o no formato YYYY-MM-DD',
+                  'Data de início estimada da pensão no formato YYYY-MM-DD',
               },
               estimatedPensionDuration: {
                 type: 'string',
                 description:
-                  'DuraÃ§Ã£o estimada da pensÃ£o com base nos documentos anexados',
+                  'Duração estimada da pensão com base nos documentos anexados',
               },
             },
             required: [
@@ -6129,7 +6994,7 @@ ${cnisAnalysisJson}
         retirementRuleSummaries: {
           type: 'array',
           description:
-            'Resumo das regras de aposentadorias aplicÃ¡veis ao instituidor falecido',
+            'Resumo das regras de aposentadorias aplicáveis ao instituidor falecido',
           items: {
             type: 'object',
             properties: {
@@ -6139,31 +7004,31 @@ ${cnisAnalysisJson}
               },
               result: {
                 type: 'string',
-                description: 'Resultado da regra (ex: Atingido, NÃ£o atingido)',
+                description: 'Resultado da regra (ex: Atingido, Não atingido)',
               },
               rightDate: {
                 type: 'string',
                 description:
-                  'Data do direito no formato YYYY-MM-DD, ou null se nÃ£o atingido',
+                  'Data do direito no formato YYYY-MM-DD, ou null se não atingido',
               },
               estimatedRmi: {
                 type: 'string',
                 description:
-                  'RMI prevista no formato monetÃ¡rio (ex: R$ 3.218,45)',
+                  'RMI prevista no formato monetário (ex: R$ 3.218,45)',
               },
               isBestRmi: {
                 type: 'boolean',
-                description: 'Indica se Ã© a melhor RMI entre todas as regras',
+                description: 'Indica se é a melhor RMI entre todas as regras',
               },
               isHighestCauseValue: {
                 type: 'boolean',
                 description:
-                  'Indica se Ã© o maior valor de causa entre todas as regras',
+                  'Indica se é o maior valor de causa entre todas as regras',
               },
               detailedAnalysisDescription: {
                 type: 'string',
                 description:
-                  'DescriÃ§Ã£o detalhada da anÃ¡lise da regra, incluindo requisitos analisados, cÃ¡lculo da RMI e valor da causa',
+                  'Descrição detalhada da análise da regra, incluindo requisitos analisados, cálculo da RMI e valor da causa',
               },
             },
             required: [
@@ -6180,68 +7045,65 @@ ${cnisAnalysisJson}
         periods: {
           type: 'array',
           description:
-            'PerÃ­odos analisados a partir do CNIS e dos dados do fluxo (Raio-X do CNIS)',
+            'Períodos analisados a partir do CNIS e dos dados do fluxo (Raio-X do CNIS)',
           items: {
             type: 'object',
             properties: {
               name: {
                 type: 'string',
-                description: 'Nome da instituiÃ§Ã£o ou vÃ­nculo principal',
+                description: 'Nome da instituição ou vínculo principal',
               },
               startDate: {
                 type: 'string',
                 format: 'date',
-                description:
-                  'Data de inÃ­cio do perÃ­odo no formato YYYY-MM-DD',
+                description: 'Data de início do período no formato YYYY-MM-DD',
               },
               endDate: {
                 type: 'string',
                 format: 'date',
-                description: 'Data de fim do perÃ­odo no formato YYYY-MM-DD',
+                description: 'Data de fim do período no formato YYYY-MM-DD',
               },
               category: {
                 type: 'string',
                 enum: Object.values(DeathBenefitGrantCategoryEnum),
-                description: 'Categoria previdenciÃ¡ria do vÃ­nculo',
+                description: 'Categoria previdenciária do vínculo',
               },
               gracePeriod: {
                 type: 'number',
-                description: 'Quantidade de competÃªncias vÃ¡lidas no perÃ­odo',
+                description: 'Quantidade de competências válidas no período',
               },
               status: {
                 type: 'boolean',
-                description: 'Indica se o perÃ­odo foi considerado vÃ¡lido',
+                description: 'Indica se o período foi considerado válido',
               },
               isPendency: {
                 type: 'boolean',
-                description: 'Indica se existe alguma pendÃªncia no perÃ­odo',
+                description: 'Indica se existe alguma pendência no período',
               },
               competenceBelowTheMinimum: {
                 type: 'boolean',
-                description:
-                  'Indica se existem competÃªncias abaixo do mÃ­nimo',
+                description: 'Indica se existem competências abaixo do mínimo',
               },
               contributionAverage: {
                 type: 'string',
                 description:
-                  'Valor mÃ©dio das remuneraÃ§Ãµes consideradas naquele perÃ­odo',
+                  'Valor médio das remunerações consideradas naquele período',
               },
               belowMinimumContributions: {
                 type: 'array',
                 description:
-                  'Lista apenas das competÃªncias cujas contribuiÃ§Ãµes ficaram abaixo do mÃ­nimo',
+                  'Lista apenas das competências cujas contribuições ficaram abaixo do mínimo',
                 items: {
                   type: 'object',
                   properties: {
                     contributionDate: {
                       type: 'string',
                       format: 'date',
-                      description:
-                        'Data da contribuiÃ§Ã£o no formato YYYY-MM-DD',
+                      description: 'Data da contribuição no formato YYYY-MM-DD',
                     },
                     contributionValue: {
                       type: 'number',
-                      description: 'Valor da contribuiÃ§Ã£o abaixo do mÃ­nimo',
+                      description: 'Valor da contribuição abaixo do mínimo',
                     },
                   },
                   required: ['contributionDate', 'contributionValue'],
@@ -6250,40 +7112,40 @@ ${cnisAnalysisJson}
               reasonPendency: {
                 type: 'string',
                 enum: Object.values(DeathBenefitGrantPeriodPendencyReasonEnum),
-                description: 'Motivo da pendÃªncia do perÃ­odo, quando houver',
+                description: 'Motivo da pendência do período, quando houver',
               },
               bondOrigin: {
                 type: 'string',
-                description: 'Origem do vÃ­nculo empregatÃ­cio',
+                description: 'Origem do vínculo empregatício',
               },
               impact: {
                 type: 'string',
-                description: 'Impacto do perÃ­odo na anÃ¡lise previdenciÃ¡ria',
+                description: 'Impacto do período na análise previdenciária',
               },
               complementViaMyInss: {
                 type: 'boolean',
                 description:
-                  'Indica se deseja fazer a complementaÃ§Ã£o via Meu INSS',
+                  'Indica se deseja fazer a complementação via Meu INSS',
               },
               earningsHistory: {
                 type: 'array',
                 description:
-                  'HistÃ³rico de remuneraÃ§Ãµes do perÃ­odo extraÃ­do do CNIS',
+                  'Histórico de remunerações do período extraído do CNIS',
                 items: {
                   type: 'object',
                   properties: {
                     competence: {
                       type: 'string',
                       format: 'date',
-                      description: 'CompetÃªncia no formato YYYY-MM-DD',
+                      description: 'Competência no formato YYYY-MM-DD',
                     },
                     remuneration: {
                       type: 'string',
-                      description: 'Valor ou descriÃ§Ã£o da remuneraÃ§Ã£o',
+                      description: 'Valor ou descrição da remuneração',
                     },
                     indicators: {
                       type: 'string',
-                      description: 'Indicadores da remuneraÃ§Ã£o',
+                      description: 'Indicadores da remuneração',
                     },
                     paymentDate: {
                       type: 'string',
@@ -6292,20 +7154,20 @@ ${cnisAnalysisJson}
                     },
                     contribution: {
                       type: 'string',
-                      description: 'InformaÃ§Ãµes de contribuiÃ§Ã£o',
+                      description: 'Informações de contribuição',
                     },
                     contributionSalary: {
                       type: 'string',
-                      description: 'SalÃ¡rio de contribuiÃ§Ã£o',
+                      description: 'Salário de contribuição',
                     },
                     analysis: {
                       type: 'string',
-                      description: 'AnÃ¡lise da competÃªncia',
+                      description: 'Análise da competência',
                     },
                     competenceBelowTheMinimum: {
                       type: 'boolean',
                       description:
-                        'Indica se a competÃªncia estÃ¡ abaixo do mÃ­nimo',
+                        'Indica se a competência está abaixo do mínimo',
                     },
                   },
                   required: [
@@ -6349,7 +7211,7 @@ ${cnisAnalysisJson}
         timeAccelerators: {
           type: 'array',
           description:
-            'Lista de perÃ­odos de acelerador de tempo identificados nos documentos analisados',
+            'Lista de períodos de acelerador de tempo identificados nos documentos analisados',
           items: {
             type: 'object',
             properties: {
@@ -6372,32 +7234,30 @@ ${cnisAnalysisJson}
                 enum: Object.values(
                   DeathBenefitGrantTimeAcceleratorViabilityEnum,
                 ),
-                description: 'NÃ­vel de viabilidade do perÃ­odo analisado',
+                description: 'Nível de viabilidade do período analisado',
               },
               technicalNote: {
                 type: 'string',
-                description:
-                  'Nota tÃ©cnica resumindo os fundamentos do perÃ­odo',
+                description: 'Nota técnica resumindo os fundamentos do período',
               },
               startDate: {
                 type: 'string',
                 format: 'date-time',
-                description: 'Data de inÃ­cio do perÃ­odo no formato ISO 8601',
+                description: 'Data de início do período no formato ISO 8601',
               },
               endDate: {
                 type: 'string',
                 format: 'date-time',
-                description: 'Data de fim do perÃ­odo no formato ISO 8601',
+                description: 'Data de fim do período no formato ISO 8601',
               },
               institution: {
                 type: 'string',
-                description:
-                  'InstituiÃ§Ã£o ou empregador relacionado ao perÃ­odo',
+                description: 'Instituição ou empregador relacionado ao período',
               },
               affectsQualifyingPeriod: {
                 type: 'boolean',
                 description:
-                  'Indica se o perÃ­odo afeta carÃªncia ou tempo qualificÃ¡vel',
+                  'Indica se o período afeta carência ou tempo qualificável',
               },
             },
             required: [
@@ -6526,34 +7386,34 @@ ${cnisAnalysisJson}
           type: 'string',
           enum: ['ELIGIBLE', 'PARTIALLY_ELIGIBLE', 'NOT_ELIGIBLE'],
           description:
-            'Status de elegibilidade para pensÃ£o por morte: ELIGIBLE (elegÃ­vel), PARTIALLY_ELIGIBLE (parcialmente elegÃ­vel), NOT_ELIGIBLE (nÃ£o elegÃ­vel)',
+            'Status de elegibilidade para pensão por morte: ELIGIBLE (elegível), PARTIALLY_ELIGIBLE (parcialmente elegível), NOT_ELIGIBLE (não elegível)',
         },
         insuredQualityStatus: {
           type: 'string',
           enum: ['PROVEN', 'NOT_PROVEN'],
           description:
-            'Status da qualidade de segurado do instituidor falecido: PROVEN (comprovada), NOT_PROVEN (nÃ£o comprovada)',
+            'Status da qualidade de segurado do instituidor falecido: PROVEN (comprovada), NOT_PROVEN (não comprovada)',
         },
         dependentQualityStatus: {
           type: 'string',
           enum: ['PROVEN', 'PARTIALLY_PROVEN', 'NOT_PROVEN'],
           description:
-            'Status geral da qualidade de dependente: PROVEN (comprovada), PARTIALLY_PROVEN (parcialmente comprovada), NOT_PROVEN (nÃ£o comprovada)',
+            'Status geral da qualidade de dependente: PROVEN (comprovada), PARTIALLY_PROVEN (parcialmente comprovada), NOT_PROVEN (não comprovada)',
         },
         applicableRules: {
           type: 'array',
           description:
-            'Resumo de regras aplicÃ¡veis para pensÃ£o por morte (RGPS)',
+            'Resumo de regras aplicáveis para pensão por morte (RGPS)',
           items: {
             type: 'object',
             properties: {
               ruleName: {
                 type: 'string',
-                description: 'Nome da regra de pensÃ£o por morte',
+                description: 'Nome da regra de pensão por morte',
               },
               result: {
                 type: 'string',
-                description: 'Resultado da aplicaÃ§Ã£o da regra',
+                description: 'Resultado da aplicação da regra',
               },
               rightDate: {
                 type: 'string',
@@ -6576,7 +7436,7 @@ ${cnisAnalysisJson}
               },
               detailedAnalysis: {
                 type: 'string',
-                description: 'AnÃ¡lise detalhada da regra em formato markdown',
+                description: 'Análise detalhada da regra em formato markdown',
               },
             },
             required: ['ruleName', 'result', 'detailedAnalysis'],
@@ -6584,7 +7444,7 @@ ${cnisAnalysisJson}
         },
         dependentAnalysis: {
           type: 'array',
-          description: 'Resultado da anÃ¡lise dos dependentes',
+          description: 'Resultado da análise dos dependentes',
           items: {
             type: 'object',
             properties: {
@@ -6594,13 +7454,13 @@ ${cnisAnalysisJson}
               },
               dependencyDegree: {
                 type: 'string',
-                description: 'Grau de dependÃªncia (ex: CÃ´njuge, Filho Menor)',
+                description: 'Grau de dependência (ex: Cônjuge, Filho Menor)',
               },
               dependentQualityStatus: {
                 type: 'string',
                 enum: ['PROVEN', 'PARTIALLY_PROVEN', 'NOT_PROVEN'],
                 description:
-                  'Status da qualidade de dependente: PROVEN (comprovada), PARTIALLY_PROVEN (parcialmente comprovada), NOT_PROVEN (nÃ£o comprovada)',
+                  'Status da qualidade de dependente: PROVEN (comprovada), PARTIALLY_PROVEN (parcialmente comprovada), NOT_PROVEN (não comprovada)',
               },
               quotaValue: {
                 type: 'string',
@@ -6609,12 +7469,12 @@ ${cnisAnalysisJson}
               pensionStartDate: {
                 type: 'string',
                 format: 'date',
-                description: 'Data de inÃ­cio da pensÃ£o no formato YYYY-MM-DD',
+                description: 'Data de início da pensão no formato YYYY-MM-DD',
               },
               estimatedPensionDuration: {
                 type: 'string',
                 description:
-                  'DuraÃ§Ã£o estimada da pensÃ£o (ex: VitalÃ­cio, 4 anos)',
+                  'Duração estimada da pensão (ex: Vitalício, 4 anos)',
               },
             },
             required: [
@@ -6628,7 +7488,7 @@ ${cnisAnalysisJson}
         analysisDescription: {
           type: 'string',
           description:
-            'DescriÃ§Ã£o completa e detalhada do resultado da anÃ¡lise de pensÃ£o por morte em formato Markdown. Deve conter o histÃ³rico previdenciÃ¡rio do instituidor, anÃ¡lise da qualidade de segurado, anÃ¡lise dos dependentes, aplicaÃ§Ã£o das regras de pensÃ£o e conclusÃ£o fundamentada.',
+            'Descrição completa e detalhada do resultado da análise de pensão por morte em formato Markdown. Deve conter o histórico previdenciário do instituidor, análise da qualidade de segurado, análise dos dependentes, aplicação das regras de pensão e conclusão fundamentada.',
         },
       },
       required: [
@@ -8695,7 +9555,7 @@ ${cnisAnalysisJson}
               category: {
                 type: 'string',
                 enum: Object.values(
-                  TemporaryIncapacityBenefitTerminationCategoryEnum,
+                  TemporaryIncapacityBenefitRejectionCategoryEnum,
                 ),
                 description:
                   'Categoria do período (ex: EMPREGADO_URBANO, MEI, CONTRIBUINTE_INDIVIDUAL_AUTONOMO)',
@@ -8979,16 +9839,18 @@ ${cnisAnalysisJson}
       properties: {
         analysisResult: {
           type: 'string',
-          description: 'Resumo principal do resultado da análise.',
+          description:
+            'Resultado consolidado em Markdown rico, com títulos, parágrafos curtos, listas e conclusão objetiva.',
         },
         analysisDetailedText: {
           type: 'string',
-          description: 'Texto detalhado da análise final.',
+          description:
+            'Fundamentação técnica e jurídica detalhada em Markdown rico, estruturada em seções numeradas para renderização em HTML.',
         },
         completeAnalysisDownload: {
           type: 'string',
           description:
-            'Versão em Markdown da análise completa, pronta para exportação.',
+            'Versão completa em Markdown rico da análise, pronta para conversão em HTML/PDF/DOCX.',
         },
         applicableRules: {
           type: 'array',
@@ -9150,6 +10012,11 @@ ${cnisAnalysisJson}
                 'Dentro_do_prazo_de_requiremento',
                 'Fora_do_prazo_de_requiremento',
               ],
+            },
+            description: {
+              type: 'string',
+              description:
+                'Descrição detalhada da análise do cumprimento dos requisitos para salário-maternidade',
             },
             eventDate: {
               type: 'string',
@@ -9485,6 +10352,108 @@ ${cnisAnalysisJson}
     };
   }
 
+  private getTeacherRetirementPlanningRejectionPppAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        periods: {
+          type: 'array',
+          description:
+            'Lista de períodos identificados nos documentos PPP analisados',
+          items: {
+            type: 'object',
+            properties: {
+              bondOrigin: {
+                type: 'string',
+                description: 'Origem do vínculo empregatício, se identificada',
+              },
+              category: {
+                type: 'string',
+                description:
+                  'Categoria do período (ex: magistério, atividade administrativa, atividade especial)',
+              },
+              activityDescription: {
+                type: 'string',
+                description:
+                  'Descrição da atividade exercida no período, se aplicável',
+              },
+              startDate: {
+                type: 'string',
+                format: 'date-time',
+                description: 'Data de início do período no formato ISO 8601',
+              },
+              endDate: {
+                type: 'string',
+                format: 'date-time',
+                description: 'Data de fim do período no formato ISO 8601',
+              },
+              impactMonths: {
+                type: 'number',
+                description:
+                  'Número de meses de impacto do período. Omitir quando não disponível.',
+              },
+              graceMonths: {
+                type: 'number',
+                description:
+                  'Número de meses de carência do período. Omitir quando não disponível.',
+              },
+              isPendency: {
+                type: 'boolean',
+                description: 'Indica se o período possui pendência',
+              },
+              competenceBelowTheMinimum: {
+                type: 'boolean',
+                description: 'Indica se a competência está abaixo do mínimo',
+              },
+              contributionAverage: {
+                type: 'string',
+                description:
+                  'Média de contribuição como string decimal, se disponível',
+              },
+              pendencyReason: {
+                type: 'string',
+                description: 'Motivo da pendência, se houver',
+              },
+              periodConsideration: {
+                type: 'string',
+                description: 'Consideração do período para o benefício',
+              },
+              wantsToComplementViaMeuINSS: {
+                type: 'boolean',
+                description:
+                  'Indica se o segurado deseja complementar o período via Meu INSS.',
+              },
+              status: {
+                type: 'boolean',
+                description: 'Status do período (ativo/inativo)',
+              },
+              hasSpecialPeriod: {
+                type: 'boolean',
+                description:
+                  'Indica se o período possui atividade especial identificada no PPP',
+              },
+              timelineClassification: {
+                type: 'string',
+                enum: Object.values(
+                  TeacherRetirementPlanningRejectionWorkPeriodTimelineClassificationEnum,
+                ),
+                description:
+                  'Classificação do período na linha do tempo (PCD_TIME, COMMON_TIME, INACTIVITY_PERIOD, TEACHER_TIME ou PENDENCY_PERIOD)',
+              },
+            },
+            required: [
+              'startDate',
+              'isPendency',
+              'competenceBelowTheMinimum',
+              'status',
+            ],
+          },
+        },
+      },
+      required: ['periods'],
+    };
+  }
+
   private getAccidentAssistanceTerminatedDecisionDetailsJsonSchema(): object {
     return {
       type: 'object',
@@ -9624,6 +10593,67 @@ ${cnisAnalysisJson}
         'analysisResult',
         'completeAnalysisDownload',
       ],
+    };
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  public async getAccidentAssistanceGrantFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: this.getAccidentAssistanceGrantFirstAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  private getAccidentAssistanceGrantFirstAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        firstAnalysis: {
+          type: 'string',
+          description:
+            'Análise técnica completa e detalhada em formato Markdown, cobrindo: 1) Perfil do Segurado e Qualidade de Segurado, 2) Análise do Acidente e da Sequela Definitiva, 3) Requisitos Legais (checklist com ✅/❌/⚠️), 4) Análise do Histórico Previdenciário (CNIS), 5) Diagnóstico e Viabilidade, 6) Pendências e Recomendações.',
+        },
+        analysisConclusion: {
+          type: 'string',
+          description:
+            'Resumo objetivo em formato Markdown focado na aplicabilidade do Auxílio-Acidente para exibição em tabela de regras. Deve incluir: viabilidade geral (Alta/Média/Baixa/Inviável), checklist de requisitos com ✅/❌/⚠️, fundamento jurídico, pontos fortes, pontos de atenção e recomendação estratégica.',
+        },
+        expectedRmi: {
+          type: 'string',
+          nullable: true,
+          description:
+            'RMI prevista (Renda Mensal Inicial) do Auxílio-Acidente formatada em reais brasileiros (ex: "R$ 756,00"). Deve ser calculada com base no salário de benefício identificado no CNIS aplicando o coeficiente de 50%. Retornar null se não for possível calcular.',
+        },
+        estimatedCaseValue: {
+          type: 'string',
+          nullable: true,
+          description:
+            'Valor da causa estimado formatado em reais brasileiros (ex: "R$ 18.144,00"). Deve ser calculado multiplicando a RMI por 24 (dois anos de parcelas vencidas como referência). Retornar null se não for possível calcular.',
+        },
+      },
+      required: ['firstAnalysis', 'analysisConclusion'],
     };
   }
 

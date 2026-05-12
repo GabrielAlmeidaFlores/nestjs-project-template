@@ -51,13 +51,32 @@ export interface SpecialRetirementGrantFirstAnalysisSummaryInterface {
   totalGracePeriod: SpecialRetirementGrantFirstAnalysisGracePeriodSummaryInterface;
 }
 
+export interface SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemHazardousAgentInterface {
+  intensityAndFrequency: string;
+  identifiedAgent: string;
+}
+
+export interface SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemLegalFrameworkInterface {
+  description: string;
+  code: string;
+}
+
 export interface SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemInterface {
   periodStartDate: string;
   periodEndDate: string | null;
   recognized: boolean;
   justification: string | null;
-  legalFramework: string[] | null;
-  agents: SpecialRetirementGrantFirstAnalysisAgentInterface[];
+  company: string | null;
+  cnpj: string | null;
+  role: string | null;
+  supportingDocument: string | null;
+  recordedInCnis: boolean | null;
+  remunerationRecordedInCnis: boolean | null;
+  hazardousAgents: SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemHazardousAgentInterface[];
+  informationSource: string | null;
+  legalFramework:
+    | SpecialRetirementGrantFirstAnalysisTechnicalDiagnosisItemLegalFrameworkInterface[]
+    | null;
   epiEficaz?: boolean | null;
   observations?: string[] | null;
 }

@@ -19,6 +19,7 @@ export enum AnalysisToolRecordTypeEnum {
   GENERAL_URBAN_RETIREMENT_ANALYSIS = 'analise_aposentadoria_urbana_geral',
   SPECIAL_CATEGORY_RETIREMENT = 'aposentadoria_categoria_especial',
   SPECIAL_RETIREMENT_GRANT = 'concessao_aposentadoria_especial',
+  SPECIAL_RETIREMENT_REJECTION = 'indeferimento_aposentadoria_especial',
   DISABILITY_RETIREMENT_PLANNING_GRANT = 'concessao_aposentadoria_para_deficiente',
   DEATH_BENEFIT_GRANT = 'concessao_pensao_por_morte',
   DEATH_BENEFIT_REJECTION = 'indeferimento_pensao_por_morte',
@@ -37,7 +38,9 @@ export enum AnalysisToolRecordTypeEnum {
   TEMPORARY_DISABILITY_BENEFITS_TERMINATED = 'cessacao_auxilio_incapacidade_temporaria',
   BPC_ELDERLY_CESSATION = 'cessacao_bpc_idoso',
   MATERNITY_PAY_GRANT = 'concessao_salario_maternidade',
+  TEACHER_RETIREMENT_PLANNING_REJECTION = 'indeferimento_aposentadoria_professor',
   BPC_DISABILITY_TERMINATION = 'bpc_deficiente_cessado',
   ACCIDENT_ASSISTANCE_TERMINATED = 'auxilio_acidente_cessado',
+  ACCIDENT_ASSISTANCE_GRANT = 'concessao_auxilio_acidente',
   RETIREMENT_PERMANENT_DISABILITY_REVISION = 'revisao_aposentadoria_invalidez',
 }
