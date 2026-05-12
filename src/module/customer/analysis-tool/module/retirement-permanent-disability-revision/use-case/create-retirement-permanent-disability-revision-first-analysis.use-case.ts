@@ -299,8 +299,8 @@ export class CreateRetirementPermanentDisabilityRevisionFirstAnalysisUseCase {
     }
 
     if (
-      !parsed.benefitAnalysis ||
-      !parsed.contributionTime ||
+      typeof parsed.benefitAnalysis !== 'object' ||
+      typeof parsed.contributionTime !== 'object' ||
       !Array.isArray(parsed.concessionLetterBreakdown)
     ) {
       throw new InvalidRetirementPermanentDisabilityRevisionFirstAnalysisJsonError();
@@ -441,7 +441,6 @@ export class CreateRetirementPermanentDisabilityRevisionFirstAnalysisUseCase {
     ).length;
 
     const pendencyReason =
-      workPeriod.pendencyReason !== null &&
       workPeriod.pendencyReason !== undefined
         ? (workPeriod.pendencyReason as RetirementPermanentDisabilityRevisionWorkPeriodsPendencyReasonEnum)
         : null;

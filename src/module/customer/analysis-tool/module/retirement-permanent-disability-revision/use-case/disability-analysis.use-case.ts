@@ -112,33 +112,33 @@ export class DisabilityAnalysisUseCase {
     const disabilityAnalysisEntity =
       new RetirementPermanentDisabilityRevisionDisabilityAnalysisEntity({
         retirementPermanentDisabilityRevisionId,
-        ...(dto.estimatedIncapacityStartDate != null && {
+        ...(dto.estimatedIncapacityStartDate !== undefined && {
           estimatedIncapacityStartDate: new Date(
             dto.estimatedIncapacityStartDate,
           ),
         }),
-        ...(dto.medicalDescription != null && {
+        ...(dto.medicalDescription !== undefined && {
           medicalDescription: dto.medicalDescription,
         }),
-        ...(dto.isAccidentRelated != null && {
+        ...(dto.isAccidentRelated !== undefined && {
           isAccidentRelated: dto.isAccidentRelated,
         }),
-        ...(dto.accidentDescription != null && {
+        ...(dto.accidentDescription !== undefined && {
           accidentDescription: dto.accidentDescription,
         }),
-        ...(dto.isSevereDisease != null && {
+        ...(dto.isSevereDisease !== undefined && {
           isSevereDisease: dto.isSevereDisease,
         }),
-        ...(dto.severeDiseaseType != null && {
+        ...(dto.severeDiseaseType !== undefined && {
           severeDiseaseType: dto.severeDiseaseType,
         }),
-        ...(dto.severeDiseaseName != null && {
+        ...(dto.severeDiseaseName !== undefined && {
           severeDiseaseName: dto.severeDiseaseName,
         }),
-        ...(dto.diseaseStartDate != null && {
+        ...(dto.diseaseStartDate !== undefined && {
           diseaseStartDate: new Date(dto.diseaseStartDate),
         }),
-        ...(dto.needsPermanentAssistance != null && {
+        ...(dto.needsPermanentAssistance !== undefined && {
           needsPermanentAssistance: dto.needsPermanentAssistance,
         }),
       });
@@ -229,13 +229,13 @@ export class DisabilityAnalysisUseCase {
         retirementPermanentDisabilityRevisionDisabilityAnalysisId:
           disabilityAnalysisId,
         hasPreviousBenefit: benefit.hasPreviousBenefit,
-        ...(benefit.benefitNumber != null && {
+        ...(benefit.benefitNumber !== undefined && {
           benefitNumber: benefit.benefitNumber,
         }),
-        ...(benefit.benefitStartDate != null && {
+        ...(benefit.benefitStartDate !== undefined && {
           benefitStartDate: new Date(benefit.benefitStartDate),
         }),
-        ...(benefit.benefitEndDate != null && {
+        ...(benefit.benefitEndDate !== undefined && {
           benefitEndDate: new Date(benefit.benefitEndDate),
         }),
       });

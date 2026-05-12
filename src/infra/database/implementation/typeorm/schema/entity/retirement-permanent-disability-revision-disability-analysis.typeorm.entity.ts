@@ -1,12 +1,11 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisAssociatedCidTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-disability-analysis-associated-cid.typeorm.entity';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-disability-analysis-benefit.typeorm.entity';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-disability-analysis-document.typeorm.entity';
 import { RetirementPermanentDisabilityRevisionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision.typeorm.entity';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
-
-import { RetirementPermanentDisabilityRevisionDisabilityAnalysisAssociatedCidTypeormEntity } from './retirement-permanent-disability-revision-disability-analysis-associated-cid.typeorm.entity';
-import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitTypeormEntity } from './retirement-permanent-disability-revision-disability-analysis-benefit.typeorm.entity';
-import { RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentTypeormEntity } from './retirement-permanent-disability-revision-disability-analysis-document.typeorm.entity';
 
 @Entity({ name: 'retirement_per_dis_rev_dis_analysis' })
 export class RetirementPermanentDisabilityRevisionDisabilityAnalysisTypeormEntity extends BaseTypeormEntity {
