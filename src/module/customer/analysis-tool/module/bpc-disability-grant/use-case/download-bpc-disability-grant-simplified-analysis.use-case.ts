@@ -109,9 +109,7 @@ export class DownloadBpcDisabilityGrantSimplifiedAnalysisUseCase {
       const simplifiedAnalysis =
         await this.analysisProcessorGateway.getBpcDisabilityGrantSimplifiedAnalysis(
           promptResponse.prompt,
-          [
-            Buffer.from(completeAnalysis, 'utf-8'),
-          ],
+          [Buffer.from(completeAnalysis, 'utf-8')],
         );
 
       const updatedResultEntity = new BpcDisabilityGrantResultEntity({
@@ -138,9 +136,8 @@ export class DownloadBpcDisabilityGrantSimplifiedAnalysisUseCase {
       throw new BpcDisabilityGrantDoesNotContainSimplifiedAnalysisError();
     }
 
-    const normalizedSimplifiedAnalysis = this.normalizeMarkdownForDownload(
-      responseAi,
-    );
+    const normalizedSimplifiedAnalysis =
+      this.normalizeMarkdownForDownload(responseAi);
 
     const htmlContent = await this.exportDocumentGateway.convertMarkdownToHtml(
       normalizedSimplifiedAnalysis,
