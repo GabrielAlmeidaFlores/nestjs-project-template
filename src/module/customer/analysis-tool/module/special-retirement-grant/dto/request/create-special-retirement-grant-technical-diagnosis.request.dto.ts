@@ -6,44 +6,44 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 
 @RequestDto()
 export class CreateSpecialRetirementGrantTechnicalDiagnosisRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoDateProperty()
-  public periodStartDate: Date;
+  @RequestDtoDateProperty({ required: false })
+  public periodStartDate?: Date;
 
-  @RequestDtoDateProperty()
-  public periodEndDate: Date;
+  @RequestDtoDateProperty({ required: false })
+  public periodEndDate?: Date;
 
-  @RequestDtoBooleanProperty()
-  public recognized: boolean;
+  @RequestDtoBooleanProperty({ required: false })
+  public recognized?: boolean;
 
-  @RequestDtoStringProperty()
-  public justification: string;
+  @RequestDtoStringProperty({ required: false })
+  public justification?: string;
 
-  @RequestDtoStringProperty()
-  public company: string;
+  @RequestDtoStringProperty({ required: false })
+  public company?: string;
 
-  @RequestDtoStringProperty()
-  public cnpj: string;
+  @RequestDtoStringProperty({ required: false })
+  public cnpj?: string;
 
-  @RequestDtoStringProperty()
-  public role: string;
+  @RequestDtoStringProperty({ required: false })
+  public role?: string;
 
-  @RequestDtoStringProperty()
-  public supportingDocument: string;
+  @RequestDtoStringProperty({ required: false })
+  public supportingDocument?: string;
 
-  @RequestDtoBooleanProperty()
-  public recordedInCnis: boolean;
+  @RequestDtoBooleanProperty({ required: false })
+  public recordedInCnis?: boolean;
 
-  @RequestDtoBooleanProperty()
-  public remunerationRecordedInCnis: boolean;
+  @RequestDtoBooleanProperty({ required: false })
+  public remunerationRecordedInCnis?: boolean;
 
-  @RequestDtoStringProperty()
-  public hazardousAgents: string;
+  @RequestDtoStringProperty({ required: false })
+  public hazardousAgents?: string;
 
-  @RequestDtoStringProperty()
-  public informationSource: string;
+  @RequestDtoStringProperty({ required: false })
+  public informationSource?: string;
 
-  @RequestDtoStringProperty()
-  public legalFramework: string;
+  @RequestDtoStringProperty({ required: false })
+  public legalFramework?: string;
 
   @RequestDtoBooleanProperty({ required: false })
   public epiEficaz?: boolean;
