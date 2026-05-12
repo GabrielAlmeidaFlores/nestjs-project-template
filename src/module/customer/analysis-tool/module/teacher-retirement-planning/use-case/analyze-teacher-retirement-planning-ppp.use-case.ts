@@ -84,7 +84,7 @@ export class AnalyzeTeacherRetirementPlanningPppUseCase {
                   impactoCarencia: { type: 'boolean', description: 'Indica se há impacto na carência.' },
                   reconhecimentoJudicial: { type: 'string', enum: ['FAVORÁVEL', 'DESFAVORÁVEL', 'INDEFINIDO'], description: 'Análise judicial do vínculo.' },
                   tempoContribuicao: { type: 'string', description: 'Tempo de contribuição reconhecido.' },
-                  observacaoTecnica: { type: 'string', description: 'Observações técnicas sobre o período analisado.' },
+                  observacaoTecnica: { type: 'string', description: 'Nota técnica em formato Markdown estruturado com 3 seções obrigatórias usando ### como título: "### Avaliação Documental" (lista os agentes nocivos, EPI/EPC e análise crítica de eficácia), "### Viabilidade e Fundamentação" (cita decreto/norma com código específico e tema STJ/TNU aplicável), "### Pendências e Recomendações" (lista numerada de ações concretas para o advogado). Mínimo de 8 linhas. Use \\n para quebras de linha e **negrito** para termos jurídicos.' },
                   contribuicaoMedia: { type: 'string', description: 'Valor da contribuição média mensal, retorne 0 se não houver.' },
                   status: { type: 'boolean', description: 'Indica se o vínculo é favorável ou não para o segurado.' },
                   tipoDeTrabalho: { type: 'string', enum: ['URBANO', 'RURAL'], description: 'Tipo de trabalho realizado no vínculo. Por padrão retorne URBANO.' },
