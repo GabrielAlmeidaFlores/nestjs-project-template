@@ -1025,6 +1025,7 @@ export class AnalysisToolRecordTypeormQueryRepository
             specialRetirementRejectionDocument: true,
             specialRetirementRejectionInssBenefit: true,
             specialRetirementRejectionLegalProceeding: true,
+            specialRetirementRejectionTechnicalDiagnosis: true,
             specialRetirementRejectionWorkPeriod: {
               specialRetirementRejectionWorkPeriodDocument: true,
               specialRetirementRejectionWorkPeriodEarningsHistory: true,

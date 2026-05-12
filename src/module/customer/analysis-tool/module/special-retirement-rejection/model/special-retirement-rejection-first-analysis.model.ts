@@ -1,5 +1,7 @@
+import { SpecialRetirementRejectionWorkPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period/enum/special-retirement-rejection-work-period-pendency-reason.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-boolean-property/response-dto-boolean-property.decorator';
+import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
 import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
@@ -93,8 +95,11 @@ export class SpecialRetirementRejectionFirstAnalysisWorkPeriodModel extends Base
   @ResponseDtoStringProperty()
   public category: string;
 
-  @ResponseDtoStringProperty({ isArray: true })
-  public pendencyReason: string[];
+  @ResponseDtoEnumProperty(
+    SpecialRetirementRejectionWorkPeriodPendencyReasonEnum,
+    { isArray: true },
+  )
+  public pendencyReason: SpecialRetirementRejectionWorkPeriodPendencyReasonEnum[];
 
   @ResponseDtoStringProperty()
   public periodConsideration: string;

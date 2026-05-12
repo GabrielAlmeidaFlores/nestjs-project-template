@@ -1,3 +1,5 @@
+import type { SpecialRetirementRejectionWorkPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period/enum/special-retirement-rejection-work-period-pendency-reason.enum';
+
 export interface SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodInterface {
   recognizedSpecialTime: boolean;
   companyName: string;
@@ -30,7 +32,7 @@ export interface SpecialRetirementRejectionFirstAnalysisWorkPeriodInterface {
   startDate: string;
   endDate: string;
   category: string;
-  pendencyReason: string[];
+  pendencyReason: SpecialRetirementRejectionWorkPeriodPendencyReasonEnum[];
   periodConsideration: string;
   contributionAverage: string;
   status: string;
