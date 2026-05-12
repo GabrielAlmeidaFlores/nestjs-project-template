@@ -19,7 +19,7 @@ export class RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDecla
   @JoinColumn({
     name: 'retirement_per_dis_rev_dis_analysis_benefit_id',
   })
-  public retirementPermanentDisabilityRevisionDisabilityAnalysisBenefit?:
+  public retirementPerDisRevDisAnalysisBenefit?:
     | RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitTypeormEntity
     | undefined;
 

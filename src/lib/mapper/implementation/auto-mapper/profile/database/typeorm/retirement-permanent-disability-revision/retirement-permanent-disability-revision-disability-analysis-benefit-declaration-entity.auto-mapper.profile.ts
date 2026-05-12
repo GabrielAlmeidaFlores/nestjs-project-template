@@ -27,9 +27,7 @@ export class RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDecla
     const convert = (
       source: RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclarationTypeormEntity,
     ): RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclarationEntity => {
-      if (
-        !source.retirementPermanentDisabilityRevisionDisabilityAnalysisBenefit
-      ) {
+      if (!source.retirementPerDisRevDisAnalysisBenefit) {
         throw new IncompleteSourceDataForMappingError({
           destinationClass:
             RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclarationEntity.name,
@@ -45,9 +43,7 @@ export class RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDecla
           ),
           retirementPermanentDisabilityRevisionDisabilityAnalysisBenefitId:
             new RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitId(
-              source
-                .retirementPermanentDisabilityRevisionDisabilityAnalysisBenefit
-                .id,
+              source.retirementPerDisRevDisAnalysisBenefit.id,
             ),
           fileName: source.fileName,
           createdAt: source.createdAt,
@@ -73,7 +69,7 @@ export class RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDecla
         {
           id: source.id.toString(),
           fileName: source.fileName,
-          retirementPermanentDisabilityRevisionDisabilityAnalysisBenefit: {
+          retirementPerDisRevDisAnalysisBenefit: {
             id: source.retirementPermanentDisabilityRevisionDisabilityAnalysisBenefitId.toString(),
           } as RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitTypeormEntity,
           createdAt: source.createdAt,
