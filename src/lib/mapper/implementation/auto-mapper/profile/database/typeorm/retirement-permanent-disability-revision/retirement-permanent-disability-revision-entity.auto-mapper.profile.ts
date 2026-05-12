@@ -32,7 +32,7 @@ export class RetirementPermanentDisabilityRevisionEntityAutoMapperProfile {
         category: source.category,
         myInssPassword: source.myInssPassword ?? null,
         retirementPermanentDisabilityRevisionResultId:
-          source.retirementPermanentDisabilityRevisionResult?.id != null
+          source.retirementPermanentDisabilityRevisionResult?.id !== undefined
             ? new RetirementPermanentDisabilityRevisionResultId(
                 source.retirementPermanentDisabilityRevisionResult.id,
               )
@@ -67,7 +67,7 @@ export class RetirementPermanentDisabilityRevisionEntityAutoMapperProfile {
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
         retirementPermanentDisabilityRevisionResult:
-          source.retirementPermanentDisabilityRevisionResultId != null
+          source.retirementPermanentDisabilityRevisionResultId !== null
             ? ({
                 id: source.retirementPermanentDisabilityRevisionResultId.toString(),
               } as RetirementPermanentDisabilityRevisionTypeormEntity['retirementPermanentDisabilityRevisionResult'])
