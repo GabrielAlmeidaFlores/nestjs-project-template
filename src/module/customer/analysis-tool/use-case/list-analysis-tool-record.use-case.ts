@@ -120,6 +120,7 @@ export class ListAnalysisToolRecordUseCase {
       analysisToolRecord.teacherRetirementPlanning ??
       analysisToolRecord.generalUrbanRetirementGrant ??
       analysisToolRecord.generalUrbanRetirementAnalysis ??
+      analysisToolRecord.generalUrbanRetirementReview ??
       analysisToolRecord.judicialCaseAnalysis ??
       analysisToolRecord.administrativeProcedureInssAnalysis ??
       analysisToolRecord.medicalAndSocialReportObjectionGeneratorAnalysis ??
