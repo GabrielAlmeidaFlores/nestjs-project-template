@@ -7,6 +7,7 @@ import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-pro
 import { RemunerationCalculatorModule } from '@module/customer/analysis-tool/lib/remuneration-calculator/remuneration-calculator.module';
 import { TeacherRetirementPlanningController } from '@module/customer/analysis-tool/module/teacher-retirement-planning/teacher-retirement-planning.controller';
 import { AnalyzeTeacherRetirementPlanningAdministrativeProcessUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/analyze-teacher-retirement-planning-administrative-process.use-case';
+import { AnalyzeTeacherRetirementPlanningTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/analyze-teacher-retirement-planning-time-accelerator.use-case';
 import { CreateTeacherRetirementPlanningPeriodUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-period.use-case';
 import { CreateTeacherRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-remuneration.use-case';
 import { CreateTeacherRetirementPlanningResultUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-result.use-case';
@@ -53,6 +54,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     ListTeacherRetirementPlanningRemunerationUseCase,
     GetTeacherRetirementPlanningRemunerationCalculationUseCase,
     AnalyzeTeacherRetirementPlanningAdministrativeProcessUseCase,
+    AnalyzeTeacherRetirementPlanningTimeAcceleratorUseCase,
   ],
   exports: [DeleteTeacherRetirementPlanningUseCase],
 })
