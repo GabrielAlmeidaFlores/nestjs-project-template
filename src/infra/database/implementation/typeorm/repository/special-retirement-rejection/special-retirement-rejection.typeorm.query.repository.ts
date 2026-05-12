@@ -39,6 +39,7 @@ export class SpecialRetirementRejectionTypeormQueryRepository
           specialRetirementRejectionDocument: true,
           specialRetirementRejectionInssBenefit: true,
           specialRetirementRejectionLegalProceeding: true,
+          specialRetirementRejectionTechnicalDiagnosis: true,
           specialRetirementRejectionWorkPeriod: {
             specialRetirementRejectionWorkPeriodDocument: true,
             specialRetirementRejectionWorkPeriodEarningsHistory: true,

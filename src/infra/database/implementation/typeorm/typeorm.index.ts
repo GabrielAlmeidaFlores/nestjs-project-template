@@ -853,6 +853,7 @@ import { SpecialRetirementRejectionResultTypeormEntity } from '@infra/database/i
 import { SpecialRetirementRejectionWorkPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-work-period-document.typeorm.entity';
 import { SpecialRetirementRejectionWorkPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-work-period-earnings-history.typeorm.entity';
 import { SpecialRetirementRejectionWorkPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-work-period.typeorm.entity';
+import { SpecialRetirementRejectionTechnicalDiagnosisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-technical-diagnosis.typeorm.entity';
 import { SpecialRetirementRejectionWorkSpecialPeriodLegalFrameworkTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-work-special-period-legal-framework.typeorm.entity';
 import { SpecialRetirementRejectionWorkSpecialPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-work-special-period.typeorm.entity';
 import { SpecialRetirementRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection.typeorm.entity';
@@ -1273,6 +1274,7 @@ export class TypeormIndex {
     SpecialRetirementRejectionWorkPeriodEarningsHistoryTypeormEntity,
     SpecialRetirementRejectionWorkSpecialPeriodTypeormEntity,
     SpecialRetirementRejectionWorkSpecialPeriodLegalFrameworkTypeormEntity,
+    SpecialRetirementRejectionTechnicalDiagnosisTypeormEntity,
     MiniAdvisorTypeormEntity,
     MiniAdvisorResultTypeormEntity,
     SystemActivitiesTypeormEntity,

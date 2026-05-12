@@ -498,6 +498,8 @@ import { SpecialRetirementRejectionDocumentTypeormCommandRepository } from '@inf
 import { SpecialRetirementRejectionInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection-inss-benefit/special-retirement-rejection-inss-benefit.typeorm.command.repository';
 import { SpecialRetirementRejectionLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection-legal-proceeding/special-retirement-rejection-legal-proceeding.typeorm.command.repository';
 import { SpecialRetirementRejectionResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection-result/special-retirement-rejection-result.typeorm.command.repository';
+import { SpecialRetirementRejectionTechnicalDiagnosisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection-technical-diagnosis/special-retirement-rejection-technical-diagnosis.typeorm.command.repository';
+import { SpecialRetirementRejectionTechnicalDiagnosisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection-technical-diagnosis/special-retirement-rejection-technical-diagnosis.typeorm.query.repository';
 import { SpecialRetirementRejectionWorkPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection-work-period/special-retirement-rejection-work-period.typeorm.command.repository';
 import { SpecialRetirementRejectionWorkPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection-work-period-document/special-retirement-rejection-work-period-document.typeorm.command.repository';
 import { SpecialRetirementRejectionWorkPeriodEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-retirement-rejection-work-period-earnings-history/special-retirement-rejection-work-period-earnings-history.typeorm.command.repository';
@@ -1078,6 +1080,8 @@ import { SpecialRetirementRejectionDocumentCommandRepositoryGateway } from '@mod
 import { SpecialRetirementRejectionInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/repository/special-retirement-rejection-inss-benefit/command/special-retirement-rejection-inss-benefit.command.repository.gateway';
 import { SpecialRetirementRejectionLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/repository/special-retirement-rejection-legal-proceeding/command/special-retirement-rejection-legal-proceeding.command.repository.gateway';
 import { SpecialRetirementRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/repository/special-retirement-rejection-result/command/special-retirement-rejection-result.command.repository.gateway';
+import { SpecialRetirementRejectionTechnicalDiagnosisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/repository/special-retirement-rejection-technical-diagnosis/command/special-retirement-rejection-technical-diagnosis.command.repository.gateway';
+import { SpecialRetirementRejectionTechnicalDiagnosisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/repository/special-retirement-rejection-technical-diagnosis/query/special-retirement-rejection-technical-diagnosis.query.repository.gateway';
 import { SpecialRetirementRejectionWorkPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/repository/special-retirement-rejection-work-period/command/special-retirement-rejection-work-period.command.repository.gateway';
 import { SpecialRetirementRejectionWorkPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/repository/special-retirement-rejection-work-period-document/command/special-retirement-rejection-work-period-document.command.repository.gateway';
 import { SpecialRetirementRejectionWorkPeriodEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/repository/special-retirement-rejection-work-period-earnings-history/command/special-retirement-rejection-work-period-earnings-history.command.repository.gateway';
@@ -1475,6 +1479,17 @@ const classProvider: ClassProvider[] = [
   {
     provide: SpecialRetirementGrantTechnicalDiagnosisQueryRepositoryGateway,
     useClass: SpecialRetirementGrantTechnicalDiagnosisTypeormQueryRepository,
+  },
+  {
+    provide:
+      SpecialRetirementRejectionTechnicalDiagnosisCommandRepositoryGateway,
+    useClass:
+      SpecialRetirementRejectionTechnicalDiagnosisTypeormCommandRepository,
+  },
+  {
+    provide: SpecialRetirementRejectionTechnicalDiagnosisQueryRepositoryGateway,
+    useClass:
+      SpecialRetirementRejectionTechnicalDiagnosisTypeormQueryRepository,
   },
   {
     provide: SpecialRetirementGrantPeriodQueryRepositoryGateway,

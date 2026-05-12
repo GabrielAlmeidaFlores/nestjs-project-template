@@ -1,5 +1,6 @@
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
+import type { GetSpecialRetirementRejectionTechnicalDiagnosisQueryResult } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/repository/special-retirement-rejection-technical-diagnosis/query/result/get-special-retirement-rejection-technical-diagnosis.query.result';
 import type { SpecialRetirementRejectionId } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection/value-object/special-retirement-rejection-id.value-object';
 import type { SpecialRetirementRejectionDocumentEntity } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-document/special-retirement-rejection-document.entity';
 import type { SpecialRetirementRejectionInssBenefitEntity } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-inss-benefit/special-retirement-rejection-inss-benefit.entity';
@@ -51,6 +52,7 @@ export class GetSpecialRetirementRejectionWithRelationsQueryResult extends BaseB
   public readonly specialRetirementRejectionWorkSpecialPeriodLegalFramework:
     | SpecialRetirementRejectionWorkSpecialPeriodLegalFrameworkEntity[]
     | null;
+  public readonly specialRetirementRejectionTechnicalDiagnosis: GetSpecialRetirementRejectionTechnicalDiagnosisQueryResult | null;
 
   protected override readonly _type =
     GetSpecialRetirementRejectionWithRelationsQueryResult.name;
