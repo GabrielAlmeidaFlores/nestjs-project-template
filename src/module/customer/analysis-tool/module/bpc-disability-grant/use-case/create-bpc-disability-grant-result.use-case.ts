@@ -23,7 +23,10 @@ import {
 } from '@module/customer/analysis-tool/module/bpc-disability-grant/dto/response/create-bpc-disability-grant-result.response.dto';
 import { BpcDisabilityGrantNotFoundError } from '@module/customer/analysis-tool/module/bpc-disability-grant/error/bpc-disability-grant-not-found.error';
 import { InvalidBpcDisabilityGrantResultJsonError } from '@module/customer/analysis-tool/module/bpc-disability-grant/error/invalid-bpc-disability-grant-result-json.error';
-import { BpcDisabilityGrantResultInterface, BpcDisabilityGrantRetirementRuleInterface } from '@module/customer/analysis-tool/module/bpc-disability-grant/model/interface/bpc-disability-grant-result.interface';
+import {
+  BpcDisabilityGrantResultInterface,
+  BpcDisabilityGrantRetirementRuleInterface,
+} from '@module/customer/analysis-tool/module/bpc-disability-grant/model/interface/bpc-disability-grant-result.interface';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';

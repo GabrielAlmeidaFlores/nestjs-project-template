@@ -54,8 +54,8 @@ export class DownloadBpcDisabilityGrantCompleteAnalysisUseCase {
       );
 
     const completeAnalysisJson =
-      bpcDisabilityGrantQueryResult.BpcDisabilityGrantResult?.completeAnalysis ??
-      null;
+      bpcDisabilityGrantQueryResult.BpcDisabilityGrantResult
+        ?.completeAnalysis ?? null;
 
     if (completeAnalysisJson === null) {
       throw new BpcDisabilityGrantDoesNotContainCompleteAnalysisError();
@@ -91,7 +91,9 @@ export class DownloadBpcDisabilityGrantCompleteAnalysisUseCase {
         cleanedJson = JSON.parse(cleanedJson) as string;
       }
 
-      const parsed = JSON.parse(cleanedJson) as BpcDisabilityGrantResultInterface;
+      const parsed = JSON.parse(
+        cleanedJson,
+      ) as BpcDisabilityGrantResultInterface;
 
       return typeof parsed.analysisResult === 'string'
         ? parsed.analysisResult
