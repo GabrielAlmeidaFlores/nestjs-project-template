@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 
+import { AccidentAssistanceGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-grant/accident-assistance-grant.typeorm.entity';
 import { AccidentAssistanceTerminatedTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated.entity';
 import { AccidentBenefitRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection.typeorm.entity';
 import { AdministrativeProcedureInssAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis.entity';
@@ -37,8 +38,10 @@ import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementati
 import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
 import { SpecialCategoryRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis.typeorm.entity';
 import { SpecialRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant.typeorm.entity';
+import { SpecialRetirementRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection.typeorm.entity';
 import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
 import { SurvivorPensionAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/survivor-pension-analysis.typeorm.entity';
+import { TeacherRetirementPlanningRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning-rejection.typeorm.entity';
 import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/teacher-retirement-planning.typeorm.entity';
 import { TemporaryDisabilityBenefitsGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant.typeorm.entity';
 import { TemporaryDisabilityBenefitsTerminatedTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-terminated.typeorm.entity';
@@ -305,6 +308,10 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({ name: 'special_retirement_grant_id' })
   public specialRetirementGrant?: SpecialRetirementGrantTypeormEntity | null;
 
+  @ManyToOne(() => SpecialRetirementRejectionTypeormEntity)
+  @JoinColumn({ name: 'special_retirement_rejection_id' })
+  public specialRetirementRejection?: SpecialRetirementRejectionTypeormEntity | null;
+
   @ManyToOne(() => GeneralUrbanRetirementDenialTypeormEntity)
   @JoinColumn({ name: 'general_urban_retirement_denial_id' })
   public generalUrbanRetirementDenial?: GeneralUrbanRetirementDenialTypeormEntity | null;
@@ -357,6 +364,10 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({ name: 'maternity_pay_grant_id' })
   public maternityPayGrant?: MaternityPayGrantTypeormEntity | null;
 
+  @ManyToOne(() => TeacherRetirementPlanningRejectionTypeormEntity)
+  @JoinColumn({ name: 'teacher_retirement_planning_rejection_id' })
+  public teacherRetirementPlanningRejection?: TeacherRetirementPlanningRejectionTypeormEntity | null;
+
   @ManyToOne(() => BpcDisabilityTerminationTypeormEntity)
   @JoinColumn({ name: 'bpc_disability_termination_id' })
   public bpcDisabilityTermination?: BpcDisabilityTerminationTypeormEntity | null;
@@ -368,6 +379,10 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   )
   @JoinColumn({ name: 'accident_assistance_terminated_id' })
   public accidentAssistanceTerminated?: AccidentAssistanceTerminatedTypeormEntity | null;
+
+  @ManyToOne(() => AccidentAssistanceGrantTypeormEntity)
+  @JoinColumn({ name: 'accident_assistance_grant_id' })
+  public accidentAssistanceGrant?: AccidentAssistanceGrantTypeormEntity | null;
 
   @ManyToOne(
     () => AnalysisToolClientTypeormEntity,

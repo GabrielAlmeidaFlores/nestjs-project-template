@@ -3,6 +3,10 @@ import { Module } from '@nestjs/common';
 
 import { AutoMapperService } from '@lib/mapper/implementation/auto-mapper/auto-mapper.service';
 import { noopStrategy } from '@lib/mapper/implementation/auto-mapper/noop-strategy';
+import { AccidentAssistanceGrantEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-grant/accident-assistance-grant-entity.auto-mapper.profile';
+import { GetAccidentAssistanceGrantWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-grant/get-accident-assistance-grant-with-relations-query-result.auto-mapper.profile';
+import { AccidentAssistanceGrantDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-grant-document/accident-assistance-grant-document-entity.auto-mapper.profile';
+import { AccidentAssistanceGrantResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-grant-result/accident-assistance-grant-result-entity.auto-mapper.profile';
 import { AccidentAssistanceTerminatedEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated/accident-assistance-terminated-entity.auto-mapper.profile';
 import { GetAccidentAssistanceTerminatedQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated/get-accident-assistance-terminated-query-result.auto-mapper.profile';
 import { GetAccidentAssistanceTerminatedWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/accident-assistance-terminated/get-accident-assistance-terminated-with-relations-query-result.auto-mapper.profile';
@@ -558,8 +562,11 @@ import { GetSpecialRetirementGrantDocumentQueryResultAutoMapperProfile } from '@
 import { SpecialRetirementGrantDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-document/special-retirement-grant-document-entity.auto-mapper.profile';
 import { GetSpecialRetirementGrantLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-legal-proceeding/get-special-retirement-grant-legal-proceeding-query-result.auto-mapper.profile';
 import { SpecialRetirementGrantLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-legal-proceeding/special-retirement-grant-legal-proceeding-entity.auto-mapper.profile';
+import { SpecialRetirementGrantPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-period-document/special-retirement-grant-period-document-entity.auto-mapper.profile';
 import { GetSpecialRetirementGrantResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-result/get-special-retirement-grant-result-query-result.auto-mapper.profile';
 import { SpecialRetirementGrantResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-grant-result/special-retirement-grant-result-entity.auto-mapper.profile';
+import { GetSpecialRetirementRejectionWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-rejection/get-special-retirement-rejection-with-relations-query-result.auto-mapper.profile';
+import { SpecialRetirementRejectionEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-retirement-rejection/special-retirement-rejection-entity.auto-mapper.profile';
 import { GetSpeechGeneratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator/get-speech-generator-query-result.auto-mapper.profile';
 import { GetSpeechGeneratorWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator/get-speech-generator-with-relations-query-result.auto-mapper.profile';
 import { SpeechGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator/speech-generator-entity.auto-mapper.profile';
@@ -603,6 +610,17 @@ import { SurvivorPensionAnalysisResultEntityAutoMapperProfile } from '@lib/mappe
 import { SurvivorPensionAnalysisResultRetirementRuleEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/survivor-pension-analysis/survivor-pension-analysis-result-retirement-rule-entity.auto-mapper.profile';
 import { SystemActivityEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/system-activity/system-activity-entity.auto-mapper.profile';
 import { GetTeacherRetirementPlanningWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/teacher-retirement-planning/get-teacher-retirement-planning-with-relations-query-result.auto-mapper.profile';
+import { GetTeacherRetirementPlanningRejectionWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/teacher-retirement-planning-rejection/get-teacher-retirement-planning-rejection-with-relations-query-result.auto-mapper.profile';
+import { TeacherRetirementPlanningRejectionEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/teacher-retirement-planning-rejection/teacher-retirement-planning-rejection-entity.auto-mapper.profile';
+import { TeacherRetirementPlanningRejectionDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/teacher-retirement-planning-rejection-document/teacher-retirement-planning-rejection-document-entity.auto-mapper.profile';
+import { TeacherRetirementPlanningRejectionInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/teacher-retirement-planning-rejection-inss-benefit/teacher-retirement-planning-rejection-inss-benefit-entity.auto-mapper.profile';
+import { TeacherRetirementPlanningRejectionResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/teacher-retirement-planning-rejection-result/teacher-retirement-planning-rejection-result-entity.auto-mapper.profile';
+import { TeacherRetirementPlanningRejectionTeachingPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/teacher-retirement-planning-rejection-teaching-period/teacher-retirement-planning-rejection-teaching-period-entity.auto-mapper.profile';
+import { TeacherRetirementPlanningRejectionTeachingPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/teacher-retirement-planning-rejection-teaching-period-document/teacher-retirement-planning-rejection-teaching-period-document-entity.auto-mapper.profile';
+import { TeacherRetirementPlanningRejectionTimeAcceleratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/teacher-retirement-planning-rejection-time-accelerator/teacher-retirement-planning-rejection-time-accelerator-entity.auto-mapper.profile';
+import { TeacherRetirementPlanningRejectionWorkPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/teacher-retirement-planning-rejection-work-period/teacher-retirement-planning-rejection-work-period-entity.auto-mapper.profile';
+import { TeacherRetirementPlanningRejectionWorkPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/teacher-retirement-planning-rejection-work-period-document/teacher-retirement-planning-rejection-work-period-document-entity.auto-mapper.profile';
+import { TeacherRetirementPlanningRejectionWorkPeriodEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/teacher-retirement-planning-rejection-work-period-earnings-history/teacher-retirement-planning-rejection-work-period-earnings-history-entity.auto-mapper.profile';
 import { GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant/get-temporary-disability-benefits-grant-with-relations-query-result.auto-mapper.profile';
 import { TemporaryDisabilityBenefitsGrantEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant/temporary-disability-benefits-grant-entity.auto-mapper.profile';
 import { TemporaryDisabilityBenefitsGrantDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-disability-benefits-grant-document/temporary-disability-benefits-grant-document-entity.auto-mapper.profile';
@@ -722,6 +740,17 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetSpeechGeneratorQueryResultAutoMapperProfile,
     GetSpeechGeneratorWithRelationsQueryResultAutoMapperProfile,
     GetTeacherRetirementPlanningWithRelationsQueryResultAutoMapperProfile,
+    TeacherRetirementPlanningRejectionEntityAutoMapperProfile,
+    TeacherRetirementPlanningRejectionDocumentEntityAutoMapperProfile,
+    TeacherRetirementPlanningRejectionInssBenefitEntityAutoMapperProfile,
+    TeacherRetirementPlanningRejectionResultEntityAutoMapperProfile,
+    TeacherRetirementPlanningRejectionTeachingPeriodEntityAutoMapperProfile,
+    TeacherRetirementPlanningRejectionTeachingPeriodDocumentEntityAutoMapperProfile,
+    TeacherRetirementPlanningRejectionTimeAcceleratorEntityAutoMapperProfile,
+    TeacherRetirementPlanningRejectionWorkPeriodEntityAutoMapperProfile,
+    TeacherRetirementPlanningRejectionWorkPeriodDocumentEntityAutoMapperProfile,
+    TeacherRetirementPlanningRejectionWorkPeriodEarningsHistoryEntityAutoMapperProfile,
+    GetTeacherRetirementPlanningRejectionWithRelationsQueryResultAutoMapperProfile,
     GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile,
     GetCnisFastAnalysisInssBenefitQueryResultAutoMapperProfile,
     GetCnisFastAnalysisLegalProceedingQueryResultAutoMapperProfile,
@@ -875,6 +904,9 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetSpecialRetirementGrantDocumentQueryResultAutoMapperProfile,
     SpecialRetirementGrantResultEntityAutoMapperProfile,
     GetSpecialRetirementGrantResultQueryResultAutoMapperProfile,
+    SpecialRetirementGrantPeriodDocumentEntityAutoMapperProfile,
+    SpecialRetirementRejectionEntityAutoMapperProfile,
+    GetSpecialRetirementRejectionWithRelationsQueryResultAutoMapperProfile,
     DisabilityAssessmentForBpcAnalysisEntityAutoMapperProfile,
     GetDisabilityAssessmentForBpcAnalysisQueryResultAutoMapperProfile,
     DisabilityAssessmentForBpcAnalysisBenefitEntityAutoMapperProfile,
@@ -1322,6 +1354,10 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     MaternityPayGrantPeriodDocumentEntityAutoMapperProfile,
     MaternityPayGrantResultEntityAutoMapperProfile,
     AccidentAssistanceTerminatedResultEntityAutoMapperProfile,
+    AccidentAssistanceGrantEntityAutoMapperProfile,
+    GetAccidentAssistanceGrantWithRelationsQueryResultAutoMapperProfile,
+    AccidentAssistanceGrantDocumentEntityAutoMapperProfile,
+    AccidentAssistanceGrantResultEntityAutoMapperProfile,
   ],
   exports: [AutoMapperService],
 })
