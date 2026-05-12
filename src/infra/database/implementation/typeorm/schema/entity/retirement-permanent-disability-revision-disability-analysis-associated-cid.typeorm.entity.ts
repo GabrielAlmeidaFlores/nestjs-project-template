@@ -1,8 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
-
-import { RetirementPermanentDisabilityRevisionDisabilityAnalysisTypeormEntity } from './retirement-permanent-disability-revision-disability-analysis.typeorm.entity';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-disability-analysis.typeorm.entity';
 
 @Entity({
   name: 'retirement_per_dis_rev_dis_analysis_associated_cid',
