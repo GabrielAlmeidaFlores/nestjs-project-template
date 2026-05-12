@@ -12,7 +12,7 @@ export class BpcDisabilityGrantResultTypeormEntity extends BaseTypeormEntity {
   public simplifiedAnalysis: string | null;
 
   @OneToOne(() => BpcDisabilityGrantTypeormEntity)
-  @JoinColumn({ name: 'bpc_disability_grant_id' })
+  @JoinColumn({ name: '_bpc_disability_grant_id' })
   public BpcDisabilityGrant?: BpcDisabilityGrantTypeormEntity | undefined;
 
   protected override readonly _type =

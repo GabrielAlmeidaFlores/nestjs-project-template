@@ -136,12 +136,8 @@ export class DownloadBpcDisabilityGrantSimplifiedAnalysisUseCase {
       throw new BpcDisabilityGrantDoesNotContainSimplifiedAnalysisError();
     }
 
-    const normalizedSimplifiedAnalysis =
-      this.normalizeMarkdownForDownload(responseAi);
-
-    const htmlContent = await this.exportDocumentGateway.convertMarkdownToHtml(
-      normalizedSimplifiedAnalysis,
-    );
+    const htmlContent =
+      await this.exportDocumentGateway.convertMarkdownToHtml(responseAi);
 
     return this.exportDocumentGateway.downloadFileAsStreamable(
       htmlContent,
@@ -170,38 +166,5 @@ export class DownloadBpcDisabilityGrantSimplifiedAnalysisUseCase {
     } catch {
       return null;
     }
-  }
-
-  private normalizeMarkdownForDownload(content: string): string {
-    const lines = content.split('\n');
-    const wrappedBoldLineRegex = /^\s*\*\*(.+)\*\*\s*$/;
-
-    const nonEmptyLineCount = lines.filter((line) => line.trim() !== '').length;
-
-    if (nonEmptyLineCount === 0) {
-      return content;
-    }
-
-    const wrappedBoldLineCount = lines.filter((line) =>
-      wrappedBoldLineRegex.test(line),
-    ).length;
-
-    const wrappedBoldRatio = wrappedBoldLineCount / nonEmptyLineCount;
-
-    if (wrappedBoldRatio < 0.6) {
-      return content;
-    }
-
-    return lines
-      .map((line) => {
-        const matches = line.match(wrappedBoldLineRegex);
-
-        if (matches === null) {
-          return line;
-        }
-
-        return line.replace(wrappedBoldLineRegex, '$1').trim();
-      })
-      .join('\n');
   }
 }
