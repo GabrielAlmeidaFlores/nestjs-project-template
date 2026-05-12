@@ -15344,7 +15344,24 @@ REGRAS IMPORTANTES
 - Não invente prova testemunhal ou documentos ausentes.
 - Se faltar informação, registre expressamente.
 - Foque no aproveitamento do período para fins previdenciários.
-- Entregue a análise com clareza, objetividade e foco técnico-jurídico.`,
+- Entregue a análise com clareza, objetividade e foco técnico-jurídico.
+
+Para o campo \`technicalNote\`, use MARKDOWN ESTRUTURADO obrigatoriamente:
+## Nota Técnica
+
+### Avaliação Documental
+- [documento analisado]: [força probatória e observações]
+- ...
+
+### Viabilidade e Fundamentação
+[parágrafo explicando grau de viabilidade com embasamento jurídico, artigos de lei e decretos aplicáveis]
+
+### Pendências e Recomendações
+1. [providência necessária]
+2. [providência necessária]
+...
+
+**[Parágrafo conclusivo com a principal recomendação estratégica]**`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15362,7 +15379,24 @@ REGRAS IMPORTANTES
 - Baseie-se somente nos documentos enviados.
 - Se houver lacuna probatória, destaque com objetividade.
 - Não afirme contagem sem base documental mínima.
-- Entregue a análise com clareza, objetividade e foco técnico-jurídico.`,
+- Entregue a análise com clareza, objetividade e foco técnico-jurídico.
+
+Para o campo \`technicalNote\`, use MARKDOWN ESTRUTURADO obrigatoriamente:
+## Nota Técnica
+
+### Avaliação Documental
+- [documento analisado]: [força probatória e observações]
+- ...
+
+### Viabilidade e Fundamentação
+[parágrafo explicando grau de viabilidade com embasamento jurídico, artigos de lei e decretos aplicáveis]
+
+### Pendências e Recomendações
+1. [providência necessária]
+2. [providência necessária]
+...
+
+**[Parágrafo conclusivo com a principal recomendação estratégica]**`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15380,7 +15414,24 @@ REGRAS IMPORTANTES
 - Não invente dados não presentes na documentação.
 - Se houver risco de duplicidade, destaque de forma expressa.
 - Mantenha foco no impacto previdenciário do período.
-- Entregue a análise com clareza, objetividade e foco técnico-jurídico.`,
+- Entregue a análise com clareza, objetividade e foco técnico-jurídico.
+
+Para o campo \`technicalNote\`, use MARKDOWN ESTRUTURADO obrigatoriamente:
+## Nota Técnica
+
+### Avaliação Documental
+- [documento analisado]: [força probatória e observações]
+- ...
+
+### Viabilidade e Fundamentação
+[parágrafo explicando grau de viabilidade com embasamento jurídico, artigos de lei e decretos aplicáveis]
+
+### Pendências e Recomendações
+1. [providência necessária]
+2. [providência necessária]
+...
+
+**[Parágrafo conclusivo com a principal recomendação estratégica]**`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15398,7 +15449,24 @@ REGRAS IMPORTANTES
 - Não invente vínculos, datas ou documentos.
 - Se a prova estiver fraca, diga claramente.
 - Mantenha foco no aproveitamento previdenciário do período.
-- Entregue a análise com clareza, objetividade e foco técnico-jurídico.`,
+- Entregue a análise com clareza, objetividade e foco técnico-jurídico.
+
+Para o campo \`technicalNote\`, use MARKDOWN ESTRUTURADO obrigatoriamente:
+## Nota Técnica
+
+### Avaliação Documental
+- [documento analisado]: [força probatória e observações]
+- ...
+
+### Viabilidade e Fundamentação
+[parágrafo explicando grau de viabilidade com embasamento jurídico, artigos de lei e decretos aplicáveis]
+
+### Pendências e Recomendações
+1. [providência necessária]
+2. [providência necessária]
+...
+
+**[Parágrafo conclusivo com a principal recomendação estratégica]**`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15416,7 +15484,24 @@ REGRAS IMPORTANTES
 - Não presuma contraprestação ou requisitos que não estejam demonstrados.
 - Se faltar documento essencial, registre explicitamente.
 - Seja objetivo e técnico.
-- Entregue a análise com clareza, objetividade e foco técnico-jurídico.`,
+- Entregue a análise com clareza, objetividade e foco técnico-jurídico.
+
+Para o campo \`technicalNote\`, use MARKDOWN ESTRUTURADO obrigatoriamente:
+## Nota Técnica
+
+### Avaliação Documental
+- [documento analisado]: [força probatória e observações]
+- ...
+
+### Viabilidade e Fundamentação
+[parágrafo explicando grau de viabilidade com embasamento jurídico, artigos de lei e decretos aplicáveis]
+
+### Pendências e Recomendações
+1. [providência necessária]
+2. [providência necessária]
+...
+
+**[Parágrafo conclusivo com a principal recomendação estratégica]**`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15434,7 +15519,24 @@ REGRAS IMPORTANTES
 - Não invente acordo internacional sem base nos documentos.
 - Se o país ou o acordo não estiver identificado, registre essa limitação.
 - Priorize orientações administrativas concretas.
-- Entregue a análise com clareza, objetividade e foco técnico-jurídico.`,
+- Entregue a análise com clareza, objetividade e foco técnico-jurídico.
+
+Para o campo \`technicalNote\`, use MARKDOWN ESTRUTURADO obrigatoriamente:
+## Nota Técnica
+
+### Avaliação Documental
+- [documento analisado]: [força probatória e observações]
+- ...
+
+### Viabilidade e Fundamentação
+[parágrafo explicando grau de viabilidade com embasamento jurídico, artigos de lei e decretos aplicáveis]
+
+### Pendências e Recomendações
+1. [providência necessária]
+2. [providência necessária]
+...
+
+**[Parágrafo conclusivo com a principal recomendação estratégica]**`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15452,7 +15554,24 @@ REGRAS IMPORTANTES
 - Não presuma recolhimento inexistente.
 - Se a prova estiver incompleta, informe com clareza.
 - Mantenha foco no aproveitamento previdenciário do período.
-- Entregue a análise com clareza, objetividade e foco técnico-jurídico.`,
+- Entregue a análise com clareza, objetividade e foco técnico-jurídico.
+
+Para o campo \`technicalNote\`, use MARKDOWN ESTRUTURADO obrigatoriamente:
+## Nota Técnica
+
+### Avaliação Documental
+- [documento analisado]: [força probatória e observações]
+- ...
+
+### Viabilidade e Fundamentação
+[parágrafo explicando grau de viabilidade com embasamento jurídico, artigos de lei e decretos aplicáveis]
+
+### Pendências e Recomendações
+1. [providência necessária]
+2. [providência necessária]
+...
+
+**[Parágrafo conclusivo com a principal recomendação estratégica]**`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
@@ -15470,7 +15589,24 @@ REGRAS IMPORTANTES
 - Não atribua eficácia previdenciária automática sem base documental.
 - Se a decisão for frágil para fins previdenciários, diga isso expressamente.
 - Seja técnico, objetivo e orientado à ação.
-- Entregue a análise com clareza, objetividade e foco técnico-jurídico.`,
+- Entregue a análise com clareza, objetividade e foco técnico-jurídico.
+
+Para o campo \`technicalNote\`, use MARKDOWN ESTRUTURADO obrigatoriamente:
+## Nota Técnica
+
+### Avaliação Documental
+- [documento analisado]: [força probatória e observações]
+- ...
+
+### Viabilidade e Fundamentação
+[parágrafo explicando grau de viabilidade com embasamento jurídico, artigos de lei e decretos aplicáveis]
+
+### Pendências e Recomendações
+1. [providência necessária]
+2. [providência necessária]
+...
+
+**[Parágrafo conclusivo com a principal recomendação estratégica]**`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(

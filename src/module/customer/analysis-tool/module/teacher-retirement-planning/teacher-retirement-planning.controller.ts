@@ -31,6 +31,9 @@ import { UpdateTeacherRetirementPlanningPeriodResponseDto } from '@module/custom
 import { UpdateTeacherRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/update-teacher-retirement-planning-remuneration.response.dto';
 import { UpdateTeacherRetirementPlanningResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/update-teacher-retirement-planning.response.dto';
 import { AnalyzeTeacherRetirementPlanningAdministrativeProcessUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/analyze-teacher-retirement-planning-administrative-process.use-case';
+import { AnalyzeTeacherRetirementPlanningTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/analyze-teacher-retirement-planning-time-accelerator.use-case';
+import { AnalyzeTeacherRetirementPlanningTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/analyze-teacher-retirement-planning-time-accelerator.request.dto';
+import { AnalyzeTeacherRetirementPlanningTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/analyze-teacher-retirement-planning-time-accelerator.response.dto';
 import { CreateTeacherRetirementPlanningPeriodUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-period.use-case';
 import { CreateTeacherRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-remuneration.use-case';
 import { CreateTeacherRetirementPlanningResultUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-result.use-case';
@@ -74,6 +77,7 @@ export class TeacherRetirementPlanningController {
     private readonly listTeacherRetirementPlanningRemunerationUseCase: ListTeacherRetirementPlanningRemunerationUseCase,
     private readonly getTeacherRetirementPlanningRemunerationCalculationUseCase: GetTeacherRetirementPlanningRemunerationCalculationUseCase,
     private readonly analyzeTeacherRetirementPlanningAdministrativeProcessUseCase: AnalyzeTeacherRetirementPlanningAdministrativeProcessUseCase,
+    private readonly analyzeTeacherRetirementPlanningTimeAcceleratorUseCase: AnalyzeTeacherRetirementPlanningTimeAcceleratorUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -540,6 +544,36 @@ export class TeacherRetirementPlanningController {
     dto: AnalyzeTeacherRetirementPlanningAdministrativeProcessRequestDto,
   ): Promise<AnalyzeTeacherRetirementPlanningAdministrativeProcessResponseDto> {
     return this.analyzeTeacherRetirementPlanningAdministrativeProcessUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Analisar documentos do acelerador de tempo do planejamento de aposentadoria do professor',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'analyze-time-accelerator-documents',
+      method: RequestMethod.POST,
+      type: AnalyzeTeacherRetirementPlanningTimeAcceleratorRequestDto,
+    },
+    tag: ['planejamento-previdenciario-professor'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Documentos do acelerador de tempo analisados com sucesso.',
+      type: AnalyzeTeacherRetirementPlanningTimeAcceleratorResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async analyzeTimeAccelerator(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Body()
+    dto: AnalyzeTeacherRetirementPlanningTimeAcceleratorRequestDto,
+  ): Promise<AnalyzeTeacherRetirementPlanningTimeAcceleratorResponseDto> {
+    return this.analyzeTeacherRetirementPlanningTimeAcceleratorUseCase.execute(
       sessionData,
       organizationSessionData,
       dto,

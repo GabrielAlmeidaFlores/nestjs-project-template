@@ -4002,7 +4002,12 @@ For probativeForce, classify each document as:
                 type: 'string',
                 enum: Object.values(TimeAcceleratorViabilityEnum),
               },
-              technicalNote: { type: 'string', nullable: true },
+              technicalNote: {
+                type: 'string',
+                nullable: true,
+                description:
+                  'Nota técnica em MARKDOWN estruturado. OBRIGATÓRIO conter: (1) título com "## Nota Técnica"; (2) seção "### Avaliação Documental" com lista "- " dos documentos analisados e sua força probatória; (3) seção "### Viabilidade e Fundamentação" explicando o grau de viabilidade com embasamento jurídico; (4) seção "### Pendências e Recomendações" com lista numerada de providências a tomar; (5) parágrafo conclusivo em negrito com a principal recomendação estratégica. Use "**...**" para destacar pontos críticos.',
+              },
               startDate: { type: 'string', nullable: true },
               endDate: { type: 'string', nullable: true },
               gracePeriod: { type: 'string', nullable: true },
