@@ -97,6 +97,21 @@ import { BpcDisabilityDenialLegalProceedingEntityAutoMapperProfile } from '@lib/
 import { GetBpcDisabilityDenialLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-denial-legal-proceeding/get-bpc-disability-denial-legal-proceeding-query-result.auto-mapper.profile';
 import { BpcDisabilityDenialResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-denial-result/bpc-disability-denial-result-entity.auto-mapper.profile';
 import { GetBpcDisabilityDenialResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-denial-result/get-bpc-disability-denial-result-query-result.auto-mapper.profile';
+import { BpcDisabilityGrantEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-grant/bpc-disability-grant-entity.auto-mapper.profile';
+import { GetBpcDisabilityGrantQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-grant/get-bpc-disability-grant-query-result.auto-mapper.profile';
+import { GetBpcDisabilityGrantWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-grant/get-bpc-disability-grant-with-relations-query-result.auto-mapper.profile';
+import { BpcDisabilityGrantDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-grant-document/bpc-disability-grant-document-entity.auto-mapper.profile';
+import { GetBpcDisabilityGrantDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-grant-document/get-bpc-disability-grant-document-query-result.auto-mapper.profile';
+import { BpcDisabilityGrantFamilyMemberEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-grant-family-member/bpc-disability-grant-family-member-entity.auto-mapper.profile';
+import { GetBpcDisabilityGrantFamilyMemberQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-grant-family-member/get-bpc-disability-grant-family-member-query-result.auto-mapper.profile';
+import { BpcDisabilityGrantFamilyMemberDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-grant-family-member-document/bpc-disability-grant-family-member-document-entity.auto-mapper.profile';
+import { GetBpcDisabilityGrantFamilyMemberDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-grant-family-member-document/get-bpc-disability-grant-family-member-document-query-result.auto-mapper.profile';
+import { BpcDisabilityGrantInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-grant-inss-benefit/bpc-disability-grant-inss-benefit-entity.auto-mapper.profile';
+import { GetBpcDisabilityGrantInssBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-grant-inss-benefit/get-bpc-disability-grant-inss-benefit-query-result.auto-mapper.profile';
+import { BpcDisabilityGrantLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-grant-legal-proceeding/bpc-disability-grant-legal-proceeding-entity.auto-mapper.profile';
+import { GetBpcDisabilityGrantLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-grant-legal-proceeding/get-bpc-disability-grant-legal-proceeding-query-result.auto-mapper.profile';
+import { BpcDisabilityGrantResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-grant-result/bpc-disability-grant-result-entity.auto-mapper.profile';
+import { GetBpcDisabilityGrantResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-grant-result/get-bpc-disability-grant-result-query-result.auto-mapper.profile';
 import { BpcDisabilityTerminationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-termination/bpc-disability-termination-entity.auto-mapper.profile';
 import { GetBpcDisabilityTerminationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-termination/get-bpc-disability-termination-query-result.auto-mapper.profile';
 import { GetBpcDisabilityTerminationWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-termination/get-bpc-disability-termination-with-relations-query-result.auto-mapper.profile';
@@ -1161,6 +1176,21 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetBpcElderlyCessationDocumentQueryResultAutoMapperProfile,
     BpcElderlyCessationResultEntityAutoMapperProfile,
     GetBpcElderlyCessationResultQueryResultAutoMapperProfile,
+    BpcDisabilityGrantEntityAutoMapperProfile,
+    BpcDisabilityGrantDocumentEntityAutoMapperProfile,
+    BpcDisabilityGrantFamilyMemberEntityAutoMapperProfile,
+    BpcDisabilityGrantFamilyMemberDocumentEntityAutoMapperProfile,
+    BpcDisabilityGrantInssBenefitEntityAutoMapperProfile,
+    BpcDisabilityGrantLegalProceedingEntityAutoMapperProfile,
+    BpcDisabilityGrantResultEntityAutoMapperProfile,
+    GetBpcDisabilityGrantQueryResultAutoMapperProfile,
+    GetBpcDisabilityGrantWithRelationsQueryResultAutoMapperProfile,
+    GetBpcDisabilityGrantDocumentQueryResultAutoMapperProfile,
+    GetBpcDisabilityGrantFamilyMemberQueryResultAutoMapperProfile,
+    GetBpcDisabilityGrantFamilyMemberDocumentQueryResultAutoMapperProfile,
+    GetBpcDisabilityGrantInssBenefitQueryResultAutoMapperProfile,
+    GetBpcDisabilityGrantLegalProceedingQueryResultAutoMapperProfile,
+    GetBpcDisabilityGrantResultQueryResultAutoMapperProfile,
     BpcElderlyCessationInssBenefitEntityAutoMapperProfile,
     GetBpcElderlyCessationInssBenefitQueryResultAutoMapperProfile,
     BpcElderlyCessationLegalProceedingEntityAutoMapperProfile,
