@@ -52,8 +52,7 @@ export class RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitTypeo
   @OneToMany(
     () =>
       RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidTypeormEntity,
-    (entity) =>
-      entity.retirementPermanentDisabilityRevisionDisabilityAnalysisBenefit,
+    (entity) => entity.retirementPerDisRevDisAnalysisBenefit,
   )
   public retirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCid?:
     | RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidTypeormEntity[]
@@ -62,8 +61,7 @@ export class RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitTypeo
   @OneToMany(
     () =>
       RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclarationTypeormEntity,
-    (entity) =>
-      entity.retirementPermanentDisabilityRevisionDisabilityAnalysisBenefit,
+    (entity) => entity.retirementPerDisRevDisAnalysisBenefit,
   )
   public retirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclaration?:
     | RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclarationTypeormEntity[]
