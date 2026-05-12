@@ -10,6 +10,7 @@ import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator.typeorm.entity';
 import { BpcDisabilityDenialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-denial.typeorm.entity';
+import { BpcDisabilityGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant.typeorm.entity';
 import { BpcDisabilityTerminationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-termination.typeorm.entity';
 import { BpcElderlyAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis.typeorm.entity';
 import { BpcElderlyCessationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-cessation.typeorm.entity';
@@ -61,6 +62,7 @@ import { AccidentBenefitRejectionEntity } from '@module/customer/analysis-tool/m
 import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
 import { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
 import { BpcDisabilityDenialEntity } from '@module/customer/analysis-tool/module/bpc-disability-denial/domain/schema/entity/bpc-disability-denial/bpc-disability-denial.entity';
+import { BpcDisabilityGrantEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/bpc-disability-grant.entity';
 import { BpcDisabilityTerminationEntity } from '@module/customer/analysis-tool/module/bpc-disability-termination/domain/schema/entity/bpc-disability-termination/bpc-disability-termination.entity';
 import { BpcElderlyAnalysisEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/bpc-elderly-analysis.entity';
 import { BpcElderlyCessationEntity } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/domain/schema/entity/bpc-elderly-cessation/bpc-elderly-cessation.entity';
@@ -754,6 +756,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const bpcDisabilityGrant =
+        source.bpcDisabilityGrant !== null
+          ? this.mapper.map(
+              source.bpcDisabilityGrant,
+              BpcDisabilityGrantEntity,
+              BpcDisabilityGrantTypeormEntity,
+            )
+          : null;
+
       const bpcDisabilityTermination =
         source.bpcDisabilityTermination !== null
           ? this.mapper.map(
@@ -1001,6 +1012,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         speechGenerator,
         disabilityAssessmentForBpcAnalysis,
         perCapitaIncomeForBpcAnalysis,
+        bpcDisabilityGrant,
         bpcDisabilityDenial,
         bpcDisabilityTermination,
         bpcElderlyAnalysis,

@@ -11,6 +11,7 @@ import type { GetAccidentAssistanceTerminatedQueryResult } from '@module/custome
 import type { GetAdministrativeProcedureInssAnalysisQueryResult } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/repository/administrative-procedure-inss-analysis/query/result/get-administrative-procedure-inss-analysis.query.result';
 import type { GetAudienceQuestionGeneratorWithRelationsQueryResult } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator/query/result/get-audience-question-generator-with-relations.query.result';
 import type { GetBpcDisabilityDenialWithRelationsQueryResult } from '@module/customer/analysis-tool/module/bpc-disability-denial/domain/repository/bpc-disability-denial/query/result/get-bpc-disability-denial-with-relations.query.result';
+import type { GetBpcDisabilityGrantWithRelationsQueryResult } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant/query/result/get-bpc-disability-grant-with-relations.query.result';
 import type { GetBpcDisabilityTerminationWithRelationsQueryResult } from '@module/customer/analysis-tool/module/bpc-disability-termination/domain/repository/bpc-disability-termination/query/result/get-bpc-disability-termination-with-relations.query.result';
 import type { GetBpcElderlyAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/repository/bpc-elderly-analysis/query/result/get-bpc-elderly-analysis-with-relations.query.result';
 import type { GetBpcElderlyCessationWithRelationsQueryResult } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/domain/repository/bpc-elderly-cessation/query/result/get-bpc-elderly-cessation-with-relations.query.result';
@@ -68,6 +69,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResult extends BaseBuildable
   public readonly perCapitaIncomeForBpcAnalysis: GetPerCapitaIncomeForBpcAnalysisWithRelationsQueryResult | null;
   public readonly ruralOrHybridRetirementRejection: RuralOrHybridRetirementRejectionEntity | null;
   public readonly ruralOrHybridRetirementAnalysis: RuralOrHybridRetirementAnalysisEntity | null;
+  public readonly bpcDisabilityGrant: GetBpcDisabilityGrantWithRelationsQueryResult | null;
   public readonly bpcDisabilityDenial: GetBpcDisabilityDenialWithRelationsQueryResult | null;
   public readonly bpcDisabilityTermination: GetBpcDisabilityTerminationWithRelationsQueryResult | null;
   public readonly bpcElderlyAnalysis: GetBpcElderlyAnalysisWithRelationsQueryResult | null;

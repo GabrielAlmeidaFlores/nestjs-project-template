@@ -2529,6 +2529,34 @@ Análise processada do CNIS:
     );
   }
 
+  public async getBpcDisabilityGrantCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente nos dados e documentos fornecidos.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- O campo \`analysisResult\` deve conter o resultado consolidado em Markdown rico, com títulos, parágrafos curtos e listas quando útil. Ele será convertido para HTML pelo backend antes de ser exibido.
+- O campo \`retirementRules\` deve listar regras juridico-previdenciarias (por artigo/beneficio), por exemplo: BPC pessoa com deficiência, Salário-maternidade.
+- Para cada item de \`retirementRules\`, preencha obrigatoriamente: \`benefitType\`, \`result\` (boolean), \`benefitStartDate\`, \`RMIprevista\` e \`detaildAnalysis\`.
+- Não invente dados; utilize exclusivamente as informações fornecidas.
+- Os demais campos devem respeitar as descrições e orientações do schema.
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: this.getBpcDisabilityGrantCompleteAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
   public async getDisabilityRetirementPlanningRejectionSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
@@ -2542,6 +2570,18 @@ Análise processada do CNIS:
   }
 
   public async getBpcDisabilityDenialSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getBpcDisabilityGrantSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null> {
@@ -9715,6 +9755,99 @@ For probativeForce, classify each document as:
         'completeAnalysisDownload',
         'applicableRules',
         'benefitSummaries',
+      ],
+    };
+  }
+
+  private getBpcDisabilityGrantCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        isElligibleForDisabilityBpc: {
+          type: 'boolean',
+          description:
+            'Indica se o segurado é elegível ao BPC por deficiência.',
+        },
+        totalFamiliarIncome: {
+          type: 'string',
+          description: 'Renda familiar total bruta. Exemplo: "5.000,00".',
+        },
+        perCapitaIncome: {
+          type: 'string',
+          description:
+            'Renda per capita do grupo familiar. Exemplo: "1.250,00".',
+        },
+        lessThanOneQuarter: {
+          type: 'boolean',
+          description:
+            'Indica se a renda per capita é inferior a 1/4 do salário mínimo.',
+        },
+        lessThanHalfAndAboveOneQuarter: {
+          type: 'boolean',
+          description:
+            'Indica se a renda per capita está entre 1/4 e 1/2 do salário mínimo.',
+        },
+        disabilityProven: {
+          type: 'boolean',
+          description:
+            'Indica se a deficiência foi comprovada por laudo médico/pericial.',
+        },
+        retirementRules: {
+          type: 'array',
+          description:
+            'Lista de regras legais/previdenciarias aplicaveis ao caso, incluindo regras por artigo e por tipo de beneficio (ex.: Regra BPC PCD, Salario-Maternidade).',
+          items: {
+            type: 'object',
+            properties: {
+              benefitType: {
+                type: 'string',
+                description:
+                  'Tipo de beneficio/regra juridico-previdenciaria analisada. Exemplo: "BPC pessoa com deficiencia", "Salario-Maternidade".',
+              },
+              result: {
+                type: 'boolean',
+                description: 'Resultado da regra: atingido ou nao atingido.',
+              },
+              benefitStartDate: {
+                type: 'string',
+                description:
+                  'Data de início do benefício no formato ISO 8601. Exemplo: "2024-01-15".',
+              },
+              RMIprevista: {
+                type: 'string',
+                description:
+                  'Valor da RMI prevista em formato monetario. Exemplo: "R$1.412,00".',
+              },
+              detaildAnalysis: {
+                type: 'string',
+                description:
+                  'Analise detalhada da aplicacao da regra ao caso, com fundamentacao tecnica e juridica.',
+              },
+            },
+            required: [
+              'benefitType',
+              'result',
+              'benefitStartDate',
+              'RMIprevista',
+              'detaildAnalysis',
+            ],
+          },
+        },
+        analysisResult: {
+          type: 'string',
+          description:
+            'Resultado completo da análise em Markdown com títulos, listas e conclusão objetiva.',
+        },
+      },
+      required: [
+        'isElligibleForDisabilityBpc',
+        'totalFamiliarIncome',
+        'perCapitaIncome',
+        'lessThanOneQuarter',
+        'lessThanHalfAndAboveOneQuarter',
+        'disabilityProven',
+        'retirementRules',
+        'analysisResult',
       ],
     };
   }

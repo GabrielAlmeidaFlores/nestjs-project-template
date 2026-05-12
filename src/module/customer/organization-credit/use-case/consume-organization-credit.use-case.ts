@@ -11,12 +11,12 @@ import { OrganizationCreditUsageQueryRepositoryGateway } from '@module/customer/
 import { OrganizationCreditUsageEntity } from '@module/customer/organization-credit/domain/schema/entity/organization-credit-usage/organization-credit-usage.entity';
 import { InsufficientCreditsError } from '@module/customer/organization-credit/error/insufficient-credits.error';
 import { PaidResourceUnavailableError } from '@module/customer/organization-credit/error/paid-resource-unavailable.error';
-// import { ResourceNotEnabledError } from '@module/customer/organization-credit/error/resource-not-enabled.error';
+import { ResourceNotEnabledError } from '@module/customer/organization-credit/error/resource-not-enabled.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/payment-plan-paid-resource.query.repository.gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
-// import { PaymentPlanInactiveError } from '@module/customer/payment-plan/error/payment-plan-inactive.error';
-// import { ValidateOrganizationPaymentPlanStatusUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/validate-organization-payment-plan-status.use-case-gateway';
+import { PaymentPlanInactiveError } from '@module/customer/payment-plan/error/payment-plan-inactive.error';
+import { ValidateOrganizationPaymentPlanStatusUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/validate-organization-payment-plan-status.use-case-gateway';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 
 @Injectable()
@@ -34,8 +34,8 @@ export class ConsumeOrganizationCreditUseCase implements ConsumeOrganizationCred
     private readonly organizationCreditUsageCommandRepository: OrganizationCreditUsageCommandRepositoryGateway,
     @Inject(PaymentPlanPaidResourceQueryRepositoryGateway)
     private readonly paymentPlanPaidResourceQueryRepository: PaymentPlanPaidResourceQueryRepositoryGateway,
-    // @Inject(ValidateOrganizationPaymentPlanStatusUseCaseGateway)
-    // private readonly validateOrganizationPaymentPlanStatusUseCase: ValidateOrganizationPaymentPlanStatusUseCaseGateway,
+    @Inject(ValidateOrganizationPaymentPlanStatusUseCaseGateway)
+    private readonly validateOrganizationPaymentPlanStatusUseCase: ValidateOrganizationPaymentPlanStatusUseCaseGateway,
   ) {}
 
   public async execute(
@@ -46,22 +46,22 @@ export class ConsumeOrganizationCreditUseCase implements ConsumeOrganizationCred
       explicitCreditCost?: number;
     },
   ): Promise<TransactionType> {
-    // const paymentPlanStatus =
-    //   await this.validateOrganizationPaymentPlanStatusUseCase.execute(
-    //     organizationId,
-    //   );
+    const paymentPlanStatus =
+      await this.validateOrganizationPaymentPlanStatusUseCase.execute(
+        organizationId,
+      );
 
-    // if (!paymentPlanStatus.isActive) {
-    //   throw new PaymentPlanInactiveError();
-    // }
+    if (!paymentPlanStatus.isActive) {
+      throw new PaymentPlanInactiveError();
+    }
 
-    // const isResourceEnabled = paymentPlanStatus.enabledPaidResources.some(
-    //   (resource) => resource.resource === resourceType,
-    // );
+    const isResourceEnabled = paymentPlanStatus.enabledPaidResources.some(
+      (resource) => resource.resource === resourceType,
+    );
 
-    // if (!isResourceEnabled) {
-    //   throw new ResourceNotEnabledError();
-    // }
+    if (!isResourceEnabled) {
+      throw new ResourceNotEnabledError();
+    }
 
     let creditCost: number;
 

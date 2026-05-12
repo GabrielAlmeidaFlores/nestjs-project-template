@@ -38,6 +38,7 @@ import { AccidentBenefitRejectionId } from '@module/customer/analysis-tool/modul
 import { AdministrativeProcedureInssAnalysisId } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/value-object/administrative-procedure-inss-analysis-id/administrative-procedure-inss-analysis-id.value-object';
 import { AudienceQuestionGeneratorId } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/value-object/audience-question-generator-id/audience-question-generator-id.value-object';
 import { BpcDisabilityDenialId } from '@module/customer/analysis-tool/module/bpc-disability-denial/domain/schema/entity/bpc-disability-denial/value-object/bpc-disability-denial-id/bpc-disability-denial-id.value-object';
+import { BpcDisabilityGrantId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/value-object/bpc-disability-grant-id/bpc-disability-grant-id.value-object';
 import { BpcDisabilityTerminationId } from '@module/customer/analysis-tool/module/bpc-disability-termination/domain/schema/entity/bpc-disability-termination/value-object/bpc-disability-termination-id/bpc-disability-termination-id.value-object';
 import { BpcElderlyAnalysisId } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/value-object/bpc-elderly-analysis-id/bpc-elderly-analysis-id.value-object';
 import { BpcElderlyCessationId } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/domain/schema/entity/bpc-elderly-cessation/value-object/bpc-elderly-cessation-id/bpc-elderly-cessation-id.value-object';
@@ -156,6 +157,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         'accidentBenefitRejection',
       [AnalysisToolRecordTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION]:
         'disabilityRetirementPlanningRejection',
+      [AnalysisToolRecordTypeEnum.BPC_DISABILITY_GRANT]: 'bpcDisabilityGrant',
       [AnalysisToolRecordTypeEnum.BPC_DISABILITY_DENIAL]: 'bpcDisabilityDenial',
       [AnalysisToolRecordTypeEnum.BPC_ELDERLY_ANALYSIS]: 'bpcElderlyAnalysis',
       [AnalysisToolRecordTypeEnum.MATERNITY_PAY_REJECTION]:
@@ -2299,6 +2301,73 @@ export class AnalysisToolRecordTypeormQueryRepository
     return mappedData;
   }
 
+  public async findWithRelationsByBpcDisabilityGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    bpcDisabilityGrantId: BpcDisabilityGrantId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          bpcDisabilityGrant: {
+            id: bpcDisabilityGrantId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          bpcDisabilityGrant: {
+            BpcDisabilityGrantResult: true,
+            BpcDisabilityGrantDocument: true,
+            BpcDisabilityGrantInssBenefit: true,
+            BpcDisabilityGrantLegalProceeding: true,
+            BpcDisabilityGrantFamilyMember: {
+              BpcDisabilityGrantFamilyMemberDocument: true,
+            },
+          },
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
   public async findWithRelationsByBpcDisabilityTerminationIdAndOrganizationIdAndAuthIdentityIdOrFail(
     bpcDisabilityTerminationId: BpcDisabilityTerminationId,
     organizationId: OrganizationId,
@@ -2628,6 +2697,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { generalUrbanRetirementDenial: Not(IsNull()) },
         { generalUrbanRetirementReview: Not(IsNull()) },
         { disabilityRetirementPlanningRejection: Not(IsNull()) },
+        { bpcDisabilityGrant: Not(IsNull()) },
         { bpcDisabilityDenial: Not(IsNull()) },
         { bpcDisabilityTermination: Not(IsNull()) },
         { bpcElderlyAnalysis: Not(IsNull()) },
@@ -3977,6 +4047,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       'generalUrbanRetirementDenial',
       'generalUrbanRetirementReview',
       'disabilityRetirementPlanningRejection',
+      'bpcDisabilityGrant',
       'bpcDisabilityDenial',
       'bpcDisabilityTermination',
       'bpcElderlyAnalysis',

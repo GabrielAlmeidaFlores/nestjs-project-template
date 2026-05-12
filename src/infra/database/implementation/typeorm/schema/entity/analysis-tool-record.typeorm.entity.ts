@@ -8,6 +8,7 @@ import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/
 import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { BpcDisabilityDenialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-denial.typeorm.entity';
+import { BpcDisabilityGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant.typeorm.entity';
 import { BpcDisabilityTerminationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-termination.typeorm.entity';
 import { BpcElderlyAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-analysis.typeorm.entity';
 import { BpcElderlyCessationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-elderly-cessation.typeorm.entity';
@@ -318,6 +319,14 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   @ManyToOne(() => DisabilityRetirementPlanningRejectionTypeormEntity)
   @JoinColumn({ name: 'disability_retirement_planning_rejection_id' })
   public disabilityRetirementPlanningRejection?: DisabilityRetirementPlanningRejectionTypeormEntity | null;
+
+  @OneToOne(
+    () => BpcDisabilityGrantTypeormEntity,
+    (entity) => entity.analysisToolRecord,
+    { nullable: true },
+  )
+  @JoinColumn({ name: 'bpc_disability_grant_id' })
+  public bpcDisabilityGrant?: BpcDisabilityGrantTypeormEntity | null;
 
   @OneToOne(
     () => BpcDisabilityDenialTypeormEntity,

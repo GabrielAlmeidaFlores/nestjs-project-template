@@ -11,6 +11,7 @@ import type { AccidentBenefitRejectionEntity } from '@module/customer/analysis-t
 import type { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
 import type { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
 import type { BpcDisabilityDenialEntity } from '@module/customer/analysis-tool/module/bpc-disability-denial/domain/schema/entity/bpc-disability-denial/bpc-disability-denial.entity';
+import type { BpcDisabilityGrantEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/bpc-disability-grant.entity';
 import type { BpcDisabilityTerminationEntity } from '@module/customer/analysis-tool/module/bpc-disability-termination/domain/schema/entity/bpc-disability-termination/bpc-disability-termination.entity';
 import type { BpcElderlyAnalysisEntity } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/bpc-elderly-analysis.entity';
 import type { BpcElderlyCessationEntity } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/domain/schema/entity/bpc-elderly-cessation/bpc-elderly-cessation.entity';
@@ -88,6 +89,7 @@ export interface AnalysisToolRecordEntityPropsInterface extends BaseEntityPropsI
   deathBenefitRejection?: DeathBenefitRejectionEntity | null;
   specialRetirementGrant?: SpecialRetirementGrantEntity | null;
   specialRetirementRejection?: SpecialRetirementRejectionEntity | null;
+  bpcDisabilityGrant?: BpcDisabilityGrantEntity | null;
   bpcDisabilityDenial?: BpcDisabilityDenialEntity | null;
   bpcDisabilityTermination?: BpcDisabilityTerminationEntity | null;
   bpcElderlyAnalysis?: BpcElderlyAnalysisEntity | null;
