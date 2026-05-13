@@ -3,6 +3,7 @@ export enum AnalysisToolRecordTypeEnum {
   RETIREMENT_PLANNING_RGPS = 'planejamento_previdenciario_rgps',
   RETIREMENT_PLANNING_RPPS = 'planejamento_aposentadoria_rpps',
   TEACHER_RETIREMENT_PLANNING = 'planejamento_previdenciario_professor',
+  TEACHER_RETIREMENT_PLANNING_RPPS = 'planejamento_aposentadoria_professor_rpps',
   SPECIAL_ACTIVITY = 'atividade_especial',
   JUDICIAL_CASE_ANALYSIS = 'analise_caso_judicial',
   ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS = 'analise_procedimento_administrativo_inss',
@@ -41,6 +42,8 @@ export enum AnalysisToolRecordTypeEnum {
   MATERNITY_PAY_GRANT = 'concessao_salario_maternidade',
   TEACHER_RETIREMENT_PLANNING_REJECTION = 'indeferimento_aposentadoria_professor',
   BPC_DISABILITY_TERMINATION = 'bpc_deficiente_cessado',
+  ELDERLY_BPC_REJECTION = 'indeferimento_bpc_idoso',
   ACCIDENT_ASSISTANCE_TERMINATED = 'auxilio_acidente_cessado',
   ACCIDENT_ASSISTANCE_GRANT = 'concessao_auxilio_acidente',
+  RETIREMENT_PERMANENT_DISABILITY_REVISION = 'revisao_aposentadoria_invalidez',
 }

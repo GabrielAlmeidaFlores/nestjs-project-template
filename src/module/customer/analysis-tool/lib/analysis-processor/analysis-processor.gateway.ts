@@ -460,13 +460,6 @@ export abstract class AnalysisProcessorGateway {
     files: Buffer[],
   ): Promise<string | null>;
 
-  public abstract getGeneralUrbanRetirementDenialFirstAnalysis(
-    systemInstruction: string,
-    cnisAnalysisJson: string,
-    files: Buffer[],
-    asJson?: boolean,
-  ): Promise<string | null>;
-
   public abstract getGeneralUrbanRetirementDenialPppAnalysis(
     systemInstruction: string,
     files: Buffer[],
@@ -765,9 +758,38 @@ export abstract class AnalysisProcessorGateway {
     files: Buffer[],
   ): Promise<string | null>;
 
+  public abstract getElderlyBpcRejectionCompleteAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getElderlyBpcRejectionSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+    completeAnalysis: string,
+  ): Promise<string | null>;
+
   public abstract getAccidentAssistanceGrantFirstAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
     files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getRetirementPermanentDisabilityRevisionCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getRetirementPermanentDisabilityRevisionSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getRetirementPermanentDisabilityRevisionFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson?: boolean,
   ): Promise<string | null>;
 }

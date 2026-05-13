@@ -120,6 +120,7 @@ export class ListAnalysisToolRecordUseCase {
       analysisToolRecord.teacherRetirementPlanning ??
       analysisToolRecord.generalUrbanRetirementGrant ??
       analysisToolRecord.generalUrbanRetirementAnalysis ??
+      analysisToolRecord.generalUrbanRetirementReview ??
       analysisToolRecord.judicialCaseAnalysis ??
       analysisToolRecord.administrativeProcedureInssAnalysis ??
       analysisToolRecord.medicalAndSocialReportObjectionGeneratorAnalysis ??
@@ -149,10 +150,12 @@ export class ListAnalysisToolRecordUseCase {
       analysisToolRecord.temporaryIncapacityBenefitTermination ??
       analysisToolRecord.deathBenefitRejection ??
       analysisToolRecord.bpcElderlyAnalysis ??
+      analysisToolRecord.bpcElderlyCessation ??
       analysisToolRecord.teacherRetirementPlanningRejection ??
       analysisToolRecord.accidentAssistanceTerminated ??
       analysisToolRecord.temporaryDisabilityBenefitsTerminated ??
       analysisToolRecord.maternityPayRejection ??
+      analysisToolRecord.elderlyBpcRejection ??
       analysisToolRecord.bpcElderlyCessation;
 
     return (

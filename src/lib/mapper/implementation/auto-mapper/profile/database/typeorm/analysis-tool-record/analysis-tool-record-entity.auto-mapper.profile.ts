@@ -21,6 +21,7 @@ import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database
 import { DisabilityRetirementPlanningGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-grant.typeorm.entity';
 import { DisabilityRetirementPlanningRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-rejection.typeorm.entity';
 import { DisabilityRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning.typeorm.entity';
+import { ElderlyBpcRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/elderly-bpc-rejection.typeorm.entity';
 import { GeneralUrbanRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis.typeorm.entity';
 import { GeneralUrbanRetirementDenialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-denial.typeorm.entity';
 import { GeneralUrbanRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant.typeorm.entity';
@@ -33,6 +34,7 @@ import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@
 import { MedicalQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { PerCapitaIncomeForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis.typeorm.entity';
+import { RetirementPermanentDisabilityRevisionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
 import { RuralOrHybridRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-analysis.typeorm.entity';
@@ -73,6 +75,7 @@ import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analy
 import { DisabilityRetirementPlanningEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/disability-retirement-planning.entity';
 import { DisabilityRetirementPlanningGrantEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant/disability-retirement-planning-grant.entity';
 import { DisabilityRetirementPlanningRejectionEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection/disability-retirement-planning-rejection.entity';
+import { ElderlyBpcRejectionEntity } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/schema/entity/elderly-bpc-rejection/elderly-bpc-rejection.entity';
 import { GeneralUrbanRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/general-urban-retirement-analysis-entity';
 import { GeneralUrbanRetirementDenialEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/general-urban-retirement-denial.entity';
 import { GeneralUrbanRetirementGrantEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/general-urban-retirement-grant.entity';
@@ -84,6 +87,7 @@ import { MaternityPayRejectionEntity } from '@module/customer/analysis-tool/modu
 import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
 import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
 import { PerCapitaIncomeForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.entity';
+import { RetirementPermanentDisabilityRevisionEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision/retirement-permanent-disability-revision.entity';
 import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
 import { RuralOrHybridRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/domain/schema/entity/rural-or-hybrid-retirement-analysis/rural-or-hybrid-retirement-analysis.entity';
@@ -277,6 +281,16 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
               source.bpcElderlyAnalysis,
               BpcElderlyAnalysisTypeormEntity,
               BpcElderlyAnalysisEntity,
+            )
+          : null;
+
+      const elderlyBpcRejection =
+        source.elderlyBpcRejection !== null &&
+        source.elderlyBpcRejection !== undefined
+          ? this.mapper.map(
+              source.elderlyBpcRejection,
+              ElderlyBpcRejectionTypeormEntity,
+              ElderlyBpcRejectionEntity,
             )
           : null;
 
@@ -526,6 +540,16 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const retirementPermanentDisabilityRevision =
+        source.retirementPermanentDisabilityRevision !== null &&
+        source.retirementPermanentDisabilityRevision !== undefined
+          ? this.mapper.map(
+              source.retirementPermanentDisabilityRevision,
+              RetirementPermanentDisabilityRevisionTypeormEntity,
+              RetirementPermanentDisabilityRevisionEntity,
+            )
+          : null;
+
       return new AnalysisToolRecordEntity({
         id: new AnalysisToolRecordId(source.id),
         code: new AnalysisToolRecordCode(source.code),
@@ -554,6 +578,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         perCapitaIncomeForBpcAnalysis,
         bpcDisabilityDenial,
         bpcElderlyAnalysis,
+        elderlyBpcRejection,
         accidentAssistanceTerminated,
         bpcElderlyCessation,
         ruralTimelineAnalysis,
@@ -580,6 +605,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         bpcDisabilityTermination,
         maternityPayGrant,
         accidentAssistanceGrant,
+        retirementPermanentDisabilityRevision,
       });
     };
 
@@ -810,6 +836,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const elderlyBpcRejection =
+        source.elderlyBpcRejection !== null
+          ? this.mapper.map(
+              source.elderlyBpcRejection,
+              ElderlyBpcRejectionEntity,
+              ElderlyBpcRejectionTypeormEntity,
+            )
+          : null;
+
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         AnalysisToolClientEntity,
@@ -989,6 +1024,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const retirementPermanentDisabilityRevision =
+        source.retirementPermanentDisabilityRevision !== null
+          ? this.mapper.map(
+              source.retirementPermanentDisabilityRevision,
+              RetirementPermanentDisabilityRevisionEntity,
+              RetirementPermanentDisabilityRevisionTypeormEntity,
+            )
+          : null;
+
       return AnalysisToolRecordTypeormEntity.build({
         id: source.id.toString(),
         code: source.code.toString(),
@@ -1016,6 +1060,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         bpcDisabilityDenial,
         bpcDisabilityTermination,
         bpcElderlyAnalysis,
+        elderlyBpcRejection,
         accidentAssistanceTerminated,
         bpcElderlyCessation,
         ruralTimeline,
@@ -1043,6 +1088,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         disabilityRetirementPlanningRejection,
         maternityPayRejection,
         accidentAssistanceGrant,
+        retirementPermanentDisabilityRevision,
         createdBy: {
           id: source.createdBy.toString(),
         } as OrganizationMemberTypeormEntity,

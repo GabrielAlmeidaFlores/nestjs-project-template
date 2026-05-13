@@ -36,6 +36,16 @@ export class SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentRespon
   })
   public conventionalPeriodEndDate: Date;
 
+  @ResponseDtoStringProperty({
+    description: 'Período original no formato: início a término.',
+  })
+  public originalPeriod: string;
+
+  @ResponseDtoStringProperty({
+    description: 'Período convencional no formato: início a término.',
+  })
+  public conventionalPeriod: string;
+
   protected override readonly _type =
     SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentResponseDto.name;
 }
