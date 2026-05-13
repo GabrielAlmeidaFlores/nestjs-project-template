@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 
+import { AccidentAssistanceGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-grant/accident-assistance-grant.typeorm.entity';
 import { AccidentAssistanceTerminatedTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-assistance-terminated.entity';
 import { AccidentBenefitRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/accident-benefit-rejection.typeorm.entity';
 import { AdministrativeProcedureInssAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis.entity';
@@ -378,6 +379,10 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   )
   @JoinColumn({ name: 'accident_assistance_terminated_id' })
   public accidentAssistanceTerminated?: AccidentAssistanceTerminatedTypeormEntity | null;
+
+  @ManyToOne(() => AccidentAssistanceGrantTypeormEntity)
+  @JoinColumn({ name: 'accident_assistance_grant_id' })
+  public accidentAssistanceGrant?: AccidentAssistanceGrantTypeormEntity | null;
 
   @ManyToOne(
     () => AnalysisToolClientTypeormEntity,
