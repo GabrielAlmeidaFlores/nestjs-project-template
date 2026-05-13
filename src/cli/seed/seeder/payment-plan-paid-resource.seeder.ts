@@ -84,6 +84,24 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise simplificada do planejamento previdenciário de professor com IA, apresentando diagnóstico objetivo de elegibilidade, pontos de atenção e próximos passos recomendados.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_RPPS_COMPLETE_ANALYSIS,
+      creditCost: 8,
+      title: 'APOSENTADORIA DO PROFESSOR RPPS - ANÁLISE COMPLETA',
+      description:
+        'Planejamento completo de aposentadoria para professor do RPPS com IA. Analisa períodos de magistério no serviço público, vínculos por instituição, remunerações, regras específicas do ente federativo e processos para estimar cenários e estratégia previdenciária mais vantajosa.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_RPPS_SIMPLIFIED_ANALYSIS,
+      creditCost: 5,
+      title: 'APOSENTADORIA DO PROFESSOR RPPS - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada da aposentadoria do professor no RPPS com IA, apresentando diagnóstico objetivo de elegibilidade, pontos de atenção e próximos passos recomendados para o regime próprio de previdência social.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('c32c6734-bb4a-405f-8c84-5199848b1dcb'),
       resource: PaymentPlanPaidResourceTypeEnum.LEGAL_PROCEEDING_MONITORING,
       creditCost: 0,
