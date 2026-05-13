@@ -2272,7 +2272,34 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise do Perfil Profissiográfico Previdenciário (PPP) para o caso de indeferimento de aposentadoria do professor. Identifica períodos de trabalho, atividades exercidas, exposição a agentes nocivos e classifica cada período para fins previdenciários.',
     }),
-
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e1a2b3c4-d5e6-4f7a-8b9c-0d1e2f3a4b5c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REVISION_COMPLETE_ANALYSIS,
+      creditCost: 6,
+      title: 'REVISÃO APOSENTADORIA INVALIDEZ PERMANENTE - ANÁLISE COMPLETA',
+      description:
+        'Análise completa de revisão de aposentadoria por invalidez permanente com IA. Examina o histórico contributivo, a carta de concessão, os salários de contribuição, o cálculo da RMI/RMA, os períodos reconhecidos e os documentos do processo administrativo, gerando parecer técnico detalhado com identificação de irregularidades, fundamentação jurídica e recomendação estratégica.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f2b3c4d5-e6f7-4a8b-9c0d-1e2f3a4b5c6d'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REVISION_SIMPLIFIED_ANALYSIS,
+      creditCost: 2,
+      title:
+        'REVISÃO APOSENTADORIA INVALIDEZ PERMANENTE - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada de revisão de aposentadoria por invalidez permanente com IA. Resume os principais achados, indica a viabilidade geral da revisão, os pontos críticos e os próximos passos recomendados, em linguagem acessível para apresentação ao cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a3c4d5e6-f7a8-4b9c-8d1e-2f3a4b5c6d7e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REVISION_FIRST_ANALYSIS,
+      creditCost: 4,
+      title: 'REVISÃO APOSENTADORIA INVALIDEZ PERMANENTE - PRIMEIRA ANÁLISE',
+      description:
+        'Primeira análise de revisão de aposentadoria por invalidez permanente com IA, combinando dados do caso com leitura e interpretação do CNIS. Gera parecer inicial técnico com detalhamento da carta de concessão, tempo de contribuição, salários de contribuição não considerados e ações recomendadas.',
+    }),
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('eb1c2d3e-4f5a-4b6c-9d7e-2f5a0b1c2d3e'),
       resource:
