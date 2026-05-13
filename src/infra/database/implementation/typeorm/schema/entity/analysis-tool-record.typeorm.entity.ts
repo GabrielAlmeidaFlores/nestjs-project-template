@@ -30,6 +30,7 @@ import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@
 import { MedicalQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { PerCapitaIncomeForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis.typeorm.entity';
+import { RetirementPermanentDisabilityRevisionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
 import { RuralOrHybridRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-or-hybrid-retirement-analysis.typeorm.entity';
@@ -383,6 +384,10 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   @ManyToOne(() => AccidentAssistanceGrantTypeormEntity)
   @JoinColumn({ name: 'accident_assistance_grant_id' })
   public accidentAssistanceGrant?: AccidentAssistanceGrantTypeormEntity | null;
+
+  @ManyToOne(() => RetirementPermanentDisabilityRevisionTypeormEntity)
+  @JoinColumn({ name: 'retirement_permanent_disability_revision_id' })
+  public retirementPermanentDisabilityRevision?: RetirementPermanentDisabilityRevisionTypeormEntity | null;
 
   @ManyToOne(
     () => AnalysisToolClientTypeormEntity,

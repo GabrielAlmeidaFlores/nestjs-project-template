@@ -98,6 +98,8 @@ export class AnalysisActivityMessageFactory {
       'Indeferimento de BPC ao Idoso',
     [AnalysisToolRecordTypeEnum.ACCIDENT_ASSISTANCE_GRANT]:
       'Concessão de auxílio-acidente',
+    [AnalysisToolRecordTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REVISION]:
+      'Revisão de aposentadoria por invalidez permanente',
   };
 
   private static readonly actionLabelMap: Record<

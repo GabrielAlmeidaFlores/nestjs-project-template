@@ -44,4 +44,5 @@ export enum AnalysisToolRecordTypeEnum {
   ELDERLY_BPC_REJECTION = 'indeferimento_bpc_idoso',
   ACCIDENT_ASSISTANCE_TERMINATED = 'auxilio_acidente_cessado',
   ACCIDENT_ASSISTANCE_GRANT = 'concessao_auxilio_acidente',
+  RETIREMENT_PERMANENT_DISABILITY_REVISION = 'revisao_aposentadoria_invalidez',
 }

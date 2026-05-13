@@ -3214,6 +3214,68 @@ For probativeForce, classify each document as:
     );
   }
 
+  public async getRetirementPermanentDisabilityRevisionCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getRetirementPermanentDisabilityRevisionCompleteAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getRetirementPermanentDisabilityRevisionSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getRetirementPermanentDisabilityRevisionFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson = true,
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANT
+- Base the technical analysis primarily on the already processed CNIS analysis in JSON format.
+- Calculate only values that are not already present in the provided CNIS analysis.
+- Return strictly a JSON object compatible with the requested schema.
+
+Processed CNIS analysis:
+${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: asJson
+          ? ResponseConfigInputModel.build({
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema:
+                this.getRetirementPermanentDisabilityRevisionFirstAnalysisJsonSchema(),
+            })
+          : null,
+      }),
+    );
+  }
+
   public async getElderlyBpcRejectionCompleteAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
@@ -3254,6 +3316,114 @@ Processed CNIS analysis:
         ...(files.length > 0 && { promptFiles: files }),
       }),
     );
+  }
+
+  private getRetirementPermanentDisabilityRevisionFirstAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        benefitAnalysis: {
+          type: 'object',
+          properties: {
+            benefitType: {
+              type: 'string',
+              description: 'Tipo de benefício previdenciário concedido.',
+            },
+            dib: {
+              type: 'string',
+              description: 'DIB no formato DD/MM/YYYY.',
+            },
+            initialMonthlyIncome: {
+              type: 'number',
+              description: 'RMI - Renda Mensal Inicial.',
+            },
+            updatedMonthlyIncome: {
+              type: 'number',
+              description: 'RMA - Renda Mensal Atualizada.',
+            },
+            insuredName: {
+              type: 'string',
+              description: 'Nome completo do segurado.',
+            },
+          },
+          required: [
+            'benefitType',
+            'dib',
+            'initialMonthlyIncome',
+            'updatedMonthlyIncome',
+            'insuredName',
+          ],
+        },
+        contributionTime: {
+          type: 'object',
+          properties: {
+            minimumRequired: {
+              type: 'object',
+              properties: {
+                withoutPendingIssues: {
+                  type: 'string',
+                  description:
+                    'Tempo reconhecido sem resolver pendências. Ex: 23 years and 4 months.',
+                },
+                afterResolvingPendingIssues: {
+                  type: 'string',
+                  description:
+                    'Tempo após regularização das pendências. Ex: 27 years and 8 months.',
+                },
+                withCollaborators: {
+                  type: 'string',
+                  description:
+                    'Tempo considerando vínculos adicionais. Ex: 30 years and 2 months.',
+                },
+              },
+              required: [
+                'withoutPendingIssues',
+                'afterResolvingPendingIssues',
+                'withCollaborators',
+              ],
+            },
+            description: {
+              type: 'string',
+              description:
+                'Texto explicativo sobre regras de tempo de contribuição.',
+            },
+          },
+          required: ['minimumRequired', 'description'],
+        },
+        concessionLetterBreakdown: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              competence: {
+                type: 'string',
+                description: 'Competência no formato MM/YYYY.',
+              },
+              amount: {
+                type: 'number',
+                description: 'Valor do salário de contribuição.',
+              },
+              reasonNotConsidered: {
+                type: 'string',
+                description:
+                  'Motivo pelo qual a competência não foi considerada.',
+              },
+              action: {
+                type: 'string',
+                description:
+                  'Ação recomendada para regularizar ou incluir a competência.',
+              },
+            },
+            required: ['competence', 'amount', 'reasonNotConsidered', 'action'],
+          },
+        },
+      },
+      required: [
+        'benefitAnalysis',
+        'contributionTime',
+        'concessionLetterBreakdown',
+      ],
+    };
   }
 
   private getSurvivorPensionAnalysisResultJsonSchema(): object {
@@ -10369,6 +10539,142 @@ Análise processada do CNIS:
         },
       },
       required: ['firstAnalysis', 'analysisConclusion'],
+    };
+  }
+
+  private getRetirementPermanentDisabilityRevisionCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        benefitReviewEligible: {
+          type: 'string',
+          description: 'Indica se o cliente possui direito à revisão.',
+        },
+        benefitReviewStatusMessage: {
+          type: 'string',
+          description: 'Mensagem principal exibida no topo.',
+        },
+        benefitReviewSummary: {
+          type: 'string',
+          description: 'Resumo da conclusão da análise.',
+        },
+        benefitReviewAlertType: {
+          type: 'string',
+          description: 'Tipo visual do alerta da interface.',
+        },
+        introductoryText: {
+          type: 'string',
+          description: 'Texto introdutório/contextual.',
+        },
+        informationBoxType: {
+          type: 'string',
+          description: 'Tipo do box de informação.',
+        },
+        reviewTheses: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              thesisName: {
+                type: 'string',
+                description: 'Nome da tese revisional.',
+              },
+              thesisDescription: {
+                type: 'string',
+                description: 'Descrição detalhada da tese.',
+              },
+              thesisApplicable: {
+                type: 'string',
+                description: 'Indica se a tese é aplicável.',
+              },
+            },
+            required: ['thesisName', 'thesisDescription', 'thesisApplicable'],
+          },
+        },
+        benefitType: {
+          type: 'string',
+          description: 'Tipo do benefício analisado.',
+        },
+        reviewPossible: {
+          type: 'string',
+          description: 'Indica se existe possibilidade de revisão.',
+        },
+        reviewTypes: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              reviewTypeName: {
+                type: 'string',
+                description: 'Nome do tipo de revisão.',
+              },
+              reviewTypeStatus: {
+                type: 'string',
+                description: 'Status da revisão.',
+              },
+            },
+            required: ['reviewTypeName', 'reviewTypeStatus'],
+          },
+        },
+        originalRMI: {
+          type: 'string',
+          description: 'Valor original da RMI.',
+        },
+        originalRMA: {
+          type: 'string',
+          description: 'Valor original da RMA.',
+        },
+        revisedRMI: {
+          type: 'string',
+          description: 'Valor revisado da RMI.',
+        },
+        revisedRMA: {
+          type: 'string',
+          description: 'Valor revisado da RMA.',
+        },
+        estimatedCaseValue: {
+          type: 'string',
+          description: 'Valor estimado da causa.',
+        },
+        detailedAnalysisText: {
+          type: 'string',
+          description: 'Texto completo da análise detalhada.',
+        },
+        analysisResultsText: {
+          type: 'string',
+          description: 'Resultado final da análise.',
+        },
+        analysisResultType: {
+          type: 'string',
+          description: 'Tipo do resultado final.',
+        },
+        downloadContent: {
+          type: 'string',
+          description:
+            'Conteúdo completo da análise em Markdown para geração do download.',
+        },
+      },
+      required: [
+        'benefitReviewEligible',
+        'benefitReviewStatusMessage',
+        'benefitReviewSummary',
+        'benefitReviewAlertType',
+        'introductoryText',
+        'informationBoxType',
+        'reviewTheses',
+        'benefitType',
+        'reviewPossible',
+        'reviewTypes',
+        'originalRMI',
+        'originalRMA',
+        'revisedRMI',
+        'revisedRMA',
+        'estimatedCaseValue',
+        'detailedAnalysisText',
+        'analysisResultsText',
+        'analysisResultType',
+        'downloadContent',
+      ],
     };
   }
 }
