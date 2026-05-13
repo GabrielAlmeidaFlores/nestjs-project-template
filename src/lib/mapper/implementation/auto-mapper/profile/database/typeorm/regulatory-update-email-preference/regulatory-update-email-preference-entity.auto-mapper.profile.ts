@@ -38,6 +38,8 @@ export class RegulatoryUpdateEmailPreferenceEntityAutoMapperProfile {
         id: new RegulatoryUpdateEmailPreferenceId(source.id),
         customerId: new CustomerId(source.customer.id),
         emailEnabled: source.emailEnabled,
+        sendFrequency: source.sendFrequency ?? null,
+        sendDays: source.sendDays ?? null,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
@@ -68,6 +70,8 @@ export class RegulatoryUpdateEmailPreferenceEntityAutoMapperProfile {
         customerId: new CustomerId(source.customer.id),
         emailEnabled: source.emailEnabled,
         customerEmail: source.customer.authIdentity.email,
+        sendFrequency: source.sendFrequency ?? null,
+        sendDays: source.sendDays ?? null,
       });
     };
 

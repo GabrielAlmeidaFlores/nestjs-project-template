@@ -152,8 +152,13 @@ export class ListAnalysisToolRecordUseCase {
       analysisToolRecord.accidentAssistanceTerminated ??
       analysisToolRecord.temporaryDisabilityBenefitsTerminated ??
       analysisToolRecord.maternityPayRejection ??
-      analysisToolRecord.elderlyBpcRejection;
+      analysisToolRecord.elderlyBpcRejection ??
+      analysisToolRecord.bpcElderlyCessation;
 
-    return analysis?.id ?? null;
+    return (
+      analysis?.id ??
+      analysisToolRecord.accidentAssistanceGrant?.accidentAssistanceGrantId ??
+      null
+    );
   }
 }

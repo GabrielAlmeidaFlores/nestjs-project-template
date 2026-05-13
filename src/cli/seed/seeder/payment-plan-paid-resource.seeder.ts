@@ -370,6 +370,15 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise simplificada da concessão de aposentadoria especial com IA. Resume elegibilidade, principais pendências e próximos passos recomendados, baseada em CNIS e PPPs.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('3d6a2e4f-7c2b-4a6e-8f5d-2b1c0e9a7d3f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.PERIOD_NO_END_DATE_DOCUMENT_ANALYSIS,
+      creditCost: 2,
+      title: 'ANÁLISE DE DOCUMENTO DE PERÍODO SEM DATA FIM',
+      description:
+        'Análise de documento de período sem data fim com IA. Com base no arquivo enviado, a IA identifica a data de encerramento do vínculo ou período e elabora observação técnica detalhada em markdown com os elementos relevantes encontrados.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('4e9d2c1b-6a7f-4d8e-9b3c-1f2a3d4e5b6c'),
       resource:
         PaymentPlanPaidResourceTypeEnum.SPECIAL_RETIREMENT_REJECTION_COMPLETE_ANALYSIS,
@@ -2051,6 +2060,33 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       title: 'DIAGNÓSTICO AUXÍLIO-ACIDENTE (RGPS) - PRIMEIRA ANÁLISE',
       description:
         'Primeira análise de cessação de auxílio-acidente com IA, combinando os dados estruturados do caso com a leitura e interpretação do CNIS. Gera parecer inicial técnico sobre tempo de contribuição, carência, períodos relevantes, pontos de atenção e viabilidade preliminar de reversão da cessação.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('636d4d00-3c9c-499f-adf7-61b63d2fe430'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_ASSISTANCE_GRANT_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title: 'AUXÍLIO-ACIDENTE (RGPS) CONCESSÃO - ANÁLISE COMPLETA',
+      description:
+        'Análise completa do direito à concessão de auxílio-acidente com IA. Examina documentos do caso, CNIS, laudos médicos e histórico previdenciário para verificar a presença de acidente de trabalho, o nexo causal, a redução da capacidade laborativa e os requisitos legais para concessão do benefício, emitindo parecer técnico conclusivo com fundamentação legal e jurisprudencial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('4fb3901a-7495-48ce-97e2-43b402fa1111'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_ASSISTANCE_GRANT_SIMPLIFIED_ANALYSIS,
+      creditCost: 2,
+      title: 'AUXÍLIO-ACIDENTE (RGPS) CONCESSÃO - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada do direito à concessão de auxílio-acidente com IA. Verifica os principais critérios para concessão do benefício, identifica os pontos fortes e fracos do caso e apresenta de forma objetiva as possibilidades de êxito. Versão resumida e acessível para apresentação ao cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('0f6692b8-b3cb-4b94-b497-bdf7fb9a2389'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ACCIDENT_ASSISTANCE_GRANT_FIRST_ANALYSIS,
+      creditCost: 4,
+      title: 'AUXÍLIO-ACIDENTE (RGPS) CONCESSÃO - PRIMEIRA ANÁLISE',
+      description:
+        'Primeira análise de concessão de auxílio-acidente com IA, combinando os dados estruturados do caso com a leitura e interpretação do CNIS. Gera parecer inicial técnico sobre a ocorrência do acidente, nexo causal, redução da capacidade laborativa, períodos relevantes e viabilidade preliminar de concessão do benefício.',
     }),
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('f7a1b2c3-d4e5-4f6a-8b9c-0d1e2f3a4b60'),
