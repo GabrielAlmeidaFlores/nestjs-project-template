@@ -3209,6 +3209,48 @@ For probativeForce, classify each document as:
     );
   }
 
+  public async getElderlyBpcRejectionCompleteAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANT
+- Base the technical analysis primarily on the already processed CNIS analysis in JSON format.
+- Calculate only values that are not already present in the provided CNIS analysis.
+- Return strictly a JSON object compatible with the requested schema.
+
+Processed CNIS analysis:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: this.getElderlyBpcRejectionCompleteAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getElderlyBpcRejectionSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+    completeAnalysis: string,
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt: completeAnalysis,
+        ...(files.length > 0 && { promptFiles: files }),
+      }),
+    );
+  }
+
   private getSurvivorPensionAnalysisResultJsonSchema(): object {
     return {
       type: 'object',
@@ -10162,6 +10204,99 @@ For probativeForce, classify each document as:
         'estimatedValueClaim',
         'analysisResult',
         'completeAnalysisDownload',
+      ],
+    };
+  }
+
+  private getElderlyBpcRejectionCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        isElligibleForElderlyBpc: {
+          type: 'boolean',
+          description:
+            'Indica se o requerente é elegível para o BPC idoso com base na análise completa do caso.',
+        },
+        totalFamiliarIncome: {
+          type: 'string',
+          description:
+            'Renda familiar total mensal declarada e/ou apurada, expressa em reais (ex: R$ 1.200,00).',
+        },
+        perCapitaIncome: {
+          type: 'string',
+          description:
+            'Renda per capita do grupo familiar, expressa em reais (ex: R$ 200,00).',
+        },
+        lessThanOneQuarter: {
+          type: 'boolean',
+          description:
+            'Indica se a renda per capita é inferior a 1/4 do salário mínimo vigente.',
+        },
+        ageGreaterThanOrEqualToSixtyFiveYears: {
+          type: 'boolean',
+          description:
+            'Indica se o requerente possui 65 anos de idade ou mais.',
+        },
+        retirementRules: {
+          type: 'array',
+          description:
+            'Lista de regras de aposentadoria avaliadas para o requerente.',
+          items: {
+            type: 'object',
+            properties: {
+              ruleName: {
+                type: 'string',
+                description: 'Nome da regra de aposentadoria avaliada.',
+              },
+              fulfilled: {
+                type: 'boolean',
+                description: 'Indica se a regra foi cumprida pelo requerente.',
+              },
+              benefitStartDate: {
+                type: 'string',
+                description:
+                  'Data de início do benefício caso a regra seja cumprida, no formato DD/MM/AAAA.',
+              },
+              bestRmi: {
+                type: 'boolean',
+                description:
+                  'Indica se esta regra resulta na melhor RMI para o requerente.',
+              },
+              biggestCauseValue: {
+                type: 'boolean',
+                description:
+                  'Indica se esta regra resulta no maior valor de causa.',
+              },
+              detaildAnalysis: {
+                type: 'string',
+                description:
+                  'Análise detalhada da regra, incluindo os requisitos, o que foi atendido e o que falta para cumprimento.',
+              },
+            },
+            required: [
+              'ruleName',
+              'fulfilled',
+              'benefitStartDate',
+              'bestRmi',
+              'biggestCauseValue',
+              'detaildAnalysis',
+            ],
+          },
+        },
+        analysisResult: {
+          type: 'string',
+          description:
+            'Análise completa e detalhada do caso de indeferimento do BPC idoso, incluindo avaliação da composição familiar, renda per capita, elegibilidade por idade e conclusão fundamentada sobre a viabilidade de reversão do indeferimento. A análise deve ser formatada em Markdown, pronta para exportação em PDF/DOCX.',
+        },
+      },
+      required: [
+        'isElligibleForElderlyBpc',
+        'totalFamiliarIncome',
+        'perCapitaIncome',
+        'lessThanOneQuarter',
+        'ageGreaterThanOrEqualToSixtyFiveYears',
+        'retirementRules',
+        'analysisResult',
       ],
     };
   }
