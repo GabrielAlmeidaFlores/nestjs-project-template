@@ -27,6 +27,7 @@ import { DisabilityAssessmentForBpcAnalysisModule } from '@module/customer/analy
 import { DisabilityRetirementPlanningModule } from '@module/customer/analysis-tool/module/disability-retirement-planning/disability-retirement-planning.module';
 import { DisabilityRetirementPlanningGrantModule } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/disability-retirement-planning-grant.module';
 import { DisabilityRetirementPlanningRejectionModule } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/disability-retirement-planning-rejection.module';
+import { ElderlyBpcRejectionModule } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/elderly-bpc-rejection.module';
 import { GeneralUrbanRetirementModule } from '@module/customer/analysis-tool/module/general-urban-retirement/general-urban-retirement.module';
 import { GeneralUrbanRetirementDenialModule } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/general-urban-retirement-denial.module';
 import { GeneralUrbanRetirementGrantModule } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/general-urban-retirement-grant.module';
@@ -39,6 +40,7 @@ import { MaternityPayRejectionModule } from '@module/customer/analysis-tool/modu
 import { MedicalAndSocialReportObjectionGeneratorAnalysisModule } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.module';
 import { MedicalQuestionGeneratorModule } from '@module/customer/analysis-tool/module/medical-question-generator/medical-question-generator.module';
 import { PerCapitaIncomeForBpcAnalysisModule } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.module';
+import { RetirementPermanentDisabilityRevisionModule } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/retirement-permanent-disability-revision.module';
 import { RetirementPlanningRgpsModule } from '@module/customer/analysis-tool/module/retirement-planning-rgps/retirement-planning-rgps.module';
 import { RetirementPlanningRppsModule } from '@module/customer/analysis-tool/module/retirement-planning-rpps/retirement-planning-rpps.module';
 import { RuralOrHybridRetirementAnalysisModule } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-analysis/rural-or-hybrid-retirement-analysis.module';
@@ -51,6 +53,7 @@ import { SpecialRetirementRejectionModule } from '@module/customer/analysis-tool
 import { SpeechGeneratorModule } from '@module/customer/analysis-tool/module/speech-generator/speech-generator.module';
 import { SurvivorPensionAnalysisModule } from '@module/customer/analysis-tool/module/survivor-pension-analysis/survivor-pension-analysis.module';
 import { TeacherRetirementPlanningModule } from '@module/customer/analysis-tool/module/teacher-retirement-planning/teacher-retirement-planning.module';
+import { TeacherRetirementPlanningRppsModule } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/teacher-retirement-planning-rpps.module';
 import { TeacherRetirementPlanningRejectionModule } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/teacher-retirement-planning-rejection.module';
 import { TemporaryDisabilityBenefitsGrantModule } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/temporary-disability-benefits-grant.module';
 import { TemporaryDisabilityBenefitsTerminatedModule } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/temporary-disability-benefits-terminated.module';
@@ -111,12 +114,14 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     LegalPleadingModule,
     RuralTimelineAnalysisModule,
     RuralOrHybridRetirementRejectionModule,
+    ElderlyBpcRejectionModule,
     RuralOrHybridRetirementAnalysisModule,
     RetirementPlanningRgpsModule,
     RetirementPlanningRppsModule,
     SpecialRetirementGrantModule,
     SpecialRetirementRejectionModule,
     TeacherRetirementPlanningModule,
+    TeacherRetirementPlanningRppsModule,
     TeacherRetirementPlanningRejectionModule,
     DisabilityRetirementPlanningModule,
     DisabilityRetirementPlanningGrantModule,
@@ -136,6 +141,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     TemporaryIncapacityBenefitTerminationModule,
     AccidentBenefitRejectionModule,
     MaternityPayRejectionModule,
+    RetirementPermanentDisabilityRevisionModule,
   ],
   controllers: [AnalysisToolController],
   providers: [
