@@ -1080,6 +1080,71 @@ Análise processada do CNIS:
       GenerateResponseInputModel.build({
         systemInstruction,
         promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: {
+            type: 'object',
+            properties: {
+              tipoBeneficio: {
+                type: 'string',
+                description: 'Tipo do benefício previdenciário concedido',
+              },
+              nomeSegurado: {
+                type: 'string',
+                description: 'Nome completo do segurado beneficiário',
+              },
+              dib: {
+                type: 'string',
+                description:
+                  'Data de início do benefício (DIB) no formato DD/MM/AAAA',
+              },
+              rmi: {
+                type: 'string',
+                description:
+                  'Renda mensal inicial (RMI) do benefício. Exemplo: R$ 1.234,56',
+              },
+              rma: {
+                type: 'string',
+                description:
+                  'Renda mensal atual (RMA) do benefício. Exemplo: R$ 1.234,56',
+              },
+              competenciasNaoConsideradas: {
+                type: 'array',
+                description:
+                  'Lista de competências que não foram consideradas no cálculo do benefício',
+                items: {
+                  type: 'object',
+                  properties: {
+                    competencia: {
+                      type: 'string',
+                      description:
+                        'Mês/ano da competência no formato MM/AAAA. Exemplo: 03/2019',
+                    },
+                    valor: {
+                      type: 'string',
+                      description:
+                        'Valor da contribuição não considerada. Exemplo: R$ 500,00',
+                    },
+                    motivo: {
+                      type: 'string',
+                      description:
+                        'Motivo pelo qual a competência não foi considerada no cálculo',
+                    },
+                  },
+                  required: ['competencia', 'valor', 'motivo'],
+                },
+              },
+            },
+            required: [
+              'tipoBeneficio',
+              'nomeSegurado',
+              'dib',
+              'rmi',
+              'rma',
+              'competenciasNaoConsideradas',
+            ],
+          },
+        }),
       }),
     );
   }

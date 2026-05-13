@@ -202,6 +202,16 @@ export class AnalyzeGeneralUrbanRetirementReviewPppUseCase {
                     description:
                       'Tempo de contribuição ganho com o reconhecimento do vínculo, retorne vazio se não houver. Ex. Período original: 5 anos, 6 meses e 15 dias | Período convencional: 7 anos, 2 meses e 10 dias',
                   },
+                  periodoOriginal: {
+                    type: 'string',
+                    description:
+                      'Período original de trabalho constante no PPP, no formato DD/MM/AAAA a DD/MM/AAAA. Ex: 01/03/2005 a 15/08/2018. Retorne vazio se não houver.',
+                  },
+                  periodoConvencional: {
+                    type: 'string',
+                    description:
+                      'Período convencional reconhecido após aplicação do fator de conversão de tempo especial, no formato DD/MM/AAAA a DD/MM/AAAA. Retorne vazio se não houver.',
+                  },
                   agentesNocivos: {
                     type: 'array',
                     description:
@@ -239,6 +249,8 @@ export class AnalyzeGeneralUrbanRetirementReviewPppUseCase {
                   'categoria',
                   'viabilidadeTempoEspecial',
                   'tempoContribuicaoGanho',
+                  'periodoOriginal',
+                  'periodoConvencional',
                   'agentesNocivos',
                 ],
               },
@@ -246,6 +258,31 @@ export class AnalyzeGeneralUrbanRetirementReviewPppUseCase {
           }),
         }),
       )) ?? '';
+
+    let periodoOriginal: string | undefined;
+    let periodoConvencional: string | undefined;
+
+    if (result) {
+      try {
+        const parsed: unknown = JSON.parse(result);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const firstItem: unknown = parsed[0];
+          if (firstItem !== null && typeof firstItem === 'object') {
+            const item = firstItem as Record<string, unknown>;
+            periodoOriginal =
+              typeof item['periodoOriginal'] === 'string'
+                ? item['periodoOriginal']
+                : undefined;
+            periodoConvencional =
+              typeof item['periodoConvencional'] === 'string'
+                ? item['periodoConvencional']
+                : undefined;
+          }
+        }
+      } catch {
+        // result não é JSON válido, periodoOriginal e periodoConvencional permanecem undefined
+      }
+    }
 
     const generalUrbanRetirementReviewSpecialPeriod =
       new GeneralUrbanRetirementReviewSpecialPeriodEntity({
@@ -269,6 +306,8 @@ export class AnalyzeGeneralUrbanRetirementReviewPppUseCase {
       generalUrbanRetirementReviewSpecialPeriodId:
         generalUrbanRetirementReviewSpecialPeriod.id,
       analysis: JSON.stringify(result),
+      periodoOriginal: periodoOriginal ?? null,
+      periodoConvencional: periodoConvencional ?? null,
     });
   }
 }
