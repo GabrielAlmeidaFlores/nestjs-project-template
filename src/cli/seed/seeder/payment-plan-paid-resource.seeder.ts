@@ -2254,6 +2254,25 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise do Perfil Profissiográfico Previdenciário (PPP) para o caso de indeferimento de aposentadoria do professor. Identifica períodos de trabalho, atividades exercidas, exposição a agentes nocivos e classifica cada período para fins previdenciários.',
     }),
+
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('eb1c2d3e-4f5a-4b6c-9d7e-2f5a0b1c2d3e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ELDERLY_BPC_REJECTION_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title: 'INDEFERIMENTO BPC AO IDOSO - ANÁLISE COMPLETA',
+      description:
+        'Análise completa de indeferimento do BPC ao Idoso com IA. Examina critério de idade (65 anos), renda familiar per capita, composição do grupo familiar, rendas e benefícios de cada membro, despesas dedutíveis, fundamentos da negativa e emite parecer técnico conclusivo com fundamentação legal e jurisprudencial e estratégia de reversão.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('ec2d3e4f-5a6b-4c7d-ae9f-9a0b1c8d3e4f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ELDERLY_BPC_REJECTION_SIMPLIFIED_ANALYSIS,
+      creditCost: 2,
+      title: 'INDEFERIMENTO BPC AO IDOSO - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada de indeferimento do BPC ao Idoso com IA. Verifica critério de idade e renda per capita familiar, identifica o fundamento da negativa e informa de forma objetiva e acessível sobre a possibilidade de reversão do indeferimento. Versão resumida para apresentação ao cliente ou familiar.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {

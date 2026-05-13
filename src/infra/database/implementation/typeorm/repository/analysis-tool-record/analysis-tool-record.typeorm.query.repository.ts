@@ -48,6 +48,7 @@ import { DisabilityAssessmentForBpcAnalysisId } from '@module/customer/analysis-
 import { DisabilityRetirementPlanningId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
 import { DisabilityRetirementPlanningGrantId } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant/value-object/disability-retirement-planning-grant-id.value-object';
 import { DisabilityRetirementPlanningRejectionId } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection/value-object/disability-retirement-planning-rejection-id/disability-retirement-planning-rejection-id.value-object';
+import { ElderlyBpcRejectionId } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/schema/entity/elderly-bpc-rejection/value-object/elderly-bpc-rejection-id/elderly-bpc-rejection-id.value-object';
 import { GeneralUrbanRetirementAnalysisId } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/value-object/general-urban-retirement-analysis-id.value-object';
 import { GeneralUrbanRetirementDenialId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/value-object/general-urban-retirement-denial-id/general-urban-retirement-denial-id.value-object';
 import { GeneralUrbanRetirementGrantId } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/value-object/general-urban-retirement-grant-id.value-object';
@@ -2638,6 +2639,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { maternityPayGrant: Not(IsNull()) },
         { teacherRetirementPlanningRejection: Not(IsNull()) },
         { accidentAssistanceTerminated: Not(IsNull()) },
+        { elderlyBpcRejection: Not(IsNull()) },
         { accidentAssistanceGrant: Not(IsNull()) },
       ];
 
@@ -3831,6 +3833,134 @@ export class AnalysisToolRecordTypeormQueryRepository
     return mappedData;
   }
 
+  public async findWithRelationsByElderlyBpcRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    elderlyBpcRejectionId: ElderlyBpcRejectionId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          elderlyBpcRejection: {
+            id: elderlyBpcRejectionId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          elderlyBpcRejection: {
+            elderlyBpcRejectionResult: true,
+            elderlyBpcRejectionDocument: true,
+            elderlyBpcRejectionInssBenefit: true,
+            elderlyBpcRejectionLegalProceeding: true,
+            elderlyBpcRejectionFamiliarGroup: {
+              elderlyBpcRejectionFamiliarGroupDocument: true,
+            },
+          },
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
+  public async findWithRelationsByElderlyBpcRejectionIdAndOrganizationIdOrFail(
+    elderlyBpcRejectionId: ElderlyBpcRejectionId,
+    organizationId: OrganizationId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          elderlyBpcRejection: {
+            id: elderlyBpcRejectionId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          elderlyBpcRejection: {
+            elderlyBpcRejectionResult: true,
+            elderlyBpcRejectionDocument: true,
+            elderlyBpcRejectionInssBenefit: true,
+            elderlyBpcRejectionLegalProceeding: true,
+            elderlyBpcRejectionFamiliarGroup: {
+              elderlyBpcRejectionFamiliarGroupDocument: true,
+            },
+          },
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
   private getAnalysisRelationKeyByType(
     type: AnalysisToolRecordTypeEnum,
   ): keyof AnalysisToolRecordTypeormEntity | null {
@@ -3987,6 +4117,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       'maternityPayGrant',
       'teacherRetirementPlanningRejection',
       'accidentAssistanceTerminated',
+      'elderlyBpcRejection',
       'accidentAssistanceGrant',
     ];
   }
