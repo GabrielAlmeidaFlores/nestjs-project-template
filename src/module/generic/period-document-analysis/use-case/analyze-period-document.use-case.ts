@@ -104,7 +104,7 @@ export class AnalyzePeriodDocumentUseCase {
         observacaoTecnica: {
           type: 'string',
           description:
-            'Observação técnica sobre o período analisado, em formato markdown, com todos os detalhes relevantes.',
+            'Observação técnica em MARKDOWN estruturado. OBRIGATÓRIO conter: (1) seção "## Identificação do Vínculo em Aberto" com empresa, trabalhador e data de início; (2) seção "## Provas Analisadas" com lista "- " dos documentos e sua força probatória; (3) seção "## Conclusão sobre Data Fim" com a data provável de desligamento e fundamento; (4) seção "## Como Regularizar" com lista numerada de providências; (5) seção "## Riscos e Observações" com alertas em **negrito** para os pontos críticos. Use "**...**" para destacar datas, nomes e pontos críticos.',
         },
         dataFim: {
           type: 'string',

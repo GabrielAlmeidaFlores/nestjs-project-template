@@ -66,6 +66,7 @@ export class CreateTeacherRetirementPlanningUseCase {
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
     dto: CreateTeacherRetirementPlanningRequestDto,
+    recordType: AnalysisToolRecordTypeEnum = AnalysisToolRecordTypeEnum.TEACHER_RETIREMENT_PLANNING,
   ): Promise<CreateTeacherRetirementPlanningResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
@@ -173,7 +174,7 @@ export class CreateTeacherRetirementPlanningUseCase {
     const analysisToolRecord = new AnalysisToolRecordEntity({
       id: new AnalysisToolRecordId(),
       code: new AnalysisToolRecordCode(countRecords + 1),
-      type: AnalysisToolRecordTypeEnum.TEACHER_RETIREMENT_PLANNING,
+      type: recordType,
       teacherRetirementPlanning,
       analysisToolClient,
       status: AnalysisStatusEnum.IN_PROGRESS,
