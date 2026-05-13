@@ -40,6 +40,8 @@ export class AnalysisActivityMessageFactory {
       'Análise da qualidade do segurado',
     [AnalysisToolRecordTypeEnum.TEACHER_RETIREMENT_PLANNING]:
       'Planejamento previdenciário para professores',
+    [AnalysisToolRecordTypeEnum.TEACHER_RETIREMENT_PLANNING_RPPS]:
+      'Aposentadoria do Professor (RPPS)',
     [AnalysisToolRecordTypeEnum.DISABILITY_RETIREMENT_PLANNING]:
       'Planejamento de aposentadoria para deficiente',
     [AnalysisToolRecordTypeEnum.GENERAL_URBAN_RETIREMENT_GRANT]:
@@ -92,8 +94,12 @@ export class AnalysisActivityMessageFactory {
       'Cessação de BPC Pessoa com Deficiência',
     [AnalysisToolRecordTypeEnum.ACCIDENT_ASSISTANCE_TERMINATED]:
       'Auxílio-acidente cessado',
+    [AnalysisToolRecordTypeEnum.ELDERLY_BPC_REJECTION]:
+      'Indeferimento de BPC ao Idoso',
     [AnalysisToolRecordTypeEnum.ACCIDENT_ASSISTANCE_GRANT]:
       'Concessão de auxílio-acidente',
+    [AnalysisToolRecordTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REVISION]:
+      'Revisão de aposentadoria por invalidez permanente',
   };
 
   private static readonly actionLabelMap: Record<
