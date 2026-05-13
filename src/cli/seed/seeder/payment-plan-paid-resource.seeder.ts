@@ -84,6 +84,24 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise simplificada do planejamento previdenciário de professor com IA, apresentando diagnóstico objetivo de elegibilidade, pontos de atenção e próximos passos recomendados.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_RPPS_COMPLETE_ANALYSIS,
+      creditCost: 8,
+      title: 'APOSENTADORIA DO PROFESSOR RPPS - ANÁLISE COMPLETA',
+      description:
+        'Planejamento completo de aposentadoria para professor do RPPS com IA. Analisa períodos de magistério no serviço público, vínculos por instituição, remunerações, regras específicas do ente federativo e processos para estimar cenários e estratégia previdenciária mais vantajosa.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_RPPS_SIMPLIFIED_ANALYSIS,
+      creditCost: 5,
+      title: 'APOSENTADORIA DO PROFESSOR RPPS - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada da aposentadoria do professor no RPPS com IA, apresentando diagnóstico objetivo de elegibilidade, pontos de atenção e próximos passos recomendados para o regime próprio de previdência social.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('c32c6734-bb4a-405f-8c84-5199848b1dcb'),
       resource: PaymentPlanPaidResourceTypeEnum.LEGAL_PROCEEDING_MONITORING,
       creditCost: 0,
@@ -2281,6 +2299,24 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       title: 'REVISÃO APOSENTADORIA INVALIDEZ PERMANENTE - PRIMEIRA ANÁLISE',
       description:
         'Primeira análise de revisão de aposentadoria por invalidez permanente com IA, combinando dados do caso com leitura e interpretação do CNIS. Gera parecer inicial técnico com detalhamento da carta de concessão, tempo de contribuição, salários de contribuição não considerados e ações recomendadas.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('eb1c2d3e-4f5a-4b6c-9d7e-2f5a0b1c2d3e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ELDERLY_BPC_REJECTION_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title: 'INDEFERIMENTO BPC AO IDOSO - ANÁLISE COMPLETA',
+      description:
+        'Análise completa de indeferimento do BPC ao Idoso com IA. Examina critério de idade (65 anos), renda familiar per capita, composição do grupo familiar, rendas e benefícios de cada membro, despesas dedutíveis, fundamentos da negativa e emite parecer técnico conclusivo com fundamentação legal e jurisprudencial e estratégia de reversão.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('ec2d3e4f-5a6b-4c7d-ae9f-9a0b1c8d3e4f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ELDERLY_BPC_REJECTION_SIMPLIFIED_ANALYSIS,
+      creditCost: 2,
+      title: 'INDEFERIMENTO BPC AO IDOSO - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada de indeferimento do BPC ao Idoso com IA. Verifica critério de idade e renda per capita familiar, identifica o fundamento da negativa e informa de forma objetiva e acessível sobre a possibilidade de reversão do indeferimento. Versão resumida para apresentação ao cliente ou familiar.',
     }),
   ];
 
