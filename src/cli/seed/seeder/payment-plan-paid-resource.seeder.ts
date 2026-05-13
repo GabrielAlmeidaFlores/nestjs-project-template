@@ -1843,6 +1843,24 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise simplificada do indeferimento do BPC para pessoa com deficiência com IA. Verifica critério de deficiência e critério de renda familiar per capita, informa de forma objetiva e acessível sobre a possibilidade de reversão do indeferimento. Versão resumida para apresentação ao cliente ou familiar.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f6b7c8d2-a0e1-4f2a-b34c-5d6e7f8a9b0c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_DISABILITY_GRANT_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title: 'CONCESSAO BPC PCD - ANALISE COMPLETA',
+      description:
+        'Analise completa da concessao do BPC para pessoa com deficiencia com IA. Examina criterio de deficiencia, renda familiar per capita, grupo familiar, documentos e fundamento da decisao, com parecer tecnico conclusivo e recomendacoes de manutencao do beneficio.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f6b7c8d6-a3e1-4f2a-b34c-5d6e7f8a9b0c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.BPC_DISABILITY_GRANT_SIMPLIFIED_ANALYSIS,
+      creditCost: 2,
+      title: 'CONCESSAO BPC PCD - ANALISE SIMPLIFICADA',
+      description:
+        'Analise simplificada da concessao do BPC para pessoa com deficiencia com linguagem objetiva e acessivel para apresentacao ao cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('c3d4e5f6-a7b8-4c9d-8e1f-2a3b4c5d6e7f'),
       resource:
         PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_GRANT_FIRST_ANALYSIS,

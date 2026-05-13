@@ -71,6 +71,14 @@ import { BpcDisabilityDenialFamilyMemberDocumentTypeormCommandRepository } from 
 import { BpcDisabilityDenialInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-denial-inss-benefit/bpc-disability-denial-inss-benefit.typeorm.command.repository';
 import { BpcDisabilityDenialLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-denial-legal-proceeding/bpc-disability-denial-legal-proceeding.typeorm.command.repository';
 import { BpcDisabilityDenialResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-denial-result/bpc-disability-denial-result.typeorm.command.repository';
+import { BpcDisabilityGrantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-grant/bpc-disability-grant.typeorm.command.repository';
+import { BpcDisabilityGrantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-grant/bpc-disability-grant.typeorm.query.repository';
+import { BpcDisabilityGrantDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-grant-document/bpc-disability-grant-document.typeorm.command.repository';
+import { BpcDisabilityGrantFamilyMemberTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-grant-family-member/bpc-disability-grant-family-member.typeorm.command.repository';
+import { BpcDisabilityGrantFamilyMemberDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-grant-family-member-document/bpc-disability-grant-family-member-document.typeorm.command.repository';
+import { BpcDisabilityGrantInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-grant-inss-benefit/bpc-disability-grant-inss-benefit.typeorm.command.repository';
+import { BpcDisabilityGrantLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-grant-legal-proceeding/bpc-disability-grant-legal-proceeding.typeorm.command.repository';
+import { BpcDisabilityGrantResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-grant-result/bpc-disability-grant-result.typeorm.command.repository';
 import { BpcDisabilityTerminationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-termination/bpc-disability-termination.typeorm.command.repository';
 import { BpcDisabilityTerminationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-termination/bpc-disability-termination.typeorm.query.repository';
 import { BpcDisabilityTerminationDisabilityAssessmentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-termination-disability-assessment/bpc-disability-termination-disability-assessment.typeorm.command.repository';
@@ -736,6 +744,14 @@ import { BpcDisabilityDenialFamilyMemberDocumentCommandRepositoryGateway } from 
 import { BpcDisabilityDenialInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-denial/domain/repository/bpc-disability-denial-inss-benefit/command/bpc-disability-denial-inss-benefit.command.repository.gateway';
 import { BpcDisabilityDenialLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-denial/domain/repository/bpc-disability-denial-legal-proceeding/command/bpc-disability-denial-legal-proceeding.command.repository.gateway';
 import { BpcDisabilityDenialResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-denial/domain/repository/bpc-disability-denial-result/command/bpc-disability-denial-result.command.repository.gateway';
+import { BpcDisabilityGrantCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant/command/bpc-disability-grant.command.repository.gateway';
+import { BpcDisabilityGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant/query/bpc-disability-grant.query.repository.gateway';
+import { BpcDisabilityGrantDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-document/command/bpc-disability-grant-document.command.repository.gateway';
+import { BpcDisabilityGrantFamilyMemberCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-family-member/command/bpc-disability-grant-family-member.command.repository.gateway';
+import { BpcDisabilityGrantFamilyMemberDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-family-member-document/command/bpc-disability-grant-family-member-document.command.repository.gateway';
+import { BpcDisabilityGrantInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-inss-benefit/command/bpc-disability-grant-inss-benefit.command.repository.gateway';
+import { BpcDisabilityGrantLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-legal-proceeding/command/bpc-disability-grant-legal-proceeding.command.repository.gateway';
+import { BpcDisabilityGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-result/command/bpc-disability-grant-result.command.repository.gateway';
 import { BpcDisabilityTerminationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-termination/domain/repository/bpc-disability-termination/command/bpc-disability-termination.command.repository.gateway';
 import { BpcDisabilityTerminationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-termination/domain/repository/bpc-disability-termination/query/bpc-disability-termination.query.repository.gateway';
 import { BpcDisabilityTerminationDisabilityAssessmentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-termination/domain/repository/bpc-disability-termination-disability-assessment/command/bpc-disability-termination-disability-assessment.command.repository.gateway';
@@ -3449,32 +3465,64 @@ const classProvider: ClassProvider[] = [
     useClass: BpcDisabilityDenialTypeormCommandRepository,
   },
   {
+    provide: BpcDisabilityGrantCommandRepositoryGateway,
+    useClass: BpcDisabilityGrantTypeormCommandRepository,
+  },
+  {
     provide: BpcDisabilityDenialQueryRepositoryGateway,
     useClass: BpcDisabilityDenialTypeormQueryRepository,
+  },
+  {
+    provide: BpcDisabilityGrantQueryRepositoryGateway,
+    useClass: BpcDisabilityGrantTypeormQueryRepository,
   },
   {
     provide: BpcDisabilityDenialDocumentCommandRepositoryGateway,
     useClass: BpcDisabilityDenialDocumentTypeormCommandRepository,
   },
   {
+    provide: BpcDisabilityGrantDocumentCommandRepositoryGateway,
+    useClass: BpcDisabilityGrantDocumentTypeormCommandRepository,
+  },
+  {
     provide: BpcDisabilityDenialResultCommandRepositoryGateway,
     useClass: BpcDisabilityDenialResultTypeormCommandRepository,
+  },
+  {
+    provide: BpcDisabilityGrantResultCommandRepositoryGateway,
+    useClass: BpcDisabilityGrantResultTypeormCommandRepository,
   },
   {
     provide: BpcDisabilityDenialFamilyMemberCommandRepositoryGateway,
     useClass: BpcDisabilityDenialFamilyMemberTypeormCommandRepository,
   },
   {
+    provide: BpcDisabilityGrantFamilyMemberCommandRepositoryGateway,
+    useClass: BpcDisabilityGrantFamilyMemberTypeormCommandRepository,
+  },
+  {
     provide: BpcDisabilityDenialFamilyMemberDocumentCommandRepositoryGateway,
     useClass: BpcDisabilityDenialFamilyMemberDocumentTypeormCommandRepository,
+  },
+  {
+    provide: BpcDisabilityGrantFamilyMemberDocumentCommandRepositoryGateway,
+    useClass: BpcDisabilityGrantFamilyMemberDocumentTypeormCommandRepository,
   },
   {
     provide: BpcDisabilityDenialInssBenefitCommandRepositoryGateway,
     useClass: BpcDisabilityDenialInssBenefitTypeormCommandRepository,
   },
   {
+    provide: BpcDisabilityGrantInssBenefitCommandRepositoryGateway,
+    useClass: BpcDisabilityGrantInssBenefitTypeormCommandRepository,
+  },
+  {
     provide: BpcDisabilityDenialLegalProceedingCommandRepositoryGateway,
     useClass: BpcDisabilityDenialLegalProceedingTypeormCommandRepository,
+  },
+  {
+    provide: BpcDisabilityGrantLegalProceedingCommandRepositoryGateway,
+    useClass: BpcDisabilityGrantLegalProceedingTypeormCommandRepository,
   },
   {
     provide: BpcDisabilityTerminationCommandRepositoryGateway,

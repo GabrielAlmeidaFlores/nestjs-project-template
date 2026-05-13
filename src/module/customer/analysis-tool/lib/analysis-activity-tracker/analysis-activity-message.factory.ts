@@ -80,6 +80,8 @@ export class AnalysisActivityMessageFactory {
       'Indeferimento de aposentadoria para deficiente',
     [AnalysisToolRecordTypeEnum.BPC_DISABILITY_DENIAL]:
       'Indeferimento de BPC Pessoa com Deficiência',
+    [AnalysisToolRecordTypeEnum.BPC_DISABILITY_GRANT]:
+      'Concessão de BPC Pessoa com Deficiência',
     [AnalysisToolRecordTypeEnum.BPC_ELDERLY_ANALYSIS]:
       'Análise de BPC ao Idoso',
     [AnalysisToolRecordTypeEnum.BPC_ELDERLY_CESSATION]:
