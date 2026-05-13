@@ -144,6 +144,14 @@ import { DisabilityRetirementPlanningRejectionTimeAcceleratorTypeormQueryReposit
 import { DisabilityRetirementPlanningRemunerationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-remuneration/disability-retirement-planning-remuneration.typeorm.command.repository';
 import { DisabilityRetirementPlanningRemunerationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-remuneration/disability-retirement-planning-remuneration.typeorm.query.repository';
 import { DisabilityRetirementPlanningResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-result/disability-retirement-planning-result.typeorm.command.repository';
+import { ElderlyBpcRejectionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection/elderly-bpc-rejection.typeorm.command.repository';
+import { ElderlyBpcRejectionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection/elderly-bpc-rejection.typeorm.query.repository';
+import { ElderlyBpcRejectionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection-document/elderly-bpc-rejection-document.typeorm.command.repository';
+import { ElderlyBpcRejectionFamiliarGroupTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection-familiar-group/elderly-bpc-rejection-familiar-group.typeorm.command.repository';
+import { ElderlyBpcRejectionFamiliarGroupDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection-familiar-group-document/elderly-bpc-rejection-familiar-group-document.typeorm.command.repository';
+import { ElderlyBpcRejectionInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection-inss-benefit/elderly-bpc-rejection-inss-benefit.typeorm.command.repository';
+import { ElderlyBpcRejectionLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection-legal-proceeding/elderly-bpc-rejection-legal-proceeding.typeorm.command.repository';
+import { ElderlyBpcRejectionResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection-result/elderly-bpc-rejection-result.typeorm.command.repository';
 import { GeneralUrbanRetirementAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-analysis/general-urban-retirement-analysis.typeorm.command.repository';
 import { GeneralUrbanRetirementAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-analysis/general-urban-retirement-analysis.typeorm.query.repository';
 import { GeneralUrbanRetirementAnalysisDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-analysis-document/general-urban-retirement-analysis-document.typeorm.command.repository';
@@ -658,6 +666,13 @@ import { DisabilityRetirementPlanningRejectionTypeormEntity } from '@infra/datab
 import { DisabilityRetirementPlanningRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-remuneration.typeorm.entity';
 import { DisabilityRetirementPlanningResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-result.typeorm.entity';
 import { DisabilityRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning.typeorm.entity';
+import { ElderlyBpcRejectionDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/elderly-bpc-rejection-document.typeorm.entity';
+import { ElderlyBpcRejectionFamiliarGroupDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/elderly-bpc-rejection-familiar-group-document.typeorm.entity';
+import { ElderlyBpcRejectionFamiliarGroupTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/elderly-bpc-rejection-familiar-group.typeorm.entity';
+import { ElderlyBpcRejectionInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/elderly-bpc-rejection-inss-benefit.typeorm.entity';
+import { ElderlyBpcRejectionLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/elderly-bpc-rejection-legal-proceeding.typeorm.entity';
+import { ElderlyBpcRejectionResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/elderly-bpc-rejection-result.typeorm.entity';
+import { ElderlyBpcRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/elderly-bpc-rejection.typeorm.entity';
 import { EmailTemplateTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/email-template.typeorm.entity';
 import { FullOpinionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/full-opinion-generator.typeorm.entity';
 import { GeneralUrbanRetirementAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis-document.typeorm.entity';
@@ -1455,6 +1470,13 @@ export class TypeormIndex {
     RetirementPermanentDisabilityRevisionConcessionLetterBreakdownTypeormEntity,
     RetirementPermanentDisabilityRevisionWorkPeriodsTypeormEntity,
     RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryTypeormEntity,
+    ElderlyBpcRejectionTypeormEntity,
+    ElderlyBpcRejectionResultTypeormEntity,
+    ElderlyBpcRejectionInssBenefitTypeormEntity,
+    ElderlyBpcRejectionLegalProceedingTypeormEntity,
+    ElderlyBpcRejectionDocumentTypeormEntity,
+    ElderlyBpcRejectionFamiliarGroupTypeormEntity,
+    ElderlyBpcRejectionFamiliarGroupDocumentTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [
@@ -1971,6 +1993,14 @@ export class TypeormIndex {
     DisabilityRetirementPlanningRejectionPeriodEarningsHistoryTypeormCommandRepository,
     DisabilityRetirementPlanningRejectionTimeAcceleratorTypeormCommandRepository,
     DisabilityRetirementPlanningRejectionTimeAcceleratorTypeormQueryRepository,
+    ElderlyBpcRejectionTypeormQueryRepository,
+    ElderlyBpcRejectionTypeormCommandRepository,
+    ElderlyBpcRejectionResultTypeormCommandRepository,
+    ElderlyBpcRejectionInssBenefitTypeormCommandRepository,
+    ElderlyBpcRejectionLegalProceedingTypeormCommandRepository,
+    ElderlyBpcRejectionDocumentTypeormCommandRepository,
+    ElderlyBpcRejectionFamiliarGroupTypeormCommandRepository,
+    ElderlyBpcRejectionFamiliarGroupDocumentTypeormCommandRepository,
   ];
 
   public static readonly dynamicModule = TypeOrmModule.forFeature(

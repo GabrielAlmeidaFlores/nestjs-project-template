@@ -261,6 +261,8 @@ import { DisabilityRetirementPlanningRemunerationEntityAutoMapperProfile } from 
 import { GetDisabilityRetirementPlanningRemunerationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-remuneration/get-disability-retirement-planning-remuneration-query-result.auto-mapper.profile';
 import { DisabilityRetirementPlanningResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-result/disability-retirement-planning-result-entity.auto-mapper.profile';
 import { GetDisabilityRetirementPlanningResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-result/get-disability-retirement-planning-result-query-result.auto-mapper.profile';
+import { ElderlyBpcRejectionEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/elderly-bpc-rejection/elderly-bpc-rejection-entity.auto-mapper.profile';
+import { ElderlyBpcRejectionResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/elderly-bpc-rejection/elderly-bpc-rejection-result-entity.auto-mapper.profile';
 import { FullOpinionGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/full-opinion-generator-analysis-result/full-opinion-generator-analysis-result-entity.auto-mapper.profile';
 import { GeneralUrbanRetirementAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-analysis/general-urban-retirement-analysis-entity.auto-mapper.profile';
 import { GetGeneralUrbanRetirementAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-analysis/get-general-urban-retirement-analysis-query-result.auto-mapper.profile';
@@ -1368,6 +1370,8 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     MaternityPayGrantPeriodDocumentEntityAutoMapperProfile,
     MaternityPayGrantResultEntityAutoMapperProfile,
     AccidentAssistanceTerminatedResultEntityAutoMapperProfile,
+    ElderlyBpcRejectionEntityAutoMapperProfile,
+    ElderlyBpcRejectionResultEntityAutoMapperProfile,
     AccidentAssistanceGrantEntityAutoMapperProfile,
     GetAccidentAssistanceGrantWithRelationsQueryResultAutoMapperProfile,
     AccidentAssistanceGrantDocumentEntityAutoMapperProfile,
