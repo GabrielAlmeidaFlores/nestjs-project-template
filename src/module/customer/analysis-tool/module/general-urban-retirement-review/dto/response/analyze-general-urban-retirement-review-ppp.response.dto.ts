@@ -12,6 +12,12 @@ export class AnalyzeGeneralUrbanRetirementReviewPppResponseDto extends BaseBuild
   @ResponseDtoStringProperty({ required: false })
   public analysis?: string;
 
+  @ResponseDtoStringProperty({ required: false })
+  public periodoOriginal?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public periodoConvencional?: string;
+
   protected override readonly _type =
     AnalyzeGeneralUrbanRetirementReviewPppResponseDto.name;
 }

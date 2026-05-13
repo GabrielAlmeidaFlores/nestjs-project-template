@@ -2,6 +2,7 @@ export enum MiniAdvisorAnalysisTypeEnum {
   GENERAL_URBAN_RETIREMENT_GRANT = 'concessao_aposentadoria_urbana_geral',
   DISABILITY_RETIREMENT_PLANNING = 'planejamento_aposentadoria_para_deficiente',
   TEACHER_RETIREMENT_PLANNING = 'planejamento_previdenciario_professor',
+  TEACHER_RETIREMENT_PLANNING_RPPS = 'planejamento_aposentadoria_professor_rpps',
   SPECIAL_CATEGORY_RETIREMENT = 'aposentadoria_categoria_especial',
   RURAL_OR_HYBRID_RETIREMENT = 'RURAL_OR_HYBRID_RETIREMENT',
   PERMANENT_DISABILITY_RETIREMENT_PLANNING = 'PERMANENT_DISABILITY_RETIREMENT_PLANNING',

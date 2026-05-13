@@ -1,11 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
 
+import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { Email } from '@core/domain/schema/value-object/email/email.value-object';
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
+import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { GetTemporaryDisabilityBenefitsTerminatedWithRelationsQueryResult } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/repository/temporary-disability-benefits-terminated/query/result/get-temporary-disability-benefits-terminated-with-relations.query.result';
 import { TemporaryDisabilityBenefitsTerminatedQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/repository/temporary-disability-benefits-terminated/query/temporary-disability-benefits-terminated.query.repository.gateway';
 import { TemporaryDisabilityBenefitsTerminatedId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/schema/entity/temporary-disability-benefits-terminated/value-object/temporary-disability-benefits-terminated-id.value-object';
+import { TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/schema/entity/temporary-disability-benefits-terminated-work-periods/enum/temporary-disability-benefits-terminated-work-periods-pendency-reason.enum';
 import {
   GetTemporaryDisabilityBenefitsTerminatedAnalysisToolClientResponseDto,
   GetTemporaryDisabilityBenefitsTerminatedDisabilityAnalysisCidResponseDto,
@@ -92,8 +97,22 @@ export class GetTemporaryDisabilityBenefitsTerminatedUseCase {
             ...(result.analysisToolClient.name !== null && {
               name: result.analysisToolClient.name,
             }),
+            ...(result.analysisToolClient.federalDocument !== null && {
+              federalDocument: new FederalDocument(
+                result.analysisToolClient.federalDocument,
+              ),
+            }),
+            ...(result.analysisToolClient.email !== null && {
+              email: new Email(result.analysisToolClient.email),
+            }),
+            ...(result.analysisToolClient.phone !== null && {
+              phoneNumber: new PhoneNumber(result.analysisToolClient.phone),
+            }),
             ...(result.analysisToolClient.birthDate !== null && {
               birthDate: result.analysisToolClient.birthDate,
+            }),
+            ...(result.analysisToolClient.sex !== null && {
+              gender: result.analysisToolClient.sex as GenderEnum,
             }),
           },
         ),
@@ -411,8 +430,12 @@ export class GetTemporaryDisabilityBenefitsTerminatedUseCase {
         );
 
       const periods = (this.hasValue(raw.periods) ? raw.periods : []).map(
-        (period) =>
-          TemporaryDisabilityBenefitsTerminatedFirstAnalysisPeriodModel.build({
+        (period) => {
+          const pendencyReason = this.normalizePendencyReason(
+            period.pendencyReason,
+          );
+
+          return TemporaryDisabilityBenefitsTerminatedFirstAnalysisPeriodModel.build({
             startDate: period.startDate,
             isPendency: period.isPendency,
             competenceBelowTheMinimum: period.competenceBelowTheMinimum,
@@ -440,8 +463,8 @@ export class GetTemporaryDisabilityBenefitsTerminatedUseCase {
                 period.contributionAverage.toString(),
               ),
             }),
-            ...(this.hasValue(period.pendencyReason) && {
-              pendencyReason: period.pendencyReason,
+            ...(this.hasValue(pendencyReason) && {
+              pendencyReason,
             }),
             ...(this.hasValue(period.periodConsideration) && {
               periodConsideration: period.periodConsideration,
@@ -452,8 +475,12 @@ export class GetTemporaryDisabilityBenefitsTerminatedUseCase {
             earningsHistory: (this.hasValue(period.earningsHistory)
               ? period.earningsHistory
               : []
-            ).map((eh) =>
-              TemporaryDisabilityBenefitsTerminatedFirstAnalysisEarningsHistoryItemModel.build(
+            ).map((eh) => {
+              const pendencyType = this.normalizePendencyReason(
+                eh.pendencyType,
+              );
+
+              return TemporaryDisabilityBenefitsTerminatedFirstAnalysisEarningsHistoryItemModel.build(
                 {
                   ...(this.hasValue(eh.competence) && {
                     competence: eh.competence,
@@ -461,16 +488,17 @@ export class GetTemporaryDisabilityBenefitsTerminatedUseCase {
                   ...(this.hasValue(eh.value) && {
                     value: eh.value,
                   }),
-                  ...(this.hasValue(eh.pendencyType) && {
-                    pendencyType: eh.pendencyType,
+                  ...(this.hasValue(pendencyType) && {
+                    pendencyType,
                   }),
                   ...(this.hasValue(eh.collectedAt) && {
                     collectedAt: eh.collectedAt,
                   }),
                 },
-              ),
-            ),
-          }),
+              );
+            }),
+          });
+        },
       );
 
       return TemporaryDisabilityBenefitsTerminatedFirstAnalysisModel.build({
@@ -506,6 +534,33 @@ export class GetTemporaryDisabilityBenefitsTerminatedUseCase {
 
   private hasValue<T>(value: T | null | undefined): value is T {
     return value !== null && value !== undefined;
+  }
+
+  private normalizePendencyReason(
+    value: string | null | undefined,
+  ): TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum | undefined {
+    if (!this.hasValue(value) || value === '') {
+      return undefined;
+    }
+
+    const normalizedValue = value.trim().toUpperCase();
+    const pendencyReasonMap: Record<
+      string,
+      TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum
+    > = {
+      LEAVE_DATE:
+        TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum.LEAVE_DATE,
+      NO_EXIT_DATE:
+        TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum.LEAVE_DATE,
+      COMPETENCE_BELOW_MINIMUM:
+        TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum.COMPETENCE_BELOW_MINIMUM,
+      LATE_CONTRIBUTION:
+        TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum.INCONSISTENT_COMPETENCE,
+      INCONSISTENT_COMPETENCE:
+        TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum.INCONSISTENT_COMPETENCE,
+    };
+
+    return pendencyReasonMap[normalizedValue];
   }
 
   private parseStoredCompleteAnalysis(

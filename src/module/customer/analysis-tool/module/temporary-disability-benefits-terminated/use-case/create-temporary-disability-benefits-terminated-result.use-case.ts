@@ -3,8 +3,11 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { AnalysisToolRecordNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-record-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
@@ -12,6 +15,7 @@ import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-pr
 import { CnisDocumentIsNotValidError } from '@module/customer/analysis-tool/module/cnis-fast-analysis/error/cnis-document-is-not-valid.error';
 import { TemporaryDisabilityBenefitsTerminatedQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/repository/temporary-disability-benefits-terminated/query/temporary-disability-benefits-terminated.query.repository.gateway';
 import { TemporaryDisabilityBenefitsTerminatedResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/repository/temporary-disability-benefits-terminated-result/command/temporary-disability-benefits-terminated-result.command.repository.gateway';
+import { TemporaryDisabilityBenefitsTerminatedEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/schema/entity/temporary-disability-benefits-terminated/temporary-disability-benefits-terminated.entity';
 import { TemporaryDisabilityBenefitsTerminatedId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/schema/entity/temporary-disability-benefits-terminated/value-object/temporary-disability-benefits-terminated-id.value-object';
 import { TemporaryDisabilityBenefitsTerminatedDocumentTypeEnum } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/schema/entity/temporary-disability-benefits-terminated-document/enum/temporary-disability-benefits-terminated-document-type.enum';
 import { TemporaryDisabilityBenefitsTerminatedResultEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/schema/entity/temporary-disability-benefits-terminated-result/temporary-disability-benefits-terminated-result.entity';
@@ -54,6 +58,8 @@ export class CreateTemporaryDisabilityBenefitsTerminatedResultUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(AnalysisToolRecordQueryRepositoryGateway)
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordCommandRepositoryGateway)
+    private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
     @Inject(TemporaryDisabilityBenefitsTerminatedQueryRepositoryGateway)
     private readonly temporaryDisabilityBenefitsTerminatedQueryRepositoryGateway: TemporaryDisabilityBenefitsTerminatedQueryRepositoryGateway,
     @Inject(TemporaryDisabilityBenefitsTerminatedResultCommandRepositoryGateway)
@@ -113,11 +119,19 @@ export class CreateTemporaryDisabilityBenefitsTerminatedResultUseCase {
       throw new CnisDocumentIsNotValidError();
     }
 
-    const analysisToolClient = await this.findAnalysisToolClientOrFail(
-      temporaryDisabilityBenefitsTerminatedId,
-      organizationSessionData.organizationId,
-      sessionData.authIdentityId,
-    );
+    const analysisToolRecordQueryResult =
+      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByTemporaryDisabilityBenefitsTerminatedIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        temporaryDisabilityBenefitsTerminatedId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+        AnalysisToolRecordNotFoundError,
+      );
+
+    const analysisToolClient = new AnalysisToolClientEntity({
+      ...analysisToolRecordQueryResult.analysisToolClient,
+      createdBy: analysisToolRecordQueryResult.analysisToolClient.createdBy.id,
+      updatedBy: analysisToolRecordQueryResult.analysisToolClient.updatedBy.id,
+    });
 
     const cnisData =
       await this.analysisProcessorGateway.parseCnisDocument(cnisBuffer);
@@ -170,10 +184,41 @@ export class CreateTemporaryDisabilityBenefitsTerminatedResultUseCase {
       simplifiedAnalysis: existingResult.simplifiedAnalysis,
     });
 
+    const analysisToolRecord = new AnalysisToolRecordEntity({
+      id: analysisToolRecordQueryResult.id,
+      code: analysisToolRecordQueryResult.code,
+      type: analysisToolRecordQueryResult.type,
+      status: AnalysisStatusEnum.COMPLETED,
+      analysisToolClient,
+      temporaryDisabilityBenefitsTerminated:
+        new TemporaryDisabilityBenefitsTerminatedEntity({
+          id: temporaryDisabilityBenefitsTerminatedId,
+          analysisName: temporaryDisabilityBenefitsTerminated.analysisName,
+          requestEntryDate:
+            temporaryDisabilityBenefitsTerminated.requestEntryDate,
+          benefitCessationDate:
+            temporaryDisabilityBenefitsTerminated.benefitCessationDate,
+          category: temporaryDisabilityBenefitsTerminated.category,
+          myInssPassword: temporaryDisabilityBenefitsTerminated.myInssPassword,
+          benefitCessationReason:
+            temporaryDisabilityBenefitsTerminated.benefitCessationReason,
+          temporaryDisabilityBenefitsTerminatedResultId:
+            new TemporaryDisabilityBenefitsTerminatedResultId(
+              existingResult.id,
+            ),
+        }),
+      createdBy: analysisToolRecordQueryResult.createdBy.id,
+      updatedBy: organizationMember.id,
+    });
+
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       consumeCreditTransaction,
       this.temporaryDisabilityBenefitsTerminatedResultCommandRepositoryGateway.updateTemporaryDisabilityBenefitsTerminatedResult(
         resultEntity,
+      ),
+      this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecord(
+        analysisToolRecord.id,
+        analysisToolRecord,
       ),
     ]);
 
@@ -433,29 +478,4 @@ export class CreateTemporaryDisabilityBenefitsTerminatedResultUseCase {
     ];
   }
 
-  private findAnalysisToolClientOrFail(
-    temporaryDisabilityBenefitsTerminatedId: TemporaryDisabilityBenefitsTerminatedId,
-    organizationId: OrganizationSessionDataModel['organizationId'],
-    authIdentityId: SessionDataModel['authIdentityId'],
-  ): Promise<AnalysisToolClientEntity> {
-    const recordPromise: ReturnType<
-      AnalysisToolRecordQueryRepositoryGateway['findWithRelationsByTemporaryDisabilityBenefitsTerminatedIdAndOrganizationIdAndAuthIdentityIdOrFail']
-    > =
-      this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByTemporaryDisabilityBenefitsTerminatedIdAndOrganizationIdAndAuthIdentityIdOrFail(
-        temporaryDisabilityBenefitsTerminatedId,
-        organizationId,
-        authIdentityId,
-        AnalysisToolRecordNotFoundError,
-      );
-
-    return recordPromise.then((record) => {
-      const analysisToolClient = record.analysisToolClient;
-
-      return new AnalysisToolClientEntity({
-        ...analysisToolClient,
-        createdBy: analysisToolClient.createdBy.id,
-        updatedBy: analysisToolClient.updatedBy.id,
-      });
-    });
-  }
 }
