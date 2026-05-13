@@ -573,6 +573,29 @@ export abstract class AnalysisProcessorGateway {
     files: Buffer[],
   ): Promise<string | null>;
 
+  public abstract getRetirementPermanentDisabilityRejectionInssDecisionAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getRetirementPermanentDisabilityRejectionFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    structured: boolean,
+  ): Promise<string | null>;
+
+  public abstract getRetirementPermanentDisabilityRejectionResultAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getRetirementPermanentDisabilityRejectionSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
   public abstract getBpcDisabilityDenialSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],

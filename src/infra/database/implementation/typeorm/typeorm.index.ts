@@ -793,6 +793,18 @@ import { RegulatoryUpdateEmailPreferenceTypeormEntity } from '@infra/database/im
 import { RegulatoryUpdateMainChangeTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/regulatory-update-main-change.typeorm.entity';
 import { RegulatoryUpdateMonitoredSourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/regulatory-update-monitored-source.typeorm.entity';
 import { RegulatoryUpdateTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/regulatory-update.typeorm.entity';
+import { RetirementPermanentDisabilityRejectionDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-document.typeorm.entity';
+import { RetirementPermanentDisabilityRejectionIncapacityCidTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-incapacity-cid.typeorm.entity';
+import { RetirementPermanentDisabilityRejectionIncapacityDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-incapacity-document.typeorm.entity';
+import { RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-incapacity-previous-benefit.typeorm.entity';
+import { RetirementPermanentDisabilityRejectionIncapacityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-incapacity.typeorm.entity';
+import { RetirementPermanentDisabilityRejectionInsuredQualityDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-insured-quality-document.typeorm.entity';
+import { RetirementPermanentDisabilityRejectionInsuredQualityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-insured-quality.typeorm.entity';
+import { RetirementPermanentDisabilityRejectionPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-period-document.typeorm.entity';
+import { RetirementPermanentDisabilityRejectionPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-period-earnings-history.typeorm.entity';
+import { RetirementPermanentDisabilityRejectionPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-period.typeorm.entity';
+import { RetirementPermanentDisabilityRejectionResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection-result.typeorm.entity';
+import { RetirementPermanentDisabilityRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-rejection.typeorm.entity';
 import { RetirementPermanentDisabilityRevisionConcessionLetterBreakdownTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-concession-letter-breakdown.typeorm.entity';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisAssociatedCidTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-disability-analysis-associated-cid.typeorm.entity';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-permanent-disability-revision-disability-analysis-benefit-associated-cid.typeorm.entity';
@@ -1182,6 +1194,18 @@ export class TypeormIndex {
     GeneralUrbanRetirementReviewAnalysisResultTypeormEntity,
     GeneralUrbanRetirementReviewTimeAcceleratorTypeormEntity,
     GeneralUrbanRetirementReviewSpecialPeriodTypeormEntity,
+    RetirementPermanentDisabilityRejectionTypeormEntity,
+    RetirementPermanentDisabilityRejectionDocumentTypeormEntity,
+    RetirementPermanentDisabilityRejectionIncapacityTypeormEntity,
+    RetirementPermanentDisabilityRejectionIncapacityCidTypeormEntity,
+    RetirementPermanentDisabilityRejectionIncapacityDocumentTypeormEntity,
+    RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitTypeormEntity,
+    RetirementPermanentDisabilityRejectionInsuredQualityTypeormEntity,
+    RetirementPermanentDisabilityRejectionInsuredQualityDocumentTypeormEntity,
+    RetirementPermanentDisabilityRejectionPeriodTypeormEntity,
+    RetirementPermanentDisabilityRejectionPeriodDocumentTypeormEntity,
+    RetirementPermanentDisabilityRejectionPeriodEarningsHistoryTypeormEntity,
+    RetirementPermanentDisabilityRejectionResultTypeormEntity,
     RetirementPlanningRgpsTypeormEntity,
     RetirementPlanningRgpsResultTypeormEntity,
     RetirementPlanningRgpsInssBenefitTypeormEntity,

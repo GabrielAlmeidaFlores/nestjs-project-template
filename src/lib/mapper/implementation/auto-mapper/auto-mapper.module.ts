@@ -470,6 +470,19 @@ import { PerCapitaIncomeForBpcAnalysisResultEntityAutoMapperProfile } from '@lib
 import { RegulatoryUpdateEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/regulatory-update/regulatory-update-entity.auto-mapper.profile';
 import { RegulatoryUpdateEmailPreferenceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/regulatory-update-email-preference/regulatory-update-email-preference-entity.auto-mapper.profile';
 import { RegulatoryUpdateMonitoredSourceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/regulatory-update-monitored-source/regulatory-update-monitored-source-entity.auto-mapper.profile';
+import { GetRetirementPermanentDisabilityRejectionWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-rejection/get-retirement-permanent-disability-rejection-with-relations-query-result.auto-mapper.profile';
+import { RetirementPermanentDisabilityRejectionEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-rejection/retirement-permanent-disability-rejection-entity.auto-mapper.profile';
+import { RetirementPermanentDisabilityRejectionResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-rejection/retirement-permanent-disability-rejection-result-entity.auto-mapper.profile';
+import { RetirementPermanentDisabilityRejectionDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-rejection-document/retirement-permanent-disability-rejection-document-entity.auto-mapper.profile';
+import { RetirementPermanentDisabilityRejectionIncapacityEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-rejection-incapacity/retirement-permanent-disability-rejection-incapacity-entity.auto-mapper.profile';
+import { RetirementPermanentDisabilityRejectionIncapacityCidEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-rejection-incapacity-cid/retirement-permanent-disability-rejection-incapacity-cid-entity.auto-mapper.profile';
+import { RetirementPermanentDisabilityRejectionIncapacityDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-rejection-incapacity-document/retirement-permanent-disability-rejection-incapacity-document-entity.auto-mapper.profile';
+import { RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-rejection-incapacity-previous-benefit/retirement-permanent-disability-rejection-incapacity-previous-benefit-entity.auto-mapper.profile';
+import { RetirementPermanentDisabilityRejectionInsuredQualityEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-rejection-insured-quality/retirement-permanent-disability-rejection-insured-quality-entity.auto-mapper.profile';
+import { RetirementPermanentDisabilityRejectionInsuredQualityDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-rejection-insured-quality-document/retirement-permanent-disability-rejection-insured-quality-document-entity.auto-mapper.profile';
+import { RetirementPermanentDisabilityRejectionPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-rejection-period/retirement-permanent-disability-rejection-period-entity.auto-mapper.profile';
+import { RetirementPermanentDisabilityRejectionPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-rejection-period-document/retirement-permanent-disability-rejection-period-document-entity.auto-mapper.profile';
+import { RetirementPermanentDisabilityRejectionPeriodEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-rejection-period-earnings-history/retirement-permanent-disability-rejection-period-earnings-history-entity.auto-mapper.profile';
 import { GetRetirementPermanentDisabilityRevisionQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-revision/get-retirement-permanent-disability-revision-query-result.auto-mapper.profile';
 import { GetRetirementPermanentDisabilityRevisionWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-revision/get-retirement-permanent-disability-revision-with-relations-query-result.auto-mapper.profile';
 import { RetirementPermanentDisabilityRevisionDisabilityAnalysisAssociatedCidEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-permanent-disability-revision/retirement-permanent-disability-revision-disability-analysis-associated-cid-entity.auto-mapper.profile';
@@ -1022,6 +1035,19 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     DisabilityRetirementPlanningRejectionInssBenefitEntityAutoMapperProfile,
     GetDisabilityRetirementPlanningRejectionWithRelationsQueryResultAutoMapperProfile,
     DisabilityRetirementPlanningRejectionDocumentEntityAutoMapperProfile,
+    RetirementPermanentDisabilityRejectionEntityAutoMapperProfile,
+    RetirementPermanentDisabilityRejectionResultEntityAutoMapperProfile,
+    GetRetirementPermanentDisabilityRejectionWithRelationsQueryResultAutoMapperProfile,
+    RetirementPermanentDisabilityRejectionDocumentEntityAutoMapperProfile,
+    RetirementPermanentDisabilityRejectionIncapacityEntityAutoMapperProfile,
+    RetirementPermanentDisabilityRejectionIncapacityCidEntityAutoMapperProfile,
+    RetirementPermanentDisabilityRejectionIncapacityDocumentEntityAutoMapperProfile,
+    RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitEntityAutoMapperProfile,
+    RetirementPermanentDisabilityRejectionInsuredQualityEntityAutoMapperProfile,
+    RetirementPermanentDisabilityRejectionInsuredQualityDocumentEntityAutoMapperProfile,
+    RetirementPermanentDisabilityRejectionPeriodEntityAutoMapperProfile,
+    RetirementPermanentDisabilityRejectionPeriodDocumentEntityAutoMapperProfile,
+    RetirementPermanentDisabilityRejectionPeriodEarningsHistoryEntityAutoMapperProfile,
     DisabilityRetirementPlanningRejectionTimeAcceleratorEntityAutoMapperProfile,
     GetDisabilityRetirementPlanningRejectionTimeAcceleratorQueryResultAutoMapperProfile,
     DisabilityRetirementPlanningGrantResultEntityAutoMapperProfile,

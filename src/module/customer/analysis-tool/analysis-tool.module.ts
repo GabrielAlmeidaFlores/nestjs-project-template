@@ -41,6 +41,7 @@ import { MaternityPayRejectionModule } from '@module/customer/analysis-tool/modu
 import { MedicalAndSocialReportObjectionGeneratorAnalysisModule } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.module';
 import { MedicalQuestionGeneratorModule } from '@module/customer/analysis-tool/module/medical-question-generator/medical-question-generator.module';
 import { PerCapitaIncomeForBpcAnalysisModule } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.module';
+import { RetirementPermanentDisabilityRejectionModule } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/retirement-permanent-disability-rejection.module';
 import { RetirementPermanentDisabilityRevisionModule } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/retirement-permanent-disability-revision.module';
 import { RetirementPlanningRgpsModule } from '@module/customer/analysis-tool/module/retirement-planning-rgps/retirement-planning-rgps.module';
 import { RetirementPlanningRppsModule } from '@module/customer/analysis-tool/module/retirement-planning-rpps/retirement-planning-rpps.module';
@@ -143,6 +144,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     TemporaryIncapacityBenefitTerminationModule,
     AccidentBenefitRejectionModule,
     MaternityPayRejectionModule,
+    RetirementPermanentDisabilityRejectionModule,
     RetirementPermanentDisabilityRevisionModule,
   ],
   controllers: [AnalysisToolController],
