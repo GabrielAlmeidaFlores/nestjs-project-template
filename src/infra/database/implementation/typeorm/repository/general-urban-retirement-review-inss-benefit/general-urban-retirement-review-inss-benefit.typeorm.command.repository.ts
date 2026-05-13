@@ -8,6 +8,7 @@ import { GeneralUrbanRetirementReviewInssBenefitTypeormEntity } from '@infra/dat
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { GeneralUrbanRetirementReviewInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-review/domain/repository/general-urban-retirement-review-inss-benefit/command/general-urban-retirement-review-inss-benefit.command.repository.gateway';
 import { GeneralUrbanRetirementReviewInssBenefitEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-review/domain/schema/entity/general-urban-retirement-review-inss-benefit/general-urban-retirement-review-inss-benefit.entity';
+import { GeneralUrbanRetirementReviewInssBenefitId } from '@module/customer/analysis-tool/module/general-urban-retirement-review/domain/schema/entity/general-urban-retirement-review-inss-benefit/value-object/general-urban-retirement-review-inss-benefit-id.value-object';
 
 @Injectable()
 export class GeneralUrbanRetirementReviewInssBenefitTypeormCommandRepository
@@ -35,5 +36,11 @@ export class GeneralUrbanRetirementReviewInssBenefitTypeormCommandRepository
     );
 
     return this.create(mappedData);
+  }
+
+  public deleteGeneralUrbanRetirementReviewInssBenefit(
+    id: GeneralUrbanRetirementReviewInssBenefitId,
+  ): TransactionType {
+    return this.delete(id.toString());
   }
 }

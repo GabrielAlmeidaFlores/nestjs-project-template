@@ -24,6 +24,7 @@ import { CreateGeneralUrbanRetirementReviewFirstAnalysisUseCase } from '@module/
 import { CreateGeneralUrbanRetirementReviewPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/create-general-urban-retirement-review-period-document.use-case';
 import { CreateGeneralUrbanRetirementReviewPeriodUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/create-general-urban-retirement-review-period.use-case';
 import { CreateGeneralUrbanRetirementReviewResultUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/create-general-urban-retirement-review-result.use-case';
+import { CreateGeneralUrbanRetirementReviewTimeAcceleratorFromPppUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/create-general-urban-retirement-review-time-accelerator-from-ppp.use-case';
 import { CreateGeneralUrbanRetirementReviewTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/create-general-urban-retirement-review-time-accelerator.use-case';
 import { CreateGeneralUrbanRetirementReviewUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/create-general-urban-retirement-review.use-case';
 import { CreateMultipleGeneralUrbanRetirementReviewPeriodsUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/create-multiple-general-urban-retirement-review-periods.use-case';
@@ -43,6 +44,7 @@ import { PeriodLeaveDateActionUseCase } from '@module/customer/analysis-tool/mod
 import { UpdateGeneralUrbanRetirementReviewClientUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/update-general-urban-retirement-review-client.use-case';
 import { UpdateGeneralUrbanRetirementReviewPeriodUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/update-general-urban-retirement-review-period.use-case';
 import { UpdateGeneralUrbanRetirementReviewResultUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/update-general-urban-retirement-review-result.use-case';
+import { UpdateGeneralUrbanRetirementReviewUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/update-general-urban-retirement-review.use-case';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
 import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
@@ -82,6 +84,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateGeneralUrbanRetirementReviewPeriodUseCase,
     CreateGeneralUrbanRetirementReviewResultUseCase,
     CreateGeneralUrbanRetirementReviewTimeAcceleratorUseCase,
+    CreateGeneralUrbanRetirementReviewTimeAcceleratorFromPppUseCase,
     CreateGeneralUrbanRetirementReviewUseCase,
     CreateMultipleGeneralUrbanRetirementReviewPeriodsUseCase,
     DeleteGeneralUrbanRetirementReviewTimeAcceleratorUseCase,
@@ -97,6 +100,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     ListGeneralUrbanRetirementReviewTimeAcceleratorUseCase,
     PeriodConsiderationActionUseCase,
     PeriodLeaveDateActionUseCase,
+    UpdateGeneralUrbanRetirementReviewUseCase,
     UpdateGeneralUrbanRetirementReviewClientUseCase,
     UpdateGeneralUrbanRetirementReviewPeriodUseCase,
     UpdateGeneralUrbanRetirementReviewResultUseCase,
