@@ -38,6 +38,7 @@ import { GeneralUrbanRetirementDenialPeriodPendencyReasonEnum } from '@module/cu
 import { TeacherRetirementPlanningRejectionWorkPeriodDocumentProbativeForceEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection-work-period/enum/teacher-retirement-planning-rejection-work-period-document-probative-force.enum';
 import { TeacherRetirementPlanningRejectionWorkPeriodTimelineClassificationEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection-work-period/enum/teacher-retirement-planning-rejection-work-period-timeline-classification.enum';
 import { TemporaryIncapacityBenefitRejectionCategoryEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/enum/temporary-incapacity-benefit-rejection-category.enum';
+import { TemporaryIncapacityBenefitRejectionWorkPeriodsPendencyReasonEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-work-periods/enum/temporary-incapacity-benefit-rejection-work-periods-pendency-reason.enum';
 import { MiniAdvisorAnalysisTypeEnum } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor-result/enum/mini-advisor-analysis-type.enum';
 
 @Injectable()
@@ -8975,6 +8976,9 @@ Processed CNIS analysis:
               },
               pendencyReason: {
                 type: 'string',
+                enum: Object.values(
+                  TemporaryIncapacityBenefitRejectionWorkPeriodsPendencyReasonEnum,
+                ),
                 description:
                   'Motivo da pendência (ex: LEAVE_DATE, COMPETENCE_BELOW_MINIMUM, INCONSISTENT_COMPETENCE)',
               },
@@ -9009,8 +9013,11 @@ Processed CNIS analysis:
                     },
                     pendencyType: {
                       type: 'string',
+                      enum: Object.values(
+                        TemporaryIncapacityBenefitRejectionWorkPeriodsPendencyReasonEnum,
+                      ),
                       description:
-                        'Tipo de pendência da competência (ex: COMPETENCE_BELOW_MINIMUM)',
+                        'Tipo de pendência da competência (ex: LEAVE_DATE, COMPETENCE_BELOW_MINIMUM, INCONSISTENT_COMPETENCE)',
                     },
                     collectedAt: {
                       type: 'string',

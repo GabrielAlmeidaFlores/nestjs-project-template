@@ -236,6 +236,7 @@ export class CreateTemporaryDisabilityBenefitsTerminatedFirstAnalysisUseCase {
         cleanedJson,
       ) as TemporaryDisabilityBenefitsTerminatedFirstAnalysisInterface;
 
+      this.normalizeFirstAnalysisPendencies(raw);
       cleanedJson = JSON.stringify(raw);
 
       const clientData =
@@ -273,8 +274,12 @@ export class CreateTemporaryDisabilityBenefitsTerminatedFirstAnalysisUseCase {
         );
 
       const periods = (this.hasValue(raw.periods) ? raw.periods : []).map(
-        (period) =>
-          TemporaryDisabilityBenefitsTerminatedFirstAnalysisPeriodModel.build({
+        (period) => {
+          const pendencyReason = this.normalizePendencyReason(
+            period.pendencyReason,
+          );
+
+          return TemporaryDisabilityBenefitsTerminatedFirstAnalysisPeriodModel.build({
             startDate: period.startDate,
             isPendency: period.isPendency,
             competenceBelowTheMinimum: period.competenceBelowTheMinimum,
@@ -305,11 +310,8 @@ export class CreateTemporaryDisabilityBenefitsTerminatedFirstAnalysisUseCase {
                 period.contributionAverage.toString(),
               ),
             }),
-            ...(this.isValidEnum(
-              period.pendencyReason,
-              TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum,
-            ) && {
-              pendencyReason: period.pendencyReason,
+            ...(this.hasValue(pendencyReason) && {
+              pendencyReason,
             }),
             ...(this.hasValue(period.periodConsideration) && {
               periodConsideration: period.periodConsideration,
@@ -320,8 +322,12 @@ export class CreateTemporaryDisabilityBenefitsTerminatedFirstAnalysisUseCase {
             earningsHistory: (this.hasValue(period.earningsHistory)
               ? period.earningsHistory
               : []
-            ).map((eh) =>
-              TemporaryDisabilityBenefitsTerminatedFirstAnalysisEarningsHistoryItemModel.build(
+            ).map((eh) => {
+              const pendencyType = this.normalizePendencyReason(
+                eh.pendencyType,
+              );
+
+              return TemporaryDisabilityBenefitsTerminatedFirstAnalysisEarningsHistoryItemModel.build(
                 {
                   ...(this.hasValue(eh.competence) && {
                     competence: eh.competence,
@@ -329,16 +335,17 @@ export class CreateTemporaryDisabilityBenefitsTerminatedFirstAnalysisUseCase {
                   ...(this.hasValue(eh.value) && {
                     value: eh.value,
                   }),
-                  ...(this.hasValue(eh.pendencyType) && {
-                    pendencyType: eh.pendencyType,
+                  ...(this.hasValue(pendencyType) && {
+                    pendencyType,
                   }),
                   ...(this.hasValue(eh.collectedAt) && {
                     collectedAt: eh.collectedAt,
                   }),
                 },
-              ),
-            ),
-          }),
+              );
+            }),
+          });
+        },
       );
 
       return {
@@ -380,6 +387,52 @@ export class CreateTemporaryDisabilityBenefitsTerminatedFirstAnalysisUseCase {
 
   private hasValue<T>(value: T | null | undefined): value is T {
     return value !== null && value !== undefined;
+  }
+
+  private normalizeFirstAnalysisPendencies(
+    raw: TemporaryDisabilityBenefitsTerminatedFirstAnalysisInterface,
+  ): void {
+    (this.hasValue(raw.periods) ? raw.periods : []).forEach((period) => {
+      period.pendencyReason = this.normalizePendencyReason(
+        period.pendencyReason,
+      );
+
+      (this.hasValue(period.earningsHistory)
+        ? period.earningsHistory
+        : []
+      ).forEach((earningHistory) => {
+        earningHistory.pendencyType = this.normalizePendencyReason(
+          earningHistory.pendencyType,
+        );
+      });
+    });
+  }
+
+  private normalizePendencyReason(
+    value: string | null | undefined,
+  ): TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum | undefined {
+    if (!this.hasValue(value) || value === '') {
+      return undefined;
+    }
+
+    const normalizedValue = value.trim().toUpperCase();
+    const pendencyReasonMap: Record<
+      string,
+      TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum
+    > = {
+      LEAVE_DATE:
+        TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum.LEAVE_DATE,
+      NO_EXIT_DATE:
+        TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum.LEAVE_DATE,
+      COMPETENCE_BELOW_MINIMUM:
+        TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum.COMPETENCE_BELOW_MINIMUM,
+      LATE_CONTRIBUTION:
+        TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum.INCONSISTENT_COMPETENCE,
+      INCONSISTENT_COMPETENCE:
+        TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum.INCONSISTENT_COMPETENCE,
+    };
+
+    return pendencyReasonMap[normalizedValue];
   }
 
   private isValidEnum<T extends Record<string, string>>(
