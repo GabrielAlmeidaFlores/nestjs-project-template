@@ -1,6 +1,6 @@
 ﻿import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base.entity.props.interface';
 import type { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
-import type { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
+import type { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import type { BpcDisabilityGrantCategoryEnum } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/enum/bpc-disability-grant-category.enum';
 import type { BpcDisabilityGrantId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/value-object/bpc-disability-grant-id/bpc-disability-grant-id.value-object';
 import type { BpcDisabilityGrantDocumentEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-document/bpc-disability-grant-document.entity';
@@ -34,7 +34,7 @@ export interface BpcDisabilityGrantEntityPropsInterface extends BaseEntityPropsI
   BpcDisabilityGrantLegalProceeding?:
     | BpcDisabilityGrantLegalProceedingEntity[]
     | null;
-  analysisToolRecord?: AnalysisToolRecordEntity | null;
+  analysisToolRecordId?: AnalysisToolRecordId | null;
   createdBy: OrganizationMemberId;
   updatedBy: OrganizationMemberId;
 }

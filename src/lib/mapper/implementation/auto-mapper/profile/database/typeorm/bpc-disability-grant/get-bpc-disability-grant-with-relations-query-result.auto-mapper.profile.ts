@@ -33,7 +33,7 @@ export class GetBpcDisabilityGrantWithRelationsQueryResultAutoMapperProfile {
     const convertOrmEntityToQueryResult = (
       source: BpcDisabilityGrantTypeormEntity,
     ): GetBpcDisabilityGrantWithRelationsQueryResult => {
-      const BpcDisabilityGrantResult = source.BpcDisabilityGrantResult
+      const bpcDisabilityGrantResult = source.BpcDisabilityGrantResult
         ? this.mapper.map(
             source.BpcDisabilityGrantResult,
             BpcDisabilityGrantResultTypeormEntity,
@@ -41,7 +41,7 @@ export class GetBpcDisabilityGrantWithRelationsQueryResultAutoMapperProfile {
           )
         : null;
 
-      const BpcDisabilityGrantFamilyMember =
+      const bpcDisabilityGrantFamilyMember =
         source.BpcDisabilityGrantFamilyMember?.map((member) =>
           this.mapper.map(
             member,
@@ -50,7 +50,7 @@ export class GetBpcDisabilityGrantWithRelationsQueryResultAutoMapperProfile {
           ),
         ) ?? [];
 
-      const BpcDisabilityGrantDocument =
+      const bpcDisabilityGrantDocument =
         source.BpcDisabilityGrantDocument?.map((doc) =>
           this.mapper.map(
             doc,
@@ -59,7 +59,7 @@ export class GetBpcDisabilityGrantWithRelationsQueryResultAutoMapperProfile {
           ),
         ) ?? [];
 
-      const BpcDisabilityGrantInssBenefit =
+      const bpcDisabilityGrantInssBenefit =
         source.BpcDisabilityGrantInssBenefit?.map((item) =>
           this.mapper.map(
             item,
@@ -68,7 +68,7 @@ export class GetBpcDisabilityGrantWithRelationsQueryResultAutoMapperProfile {
           ),
         ) ?? [];
 
-      const BpcDisabilityGrantLegalProceeding =
+      const bpcDisabilityGrantLegalProceeding =
         source.BpcDisabilityGrantLegalProceeding?.map((item) =>
           this.mapper.map(
             item,
@@ -97,11 +97,11 @@ export class GetBpcDisabilityGrantWithRelationsQueryResultAutoMapperProfile {
         hasAccessToBasicServices: source.hasAccessToBasicServices ?? null,
         otherBarriersDescription: source.otherBarriersDescription ?? null,
         livesAlone: null,
-        BpcDisabilityGrantResult,
-        BpcDisabilityGrantFamilyMember,
-        BpcDisabilityGrantDocument,
-        BpcDisabilityGrantInssBenefit,
-        BpcDisabilityGrantLegalProceeding,
+        BpcDisabilityGrantResult: bpcDisabilityGrantResult,
+        BpcDisabilityGrantFamilyMember: bpcDisabilityGrantFamilyMember,
+        BpcDisabilityGrantDocument: bpcDisabilityGrantDocument,
+        BpcDisabilityGrantInssBenefit: bpcDisabilityGrantInssBenefit,
+        BpcDisabilityGrantLegalProceeding: bpcDisabilityGrantLegalProceeding,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt ?? null,

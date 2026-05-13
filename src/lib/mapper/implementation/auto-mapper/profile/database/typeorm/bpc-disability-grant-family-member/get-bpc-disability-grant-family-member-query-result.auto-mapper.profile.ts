@@ -25,7 +25,7 @@ export class GetBpcDisabilityGrantFamilyMemberQueryResultAutoMapperProfile {
     const convertOrmEntityToQueryResult = (
       source: BpcDisabilityGrantFamilyMemberTypeormEntity,
     ): GetBpcDisabilityGrantFamilyMemberQueryResult => {
-      const BpcDisabilityGrantFamilyMemberDocument =
+      const bpcDisabilityGrantFamilyMemberDocument =
         source.BpcDisabilityGrantFamilyMemberDocument?.map((doc) =>
           this.mapper.map(
             doc,
@@ -48,7 +48,7 @@ export class GetBpcDisabilityGrantFamilyMemberQueryResultAutoMapperProfile {
             : null,
         incomeType: source.incomeType,
         hasExpenseProofs: source.hasExpenseProofs ?? null,
-        BpcDisabilityGrantFamilyMemberDocument,
+        BpcDisabilityGrantFamilyMemberDocument: bpcDisabilityGrantFamilyMemberDocument,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt ?? null,

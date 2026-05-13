@@ -4,7 +4,8 @@ import { Injectable } from '@nestjs/common';
 
 import { BpcDisabilityGrantFamilyMemberDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant-family-member-document.typeorm.entity';
 import { BpcDisabilityGrantFamilyMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant-family-member.typeorm.entity';
-import { BpcDisabilityGrantFamilyMemberEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member/bpc-disability-grant-family-member.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
+import { BpcDisabilityGrantFamilyMemberId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member/value-object/bpc-disability-grant-family-member-id/bpc-disability-grant-family-member-id.value-object';
 import { BpcDisabilityGrantFamilyMemberDocumentEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member-document/bpc-disability-grant-family-member-document.entity';
 import { BpcDisabilityGrantFamilyMemberDocumentId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member-document/value-object/bpc-disability-grant-family-member-document-id/bpc-disability-grant-family-member-document-id.value-object';
 
@@ -26,17 +27,20 @@ export class BpcDisabilityGrantFamilyMemberDocumentEntityAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: BpcDisabilityGrantFamilyMemberDocumentTypeormEntity,
     ): BpcDisabilityGrantFamilyMemberDocumentEntity => {
-      const BpcDisabilityGrantFamilyMember = this.mapper.map(
-        source.BpcDisabilityGrantFamilyMember,
-        BpcDisabilityGrantFamilyMemberTypeormEntity,
-        BpcDisabilityGrantFamilyMemberEntity,
-      );
+      if (!source.BpcDisabilityGrantFamilyMember) {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass: BpcDisabilityGrantFamilyMemberDocumentEntity.name,
+          sourceClass: BpcDisabilityGrantFamilyMemberDocumentTypeormEntity.name,
+        });
+      }
 
       return new BpcDisabilityGrantFamilyMemberDocumentEntity({
         id: new BpcDisabilityGrantFamilyMemberDocumentId(source.id),
         document: source.document,
         type: source.type,
-        BpcDisabilityGrantFamilyMember,
+        BpcDisabilityGrantFamilyMemberId: new BpcDisabilityGrantFamilyMemberId(
+          source.BpcDisabilityGrantFamilyMember.id,
+        ),
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt ?? null,
@@ -55,17 +59,13 @@ export class BpcDisabilityGrantFamilyMemberDocumentEntityAutoMapperProfile {
     const convertDomainEntityToOrmEntity = (
       source: BpcDisabilityGrantFamilyMemberDocumentEntity,
     ): BpcDisabilityGrantFamilyMemberDocumentTypeormEntity => {
-      const BpcDisabilityGrantFamilyMember = this.mapper.map(
-        source.BpcDisabilityGrantFamilyMember,
-        BpcDisabilityGrantFamilyMemberEntity,
-        BpcDisabilityGrantFamilyMemberTypeormEntity,
-      );
-
       return BpcDisabilityGrantFamilyMemberDocumentTypeormEntity.build({
         id: source.id.toString(),
         document: source.document,
         type: source.type,
-        BpcDisabilityGrantFamilyMember,
+        BpcDisabilityGrantFamilyMember: {
+          id: source.BpcDisabilityGrantFamilyMemberId.toString(),
+        } as BpcDisabilityGrantFamilyMemberTypeormEntity,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,

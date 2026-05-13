@@ -67,7 +67,7 @@ export class GetBpcDisabilityGrantUseCase {
         BpcDisabilityGrantNotFoundError,
       );
 
-    const BpcDisabilityGrantQueryResult =
+    const bpcDisabilityGrantQueryResult =
       await this.bpcDisabilityGrantQueryRepositoryGateway.findOneByBpcDisabilityGrantIdAndOrganizationIdOrFail(
         bpcDisabilityGrantId,
         organizationSessionData.organizationId,
@@ -75,92 +75,92 @@ export class GetBpcDisabilityGrantUseCase {
       );
 
     const familyMembers = await Promise.all(
-      BpcDisabilityGrantQueryResult.BpcDisabilityGrantFamilyMember.map(
+      bpcDisabilityGrantQueryResult.BpcDisabilityGrantFamilyMember.map(
         async (familyMember: GetBpcDisabilityGrantFamilyMemberQueryResult) =>
           this.buildFamilyMemberResponseDto(familyMember),
       ),
     );
 
     const response = GetBpcDisabilityGrantResponseDto.build({
-      id: BpcDisabilityGrantQueryResult.id,
+      id: bpcDisabilityGrantQueryResult.id,
       status: analysisToolRecordQueryResult.status,
       analysisToolClient: GetBpcDisabilityGrantClientResponseDto.build({
         ...analysisToolRecordQueryResult.analysisToolClient,
       }),
-      ...(BpcDisabilityGrantQueryResult.analysisName !== null && {
-        analysisName: BpcDisabilityGrantQueryResult.analysisName,
+      ...(bpcDisabilityGrantQueryResult.analysisName !== null && {
+        analysisName: bpcDisabilityGrantQueryResult.analysisName,
       }),
-      ...(BpcDisabilityGrantQueryResult.requestEntryDate !== null && {
-        requestEntryDate: BpcDisabilityGrantQueryResult.requestEntryDate,
+      ...(bpcDisabilityGrantQueryResult.requestEntryDate !== null && {
+        requestEntryDate: bpcDisabilityGrantQueryResult.requestEntryDate,
       }),
-      ...(BpcDisabilityGrantQueryResult.denialDate !== null && {
-        denialDate: BpcDisabilityGrantQueryResult.denialDate,
+      ...(bpcDisabilityGrantQueryResult.denialDate !== null && {
+        denialDate: bpcDisabilityGrantQueryResult.denialDate,
       }),
-      ...(BpcDisabilityGrantQueryResult.requestedBenefitType !== null && {
+      ...(bpcDisabilityGrantQueryResult.requestedBenefitType !== null && {
         requestedBenefitType:
-          BpcDisabilityGrantQueryResult.requestedBenefitType,
+          bpcDisabilityGrantQueryResult.requestedBenefitType,
       }),
-      ...(BpcDisabilityGrantQueryResult.category !== null && {
-        category: BpcDisabilityGrantQueryResult.category,
+      ...(bpcDisabilityGrantQueryResult.category !== null && {
+        category: bpcDisabilityGrantQueryResult.category,
       }),
-      ...(BpcDisabilityGrantQueryResult.denialReason !== null && {
-        denialReason: BpcDisabilityGrantQueryResult.denialReason,
+      ...(bpcDisabilityGrantQueryResult.denialReason !== null && {
+        denialReason: bpcDisabilityGrantQueryResult.denialReason,
       }),
-      ...(BpcDisabilityGrantQueryResult.denialReasonDescription !== null && {
+      ...(bpcDisabilityGrantQueryResult.denialReasonDescription !== null && {
         denialReasonDescription:
-          BpcDisabilityGrantQueryResult.denialReasonDescription,
+          bpcDisabilityGrantQueryResult.denialReasonDescription,
       }),
-      ...(BpcDisabilityGrantQueryResult.disabilityType !== null && {
-        disabilityType: BpcDisabilityGrantQueryResult.disabilityType,
+      ...(bpcDisabilityGrantQueryResult.disabilityType !== null && {
+        disabilityType: bpcDisabilityGrantQueryResult.disabilityType,
       }),
-      ...(BpcDisabilityGrantQueryResult.disabilityDegree !== null && {
-        disabilityDegree: BpcDisabilityGrantQueryResult.disabilityDegree,
+      ...(bpcDisabilityGrantQueryResult.disabilityDegree !== null && {
+        disabilityDegree: bpcDisabilityGrantQueryResult.disabilityDegree,
       }),
-      ...(BpcDisabilityGrantQueryResult.estimatedDisabilityStartDate !==
+      ...(bpcDisabilityGrantQueryResult.estimatedDisabilityStartDate !==
         null && {
         estimatedDisabilityStartDate:
-          BpcDisabilityGrantQueryResult.estimatedDisabilityStartDate,
+          bpcDisabilityGrantQueryResult.estimatedDisabilityStartDate,
       }),
-      ...(BpcDisabilityGrantQueryResult.attendsSchoolOrTechnicalCourse !==
+      ...(bpcDisabilityGrantQueryResult.attendsSchoolOrTechnicalCourse !==
         null && {
         attendsSchoolOrTechnicalCourse:
-          BpcDisabilityGrantQueryResult.attendsSchoolOrTechnicalCourse,
+          bpcDisabilityGrantQueryResult.attendsSchoolOrTechnicalCourse,
       }),
-      ...(BpcDisabilityGrantQueryResult.performsLaborActivity !== null && {
+      ...(bpcDisabilityGrantQueryResult.performsLaborActivity !== null && {
         performsLaborActivity:
-          BpcDisabilityGrantQueryResult.performsLaborActivity,
+          bpcDisabilityGrantQueryResult.performsLaborActivity,
       }),
-      ...(BpcDisabilityGrantQueryResult.needsThirdPartyHelp !== null && {
-        needsThirdPartyHelp: BpcDisabilityGrantQueryResult.needsThirdPartyHelp,
+      ...(bpcDisabilityGrantQueryResult.needsThirdPartyHelp !== null && {
+        needsThirdPartyHelp: bpcDisabilityGrantQueryResult.needsThirdPartyHelp,
       }),
-      ...(BpcDisabilityGrantQueryResult.hasAccessToBasicServices !== null && {
+      ...(bpcDisabilityGrantQueryResult.hasAccessToBasicServices !== null && {
         hasAccessToBasicServices:
-          BpcDisabilityGrantQueryResult.hasAccessToBasicServices,
+          bpcDisabilityGrantQueryResult.hasAccessToBasicServices,
       }),
-      ...(BpcDisabilityGrantQueryResult.otherBarriersDescription !== null && {
+      ...(bpcDisabilityGrantQueryResult.otherBarriersDescription !== null && {
         otherBarriersDescription:
-          BpcDisabilityGrantQueryResult.otherBarriersDescription,
+          bpcDisabilityGrantQueryResult.otherBarriersDescription,
       }),
-      ...(BpcDisabilityGrantQueryResult.livesAlone !== null && {
-        livesAlone: BpcDisabilityGrantQueryResult.livesAlone,
+      ...(bpcDisabilityGrantQueryResult.livesAlone !== null && {
+        livesAlone: bpcDisabilityGrantQueryResult.livesAlone,
       }),
-      ...(BpcDisabilityGrantQueryResult.BpcDisabilityGrantResult !== null && {
+      ...(bpcDisabilityGrantQueryResult.BpcDisabilityGrantResult !== null && {
         BpcDisabilityGrantResult: this.buildResultResponseDto(
-          BpcDisabilityGrantQueryResult.BpcDisabilityGrantResult,
+          bpcDisabilityGrantQueryResult.BpcDisabilityGrantResult,
         ),
       }),
       ...(familyMembers.length > 0 && { familyMembers }),
-      ...(BpcDisabilityGrantQueryResult.BpcDisabilityGrantInssBenefit.length >
+      ...(bpcDisabilityGrantQueryResult.BpcDisabilityGrantInssBenefit.length >
         0 && {
         inssBenefitNumbers:
-          BpcDisabilityGrantQueryResult.BpcDisabilityGrantInssBenefit.map(
+          bpcDisabilityGrantQueryResult.BpcDisabilityGrantInssBenefit.map(
             (benefit) => benefit.inssBenefitNumber,
           ),
       }),
-      ...(BpcDisabilityGrantQueryResult.BpcDisabilityGrantLegalProceeding
+      ...(bpcDisabilityGrantQueryResult.BpcDisabilityGrantLegalProceeding
         .length > 0 && {
         legalProceedingNumbers:
-          BpcDisabilityGrantQueryResult.BpcDisabilityGrantLegalProceeding.map(
+          bpcDisabilityGrantQueryResult.BpcDisabilityGrantLegalProceeding.map(
             (proceeding) => proceeding.legalProceedingNumber,
           ),
       }),
@@ -174,9 +174,9 @@ export class GetBpcDisabilityGrantUseCase {
       updatedAt: analysisToolRecordQueryResult.updatedAt,
     });
 
-    if (BpcDisabilityGrantQueryResult.BpcDisabilityGrantDocument.length > 0) {
+    if (bpcDisabilityGrantQueryResult.BpcDisabilityGrantDocument.length > 0) {
       response.documents = await Promise.all(
-        BpcDisabilityGrantQueryResult.BpcDisabilityGrantDocument.map(
+        bpcDisabilityGrantQueryResult.BpcDisabilityGrantDocument.map(
           async (document: GetBpcDisabilityGrantDocumentQueryResult) => {
             const file = await this.fileProcessorGateway.getFileBuffer(
               document.document,

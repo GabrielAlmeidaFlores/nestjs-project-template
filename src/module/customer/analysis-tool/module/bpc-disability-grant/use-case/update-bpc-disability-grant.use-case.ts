@@ -217,7 +217,7 @@ export class UpdateBpcDisabilityGrantUseCase {
         const documentEntity = new BpcDisabilityGrantDocumentEntity({
           document: uploadedDocument,
           type: documentDto.type,
-          BpcDisabilityGrant: updatedBpcDisabilityGrant,
+          BpcDisabilityGrantId: bpcDisabilityGrantId,
         });
 
         const documentTransactions =

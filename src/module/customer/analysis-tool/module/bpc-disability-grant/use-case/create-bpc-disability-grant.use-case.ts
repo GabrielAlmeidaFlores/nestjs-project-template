@@ -86,7 +86,7 @@ export class CreateBpcDisabilityGrantUseCase {
       updatedBy: analysisToolClientQueryResult.updatedBy.id,
     });
 
-    const BpcDisabilityGrant = new BpcDisabilityGrantEntity({
+    const bpcDisabilityGrant = new BpcDisabilityGrantEntity({
       analysisName: dto.analysisName ?? null,
       requestEntryDate: dto.requestEntryDate ?? null,
       denialDate: dto.denialDate ?? null,
@@ -114,7 +114,7 @@ export class CreateBpcDisabilityGrantUseCase {
     const analysisToolRecord = new AnalysisToolRecordEntity({
       code: new AnalysisToolRecordCode(maxCode + 1),
       type: AnalysisToolRecordTypeEnum.BPC_DISABILITY_GRANT,
-      bpcDisabilityGrant: BpcDisabilityGrant,
+      bpcDisabilityGrant: bpcDisabilityGrant,
       analysisToolClient,
       status: AnalysisStatusEnum.IN_PROGRESS,
       createdBy: organizationMember.id,
@@ -123,7 +123,7 @@ export class CreateBpcDisabilityGrantUseCase {
 
     const createBpcDisabilityGrantTransaction =
       this.bpcDisabilityGrantCommandRepositoryGateway.createBpcDisabilityGrant(
-        BpcDisabilityGrant,
+        bpcDisabilityGrant,
       );
 
     const createAnalysisToolRecordTransaction =
@@ -136,7 +136,7 @@ export class CreateBpcDisabilityGrantUseCase {
         this.bpcDisabilityGrantInssBenefitCommandRepositoryGateway.createBpcDisabilityGrantInssBenefit(
           new BpcDisabilityGrantInssBenefitEntity({
             inssBenefitNumber,
-            BpcDisabilityGrantId: BpcDisabilityGrant.id,
+            BpcDisabilityGrantId: bpcDisabilityGrant.id,
           }),
         ),
     );
@@ -146,7 +146,7 @@ export class CreateBpcDisabilityGrantUseCase {
         this.bpcDisabilityGrantLegalProceedingCommandRepositoryGateway.createBpcDisabilityGrantLegalProceeding(
           new BpcDisabilityGrantLegalProceedingEntity({
             legalProceedingNumber,
-            BpcDisabilityGrantId: BpcDisabilityGrant.id,
+            BpcDisabilityGrantId: bpcDisabilityGrant.id,
           }),
         ),
     );
@@ -173,7 +173,7 @@ export class CreateBpcDisabilityGrantUseCase {
         new BpcDisabilityGrantDocumentEntity({
           document: uploadedDocument,
           type: documentDto.type,
-          BpcDisabilityGrant,
+          BpcDisabilityGrantId: bpcDisabilityGrant.id,
         }),
       );
     }
@@ -210,7 +210,7 @@ export class CreateBpcDisabilityGrantUseCase {
     await transaction.commit();
 
     return CreateBpcDisabilityGrantResponseDto.build({
-      BpcDisabilityGrantId: BpcDisabilityGrant.id,
+      BpcDisabilityGrantId: bpcDisabilityGrant.id,
     });
   }
 }

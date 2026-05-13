@@ -2,10 +2,10 @@
 import { BpcDisabilityGrantFamilyMemberEntityPropsInterface } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member/bpc-disability-grant-family-member.entity.props.interface';
 import { BpcDisabilityGrantFamilyMemberIncomeTypeEnum } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member/enum/bpc-disability-grant-family-member-income-type.enum';
 import { BpcDisabilityGrantFamilyMemberKinshipEnum } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member/enum/bpc-disability-grant-family-member-kinship.enum';
+import { BpcDisabilityGrantId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/value-object/bpc-disability-grant-id/bpc-disability-grant-id.value-object';
 import { BpcDisabilityGrantFamilyMemberId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member/value-object/bpc-disability-grant-family-member-id/bpc-disability-grant-family-member-id.value-object';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
-import type { BpcDisabilityGrantEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/bpc-disability-grant.entity';
 import type { BpcDisabilityGrantFamilyMemberDocumentEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member-document/bpc-disability-grant-family-member-document.entity';
 
 export class BpcDisabilityGrantFamilyMemberEntity extends BaseEntity<BpcDisabilityGrantFamilyMemberId> {
@@ -38,7 +38,7 @@ export class BpcDisabilityGrantFamilyMemberEntity extends BaseEntity<BpcDisabili
   @Description(
     'AnÃ¡lise de indeferimento de BPC PcD associada ao membro da famÃ­lia.',
   )
-  public readonly BpcDisabilityGrant: BpcDisabilityGrantEntity;
+  public readonly BpcDisabilityGrantId: BpcDisabilityGrantId;
 
   @Description('Documentos do membro da famÃ­lia.')
   public readonly BpcDisabilityGrantFamilyMemberDocument: BpcDisabilityGrantFamilyMemberDocumentEntity[];
@@ -58,7 +58,7 @@ export class BpcDisabilityGrantFamilyMemberEntity extends BaseEntity<BpcDisabili
     this.monthlyIncomeAmount = props.monthlyIncomeAmount ?? null;
     this.incomeType = props.incomeType ?? null;
     this.hasExpenseProofs = props.hasExpenseProofs ?? null;
-    this.BpcDisabilityGrant = props.BpcDisabilityGrant;
+    this.BpcDisabilityGrantId = props.BpcDisabilityGrantId;
     this.BpcDisabilityGrantFamilyMemberDocument =
       props.BpcDisabilityGrantFamilyMemberDocument ?? [];
   }
