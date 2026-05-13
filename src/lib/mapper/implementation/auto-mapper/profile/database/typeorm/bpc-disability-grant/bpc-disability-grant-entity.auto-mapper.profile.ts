@@ -7,7 +7,6 @@ import { BpcDisabilityGrantTypeormEntity } from '@infra/database/implementation/
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
-import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
 import { BpcDisabilityGrantEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/bpc-disability-grant.entity';
 import { BpcDisabilityGrantId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/value-object/bpc-disability-grant-id/bpc-disability-grant-id.value-object';
 
@@ -55,7 +54,7 @@ export class BpcDisabilityGrantEntityAutoMapperProfile {
         BpcDisabilityGrantDocument: [],
         BpcDisabilityGrantInssBenefit: [],
         BpcDisabilityGrantLegalProceeding: [],
-        analysisToolRecord: null,
+        analysisToolRecordId: null,
         createdBy: new OrganizationMemberId(source.createdBy.id),
         updatedBy: new OrganizationMemberId(source.updatedBy.id),
         createdAt: source.createdAt,
@@ -85,12 +84,8 @@ export class BpcDisabilityGrantEntityAutoMapperProfile {
       } as OrganizationMemberTypeormEntity;
 
       const analysisToolRecord =
-        source.analysisToolRecord !== null
-          ? this.mapper.map(
-              source.analysisToolRecord,
-              AnalysisToolRecordEntity,
-              AnalysisToolRecordTypeormEntity,
-            )
+        source.analysisToolRecordId !== null
+          ? ({ id: source.analysisToolRecordId.toString() } as AnalysisToolRecordTypeormEntity)
           : undefined;
 
       return BpcDisabilityGrantTypeormEntity.build({

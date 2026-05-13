@@ -5,7 +5,8 @@ import { Injectable } from '@nestjs/common';
 import { BpcDisabilityGrantFamilyMemberDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant-family-member-document.typeorm.entity';
 import { BpcDisabilityGrantFamilyMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant-family-member.typeorm.entity';
 import { BpcDisabilityGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant.typeorm.entity';
-import { BpcDisabilityGrantEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/bpc-disability-grant.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
+import { BpcDisabilityGrantId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/value-object/bpc-disability-grant-id/bpc-disability-grant-id.value-object';
 import { BpcDisabilityGrantFamilyMemberEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member/bpc-disability-grant-family-member.entity';
 import { BpcDisabilityGrantFamilyMemberId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member/value-object/bpc-disability-grant-family-member-id/bpc-disability-grant-family-member-id.value-object';
 import { BpcDisabilityGrantFamilyMemberDocumentEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member-document/bpc-disability-grant-family-member-document.entity';
@@ -28,13 +29,14 @@ export class BpcDisabilityGrantFamilyMemberEntityAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: BpcDisabilityGrantFamilyMemberTypeormEntity,
     ): BpcDisabilityGrantFamilyMemberEntity => {
-      const BpcDisabilityGrant = this.mapper.map(
-        source.BpcDisabilityGrant,
-        BpcDisabilityGrantTypeormEntity,
-        BpcDisabilityGrantEntity,
-      );
+      if (!source.BpcDisabilityGrant) {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass: BpcDisabilityGrantFamilyMemberEntity.name,
+          sourceClass: BpcDisabilityGrantFamilyMemberTypeormEntity.name,
+        });
+      }
 
-      const BpcDisabilityGrantFamilyMemberDocument =
+      const bpcDisabilityGrantFamilyMemberDocument =
         source.BpcDisabilityGrantFamilyMemberDocument !== undefined
           ? this.mapper.mapArray(
               source.BpcDisabilityGrantFamilyMemberDocument,
@@ -57,8 +59,10 @@ export class BpcDisabilityGrantFamilyMemberEntityAutoMapperProfile {
             : null,
         incomeType: source.incomeType,
         hasExpenseProofs: source.hasExpenseProofs ?? null,
-        BpcDisabilityGrant,
-        BpcDisabilityGrantFamilyMemberDocument,
+        BpcDisabilityGrantId: new BpcDisabilityGrantId(
+          source.BpcDisabilityGrant.id,
+        ),
+        BpcDisabilityGrantFamilyMemberDocument: bpcDisabilityGrantFamilyMemberDocument,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt ?? null,
@@ -77,13 +81,7 @@ export class BpcDisabilityGrantFamilyMemberEntityAutoMapperProfile {
     const convertDomainEntityToOrmEntity = (
       source: BpcDisabilityGrantFamilyMemberEntity,
     ): BpcDisabilityGrantFamilyMemberTypeormEntity => {
-      const BpcDisabilityGrant = this.mapper.map(
-        source.BpcDisabilityGrant,
-        BpcDisabilityGrantEntity,
-        BpcDisabilityGrantTypeormEntity,
-      );
-
-      const BpcDisabilityGrantFamilyMemberDocument = this.mapper.mapArray(
+      const bpcDisabilityGrantFamilyMemberDocument = this.mapper.mapArray(
         source.BpcDisabilityGrantFamilyMemberDocument,
         BpcDisabilityGrantFamilyMemberDocumentEntity,
         BpcDisabilityGrantFamilyMemberDocumentTypeormEntity,
@@ -99,8 +97,10 @@ export class BpcDisabilityGrantFamilyMemberEntityAutoMapperProfile {
         monthlyIncomeAmount: source.monthlyIncomeAmount?.toString() ?? null,
         incomeType: source.incomeType,
         hasExpenseProofs: source.hasExpenseProofs,
-        BpcDisabilityGrant,
-        BpcDisabilityGrantFamilyMemberDocument,
+        BpcDisabilityGrant: {
+          id: source.BpcDisabilityGrantId.toString(),
+        } as BpcDisabilityGrantTypeormEntity,
+        BpcDisabilityGrantFamilyMemberDocument: bpcDisabilityGrantFamilyMemberDocument,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,

@@ -99,17 +99,17 @@ export class CreateBpcDisabilityGrantResultUseCase {
         BpcDisabilityGrantNotFoundError,
       );
 
-    const BpcDisabilityGrant =
+    const bpcDisabilityGrant =
       await this.bpcDisabilityGrantQueryRepositoryGateway.findOneByBpcDisabilityGrantIdAndOrganizationIdOrFail(
         bpcDisabilityGrantId,
         organizationSessionData.organizationId,
         BpcDisabilityGrantNotFoundError,
       );
 
-    const currentResult = BpcDisabilityGrant.BpcDisabilityGrantResult;
+    const currentResult = bpcDisabilityGrant.BpcDisabilityGrantResult;
     const files = await this.buildFiles(
       analysisToolRecordQueryResult.analysisToolClient,
-      BpcDisabilityGrant,
+      bpcDisabilityGrant,
     );
 
     const completeAnalysisRaw =
@@ -120,7 +120,7 @@ export class CreateBpcDisabilityGrantResultUseCase {
 
     const parsedResult = this.parseResultAnalysis(completeAnalysisRaw);
 
-    const BpcDisabilityGrantResult = new BpcDisabilityGrantResultEntity({
+    const bpcDisabilityGrantResult = new BpcDisabilityGrantResultEntity({
       ...(currentResult !== null && { id: currentResult.id }),
       completeAnalysis: completeAnalysisRaw ?? null,
       simplifiedAnalysis: currentResult?.simplifiedAnalysis ?? null,
@@ -139,7 +139,7 @@ export class CreateBpcDisabilityGrantResultUseCase {
       status: AnalysisStatusEnum.COMPLETED,
       analysisToolClient,
       bpcDisabilityGrant: new BpcDisabilityGrantEntity({
-        id: BpcDisabilityGrant.id,
+        id: bpcDisabilityGrant.id,
         createdBy: analysisToolRecordQueryResult.createdBy.id,
         updatedBy: organizationMember.id,
       }),
@@ -178,11 +178,11 @@ export class CreateBpcDisabilityGrantResultUseCase {
       currentResult !== null
         ? this.bpcDisabilityGrantResultCommandRepositoryGateway.updateBpcDisabilityGrantResult(
             currentResult.id,
-            BpcDisabilityGrantResult,
+            bpcDisabilityGrantResult,
           )
         : this.bpcDisabilityGrantResultCommandRepositoryGateway.createBpcDisabilityGrantResult(
-            BpcDisabilityGrantResult,
-            BpcDisabilityGrant.id,
+            bpcDisabilityGrantResult,
+            bpcDisabilityGrant.id,
           );
 
     const updateAnalysisToolRecordTransaction =

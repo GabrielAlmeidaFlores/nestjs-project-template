@@ -8,7 +8,6 @@ import { AnalysisActivityTrackerGateway } from '@module/customer/analysis-tool/l
 import { AnalysisActivityActionEnum } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/enum/analysis-activity-action.enum';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { BpcDisabilityGrantDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-document/command/bpc-disability-grant-document.command.repository.gateway';
-import { BpcDisabilityGrantEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/bpc-disability-grant.entity';
 import { BpcDisabilityGrantId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/value-object/bpc-disability-grant-id/bpc-disability-grant-id.value-object';
 import { BpcDisabilityGrantDocumentEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-document/bpc-disability-grant-document.entity';
 import { CreateBpcDisabilityGrantDocumentRequestDto } from '@module/customer/analysis-tool/module/bpc-disability-grant/dto/request/create-bpc-disability-grant-document.request.dto';
@@ -62,18 +61,12 @@ export class CreateBpcDisabilityGrantDocumentUseCase {
         BpcDisabilityGrantNotFoundError,
       );
 
-    const BpcDisabilityGrantQueryResult =
+    const bpcDisabilityGrantQueryResult =
       analysisToolRecordQueryResult.bpcDisabilityGrant;
 
-    if (BpcDisabilityGrantQueryResult === null) {
+    if (bpcDisabilityGrantQueryResult === null) {
       throw new BpcDisabilityGrantNotFoundError();
     }
-
-    const BpcDisabilityGrant = new BpcDisabilityGrantEntity({
-      id: BpcDisabilityGrantQueryResult.id,
-      createdBy: organizationMember.id,
-      updatedBy: organizationMember.id,
-    });
 
     if (dto.documents.length === 0) {
       throw new BpcDisabilityGrantDocumentRequiredError();
@@ -101,7 +94,7 @@ export class CreateBpcDisabilityGrantDocumentUseCase {
         new BpcDisabilityGrantDocumentEntity({
           document: uploadedDocument,
           type: documentDto.type,
-          BpcDisabilityGrant,
+          BpcDisabilityGrantId: bpcDisabilityGrantId,
         }),
       );
     }
@@ -128,7 +121,7 @@ export class CreateBpcDisabilityGrantDocumentUseCase {
     await transaction.commit();
 
     return CreateBpcDisabilityGrantDocumentResponseDto.build({
-      BpcDisabilityGrantId: BpcDisabilityGrant.id,
+      BpcDisabilityGrantId: bpcDisabilityGrantId,
     });
   }
 }

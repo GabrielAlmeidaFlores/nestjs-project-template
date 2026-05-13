@@ -3,7 +3,6 @@
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
-import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisActivityTrackerGateway } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.gateway';
@@ -11,7 +10,6 @@ import { AnalysisActivityActionEnum } from '@module/customer/analysis-tool/lib/a
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { BpcDisabilityGrantFamilyMemberCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-family-member/command/bpc-disability-grant-family-member.command.repository.gateway';
 import { BpcDisabilityGrantFamilyMemberDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-family-member-document/command/bpc-disability-grant-family-member-document.command.repository.gateway';
-import { BpcDisabilityGrantEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/bpc-disability-grant.entity';
 import { BpcDisabilityGrantId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/value-object/bpc-disability-grant-id/bpc-disability-grant-id.value-object';
 import { BpcDisabilityGrantFamilyMemberEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member/bpc-disability-grant-family-member.entity';
 import { BpcDisabilityGrantFamilyMemberDocumentEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member-document/bpc-disability-grant-family-member-document.entity';
@@ -74,7 +72,6 @@ export class UpdateBpcDisabilityGrantFamilyMemberUseCase {
     const transactions = await this.buildFamilyMemberTransactions(
       bpcDisabilityGrantId,
       dto,
-      organizationMember.id,
     );
 
     const transactionsWithActivity =
@@ -102,19 +99,12 @@ export class UpdateBpcDisabilityGrantFamilyMemberUseCase {
   private async buildFamilyMemberTransactions(
     bpcDisabilityGrantId: BpcDisabilityGrantId,
     dto: UpdateBpcDisabilityGrantFamilyMemberRequestDto,
-    organizationMemberId: OrganizationMemberId,
   ): Promise<TransactionType[]> {
     const transactions: TransactionType[] = [
       this.bpcDisabilityGrantFamilyMemberCommandRepositoryGateway.deleteAllByBpcDisabilityGrantId(
         bpcDisabilityGrantId,
       ),
     ];
-
-    const BpcDisabilityGrant = new BpcDisabilityGrantEntity({
-      id: bpcDisabilityGrantId,
-      createdBy: organizationMemberId,
-      updatedBy: organizationMemberId,
-    });
 
     for (const familyMemberDto of dto.familyMembers) {
       const familyMemberEntity = new BpcDisabilityGrantFamilyMemberEntity({
@@ -126,7 +116,7 @@ export class UpdateBpcDisabilityGrantFamilyMemberUseCase {
         monthlyIncomeAmount: familyMemberDto.monthlyIncomeAmount ?? null,
         incomeType: familyMemberDto.incomeType ?? null,
         hasExpenseProofs: familyMemberDto.hasExpenseProofs ?? null,
-        BpcDisabilityGrant,
+        BpcDisabilityGrantId: bpcDisabilityGrantId,
       });
 
       transactions.push(
@@ -156,7 +146,7 @@ export class UpdateBpcDisabilityGrantFamilyMemberUseCase {
             new BpcDisabilityGrantFamilyMemberDocumentEntity({
               document: documentFile,
               type: documentDto.type,
-              BpcDisabilityGrantFamilyMember: familyMemberEntity,
+              BpcDisabilityGrantFamilyMemberId: familyMemberEntity.id,
             }),
           ),
         );

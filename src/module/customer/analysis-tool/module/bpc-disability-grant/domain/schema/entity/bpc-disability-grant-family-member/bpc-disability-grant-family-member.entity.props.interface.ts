@@ -1,5 +1,5 @@
 ﻿import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base.entity.props.interface';
-import type { BpcDisabilityGrantEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/bpc-disability-grant.entity';
+import type { BpcDisabilityGrantId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/value-object/bpc-disability-grant-id/bpc-disability-grant-id.value-object';
 import type { BpcDisabilityGrantFamilyMemberIncomeTypeEnum } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member/enum/bpc-disability-grant-family-member-income-type.enum';
 import type { BpcDisabilityGrantFamilyMemberKinshipEnum } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member/enum/bpc-disability-grant-family-member-kinship.enum';
 import type { BpcDisabilityGrantFamilyMemberId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member/value-object/bpc-disability-grant-family-member-id/bpc-disability-grant-family-member-id.value-object';
@@ -14,7 +14,7 @@ export interface BpcDisabilityGrantFamilyMemberEntityPropsInterface extends Base
   monthlyIncomeAmount?: number | null;
   incomeType?: BpcDisabilityGrantFamilyMemberIncomeTypeEnum | null;
   hasExpenseProofs?: boolean | null;
-  BpcDisabilityGrant: BpcDisabilityGrantEntity;
+  BpcDisabilityGrantId: BpcDisabilityGrantId;
   BpcDisabilityGrantFamilyMemberDocument?:
     | BpcDisabilityGrantFamilyMemberDocumentEntity[]
     | null;

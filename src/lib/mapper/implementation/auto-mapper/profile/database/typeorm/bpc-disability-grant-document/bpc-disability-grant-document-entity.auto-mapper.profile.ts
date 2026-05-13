@@ -4,7 +4,8 @@ import { Injectable } from '@nestjs/common';
 
 import { BpcDisabilityGrantDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant-document.typeorm.entity';
 import { BpcDisabilityGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant.typeorm.entity';
-import { BpcDisabilityGrantEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/bpc-disability-grant.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
+import { BpcDisabilityGrantId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/value-object/bpc-disability-grant-id/bpc-disability-grant-id.value-object';
 import { BpcDisabilityGrantDocumentEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-document/bpc-disability-grant-document.entity';
 import { BpcDisabilityGrantDocumentId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-document/value-object/bpc-disability-grant-document-id/bpc-disability-grant-document-id.value-object';
 
@@ -26,17 +27,20 @@ export class BpcDisabilityGrantDocumentEntityAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: BpcDisabilityGrantDocumentTypeormEntity,
     ): BpcDisabilityGrantDocumentEntity => {
-      const BpcDisabilityGrant = this.mapper.map(
-        source.BpcDisabilityGrant,
-        BpcDisabilityGrantTypeormEntity,
-        BpcDisabilityGrantEntity,
-      );
+      if (!source.BpcDisabilityGrant) {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass: BpcDisabilityGrantDocumentEntity.name,
+          sourceClass: BpcDisabilityGrantDocumentTypeormEntity.name,
+        });
+      }
 
       return new BpcDisabilityGrantDocumentEntity({
         id: new BpcDisabilityGrantDocumentId(source.id),
         document: source.document,
         type: source.type,
-        BpcDisabilityGrant,
+        BpcDisabilityGrantId: new BpcDisabilityGrantId(
+          source.BpcDisabilityGrant.id,
+        ),
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt ?? null,
@@ -55,17 +59,13 @@ export class BpcDisabilityGrantDocumentEntityAutoMapperProfile {
     const convertDomainEntityToOrmEntity = (
       source: BpcDisabilityGrantDocumentEntity,
     ): BpcDisabilityGrantDocumentTypeormEntity => {
-      const BpcDisabilityGrant = this.mapper.map(
-        source.BpcDisabilityGrant,
-        BpcDisabilityGrantEntity,
-        BpcDisabilityGrantTypeormEntity,
-      );
-
       return BpcDisabilityGrantDocumentTypeormEntity.build({
         id: source.id.toString(),
         document: source.document,
         type: source.type,
-        BpcDisabilityGrant,
+        BpcDisabilityGrant: {
+          id: source.BpcDisabilityGrantId.toString(),
+        } as BpcDisabilityGrantTypeormEntity,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,

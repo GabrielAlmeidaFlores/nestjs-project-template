@@ -81,29 +81,29 @@ export class DownloadBpcDisabilityGrantSimplifiedAnalysisUseCase {
         organizationMember.id,
       );
 
-    const BpcDisabilityGrantQueryResult =
+    const bpcDisabilityGrantQueryResult =
       await this.bpcDisabilityGrantQueryRepositoryGateway.findOneByBpcDisabilityGrantIdAndOrganizationIdOrFail(
         bpcDisabilityGrantId,
         organizationSessionData.organizationId,
         BpcDisabilityGrantNotFoundError,
       );
 
-    const BpcDisabilityGrantResult =
-      BpcDisabilityGrantQueryResult.BpcDisabilityGrantResult;
+    const bpcDisabilityGrantResult =
+      bpcDisabilityGrantQueryResult.BpcDisabilityGrantResult;
 
-    if (BpcDisabilityGrantResult === null) {
+    if (bpcDisabilityGrantResult === null) {
       throw new BpcDisabilityGrantDoesNotContainCompleteAnalysisError();
     }
 
     const completeAnalysis = this.extractAnalysisResult(
-      BpcDisabilityGrantResult.completeAnalysis,
+      bpcDisabilityGrantResult.completeAnalysis,
     );
 
     if (completeAnalysis === null) {
       throw new BpcDisabilityGrantDoesNotContainCompleteAnalysisError();
     }
 
-    let responseAi = BpcDisabilityGrantResult.simplifiedAnalysis;
+    let responseAi = bpcDisabilityGrantResult.simplifiedAnalysis;
 
     if (responseAi === null) {
       const simplifiedAnalysis =
@@ -113,13 +113,13 @@ export class DownloadBpcDisabilityGrantSimplifiedAnalysisUseCase {
         );
 
       const updatedResultEntity = new BpcDisabilityGrantResultEntity({
-        ...BpcDisabilityGrantResult,
+        ...bpcDisabilityGrantResult,
         simplifiedAnalysis,
       });
 
       const updateResultTransaction =
         this.bpcDisabilityGrantResultCommandRepositoryGateway.updateBpcDisabilityGrantResult(
-          BpcDisabilityGrantResult.id,
+          bpcDisabilityGrantResult.id,
           updatedResultEntity,
         );
 

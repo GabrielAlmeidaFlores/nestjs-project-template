@@ -10,7 +10,6 @@ import { AnalysisActivityActionEnum } from '@module/customer/analysis-tool/lib/a
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { BpcDisabilityGrantFamilyMemberCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-family-member/command/bpc-disability-grant-family-member.command.repository.gateway';
 import { BpcDisabilityGrantFamilyMemberDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-family-member-document/command/bpc-disability-grant-family-member-document.command.repository.gateway';
-import { BpcDisabilityGrantEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/bpc-disability-grant.entity';
 import { BpcDisabilityGrantId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/value-object/bpc-disability-grant-id/bpc-disability-grant-id.value-object';
 import { BpcDisabilityGrantFamilyMemberEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member/bpc-disability-grant-family-member.entity';
 import { BpcDisabilityGrantFamilyMemberDocumentEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member-document/bpc-disability-grant-family-member-document.entity';
@@ -66,18 +65,12 @@ export class CreateBpcDisabilityGrantFamilyMemberUseCase {
         BpcDisabilityGrantNotFoundError,
       );
 
-    const BpcDisabilityGrantQueryResult =
+    const bpcDisabilityGrantQueryResult =
       analysisToolRecordQueryResult.bpcDisabilityGrant;
 
-    if (BpcDisabilityGrantQueryResult === null) {
+    if (bpcDisabilityGrantQueryResult === null) {
       throw new BpcDisabilityGrantNotFoundError();
     }
-
-    const BpcDisabilityGrant = new BpcDisabilityGrantEntity({
-      id: BpcDisabilityGrantQueryResult.id,
-      createdBy: organizationMember.id,
-      updatedBy: organizationMember.id,
-    });
 
     const transactions: TransactionType[] = [];
 
@@ -91,7 +84,7 @@ export class CreateBpcDisabilityGrantFamilyMemberUseCase {
         monthlyIncomeAmount: familyMemberDto.monthlyIncomeAmount ?? null,
         incomeType: familyMemberDto.incomeType ?? null,
         hasExpenseProofs: familyMemberDto.hasExpenseProofs ?? null,
-        BpcDisabilityGrant,
+        BpcDisabilityGrantId: bpcDisabilityGrantQueryResult.id,
       });
 
       transactions.push(
@@ -121,7 +114,7 @@ export class CreateBpcDisabilityGrantFamilyMemberUseCase {
             new BpcDisabilityGrantFamilyMemberDocumentEntity({
               document: documentFile,
               type: documentDto.type,
-              BpcDisabilityGrantFamilyMember: familyMemberEntity,
+              BpcDisabilityGrantFamilyMemberId: familyMemberEntity.id,
             });
 
           transactions.push(
@@ -150,7 +143,7 @@ export class CreateBpcDisabilityGrantFamilyMemberUseCase {
     await transaction.commit();
 
     return CreateBpcDisabilityGrantFamilyMemberResponseDto.build({
-      BpcDisabilityGrantId: BpcDisabilityGrant.id,
+      BpcDisabilityGrantId: bpcDisabilityGrantQueryResult.id,
     });
   }
 }

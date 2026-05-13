@@ -6,7 +6,7 @@ import { RetirementPlanningDisabilityDegreeEnum } from '@module/customer/analysi
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
-import type { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
+import type { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import type { BpcDisabilityGrantEntityPropsInterface } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/bpc-disability-grant.entity.props.interface';
 import type { BpcDisabilityGrantDocumentEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-document/bpc-disability-grant-document.entity';
 import type { BpcDisabilityGrantFamilyMemberEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member/bpc-disability-grant-family-member.entity';
@@ -72,7 +72,7 @@ export class BpcDisabilityGrantEntity extends BaseEntity<BpcDisabilityGrantId> {
   public readonly BpcDisabilityGrantLegalProceeding: BpcDisabilityGrantLegalProceedingEntity[];
 
   @Description('Registro da ferramenta de anÃ¡lise associado.')
-  public readonly analysisToolRecord: AnalysisToolRecordEntity | null;
+  public readonly analysisToolRecordId: AnalysisToolRecordId | null;
 
   @Description('Membro da organizaÃ§Ã£o que criou a anÃ¡lise de BPC ao Idoso.')
   public readonly createdBy: OrganizationMemberId;
@@ -110,7 +110,7 @@ export class BpcDisabilityGrantEntity extends BaseEntity<BpcDisabilityGrantId> {
       props.BpcDisabilityGrantInssBenefit ?? [];
     this.BpcDisabilityGrantLegalProceeding =
       props.BpcDisabilityGrantLegalProceeding ?? [];
-    this.analysisToolRecord = props.analysisToolRecord ?? null;
+    this.analysisToolRecordId = props.analysisToolRecordId ?? null;
     this.createdBy = props.createdBy;
     this.updatedBy = props.updatedBy;
   }
