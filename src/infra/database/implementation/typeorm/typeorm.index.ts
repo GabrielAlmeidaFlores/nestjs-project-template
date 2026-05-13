@@ -570,6 +570,13 @@ import { BpcDisabilityDenialInssBenefitTypeormEntity } from '@infra/database/imp
 import { BpcDisabilityDenialLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-denial-legal-proceeding.typeorm.entity';
 import { BpcDisabilityDenialResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-denial-result.typeorm.entity';
 import { BpcDisabilityDenialTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-denial.typeorm.entity';
+import { BpcDisabilityGrantDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant-document.typeorm.entity';
+import { BpcDisabilityGrantFamilyMemberDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant-family-member-document.typeorm.entity';
+import { BpcDisabilityGrantFamilyMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant-family-member.typeorm.entity';
+import { BpcDisabilityGrantInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant-inss-benefit.typeorm.entity';
+import { BpcDisabilityGrantLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant-legal-proceeding.typeorm.entity';
+import { BpcDisabilityGrantResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant-result.typeorm.entity';
+import { BpcDisabilityGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant.typeorm.entity';
 import { BpcDisabilityTerminationDisabilityAssessmentDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-termination-disability-assessment-document.typeorm.entity';
 import { BpcDisabilityTerminationDisabilityAssessmentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-termination-disability-assessment.typeorm.entity';
 import { BpcDisabilityTerminationDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-termination-document.typeorm.entity';
@@ -1414,6 +1421,13 @@ export class TypeormIndex {
     BpcDisabilityDenialResultTypeormEntity,
     BpcDisabilityDenialInssBenefitTypeormEntity,
     BpcDisabilityDenialLegalProceedingTypeormEntity,
+    BpcDisabilityGrantTypeormEntity,
+    BpcDisabilityGrantDocumentTypeormEntity,
+    BpcDisabilityGrantFamilyMemberTypeormEntity,
+    BpcDisabilityGrantFamilyMemberDocumentTypeormEntity,
+    BpcDisabilityGrantResultTypeormEntity,
+    BpcDisabilityGrantInssBenefitTypeormEntity,
+    BpcDisabilityGrantLegalProceedingTypeormEntity,
     BpcDisabilityTerminationTypeormEntity,
     BpcDisabilityTerminationDisabilityAssessmentTypeormEntity,
     BpcDisabilityTerminationDisabilityAssessmentDocumentTypeormEntity,
