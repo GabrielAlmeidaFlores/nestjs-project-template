@@ -65,7 +65,19 @@ export class InternalAnalysisToolsService extends McpToolsGateway {
       }),
       McpToolModel.build({
         name: 'update_cnis_analysis',
-        description: 'Update a specific field of an analysis result',
+        description:
+          'Update a specific field of an analysis result. ' +
+          'Most fields (simplifiedAnalysis, firstAnalysis, inssDecisionAnalysis, etc.) accept plain text or Markdown. ' +
+          'Some fields store JSON-stringified data and require valid JSON strings: ' +
+          'RETIREMENT_PLANNING_RPPS (completeAnalysis, simplifiedAnalysis), ' +
+          'RETIREMENT_PLANNING_RGPS (result, compareCnisCtps), ' +
+          'RURAL_OR_HYBRID_RETIREMENT_ANALYSIS/REJECTION (all analysis fields), ' +
+          'TEACHER_RETIREMENT_PLANNING (completeAnalysis, simplifiedAnalysis), ' +
+          'BPC_DISABILITY_DENIAL/BPC_ELDERLY_CESSATION (applicableRules, benefitSummaries), ' +
+          'GENERAL_URBAN_RETIREMENT_GRANT/REVIEW (completeAnalysis), ' +
+          'SPECIAL_RETIREMENT_GRANT (completeAnalysis), ' +
+          'PER_CAPITA_INCOME_FOR_BPC_ANALYSIS (completeAnalysis). ' +
+          'Call get_database_schema for the full field reference.',
         parameters: {
           type: 'object',
           properties: {
@@ -206,6 +218,92 @@ export class InternalAnalysisToolsService extends McpToolsGateway {
           required: ['record_id', 'field_name', 'new_content'],
         },
       }),
+      McpToolModel.build({
+        name: 'get_accident_benefit_rejection',
+        description:
+          'Get accident benefit rejection analysis details by accident_benefit_rejection_id. Use this for analyses of type ACCIDENT_BENEFIT_REJECTION.',
+        parameters: {
+          type: 'object',
+          properties: {
+            accident_benefit_rejection_id: {
+              type: 'string',
+              description: 'The accident benefit rejection analysis ID',
+            },
+          },
+          required: ['accident_benefit_rejection_id'],
+        },
+      }),
+      McpToolModel.build({
+        name: 'update_accident_benefit_rejection_result',
+        description:
+          'Update a specific field of an accident benefit rejection analysis result. Fields: firstAnalysis, secondAnalysis, completeAnalysis, simplifiedAnalysis, completeAnalysisDownload.',
+        parameters: {
+          type: 'object',
+          properties: {
+            accident_benefit_rejection_id: {
+              type: 'string',
+              description: 'The accident benefit rejection analysis ID',
+            },
+            field_name: {
+              type: 'string',
+              description: 'Name of the field to update',
+            },
+            new_content: {
+              type: 'string',
+              description: 'New content for the field',
+            },
+          },
+          required: [
+            'accident_benefit_rejection_id',
+            'field_name',
+            'new_content',
+          ],
+        },
+      }),
+      McpToolModel.build({
+        name: 'get_retirement_permanent_disability_revision',
+        description:
+          'Get retirement permanent disability revision analysis details by retirement_permanent_disability_revision_id. Use this for analyses of type RETIREMENT_PERMANENT_DISABILITY_REVISION.',
+        parameters: {
+          type: 'object',
+          properties: {
+            retirement_permanent_disability_revision_id: {
+              type: 'string',
+              description:
+                'The retirement permanent disability revision analysis ID',
+            },
+          },
+          required: ['retirement_permanent_disability_revision_id'],
+        },
+      }),
+      McpToolModel.build({
+        name: 'update_retirement_permanent_disability_revision_result',
+        description:
+          'Update a specific field of a retirement permanent disability revision result. Fields: retirementPermanentDisabilityRevisionFirstAnalysis, retirementPermanentDisabilityRevisionCompleteAnalysis, retirementPermanentDisabilityRevisionCompleteAnalysisDownload, retirementPermanentDisabilityRevisionSimplifiedAnalysis.',
+        parameters: {
+          type: 'object',
+          properties: {
+            retirement_permanent_disability_revision_id: {
+              type: 'string',
+              description:
+                'The retirement permanent disability revision analysis ID',
+            },
+            field_name: {
+              type: 'string',
+              description: 'Name of the field to update',
+            },
+            new_content: {
+              type: 'string',
+              description: 'New content for the field',
+            },
+          },
+          required: [
+            'retirement_permanent_disability_revision_id',
+            'field_name',
+            'new_content',
+          ],
+        },
+      }),
     ]);
   }
 
@@ -272,6 +370,26 @@ export class InternalAnalysisToolsService extends McpToolsGateway {
           p,
           'update_retirement_planning',
         ),
+      get_accident_benefit_rejection: (p) =>
+        this.analysisRecordHandler.getAccidentBenefitRejection(
+          p,
+          'get_accident_benefit_rejection',
+        ),
+      update_accident_benefit_rejection_result: (p) =>
+        this.analysisRecordHandler.updateAccidentBenefitRejectionResult(
+          p,
+          'update_accident_benefit_rejection_result',
+        ),
+      get_retirement_permanent_disability_revision: (p) =>
+        this.analysisRecordHandler.getRetirementPermanentDisabilityRevision(
+          p,
+          'get_retirement_permanent_disability_revision',
+        ),
+      update_retirement_permanent_disability_revision_result: (p) =>
+        this.analysisRecordHandler.updateRetirementPermanentDisabilityRevisionResult(
+          p,
+          'update_retirement_permanent_disability_revision_result',
+        ),
     };
 
     const handler = toolMap[toolName];
@@ -296,9 +414,42 @@ export class InternalAnalysisToolsService extends McpToolsGateway {
   }
 
   public override getDatabaseSchema(): Promise<string> {
-    return Promise.resolve(
-      'Internal database schema - use available tools to query data',
-    );
+    return Promise.resolve(`
+# Analysis Tool - Field Reference
+
+## General rules
+- Use list_analysis_records to find records, then get_cnis_analysis_details with the record_id to read all fields.
+- Use update_cnis_analysis (or dedicated tools below) to update a specific field.
+- For ACCIDENT_BENEFIT_REJECTION and RETIREMENT_PERMANENT_DISABILITY_REVISION, use dedicated get/update tools.
+- TEACHER_RETIREMENT_PLANNING_RPPS is not yet supported (infrastructure not implemented).
+
+## ⚠️ JSON-stringified fields (must provide valid JSON string when updating)
+These fields store JSON-serialized objects/arrays as plain strings.
+When reading you'll receive the raw JSON string; when updating you MUST provide valid JSON:
+
+| Analysis type | Field(s) that are JSON strings |
+|---|---|
+| RETIREMENT_PLANNING_RPPS | retirementPlanningRppsCompleteAnalysis, retirementPlanningRppsSimplifiedAnalysis |
+| RETIREMENT_PLANNING_RGPS | result (retirementPlanningRgpsResult), compareCnisCtps, compareCnisCtpsRaw |
+| RURAL_OR_HYBRID_RETIREMENT_ANALYSIS | firstAnalysis, secondAnalysis, completeAnalysis, simplifiedAnalysis, completeAnalysisDownload, simplifiedAnalysisDownload |
+| RURAL_OR_HYBRID_RETIREMENT_REJECTION | completeAnalysis, firstAnalysis |
+| TEACHER_RETIREMENT_PLANNING | teacherRetirementPlanningCompleteAnalysis, teacherRetirementPlanningSimplifiedAnalysis |
+| BPC_DISABILITY_DENIAL | applicableRules (JSON array), benefitSummaries (JSON array) |
+| BPC_ELDERLY_CESSATION | applicableRules (JSON array), benefitSummaries (JSON array) |
+| GENERAL_URBAN_RETIREMENT_GRANT | generalUrbanRetirementGrantCompleteAnalysis |
+| GENERAL_URBAN_RETIREMENT_REVIEW | generalUrbanRetirementReviewCompleteAnalysis |
+| SPECIAL_RETIREMENT_GRANT | specialRetirementGrantCompleteAnalysis |
+| PER_CAPITA_INCOME_FOR_BPC_ANALYSIS | completeAnalysis |
+| DISABILITY_RETIREMENT_PLANNING | disabilityRetirementPlanningCompleteAnalysis |
+
+## ✅ Plain text / Markdown fields (safe to update with readable text)
+All other fields (simplifiedAnalysis, firstAnalysis, secondAnalysis, inssDecisionAnalysis,
+completeAnalysisDownload for most types, etc.) store plain text or Markdown.
+
+## Organisation isolation
+All queries are automatically scoped to the authenticated user's organisation.
+The AI cannot access data from other organisations.
+    `);
   }
 
   public override getDatabaseStats(): Promise<McpDatabaseStatsModel> {
