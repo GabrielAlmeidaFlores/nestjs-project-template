@@ -304,6 +304,52 @@ export class InternalAnalysisToolsService extends McpToolsGateway {
           ],
         },
       }),
+      McpToolModel.build({
+        name: 'get_teacher_retirement_planning_rpps',
+        description:
+          'Get teacher retirement planning RPPS analysis details by teacher_retirement_planning_rpps_id. ' +
+          'Use this for analyses of type TEACHER_RETIREMENT_PLANNING_RPPS. ' +
+          'Fields teacherRetirementPlanningCompleteAnalysis and teacherRetirementPlanningSimplifiedAnalysis store JSON-stringified data.',
+        parameters: {
+          type: 'object',
+          properties: {
+            teacher_retirement_planning_rpps_id: {
+              type: 'string',
+              description: 'The teacher retirement planning RPPS analysis ID',
+            },
+          },
+          required: ['teacher_retirement_planning_rpps_id'],
+        },
+      }),
+      McpToolModel.build({
+        name: 'update_teacher_retirement_planning_rpps_result',
+        description:
+          'Update a specific field of a teacher retirement planning RPPS result. ' +
+          'Plain-text fields: teacherRetirementPlanningCompleteAnalysisDownload. ' +
+          'JSON-stringified fields (must provide valid JSON): teacherRetirementPlanningCompleteAnalysis, teacherRetirementPlanningSimplifiedAnalysis.',
+        parameters: {
+          type: 'object',
+          properties: {
+            teacher_retirement_planning_rpps_id: {
+              type: 'string',
+              description: 'The teacher retirement planning RPPS analysis ID',
+            },
+            field_name: {
+              type: 'string',
+              description: 'Name of the field to update',
+            },
+            new_content: {
+              type: 'string',
+              description: 'New content for the field',
+            },
+          },
+          required: [
+            'teacher_retirement_planning_rpps_id',
+            'field_name',
+            'new_content',
+          ],
+        },
+      }),
     ]);
   }
 
@@ -390,6 +436,16 @@ export class InternalAnalysisToolsService extends McpToolsGateway {
           p,
           'update_retirement_permanent_disability_revision_result',
         ),
+      get_teacher_retirement_planning_rpps: (p) =>
+        this.analysisRecordHandler.getTeacherRetirementPlanningRpps(
+          p,
+          'get_teacher_retirement_planning_rpps',
+        ),
+      update_teacher_retirement_planning_rpps_result: (p) =>
+        this.analysisRecordHandler.updateTeacherRetirementPlanningRppsResult(
+          p,
+          'update_teacher_retirement_planning_rpps_result',
+        ),
     };
 
     const handler = toolMap[toolName];
@@ -420,8 +476,8 @@ export class InternalAnalysisToolsService extends McpToolsGateway {
 ## General rules
 - Use list_analysis_records to find records, then get_cnis_analysis_details with the record_id to read all fields.
 - Use update_cnis_analysis (or dedicated tools below) to update a specific field.
-- For ACCIDENT_BENEFIT_REJECTION and RETIREMENT_PERMANENT_DISABILITY_REVISION, use dedicated get/update tools.
-- TEACHER_RETIREMENT_PLANNING_RPPS is not yet supported (infrastructure not implemented).
+- For ACCIDENT_BENEFIT_REJECTION, RETIREMENT_PERMANENT_DISABILITY_REVISION and TEACHER_RETIREMENT_PLANNING_RPPS, use dedicated get/update tools.
+- All 48 analysis types are supported.
 
 ## ⚠️ JSON-stringified fields (must provide valid JSON string when updating)
 These fields store JSON-serialized objects/arrays as plain strings.
@@ -436,8 +492,8 @@ When reading you'll receive the raw JSON string; when updating you MUST provide 
 | TEACHER_RETIREMENT_PLANNING | teacherRetirementPlanningCompleteAnalysis, teacherRetirementPlanningSimplifiedAnalysis |
 | BPC_DISABILITY_DENIAL | applicableRules (JSON array), benefitSummaries (JSON array) |
 | BPC_ELDERLY_CESSATION | applicableRules (JSON array), benefitSummaries (JSON array) |
-| GENERAL_URBAN_RETIREMENT_GRANT | generalUrbanRetirementGrantCompleteAnalysis |
-| GENERAL_URBAN_RETIREMENT_REVIEW | generalUrbanRetirementReviewCompleteAnalysis |
+| GENERAL_URBAN_RETIREMENT_GRANT | generalUrbanRetirementGrantCompleteAnalysis, compareCnisCtps, compareCnisCtpsRaw |
+| GENERAL_URBAN_RETIREMENT_REVIEW | generalUrbanRetirementReviewCompleteAnalysis, compareCnisCtps, compareCnisCtpsRaw |
 | SPECIAL_RETIREMENT_GRANT | specialRetirementGrantCompleteAnalysis |
 | PER_CAPITA_INCOME_FOR_BPC_ANALYSIS | completeAnalysis |
 | DISABILITY_RETIREMENT_PLANNING | disabilityRetirementPlanningCompleteAnalysis |

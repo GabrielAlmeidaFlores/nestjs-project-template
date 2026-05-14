@@ -59,6 +59,9 @@ import { DisabilityRetirementPlanningResultId } from '@module/customer/analysis-
 import { DisabilityRetirementPlanningGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/repository/disability-retirement-planning-grant-result/command/disability-retirement-planning-grant-result.command.repository.gateway';
 import { DisabilityRetirementPlanningGrantResultEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-result/disability-retirement-planning-grant-result.entity';
 import { DisabilityRetirementPlanningGrantResultId } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-result/value-object/disability-retirement-planning-grant-result-id.value-object';
+import { DisabilityRetirementPlanningRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/repository/disability-retirement-planning-rejection-result/command/disability-retirement-planning-rejection-result.command.repository.gateway';
+import { DisabilityRetirementPlanningRejectionResultEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection-result/disability-retirement-planning-rejection-result.entity';
+import { DisabilityRetirementPlanningRejectionResultId } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection-result/value-object/disability-retirement-planning-rejection-result-id/disability-retirement-planning-rejection-result-id.value-object';
 import { ElderlyBpcRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/repository/elderly-bpc-rejection/query/elderly-bpc-rejection.query.repository.gateway';
 import { ElderlyBpcRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/repository/elderly-bpc-rejection-result/command/elderly-bpc-rejection-result.command.repository.gateway';
 import { ElderlyBpcRejectionId } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/schema/entity/elderly-bpc-rejection/value-object/elderly-bpc-rejection-id/elderly-bpc-rejection-id.value-object';
@@ -137,6 +140,7 @@ import { SpecialRetirementGrantResultEntity } from '@module/customer/analysis-to
 import { SpecialRetirementGrantResultId } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant-result/value-object/special-retirement-grant-result-id/special-retirement-grant-result-id.value-object';
 import { SpecialRetirementRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/repository/special-retirement-rejection-result/command/special-retirement-rejection-result.command.repository.gateway';
 import { SpecialRetirementRejectionResultEntity } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-result/special-retirement-rejection-result.entity';
+import { SpecialRetirementRejectionResultId } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-result/value-object/special-retirement-rejection-result-id.value-object';
 import { SpeechGeneratorResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator-result/command/speech-generator-result.command.repository.gateway';
 import { SpeechGeneratorResultEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator-result/speech-generator-result.entity';
 import { SpeechGeneratorResultId } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator-result/value-object/speech-generator-result-id/speech-generator-result-id.value-object';
@@ -146,6 +150,7 @@ import { SurvivorPensionAnalysisId } from '@module/customer/analysis-tool/module
 import { SurvivorPensionAnalysisResultEntity } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-result/survivor-pension-analysis-result.entity';
 import { SurvivorPensionAnalysisResultId } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-result/value-object/survivor-pension-analysis-result-id/survivor-pension-analysis-result-id.value-object';
 import { TeacherRetirementPlanningResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-result/command/teacher-retirement-planning-result.command.repository.gateway';
+import { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
 import { TeacherRetirementPlanningResultEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-result/teacher-retirement-planning-result.entity';
 import { TeacherRetirementPlanningResultId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-result/value-object/teacher-retirement-planning-result-id.value-object';
 import { TeacherRetirementPlanningRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/repository/teacher-retirement-planning-rejection/query/teacher-retirement-planning-rejection.query.repository.gateway';
@@ -153,6 +158,11 @@ import { TeacherRetirementPlanningRejectionResultCommandRepositoryGateway } from
 import { TeacherRetirementPlanningRejectionId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection/value-object/teacher-retirement-planning-rejection-id.value-object';
 import { TeacherRetirementPlanningRejectionResultEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection-result/teacher-retirement-planning-rejection-result.entity';
 import { TeacherRetirementPlanningRejectionResultId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection-result/value-object/teacher-retirement-planning-rejection-result-id.value-object';
+import { TeacherRetirementPlanningRppsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning/query/teacher-retirement-planning.query.repository.gateway';
+import { TeacherRetirementPlanningRppsResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning-result/command/teacher-retirement-planning-result.command.repository.gateway';
+import { TeacherRetirementPlanningRppsId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
+import { TeacherRetirementPlanningRppsResultEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning-result/teacher-retirement-planning-result.entity';
+import { TeacherRetirementPlanningRppsResultId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning-result/value-object/teacher-retirement-planning-result-id.value-object';
 import { TemporaryDisabilityBenefitsGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-result/command/temporary-disability-benefits-grant-result.command.repository.gateway';
 import { TemporaryDisabilityBenefitsGrantResultEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-result/temporary-disability-benefits-grant-result.entity';
 import { TemporaryDisabilityBenefitsGrantResultId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-result/value-object/temporary-disability-benefits-grant-result-id.value-object';
@@ -202,6 +212,7 @@ export class McpAnalysisRecordHandler {
     private readonly deathBenefitRejectionResultCommandRepo: DeathBenefitRejectionResultCommandRepositoryGateway,
     private readonly disabilityRetirementPlanningGrantResultCommandRepo: DisabilityRetirementPlanningGrantResultCommandRepositoryGateway,
     private readonly disabilityRetirementPlanningResultCommandRepo: DisabilityRetirementPlanningResultCommandRepositoryGateway,
+    private readonly disabilityRetirementPlanningRejectionResultCommandRepo: DisabilityRetirementPlanningRejectionResultCommandRepositoryGateway,
     private readonly temporaryDisabilityGrantResultCommandRepo: TemporaryDisabilityBenefitsGrantResultCommandRepositoryGateway,
     private readonly temporaryDisabilityTerminatedResultCommandRepo: TemporaryDisabilityBenefitsTerminatedResultCommandRepositoryGateway,
     private readonly temporaryIncapacityRejectionResultCommandRepo: TemporaryIncapacityBenefitRejectionResultCommandRepositoryGateway,
@@ -225,6 +236,8 @@ export class McpAnalysisRecordHandler {
     private readonly accidentBenefitRejectionResultCommandRepo: AccidentBenefitRejectionResultCommandRepositoryGateway,
     private readonly retirementPermanentDisabilityRevisionQueryRepo: RetirementPermanentDisabilityRevisionQueryRepositoryGateway,
     private readonly retirementPermanentDisabilityRevisionResultCommandRepo: RetirementPermanentDisabilityRevisionResultCommandRepositoryGateway,
+    private readonly teacherRetirementPlanningRppsQueryRepo: TeacherRetirementPlanningRppsQueryRepositoryGateway,
+    private readonly teacherRetirementPlanningRppsResultCommandRepo: TeacherRetirementPlanningRppsResultCommandRepositoryGateway,
   ) {}
 
   public async listAnalysisRecords(
@@ -1039,7 +1052,10 @@ export class McpAnalysisRecordHandler {
           });
         }
         const props: Record<string, unknown> = {
-          id: r.id,
+          id:
+            r.id instanceof SpecialRetirementRejectionResultId
+              ? r.id
+              : new SpecialRetirementRejectionResultId(r.id),
           firstAnalysis: r.firstAnalysis,
           completeAnalysis: r.completeAnalysis,
           simplifiedAnalysis: r.simplifiedAnalysis,
@@ -1140,31 +1156,33 @@ export class McpAnalysisRecordHandler {
             message: 'No disability retirement planning rejection data found',
           });
         }
-        const r = drpRejData.result;
+        const r = drpRejData.disabilityRetirementPlanningRejectionResult;
         if (!r) {
           throw new McpExecuteToolCallError({
             toolName,
             message: 'No result found',
           });
         }
-        const id = new DisabilityRetirementPlanningResultId(r.id);
+        const id =
+          r.id instanceof DisabilityRetirementPlanningRejectionResultId
+            ? r.id
+            : new DisabilityRetirementPlanningRejectionResultId(r.id);
         const props: Record<string, unknown> = {
           id,
-          disabilityRetirementPlanningCompleteAnalysis:
-            r.disabilityRetirementPlanningCompleteAnalysis,
-          disabilityRetirementPlanningSimplifiedAnalysis:
-            r.disabilityRetirementPlanningSimplifiedAnalysis,
-          disabilityRetirementPlanningCompleteAnalysisDownload:
-            r.disabilityRetirementPlanningCompleteAnalysisDownload,
+          inssDecisionAnalysis: r.inssDecisionAnalysis,
+          firstAnalysis: r.firstAnalysis,
+          completeAnalysis: r.completeAnalysis,
+          completeAnalysisDownload: r.completeAnalysisDownload,
+          simplifiedAnalysis: r.simplifiedAnalysis,
         };
         props[fieldName] = newContent;
-        const entity = new DisabilityRetirementPlanningResultEntity(
+        const entity = new DisabilityRetirementPlanningRejectionResultEntity(
           props as unknown as ConstructorParameters<
-            typeof DisabilityRetirementPlanningResultEntity
+            typeof DisabilityRetirementPlanningRejectionResultEntity
           >[0],
         );
         await this.transactionRepo.execute(
-          this.disabilityRetirementPlanningResultCommandRepo.updateDisabilityRetirementPlanningResult(
+          this.disabilityRetirementPlanningRejectionResultCommandRepo.updateDisabilityRetirementPlanningRejectionResult(
             id,
             entity,
           ),
@@ -1797,7 +1815,7 @@ export class McpAnalysisRecordHandler {
         throw new McpExecuteToolCallError({
           toolName,
           message:
-            'Update not supported for this analysis type due to complex entity requirements',
+            'Use dedicated tool get_teacher_retirement_planning_rpps and update_teacher_retirement_planning_rpps_result for TEACHER_RETIREMENT_PLANNING_RPPS analyses',
         });
 
       case AnalysisToolRecordTypeEnum.RURAL_TIMELINE_ANALYSIS: {
@@ -2299,6 +2317,114 @@ export class McpAnalysisRecordHandler {
     await this.transactionRepo.execute(
       this.retirementPermanentDisabilityRevisionResultCommandRepo.updateRetirementPermanentDisabilityRevisionResult(
         resultId,
+        entity,
+      ),
+    );
+    return {
+      success: true,
+      message: `Field '${fieldName}' updated successfully`,
+    };
+  }
+  public async getTeacherRetirementPlanningRpps(
+    params: Record<string, unknown>,
+    toolName: string,
+  ): Promise<unknown> {
+    const { orgId, authId } = this.getOrgContext(params);
+    const rawId = params['teacher_retirement_planning_rpps_id'] as string;
+    if (!rawId) {
+      throw new McpExecuteToolCallError({
+        toolName,
+        message: 'teacher_retirement_planning_rpps_id is required',
+      });
+    }
+    const rppsId = new TeacherRetirementPlanningRppsId(rawId);
+    // Auth check via the shared table method (same underlying DB row)
+    await this.analysisToolRecordQueryRepo.findWithRelationsByTeacherRetirementPlanningIdAndOrganizationIdAndAuthIdentityIdOrFail(
+      new TeacherRetirementPlanningId(rawId),
+      orgId,
+      authId,
+      McpRecordNotFoundError,
+    );
+    const result =
+      await this.teacherRetirementPlanningRppsQueryRepo.findOneTeacherRetirementPlanningByIdWithRelations(
+        rppsId,
+      );
+    if (!result) {
+      throw new McpRecordNotFoundError();
+    }
+    return result;
+  }
+
+  public async updateTeacherRetirementPlanningRppsResult(
+    params: Record<string, unknown>,
+    toolName: string,
+  ): Promise<unknown> {
+    const { orgId, authId } = this.getOrgContext(params);
+    const rawId = params['teacher_retirement_planning_rpps_id'] as string;
+    const fieldName = params['field_name'] as string;
+    const newContent = params['new_content'] as string | null | undefined;
+    if (!rawId) {
+      throw new McpExecuteToolCallError({
+        toolName,
+        message: 'teacher_retirement_planning_rpps_id is required',
+      });
+    }
+    if (!fieldName) {
+      throw new McpExecuteToolCallError({
+        toolName,
+        message: 'field_name is required',
+      });
+    }
+    if (newContent === undefined || newContent === null) {
+      throw new McpExecuteToolCallError({
+        toolName,
+        message: 'new_content is required',
+      });
+    }
+    const rppsId = new TeacherRetirementPlanningRppsId(rawId);
+    // Auth check via the shared table method (same underlying DB row)
+    await this.analysisToolRecordQueryRepo.findWithRelationsByTeacherRetirementPlanningIdAndOrganizationIdAndAuthIdentityIdOrFail(
+      new TeacherRetirementPlanningId(rawId),
+      orgId,
+      authId,
+      McpRecordNotFoundError,
+    );
+    const withRelations =
+      await this.teacherRetirementPlanningRppsQueryRepo.findOneTeacherRetirementPlanningByIdWithRelations(
+        rppsId,
+      );
+    if (!withRelations) {
+      throw new McpRecordNotFoundError();
+    }
+    const r = withRelations.result;
+    if (!r) {
+      throw new McpExecuteToolCallError({
+        toolName,
+        message:
+          'No result found for this teacher retirement planning RPPS analysis',
+      });
+    }
+    const resultId =
+      r.id instanceof TeacherRetirementPlanningRppsResultId
+        ? r.id
+        : new TeacherRetirementPlanningRppsResultId(r.id);
+    const props: Record<string, unknown> = {
+      id: resultId,
+      teacherRetirementPlanningCompleteAnalysis:
+        r.teacherRetirementPlanningCompleteAnalysis,
+      teacherRetirementPlanningSimplifiedAnalysis:
+        r.teacherRetirementPlanningSimplifiedAnalysis,
+      teacherRetirementPlanningCompleteAnalysisDownload:
+        r.teacherRetirementPlanningCompleteAnalysisDownload,
+    };
+    props[fieldName] = newContent;
+    const entity = new TeacherRetirementPlanningRppsResultEntity(
+      props as unknown as ConstructorParameters<
+        typeof TeacherRetirementPlanningRppsResultEntity
+      >[0],
+    );
+    await this.transactionRepo.execute(
+      this.teacherRetirementPlanningRppsResultCommandRepo.updateTeacherRetirementPlanningResult(
         entity,
       ),
     );
