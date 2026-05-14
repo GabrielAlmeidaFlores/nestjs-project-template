@@ -2809,7 +2809,7 @@ Análise processada do CNIS:
     );
   }
 
-  public async getTemporaryIncapacityBenefitTerminationInssDecisionAnalysis(
+  public async getPermanentIncapacityBenefitTerminatedInssDecisionAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null> {
@@ -2821,7 +2821,7 @@ Análise processada do CNIS:
     );
   }
 
-  public async getTemporaryIncapacityBenefitTerminationFirstAnalysis(
+  public async getPermanentIncapacityBenefitTerminatedFirstAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
     files: Buffer[],
@@ -2847,14 +2847,14 @@ Análise processada do CNIS:
               responseMimeType:
                 GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
               jsonSchema:
-                this.getTemporaryIncapacityBenefitTerminationFirstAnalysisJsonSchema(),
+                this.getPermanentIncapacityBenefitTerminatedFirstAnalysisJsonSchema(),
             })
           : null,
       }),
     );
   }
 
-  public async getTemporaryIncapacityBenefitTerminationCompleteAnalysis(
+  public async getPermanentIncapacityBenefitTerminatedCompleteAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
     files: Buffer[],
@@ -2878,13 +2878,13 @@ Análise processada do CNIS:
         responseConfig: ResponseConfigInputModel.build({
           responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
           jsonSchema:
-            this.getTemporaryIncapacityBenefitTerminationCompleteAnalysisJsonSchema(),
+            this.getPermanentIncapacityBenefitTerminatedCompleteAnalysisJsonSchema(),
         }),
       }),
     );
   }
 
-  public async getTemporaryIncapacityBenefitTerminationSimplifiedAnalysis(
+  public async getPermanentIncapacityBenefitTerminatedSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null> {
@@ -8996,7 +8996,7 @@ For probativeForce, classify each document as:
     };
   }
 
-  private getTemporaryIncapacityBenefitTerminationFirstAnalysisJsonSchema(): object {
+  private getPermanentIncapacityBenefitTerminatedFirstAnalysisJsonSchema(): object {
     return {
       type: 'object',
       properties: {
@@ -9244,14 +9244,14 @@ For probativeForce, classify each document as:
     };
   }
 
-  private getTemporaryIncapacityBenefitTerminationCompleteAnalysisJsonSchema(): object {
+  private getPermanentIncapacityBenefitTerminatedCompleteAnalysisJsonSchema(): object {
     return {
       type: 'object',
       properties: {
-        isEligibleForTemporaryIncapacityBenefit: {
+        isEligibleForPermanentIncapacityBenefit: {
           type: 'boolean',
           description:
-            'Indica se o segurado tem direito ao auxílio por incapacidade temporária',
+            'Indica se o segurado tem direito à aposentadoria por incapacidade permanente',
         },
         gracePeriodAnalysis: {
           type: 'object',
@@ -9392,7 +9392,7 @@ For probativeForce, classify each document as:
         },
       },
       required: [
-        'isEligibleForTemporaryIncapacityBenefit',
+        'isEligibleForPermanentIncapacityBenefit',
         'gracePeriodAnalysis',
         'insuredStatus',
         'disabilityAnalysis',
