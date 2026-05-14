@@ -273,6 +273,7 @@ export class CreateGeneralUrbanRetirementDenialFirstAnalysisUseCase {
         periodConsideration:
           GeneralUrbanRetirementDenialPeriodConsiderationEnum.NAO,
         wantsToComplementViaMeuINSS: false,
+        shouldConsiderLastRemunerationAsExitDate: false,
         ...(finalEarningsHistory.length > 0 && {
           earningsHistory: finalEarningsHistory,
         }),

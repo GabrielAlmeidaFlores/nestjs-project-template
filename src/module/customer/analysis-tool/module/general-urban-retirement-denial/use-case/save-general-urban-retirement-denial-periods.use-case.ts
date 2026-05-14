@@ -110,6 +110,8 @@ export class SaveGeneralUrbanRetirementDenialPeriodsUseCase {
             periodConsideration: periodDto.periodConsideration ?? null,
             wantsToComplementViaMeuINSS:
               periodDto.wantsToComplementViaMeuINSS ?? null,
+            shouldConsiderLastRemunerationAsExitDate:
+              periodDto.shouldConsiderLastRemunerationAsExitDate,
             status: periodDto.status,
             generalUrbanRetirementDenialId,
           }),
