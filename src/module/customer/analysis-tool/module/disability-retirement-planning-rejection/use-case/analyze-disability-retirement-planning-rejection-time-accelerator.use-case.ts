@@ -120,12 +120,8 @@ export class AnalyzeDisabilityRetirementPlanningRejectionTimeAcceleratorUseCase 
                 ...(this.hasValue(timeAccelerator.technicalNote) && {
                   technicalNote: timeAccelerator.technicalNote,
                 }),
-                ...(this.hasValue(timeAccelerator.startDate) && {
-                  startDate: new Date(timeAccelerator.startDate),
-                }),
-                ...(this.hasValue(timeAccelerator.endDate) && {
-                  endDate: new Date(timeAccelerator.endDate),
-                }),
+                ...this.toValidDateProp('startDate', timeAccelerator.startDate),
+                ...this.toValidDateProp('endDate', timeAccelerator.endDate),
                 ...(this.hasValue(timeAccelerator.institution) && {
                   institution: timeAccelerator.institution,
                 }),
@@ -236,6 +232,17 @@ export class AnalyzeDisabilityRetirementPlanningRejectionTimeAcceleratorUseCase 
 
   private isRecord(value: unknown): value is Record<string, unknown> {
     return typeof value === 'object' && value !== null;
+  }
+
+  private toValidDateProp(
+    key: 'startDate' | 'endDate',
+    value: string | null | undefined,
+  ): Record<string, Date> {
+    if (value === null || value === undefined || value.trim() === '') {
+      return {};
+    }
+    const d = new Date(value);
+    return isNaN(d.getTime()) ? {} : { [key]: d };
   }
 
   private getPaymentPlanPaidResourceType(

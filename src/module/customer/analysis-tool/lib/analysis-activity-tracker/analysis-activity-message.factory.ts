@@ -40,6 +40,8 @@ export class AnalysisActivityMessageFactory {
       'Análise da qualidade do segurado',
     [AnalysisToolRecordTypeEnum.TEACHER_RETIREMENT_PLANNING]:
       'Planejamento previdenciário para professores',
+    [AnalysisToolRecordTypeEnum.TEACHER_RETIREMENT_PLANNING_RPPS]:
+      'Aposentadoria do Professor (RPPS)',
     [AnalysisToolRecordTypeEnum.DISABILITY_RETIREMENT_PLANNING]:
       'Planejamento de aposentadoria para deficiente',
     [AnalysisToolRecordTypeEnum.GENERAL_URBAN_RETIREMENT_GRANT]:
@@ -62,6 +64,8 @@ export class AnalysisActivityMessageFactory {
       'Concessão de benefício por incapacidade temporária',
     [AnalysisToolRecordTypeEnum.TEMPORARY_DISABILITY_BENEFITS_TERMINATED]:
       'Cessação de auxílio por incapacidade temporária',
+    [AnalysisToolRecordTypeEnum.PERMANENT_INCAPACITY_BENEFIT_TERMINATED]:
+      'Cessação de aposentadoria por incapacidade permanente',
     [AnalysisToolRecordTypeEnum.RURAL_OR_HYBRID_RETIREMENT_REJECTION]:
       'Indeferimento de aposentadoria rural ou híbrida',
     [AnalysisToolRecordTypeEnum.RURAL_OR_HYBRID_RETIREMENT_ANALYSIS]:
@@ -78,6 +82,8 @@ export class AnalysisActivityMessageFactory {
       'Indeferimento de aposentadoria para deficiente',
     [AnalysisToolRecordTypeEnum.BPC_DISABILITY_DENIAL]:
       'Indeferimento de BPC Pessoa com Deficiência',
+    [AnalysisToolRecordTypeEnum.BPC_DISABILITY_GRANT]:
+      'Concessão de BPC Pessoa com Deficiência',
     [AnalysisToolRecordTypeEnum.BPC_ELDERLY_ANALYSIS]:
       'Análise de BPC ao Idoso',
     [AnalysisToolRecordTypeEnum.BPC_ELDERLY_CESSATION]:
@@ -92,8 +98,14 @@ export class AnalysisActivityMessageFactory {
       'Cessação de BPC Pessoa com Deficiência',
     [AnalysisToolRecordTypeEnum.ACCIDENT_ASSISTANCE_TERMINATED]:
       'Auxílio-acidente cessado',
+    [AnalysisToolRecordTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REJECTION]:
+      'Indeferimento de aposentadoria por incapacidade permanente',
+    [AnalysisToolRecordTypeEnum.ELDERLY_BPC_REJECTION]:
+      'Indeferimento de BPC ao Idoso',
     [AnalysisToolRecordTypeEnum.ACCIDENT_ASSISTANCE_GRANT]:
       'Concessão de auxílio-acidente',
+    [AnalysisToolRecordTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REVISION]:
+      'Revisão de aposentadoria por invalidez permanente',
   };
 
   private static readonly actionLabelMap: Record<

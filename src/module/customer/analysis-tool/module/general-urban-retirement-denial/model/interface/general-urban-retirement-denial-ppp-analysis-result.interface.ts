@@ -4,6 +4,9 @@ import type { GeneralUrbanRetirementDenialPeriodPendencyReasonEnum } from '@modu
 import type { GeneralUrbanRetirementDenialPeriodWorkTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-work-type.enum';
 
 export interface GeneralUrbanRetirementDenialPppAnalysisResultItemInterface {
+  insuredName: string | null | undefined;
+  companyName: string | null | undefined;
+  position: string | null | undefined;
   bondOrigin: string | null | undefined;
   category: GeneralUrbanRetirementDenialPeriodCategoryEnum;
   activityDescription: string | null | undefined;
@@ -25,6 +28,11 @@ export interface GeneralUrbanRetirementDenialPppAnalysisResultItemInterface {
     | undefined;
   wantsToComplementViaMeuINSS: boolean | null | undefined;
   status: boolean;
+  hazardousAgents: string[] | null | undefined;
+  specialTimeViability: boolean | null | undefined;
+  inssRecognition: boolean | null | undefined;
+  judicialRecognition: boolean | null | undefined;
+  technicalObservation: string | null | undefined;
 }
 
 export interface GeneralUrbanRetirementDenialPppAnalysisResultInterface {

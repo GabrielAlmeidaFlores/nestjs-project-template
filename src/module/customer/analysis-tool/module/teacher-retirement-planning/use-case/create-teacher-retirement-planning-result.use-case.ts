@@ -9,6 +9,7 @@ import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
+import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { TeacherRetirementPlanningCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/command/teacher-retirement-planning.command.repository.gateway';
 import { TeacherRetirementPlanningQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/query/teacher-retirement-planning.query.repository.gateway';
 import { TeacherRetirementPlanningResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-result/command/teacher-retirement-planning-result.command.repository.gateway';
@@ -55,6 +56,8 @@ export class CreateTeacherRetirementPlanningResultUseCase {
     private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(FileProcessorGateway)
+    private readonly fileProcessorGateway: FileProcessorGateway,
   ) {}
 
   public async execute(
@@ -116,10 +119,20 @@ export class CreateTeacherRetirementPlanningResultUseCase {
       remunerations: planning.remunerations,
     };
 
+    const jsonInputBuffer = Buffer.from(
+      JSON.stringify(input, null, 2),
+      'utf-8',
+    );
+    const documentBuffers = await Promise.all(
+      planning.documents.map((doc) =>
+        this.fileProcessorGateway.getFileBuffer(doc.document),
+      ),
+    );
+
     const completeAnalysis =
       await this.analysisProcessorGateway.getTeacherRetirementPlanningCompleteAnalysis(
         promptResponse.prompt,
-        [Buffer.from(JSON.stringify(input, null, 2), 'utf-8')],
+        [jsonInputBuffer, ...documentBuffers],
       );
 
     if (completeAnalysis === null) {

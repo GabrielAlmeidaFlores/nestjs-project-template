@@ -24,6 +24,7 @@ import { CreateGeneralUrbanRetirementReviewBenefitAwardLetterAnalysisRequestDto 
 import { CreateGeneralUrbanRetirementReviewCnisRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/request/create-general-urban-retirement-review-cnis.request.dto';
 import { CreateGeneralUrbanRetirementReviewPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/request/create-general-urban-retirement-review-period-document.request.dto';
 import { CreateGeneralUrbanRetirementReviewPeriodRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/request/create-general-urban-retirement-review-period.request.dto';
+import { CreateGeneralUrbanRetirementReviewTimeAcceleratorFromPppRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/request/create-general-urban-retirement-review-time-accelerator-from-ppp.request.dto';
 import { CreateGeneralUrbanRetirementReviewTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/request/create-general-urban-retirement-review-time-accelerator.request.dto';
 import { CreateGeneralUrbanRetirementReviewRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/request/create-general-urban-retirement-review.request.dto';
 import { CreateMultipleGeneralUrbanRetirementReviewPeriodsRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/request/create-multiple-general-urban-retirement-review-periods.request.dto';
@@ -31,6 +32,7 @@ import { ListGeneralUrbanRetirementReviewPeriodRequestDto } from '@module/custom
 import { ListGeneralUrbanRetirementReviewTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/request/list-general-urban-retirement-review-time-accelerator.request.dto';
 import { UpdateGeneralUrbanRetirementReviewPeriodRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/request/update-general-urban-retirement-review-period.request.dto';
 import { UpdateGeneralUrbanRetirementReviewResultRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/request/update-general-urban-retirement-review-result.request.dto';
+import { UpdateGeneralUrbanRetirementReviewRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/request/update-general-urban-retirement-review.request.dto';
 import { AnalyzeGeneralUrbanRetirementReviewCnisResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/response/analyze-general-urban-retirement-review-cnis.response.dto';
 import { AnalyzeGeneralUrbanRetirementReviewPppResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/response/analyze-general-urban-retirement-review-ppp.response.dto';
 import { CompareGeneralUrbanRetirementReviewCnisCtpsResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/response/compare-general-urban-retirement-review-cnis-ctps.response.dto';
@@ -53,6 +55,7 @@ import { ListGeneralUrbanRetirementReviewPeriodResponseDto } from '@module/custo
 import { ListGeneralUrbanRetirementReviewTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/response/list-general-urban-retirement-review-time-accelerator.response.dto';
 import { UpdateGeneralUrbanRetirementReviewPeriodResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/response/update-general-urban-retirement-review-period.response.dto';
 import { UpdateGeneralUrbanRetirementReviewResultResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/response/update-general-urban-retirement-review-result.response.dto';
+import { UpdateGeneralUrbanRetirementReviewResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/response/update-general-urban-retirement-review.response.dto';
 import { AnalyzeApprenticeStudentUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/analyze-apprentice-student.use-case';
 import { AnalyzeCtpsOutsideCnisUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/analyze-ctps-outside-cnis.use-case';
 import { AnalyzeGeneralUrbanRetirementReviewPppUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/analyze-general-urban-retirement-review-ppp.use-case';
@@ -70,6 +73,7 @@ import { CreateGeneralUrbanRetirementReviewFirstAnalysisUseCase } from '@module/
 import { CreateGeneralUrbanRetirementReviewPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/create-general-urban-retirement-review-period-document.use-case';
 import { CreateGeneralUrbanRetirementReviewPeriodUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/create-general-urban-retirement-review-period.use-case';
 import { CreateGeneralUrbanRetirementReviewResultUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/create-general-urban-retirement-review-result.use-case';
+import { CreateGeneralUrbanRetirementReviewTimeAcceleratorFromPppUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/create-general-urban-retirement-review-time-accelerator-from-ppp.use-case';
 import { CreateGeneralUrbanRetirementReviewTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/create-general-urban-retirement-review-time-accelerator.use-case';
 import { CreateGeneralUrbanRetirementReviewUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/create-general-urban-retirement-review.use-case';
 import { CreateMultipleGeneralUrbanRetirementReviewPeriodsUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/create-multiple-general-urban-retirement-review-periods.use-case';
@@ -89,6 +93,7 @@ import { PeriodLeaveDateActionUseCase } from '@module/customer/analysis-tool/mod
 import { UpdateGeneralUrbanRetirementReviewClientUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/update-general-urban-retirement-review-client.use-case';
 import { UpdateGeneralUrbanRetirementReviewPeriodUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/update-general-urban-retirement-review-period.use-case';
 import { UpdateGeneralUrbanRetirementReviewResultUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/update-general-urban-retirement-review-result.use-case';
+import { UpdateGeneralUrbanRetirementReviewUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/update-general-urban-retirement-review.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
@@ -113,6 +118,7 @@ export class GeneralUrbanRetirementReviewController {
     private readonly createMultipleGeneralUrbanRetirementReviewPeriodsUseCase: CreateMultipleGeneralUrbanRetirementReviewPeriodsUseCase,
     private readonly updateGeneralUrbanRetirementReviewPeriodUseCase: UpdateGeneralUrbanRetirementReviewPeriodUseCase,
     private readonly updateGeneralUrbanRetirementReviewResultUseCase: UpdateGeneralUrbanRetirementReviewResultUseCase,
+    private readonly updateGeneralUrbanRetirementReviewUseCase: UpdateGeneralUrbanRetirementReviewUseCase,
     private readonly updateGeneralUrbanRetirementReviewClientUseCase: UpdateGeneralUrbanRetirementReviewClientUseCase,
     private readonly compareGeneralUrbanRetirementReviewCnisCtpsUseCase: CompareGeneralUrbanRetirementReviewCnisCtpsUseCase,
     private readonly analyzeRuralTimeUseCase: AnalyzeRuralTimeUseCase,
@@ -126,6 +132,7 @@ export class GeneralUrbanRetirementReviewController {
     private readonly analyzePublicServiceUseCase: AnalyzePublicServiceUseCase,
     private readonly analyzeCtpsOutsideCnisUseCase: AnalyzeCtpsOutsideCnisUseCase,
     private readonly createGeneralUrbanRetirementReviewTimeAcceleratorUseCase: CreateGeneralUrbanRetirementReviewTimeAcceleratorUseCase,
+    private readonly createGeneralUrbanRetirementReviewTimeAcceleratorFromPppUseCase: CreateGeneralUrbanRetirementReviewTimeAcceleratorFromPppUseCase,
     private readonly deleteGeneralUrbanRetirementReviewTimeAcceleratorUseCase: DeleteGeneralUrbanRetirementReviewTimeAcceleratorUseCase,
     private readonly downloadGeneralUrbanRetirementReviewCompleteAnalysisUseCase: DownloadGeneralUrbanRetirementReviewCompleteAnalysisUseCase,
     private readonly downloadGeneralUrbanRetirementReviewSimplifiedAnalysisUseCase: DownloadGeneralUrbanRetirementReviewSimplifiedAnalysisUseCase,
@@ -170,6 +177,44 @@ export class GeneralUrbanRetirementReviewController {
     return await this.createGeneralUrbanRetirementReviewUseCase.execute(
       sessionData,
       organizationSessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Atualizar análise de revisão de aposentadoria urbana geral (RGPS)',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':generalUrbanRetirementReviewId',
+      method: RequestMethod.PATCH,
+      type: UpdateGeneralUrbanRetirementReviewRequestDto,
+    },
+    tag: ['revisao-aposentadoria-urbana-geral'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Análise de revisão de aposentadoria urbana geral atualizada com sucesso.',
+      type: UpdateGeneralUrbanRetirementReviewResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async update(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'generalUrbanRetirementReviewId',
+      new ParseValueObjectPipe(GeneralUrbanRetirementReviewId),
+    )
+    generalUrbanRetirementReviewId: GeneralUrbanRetirementReviewId,
+    @Body()
+    dto: UpdateGeneralUrbanRetirementReviewRequestDto,
+  ): Promise<UpdateGeneralUrbanRetirementReviewResponseDto> {
+    return await this.updateGeneralUrbanRetirementReviewUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      generalUrbanRetirementReviewId,
       dto,
     );
   }
@@ -869,6 +914,31 @@ export class GeneralUrbanRetirementReviewController {
     @Body() dto: CreateGeneralUrbanRetirementReviewTimeAcceleratorRequestDto,
   ): Promise<CreateGeneralUrbanRetirementReviewTimeAcceleratorResponseDto> {
     return await this.createGeneralUrbanRetirementReviewTimeAcceleratorUseCase.execute(
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Criar acelerador de tempo a partir de análise de PPP',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'time-accelerator/from-ppp',
+      method: RequestMethod.POST,
+      type: CreateGeneralUrbanRetirementReviewTimeAcceleratorFromPppRequestDto,
+    },
+    tag: ['revisao-aposentadoria-urbana-geral'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Acelerador de tempo criado a partir do PPP com sucesso.',
+      type: CreateGeneralUrbanRetirementReviewTimeAcceleratorResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createTimeAcceleratorFromPpp(
+    @Body()
+    dto: CreateGeneralUrbanRetirementReviewTimeAcceleratorFromPppRequestDto,
+  ): Promise<CreateGeneralUrbanRetirementReviewTimeAcceleratorResponseDto> {
+    return await this.createGeneralUrbanRetirementReviewTimeAcceleratorFromPppUseCase.execute(
       dto,
     );
   }
