@@ -12,6 +12,8 @@ import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/exp
 import { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
 import { AnalyzeTeacherRetirementPlanningAdministrativeProcessRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/analyze-teacher-retirement-planning-administrative-process.request.dto';
 import { AnalyzeTeacherRetirementPlanningPppRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/analyze-teacher-retirement-planning-ppp.request.dto';
+import { AnalyzeTeacherRetirementPlanningTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/analyze-teacher-retirement-planning-time-accelerator.request.dto';
+import { CreateTeacherRetirementPlanningPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/create-teacher-retirement-planning-period-document.request.dto';
 import { CreateTeacherRetirementPlanningPeriodRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/create-teacher-retirement-planning-period.request.dto';
 import { CreateTeacherRetirementPlanningRemunerationRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/create-teacher-retirement-planning-remuneration.request.dto';
 import { CreateTeacherRetirementPlanningRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/create-teacher-retirement-planning.request.dto';
@@ -21,6 +23,8 @@ import { UpdateTeacherRetirementPlanningRemunerationRequestDto } from '@module/c
 import { UpdateTeacherRetirementPlanningRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/update-teacher-retirement-planning.request.dto';
 import { AnalyzeTeacherRetirementPlanningAdministrativeProcessResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/analyze-teacher-retirement-planning-administrative-process.response.dto';
 import { AnalyzeTeacherRetirementPlanningPppResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/analyze-teacher-retirement-planning-ppp.response.dto';
+import { AnalyzeTeacherRetirementPlanningTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/analyze-teacher-retirement-planning-time-accelerator.response.dto';
+import { CreateTeacherRetirementPlanningPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning-period-document.response.dto';
 import { CreateTeacherRetirementPlanningPeriodResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning-period.response.dto';
 import { CreateTeacherRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning-remuneration.response.dto';
 import { CreateTeacherRetirementPlanningResultResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning-result.response.dto';
@@ -36,10 +40,6 @@ import { AnalyzeTeacherRetirementPlanningAdministrativeProcessUseCase } from '@m
 import { AnalyzeTeacherRetirementPlanningPppUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/analyze-teacher-retirement-planning-ppp.use-case';
 import { AnalyzeTeacherRetirementPlanningTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/analyze-teacher-retirement-planning-time-accelerator.use-case';
 import { CreateTeacherRetirementPlanningPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-period-document.use-case';
-import { AnalyzeTeacherRetirementPlanningTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/analyze-teacher-retirement-planning-time-accelerator.request.dto';
-import { AnalyzeTeacherRetirementPlanningTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/analyze-teacher-retirement-planning-time-accelerator.response.dto';
-import { CreateTeacherRetirementPlanningPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/create-teacher-retirement-planning-period-document.request.dto';
-import { CreateTeacherRetirementPlanningPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning-period-document.response.dto';
 import { CreateTeacherRetirementPlanningPeriodUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-period.use-case';
 import { CreateTeacherRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-remuneration.use-case';
 import { CreateTeacherRetirementPlanningResultUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-result.use-case';
@@ -559,7 +559,8 @@ export class TeacherRetirementPlanningController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Analisar PPP (Perfil Profissiográfico Previdenciário) do planejamento de aposentadoria do professor',
+    summary:
+      'Analisar PPP (Perfil Profissiográfico Previdenciário) do planejamento de aposentadoria do professor',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'analyze-ppp',
@@ -589,7 +590,8 @@ export class TeacherRetirementPlanningController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Analisar documentos do acelerador de tempo do planejamento de aposentadoria do professor',
+    summary:
+      'Analisar documentos do acelerador de tempo do planejamento de aposentadoria do professor',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'analyze-time-accelerator-documents',
@@ -619,7 +621,8 @@ export class TeacherRetirementPlanningController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Analisar documento de período sem data de saída do planejamento de aposentadoria do professor',
+    summary:
+      'Analisar documento de período sem data de saída do planejamento de aposentadoria do professor',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'date-without-leave-analysis',
@@ -629,7 +632,8 @@ export class TeacherRetirementPlanningController {
     tag: ['planejamento-previdenciario-professor'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Documento de período sem data de saída analisado com sucesso.',
+      description:
+        'Documento de período sem data de saída analisado com sucesso.',
       type: CreateTeacherRetirementPlanningPeriodDocumentResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],

@@ -1,7 +1,7 @@
 ﻿import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { BpcDisabilityGrantFamilyMemberId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member/value-object/bpc-disability-grant-family-member-id/bpc-disability-grant-family-member-id.value-object';
 import { BpcDisabilityGrantFamilyMemberDocumentEntityPropsInterface } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member-document/bpc-disability-grant-family-member-document.entity.props.interface';
 import { BpcDisabilityGrantFamilyMemberDocumentTypeEnum } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member-document/enum/bpc-disability-grant-family-member-document-type.enum';
-import { BpcDisabilityGrantFamilyMemberId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member/value-object/bpc-disability-grant-family-member-id/bpc-disability-grant-family-member-id.value-object';
 import { BpcDisabilityGrantFamilyMemberDocumentId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member-document/value-object/bpc-disability-grant-family-member-document-id/bpc-disability-grant-family-member-document-id.value-object';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
@@ -24,6 +24,7 @@ export class BpcDisabilityGrantFamilyMemberDocumentEntity extends BaseEntity<Bpc
 
     this.document = props.document;
     this.type = props.type;
-    this.BpcDisabilityGrantFamilyMemberId = props.BpcDisabilityGrantFamilyMemberId;
+    this.BpcDisabilityGrantFamilyMemberId =
+      props.BpcDisabilityGrantFamilyMemberId;
   }
 }

@@ -60,7 +60,7 @@ export class CreateGeneralUrbanRetirementReviewTimeAcceleratorFromPppUseCase {
       { ...generalUrbanRetirementReviewRecord },
     );
 
-    const rawResponse = specialPeriod.response ?? '';
+    const rawResponse = specialPeriod.response;
 
     let jsonString = rawResponse.trim();
     const codeFenceMatch = rawResponse.match(
@@ -93,7 +93,7 @@ export class CreateGeneralUrbanRetirementReviewTimeAcceleratorFromPppUseCase {
     const item: PppAnalysisItemType = items[0] ?? {};
 
     const parseDate = (value?: string): Date | null => {
-      if (!value || value.trim() === '') {
+      if (value === undefined || value.trim() === '') {
         return null;
       }
       const normalized = value.replace(/\//g, '-');

@@ -8,7 +8,8 @@ export class TeacherRetirementPlanningRppsInssBenefitEntity extends BaseEntity<T
   public readonly inssBenefitNumber: string;
   public readonly teacherRetirementPlanning: TeacherRetirementPlanningRppsEntity;
 
-  protected readonly _type = TeacherRetirementPlanningRppsInssBenefitEntity.name;
+  protected readonly _type =
+    TeacherRetirementPlanningRppsInssBenefitEntity.name;
 
   public constructor(
     props: TeacherRetirementPlanningRppsInssBenefitEntityPropsInterface,

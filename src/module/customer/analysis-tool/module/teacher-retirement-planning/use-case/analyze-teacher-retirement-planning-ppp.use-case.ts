@@ -73,47 +73,149 @@ export class AnalyzeTeacherRetirementPlanningPppUseCase {
               items: {
                 type: 'object',
                 properties: {
-                  nome: { type: 'string', description: 'Nome do segurado analisado.' },
-                  cargo: { type: 'string', description: 'Cargo ou função exercida no vínculo, retorne vazio se não houver.' },
-                  tipo: { type: 'string', description: 'Tipo de vínculo analisado, neste caso sempre será "Análise de PPP".' },
-                  empresa: { type: 'string', description: 'Nome da empresa empregadora, retorne vazio se não houver.' },
-                  periodoInicio: { type: 'string', description: 'Data de início do vínculo, formate em AAAA/MM/DD, ex: 2020/01/15.' },
-                  periodoFim: { type: 'string', description: 'Data de término do vínculo, formate em AAAA/MM/DD. Caso não tenha data de saída, informe "".' },
-                  viabilidade: { type: 'string', enum: ['BAIXA', 'MÉDIA', 'ALTA'], description: 'Viabilidade do reconhecimento.' },
-                  reconhecimentoINSS: { type: 'string', enum: ['PROVÁVEL', 'PARCIAL', 'IMPROVÁVEL'], description: 'Análise do INSS.' },
-                  impactoCarencia: { type: 'boolean', description: 'Indica se há impacto na carência.' },
-                  reconhecimentoJudicial: { type: 'string', enum: ['FAVORÁVEL', 'DESFAVORÁVEL', 'INDEFINIDO'], description: 'Análise judicial do vínculo.' },
-                  tempoContribuicao: { type: 'string', description: 'Tempo de contribuição reconhecido.' },
-                  observacaoTecnica: { type: 'string', description: 'Nota técnica em formato Markdown estruturado com 3 seções obrigatórias usando ### como título: "### Avaliação Documental" (lista os agentes nocivos, EPI/EPC e análise crítica de eficácia), "### Viabilidade e Fundamentação" (cita decreto/norma com código específico e tema STJ/TNU aplicável), "### Pendências e Recomendações" (lista numerada de ações concretas para o advogado). Mínimo de 8 linhas. Use \\n para quebras de linha e **negrito** para termos jurídicos.' },
-                  contribuicaoMedia: { type: 'string', description: 'Valor da contribuição média mensal, retorne 0 se não houver.' },
-                  status: { type: 'boolean', description: 'Indica se o vínculo é favorável ou não para o segurado.' },
-                  tipoDeTrabalho: { type: 'string', enum: ['URBANO', 'RURAL'], description: 'Tipo de trabalho realizado no vínculo. Por padrão retorne URBANO.' },
-                  competenciaAbaixoDoMinimo: { type: 'boolean', description: 'Indica se há competências com valor de contribuição abaixo do mínimo legal.' },
+                  nome: {
+                    type: 'string',
+                    description: 'Nome do segurado analisado.',
+                  },
+                  cargo: {
+                    type: 'string',
+                    description:
+                      'Cargo ou função exercida no vínculo, retorne vazio se não houver.',
+                  },
+                  tipo: {
+                    type: 'string',
+                    description:
+                      'Tipo de vínculo analisado, neste caso sempre será "Análise de PPP".',
+                  },
+                  empresa: {
+                    type: 'string',
+                    description:
+                      'Nome da empresa empregadora, retorne vazio se não houver.',
+                  },
+                  periodoInicio: {
+                    type: 'string',
+                    description:
+                      'Data de início do vínculo, formate em AAAA/MM/DD, ex: 2020/01/15.',
+                  },
+                  periodoFim: {
+                    type: 'string',
+                    description:
+                      'Data de término do vínculo, formate em AAAA/MM/DD. Caso não tenha data de saída, informe "".',
+                  },
+                  viabilidade: {
+                    type: 'string',
+                    enum: ['BAIXA', 'MÉDIA', 'ALTA'],
+                    description: 'Viabilidade do reconhecimento.',
+                  },
+                  reconhecimentoINSS: {
+                    type: 'string',
+                    enum: ['PROVÁVEL', 'PARCIAL', 'IMPROVÁVEL'],
+                    description: 'Análise do INSS.',
+                  },
+                  impactoCarencia: {
+                    type: 'boolean',
+                    description: 'Indica se há impacto na carência.',
+                  },
+                  reconhecimentoJudicial: {
+                    type: 'string',
+                    enum: ['FAVORÁVEL', 'DESFAVORÁVEL', 'INDEFINIDO'],
+                    description: 'Análise judicial do vínculo.',
+                  },
+                  tempoContribuicao: {
+                    type: 'string',
+                    description: 'Tempo de contribuição reconhecido.',
+                  },
+                  observacaoTecnica: {
+                    type: 'string',
+                    description:
+                      'Nota técnica em formato Markdown estruturado com 3 seções obrigatórias usando ### como título: "### Avaliação Documental" (lista os agentes nocivos, EPI/EPC e análise crítica de eficácia), "### Viabilidade e Fundamentação" (cita decreto/norma com código específico e tema STJ/TNU aplicável), "### Pendências e Recomendações" (lista numerada de ações concretas para o advogado). Mínimo de 8 linhas. Use \\n para quebras de linha e **negrito** para termos jurídicos.',
+                  },
+                  contribuicaoMedia: {
+                    type: 'string',
+                    description:
+                      'Valor da contribuição média mensal, retorne 0 se não houver.',
+                  },
+                  status: {
+                    type: 'boolean',
+                    description:
+                      'Indica se o vínculo é favorável ou não para o segurado.',
+                  },
+                  tipoDeTrabalho: {
+                    type: 'string',
+                    enum: ['URBANO', 'RURAL'],
+                    description:
+                      'Tipo de trabalho realizado no vínculo. Por padrão retorne URBANO.',
+                  },
+                  competenciaAbaixoDoMinimo: {
+                    type: 'boolean',
+                    description:
+                      'Indica se há competências com valor de contribuição abaixo do mínimo legal.',
+                  },
                   categoria: {
                     type: 'string',
-                    enum: ['AUTONOMO', 'MEI', 'CONTRIBUINTE_INDIVIDUAL', 'TRABALHADOR_AVULSO', 'TEMPORARIO', 'ESTAGIARIO', 'APRENDIZ', 'SERVIDOR_PUBLICO', 'TRABALHADOR_RURAL', 'SEGURADO_ESPECIAL', 'MILITAR'],
+                    enum: [
+                      'AUTONOMO',
+                      'MEI',
+                      'CONTRIBUINTE_INDIVIDUAL',
+                      'TRABALHADOR_AVULSO',
+                      'TEMPORARIO',
+                      'ESTAGIARIO',
+                      'APRENDIZ',
+                      'SERVIDOR_PUBLICO',
+                      'TRABALHADOR_RURAL',
+                      'SEGURADO_ESPECIAL',
+                      'MILITAR',
+                    ],
                     description: 'Categoria do vínculo.',
                   },
-                  viabilidadeTempoEspecial: { type: 'boolean', description: 'Indica se o vínculo possui viabilidade para reconhecimento de tempo especial.' },
-                  tempoContribuicaoGanho: { type: 'string', description: 'Tempo de contribuição ganho com o reconhecimento do vínculo. Ex. Período original: 5 anos, 6 meses e 15 dias | Período convencional: 7 anos, 2 meses e 10 dias' },
+                  viabilidadeTempoEspecial: {
+                    type: 'boolean',
+                    description:
+                      'Indica se o vínculo possui viabilidade para reconhecimento de tempo especial.',
+                  },
+                  tempoContribuicaoGanho: {
+                    type: 'string',
+                    description:
+                      'Tempo de contribuição ganho com o reconhecimento do vínculo. Ex. Período original: 5 anos, 6 meses e 15 dias | Período convencional: 7 anos, 2 meses e 10 dias',
+                  },
                   agentesNocivos: {
                     type: 'array',
-                    description: 'Lista de agentes nocivos identificados no vínculo.',
+                    description:
+                      'Lista de agentes nocivos identificados no vínculo.',
                     items: {
                       type: 'object',
                       properties: {
-                        agente: { type: 'string', description: 'Nome do agente nocivo. Ex: Ruído - 87db(A)' },
+                        agente: {
+                          type: 'string',
+                          description:
+                            'Nome do agente nocivo. Ex: Ruído - 87db(A)',
+                        },
                       },
                       required: ['agente'],
                     },
                   },
                 },
                 required: [
-                  'nome', 'cargo', 'tipo', 'empresa', 'periodoInicio', 'periodoFim',
-                  'viabilidade', 'reconhecimentoINSS', 'impactoCarencia', 'reconhecimentoJudicial',
-                  'tempoContribuicao', 'observacaoTecnica', 'contribuicaoMedia', 'status',
-                  'tipoDeTrabalho', 'competenciaAbaixoDoMinimo', 'categoria',
-                  'viabilidadeTempoEspecial', 'tempoContribuicaoGanho', 'agentesNocivos',
+                  'nome',
+                  'cargo',
+                  'tipo',
+                  'empresa',
+                  'periodoInicio',
+                  'periodoFim',
+                  'viabilidade',
+                  'reconhecimentoINSS',
+                  'impactoCarencia',
+                  'reconhecimentoJudicial',
+                  'tempoContribuicao',
+                  'observacaoTecnica',
+                  'contribuicaoMedia',
+                  'status',
+                  'tipoDeTrabalho',
+                  'competenciaAbaixoDoMinimo',
+                  'categoria',
+                  'viabilidadeTempoEspecial',
+                  'tempoContribuicaoGanho',
+                  'agentesNocivos',
                 ],
               },
             },
@@ -121,9 +223,10 @@ export class AnalyzeTeacherRetirementPlanningPppUseCase {
         }),
       )) ?? '[]';
 
-    const transactionCredit = await this.baseTransactionRepositoryGateway.execute([
-      consumeCreditTransaction,
-    ]);
+    const transactionCredit =
+      await this.baseTransactionRepositoryGateway.execute([
+        consumeCreditTransaction,
+      ]);
 
     await transactionCredit.commit();
 

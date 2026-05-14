@@ -85,7 +85,9 @@ export class BpcDisabilityGrantEntityAutoMapperProfile {
 
       const analysisToolRecord =
         source.analysisToolRecordId !== null
-          ? ({ id: source.analysisToolRecordId.toString() } as AnalysisToolRecordTypeormEntity)
+          ? ({
+              id: source.analysisToolRecordId.toString(),
+            } as AnalysisToolRecordTypeormEntity)
           : undefined;
 
       return BpcDisabilityGrantTypeormEntity.build({
