@@ -71,6 +71,14 @@ import { BpcDisabilityDenialFamilyMemberDocumentTypeormCommandRepository } from 
 import { BpcDisabilityDenialInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-denial-inss-benefit/bpc-disability-denial-inss-benefit.typeorm.command.repository';
 import { BpcDisabilityDenialLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-denial-legal-proceeding/bpc-disability-denial-legal-proceeding.typeorm.command.repository';
 import { BpcDisabilityDenialResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-denial-result/bpc-disability-denial-result.typeorm.command.repository';
+import { BpcDisabilityGrantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-grant/bpc-disability-grant.typeorm.command.repository';
+import { BpcDisabilityGrantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-grant/bpc-disability-grant.typeorm.query.repository';
+import { BpcDisabilityGrantDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-grant-document/bpc-disability-grant-document.typeorm.command.repository';
+import { BpcDisabilityGrantFamilyMemberTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-grant-family-member/bpc-disability-grant-family-member.typeorm.command.repository';
+import { BpcDisabilityGrantFamilyMemberDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-grant-family-member-document/bpc-disability-grant-family-member-document.typeorm.command.repository';
+import { BpcDisabilityGrantInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-grant-inss-benefit/bpc-disability-grant-inss-benefit.typeorm.command.repository';
+import { BpcDisabilityGrantLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-grant-legal-proceeding/bpc-disability-grant-legal-proceeding.typeorm.command.repository';
+import { BpcDisabilityGrantResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-grant-result/bpc-disability-grant-result.typeorm.command.repository';
 import { BpcDisabilityTerminationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-termination/bpc-disability-termination.typeorm.command.repository';
 import { BpcDisabilityTerminationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-termination/bpc-disability-termination.typeorm.query.repository';
 import { BpcDisabilityTerminationDisabilityAssessmentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-termination-disability-assessment/bpc-disability-termination-disability-assessment.typeorm.command.repository';
@@ -192,6 +200,14 @@ import { DisabilityRetirementPlanningRemunerationTypeormCommandRepository } from
 import { DisabilityRetirementPlanningRemunerationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-remuneration/disability-retirement-planning-remuneration.typeorm.query.repository';
 import { DisabilityRetirementPlanningResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-result/disability-retirement-planning-result.typeorm.command.repository';
 import { DisabilityRetirementPlanningResultTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-result/disability-retirement-planning-result.typeorm.query.repository';
+import { ElderlyBpcRejectionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection/elderly-bpc-rejection.typeorm.command.repository';
+import { ElderlyBpcRejectionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection/elderly-bpc-rejection.typeorm.query.repository';
+import { ElderlyBpcRejectionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection-document/elderly-bpc-rejection-document.typeorm.command.repository';
+import { ElderlyBpcRejectionFamiliarGroupTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection-familiar-group/elderly-bpc-rejection-familiar-group.typeorm.command.repository';
+import { ElderlyBpcRejectionFamiliarGroupDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection-familiar-group-document/elderly-bpc-rejection-familiar-group-document.typeorm.command.repository';
+import { ElderlyBpcRejectionInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection-inss-benefit/elderly-bpc-rejection-inss-benefit.typeorm.command.repository';
+import { ElderlyBpcRejectionLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection-legal-proceeding/elderly-bpc-rejection-legal-proceeding.typeorm.command.repository';
+import { ElderlyBpcRejectionResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection-result/elderly-bpc-rejection-result.typeorm.command.repository';
 import { FullOpinionGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/full-opinion-generator-analysis-result/full-opinion-generator-analysis-result.typeorm.command.repository';
 import { FullOpinionGeneratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/full-opinion-generator-analysis-result/full-opinion-generator-analysis-result.typeorm.query.repository';
 import { GeneralUrbanRetirementAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-analysis/general-urban-retirement-analysis.typeorm.command.repository';
@@ -362,6 +378,36 @@ import { RegulatoryUpdateEmailPreferenceTypeormCommandRepository } from '@infra/
 import { RegulatoryUpdateEmailPreferenceTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/regulatory-update-email-preference/regulatory-update-email-preference.typeorm.query.repository';
 import { RegulatoryUpdateMonitoredSourceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/regulatory-update-monitored-source/regulatory-update-monitored-source.typeorm.command.repository';
 import { RegulatoryUpdateMonitoredSourceTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/regulatory-update-monitored-source/regulatory-update-monitored-source.typeorm.query.repository';
+import { RetirementPermanentDisabilityRejectionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-rejection/retirement-permanent-disability-rejection.typeorm.command.repository';
+import { RetirementPermanentDisabilityRejectionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-rejection/retirement-permanent-disability-rejection.typeorm.query.repository';
+import { RetirementPermanentDisabilityRejectionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-rejection-document/retirement-permanent-disability-rejection-document.typeorm.command.repository';
+import { RetirementPermanentDisabilityRejectionIncapacityTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-rejection-incapacity/retirement-permanent-disability-rejection-incapacity.typeorm.command.repository';
+import { RetirementPermanentDisabilityRejectionIncapacityCidTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-rejection-incapacity-cid/retirement-permanent-disability-rejection-incapacity-cid.typeorm.command.repository';
+import { RetirementPermanentDisabilityRejectionIncapacityDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-rejection-incapacity-document/retirement-permanent-disability-rejection-incapacity-document.typeorm.command.repository';
+import { RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-rejection-incapacity-previous-benefit/retirement-permanent-disability-rejection-incapacity-previous-benefit.typeorm.command.repository';
+import { RetirementPermanentDisabilityRejectionInsuredQualityTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-rejection-insured-quality/retirement-permanent-disability-rejection-insured-quality.typeorm.command.repository';
+import { RetirementPermanentDisabilityRejectionInsuredQualityDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-rejection-insured-quality-document/retirement-permanent-disability-rejection-insured-quality-document.typeorm.command.repository';
+import { RetirementPermanentDisabilityRejectionPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-rejection-period/retirement-permanent-disability-rejection-period.typeorm.command.repository';
+import { RetirementPermanentDisabilityRejectionPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-rejection-period-document/retirement-permanent-disability-rejection-period-document.typeorm.command.repository';
+import { RetirementPermanentDisabilityRejectionPeriodEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-rejection-period-earnings-history/retirement-permanent-disability-rejection-period-earnings-history.typeorm.command.repository';
+import { RetirementPermanentDisabilityRejectionResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-rejection-result/retirement-permanent-disability-rejection-result.typeorm.command.repository';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisAssociatedCidTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision/retirement-permanent-disability-revision-disability-analysis-associated-cid.typeorm.command.repository';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision/retirement-permanent-disability-revision-disability-analysis-benefit-associated-cid.typeorm.command.repository';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclarationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision/retirement-permanent-disability-revision-disability-analysis-benefit-declaration.typeorm.command.repository';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision/retirement-permanent-disability-revision-disability-analysis-benefit.typeorm.command.repository';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision/retirement-permanent-disability-revision-disability-analysis-document.typeorm.command.repository';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision/retirement-permanent-disability-revision-disability-analysis.typeorm.command.repository';
+import { RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision/retirement-permanent-disability-revision-work-periods-earnings-history.typeorm.command.repository';
+import { RetirementPermanentDisabilityRevisionWorkPeriodsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision/retirement-permanent-disability-revision-work-periods.typeorm.command.repository';
+import { RetirementPermanentDisabilityRevisionWorkPeriodsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision/retirement-permanent-disability-revision-work-periods.typeorm.query.repository';
+import { RetirementPermanentDisabilityRevisionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision/retirement-permanent-disability-revision.typeorm.command.repository';
+import { RetirementPermanentDisabilityRevisionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision/retirement-permanent-disability-revision.typeorm.query.repository';
+import { RetirementPermanentDisabilityRevisionConcessionLetterBreakdownTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision-concession-letter-breakdown/retirement-permanent-disability-revision-concession-letter-breakdown.typeorm.command.repository';
+import { RetirementPermanentDisabilityRevisionConcessionLetterBreakdownTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision-concession-letter-breakdown/retirement-permanent-disability-revision-concession-letter-breakdown.typeorm.query.repository';
+import { RetirementPermanentDisabilityRevisionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision-document/retirement-permanent-disability-revision-document.typeorm.command.repository';
+import { RetirementPermanentDisabilityRevisionInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision-inss-benefit/retirement-permanent-disability-revision-inss-benefit.typeorm.command.repository';
+import { RetirementPermanentDisabilityRevisionLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision-legal-proceeding/retirement-permanent-disability-revision-legal-proceeding.typeorm.command.repository';
+import { RetirementPermanentDisabilityRevisionResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-permanent-disability-revision-result/retirement-permanent-disability-revision-result.typeorm.command.repository';
 import { RetirementPlanningRgpsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps/retirement-planning-rgps.typeorm.command.repository';
 import { RetirementPlanningRgpsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps/retirement-planning-rgps.typeorm.query.repository';
 import { RetirementPlanningRgpsAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-analysis-result/retirement-planning-rgps-analysis-result.typeorm.command.repository';
@@ -711,6 +757,14 @@ import { BpcDisabilityDenialFamilyMemberDocumentCommandRepositoryGateway } from 
 import { BpcDisabilityDenialInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-denial/domain/repository/bpc-disability-denial-inss-benefit/command/bpc-disability-denial-inss-benefit.command.repository.gateway';
 import { BpcDisabilityDenialLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-denial/domain/repository/bpc-disability-denial-legal-proceeding/command/bpc-disability-denial-legal-proceeding.command.repository.gateway';
 import { BpcDisabilityDenialResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-denial/domain/repository/bpc-disability-denial-result/command/bpc-disability-denial-result.command.repository.gateway';
+import { BpcDisabilityGrantCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant/command/bpc-disability-grant.command.repository.gateway';
+import { BpcDisabilityGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant/query/bpc-disability-grant.query.repository.gateway';
+import { BpcDisabilityGrantDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-document/command/bpc-disability-grant-document.command.repository.gateway';
+import { BpcDisabilityGrantFamilyMemberCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-family-member/command/bpc-disability-grant-family-member.command.repository.gateway';
+import { BpcDisabilityGrantFamilyMemberDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-family-member-document/command/bpc-disability-grant-family-member-document.command.repository.gateway';
+import { BpcDisabilityGrantInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-inss-benefit/command/bpc-disability-grant-inss-benefit.command.repository.gateway';
+import { BpcDisabilityGrantLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-legal-proceeding/command/bpc-disability-grant-legal-proceeding.command.repository.gateway';
+import { BpcDisabilityGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-result/command/bpc-disability-grant-result.command.repository.gateway';
 import { BpcDisabilityTerminationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-termination/domain/repository/bpc-disability-termination/command/bpc-disability-termination.command.repository.gateway';
 import { BpcDisabilityTerminationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-termination/domain/repository/bpc-disability-termination/query/bpc-disability-termination.query.repository.gateway';
 import { BpcDisabilityTerminationDisabilityAssessmentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-termination/domain/repository/bpc-disability-termination-disability-assessment/command/bpc-disability-termination-disability-assessment.command.repository.gateway';
@@ -820,6 +874,14 @@ import { DisabilityRetirementPlanningRejectionPeriodEarningsHistoryCommandReposi
 import { DisabilityRetirementPlanningRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/repository/disability-retirement-planning-rejection-result/command/disability-retirement-planning-rejection-result.command.repository.gateway';
 import { DisabilityRetirementPlanningRejectionTimeAcceleratorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/repository/disability-retirement-planning-rejection-time-accelerator/command/disability-retirement-planning-rejection-time-accelerator.command.repository.gateway';
 import { DisabilityRetirementPlanningRejectionTimeAcceleratorQueryRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/repository/disability-retirement-planning-rejection-time-accelerator/query/disability-retirement-planning-rejection-time-accelerator.query.repository.gateway';
+import { ElderlyBpcRejectionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/repository/elderly-bpc-rejection/command/elderly-bpc-rejection.command.repository.gateway';
+import { ElderlyBpcRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/repository/elderly-bpc-rejection/query/elderly-bpc-rejection.query.repository.gateway';
+import { ElderlyBpcRejectionDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/repository/elderly-bpc-rejection-document/command/elderly-bpc-rejection-document.command.repository.gateway';
+import { ElderlyBpcRejectionFamiliarGroupCommandRepositoryGateway } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/repository/elderly-bpc-rejection-familiar-group/command/elderly-bpc-rejection-familiar-group.command.repository.gateway';
+import { ElderlyBpcRejectionFamiliarGroupDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/repository/elderly-bpc-rejection-familiar-group-document/command/elderly-bpc-rejection-familiar-group-document.command.repository.gateway';
+import { ElderlyBpcRejectionInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/repository/elderly-bpc-rejection-inss-benefit/command/elderly-bpc-rejection-inss-benefit.command.repository.gateway';
+import { ElderlyBpcRejectionLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/repository/elderly-bpc-rejection-legal-proceeding/command/elderly-bpc-rejection-legal-proceeding.command.repository.gateway';
+import { ElderlyBpcRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/repository/elderly-bpc-rejection-result/command/elderly-bpc-rejection-result.command.repository.gateway';
 import { GeneralUrbanRetirementAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis/command/general-urban-retirement-analysis.command.repository.gateway';
 import { GeneralUrbanRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis/query/general-urban-retirement-analysis.query.repository.gateway';
 import { GeneralUrbanRetirementAnalysisDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-document/command/general-urban-retirement-analysis-document.command.repository.gateway';
@@ -942,6 +1004,36 @@ import { PerCapitaIncomeForBpcAnalysisFamilyMemberQueryRepositoryGateway } from 
 import { PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis-family-member-document/command/per-capita-income-for-bpc-analysis-family-member-document.command.repository.gateway';
 import { PerCapitaIncomeForBpcAnalysisLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis-legal-proceeding/command/per-capita-income-for-bpc-analysis-legal-proceeding.command.repository.gateway';
 import { PerCapitaIncomeForBpcAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis-result/command/per-capita-income-for-bpc-analysis-result.command.repository.gateway';
+import { RetirementPermanentDisabilityRejectionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection/command/retirement-permanent-disability-rejection.command.repository.gateway';
+import { RetirementPermanentDisabilityRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection/query/retirement-permanent-disability-rejection.query.repository.gateway';
+import { RetirementPermanentDisabilityRejectionDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection-document/command/retirement-permanent-disability-rejection-document.command.repository.gateway';
+import { RetirementPermanentDisabilityRejectionIncapacityCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection-incapacity/command/retirement-permanent-disability-rejection-incapacity.command.repository.gateway';
+import { RetirementPermanentDisabilityRejectionIncapacityCidCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection-incapacity-cid/command/retirement-permanent-disability-rejection-incapacity-cid.command.repository.gateway';
+import { RetirementPermanentDisabilityRejectionIncapacityDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection-incapacity-document/command/retirement-permanent-disability-rejection-incapacity-document.command.repository.gateway';
+import { RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection-incapacity-previous-benefit/command/retirement-permanent-disability-rejection-incapacity-previous-benefit.command.repository.gateway';
+import { RetirementPermanentDisabilityRejectionInsuredQualityCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection-insured-quality/command/retirement-permanent-disability-rejection-insured-quality.command.repository.gateway';
+import { RetirementPermanentDisabilityRejectionInsuredQualityDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection-insured-quality-document/command/retirement-permanent-disability-rejection-insured-quality-document.command.repository.gateway';
+import { RetirementPermanentDisabilityRejectionPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection-period/command/retirement-permanent-disability-rejection-period.command.repository.gateway';
+import { RetirementPermanentDisabilityRejectionPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection-period-document/command/retirement-permanent-disability-rejection-period-document.command.repository.gateway';
+import { RetirementPermanentDisabilityRejectionPeriodEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection-period-earnings-history/command/retirement-permanent-disability-rejection-period-earnings-history.command.repository.gateway';
+import { RetirementPermanentDisabilityRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection-result/command/retirement-permanent-disability-rejection-result.command.repository.gateway';
+import { RetirementPermanentDisabilityRevisionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision/command/retirement-permanent-disability-revision.command.repository.gateway';
+import { RetirementPermanentDisabilityRevisionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision/query/retirement-permanent-disability-revision.query.repository.gateway';
+import { RetirementPermanentDisabilityRevisionConcessionLetterBreakdownCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-concession-letter-breakdown/command/retirement-permanent-disability-revision-concession-letter-breakdown.command.repository.gateway';
+import { RetirementPermanentDisabilityRevisionConcessionLetterBreakdownQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-concession-letter-breakdown/query/retirement-permanent-disability-revision-concession-letter-breakdown.query.repository.gateway';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-disability-analysis/command/retirement-permanent-disability-revision-disability-analysis.command.repository.gateway';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisAssociatedCidCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-disability-analysis-associated-cid/command/retirement-permanent-disability-revision-disability-analysis-associated-cid.command.repository.gateway';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-disability-analysis-benefit/command/retirement-permanent-disability-revision-disability-analysis-benefit.command.repository.gateway';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-disability-analysis-benefit-associated-cid/command/retirement-permanent-disability-revision-disability-analysis-benefit-associated-cid.command.repository.gateway';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclarationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-disability-analysis-benefit-declaration/command/retirement-permanent-disability-revision-disability-analysis-benefit-declaration.command.repository.gateway';
+import { RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-disability-analysis-document/command/retirement-permanent-disability-revision-disability-analysis-document.command.repository.gateway';
+import { RetirementPermanentDisabilityRevisionDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-document/command/retirement-permanent-disability-revision-document.command.repository.gateway';
+import { RetirementPermanentDisabilityRevisionInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-inss-benefit/command/retirement-permanent-disability-revision-inss-benefit.command.repository.gateway';
+import { RetirementPermanentDisabilityRevisionLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-legal-proceeding/command/retirement-permanent-disability-revision-legal-proceeding.command.repository.gateway';
+import { RetirementPermanentDisabilityRevisionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-result/command/retirement-permanent-disability-revision-result.command.repository.gateway';
+import { RetirementPermanentDisabilityRevisionWorkPeriodsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-work-periods/command/retirement-permanent-disability-revision-work-periods.command.repository.gateway';
+import { RetirementPermanentDisabilityRevisionWorkPeriodsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-work-periods/query/retirement-permanent-disability-revision-work-periods.query.repository.gateway';
+import { RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-work-periods-earnings-history/command/retirement-permanent-disability-revision-work-periods-earnings-history.command.repository.gateway';
 import { RetirementPlanningRgpsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps/command/retirement-planning-rgps.repository.gateway';
 import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
 import { RetirementPlanningRgpsAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps-analysis-result/command/retirement-planning-rgps-analysis-result.repository.gateway';
@@ -3159,6 +3251,104 @@ const classProvider: ClassProvider[] = [
       RuralOrHybridRetirementAnalysisTimeAcceleratorTypeormCommandRepository,
   },
   {
+    provide: RetirementPermanentDisabilityRevisionCommandRepositoryGateway,
+    useClass: RetirementPermanentDisabilityRevisionTypeormCommandRepository,
+  },
+  {
+    provide: RetirementPermanentDisabilityRevisionQueryRepositoryGateway,
+    useClass: RetirementPermanentDisabilityRevisionTypeormQueryRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRevisionDocumentCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRevisionDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRevisionInssBenefitCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRevisionInssBenefitTypeormCommandRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRevisionLegalProceedingCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRevisionLegalProceedingTypeormCommandRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRevisionResultCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRevisionResultTypeormCommandRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRevisionDisabilityAnalysisCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRevisionDisabilityAnalysisTypeormCommandRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRevisionDisabilityAnalysisAssociatedCidCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRevisionDisabilityAnalysisAssociatedCidTypeormCommandRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitTypeormCommandRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitAssociatedCidTypeormCommandRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclarationCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRevisionDisabilityAnalysisBenefitDeclarationTypeormCommandRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRevisionDisabilityAnalysisDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRevisionConcessionLetterBreakdownCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRevisionConcessionLetterBreakdownTypeormCommandRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRevisionConcessionLetterBreakdownQueryRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRevisionConcessionLetterBreakdownTypeormQueryRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRevisionWorkPeriodsCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRevisionWorkPeriodsTypeormCommandRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRevisionWorkPeriodsQueryRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRevisionWorkPeriodsTypeormQueryRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRevisionWorkPeriodsEarningsHistoryTypeormCommandRepository,
+  },
+  {
     provide: SpecialActivityAnalysisQueryRepositoryGateway,
     useClass: SpecialActivityTypeormQueryRepository,
   },
@@ -3301,32 +3491,64 @@ const classProvider: ClassProvider[] = [
     useClass: BpcDisabilityDenialTypeormCommandRepository,
   },
   {
+    provide: BpcDisabilityGrantCommandRepositoryGateway,
+    useClass: BpcDisabilityGrantTypeormCommandRepository,
+  },
+  {
     provide: BpcDisabilityDenialQueryRepositoryGateway,
     useClass: BpcDisabilityDenialTypeormQueryRepository,
+  },
+  {
+    provide: BpcDisabilityGrantQueryRepositoryGateway,
+    useClass: BpcDisabilityGrantTypeormQueryRepository,
   },
   {
     provide: BpcDisabilityDenialDocumentCommandRepositoryGateway,
     useClass: BpcDisabilityDenialDocumentTypeormCommandRepository,
   },
   {
+    provide: BpcDisabilityGrantDocumentCommandRepositoryGateway,
+    useClass: BpcDisabilityGrantDocumentTypeormCommandRepository,
+  },
+  {
     provide: BpcDisabilityDenialResultCommandRepositoryGateway,
     useClass: BpcDisabilityDenialResultTypeormCommandRepository,
+  },
+  {
+    provide: BpcDisabilityGrantResultCommandRepositoryGateway,
+    useClass: BpcDisabilityGrantResultTypeormCommandRepository,
   },
   {
     provide: BpcDisabilityDenialFamilyMemberCommandRepositoryGateway,
     useClass: BpcDisabilityDenialFamilyMemberTypeormCommandRepository,
   },
   {
+    provide: BpcDisabilityGrantFamilyMemberCommandRepositoryGateway,
+    useClass: BpcDisabilityGrantFamilyMemberTypeormCommandRepository,
+  },
+  {
     provide: BpcDisabilityDenialFamilyMemberDocumentCommandRepositoryGateway,
     useClass: BpcDisabilityDenialFamilyMemberDocumentTypeormCommandRepository,
+  },
+  {
+    provide: BpcDisabilityGrantFamilyMemberDocumentCommandRepositoryGateway,
+    useClass: BpcDisabilityGrantFamilyMemberDocumentTypeormCommandRepository,
   },
   {
     provide: BpcDisabilityDenialInssBenefitCommandRepositoryGateway,
     useClass: BpcDisabilityDenialInssBenefitTypeormCommandRepository,
   },
   {
+    provide: BpcDisabilityGrantInssBenefitCommandRepositoryGateway,
+    useClass: BpcDisabilityGrantInssBenefitTypeormCommandRepository,
+  },
+  {
     provide: BpcDisabilityDenialLegalProceedingCommandRepositoryGateway,
     useClass: BpcDisabilityDenialLegalProceedingTypeormCommandRepository,
+  },
+  {
+    provide: BpcDisabilityGrantLegalProceedingCommandRepositoryGateway,
+    useClass: BpcDisabilityGrantLegalProceedingTypeormCommandRepository,
   },
   {
     provide: BpcDisabilityTerminationCommandRepositoryGateway,
@@ -4160,6 +4382,112 @@ const classProvider: ClassProvider[] = [
       PermanentIncapacityBenefitTerminatedWorkPeriodsEarningsHistoryCommandRepositoryGateway,
     useClass:
       PermanentIncapacityBenefitTerminatedWorkPeriodsEarningsHistoryTypeormCommandRepository,
+  },
+  {
+    provide: RetirementPermanentDisabilityRejectionCommandRepositoryGateway,
+    useClass: RetirementPermanentDisabilityRejectionTypeormCommandRepository,
+  },
+  {
+    provide: RetirementPermanentDisabilityRejectionQueryRepositoryGateway,
+    useClass: RetirementPermanentDisabilityRejectionTypeormQueryRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRejectionDocumentCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRejectionDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRejectionIncapacityCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRejectionIncapacityTypeormCommandRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRejectionIncapacityCidCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRejectionIncapacityCidTypeormCommandRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRejectionIncapacityPreviousBenefitTypeormCommandRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRejectionIncapacityDocumentCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRejectionIncapacityDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRejectionInsuredQualityCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRejectionInsuredQualityTypeormCommandRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRejectionInsuredQualityDocumentCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRejectionInsuredQualityDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRejectionPeriodCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRejectionPeriodTypeormCommandRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRejectionPeriodDocumentCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRejectionPeriodDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRejectionPeriodEarningsHistoryCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRejectionPeriodEarningsHistoryTypeormCommandRepository,
+  },
+  {
+    provide:
+      RetirementPermanentDisabilityRejectionResultCommandRepositoryGateway,
+    useClass:
+      RetirementPermanentDisabilityRejectionResultTypeormCommandRepository,
+  },
+  {
+    provide: ElderlyBpcRejectionQueryRepositoryGateway,
+    useClass: ElderlyBpcRejectionTypeormQueryRepository,
+  },
+  {
+    provide: ElderlyBpcRejectionCommandRepositoryGateway,
+    useClass: ElderlyBpcRejectionTypeormCommandRepository,
+  },
+  {
+    provide: ElderlyBpcRejectionResultCommandRepositoryGateway,
+    useClass: ElderlyBpcRejectionResultTypeormCommandRepository,
+  },
+  {
+    provide: ElderlyBpcRejectionInssBenefitCommandRepositoryGateway,
+    useClass: ElderlyBpcRejectionInssBenefitTypeormCommandRepository,
+  },
+  {
+    provide: ElderlyBpcRejectionLegalProceedingCommandRepositoryGateway,
+    useClass: ElderlyBpcRejectionLegalProceedingTypeormCommandRepository,
+  },
+  {
+    provide: ElderlyBpcRejectionDocumentCommandRepositoryGateway,
+    useClass: ElderlyBpcRejectionDocumentTypeormCommandRepository,
+  },
+  {
+    provide: ElderlyBpcRejectionFamiliarGroupCommandRepositoryGateway,
+    useClass: ElderlyBpcRejectionFamiliarGroupTypeormCommandRepository,
+  },
+  {
+    provide: ElderlyBpcRejectionFamiliarGroupDocumentCommandRepositoryGateway,
+    useClass: ElderlyBpcRejectionFamiliarGroupDocumentTypeormCommandRepository,
   },
 ];
 
