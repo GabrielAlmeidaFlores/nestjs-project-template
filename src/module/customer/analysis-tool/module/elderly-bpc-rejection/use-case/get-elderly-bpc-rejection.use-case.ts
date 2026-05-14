@@ -110,6 +110,9 @@ export class GetElderlyBpcRejectionUseCase {
     const resultDto =
       currentResult !== null
         ? GetElderlyBpcRejectionResultResponseDto.build({
+            ...(currentResult.inssDecisionAnalysis !== null && {
+              inssDecisionAnalysis: currentResult.inssDecisionAnalysis,
+            }),
             ...(currentResult.completeAnalysis !== null && {
               elderlyBpcRejectionCompleteAnalysis: this.parseCompleteAnalysis(
                 currentResult.completeAnalysis,

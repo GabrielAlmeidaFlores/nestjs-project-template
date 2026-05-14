@@ -46,7 +46,9 @@ export class UpdateTeacherRetirementPlanningRppsUseCase {
     private readonly teacherRetirementPlanningDocumentCommandRepositoryGateway: TeacherRetirementPlanningRppsDocumentCommandRepositoryGateway,
     @Inject(TeacherRetirementPlanningRppsInssBenefitCommandRepositoryGateway)
     private readonly teacherRetirementPlanningInssBenefitCommandRepositoryGateway: TeacherRetirementPlanningRppsInssBenefitCommandRepositoryGateway,
-    @Inject(TeacherRetirementPlanningRppsLegalProceedingCommandRepositoryGateway)
+    @Inject(
+      TeacherRetirementPlanningRppsLegalProceedingCommandRepositoryGateway,
+    )
     private readonly teacherRetirementPlanningLegalProceedingCommandRepositoryGateway: TeacherRetirementPlanningRppsLegalProceedingCommandRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,

@@ -3482,6 +3482,28 @@ ${cnisAnalysisJson}
     );
   }
 
+  public async getElderlyBpcRejectionInssDecisionAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANT
+- Analyze the INSS administrative denial decision for elderly BPC based on the provided case data and attached administrative proceeding files.
+- Identify the key denial grounds, legal basis cited by INSS, critical factual points, and possible inconsistencies.
+- Highlight the strongest technical arguments for administrative appeal or judicial challenge.
+- When data is missing, explicitly state that it was not identified.
+- Return a clear, structured markdown text suitable for direct reading by a social security lawyer.
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+      }),
+    );
+  }
+
   public async getElderlyBpcRejectionCompleteAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,

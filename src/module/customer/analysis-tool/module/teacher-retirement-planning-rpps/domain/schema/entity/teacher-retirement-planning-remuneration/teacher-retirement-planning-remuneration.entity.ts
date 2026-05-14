@@ -10,7 +10,8 @@ export class TeacherRetirementPlanningRppsRemunerationEntity extends BaseEntity<
   public readonly amount: DecimalValue;
   public readonly teacherRetirementPlanning: TeacherRetirementPlanningRppsEntity;
 
-  protected readonly _type = TeacherRetirementPlanningRppsRemunerationEntity.name;
+  protected readonly _type =
+    TeacherRetirementPlanningRppsRemunerationEntity.name;
 
   public constructor(
     props: TeacherRetirementPlanningRppsRemunerationEntityPropsInterface,

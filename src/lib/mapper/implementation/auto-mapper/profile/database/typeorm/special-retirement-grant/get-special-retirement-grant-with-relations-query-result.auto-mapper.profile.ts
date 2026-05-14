@@ -9,6 +9,7 @@ import { SpecialRetirementGrantLegalProceedingTypeormEntity } from '@infra/datab
 import { SpecialRetirementGrantResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-result.typeorm.entity';
 import { SpecialRetirementGrantTechnicalDiagnosisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant-technical-diagnosis.typeorm.entity';
 import { SpecialRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-grant.typeorm.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
 import { GetSpecialRetirementGrantBenefitQueryResult } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant/query/result/get-special-retirement-grant-benefit.query.result';
 import { GetSpecialRetirementGrantDocumentQueryResult } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/repository/special-retirement-grant/query/result/get-special-retirement-grant-document.query.result';
@@ -36,6 +37,13 @@ export class GetSpecialRetirementGrantWithRelationsQueryResultAutoMapperProfile 
     const convertOrmEntityToDomainEntity = (
       source: SpecialRetirementGrantTypeormEntity,
     ): GetSpecialRetirementGrantWithRelationsQueryResult => {
+      if (!source.createdBy || !source.updatedBy) {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass: GetSpecialRetirementGrantWithRelationsQueryResult.name,
+          sourceClass: SpecialRetirementGrantTypeormEntity.name,
+        });
+      }
+
       const specialRetirementGrantResult = source.specialRetirementGrantResult
         ? this.mapper.map(
             source.specialRetirementGrantResult,
@@ -44,21 +52,17 @@ export class GetSpecialRetirementGrantWithRelationsQueryResultAutoMapperProfile 
           )
         : null;
 
-      const createdBy = source.createdBy
-        ? this.mapper.map(
-            source.createdBy,
-            OrganizationMemberTypeormEntity,
-            GetOrganizationMemberWithCustomerRelationQueryResult,
-          )
-        : null;
+      const createdBy = this.mapper.map(
+        source.createdBy,
+        OrganizationMemberTypeormEntity,
+        GetOrganizationMemberWithCustomerRelationQueryResult,
+      );
 
-      const updatedBy = source.updatedBy
-        ? this.mapper.map(
-            source.updatedBy,
-            OrganizationMemberTypeormEntity,
-            GetOrganizationMemberWithCustomerRelationQueryResult,
-          )
-        : null;
+      const updatedBy = this.mapper.map(
+        source.updatedBy,
+        OrganizationMemberTypeormEntity,
+        GetOrganizationMemberWithCustomerRelationQueryResult,
+      );
 
       const specialRetirementGrantBenefit =
         source.specialRetirementGrantBenefit?.map((item) =>
@@ -101,16 +105,13 @@ export class GetSpecialRetirementGrantWithRelationsQueryResultAutoMapperProfile 
 
       return GetSpecialRetirementGrantWithRelationsQueryResult.build({
         id: new SpecialRetirementGrantId(source.id),
-        name: source.name ?? null,
-        specialActivity: source.specialActivity ?? null,
+        name: source.name,
+        specialActivity: source.specialActivity,
         cnisDocument: source.cnisDocument ?? null,
-        specialRetirementGrantResult: specialRetirementGrantResult ?? null,
-        createdBy:
-          createdBy as GetOrganizationMemberWithCustomerRelationQueryResult,
-        updatedBy:
-          (updatedBy as GetOrganizationMemberWithCustomerRelationQueryResult) ??
-          null,
-        specialRetirementGrantBenefit: specialRetirementGrantBenefit ?? [],
+        specialRetirementGrantResult,
+        createdBy,
+        updatedBy: updatedBy,
+        specialRetirementGrantBenefit: specialRetirementGrantBenefit,
         specialRetirementGrantLegalProceeding:
           specialRetirementGrantLegalProceeding,
         specialRetirementGrantDocument,
