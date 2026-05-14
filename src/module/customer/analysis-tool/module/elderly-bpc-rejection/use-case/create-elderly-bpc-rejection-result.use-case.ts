@@ -147,6 +147,7 @@ export class CreateElderlyBpcRejectionResultUseCase {
 
     const resultEntity = new ElderlyBpcRejectionResultEntity({
       ...(rejectionResult !== null && { id: rejectionResult.id }),
+      inssDecisionAnalysis: rejectionResult?.inssDecisionAnalysis ?? null,
       completeAnalysis,
       simplifiedAnalysis: rejectionResult?.simplifiedAnalysis ?? null,
       elderlyBpcRejectionId,

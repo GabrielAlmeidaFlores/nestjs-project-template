@@ -477,5 +477,4 @@ export class CreateTemporaryDisabilityBenefitsTerminatedResultUseCase {
       ...workPeriodDocumentBuffers,
     ];
   }
-
 }

@@ -12,10 +12,12 @@ import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/exp
 import { ElderlyBpcRejectionId } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/schema/entity/elderly-bpc-rejection/value-object/elderly-bpc-rejection-id/elderly-bpc-rejection-id.value-object';
 import { CreateElderlyBpcRejectionRequestDto } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/dto/request/create-elderly-bpc-rejection.request.dto';
 import { UpdateElderlyBpcRejectionRequestDto } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/dto/request/update-elderly-bpc-rejection.request.dto';
+import { CreateElderlyBpcRejectionInssDecisionAnalysisResponseDto } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/dto/response/create-elderly-bpc-rejection-inss-decision-analysis.response.dto';
 import { CreateElderlyBpcRejectionResultResponseDto } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/dto/response/create-elderly-bpc-rejection-result.response.dto';
 import { CreateElderlyBpcRejectionResponseDto } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/dto/response/create-elderly-bpc-rejection.response.dto';
 import { GetElderlyBpcRejectionResponseDto } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/dto/response/get-elderly-bpc-rejection.response.dto';
 import { UpdateElderlyBpcRejectionResponseDto } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/dto/response/update-elderly-bpc-rejection.response.dto';
+import { CreateElderlyBpcRejectionInssDecisionAnalysisUseCase } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/use-case/create-elderly-bpc-rejection-inss-decision-analysis.use-case';
 import { CreateElderlyBpcRejectionResultUseCase } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/use-case/create-elderly-bpc-rejection-result.use-case';
 import { CreateElderlyBpcRejectionUseCase } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/use-case/create-elderly-bpc-rejection.use-case';
 import { DownloadElderlyBpcRejectionCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/use-case/download-elderly-bpc-rejection-complete-analysis.use-case';
@@ -41,6 +43,7 @@ export class ElderlyBpcRejectionController {
     private readonly createElderlyBpcRejectionUseCase: CreateElderlyBpcRejectionUseCase,
     private readonly updateElderlyBpcRejectionUseCase: UpdateElderlyBpcRejectionUseCase,
     private readonly getElderlyBpcRejectionUseCase: GetElderlyBpcRejectionUseCase,
+    private readonly createElderlyBpcRejectionInssDecisionAnalysisUseCase: CreateElderlyBpcRejectionInssDecisionAnalysisUseCase,
     private readonly createElderlyBpcRejectionResultUseCase: CreateElderlyBpcRejectionResultUseCase,
     private readonly downloadElderlyBpcRejectionCompleteAnalysisUseCase: DownloadElderlyBpcRejectionCompleteAnalysisUseCase,
     private readonly downloadElderlyBpcRejectionSimplifiedAnalysisUseCase: DownloadElderlyBpcRejectionSimplifiedAnalysisUseCase,
@@ -135,6 +138,39 @@ export class ElderlyBpcRejectionController {
     elderlyBpcRejectionId: ElderlyBpcRejectionId,
   ): Promise<GetElderlyBpcRejectionResponseDto> {
     return this.getElderlyBpcRejectionUseCase.execute(elderlyBpcRejectionId);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Gerar analise da decisao do INSS no indeferimento de BPC idoso',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':elderlyBpcRejectionId/inss-decision-analysis',
+      method: RequestMethod.POST,
+    },
+    tag: ['indeferimento-bpc-idoso'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description:
+        'Analise da decisao do INSS no indeferimento de BPC idoso gerada com sucesso.',
+      type: CreateElderlyBpcRejectionInssDecisionAnalysisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createInssDecisionAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'elderlyBpcRejectionId',
+      new ParseValueObjectPipe(ElderlyBpcRejectionId),
+    )
+    elderlyBpcRejectionId: ElderlyBpcRejectionId,
+  ): Promise<CreateElderlyBpcRejectionInssDecisionAnalysisResponseDto> {
+    return this.createElderlyBpcRejectionInssDecisionAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      elderlyBpcRejectionId,
+    );
   }
 
   @BuildEndpointSpecification({

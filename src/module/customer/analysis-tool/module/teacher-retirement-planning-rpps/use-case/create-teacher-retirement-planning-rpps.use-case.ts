@@ -15,6 +15,12 @@ import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/sche
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
+import { TeacherRetirementPlanningActivityTypeEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/enum/teacher-retirement-planning-activity-type.enum';
+import { TeacherRetirementPlanningFederativeEntityEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/enum/teacher-retirement-planning-federative-entity.enum';
+import { TeacherRetirementPlanningEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
+import { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
+import { TeacherRetirementPlanningRppsActivityTypeEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning/enum/teacher-retirement-planning-activity-type.enum';
+import { TeacherRetirementPlanningRppsFederativeEntityEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning/enum/teacher-retirement-planning-federative-entity.enum';
 import { TeacherRetirementPlanningRppsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning/command/teacher-retirement-planning.command.repository.gateway';
 import { TeacherRetirementPlanningRppsDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning-document/command/teacher-retirement-planning-document.command.repository.gateway';
 import { TeacherRetirementPlanningRppsInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning-inss-benefit/command/teacher-retirement-planning-inss-benefit.command.repository.gateway';
@@ -54,7 +60,9 @@ export class CreateTeacherRetirementPlanningRppsUseCase {
     private readonly teacherRetirementPlanningRppsDocumentCommandRepositoryGateway: TeacherRetirementPlanningRppsDocumentCommandRepositoryGateway,
     @Inject(TeacherRetirementPlanningRppsInssBenefitCommandRepositoryGateway)
     private readonly teacherRetirementPlanningRppsInssBenefitCommandRepositoryGateway: TeacherRetirementPlanningRppsInssBenefitCommandRepositoryGateway,
-    @Inject(TeacherRetirementPlanningRppsLegalProceedingCommandRepositoryGateway)
+    @Inject(
+      TeacherRetirementPlanningRppsLegalProceedingCommandRepositoryGateway,
+    )
     private readonly teacherRetirementPlanningRppsLegalProceedingCommandRepositoryGateway: TeacherRetirementPlanningRppsLegalProceedingCommandRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
@@ -91,20 +99,23 @@ export class CreateTeacherRetirementPlanningRppsUseCase {
       updatedBy: analysisToolClientQueryResult.updatedBy.id,
     });
 
-    const teacherRetirementPlanningRppsId = new TeacherRetirementPlanningRppsId();
+    const teacherRetirementPlanningRppsId =
+      new TeacherRetirementPlanningRppsId();
 
-    const teacherRetirementPlanningRpps = new TeacherRetirementPlanningRppsEntity({
-      id: teacherRetirementPlanningRppsId,
-      federativeEntity: dto.federativeEntity,
-      state: dto.state as StateCodeEnum,
-      municipality: dto.municipality ?? null,
-      analysisName: dto.analysisName ?? null,
-      currentPosition: dto.currentPosition ?? null,
-      activityType: dto.activityType,
-      publicServiceStartDate: dto.publicServiceStartDate ?? null,
-      careerStartDate: dto.careerStartDate ?? null,
-      administrativeProcessAnalysis: dto.administrativeProcessAnalysis ?? null,
-    });
+    const teacherRetirementPlanningRpps =
+      new TeacherRetirementPlanningRppsEntity({
+        id: teacherRetirementPlanningRppsId,
+        federativeEntity: dto.federativeEntity,
+        state: dto.state as StateCodeEnum,
+        municipality: dto.municipality ?? null,
+        analysisName: dto.analysisName ?? null,
+        currentPosition: dto.currentPosition ?? null,
+        activityType: dto.activityType,
+        publicServiceStartDate: dto.publicServiceStartDate ?? null,
+        careerStartDate: dto.careerStartDate ?? null,
+        administrativeProcessAnalysis:
+          dto.administrativeProcessAnalysis ?? null,
+      });
 
     const transactionOperations: TransactionType[] = [
       this.teacherRetirementPlanningRppsCommandRepositoryGateway.createTeacherRetirementPlanning(
@@ -175,7 +186,9 @@ export class CreateTeacherRetirementPlanningRppsUseCase {
       id: new AnalysisToolRecordId(),
       code: new AnalysisToolRecordCode(countRecords + 1),
       type: recordType,
-      teacherRetirementPlanning: teacherRetirementPlanningRpps as any,
+      teacherRetirementPlanning: this.buildTeacherRetirementPlanningEntity(
+        teacherRetirementPlanningRpps,
+      ),
       analysisToolClient,
       status: AnalysisStatusEnum.IN_PROGRESS,
       createdBy: organizationMember.id,
@@ -196,6 +209,63 @@ export class CreateTeacherRetirementPlanningRppsUseCase {
     return CreateTeacherRetirementPlanningRppsResponseDto.build({
       teacherRetirementPlanningId: teacherRetirementPlanningRppsId,
     });
+  }
+
+  private buildTeacherRetirementPlanningEntity(
+    planning: TeacherRetirementPlanningRppsEntity,
+  ): TeacherRetirementPlanningEntity {
+    return new TeacherRetirementPlanningEntity({
+      id: new TeacherRetirementPlanningId(planning.id.toString()),
+      federativeEntity: this.mapFederativeEntity(planning.federativeEntity),
+      state: planning.state,
+      municipality: planning.municipality,
+      analysisName: planning.analysisName,
+      currentPosition: planning.currentPosition,
+      activityType: this.mapActivityType(planning.activityType),
+      publicServiceStartDate: planning.publicServiceStartDate,
+      careerStartDate: planning.careerStartDate,
+      administrativeProcessAnalysis: planning.administrativeProcessAnalysis,
+      teacherRetirementPlanningResult: null,
+    });
+  }
+
+  private mapFederativeEntity(
+    federativeEntity: TeacherRetirementPlanningRppsFederativeEntityEnum,
+  ): TeacherRetirementPlanningFederativeEntityEnum {
+    const mapper: Record<
+      TeacherRetirementPlanningRppsFederativeEntityEnum,
+      TeacherRetirementPlanningFederativeEntityEnum
+    > = {
+      [TeacherRetirementPlanningRppsFederativeEntityEnum.STATE]:
+        TeacherRetirementPlanningFederativeEntityEnum.STATE,
+      [TeacherRetirementPlanningRppsFederativeEntityEnum.MUNICIPALITY]:
+        TeacherRetirementPlanningFederativeEntityEnum.MUNICIPALITY,
+      [TeacherRetirementPlanningRppsFederativeEntityEnum.UNION]:
+        TeacherRetirementPlanningFederativeEntityEnum.UNION,
+      [TeacherRetirementPlanningRppsFederativeEntityEnum.FEDERAL_DISTRICT]:
+        TeacherRetirementPlanningFederativeEntityEnum.FEDERAL_DISTRICT,
+    };
+
+    return mapper[federativeEntity];
+  }
+
+  private mapActivityType(
+    activityType: TeacherRetirementPlanningRppsActivityTypeEnum,
+  ): TeacherRetirementPlanningActivityTypeEnum {
+    const mapper: Record<
+      TeacherRetirementPlanningRppsActivityTypeEnum,
+      TeacherRetirementPlanningActivityTypeEnum
+    > = {
+      [TeacherRetirementPlanningRppsActivityTypeEnum.CLASSROOM_ONLY]:
+        TeacherRetirementPlanningActivityTypeEnum.CLASSROOM_ONLY,
+      [
+        TeacherRetirementPlanningRppsActivityTypeEnum.CLASSROOM_AND_PEDAGOGICAL_FUNCTION
+      ]: TeacherRetirementPlanningActivityTypeEnum.CLASSROOM_AND_PEDAGOGICAL_FUNCTION,
+      [TeacherRetirementPlanningRppsActivityTypeEnum.NO_TEACHING_ACTIVITY]:
+        TeacherRetirementPlanningActivityTypeEnum.NO_TEACHING_ACTIVITY,
+    };
+
+    return mapper[activityType];
   }
 
   private async uploadBase64File(
