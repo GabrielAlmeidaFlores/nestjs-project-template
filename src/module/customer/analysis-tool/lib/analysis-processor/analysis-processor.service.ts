@@ -1182,6 +1182,11 @@ Análise processada do CNIS:
       GenerateResponseInputModel.build({
         systemInstruction,
         promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getSpecialRetirementGrantCompleteAnalysisJsonSchema(),
+        }),
       }),
     );
   }
@@ -11326,6 +11331,70 @@ Análise processada do CNIS:
         'analysisResultsText',
         'analysisResultType',
         'downloadContent',
+      ],
+    };
+  }
+
+  private getSpecialRetirementGrantCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        regrasAplicaveis: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              modalidade: { type: 'string' },
+              cumprida: { type: 'boolean' },
+              dataDaAposentadoria: { type: 'string' },
+              rmiPrevista: { type: 'string' },
+              valorDaCausaEstimada: { type: 'string' },
+              melhorRmi: { type: 'boolean' },
+              maiorValorDeCausa: { type: 'boolean' },
+              analiseDetalhada: { type: 'string' },
+            },
+            required: [
+              'modalidade',
+              'cumprida',
+              'dataDaAposentadoria',
+              'rmiPrevista',
+              'valorDaCausaEstimada',
+              'melhorRmi',
+              'maiorValorDeCausa',
+              'analiseDetalhada',
+            ],
+          },
+        },
+        periodosReconhecidos: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              origemDoVinculo: { type: 'string' },
+              periodo: { type: 'string' },
+              categoria: { type: 'string' },
+              agentes: { type: 'string' },
+              tempoEspecial: { type: 'string' },
+              tempoConvertido: { type: 'string' },
+              status: { type: 'string' },
+            },
+            required: [
+              'origemDoVinculo',
+              'periodo',
+              'categoria',
+              'agentes',
+              'tempoEspecial',
+              'tempoConvertido',
+              'status',
+            ],
+          },
+        },
+        resultadoDaAnalise: { type: 'string' },
+      },
+      required: [
+        'regrasAplicaveis',
+        'periodosReconhecidos',
+        'resultadoDaAnalise',
       ],
     };
   }
