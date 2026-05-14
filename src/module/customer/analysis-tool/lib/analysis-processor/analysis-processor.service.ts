@@ -1182,6 +1182,11 @@ Análise processada do CNIS:
       GenerateResponseInputModel.build({
         systemInstruction,
         promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getSpecialRetirementGrantCompleteAnalysisJsonSchema(),
+        }),
       }),
     );
   }
@@ -3020,7 +3025,7 @@ Análise processada do CNIS:
     );
   }
 
-  public async getTemporaryIncapacityBenefitTerminationInssDecisionAnalysis(
+  public async getPermanentIncapacityBenefitTerminatedInssDecisionAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null> {
@@ -3032,7 +3037,7 @@ Análise processada do CNIS:
     );
   }
 
-  public async getTemporaryIncapacityBenefitTerminationFirstAnalysis(
+  public async getPermanentIncapacityBenefitTerminatedFirstAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
     files: Buffer[],
@@ -3058,14 +3063,14 @@ Análise processada do CNIS:
               responseMimeType:
                 GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
               jsonSchema:
-                this.getTemporaryIncapacityBenefitTerminationFirstAnalysisJsonSchema(),
+                this.getPermanentIncapacityBenefitTerminatedFirstAnalysisJsonSchema(),
             })
           : null,
       }),
     );
   }
 
-  public async getTemporaryIncapacityBenefitTerminationCompleteAnalysis(
+  public async getPermanentIncapacityBenefitTerminatedCompleteAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
     files: Buffer[],
@@ -3089,13 +3094,13 @@ Análise processada do CNIS:
         responseConfig: ResponseConfigInputModel.build({
           responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
           jsonSchema:
-            this.getTemporaryIncapacityBenefitTerminationCompleteAnalysisJsonSchema(),
+            this.getPermanentIncapacityBenefitTerminatedCompleteAnalysisJsonSchema(),
         }),
       }),
     );
   }
 
-  public async getTemporaryIncapacityBenefitTerminationSimplifiedAnalysis(
+  public async getPermanentIncapacityBenefitTerminatedSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null> {
@@ -9777,7 +9782,7 @@ Processed CNIS analysis:
     };
   }
 
-  private getTemporaryIncapacityBenefitTerminationFirstAnalysisJsonSchema(): object {
+  private getPermanentIncapacityBenefitTerminatedFirstAnalysisJsonSchema(): object {
     return {
       type: 'object',
       properties: {
@@ -10025,14 +10030,14 @@ Processed CNIS analysis:
     };
   }
 
-  private getTemporaryIncapacityBenefitTerminationCompleteAnalysisJsonSchema(): object {
+  private getPermanentIncapacityBenefitTerminatedCompleteAnalysisJsonSchema(): object {
     return {
       type: 'object',
       properties: {
-        isEligibleForTemporaryIncapacityBenefit: {
+        isEligibleForPermanentIncapacityBenefit: {
           type: 'boolean',
           description:
-            'Indica se o segurado tem direito ao auxílio por incapacidade temporária',
+            'Indica se o segurado tem direito à aposentadoria por incapacidade permanente',
         },
         gracePeriodAnalysis: {
           type: 'object',
@@ -10173,7 +10178,7 @@ Processed CNIS analysis:
         },
       },
       required: [
-        'isEligibleForTemporaryIncapacityBenefit',
+        'isEligibleForPermanentIncapacityBenefit',
         'gracePeriodAnalysis',
         'insuredStatus',
         'disabilityAnalysis',
@@ -11326,6 +11331,70 @@ Análise processada do CNIS:
         'analysisResultsText',
         'analysisResultType',
         'downloadContent',
+      ],
+    };
+  }
+
+  private getSpecialRetirementGrantCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        regrasAplicaveis: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              modalidade: { type: 'string' },
+              cumprida: { type: 'boolean' },
+              dataDaAposentadoria: { type: 'string' },
+              rmiPrevista: { type: 'string' },
+              valorDaCausaEstimada: { type: 'string' },
+              melhorRmi: { type: 'boolean' },
+              maiorValorDeCausa: { type: 'boolean' },
+              analiseDetalhada: { type: 'string' },
+            },
+            required: [
+              'modalidade',
+              'cumprida',
+              'dataDaAposentadoria',
+              'rmiPrevista',
+              'valorDaCausaEstimada',
+              'melhorRmi',
+              'maiorValorDeCausa',
+              'analiseDetalhada',
+            ],
+          },
+        },
+        periodosReconhecidos: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              origemDoVinculo: { type: 'string' },
+              periodo: { type: 'string' },
+              categoria: { type: 'string' },
+              agentes: { type: 'string' },
+              tempoEspecial: { type: 'string' },
+              tempoConvertido: { type: 'string' },
+              status: { type: 'string' },
+            },
+            required: [
+              'origemDoVinculo',
+              'periodo',
+              'categoria',
+              'agentes',
+              'tempoEspecial',
+              'tempoConvertido',
+              'status',
+            ],
+          },
+        },
+        resultadoDaAnalise: { type: 'string' },
+      },
+      required: [
+        'regrasAplicaveis',
+        'periodosReconhecidos',
+        'resultadoDaAnalise',
       ],
     };
   }

@@ -1,5 +1,0 @@
-export enum TemporaryIncapacityBenefitTerminationWorkPeriodsPendencyReasonEnum {
-  LEAVE_DATE = 'LEAVE_DATE',
-  COMPETENCE_BELOW_MINIMUM = 'COMPETENCE_BELOW_MINIMUM',
-  INCONSISTENT_COMPETENCE = 'INCONSISTENT_COMPETENCE',
-}

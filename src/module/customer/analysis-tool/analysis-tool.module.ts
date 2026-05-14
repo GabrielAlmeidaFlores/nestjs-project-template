@@ -60,7 +60,7 @@ import { TeacherRetirementPlanningRppsModule } from '@module/customer/analysis-t
 import { TemporaryDisabilityBenefitsGrantModule } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/temporary-disability-benefits-grant.module';
 import { TemporaryDisabilityBenefitsTerminatedModule } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/temporary-disability-benefits-terminated.module';
 import { TemporaryIncapacityBenefitRejectionModule } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.module';
-import { TemporaryIncapacityBenefitTerminationModule } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-termination/temporary-incapacity-benefit-termination.module';
+import { PermanentIncapacityBenefitTerminatedModule } from '@module/customer/analysis-tool/module/permanent-incapacity-benefit-terminated/permanent-incapacity-benefit-terminated.module';
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
 import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
 import { DeleteAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-record.use-case';
@@ -141,7 +141,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     TemporaryDisabilityBenefitsGrantModule,
     TemporaryDisabilityBenefitsTerminatedModule,
     TemporaryIncapacityBenefitRejectionModule,
-    TemporaryIncapacityBenefitTerminationModule,
+    PermanentIncapacityBenefitTerminatedModule,
     AccidentBenefitRejectionModule,
     MaternityPayRejectionModule,
     RetirementPermanentDisabilityRejectionModule,
