@@ -44,7 +44,7 @@ import { TeacherRetirementPlanningRejectionEntity } from '@module/customer/analy
 import { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/temporary-disability-benefits-grant.entity';
 import { TemporaryDisabilityBenefitsTerminatedEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/schema/entity/temporary-disability-benefits-terminated/temporary-disability-benefits-terminated.entity';
 import { TemporaryIncapacityBenefitRejectionEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.entity';
-import { TemporaryIncapacityBenefitTerminationEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-termination/domain/schema/entity/temporary-incapacity-benefit-termination/temporary-incapacity-benefit-termination.entity';
+import { PermanentIncapacityBenefitTerminatedEntity } from '@module/customer/analysis-tool/module/permanent-incapacity-benefit-terminated/domain/schema/entity/permanent-incapacity-benefit-terminated/permanent-incapacity-benefit-terminated.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { AnalysisToolRecordEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity.props.interface';
@@ -264,9 +264,9 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly temporaryIncapacityBenefitRejection: TemporaryIncapacityBenefitRejectionEntity | null;
 
   @Description(
-    'Análise de cessação de benefício por incapacidade temporária associada ao registro da ferramenta de análise',
+    'Análise de cessação de aposentadoria por incapacidade permanente associada ao registro da ferramenta de análise',
   )
-  public readonly temporaryIncapacityBenefitTermination: TemporaryIncapacityBenefitTerminationEntity | null;
+  public readonly permanentIncapacityBenefitTerminated: PermanentIncapacityBenefitTerminatedEntity | null;
 
   @Description(
     'Análise de concessão de salário-maternidade associada ao registro da ferramenta de análise',
@@ -363,8 +363,8 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     this.maternityPayRejection = props.maternityPayRejection ?? null;
     this.temporaryIncapacityBenefitRejection =
       props.temporaryIncapacityBenefitRejection ?? null;
-    this.temporaryIncapacityBenefitTermination =
-      props.temporaryIncapacityBenefitTermination ?? null;
+    this.permanentIncapacityBenefitTerminated =
+      props.permanentIncapacityBenefitTerminated ?? null;
     this.maternityPayGrant = props.maternityPayGrant ?? null;
     this.accidentAssistanceTerminated =
       props.accidentAssistanceTerminated ?? null;
