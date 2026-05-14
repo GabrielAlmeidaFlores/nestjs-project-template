@@ -21,7 +21,7 @@ export class GeminiService implements GenerativeIaGateway {
   private static readonly TEMPERATURE_FOR_MARKDOWN_MODE = 0.1;
   private static readonly TOP_P_VALUE = 0.95;
   private static readonly TOP_K_VALUE = 40;
-  private static readonly AI_CALL_TIMEOUT_MS = 80_000;
+  private static readonly AI_CALL_TIMEOUT_MS = 150_000;
   private static readonly TIMEOUT_ERROR_MESSAGE = 'GEMINI_CALL_TIMEOUT';
 
   protected readonly _type = GeminiService.name;
@@ -156,7 +156,6 @@ formatting rules:
         props,
         model,
         maxOutputTokens,
-        isRetry,
       );
 
       span.setAttributes({
@@ -189,7 +188,6 @@ formatting rules:
     props: GenerateResponseInputModel,
     model: string,
     maxOutputTokens: number,
-    isRetry = false,
   ): Promise<GeminiResultOutputModel> {
     const promptPart: Part[] = [];
     const systemInstructionParts: Part[] = [];
@@ -359,7 +357,7 @@ formatting rules:
         ) {
           const fallbackModel = this.FALLBACK_MODELS[model];
 
-          if (fallbackModel !== undefined && !isRetry) {
+          if (fallbackModel !== undefined) {
             const fallbackText = await this.generateResponseFromPromptAndFiles(
               props,
               fallbackModel,

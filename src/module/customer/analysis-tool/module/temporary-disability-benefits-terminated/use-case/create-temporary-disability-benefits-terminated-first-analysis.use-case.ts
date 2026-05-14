@@ -236,6 +236,7 @@ export class CreateTemporaryDisabilityBenefitsTerminatedFirstAnalysisUseCase {
         cleanedJson,
       ) as TemporaryDisabilityBenefitsTerminatedFirstAnalysisInterface;
 
+      this.normalizeFirstAnalysisPendencies(raw);
       cleanedJson = JSON.stringify(raw);
 
       const clientData =
@@ -273,72 +274,80 @@ export class CreateTemporaryDisabilityBenefitsTerminatedFirstAnalysisUseCase {
         );
 
       const periods = (this.hasValue(raw.periods) ? raw.periods : []).map(
-        (period) =>
-          TemporaryDisabilityBenefitsTerminatedFirstAnalysisPeriodModel.build({
-            startDate: period.startDate,
-            isPendency: period.isPendency,
-            competenceBelowTheMinimum: period.competenceBelowTheMinimum,
-            status: period.status,
-            ...(this.hasValue(period.bondOrigin) && {
-              bondOrigin: period.bondOrigin,
-            }),
-            ...(this.isValidEnum(
-              period.category,
-              TemporaryDisabilityBenefitsTerminatedCategoryEnum,
-            ) && {
-              category: period.category,
-            }),
-            ...(this.hasValue(period.activityDescription) && {
-              activityDescription: period.activityDescription,
-            }),
-            ...(this.hasValue(period.endDate) && {
-              endDate: period.endDate,
-            }),
-            ...(this.hasValue(period.impactMonths) && {
-              impactMonths: period.impactMonths,
-            }),
-            ...(this.hasValue(period.graceMonths) && {
-              graceMonths: period.graceMonths,
-            }),
-            ...(this.hasValue(period.contributionAverage) && {
-              contributionAverage: new DecimalValue(
-                period.contributionAverage.toString(),
-              ),
-            }),
-            ...(this.isValidEnum(
-              period.pendencyReason,
-              TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum,
-            ) && {
-              pendencyReason: period.pendencyReason,
-            }),
-            ...(this.hasValue(period.periodConsideration) && {
-              periodConsideration: period.periodConsideration,
-            }),
-            ...(this.hasValue(period.wantsToComplementViaMeuINSS) && {
-              wantsToComplementViaMeuINSS: period.wantsToComplementViaMeuINSS,
-            }),
-            earningsHistory: (this.hasValue(period.earningsHistory)
-              ? period.earningsHistory
-              : []
-            ).map((eh) =>
-              TemporaryDisabilityBenefitsTerminatedFirstAnalysisEarningsHistoryItemModel.build(
-                {
-                  ...(this.hasValue(eh.competence) && {
-                    competence: eh.competence,
-                  }),
-                  ...(this.hasValue(eh.value) && {
-                    value: eh.value,
-                  }),
-                  ...(this.hasValue(eh.pendencyType) && {
-                    pendencyType: eh.pendencyType,
-                  }),
-                  ...(this.hasValue(eh.collectedAt) && {
-                    collectedAt: eh.collectedAt,
-                  }),
-                },
-              ),
-            ),
-          }),
+        (period) => {
+          const pendencyReason = this.normalizePendencyReason(
+            period.pendencyReason,
+          );
+
+          return TemporaryDisabilityBenefitsTerminatedFirstAnalysisPeriodModel.build(
+            {
+              startDate: period.startDate,
+              isPendency: period.isPendency,
+              competenceBelowTheMinimum: period.competenceBelowTheMinimum,
+              status: period.status,
+              ...(this.hasValue(period.bondOrigin) && {
+                bondOrigin: period.bondOrigin,
+              }),
+              ...(this.isValidEnum(
+                period.category,
+                TemporaryDisabilityBenefitsTerminatedCategoryEnum,
+              ) && {
+                category: period.category,
+              }),
+              ...(this.hasValue(period.activityDescription) && {
+                activityDescription: period.activityDescription,
+              }),
+              ...(this.hasValue(period.endDate) && {
+                endDate: period.endDate,
+              }),
+              ...(this.hasValue(period.impactMonths) && {
+                impactMonths: period.impactMonths,
+              }),
+              ...(this.hasValue(period.graceMonths) && {
+                graceMonths: period.graceMonths,
+              }),
+              ...(this.hasValue(period.contributionAverage) && {
+                contributionAverage: new DecimalValue(
+                  period.contributionAverage.toString(),
+                ),
+              }),
+              ...(this.hasValue(pendencyReason) && {
+                pendencyReason,
+              }),
+              ...(this.hasValue(period.periodConsideration) && {
+                periodConsideration: period.periodConsideration,
+              }),
+              ...(this.hasValue(period.wantsToComplementViaMeuINSS) && {
+                wantsToComplementViaMeuINSS: period.wantsToComplementViaMeuINSS,
+              }),
+              earningsHistory: (this.hasValue(period.earningsHistory)
+                ? period.earningsHistory
+                : []
+              ).map((eh) => {
+                const pendencyType = this.normalizePendencyReason(
+                  eh.pendencyType,
+                );
+
+                return TemporaryDisabilityBenefitsTerminatedFirstAnalysisEarningsHistoryItemModel.build(
+                  {
+                    ...(this.hasValue(eh.competence) && {
+                      competence: eh.competence,
+                    }),
+                    ...(this.hasValue(eh.value) && {
+                      value: eh.value,
+                    }),
+                    ...(this.hasValue(pendencyType) && {
+                      pendencyType,
+                    }),
+                    ...(this.hasValue(eh.collectedAt) && {
+                      collectedAt: eh.collectedAt,
+                    }),
+                  },
+                );
+              }),
+            },
+          );
+        },
       );
 
       return {
@@ -380,6 +389,54 @@ export class CreateTemporaryDisabilityBenefitsTerminatedFirstAnalysisUseCase {
 
   private hasValue<T>(value: T | null | undefined): value is T {
     return value !== null && value !== undefined;
+  }
+
+  private normalizeFirstAnalysisPendencies(
+    raw: TemporaryDisabilityBenefitsTerminatedFirstAnalysisInterface,
+  ): void {
+    (this.hasValue(raw.periods) ? raw.periods : []).forEach((period) => {
+      period.pendencyReason = this.normalizePendencyReason(
+        period.pendencyReason,
+      );
+
+      (this.hasValue(period.earningsHistory)
+        ? period.earningsHistory
+        : []
+      ).forEach((earningHistory) => {
+        earningHistory.pendencyType = this.normalizePendencyReason(
+          earningHistory.pendencyType,
+        );
+      });
+    });
+  }
+
+  private normalizePendencyReason(
+    value: string | null | undefined,
+  ):
+    | TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum
+    | undefined {
+    if (!this.hasValue(value) || value === '') {
+      return undefined;
+    }
+
+    const normalizedValue = value.trim().toUpperCase();
+    const pendencyReasonMap: Record<
+      string,
+      TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum
+    > = {
+      LEAVE_DATE:
+        TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum.LEAVE_DATE,
+      NO_EXIT_DATE:
+        TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum.LEAVE_DATE,
+      COMPETENCE_BELOW_MINIMUM:
+        TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum.COMPETENCE_BELOW_MINIMUM,
+      LATE_CONTRIBUTION:
+        TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum.INCONSISTENT_COMPETENCE,
+      INCONSISTENT_COMPETENCE:
+        TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum.INCONSISTENT_COMPETENCE,
+    };
+
+    return pendencyReasonMap[normalizedValue];
   }
 
   private isValidEnum<T extends Record<string, string>>(

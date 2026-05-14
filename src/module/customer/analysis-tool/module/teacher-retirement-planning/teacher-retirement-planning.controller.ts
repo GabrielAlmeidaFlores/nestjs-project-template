@@ -11,6 +11,9 @@ import {
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
 import { AnalyzeTeacherRetirementPlanningAdministrativeProcessRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/analyze-teacher-retirement-planning-administrative-process.request.dto';
+import { AnalyzeTeacherRetirementPlanningPppRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/analyze-teacher-retirement-planning-ppp.request.dto';
+import { AnalyzeTeacherRetirementPlanningTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/analyze-teacher-retirement-planning-time-accelerator.request.dto';
+import { CreateTeacherRetirementPlanningPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/create-teacher-retirement-planning-period-document.request.dto';
 import { CreateTeacherRetirementPlanningPeriodRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/create-teacher-retirement-planning-period.request.dto';
 import { CreateTeacherRetirementPlanningRemunerationRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/create-teacher-retirement-planning-remuneration.request.dto';
 import { CreateTeacherRetirementPlanningRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/create-teacher-retirement-planning.request.dto';
@@ -19,6 +22,9 @@ import { UpdateTeacherRetirementPlanningPeriodRequestDto } from '@module/custome
 import { UpdateTeacherRetirementPlanningRemunerationRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/update-teacher-retirement-planning-remuneration.request.dto';
 import { UpdateTeacherRetirementPlanningRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/update-teacher-retirement-planning.request.dto';
 import { AnalyzeTeacherRetirementPlanningAdministrativeProcessResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/analyze-teacher-retirement-planning-administrative-process.response.dto';
+import { AnalyzeTeacherRetirementPlanningPppResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/analyze-teacher-retirement-planning-ppp.response.dto';
+import { AnalyzeTeacherRetirementPlanningTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/analyze-teacher-retirement-planning-time-accelerator.response.dto';
+import { CreateTeacherRetirementPlanningPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning-period-document.response.dto';
 import { CreateTeacherRetirementPlanningPeriodResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning-period.response.dto';
 import { CreateTeacherRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning-remuneration.response.dto';
 import { CreateTeacherRetirementPlanningResultResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning-result.response.dto';
@@ -31,6 +37,9 @@ import { UpdateTeacherRetirementPlanningPeriodResponseDto } from '@module/custom
 import { UpdateTeacherRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/update-teacher-retirement-planning-remuneration.response.dto';
 import { UpdateTeacherRetirementPlanningResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/update-teacher-retirement-planning.response.dto';
 import { AnalyzeTeacherRetirementPlanningAdministrativeProcessUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/analyze-teacher-retirement-planning-administrative-process.use-case';
+import { AnalyzeTeacherRetirementPlanningPppUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/analyze-teacher-retirement-planning-ppp.use-case';
+import { AnalyzeTeacherRetirementPlanningTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/analyze-teacher-retirement-planning-time-accelerator.use-case';
+import { CreateTeacherRetirementPlanningPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-period-document.use-case';
 import { CreateTeacherRetirementPlanningPeriodUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-period.use-case';
 import { CreateTeacherRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-remuneration.use-case';
 import { CreateTeacherRetirementPlanningResultUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-result.use-case';
@@ -74,6 +83,9 @@ export class TeacherRetirementPlanningController {
     private readonly listTeacherRetirementPlanningRemunerationUseCase: ListTeacherRetirementPlanningRemunerationUseCase,
     private readonly getTeacherRetirementPlanningRemunerationCalculationUseCase: GetTeacherRetirementPlanningRemunerationCalculationUseCase,
     private readonly analyzeTeacherRetirementPlanningAdministrativeProcessUseCase: AnalyzeTeacherRetirementPlanningAdministrativeProcessUseCase,
+    private readonly analyzeTeacherRetirementPlanningPppUseCase: AnalyzeTeacherRetirementPlanningPppUseCase,
+    private readonly analyzeTeacherRetirementPlanningTimeAcceleratorUseCase: AnalyzeTeacherRetirementPlanningTimeAcceleratorUseCase,
+    private readonly createTeacherRetirementPlanningPeriodDocumentUseCase: CreateTeacherRetirementPlanningPeriodDocumentUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -540,6 +552,100 @@ export class TeacherRetirementPlanningController {
     dto: AnalyzeTeacherRetirementPlanningAdministrativeProcessRequestDto,
   ): Promise<AnalyzeTeacherRetirementPlanningAdministrativeProcessResponseDto> {
     return this.analyzeTeacherRetirementPlanningAdministrativeProcessUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Analisar PPP (Perfil Profissiográfico Previdenciário) do planejamento de aposentadoria do professor',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'analyze-ppp',
+      method: RequestMethod.POST,
+      type: AnalyzeTeacherRetirementPlanningPppRequestDto,
+    },
+    tag: ['planejamento-previdenciario-professor'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Análise de PPP realizada com sucesso.',
+      type: AnalyzeTeacherRetirementPlanningPppResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async analyzePpp(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Body()
+    dto: AnalyzeTeacherRetirementPlanningPppRequestDto,
+  ): Promise<AnalyzeTeacherRetirementPlanningPppResponseDto> {
+    return this.analyzeTeacherRetirementPlanningPppUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Analisar documentos do acelerador de tempo do planejamento de aposentadoria do professor',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'analyze-time-accelerator-documents',
+      method: RequestMethod.POST,
+      type: AnalyzeTeacherRetirementPlanningTimeAcceleratorRequestDto,
+    },
+    tag: ['planejamento-previdenciario-professor'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Documentos do acelerador de tempo analisados com sucesso.',
+      type: AnalyzeTeacherRetirementPlanningTimeAcceleratorResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async analyzeTimeAccelerator(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Body()
+    dto: AnalyzeTeacherRetirementPlanningTimeAcceleratorRequestDto,
+  ): Promise<AnalyzeTeacherRetirementPlanningTimeAcceleratorResponseDto> {
+    return this.analyzeTeacherRetirementPlanningTimeAcceleratorUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Analisar documento de período sem data de saída do planejamento de aposentadoria do professor',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'date-without-leave-analysis',
+      method: RequestMethod.POST,
+      type: CreateTeacherRetirementPlanningPeriodDocumentRequestDto,
+    },
+    tag: ['planejamento-previdenciario-professor'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Documento de período sem data de saída analisado com sucesso.',
+      type: CreateTeacherRetirementPlanningPeriodDocumentResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createPeriodDocument(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Body()
+    dto: CreateTeacherRetirementPlanningPeriodDocumentRequestDto,
+  ): Promise<CreateTeacherRetirementPlanningPeriodDocumentResponseDto> {
+    return this.createTeacherRetirementPlanningPeriodDocumentUseCase.execute(
       sessionData,
       organizationSessionData,
       dto,

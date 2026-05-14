@@ -109,12 +109,8 @@ export class AnalyzeDeathBenefitGrantTimeAcceleratorUseCase {
             ...(timeAccelerator.technicalNote !== null && {
               technicalNote: timeAccelerator.technicalNote,
             }),
-            ...(timeAccelerator.startDate !== null && {
-              startDate: new Date(timeAccelerator.startDate),
-            }),
-            ...(timeAccelerator.endDate !== null && {
-              endDate: new Date(timeAccelerator.endDate),
-            }),
+            ...this.toValidDateProp('startDate', timeAccelerator.startDate),
+            ...this.toValidDateProp('endDate', timeAccelerator.endDate),
             ...(timeAccelerator.institution !== null && {
               institution: timeAccelerator.institution,
             }),
@@ -214,6 +210,17 @@ export class AnalyzeDeathBenefitGrantTimeAcceleratorUseCase {
 
   private isRecord(value: unknown): value is Record<string, unknown> {
     return typeof value === 'object' && value !== null;
+  }
+
+  private toValidDateProp(
+    key: 'startDate' | 'endDate',
+    value: string | null,
+  ): Record<string, Date> {
+    if (value === null) {
+      return {};
+    }
+    const d = new Date(value);
+    return isNaN(d.getTime()) ? {} : { [key]: d };
   }
 
   private getPaymentPlanPaidResourceType(
