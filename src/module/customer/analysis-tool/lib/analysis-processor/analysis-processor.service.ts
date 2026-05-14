@@ -35,9 +35,11 @@ import { DisabilityRetirementPlanningRejectionPeriodPendencyReasonEnum } from '@
 import { GeneralUrbanRetirementDenialPeriodCategoryEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-category.enum';
 import { GeneralUrbanRetirementDenialPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-consideration.enum';
 import { GeneralUrbanRetirementDenialPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-pendency-reason.enum';
+import { RetirementPermanentDisabilityRejectionPeriodCategoryEnum } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-period/enum/retirement-permanent-disability-rejection-period-category.enum';
 import { TeacherRetirementPlanningRejectionWorkPeriodDocumentProbativeForceEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection-work-period/enum/teacher-retirement-planning-rejection-work-period-document-probative-force.enum';
 import { TeacherRetirementPlanningRejectionWorkPeriodTimelineClassificationEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection-work-period/enum/teacher-retirement-planning-rejection-work-period-timeline-classification.enum';
 import { TemporaryIncapacityBenefitRejectionCategoryEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/enum/temporary-incapacity-benefit-rejection-category.enum';
+import { TemporaryIncapacityBenefitRejectionWorkPeriodsPendencyReasonEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-work-periods/enum/temporary-incapacity-benefit-rejection-work-periods-pendency-reason.enum';
 import { MiniAdvisorAnalysisTypeEnum } from '@module/customer/mini-advisor/domain/schema/entity/mini-advisor-result/enum/mini-advisor-analysis-type.enum';
 
 @Injectable()
@@ -266,6 +268,8 @@ Análise processada do CNIS:
                 properties: {
                   timeline: {
                     type: 'array',
+                    description:
+                      'Linha do tempo COMPLETA cobrindo TODOS os períodos desde o início da vida contributiva até hoje. OBRIGATÓRIO: incluir períodos com activityType "periodo_sem_atividade" para TODOS os intervalos entre contribuições onde não havia nenhum vínculo ativo. Não deixe buracos na linha do tempo.',
                     items: {
                       type: 'object',
                       properties: {
@@ -284,7 +288,8 @@ Análise processada do CNIS:
                             'atividade_comum',
                             'periodo_sem_atividade',
                           ],
-                          description: 'Tipo de atividade exercida',
+                          description:
+                            'Tipo de atividade: "atividade_professor" para períodos de magistério, "atividade_comum" para outros vínculos (CLT, servidor, etc.), "periodo_sem_atividade" para lacunas/intervalos sem nenhum vínculo contributivo',
                         },
                         type: {
                           type: 'string',
@@ -292,7 +297,7 @@ Análise processada do CNIS:
                         },
                         location: {
                           type: 'string',
-                          description: 'Local do periodo',
+                          description: 'Local do periodo ou nome do vínculo',
                         },
                       },
                       required: [
@@ -335,7 +340,8 @@ Análise processada do CNIS:
                         },
                         detailedRuleAnalysis: {
                           type: 'string',
-                          description: 'Analise detalhada da regra',
+                          description:
+                            'Análise detalhada da regra em MARKDOWN estruturado. OBRIGATÓRIO conter: (1) título da regra com "##"; (2) seção de requisitos com lista "- " mostrando cada requisito, tempo necessário vs tempo atual, e se foi cumprido (✅ ou ❌); (3) seção "### Situação Atual" com o que falta ou por que foi cumprida; (4) seção "### Estratégia" com orientação prática. Exemplo: "## Regra X\\n\\n### Requisitos\\n- ✅ Tempo de magistério: necessário 25 anos / possui 26 anos\\n- ❌ Idade mínima: necessário 57 anos / possui 52 anos\\n\\n### Situação Atual\\n[parágrafo]\\n\\n### Estratégia\\n[parágrafo com recomendação]"',
                         },
                       },
                       required: [
@@ -349,7 +355,8 @@ Análise processada do CNIS:
                   },
                   finalAnalysis: {
                     type: 'string',
-                    description: 'Analise final consolidada',
+                    description:
+                      'Análise técnica final completa em formato MARKDOWN estruturado. OBRIGATÓRIO conter: (1) um título principal com "#"; (2) pelo menos 3 seções com "##" cobrindo: diagnóstico previdenciário, pendências identificadas, e recomendações estratégicas; (3) listas com "- " ou "1." dentro das seções; (4) texto em negrito "**...**" para destacar pontos críticos; (5) um parágrafo conclusivo. Exemplo de estrutura: "# Observação Técnica\\n\\n## 1. Diagnóstico Previdenciário\\n[parágrafo]\\n\\n**Situação Atual:**\\n- Tempo de Magistério: X\\n- ...\\n\\n## 2. Pendências Identificadas\\n1. ...\\n\\n## 3. Recomendações Estratégicas\\n..."',
                   },
                   teacherTime: {
                     type: 'string',
@@ -1074,6 +1081,71 @@ Análise processada do CNIS:
       GenerateResponseInputModel.build({
         systemInstruction,
         promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: {
+            type: 'object',
+            properties: {
+              tipoBeneficio: {
+                type: 'string',
+                description: 'Tipo do benefício previdenciário concedido',
+              },
+              nomeSegurado: {
+                type: 'string',
+                description: 'Nome completo do segurado beneficiário',
+              },
+              dib: {
+                type: 'string',
+                description:
+                  'Data de início do benefício (DIB) no formato DD/MM/AAAA',
+              },
+              rmi: {
+                type: 'string',
+                description:
+                  'Renda mensal inicial (RMI) do benefício. Exemplo: R$ 1.234,56',
+              },
+              rma: {
+                type: 'string',
+                description:
+                  'Renda mensal atual (RMA) do benefício. Exemplo: R$ 1.234,56',
+              },
+              competenciasNaoConsideradas: {
+                type: 'array',
+                description:
+                  'Lista de competências que não foram consideradas no cálculo do benefício',
+                items: {
+                  type: 'object',
+                  properties: {
+                    competencia: {
+                      type: 'string',
+                      description:
+                        'Mês/ano da competência no formato MM/AAAA. Exemplo: 03/2019',
+                    },
+                    valor: {
+                      type: 'string',
+                      description:
+                        'Valor da contribuição não considerada. Exemplo: R$ 500,00',
+                    },
+                    motivo: {
+                      type: 'string',
+                      description:
+                        'Motivo pelo qual a competência não foi considerada no cálculo',
+                    },
+                  },
+                  required: ['competencia', 'valor', 'motivo'],
+                },
+              },
+            },
+            required: [
+              'tipoBeneficio',
+              'nomeSegurado',
+              'dib',
+              'rmi',
+              'rma',
+              'competenciasNaoConsideradas',
+            ],
+          },
+        }),
       }),
     );
   }
@@ -2488,6 +2560,34 @@ Análise processada do CNIS:
     );
   }
 
+  public async getBpcDisabilityGrantCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente nos dados e documentos fornecidos.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- O campo \`analysisResult\` deve conter o resultado consolidado em Markdown rico, com títulos, parágrafos curtos e listas quando útil. Ele será convertido para HTML pelo backend antes de ser exibido.
+- O campo \`retirementRules\` deve listar regras juridico-previdenciarias (por artigo/beneficio), por exemplo: BPC pessoa com deficiência, Salário-maternidade.
+- Para cada item de \`retirementRules\`, preencha obrigatoriamente: \`benefitType\`, \`result\` (boolean), \`benefitStartDate\`, \`RMIprevista\` e \`detaildAnalysis\`.
+- Não invente dados; utilize exclusivamente as informações fornecidas.
+- Os demais campos devem respeitar as descrições e orientações do schema.
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: this.getBpcDisabilityGrantCompleteAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
   public async getDisabilityRetirementPlanningRejectionSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
@@ -2500,7 +2600,117 @@ Análise processada do CNIS:
     );
   }
 
+  public async getRetirementPermanentDisabilityRejectionInssDecisionAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getRetirementPermanentDisabilityRejectionFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    structured: boolean,
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON;
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize cálculos salariais além do que for necessário; use estritamente os fornecidos.
+- Não incluir tag <br> na resposta.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- Para cada item de \`periods\`, use prioritariamente os dados estruturados já enviados nos arquivos do prompt; não invente valores.
+- O campo \`contributionAverage\` representa a média das remunerações do período já informada nos dados estruturados; quando esse valor estiver disponível, reutilize exatamente esse valor.
+- Quando o valor de \`contributionAverage\` não estiver presente nos dados estruturados do período, omita esse campo.
+- O campo \`competenceBelowTheMinimum\` deve ser \`true\` somente quando houver competências abaixo do mínimo no histórico de remunerações.
+- O campo \`isPendency\` deve indicar se o período possui qualquer pendência relevante.
+- O campo \`pendencyReason\` só deve ser preenchido quando realmente existir pendência no período.
+- O campo \`earningsHistory\` de cada período deve conter APENAS as competências com pendência.
+- Não inclua competências sem pendência. Retorne array vazio quando não houver nenhuma.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: structured
+          ? ResponseConfigInputModel.build({
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema:
+                this.getRetirementPermanentDisabilityRejectionFirstAnalysisJsonSchema(),
+            })
+          : null,
+      }),
+    );
+  }
+
+  public async getRetirementPermanentDisabilityRejectionResultAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
+- Retorne estritamente um objeto JSON compatível com o schema solicitado.
+- O campo \`completeAnalysisDownload\` deve conter HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.
+- O campo \`analysisResult\` deve conter um texto explicativo completo sobre o resultado da análise e as perspectivas processuais do caso.
+- O campo \`simplifiedAnalysis\` deve conter a análise simplificada em Markdown, pronta para exportação.
+- Não incluir tag <br> na resposta no campo \`analysisResult\`.
+
+Análise processada do CNIS:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getRetirementPermanentDisabilityRejectionResultAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getRetirementPermanentDisabilityRejectionSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
   public async getBpcDisabilityDenialSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getBpcDisabilityGrantSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null> {
@@ -2702,8 +2912,9 @@ Análise processada do CNIS:
 # IMPORTANTE
 - Retorne estritamente um objeto JSON válido compatível com o schema solicitado.
 - O campo \`completeAnalysisDownload\` deve conter a análise detalhada em Markdown, pronta para exportação em PDF/DOCX.
-- O campo \`analysisResult\` deve conter um resumo textual objetivo do resultado.
-- O campo \`analysisDetailedText\` deve conter a fundamentação detalhada em texto corrido.
+- O campo \`analysisResult\` deve conter um resumo objetivo em Markdown, com títulos curtos e bullets.
+- O campo \`analysisDetailedText\` deve conter a fundamentação detalhada em Markdown estruturado para renderização na tela "Resultado Final da Análise".
+- Não gere \`analysisDetailedText\` em parágrafo único; use títulos, subtítulos, listas curtas e tabelas quando houver dados objetivos.
 - Cada item de \`applicableRules\` deve representar uma regra aplicável ao BPC ao Idoso cessado/suspenso.
 - Cada item de \`benefitSummaries\` deve representar um cenário ou benefício resumido para a tela final.
 - Preencha diagnóstico, renda familiar total, renda per capita, requisitos legais, regra de renda e idade mínima com base nos documentos fornecidos.
@@ -3207,6 +3418,218 @@ For probativeForce, classify each document as:
         }),
       }),
     );
+  }
+
+  public async getRetirementPermanentDisabilityRevisionCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getRetirementPermanentDisabilityRevisionCompleteAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getRetirementPermanentDisabilityRevisionSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getRetirementPermanentDisabilityRevisionFirstAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+    asJson = true,
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANT
+- Base the technical analysis primarily on the already processed CNIS analysis in JSON format.
+- Calculate only values that are not already present in the provided CNIS analysis.
+- Return strictly a JSON object compatible with the requested schema.
+
+Processed CNIS analysis:
+${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: asJson
+          ? ResponseConfigInputModel.build({
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema:
+                this.getRetirementPermanentDisabilityRevisionFirstAnalysisJsonSchema(),
+            })
+          : null,
+      }),
+    );
+  }
+
+  public async getElderlyBpcRejectionCompleteAnalysis(
+    systemInstruction: string,
+    cnisAnalysisJson: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    const prompt = `
+# IMPORTANT
+- Base the technical analysis primarily on the already processed CNIS analysis in JSON format.
+- Calculate only values that are not already present in the provided CNIS analysis.
+- Return strictly a JSON object compatible with the requested schema.
+
+Processed CNIS analysis:
+  ${cnisAnalysisJson}
+`;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: this.getElderlyBpcRejectionCompleteAnalysisJsonSchema(),
+        }),
+      }),
+    );
+  }
+
+  public async getElderlyBpcRejectionSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+    completeAnalysis: string,
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt: completeAnalysis,
+        ...(files.length > 0 && { promptFiles: files }),
+      }),
+    );
+  }
+
+  private getRetirementPermanentDisabilityRevisionFirstAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        benefitAnalysis: {
+          type: 'object',
+          properties: {
+            benefitType: {
+              type: 'string',
+              description: 'Tipo de benefício previdenciário concedido.',
+            },
+            dib: {
+              type: 'string',
+              description: 'DIB no formato DD/MM/YYYY.',
+            },
+            initialMonthlyIncome: {
+              type: 'number',
+              description: 'RMI - Renda Mensal Inicial.',
+            },
+            updatedMonthlyIncome: {
+              type: 'number',
+              description: 'RMA - Renda Mensal Atualizada.',
+            },
+            insuredName: {
+              type: 'string',
+              description: 'Nome completo do segurado.',
+            },
+          },
+          required: [
+            'benefitType',
+            'dib',
+            'initialMonthlyIncome',
+            'updatedMonthlyIncome',
+            'insuredName',
+          ],
+        },
+        contributionTime: {
+          type: 'object',
+          properties: {
+            minimumRequired: {
+              type: 'object',
+              properties: {
+                withoutPendingIssues: {
+                  type: 'string',
+                  description:
+                    'Tempo reconhecido sem resolver pendências. Ex: 23 years and 4 months.',
+                },
+                afterResolvingPendingIssues: {
+                  type: 'string',
+                  description:
+                    'Tempo após regularização das pendências. Ex: 27 years and 8 months.',
+                },
+                withCollaborators: {
+                  type: 'string',
+                  description:
+                    'Tempo considerando vínculos adicionais. Ex: 30 years and 2 months.',
+                },
+              },
+              required: [
+                'withoutPendingIssues',
+                'afterResolvingPendingIssues',
+                'withCollaborators',
+              ],
+            },
+            description: {
+              type: 'string',
+              description:
+                'Texto explicativo sobre regras de tempo de contribuição.',
+            },
+          },
+          required: ['minimumRequired', 'description'],
+        },
+        concessionLetterBreakdown: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              competence: {
+                type: 'string',
+                description: 'Competência no formato MM/YYYY.',
+              },
+              amount: {
+                type: 'number',
+                description: 'Valor do salário de contribuição.',
+              },
+              reasonNotConsidered: {
+                type: 'string',
+                description:
+                  'Motivo pelo qual a competência não foi considerada.',
+              },
+              action: {
+                type: 'string',
+                description:
+                  'Ação recomendada para regularizar ou incluir a competência.',
+              },
+            },
+            required: ['competence', 'amount', 'reasonNotConsidered', 'action'],
+          },
+        },
+      },
+      required: [
+        'benefitAnalysis',
+        'contributionTime',
+        'concessionLetterBreakdown',
+      ],
+    };
   }
 
   private getSurvivorPensionAnalysisResultJsonSchema(): object {
@@ -3956,7 +4379,12 @@ For probativeForce, classify each document as:
                 type: 'string',
                 enum: Object.values(TimeAcceleratorViabilityEnum),
               },
-              technicalNote: { type: 'string', nullable: true },
+              technicalNote: {
+                type: 'string',
+                nullable: true,
+                description:
+                  'Nota técnica em MARKDOWN estruturado. OBRIGATÓRIO conter: (1) título com "## Nota Técnica"; (2) seção "### Avaliação Documental" com lista "- " dos documentos analisados e sua força probatória; (3) seção "### Viabilidade e Fundamentação" explicando o grau de viabilidade com embasamento jurídico; (4) seção "### Pendências e Recomendações" com lista numerada de providências a tomar; (5) parágrafo conclusivo em negrito com a principal recomendação estratégica. Use "**...**" para destacar pontos críticos.',
+              },
               startDate: { type: 'string', nullable: true },
               endDate: { type: 'string', nullable: true },
               gracePeriod: { type: 'string', nullable: true },
@@ -8190,6 +8618,331 @@ For probativeForce, classify each document as:
       ],
     };
   }
+
+  private getRetirementPermanentDisabilityRejectionFirstAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        clientData: {
+          type: 'object',
+          description: 'Dados do cliente extraídos dos documentos',
+          properties: {
+            name: {
+              type: 'string',
+              description: 'Nome completo do cliente',
+            },
+            cpf: {
+              type: 'string',
+              description: 'CPF do cliente',
+            },
+            birthDate: {
+              type: 'string',
+              description:
+                'Data de nascimento do cliente no formato DD/MM/AAAA',
+            },
+            category: {
+              type: 'string',
+              description:
+                'Categoria previdenciária do segurado (ex: MEI, Empregado, Contribuinte Individual)',
+            },
+            nb: {
+              type: 'string',
+              description: 'Número do Benefício (NB)',
+            },
+            judicialProcessNumber: {
+              type: 'string',
+              description: 'Número do processo judicial, se houver',
+            },
+            incapacityStartDate: {
+              type: 'string',
+              description:
+                'Data de Início da Incapacidade (DII) no formato DD/MM/AAAA',
+            },
+          },
+          required: ['name'],
+        },
+        insuredStatus: {
+          type: 'boolean',
+          description:
+            'Indica se o segurado possui qualidade de segurado na Data de Início da Incapacidade (DII)',
+        },
+        gracePeriodStatus: {
+          type: 'string',
+          description:
+            'Indica a situação do período de graça do segurado na DII',
+        },
+        gracePeriods: {
+          type: 'array',
+          description:
+            'Lista de eventos que geraram ou sustentam o período de graça',
+          items: {
+            type: 'object',
+            properties: {
+              event: {
+                type: 'string',
+                description:
+                  'Nome do evento que gerou ou sustenta o período de graça. Ex: Último vínculo empregatício, Desemprego involuntário, Afastamento por doença',
+              },
+              date: {
+                type: 'string',
+                description: 'Data do evento no formato DD/MM/AAAA',
+              },
+              observation: {
+                type: 'string',
+                description:
+                  'Análise técnica sobre como esse evento impacta o período de graça',
+              },
+            },
+            required: ['event', 'date', 'observation'],
+          },
+        },
+        analysisConclusion: {
+          type: 'string',
+          description:
+            'Conclusão técnica completa da análise, incluindo carência, qualidade de segurado, pontos de atenção e viabilidade preliminar do benefício',
+        },
+        graceExtensionDueToInvoluntaryUnemployment: {
+          type: 'boolean',
+          description:
+            'Indica se há direito à extensão do período de graça em razão de desemprego involuntário (art. 15, §2º da Lei 8.213/91)',
+        },
+        requestToExtendGracePeriod: {
+          type: 'boolean',
+          description:
+            'Indica se é recomendável requerer prorrogação do período de graça administrativamente',
+        },
+        graceExempt: {
+          type: 'boolean',
+          description:
+            'Indica se o segurado é isento de carência para o benefício',
+        },
+        graceValidation: {
+          type: 'string',
+          description:
+            'Observação sobre a validação de carência na Data de Início da Incapacidade (DII)',
+        },
+        contributionTimeWithoutResolvingPendencies: {
+          type: 'string',
+          description: 'Tempo de contribuição total sem resolver pendências',
+        },
+        contributionTimeResolvingPendencies: {
+          type: 'string',
+          description: 'Tempo de contribuição total resolvendo pendências',
+        },
+        contributionTimeWithAccelerators: {
+          type: 'string',
+          description: 'Tempo de contribuição total com aceleradores',
+        },
+        periods: {
+          type: 'array',
+          description:
+            'Lista de períodos de contribuição extraídos do CNIS (Raio-X do CNIS)',
+          items: {
+            type: 'object',
+            properties: {
+              bondOrigin: {
+                type: 'string',
+                description:
+                  'Origem do vínculo (nome da empresa ou empregador)',
+              },
+              category: {
+                type: 'string',
+                enum: Object.values(
+                  RetirementPermanentDisabilityRejectionPeriodCategoryEnum,
+                ),
+                description:
+                  'Categoria do período (ex: EMPREGADO_URBANO, MEI, CONTRIBUINTE_INDIVIDUAL_AUTONOMO)',
+              },
+              startDate: {
+                type: 'string',
+                description: 'Data de início do período no formato DD/MM/AAAA',
+              },
+              endDate: {
+                type: 'string',
+                description: 'Data de fim do período no formato DD/MM/AAAA',
+              },
+              impactMonths: {
+                type: 'number',
+                description: 'Tempo de contribuição do período em meses',
+              },
+              graceMonths: {
+                type: 'number',
+                description: 'Carência do período em meses',
+              },
+              isPendency: {
+                type: 'boolean',
+                description: 'Indica se o período possui pendência',
+              },
+              competenceBelowTheMinimum: {
+                type: 'boolean',
+                description:
+                  'Indica se há competências abaixo do mínimo no período',
+              },
+              contributionAverage: {
+                type: 'string',
+                description:
+                  'Média contributiva do período em formato decimal (ex: 1213.50)',
+              },
+              pendencyReason: {
+                type: 'string',
+                description:
+                  'Motivo da pendência (ex: LEAVE_DATE, COMPETENCE_BELOW_MINIMUM, INCONSISTENT_COMPETENCE)',
+              },
+              periodConsideration: {
+                type: 'string',
+                description:
+                  'Consideração do período (ex: SIM, NAO, PROVISORIO)',
+              },
+              wantsToComplementViaMeuINSS: {
+                type: 'boolean',
+                description:
+                  'Indica se deseja fazer a complementação via Meu INSS',
+              },
+              status: {
+                type: 'boolean',
+                description:
+                  'Status do período (true = válido, false = inválido)',
+              },
+              earningsHistory: {
+                type: 'array',
+                description: 'Histórico de remunerações do período',
+                items: {
+                  type: 'object',
+                  properties: {
+                    competence: {
+                      type: 'string',
+                      description: 'Competência no formato MM/AAAA',
+                    },
+                    value: {
+                      type: 'string',
+                      description: 'Valor da remuneração em formato decimal',
+                    },
+                    pendencyType: {
+                      type: 'string',
+                      description:
+                        'Tipo de pendência da competência (ex: COMPETENCE_BELOW_MINIMUM)',
+                    },
+                    collectedAt: {
+                      type: 'string',
+                      description: 'Data de recolhimento no formato DD/MM/AAAA',
+                    },
+                  },
+                },
+              },
+            },
+            required: [
+              'startDate',
+              'isPendency',
+              'competenceBelowTheMinimum',
+              'status',
+              'category',
+              'endDate',
+              'impactMonths',
+              'graceMonths',
+              'wantsToComplementViaMeuINSS',
+              'bondOrigin',
+              'contributionAverage',
+              'pendencyReason',
+              'periodConsideration',
+              'earningsHistory',
+            ],
+          },
+        },
+      },
+      required: [
+        'clientData',
+        'insuredStatus',
+        'gracePeriodStatus',
+        'gracePeriods',
+        'analysisConclusion',
+        'graceExtensionDueToInvoluntaryUnemployment',
+        'requestToExtendGracePeriod',
+        'graceExempt',
+        'graceValidation',
+        'contributionTimeWithoutResolvingPendencies',
+        'contributionTimeResolvingPendencies',
+        'contributionTimeWithAccelerators',
+        'periods',
+      ],
+    };
+  }
+
+  private getRetirementPermanentDisabilityRejectionResultAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        retirementRules: {
+          type: 'array',
+          description:
+            'Resumo de regras aplicáveis para aposentadoria por incapacidade permanente.',
+          items: {
+            type: 'object',
+            properties: {
+              retirementRuleName: {
+                type: 'string',
+                description: 'Nome da regra de aposentadoria.',
+              },
+              isEligible: {
+                type: 'boolean',
+                description: 'Indica se o segurado atingiu o direito.',
+              },
+              eligibilityAvailableAt: {
+                type: 'string',
+                format: 'date',
+                description: 'Data do direito no formato YYYY-MM-DD.',
+              },
+              expectedMonthlyBenefit: {
+                type: 'number',
+                description: 'RMI prevista em reais.',
+              },
+              isBestRmi: {
+                type: 'boolean',
+                description: 'Indica se esta regra possui a melhor RMI.',
+              },
+              isHighestCauseValue: {
+                type: 'boolean',
+                description:
+                  'Indica se esta regra possui o maior valor de causa.',
+              },
+              retirementAnalysis: {
+                type: 'string',
+                description: 'Análise detalhada desta regra.',
+              },
+            },
+            required: [
+              'retirementRuleName',
+              'isEligible',
+              'expectedMonthlyBenefit',
+              'isBestRmi',
+              'isHighestCauseValue',
+              'retirementAnalysis',
+            ],
+          },
+        },
+        analysisResult: {
+          type: 'string',
+          description:
+            'Texto explicativo completo sobre o resultado da análise.',
+        },
+        completeAnalysisDownload: {
+          type: 'string',
+          description:
+            'Conteúdo HTML completo e bem formatado, pronto para conversão em PDF.',
+        },
+        simplifiedAnalysis: {
+          type: 'string',
+          description: 'Análise simplificada em Markdown.',
+        },
+      },
+      required: [
+        'retirementRules',
+        'analysisResult',
+        'completeAnalysisDownload',
+        'simplifiedAnalysis',
+      ],
+    };
+  }
+
   private getBpcElderlyAnalysisCompleteAnalysisJsonSchema(): object {
     return {
       type: 'object',
@@ -8288,7 +9041,7 @@ For probativeForce, classify each document as:
         analysisDetailedText: {
           type: 'string',
           description:
-            'Texto detalhado da análise final sobre a cessação ou suspensão do BPC ao Idoso.',
+            'Texto detalhado da análise final sobre a cessação ou suspensão do BPC ao Idoso em Markdown estruturado, com títulos, listas e tabelas quando aplicável.',
         },
         completeAnalysisDownload: {
           type: 'string',
@@ -8753,6 +9506,9 @@ For probativeForce, classify each document as:
               },
               pendencyReason: {
                 type: 'string',
+                enum: Object.values(
+                  TemporaryIncapacityBenefitRejectionWorkPeriodsPendencyReasonEnum,
+                ),
                 description:
                   'Motivo da pendência (ex: LEAVE_DATE, COMPETENCE_BELOW_MINIMUM, INCONSISTENT_COMPETENCE)',
               },
@@ -8787,8 +9543,11 @@ For probativeForce, classify each document as:
                     },
                     pendencyType: {
                       type: 'string',
+                      enum: Object.values(
+                        TemporaryIncapacityBenefitRejectionWorkPeriodsPendencyReasonEnum,
+                      ),
                       description:
-                        'Tipo de pendência da competência (ex: COMPETENCE_BELOW_MINIMUM)',
+                        'Tipo de pendência da competência (ex: LEAVE_DATE, COMPETENCE_BELOW_MINIMUM, INCONSISTENT_COMPETENCE)',
                     },
                     collectedAt: {
                       type: 'string',
@@ -9455,6 +10214,99 @@ For probativeForce, classify each document as:
         'completeAnalysisDownload',
         'applicableRules',
         'benefitSummaries',
+      ],
+    };
+  }
+
+  private getBpcDisabilityGrantCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        isElligibleForDisabilityBpc: {
+          type: 'boolean',
+          description:
+            'Indica se o segurado é elegível ao BPC por deficiência.',
+        },
+        totalFamiliarIncome: {
+          type: 'string',
+          description: 'Renda familiar total bruta. Exemplo: "5.000,00".',
+        },
+        perCapitaIncome: {
+          type: 'string',
+          description:
+            'Renda per capita do grupo familiar. Exemplo: "1.250,00".',
+        },
+        lessThanOneQuarter: {
+          type: 'boolean',
+          description:
+            'Indica se a renda per capita é inferior a 1/4 do salário mínimo.',
+        },
+        lessThanHalfAndAboveOneQuarter: {
+          type: 'boolean',
+          description:
+            'Indica se a renda per capita está entre 1/4 e 1/2 do salário mínimo.',
+        },
+        disabilityProven: {
+          type: 'boolean',
+          description:
+            'Indica se a deficiência foi comprovada por laudo médico/pericial.',
+        },
+        retirementRules: {
+          type: 'array',
+          description:
+            'Lista de regras legais/previdenciarias aplicaveis ao caso, incluindo regras por artigo e por tipo de beneficio (ex.: Regra BPC PCD, Salario-Maternidade).',
+          items: {
+            type: 'object',
+            properties: {
+              benefitType: {
+                type: 'string',
+                description:
+                  'Tipo de beneficio/regra juridico-previdenciaria analisada. Exemplo: "BPC pessoa com deficiencia", "Salario-Maternidade".',
+              },
+              result: {
+                type: 'boolean',
+                description: 'Resultado da regra: atingido ou nao atingido.',
+              },
+              benefitStartDate: {
+                type: 'string',
+                description:
+                  'Data de início do benefício no formato ISO 8601. Exemplo: "2024-01-15".',
+              },
+              RMIprevista: {
+                type: 'string',
+                description:
+                  'Valor da RMI prevista em formato monetario. Exemplo: "R$1.412,00".',
+              },
+              detaildAnalysis: {
+                type: 'string',
+                description:
+                  'Analise detalhada da aplicacao da regra ao caso, com fundamentacao tecnica e juridica.',
+              },
+            },
+            required: [
+              'benefitType',
+              'result',
+              'benefitStartDate',
+              'RMIprevista',
+              'detaildAnalysis',
+            ],
+          },
+        },
+        analysisResult: {
+          type: 'string',
+          description:
+            'Resultado completo da análise em Markdown com títulos, listas e conclusão objetiva.',
+        },
+      },
+      required: [
+        'isElligibleForDisabilityBpc',
+        'totalFamiliarIncome',
+        'perCapitaIncome',
+        'lessThanOneQuarter',
+        'lessThanHalfAndAboveOneQuarter',
+        'disabilityProven',
+        'retirementRules',
+        'analysisResult',
       ],
     };
   }
@@ -10166,6 +11018,99 @@ For probativeForce, classify each document as:
     };
   }
 
+  private getElderlyBpcRejectionCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        isElligibleForElderlyBpc: {
+          type: 'boolean',
+          description:
+            'Indica se o requerente é elegível para o BPC idoso com base na análise completa do caso.',
+        },
+        totalFamiliarIncome: {
+          type: 'string',
+          description:
+            'Renda familiar total mensal declarada e/ou apurada, expressa em reais (ex: R$ 1.200,00).',
+        },
+        perCapitaIncome: {
+          type: 'string',
+          description:
+            'Renda per capita do grupo familiar, expressa em reais (ex: R$ 200,00).',
+        },
+        lessThanOneQuarter: {
+          type: 'boolean',
+          description:
+            'Indica se a renda per capita é inferior a 1/4 do salário mínimo vigente.',
+        },
+        ageGreaterThanOrEqualToSixtyFiveYears: {
+          type: 'boolean',
+          description:
+            'Indica se o requerente possui 65 anos de idade ou mais.',
+        },
+        retirementRules: {
+          type: 'array',
+          description:
+            'Lista de regras de aposentadoria avaliadas para o requerente.',
+          items: {
+            type: 'object',
+            properties: {
+              ruleName: {
+                type: 'string',
+                description: 'Nome da regra de aposentadoria avaliada.',
+              },
+              fulfilled: {
+                type: 'boolean',
+                description: 'Indica se a regra foi cumprida pelo requerente.',
+              },
+              benefitStartDate: {
+                type: 'string',
+                description:
+                  'Data de início do benefício caso a regra seja cumprida, no formato DD/MM/AAAA.',
+              },
+              bestRmi: {
+                type: 'boolean',
+                description:
+                  'Indica se esta regra resulta na melhor RMI para o requerente.',
+              },
+              biggestCauseValue: {
+                type: 'boolean',
+                description:
+                  'Indica se esta regra resulta no maior valor de causa.',
+              },
+              detaildAnalysis: {
+                type: 'string',
+                description:
+                  'Análise detalhada da regra, incluindo os requisitos, o que foi atendido e o que falta para cumprimento.',
+              },
+            },
+            required: [
+              'ruleName',
+              'fulfilled',
+              'benefitStartDate',
+              'bestRmi',
+              'biggestCauseValue',
+              'detaildAnalysis',
+            ],
+          },
+        },
+        analysisResult: {
+          type: 'string',
+          description:
+            'Análise completa e detalhada do caso de indeferimento do BPC idoso, incluindo avaliação da composição familiar, renda per capita, elegibilidade por idade e conclusão fundamentada sobre a viabilidade de reversão do indeferimento. A análise deve ser formatada em Markdown, pronta para exportação em PDF/DOCX.',
+        },
+      },
+      required: [
+        'isElligibleForElderlyBpc',
+        'totalFamiliarIncome',
+        'perCapitaIncome',
+        'lessThanOneQuarter',
+        'ageGreaterThanOrEqualToSixtyFiveYears',
+        'retirementRules',
+        'analysisResult',
+      ],
+    };
+  }
+
   // eslint-disable-next-line @typescript-eslint/member-ordering
   public async getAccidentAssistanceGrantFirstAnalysis(
     systemInstruction: string,
@@ -10224,6 +11169,142 @@ Análise processada do CNIS:
         },
       },
       required: ['firstAnalysis', 'analysisConclusion'],
+    };
+  }
+
+  private getRetirementPermanentDisabilityRevisionCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        benefitReviewEligible: {
+          type: 'string',
+          description: 'Indica se o cliente possui direito à revisão.',
+        },
+        benefitReviewStatusMessage: {
+          type: 'string',
+          description: 'Mensagem principal exibida no topo.',
+        },
+        benefitReviewSummary: {
+          type: 'string',
+          description: 'Resumo da conclusão da análise.',
+        },
+        benefitReviewAlertType: {
+          type: 'string',
+          description: 'Tipo visual do alerta da interface.',
+        },
+        introductoryText: {
+          type: 'string',
+          description: 'Texto introdutório/contextual.',
+        },
+        informationBoxType: {
+          type: 'string',
+          description: 'Tipo do box de informação.',
+        },
+        reviewTheses: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              thesisName: {
+                type: 'string',
+                description: 'Nome da tese revisional.',
+              },
+              thesisDescription: {
+                type: 'string',
+                description: 'Descrição detalhada da tese.',
+              },
+              thesisApplicable: {
+                type: 'string',
+                description: 'Indica se a tese é aplicável.',
+              },
+            },
+            required: ['thesisName', 'thesisDescription', 'thesisApplicable'],
+          },
+        },
+        benefitType: {
+          type: 'string',
+          description: 'Tipo do benefício analisado.',
+        },
+        reviewPossible: {
+          type: 'string',
+          description: 'Indica se existe possibilidade de revisão.',
+        },
+        reviewTypes: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              reviewTypeName: {
+                type: 'string',
+                description: 'Nome do tipo de revisão.',
+              },
+              reviewTypeStatus: {
+                type: 'string',
+                description: 'Status da revisão.',
+              },
+            },
+            required: ['reviewTypeName', 'reviewTypeStatus'],
+          },
+        },
+        originalRMI: {
+          type: 'string',
+          description: 'Valor original da RMI.',
+        },
+        originalRMA: {
+          type: 'string',
+          description: 'Valor original da RMA.',
+        },
+        revisedRMI: {
+          type: 'string',
+          description: 'Valor revisado da RMI.',
+        },
+        revisedRMA: {
+          type: 'string',
+          description: 'Valor revisado da RMA.',
+        },
+        estimatedCaseValue: {
+          type: 'string',
+          description: 'Valor estimado da causa.',
+        },
+        detailedAnalysisText: {
+          type: 'string',
+          description: 'Texto completo da análise detalhada.',
+        },
+        analysisResultsText: {
+          type: 'string',
+          description: 'Resultado final da análise.',
+        },
+        analysisResultType: {
+          type: 'string',
+          description: 'Tipo do resultado final.',
+        },
+        downloadContent: {
+          type: 'string',
+          description:
+            'Conteúdo completo da análise em Markdown para geração do download.',
+        },
+      },
+      required: [
+        'benefitReviewEligible',
+        'benefitReviewStatusMessage',
+        'benefitReviewSummary',
+        'benefitReviewAlertType',
+        'introductoryText',
+        'informationBoxType',
+        'reviewTheses',
+        'benefitType',
+        'reviewPossible',
+        'reviewTypes',
+        'originalRMI',
+        'originalRMA',
+        'revisedRMI',
+        'revisedRMA',
+        'estimatedCaseValue',
+        'detailedAnalysisText',
+        'analysisResultsText',
+        'analysisResultType',
+        'downloadContent',
+      ],
     };
   }
 }

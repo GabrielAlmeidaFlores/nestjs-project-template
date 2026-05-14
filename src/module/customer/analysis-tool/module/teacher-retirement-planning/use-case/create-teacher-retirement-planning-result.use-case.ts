@@ -24,6 +24,7 @@ import {
 import { FailedToGenerateTeacherRetirementPlanningAnalysisError } from '@module/customer/analysis-tool/module/teacher-retirement-planning/error/failed-to-generate-teacher-retirement-planning-analysis.error';
 import { TeacherRetirementPlanningNotFoundError } from '@module/customer/analysis-tool/module/teacher-retirement-planning/error/teacher-retirement-planning-not-found.error';
 import { TeacherRetirementPlanningCompleteAnalysisDataInterface } from '@module/customer/analysis-tool/module/teacher-retirement-planning/model/generic/teacher-retirement-planning-complete-analysis-data.model';
+import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
@@ -55,6 +56,8 @@ export class CreateTeacherRetirementPlanningResultUseCase {
     private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(FileProcessorGateway)
+    private readonly fileProcessorGateway: FileProcessorGateway,
   ) {}
 
   public async execute(
@@ -116,10 +119,15 @@ export class CreateTeacherRetirementPlanningResultUseCase {
       remunerations: planning.remunerations,
     };
 
+    const jsonInputBuffer = Buffer.from(JSON.stringify(input, null, 2), 'utf-8');
+    const documentBuffers = await Promise.all(
+      planning.documents.map((doc) => this.fileProcessorGateway.getFileBuffer(doc.document)),
+    );
+
     const completeAnalysis =
       await this.analysisProcessorGateway.getTeacherRetirementPlanningCompleteAnalysis(
         promptResponse.prompt,
-        [Buffer.from(JSON.stringify(input, null, 2), 'utf-8')],
+        [jsonInputBuffer, ...documentBuffers],
       );
 
     if (completeAnalysis === null) {

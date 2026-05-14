@@ -27,6 +27,12 @@ export const miniAdvisorAnalysisPredefinedMessages: Record<
     attentionNote:
       'É essencial comprovar o efetivo exercício de função de magistério, não apenas o vínculo com a instituição de ensino. Diretores, coordenadores e orientadores pedagógicos em geral não têm direito à aposentadoria do professor, salvo se também exercerem docência.',
   },
+  [MiniAdvisorAnalysisTypeEnum.TEACHER_RETIREMENT_PLANNING_RPPS]: {
+    benefitDescription:
+      'Aposentadoria especial do professor no Regime Próprio de Previdência Social (RPPS), com redução de 5 anos no tempo de contribuição (25 anos para mulheres e 30 anos para homens), exclusivamente para servidores públicos que exercem função de magistério em educação infantil, ensino fundamental ou ensino médio.',
+    attentionNote:
+      'É essencial comprovar o efetivo exercício de função de magistério no serviço público, não apenas o vínculo com a instituição de ensino. Verifique as regras específicas do ente federativo ao qual o servidor está vinculado, pois cada RPPS pode ter particularidades. Considere as regras de transição aplicáveis ao regime próprio.',
+  },
   [MiniAdvisorAnalysisTypeEnum.SPECIAL_CATEGORY_RETIREMENT]: {
     benefitDescription:
       'Aposentadoria especial para trabalhadores expostos de forma habitual e permanente a agentes nocivos à saúde (ruído, produtos químicos, calor, agentes biológicos, entre outros). Exige 15, 20 ou 25 anos de atividade especial conforme o agente e o período laborado.',
