@@ -30,9 +30,12 @@ export class CreateTeacherRetirementPlanningPeriodItemRequestDto extends BaseBui
   @RequestDtoDateProperty({ required: false })
   public readonly endDate?: Date;
 
-  @RequestDtoEnumProperty(TeacherRetirementPlanningRppsPeriodItemWorkloadTypeEnum, {
-    required: false,
-  })
+  @RequestDtoEnumProperty(
+    TeacherRetirementPlanningRppsPeriodItemWorkloadTypeEnum,
+    {
+      required: false,
+    },
+  )
   public readonly workloadType?: TeacherRetirementPlanningRppsPeriodItemWorkloadTypeEnum;
 
   @RequestDtoStringProperty({ required: true })

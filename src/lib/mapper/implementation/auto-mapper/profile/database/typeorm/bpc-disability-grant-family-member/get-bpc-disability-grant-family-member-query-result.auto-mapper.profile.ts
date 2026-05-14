@@ -48,7 +48,8 @@ export class GetBpcDisabilityGrantFamilyMemberQueryResultAutoMapperProfile {
             : null,
         incomeType: source.incomeType,
         hasExpenseProofs: source.hasExpenseProofs ?? null,
-        BpcDisabilityGrantFamilyMemberDocument: bpcDisabilityGrantFamilyMemberDocument,
+        BpcDisabilityGrantFamilyMemberDocument:
+          bpcDisabilityGrantFamilyMemberDocument,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt ?? null,

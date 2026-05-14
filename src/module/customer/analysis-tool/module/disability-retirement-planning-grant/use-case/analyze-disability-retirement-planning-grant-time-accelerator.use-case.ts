@@ -112,7 +112,7 @@ export class AnalyzeDisabilityRetirementPlanningGrantTimeAcceleratorUseCase {
                   technicalNote: timeAccelerator.technicalNote,
                 }),
                 ...this.toValidDateProp('startDate', timeAccelerator.startDate),
-            ...this.toValidDateProp('endDate', timeAccelerator.endDate),
+                ...this.toValidDateProp('endDate', timeAccelerator.endDate),
                 ...(timeAccelerator.institution !== null && {
                   institution: timeAccelerator.institution,
                 }),
@@ -223,12 +223,14 @@ export class AnalyzeDisabilityRetirementPlanningGrantTimeAcceleratorUseCase {
     key: 'startDate' | 'endDate',
     value: string | null,
   ): Record<string, Date> {
-    if (value === null) return {};
+    if (value === null) {
+      return {};
+    }
     const d = new Date(value);
     return isNaN(d.getTime()) ? {} : { [key]: d };
   }
 
-    private getPaymentPlanPaidResourceType(
+  private getPaymentPlanPaidResourceType(
     type: DisabilityRetirementPlanningGrantTimeAcceleratorTypeEnum,
   ): PaymentPlanPaidResourceTypeEnum {
     switch (type) {

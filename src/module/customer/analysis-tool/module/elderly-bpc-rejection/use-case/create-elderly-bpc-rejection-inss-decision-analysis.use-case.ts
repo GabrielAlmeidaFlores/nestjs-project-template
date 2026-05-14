@@ -103,7 +103,9 @@ export class CreateElderlyBpcRejectionInssDecisionAnalysisUseCase {
       await Promise.all([
         Promise.all(
           administrativeProceedingsDocuments.map((document) =>
-            this.fileProcessorGateway.getFileBuffer(document.document as string),
+            this.fileProcessorGateway.getFileBuffer(
+              document.document as string,
+            ),
           ),
         ),
         this.buildRejectionDataBuffer(elderlyBpcRejection),
@@ -145,7 +147,7 @@ export class CreateElderlyBpcRejectionInssDecisionAnalysisUseCase {
     });
   }
 
-  private async buildRejectionDataBuffer(
+  private buildRejectionDataBuffer(
     elderlyBpcRejection: Awaited<
       ReturnType<
         typeof this.elderlyBpcRejectionQueryRepositoryGateway.findOneByElderlyBpcRejectionIdOrFailWithRelations
@@ -190,6 +192,8 @@ export class CreateElderlyBpcRejectionInssDecisionAnalysisUseCase {
       },
     };
 
-    return Buffer.from(JSON.stringify(rejectionData, null, 2), 'utf-8');
+    return Promise.resolve(
+      Buffer.from(JSON.stringify(rejectionData, null, 2), 'utf-8'),
+    );
   }
 }

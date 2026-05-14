@@ -62,7 +62,8 @@ export class TeacherRetirementPlanningRppsCompleteAnalysisResultResponseDto exte
   public timeline: TeacherRetirementPlanningRppsCompleteAnalysisTimelineItemResponseDto[];
 
   @ResponseDtoObjectProperty(
-    () => TeacherRetirementPlanningRppsCompleteAnalysisRetirementRuleResponseDto,
+    () =>
+      TeacherRetirementPlanningRppsCompleteAnalysisRetirementRuleResponseDto,
     { isArray: true },
   )
   public retirementRules: TeacherRetirementPlanningRppsCompleteAnalysisRetirementRuleResponseDto[];
