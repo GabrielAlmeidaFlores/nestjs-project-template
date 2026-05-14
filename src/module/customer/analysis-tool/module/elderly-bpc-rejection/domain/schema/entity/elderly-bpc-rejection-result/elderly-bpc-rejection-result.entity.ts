@@ -5,6 +5,7 @@ import type { ElderlyBpcRejectionId } from '@module/customer/analysis-tool/modul
 import type { ElderlyBpcRejectionResultEntityPropsInterface } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/schema/entity/elderly-bpc-rejection-result/elderly-bpc-rejection-result.entity.props.interface';
 
 export class ElderlyBpcRejectionResultEntity extends BaseEntity<ElderlyBpcRejectionResultId> {
+  public readonly inssDecisionAnalysis: string | null;
   public readonly completeAnalysis: string | null;
   public readonly simplifiedAnalysis: string | null;
   public readonly elderlyBpcRejectionId: ElderlyBpcRejectionId;
@@ -13,6 +14,7 @@ export class ElderlyBpcRejectionResultEntity extends BaseEntity<ElderlyBpcReject
 
   public constructor(props: ElderlyBpcRejectionResultEntityPropsInterface) {
     super(ElderlyBpcRejectionResultId, props);
+    this.inssDecisionAnalysis = props.inssDecisionAnalysis ?? null;
     this.completeAnalysis = props.completeAnalysis ?? null;
     this.simplifiedAnalysis = props.simplifiedAnalysis ?? null;
     this.elderlyBpcRejectionId = props.elderlyBpcRejectionId;

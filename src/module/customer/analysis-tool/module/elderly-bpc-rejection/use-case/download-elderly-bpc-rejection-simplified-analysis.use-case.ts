@@ -150,6 +150,7 @@ export class DownloadElderlyBpcRejectionSimplifiedAnalysisUseCase {
   ): ElderlyBpcRejectionResultEntity {
     return new ElderlyBpcRejectionResultEntity({
       id: currentResult.id,
+      inssDecisionAnalysis: currentResult.inssDecisionAnalysis,
       completeAnalysis: currentResult.completeAnalysis,
       simplifiedAnalysis:
         overrides.simplifiedAnalysis ?? currentResult.simplifiedAnalysis,
