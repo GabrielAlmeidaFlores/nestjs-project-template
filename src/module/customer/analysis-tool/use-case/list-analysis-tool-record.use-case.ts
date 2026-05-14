@@ -147,7 +147,7 @@ export class ListAnalysisToolRecordUseCase {
       analysisToolRecord.bpcDisabilityTermination ??
       analysisToolRecord.deathBenefitGrant ??
       analysisToolRecord.temporaryIncapacityBenefitRejection ??
-      analysisToolRecord.temporaryIncapacityBenefitTermination ??
+      analysisToolRecord.permanentIncapacityBenefitTerminated ??
       analysisToolRecord.deathBenefitRejection ??
       analysisToolRecord.bpcElderlyAnalysis ??
       analysisToolRecord.bpcElderlyCessation ??

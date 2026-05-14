@@ -64,6 +64,8 @@ export class AnalysisActivityMessageFactory {
       'Concessão de benefício por incapacidade temporária',
     [AnalysisToolRecordTypeEnum.TEMPORARY_DISABILITY_BENEFITS_TERMINATED]:
       'Cessação de auxílio por incapacidade temporária',
+    [AnalysisToolRecordTypeEnum.PERMANENT_INCAPACITY_BENEFIT_TERMINATED]:
+      'Cessação de aposentadoria por incapacidade permanente',
     [AnalysisToolRecordTypeEnum.RURAL_OR_HYBRID_RETIREMENT_REJECTION]:
       'Indeferimento de aposentadoria rural ou híbrida',
     [AnalysisToolRecordTypeEnum.RURAL_OR_HYBRID_RETIREMENT_ANALYSIS]:

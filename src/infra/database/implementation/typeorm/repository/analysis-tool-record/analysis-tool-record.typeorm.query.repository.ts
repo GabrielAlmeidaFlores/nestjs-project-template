@@ -78,7 +78,7 @@ import { TeacherRetirementPlanningRejectionId } from '@module/customer/analysis-
 import { TemporaryDisabilityBenefitsGrantId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/value-object/temporary-disability-benefits-grant-id.value-object';
 import { TemporaryDisabilityBenefitsTerminatedId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/schema/entity/temporary-disability-benefits-terminated/value-object/temporary-disability-benefits-terminated-id.value-object';
 import { TemporaryIncapacityBenefitRejectionId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/value-object/temporary-incapacity-benefit-rejection-id.value-object';
-import { TemporaryIncapacityBenefitTerminationId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-termination/domain/schema/entity/temporary-incapacity-benefit-termination/value-object/temporary-incapacity-benefit-termination-id.value-object';
+import { PermanentIncapacityBenefitTerminatedId } from '@module/customer/analysis-tool/module/permanent-incapacity-benefit-terminated/domain/schema/entity/permanent-incapacity-benefit-terminated/value-object/permanent-incapacity-benefit-terminated-id.value-object';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { ConstructorType } from '@shared/system/type/constructor.type';
 
@@ -171,6 +171,8 @@ export class AnalysisToolRecordTypeormQueryRepository
         'temporaryIncapacityBenefitRejection',
       [AnalysisToolRecordTypeEnum.TEMPORARY_DISABILITY_BENEFITS_TERMINATED]:
         'temporaryDisabilityBenefitsTerminated',
+      [AnalysisToolRecordTypeEnum.PERMANENT_INCAPACITY_BENEFIT_TERMINATED]:
+        'permanentIncapacityBenefitTerminated',
       [AnalysisToolRecordTypeEnum.BPC_ELDERLY_CESSATION]: 'bpcElderlyCessation',
       [AnalysisToolRecordTypeEnum.MATERNITY_PAY_GRANT]: 'maternityPayGrant',
       [AnalysisToolRecordTypeEnum.TEACHER_RETIREMENT_PLANNING_REJECTION]:
@@ -2708,7 +2710,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { bpcElderlyCessation: Not(IsNull()) },
         { maternityPayRejection: Not(IsNull()) },
         { temporaryIncapacityBenefitRejection: Not(IsNull()) },
-        { temporaryIncapacityBenefitTermination: Not(IsNull()) },
+        { permanentIncapacityBenefitTerminated: Not(IsNull()) },
         { maternityPayGrant: Not(IsNull()) },
         { teacherRetirementPlanningRejection: Not(IsNull()) },
         { accidentAssistanceTerminated: Not(IsNull()) },
@@ -3744,17 +3746,21 @@ export class AnalysisToolRecordTypeormQueryRepository
     return mappedData;
   }
 
-  public async findWithRelationsByTemporaryIncapacityBenefitTerminationIdAndOrganizationIdAndAuthIdentityIdOrFail(
-    temporaryIncapacityBenefitTerminationId: TemporaryIncapacityBenefitTerminationId,
+  public async findWithRelationsByPermanentIncapacityBenefitTerminatedIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    permanentIncapacityBenefitTerminatedId: PermanentIncapacityBenefitTerminatedId,
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
     err: ConstructorType<NotFoundError>,
   ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const relationsClause = this.getRelationsClauseOperation([
+      'permanentIncapacityBenefitTerminated',
+    ]);
+
     const data = await this.findOneOrFail(
       {
         where: {
-          temporaryIncapacityBenefitTermination: {
-            id: temporaryIncapacityBenefitTerminationId.toString(),
+          permanentIncapacityBenefitTerminated: {
+            id: permanentIncapacityBenefitTerminatedId.toString(),
           },
           createdBy: {
             organization: {
@@ -3767,28 +3773,7 @@ export class AnalysisToolRecordTypeormQueryRepository
             },
           },
         },
-        relations: {
-          analysisToolClient: {
-            analysisToolClientInssBenefit: true,
-            analysisToolClientLegalProceeding: true,
-            createdBy: {
-              customer: true,
-              organization: true,
-            },
-            updatedBy: {
-              customer: true,
-              organization: true,
-            },
-          },
-          createdBy: {
-            customer: true,
-            organization: true,
-          },
-          updatedBy: {
-            customer: true,
-            organization: true,
-          },
-        },
+        relations: relationsClause,
       },
       err,
     );
@@ -4252,11 +4237,33 @@ export class AnalysisToolRecordTypeormQueryRepository
       };
     }
 
+    if (analysisRelationKeys.includes('permanentIncapacityBenefitTerminated')) {
+      relationsClause.permanentIncapacityBenefitTerminated = {
+        permanentIncapacityBenefitTerminatedResult: true,
+        documents: true,
+        inssBenefits: true,
+        disabilityAnalysis: {
+          cids: true,
+          documents: true,
+        },
+        insuredStatus: {
+          documents: true,
+        },
+        workPeriods: {
+          earningsHistory: true,
+        },
+        analysisToolRecord: {
+          analysisToolClient: true,
+        },
+      };
+    }
+
     for (const key of analysisRelationKeys) {
       if (
         key === 'speechGenerator' ||
         key === 'ruralTimeline' ||
-        key === 'accidentAssistanceGrant'
+        key === 'accidentAssistanceGrant' ||
+        key === 'permanentIncapacityBenefitTerminated'
       ) {
         continue;
       }
@@ -4306,7 +4313,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       'bpcElderlyCessation',
       'maternityPayRejection',
       'temporaryIncapacityBenefitRejection',
-      'temporaryIncapacityBenefitTermination',
+      'permanentIncapacityBenefitTerminated',
       'maternityPayGrant',
       'teacherRetirementPlanningRejection',
       'accidentAssistanceTerminated',

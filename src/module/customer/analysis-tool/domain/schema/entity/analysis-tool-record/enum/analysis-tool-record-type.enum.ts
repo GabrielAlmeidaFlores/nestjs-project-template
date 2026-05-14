@@ -39,6 +39,7 @@ export enum AnalysisToolRecordTypeEnum {
   MATERNITY_PAY_REJECTION = 'indeferimento_salario_maternidade',
   TEMPORARY_INCAPACITY_BENEFIT_REJECTION = 'indeferimento_auxilio_incapacidade_temporaria',
   TEMPORARY_DISABILITY_BENEFITS_TERMINATED = 'cessacao_auxilio_incapacidade_temporaria',
+  PERMANENT_INCAPACITY_BENEFIT_TERMINATED = 'cessacao_aposentadoria_incapacidade_permanente',
   BPC_ELDERLY_CESSATION = 'cessacao_bpc_idoso',
   MATERNITY_PAY_GRANT = 'concessao_salario_maternidade',
   TEACHER_RETIREMENT_PLANNING_REJECTION = 'indeferimento_aposentadoria_professor',

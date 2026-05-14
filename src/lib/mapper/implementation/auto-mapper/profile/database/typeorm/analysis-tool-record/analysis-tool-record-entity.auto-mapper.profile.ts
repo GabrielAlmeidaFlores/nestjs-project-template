@@ -52,7 +52,7 @@ import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implemen
 import { TemporaryDisabilityBenefitsGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant.typeorm.entity';
 import { TemporaryDisabilityBenefitsTerminatedTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-terminated.typeorm.entity';
 import { TemporaryIncapacityBenefitRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-rejection.typeorm.entity';
-import { TemporaryIncapacityBenefitTerminationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-termination.typeorm.entity';
+import { PermanentIncapacityBenefitTerminatedTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/permanent-incapacity-benefit-terminated.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
@@ -105,7 +105,7 @@ import { TeacherRetirementPlanningRejectionEntity } from '@module/customer/analy
 import { TemporaryDisabilityBenefitsGrantEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/temporary-disability-benefits-grant.entity';
 import { TemporaryDisabilityBenefitsTerminatedEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/schema/entity/temporary-disability-benefits-terminated/temporary-disability-benefits-terminated.entity';
 import { TemporaryIncapacityBenefitRejectionEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.entity';
-import { TemporaryIncapacityBenefitTerminationEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-termination/domain/schema/entity/temporary-incapacity-benefit-termination/temporary-incapacity-benefit-termination.entity';
+import { PermanentIncapacityBenefitTerminatedEntity } from '@module/customer/analysis-tool/module/permanent-incapacity-benefit-terminated/domain/schema/entity/permanent-incapacity-benefit-terminated/permanent-incapacity-benefit-terminated.entity';
 
 @Injectable()
 export class AnalysisToolRecordEntityAutoMapperProfile {
@@ -447,13 +447,13 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
-      const temporaryIncapacityBenefitTermination =
-        source.temporaryIncapacityBenefitTermination !== null &&
-        source.temporaryIncapacityBenefitTermination !== undefined
+      const permanentIncapacityBenefitTerminated =
+        source.permanentIncapacityBenefitTerminated !== null &&
+        source.permanentIncapacityBenefitTerminated !== undefined
           ? this.mapper.map(
-              source.temporaryIncapacityBenefitTermination,
-              TemporaryIncapacityBenefitTerminationTypeormEntity,
-              TemporaryIncapacityBenefitTerminationEntity,
+              source.permanentIncapacityBenefitTerminated,
+              PermanentIncapacityBenefitTerminatedTypeormEntity,
+              PermanentIncapacityBenefitTerminatedEntity,
             )
           : null;
 
@@ -607,7 +607,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         temporaryDisabilityBenefitsGrant,
         temporaryDisabilityBenefitsTerminated,
         temporaryIncapacityBenefitRejection,
-        temporaryIncapacityBenefitTermination,
+        permanentIncapacityBenefitTerminated,
         accidentBenefitRejection,
         survivorPensionAnalysis,
         ruralOrHybridRetirementRejection,
@@ -1028,12 +1028,12 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
-      const temporaryIncapacityBenefitTermination =
-        source.temporaryIncapacityBenefitTermination !== null
+      const permanentIncapacityBenefitTerminated =
+        source.permanentIncapacityBenefitTerminated !== null
           ? this.mapper.map(
-              source.temporaryIncapacityBenefitTermination,
-              TemporaryIncapacityBenefitTerminationEntity,
-              TemporaryIncapacityBenefitTerminationTypeormEntity,
+              source.permanentIncapacityBenefitTerminated,
+              PermanentIncapacityBenefitTerminatedEntity,
+              PermanentIncapacityBenefitTerminatedTypeormEntity,
             )
           : null;
 
@@ -1095,7 +1095,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         specialRetirementRejection,
         temporaryDisabilityBenefitsGrant,
         temporaryDisabilityBenefitsTerminated,
-        temporaryIncapacityBenefitTermination,
+        permanentIncapacityBenefitTerminated,
         temporaryIncapacityBenefitRejection,
         accidentBenefitRejection,
         survivorPensionAnalysis,
