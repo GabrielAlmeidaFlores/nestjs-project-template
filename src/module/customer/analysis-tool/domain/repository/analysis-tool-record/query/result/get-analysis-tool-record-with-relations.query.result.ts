@@ -21,6 +21,7 @@ import type { GetDeathBenefitRejectionWithRelationsQueryResult } from '@module/c
 import type { GetDisabilityAssessmentForBpcAnalysisQueryResult } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/repository/disability-assessment-for-bpc-analysis/query/result/get-disability-assessment-for-bpc-analysis.query.result';
 import type { GetDisabilityRetirementPlanningWithRelationsQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning/query/result/get-disability-retirement-planning-with-relations.query.result';
 import type { GetDisabilityRetirementPlanningGrantWithRelationsQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/repository/disability-retirement-planning-grant/query/result/get-disability-retirement-planning-grant-with-relations.query.result';
+import type { GetDisabilityRetirementPlanningRejectionWithRelationsQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/repository/disability-retirement-planning-rejection/query/result/get-disability-retirement-planning-rejection-with-relations.query.result';
 import type { ElderlyBpcRejectionEntity } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/domain/schema/entity/elderly-bpc-rejection/elderly-bpc-rejection.entity';
 import type { GetGeneralUrbanRetirementAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis/query/result/get-general-urban-retirement-analysis-with-relations.query.result';
 import type { GetGeneralUrbanRetirementDenialWithRelationsQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial/query/result/get-general-urban-retirement-denial-with-relations.query.result';
@@ -92,7 +93,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResult extends BaseBuildable
   public readonly specialRetirementGrant: GetSpecialRetirementGrantWithRelationsQueryResult | null;
   public readonly specialRetirementRejection: GetSpecialRetirementRejectionWithRelationsQueryResult | null;
   public readonly disabilityRetirementPlanningGrant: GetDisabilityRetirementPlanningGrantWithRelationsQueryResult | null;
-  public readonly disabilityRetirementPlanningRejection: GetDisabilityRetirementPlanningWithRelationsQueryResult | null;
+  public readonly disabilityRetirementPlanningRejection: GetDisabilityRetirementPlanningRejectionWithRelationsQueryResult | null;
   public readonly temporaryDisabilityBenefitsGrant: GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResult | null;
   public readonly temporaryDisabilityBenefitsTerminated: GetTemporaryDisabilityBenefitsTerminatedWithRelationsQueryResult | null;
   public readonly temporaryIncapacityBenefitRejection: GetTemporaryIncapacityBenefitRejectionWithRelationsQueryResult | null;
