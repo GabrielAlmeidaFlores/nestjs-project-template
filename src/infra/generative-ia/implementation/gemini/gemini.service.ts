@@ -65,6 +65,14 @@ formatting rules:
 - identifiers and metadata: do not return identifiers, system references, codes, tracking values, or any form of metadata. return only the human-readable information requested by the user.
 - technical terms: avoid mentioning implementation terms related to internal data structures or system identifiers. present only the final information relevant to the user.
 `,
+      `
+json mode rules (apply when JSON output is explicitly requested):
+- return exclusively a valid JSON object with no text, explanation, or markdown outside the JSON.
+- all text-content fields inside the JSON (analysis, summaries, reports, conclusions) must use rich markdown formatting: headers (#, ##, ###), bold (**text**), bullet lists (- item), numbered lists (1. item), and tables (| col |) where appropriate. never use plain unstructured paragraphs for analytical content.
+- fields containing detailed reports or comprehensive analysis must be thorough and well-structured with at minimum: an introduction, multiple headed sections, and a conclusion.
+- fields containing summarized or simplified text must still use proper markdown formatting.
+- never invent or fabricate data. when information is unavailable, state it explicitly and continue with what is available.
+`,
     ];
   }
 

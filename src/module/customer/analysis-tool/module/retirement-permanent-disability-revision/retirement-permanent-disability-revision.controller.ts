@@ -39,6 +39,9 @@ import { DownloadRetirementPermanentDisabilityRevisionSimplifiedAnalysisUseCase 
 import { GetRetirementPermanentDisabilityRevisionUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/get-retirement-permanent-disability-revision.use-case';
 import { ResolveRetirementPermanentDisabilityRevisionConcessionLetterBreakdownPendencyUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/resolve-retirement-permanent-disability-revision-concession-letter-breakdown-pendency.use-case';
 import { ResolveRetirementPermanentDisabilityRevisionWorkPeriodsPendencyUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/resolve-retirement-permanent-disability-revision-work-periods-pendency.use-case';
+import { CreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/create-retirement-permanent-disability-revision-work-period-document-analysis.use-case';
+import { CreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisRequestDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/request/create-retirement-permanent-disability-revision-work-period-document-analysis.request.dto';
+import { CreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/response/create-retirement-permanent-disability-revision-work-period-document-analysis.response.dto';
 import { UpdateRetirementPermanentDisabilityRevisionWorkPeriodsUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/update-retirement-permanent-disability-revision-work-periods.use-case';
 import { UpdateRetirementPermanentDisabilityRevisionUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/update-retirement-permanent-disability-revision.use-case';
 import { UploadRetirementPermanentDisabilityRevisionDocumentsUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/upload-retirement-permanent-disability-revision-documents.use-case';
@@ -74,6 +77,7 @@ export class RetirementPermanentDisabilityRevisionController {
     private readonly updateRetirementPermanentDisabilityRevisionWorkPeriodsUseCase: UpdateRetirementPermanentDisabilityRevisionWorkPeriodsUseCase,
     private readonly resolveRetirementPermanentDisabilityRevisionConcessionLetterBreakdownPendencyUseCase: ResolveRetirementPermanentDisabilityRevisionConcessionLetterBreakdownPendencyUseCase,
     private readonly resolveRetirementPermanentDisabilityRevisionWorkPeriodsPendencyUseCase: ResolveRetirementPermanentDisabilityRevisionWorkPeriodsPendencyUseCase,
+    private readonly createRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisUseCase: CreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -539,6 +543,35 @@ export class RetirementPermanentDisabilityRevisionController {
     await this.resolveRetirementPermanentDisabilityRevisionWorkPeriodsPendencyUseCase.execute(
       _retirementPermanentDisabilityRevisionId,
       retirementPermanentDisabilityRevisionWorkPeriodsId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Criar análise de documento de período sem data de saída',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':retirementPermanentDisabilityRevisionId/work-period/no-end-date-document-analysis',
+      method: RequestMethod.POST,
+      type: CreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisRequestDto,
+    },
+    tag: ['revisao-aposentadoria-invalidez-permanente'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Análise de documento de período sem data de saída criada com sucesso.',
+      type: CreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createWorkPeriodNoEndDateDocumentAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Body() dto: CreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisRequestDto,
+  ): Promise<CreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisResponseDto> {
+    return await this.createRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
       dto,
     );
   }
