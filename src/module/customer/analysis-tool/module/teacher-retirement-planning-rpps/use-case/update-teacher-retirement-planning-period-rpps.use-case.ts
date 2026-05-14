@@ -29,7 +29,8 @@ import { FileModel } from '@shared/system/model/generic/file.model';
 
 @Injectable()
 export class UpdateTeacherRetirementPlanningPeriodRppsUseCase {
-  protected readonly _type = UpdateTeacherRetirementPlanningPeriodRppsUseCase.name;
+  protected readonly _type =
+    UpdateTeacherRetirementPlanningPeriodRppsUseCase.name;
 
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
@@ -40,7 +41,9 @@ export class UpdateTeacherRetirementPlanningPeriodRppsUseCase {
     private readonly teacherRetirementPlanningPeriodCommandRepositoryGateway: TeacherRetirementPlanningRppsPeriodCommandRepositoryGateway,
     @Inject(TeacherRetirementPlanningRppsPeriodItemCommandRepositoryGateway)
     private readonly teacherRetirementPlanningPeriodItemCommandRepositoryGateway: TeacherRetirementPlanningRppsPeriodItemCommandRepositoryGateway,
-    @Inject(TeacherRetirementPlanningRppsPeriodItemDocumentCommandRepositoryGateway)
+    @Inject(
+      TeacherRetirementPlanningRppsPeriodItemDocumentCommandRepositoryGateway,
+    )
     private readonly teacherRetirementPlanningPeriodItemDocumentCommandRepositoryGateway: TeacherRetirementPlanningRppsPeriodItemDocumentCommandRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,

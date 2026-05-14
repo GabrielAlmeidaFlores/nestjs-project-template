@@ -279,72 +279,74 @@ export class CreateTemporaryDisabilityBenefitsTerminatedFirstAnalysisUseCase {
             period.pendencyReason,
           );
 
-          return TemporaryDisabilityBenefitsTerminatedFirstAnalysisPeriodModel.build({
-            startDate: period.startDate,
-            isPendency: period.isPendency,
-            competenceBelowTheMinimum: period.competenceBelowTheMinimum,
-            status: period.status,
-            ...(this.hasValue(period.bondOrigin) && {
-              bondOrigin: period.bondOrigin,
-            }),
-            ...(this.isValidEnum(
-              period.category,
-              TemporaryDisabilityBenefitsTerminatedCategoryEnum,
-            ) && {
-              category: period.category,
-            }),
-            ...(this.hasValue(period.activityDescription) && {
-              activityDescription: period.activityDescription,
-            }),
-            ...(this.hasValue(period.endDate) && {
-              endDate: period.endDate,
-            }),
-            ...(this.hasValue(period.impactMonths) && {
-              impactMonths: period.impactMonths,
-            }),
-            ...(this.hasValue(period.graceMonths) && {
-              graceMonths: period.graceMonths,
-            }),
-            ...(this.hasValue(period.contributionAverage) && {
-              contributionAverage: new DecimalValue(
-                period.contributionAverage.toString(),
-              ),
-            }),
-            ...(this.hasValue(pendencyReason) && {
-              pendencyReason,
-            }),
-            ...(this.hasValue(period.periodConsideration) && {
-              periodConsideration: period.periodConsideration,
-            }),
-            ...(this.hasValue(period.wantsToComplementViaMeuINSS) && {
-              wantsToComplementViaMeuINSS: period.wantsToComplementViaMeuINSS,
-            }),
-            earningsHistory: (this.hasValue(period.earningsHistory)
-              ? period.earningsHistory
-              : []
-            ).map((eh) => {
-              const pendencyType = this.normalizePendencyReason(
-                eh.pendencyType,
-              );
+          return TemporaryDisabilityBenefitsTerminatedFirstAnalysisPeriodModel.build(
+            {
+              startDate: period.startDate,
+              isPendency: period.isPendency,
+              competenceBelowTheMinimum: period.competenceBelowTheMinimum,
+              status: period.status,
+              ...(this.hasValue(period.bondOrigin) && {
+                bondOrigin: period.bondOrigin,
+              }),
+              ...(this.isValidEnum(
+                period.category,
+                TemporaryDisabilityBenefitsTerminatedCategoryEnum,
+              ) && {
+                category: period.category,
+              }),
+              ...(this.hasValue(period.activityDescription) && {
+                activityDescription: period.activityDescription,
+              }),
+              ...(this.hasValue(period.endDate) && {
+                endDate: period.endDate,
+              }),
+              ...(this.hasValue(period.impactMonths) && {
+                impactMonths: period.impactMonths,
+              }),
+              ...(this.hasValue(period.graceMonths) && {
+                graceMonths: period.graceMonths,
+              }),
+              ...(this.hasValue(period.contributionAverage) && {
+                contributionAverage: new DecimalValue(
+                  period.contributionAverage.toString(),
+                ),
+              }),
+              ...(this.hasValue(pendencyReason) && {
+                pendencyReason,
+              }),
+              ...(this.hasValue(period.periodConsideration) && {
+                periodConsideration: period.periodConsideration,
+              }),
+              ...(this.hasValue(period.wantsToComplementViaMeuINSS) && {
+                wantsToComplementViaMeuINSS: period.wantsToComplementViaMeuINSS,
+              }),
+              earningsHistory: (this.hasValue(period.earningsHistory)
+                ? period.earningsHistory
+                : []
+              ).map((eh) => {
+                const pendencyType = this.normalizePendencyReason(
+                  eh.pendencyType,
+                );
 
-              return TemporaryDisabilityBenefitsTerminatedFirstAnalysisEarningsHistoryItemModel.build(
-                {
-                  ...(this.hasValue(eh.competence) && {
-                    competence: eh.competence,
-                  }),
-                  ...(this.hasValue(eh.value) && {
-                    value: eh.value,
-                  }),
-                  ...(this.hasValue(pendencyType) && {
-                    pendencyType,
-                  }),
-                  ...(this.hasValue(eh.collectedAt) && {
-                    collectedAt: eh.collectedAt,
-                  }),
-                },
-              );
-            }),
-          });
+                return TemporaryDisabilityBenefitsTerminatedFirstAnalysisEarningsHistoryItemModel.build(
+                  {
+                    ...(this.hasValue(eh.competence) && {
+                      competence: eh.competence,
+                    }),
+                    ...(this.hasValue(eh.value) && {
+                      value: eh.value,
+                    }),
+                    ...(this.hasValue(pendencyType) && {
+                      pendencyType,
+                    }),
+                    ...(this.hasValue(eh.collectedAt) && {
+                      collectedAt: eh.collectedAt,
+                    }),
+                  },
+                );
+              }),
+            },
+          );
         },
       );
 
@@ -410,7 +412,9 @@ export class CreateTemporaryDisabilityBenefitsTerminatedFirstAnalysisUseCase {
 
   private normalizePendencyReason(
     value: string | null | undefined,
-  ): TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum | undefined {
+  ):
+    | TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum
+    | undefined {
     if (!this.hasValue(value) || value === '') {
       return undefined;
     }

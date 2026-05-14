@@ -8,6 +8,7 @@ import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/anal
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
 import { ElderlyBpcRejectionController } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/elderly-bpc-rejection.controller';
+import { CreateElderlyBpcRejectionInssDecisionAnalysisUseCase } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/use-case/create-elderly-bpc-rejection-inss-decision-analysis.use-case';
 import { CreateElderlyBpcRejectionResultUseCase } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/use-case/create-elderly-bpc-rejection-result.use-case';
 import { CreateElderlyBpcRejectionUseCase } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/use-case/create-elderly-bpc-rejection.use-case';
 import { DownloadElderlyBpcRejectionCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/elderly-bpc-rejection/use-case/download-elderly-bpc-rejection-complete-analysis.use-case';
@@ -37,6 +38,7 @@ import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
     CreateElderlyBpcRejectionUseCase,
     UpdateElderlyBpcRejectionUseCase,
     GetElderlyBpcRejectionUseCase,
+    CreateElderlyBpcRejectionInssDecisionAnalysisUseCase,
     CreateElderlyBpcRejectionResultUseCase,
     DownloadElderlyBpcRejectionCompleteAnalysisUseCase,
     DownloadElderlyBpcRejectionSimplifiedAnalysisUseCase,
