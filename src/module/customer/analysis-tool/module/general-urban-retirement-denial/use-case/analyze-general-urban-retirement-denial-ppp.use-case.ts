@@ -85,6 +85,15 @@ export class AnalyzeGeneralUrbanRetirementDenialPppUseCase {
     return AnalyzeGeneralUrbanRetirementDenialPppResponseDto.build({
       periods: parsedResult.periods.map((period) =>
         AnalyzeGeneralUrbanRetirementDenialPppPeriodItemResponseDto.build({
+          ...(this.hasValue(period.insuredName) && {
+            insuredName: period.insuredName,
+          }),
+          ...(this.hasValue(period.companyName) && {
+            companyName: period.companyName,
+          }),
+          ...(this.hasValue(period.position) && {
+            position: period.position,
+          }),
           ...(this.hasValue(period.bondOrigin) && {
             bondOrigin: period.bondOrigin,
           }),
@@ -118,6 +127,21 @@ export class AnalyzeGeneralUrbanRetirementDenialPppUseCase {
             wantsToComplementViaMeuINSS: period.wantsToComplementViaMeuINSS,
           }),
           status: period.status,
+          ...(this.hasValue(period.hazardousAgents) && {
+            hazardousAgents: period.hazardousAgents,
+          }),
+          ...(this.hasValue(period.specialTimeViability) && {
+            specialTimeViability: period.specialTimeViability,
+          }),
+          ...(this.hasValue(period.inssRecognition) && {
+            inssRecognition: period.inssRecognition,
+          }),
+          ...(this.hasValue(period.judicialRecognition) && {
+            judicialRecognition: period.judicialRecognition,
+          }),
+          ...(this.hasValue(period.technicalObservation) && {
+            technicalObservation: period.technicalObservation,
+          }),
         }),
       ),
     });

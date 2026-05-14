@@ -16,6 +16,15 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @ResponseDto()
 export class AnalyzeGeneralUrbanRetirementDenialPppPeriodItemResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty({ required: false })
+  public insuredName?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public companyName?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public position?: string;
+
+  @ResponseDtoStringProperty({ required: false })
   public bondOrigin?: string;
 
   @ResponseDtoEnumProperty(GeneralUrbanRetirementDenialPeriodCategoryEnum)
@@ -69,6 +78,21 @@ export class AnalyzeGeneralUrbanRetirementDenialPppPeriodItemResponseDto extends
 
   @ResponseDtoBooleanProperty()
   public status: boolean;
+
+  @ResponseDtoStringProperty({ required: false, isArray: true })
+  public hazardousAgents?: string[];
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public specialTimeViability?: boolean;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public inssRecognition?: boolean;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public judicialRecognition?: boolean;
+
+  @ResponseDtoStringProperty({ required: false })
+  public technicalObservation?: string;
 
   protected override readonly _type =
     AnalyzeGeneralUrbanRetirementDenialPppPeriodItemResponseDto.name;
