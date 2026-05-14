@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
@@ -21,9 +21,9 @@ import { RetirementPermanentDisabilityRejectionPeriodConsiderationEnum } from '@
 import { RetirementPermanentDisabilityRejectionPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-period/enum/retirement-permanent-disability-rejection-period-pendency-reason.enum';
 import { RetirementPermanentDisabilityRejectionResultEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-result/retirement-permanent-disability-rejection-result.entity';
 import { CreateRetirementPermanentDisabilityRejectionFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/dto/response/create-retirement-permanent-disability-rejection-first-analysis.response.dto';
+import { InvalidRetirementPermanentDisabilityRejectionResultJsonError } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/error/invalid-retirement-permanent-disability-rejection-result-json.error';
 import { RetirementPermanentDisabilityRejectionCnisDocumentNotFoundError } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/error/retirement-permanent-disability-rejection-cnis-document-not-found.error';
 import { RetirementPermanentDisabilityRejectionNotFoundError } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/error/retirement-permanent-disability-rejection-not-found.error';
-import { InvalidRetirementPermanentDisabilityRejectionResultJsonError } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/error/invalid-retirement-permanent-disability-rejection-result-json.error';
 import {
   RetirementPermanentDisabilityRejectionFirstAnalysisClientDataModel,
   RetirementPermanentDisabilityRejectionFirstAnalysisEarningsHistoryItemModel,
@@ -31,12 +31,13 @@ import {
   RetirementPermanentDisabilityRejectionFirstAnalysisModel,
   RetirementPermanentDisabilityRejectionFirstAnalysisPeriodModel,
 } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/model/generic/retirement-permanent-disability-rejection-first-analysis.model';
-import type { RetirementPermanentDisabilityRejectionFirstAnalysisInterface } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/model/interface/retirement-permanent-disability-rejection-first-analysis.interface';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+
+import type { RetirementPermanentDisabilityRejectionFirstAnalysisInterface } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/model/interface/retirement-permanent-disability-rejection-first-analysis.interface';
 
 interface ParsedFirstAnalysisInterface {
   cleanedJson: string;

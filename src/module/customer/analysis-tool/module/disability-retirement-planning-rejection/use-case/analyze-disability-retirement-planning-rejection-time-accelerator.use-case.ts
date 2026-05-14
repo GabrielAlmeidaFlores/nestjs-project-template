@@ -238,7 +238,9 @@ export class AnalyzeDisabilityRetirementPlanningRejectionTimeAcceleratorUseCase 
     key: 'startDate' | 'endDate',
     value: string | null | undefined,
   ): Record<string, Date> {
-    if (!value) return {};
+    if (value === null || value === undefined || value.trim() === '') {
+      return {};
+    }
     const d = new Date(value);
     return isNaN(d.getTime()) ? {} : { [key]: d };
   }

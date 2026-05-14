@@ -13,15 +13,16 @@ import {
   AnalyzeTeacherRetirementPlanningTimeAcceleratorResponseDto,
 } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/analyze-teacher-retirement-planning-time-accelerator.response.dto';
 import { InvalidTeacherRetirementPlanningTimeAcceleratorAnalysisJsonError } from '@module/customer/analysis-tool/module/teacher-retirement-planning/error/invalid-teacher-retirement-planning-time-accelerator-analysis-json.error';
-import type {
-  TeacherRetirementPlanningTimeAcceleratorAnalysisResultInterface,
-  TeacherRetirementPlanningTimeAcceleratorAnalysisResultItemInterface,
-} from '@module/customer/analysis-tool/module/teacher-retirement-planning/interface/teacher-retirement-planning-time-accelerator-analysis-result.interface';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+
+import type {
+  TeacherRetirementPlanningTimeAcceleratorAnalysisResultInterface,
+  TeacherRetirementPlanningTimeAcceleratorAnalysisResultItemInterface,
+} from '@module/customer/analysis-tool/module/teacher-retirement-planning/interface/teacher-retirement-planning-time-accelerator-analysis-result.interface';
 
 @Injectable()
 export class AnalyzeTeacherRetirementPlanningTimeAcceleratorUseCase {
@@ -213,7 +214,9 @@ export class AnalyzeTeacherRetirementPlanningTimeAcceleratorUseCase {
     key: 'startDate' | 'endDate',
     value: string | null,
   ): Record<string, Date> {
-    if (value === null) return {};
+    if (value === null) {
+      return {};
+    }
     const d = new Date(value);
     return isNaN(d.getTime()) ? {} : { [key]: d };
   }

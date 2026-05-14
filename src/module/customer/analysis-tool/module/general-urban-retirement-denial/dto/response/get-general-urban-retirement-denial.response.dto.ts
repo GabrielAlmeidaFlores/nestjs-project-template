@@ -11,13 +11,83 @@ import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/
 import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-boolean-property/response-dto-boolean-property.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
+import { ResponseDtoNumberProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-number-property/response-dto-number-property.decorator';
 import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
-export class GetGeneralUrbanRetirementDenialResultResponseDto extends BaseBuildableDtoObject {
+export class GetGeneralUrbanRetirementDenialCompleteAnalysisClientDataResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty()
+  public name: string;
+
+  @ResponseDtoStringProperty()
+  public federalDocument: string;
+
+  @ResponseDtoDateProperty({ required: false })
+  public lastAffiliationDate?: Date;
+
+  @ResponseDtoDateProperty({ required: false })
+  public birthDate?: Date;
+
+  @ResponseDtoStringProperty()
+  public gender: string;
+
+  protected override readonly _type =
+    GetGeneralUrbanRetirementDenialCompleteAnalysisClientDataResponseDto.name;
+}
+
+@ResponseDto()
+export class GetGeneralUrbanRetirementDenialCompleteAnalysisRetirementRuleResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty()
+  public retirementRuleName: string;
+
+  @ResponseDtoBooleanProperty()
+  public isEligible: boolean;
+
+  @ResponseDtoDateProperty({ required: false })
+  public eligibilityAvailableAt?: Date;
+
+  @ResponseDtoNumberProperty()
+  public expectedMonthlyBenefit: number;
+
+  @ResponseDtoBooleanProperty()
+  public isBestRmi: boolean;
+
+  @ResponseDtoBooleanProperty()
+  public isHighestCauseValue: boolean;
+
+  @ResponseDtoStringProperty()
+  public retirementAnalysis: string;
+
+  protected override readonly _type =
+    GetGeneralUrbanRetirementDenialCompleteAnalysisRetirementRuleResponseDto.name;
+}
+
+@ResponseDto()
+export class GetGeneralUrbanRetirementDenialCompleteAnalysisResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoObjectProperty(
+    () => GetGeneralUrbanRetirementDenialCompleteAnalysisClientDataResponseDto,
+  )
+  public clientData: GetGeneralUrbanRetirementDenialCompleteAnalysisClientDataResponseDto;
+
+  @ResponseDtoObjectProperty(
+    () =>
+      GetGeneralUrbanRetirementDenialCompleteAnalysisRetirementRuleResponseDto,
+    { isArray: true },
+  )
+  public retirementRules: GetGeneralUrbanRetirementDenialCompleteAnalysisRetirementRuleResponseDto[];
+
+  @ResponseDtoStringProperty()
+  public analysisResult: string;
+
+  protected override readonly _type =
+    GetGeneralUrbanRetirementDenialCompleteAnalysisResponseDto.name;
+}
+
+@ResponseDto()
+export class GetGeneralUrbanRetirementDenialCurrentResultResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty({ required: false })
   public inssDecisionAnalysis?: string;
 
@@ -27,8 +97,14 @@ export class GetGeneralUrbanRetirementDenialResultResponseDto extends BaseBuilda
   )
   public generalUrbanRetirementDenialFirstAnalysis?: GeneralUrbanRetirementDenialFirstAnalysisModel;
 
+  @ResponseDtoObjectProperty(
+    () => GetGeneralUrbanRetirementDenialCompleteAnalysisResponseDto,
+    { required: false },
+  )
+  public generalUrbanRetirementDenialCompleteAnalysis?: GetGeneralUrbanRetirementDenialCompleteAnalysisResponseDto;
+
   protected override readonly _type =
-    GetGeneralUrbanRetirementDenialResultResponseDto.name;
+    GetGeneralUrbanRetirementDenialCurrentResultResponseDto.name;
 }
 
 @ResponseDto()
@@ -155,10 +231,10 @@ export class GetGeneralUrbanRetirementDenialResponseDto extends BaseBuildableDto
   public inssBenefitNumber?: string[];
 
   @ResponseDtoObjectProperty(
-    () => GetGeneralUrbanRetirementDenialResultResponseDto,
+    () => GetGeneralUrbanRetirementDenialCurrentResultResponseDto,
     { required: false },
   )
-  public generalUrbanRetirementDenialResult?: GetGeneralUrbanRetirementDenialResultResponseDto;
+  public generalUrbanRetirementDenialResult?: GetGeneralUrbanRetirementDenialCurrentResultResponseDto;
 
   @ResponseDtoObjectProperty(
     () => GetGeneralUrbanRetirementDenialDocumentResponseDto,

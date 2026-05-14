@@ -2359,13 +2359,13 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Primeira análise de revisão de aposentadoria por invalidez permanente com IA, combinando dados do caso com leitura e interpretação do CNIS. Gera parecer inicial técnico com detalhamento da carta de concessão, tempo de contribuição, salários de contribuição não considerados e ações recomendadas.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('ec3d4e5f-6a7b-4c8d-bf0a-3a1b2c3d4e5f'),
+      id: new PaymentPlanPaidResourceId('ea0b1c2d-3e4f-4a5b-9c6d-7e8f9a0b1c2d'),
       resource:
         PaymentPlanPaidResourceTypeEnum.ELDERLY_BPC_REJECTION_INSS_DECISION_ANALYSIS,
-      creditCost: 4,
+      creditCost: 2,
       title: 'INDEFERIMENTO BPC AO IDOSO - ANÁLISE DA DECISÃO DO INSS',
       description:
-        'Análise da carta de indeferimento e documentos administrativos do INSS com IA para BPC ao Idoso. Examina o fundamento legal da negativa, identifica erros de cálculo de renda per capita ou falhas na avaliação da composição familiar, aponta eventuais irregularidades processuais e orienta sobre a melhor estratégia de impugnação — recurso ao CRPS ou ação judicial.',
+        'Análise da decisão administrativa do INSS no indeferimento do BPC ao Idoso com IA. Extrai fundamentos da negativa, pontos técnicos vulneráveis e estratégia inicial de contestação administrativa e judicial em formato textual estruturado.',
     }),
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('eb1c2d3e-4f5a-4b6c-9d7e-2f5a0b1c2d3e'),

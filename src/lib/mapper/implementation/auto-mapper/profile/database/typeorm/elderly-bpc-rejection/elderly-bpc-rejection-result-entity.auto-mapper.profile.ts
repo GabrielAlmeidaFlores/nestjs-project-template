@@ -36,6 +36,7 @@ export class ElderlyBpcRejectionResultEntityAutoMapperProfile {
 
       return new ElderlyBpcRejectionResultEntity({
         id: new ElderlyBpcRejectionResultId(source.id),
+        inssDecisionAnalysis: source.inssDecisionAnalysis,
         completeAnalysis: source.completeAnalysis,
         simplifiedAnalysis: source.simplifiedAnalysis,
         elderlyBpcRejectionId: new ElderlyBpcRejectionId(
@@ -67,6 +68,7 @@ export class ElderlyBpcRejectionResultEntityAutoMapperProfile {
 
       return ElderlyBpcRejectionResultTypeormEntity.build({
         id: source.id.toString(),
+        inssDecisionAnalysis: source.inssDecisionAnalysis,
         completeAnalysis: source.completeAnalysis,
         simplifiedAnalysis: source.simplifiedAnalysis,
         elderlyBpcRejection,

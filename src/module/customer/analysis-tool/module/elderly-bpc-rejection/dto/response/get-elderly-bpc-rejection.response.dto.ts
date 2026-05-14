@@ -110,6 +110,9 @@ export class GetElderlyBpcRejectionFamiliarGroupResponseDto extends BaseBuildabl
 
 @ResponseDto()
 export class GetElderlyBpcRejectionResultResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty({ required: false })
+  public inssDecisionAnalysis?: string;
+
   @ResponseDtoObjectProperty(() => Object, { required: false })
   public elderlyBpcRejectionCompleteAnalysis?: ElderlyBpcRejectionCompleteAnalysisInterface;
 
