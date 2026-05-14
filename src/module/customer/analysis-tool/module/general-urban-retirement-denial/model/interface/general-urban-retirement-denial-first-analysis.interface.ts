@@ -33,6 +33,7 @@ export interface GeneralUrbanRetirementDenialFirstAnalysisPeriodInterface {
     | GeneralUrbanRetirementDenialPeriodConsiderationEnum
     | null
     | undefined;
+  shouldConsiderLastRemunerationAsExitDate: boolean | null | undefined;
   wantsToComplementViaMeuINSS: boolean | null | undefined;
   status: boolean;
   earningsHistory:

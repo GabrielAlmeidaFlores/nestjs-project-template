@@ -24,6 +24,7 @@ export class GeneralUrbanRetirementDenialPeriodEntity extends BaseEntity<General
   public readonly pendencyReason: GeneralUrbanRetirementDenialPeriodPendencyReasonEnum | null;
   public readonly periodConsideration: GeneralUrbanRetirementDenialPeriodConsiderationEnum | null;
   public readonly wantsToComplementViaMeuINSS: boolean | null;
+  public readonly shouldConsiderLastRemunerationAsExitDate: boolean;
   public readonly status: boolean;
   public readonly generalUrbanRetirementDenialId: GeneralUrbanRetirementDenialId;
 
@@ -48,6 +49,8 @@ export class GeneralUrbanRetirementDenialPeriodEntity extends BaseEntity<General
     this.periodConsideration = props.periodConsideration ?? null;
     this.wantsToComplementViaMeuINSS =
       props.wantsToComplementViaMeuINSS ?? null;
+    this.shouldConsiderLastRemunerationAsExitDate =
+      props.shouldConsiderLastRemunerationAsExitDate;
     this.status = props.status;
     this.generalUrbanRetirementDenialId = props.generalUrbanRetirementDenialId;
   }

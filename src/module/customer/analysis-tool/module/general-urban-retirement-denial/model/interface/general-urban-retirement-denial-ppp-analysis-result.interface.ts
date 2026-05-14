@@ -27,6 +27,7 @@ export interface GeneralUrbanRetirementDenialPppAnalysisResultItemInterface {
     | null
     | undefined;
   wantsToComplementViaMeuINSS: boolean | null | undefined;
+  shouldConsiderLastRemunerationAsExitDate: boolean | null | undefined;
   status: boolean;
   hazardousAgents: string[] | null | undefined;
   specialTimeViability: boolean | null | undefined;
