@@ -240,6 +240,8 @@ export class GetGeneralUrbanRetirementDenialUseCase {
       ...(period.wantsToComplementViaMeuINSS !== null && {
         wantsToComplementViaMeuINSS: period.wantsToComplementViaMeuINSS,
       }),
+      shouldConsiderLastRemunerationAsExitDate:
+        period.shouldConsiderLastRemunerationAsExitDate,
       status: period.status,
       ...(periodDocuments.length > 0 && {
         generalUrbanRetirementDenialPeriodDocument: periodDocuments.map((doc) =>
@@ -368,6 +370,8 @@ export class GetGeneralUrbanRetirementDenialUseCase {
             ...(this.hasValue(period.wantsToComplementViaMeuINSS) && {
               wantsToComplementViaMeuINSS: period.wantsToComplementViaMeuINSS,
             }),
+            shouldConsiderLastRemunerationAsExitDate:
+              period.shouldConsiderLastRemunerationAsExitDate ?? false,
             status: period.status,
             earningsHistory: (this.hasValue(period.earningsHistory)
               ? period.earningsHistory
