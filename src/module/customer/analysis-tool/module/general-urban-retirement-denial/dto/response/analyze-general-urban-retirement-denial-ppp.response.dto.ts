@@ -76,6 +76,9 @@ export class AnalyzeGeneralUrbanRetirementDenialPppPeriodItemResponseDto extends
   @ResponseDtoBooleanProperty({ required: false })
   public wantsToComplementViaMeuINSS?: boolean;
 
+  @ResponseDtoBooleanProperty({ required: false })
+  public shouldConsiderLastRemunerationAsExitDate?: boolean;
+
   @ResponseDtoBooleanProperty()
   public status: boolean;
 

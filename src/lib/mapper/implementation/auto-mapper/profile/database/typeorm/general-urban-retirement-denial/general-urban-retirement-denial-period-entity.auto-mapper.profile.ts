@@ -56,6 +56,8 @@ export class GeneralUrbanRetirementDenialPeriodEntityAutoMapperProfile {
           pendencyReason: source.pendencyReason,
           periodConsideration: source.periodConsideration,
           wantsToComplementViaMeuINSS: source.wantsToComplementViaMeuINSS,
+          shouldConsiderLastRemunerationAsExitDate:
+            source.shouldConsiderLastRemunerationAsExitDate,
           status: source.status,
           generalUrbanRetirementDenialId: new GeneralUrbanRetirementDenialId(
             source.generalUrbanRetirementDenial.id,
@@ -93,6 +95,8 @@ export class GeneralUrbanRetirementDenialPeriodEntityAutoMapperProfile {
           pendencyReason: source.pendencyReason,
           periodConsideration: source.periodConsideration,
           wantsToComplementViaMeuINSS: source.wantsToComplementViaMeuINSS,
+          shouldConsiderLastRemunerationAsExitDate:
+            source.shouldConsiderLastRemunerationAsExitDate,
           status: source.status,
           generalUrbanRetirementDenial:
             GeneralUrbanRetirementDenialTypeormEntity.build({

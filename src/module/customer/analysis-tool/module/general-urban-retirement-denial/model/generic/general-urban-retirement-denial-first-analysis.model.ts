@@ -82,6 +82,9 @@ export class GeneralUrbanRetirementDenialFirstAnalysisPeriodModel extends BaseBu
   )
   public periodConsideration?: GeneralUrbanRetirementDenialPeriodConsiderationEnum;
 
+  @ResponseDtoBooleanProperty()
+  public shouldConsiderLastRemunerationAsExitDate: boolean;
+
   @ResponseDtoBooleanProperty({ required: false })
   public wantsToComplementViaMeuINSS?: boolean;
 

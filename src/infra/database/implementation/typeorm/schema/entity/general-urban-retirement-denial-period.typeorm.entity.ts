@@ -92,6 +92,12 @@ export class GeneralUrbanRetirementDenialPeriodTypeormEntity extends BaseTypeorm
   })
   public wantsToComplementViaMeuINSS: boolean | null;
 
+  @Column({
+    name: 'should_consider_last_remuneration_as_exit_date',
+    type: 'boolean',
+  })
+  public shouldConsiderLastRemunerationAsExitDate: boolean;
+
   @Column({ name: 'status', type: 'boolean' })
   public status: boolean;
 
