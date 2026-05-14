@@ -39,7 +39,8 @@ export class GetSpecialRetirementGrantWithRelationsQueryResultAutoMapperProfile 
     ): GetSpecialRetirementGrantWithRelationsQueryResult => {
       if (!source.createdBy || !source.updatedBy) {
         throw new IncompleteSourceDataForMappingError({
-          destinationClass: GetSpecialRetirementGrantWithRelationsQueryResult.name,
+          destinationClass:
+            GetSpecialRetirementGrantWithRelationsQueryResult.name,
           sourceClass: SpecialRetirementGrantTypeormEntity.name,
         });
       }

@@ -15,9 +15,9 @@ import { TeacherRetirementPlanningEntity } from '@module/customer/analysis-tool/
 import { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
 import { TeacherRetirementPlanningRppsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning/command/teacher-retirement-planning.command.repository.gateway';
 import { TeacherRetirementPlanningRppsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning/query/teacher-retirement-planning.query.repository.gateway';
+import { TeacherRetirementPlanningRppsResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning-result/command/teacher-retirement-planning-result.command.repository.gateway';
 import { TeacherRetirementPlanningRppsActivityTypeEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning/enum/teacher-retirement-planning-activity-type.enum';
 import { TeacherRetirementPlanningRppsFederativeEntityEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning/enum/teacher-retirement-planning-federative-entity.enum';
-import { TeacherRetirementPlanningRppsResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning-result/command/teacher-retirement-planning-result.command.repository.gateway';
 import { TeacherRetirementPlanningRppsEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
 import { TeacherRetirementPlanningRppsId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
 import { TeacherRetirementPlanningRppsResultEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning-result/teacher-retirement-planning-result.entity';
@@ -300,9 +300,8 @@ export class CreateTeacherRetirementPlanningResultRppsUseCase {
     > = {
       [TeacherRetirementPlanningRppsActivityTypeEnum.CLASSROOM_ONLY]:
         TeacherRetirementPlanningActivityTypeEnum.CLASSROOM_ONLY,
-      [
-        TeacherRetirementPlanningRppsActivityTypeEnum.CLASSROOM_AND_PEDAGOGICAL_FUNCTION
-      ]: TeacherRetirementPlanningActivityTypeEnum.CLASSROOM_AND_PEDAGOGICAL_FUNCTION,
+      [TeacherRetirementPlanningRppsActivityTypeEnum.CLASSROOM_AND_PEDAGOGICAL_FUNCTION]:
+        TeacherRetirementPlanningActivityTypeEnum.CLASSROOM_AND_PEDAGOGICAL_FUNCTION,
       [TeacherRetirementPlanningRppsActivityTypeEnum.NO_TEACHING_ACTIVITY]:
         TeacherRetirementPlanningActivityTypeEnum.NO_TEACHING_ACTIVITY,
     };
