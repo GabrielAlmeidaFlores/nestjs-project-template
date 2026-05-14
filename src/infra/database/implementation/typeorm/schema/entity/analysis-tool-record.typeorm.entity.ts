@@ -45,7 +45,7 @@ import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implemen
 import { TemporaryDisabilityBenefitsGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-grant.typeorm.entity';
 import { TemporaryDisabilityBenefitsTerminatedTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-terminated.typeorm.entity';
 import { TemporaryIncapacityBenefitRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-rejection.typeorm.entity';
-import { TemporaryIncapacityBenefitTerminationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-incapacity-benefit-termination.typeorm.entity';
+import { PermanentIncapacityBenefitTerminatedTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/permanent-incapacity-benefit-terminated.typeorm.entity';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 
@@ -351,9 +351,9 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({ name: 'temporary_incapacity_benefit_rejection_id' })
   public temporaryIncapacityBenefitRejection?: TemporaryIncapacityBenefitRejectionTypeormEntity | null;
 
-  @ManyToOne(() => TemporaryIncapacityBenefitTerminationTypeormEntity)
-  @JoinColumn({ name: 'temporary_incapacity_benefit_termination_id' })
-  public temporaryIncapacityBenefitTermination?: TemporaryIncapacityBenefitTerminationTypeormEntity | null;
+  @ManyToOne(() => PermanentIncapacityBenefitTerminatedTypeormEntity)
+  @JoinColumn({ name: 'permanent_incapacity_benefit_terminated_id' })
+  public permanentIncapacityBenefitTerminated?: PermanentIncapacityBenefitTerminatedTypeormEntity | null;
 
   @ManyToOne(() => MaternityPayGrantTypeormEntity)
   @JoinColumn({ name: 'maternity_pay_grant_id' })
