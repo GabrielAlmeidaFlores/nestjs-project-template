@@ -240,6 +240,9 @@ export class GetGeneralUrbanRetirementDenialPeriodResponseDto extends BaseBuilda
   public wantsToComplementViaMeuINSS?: boolean;
 
   @ResponseDtoBooleanProperty()
+  public shouldConsiderLastRemunerationAsExitDate: boolean;
+
+  @ResponseDtoBooleanProperty()
   public status: boolean;
 
   @ResponseDtoObjectProperty(
