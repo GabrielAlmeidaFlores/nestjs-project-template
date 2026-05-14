@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { GeneralUrbanRetirementDenialQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial/query/general-urban-retirement-denial.query.repository.gateway';
+import { GetGeneralUrbanRetirementDenialTimeAcceleratorQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial-time-accelerator/query/result/get-general-urban-retirement-denial-time-accelerator.query.result';
 import { GeneralUrbanRetirementDenialId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/value-object/general-urban-retirement-denial-id/general-urban-retirement-denial-id.value-object';
 import { GeneralUrbanRetirementDenialDocumentEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-document/general-urban-retirement-denial-document.entity';
 import { GeneralUrbanRetirementDenialPeriodEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/general-urban-retirement-denial-period.entity';
@@ -18,6 +19,7 @@ import {
   GetGeneralUrbanRetirementDenialPeriodEarningsHistoryResponseDto,
   GetGeneralUrbanRetirementDenialPeriodResponseDto,
   GetGeneralUrbanRetirementDenialResponseDto,
+  GetGeneralUrbanRetirementDenialTimeAcceleratorResponseDto,
 } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/get-general-urban-retirement-denial.response.dto';
 import { GeneralUrbanRetirementDenialNotFoundError } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/error/general-urban-retirement-denial-not-found.error';
 import { InvalidGeneralUrbanRetirementDenialFirstAnalysisJsonError } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/error/invalid-general-urban-retirement-denial-first-analysis-json.error';
@@ -68,6 +70,10 @@ export class GetGeneralUrbanRetirementDenialUseCase {
       ),
     );
 
+    const timeAcceleratorDtos = (
+      denial.generalUrbanRetirementDenialTimeAccelerator ?? []
+    ).map((ta) => this.buildTimeAcceleratorResponseDto(ta));
+
     return GetGeneralUrbanRetirementDenialResponseDto.build({
       generalUrbanRetirementDenialId: denial.id,
       ...(denial.analysisName !== null && {
@@ -101,6 +107,9 @@ export class GetGeneralUrbanRetirementDenialUseCase {
         }),
       ...(periodResponseDtos.length > 0 && {
         generalUrbanRetirementDenialPeriod: periodResponseDtos,
+      }),
+      ...(timeAcceleratorDtos.length > 0 && {
+        generalUrbanRetirementDenialTimeAccelerator: timeAcceleratorDtos,
       }),
       createdAt: denial.createdAt,
       updatedAt: denial.updatedAt,
@@ -172,6 +181,25 @@ export class GetGeneralUrbanRetirementDenialUseCase {
           ),
       ),
       analysisResult: parsedCompleteAnalysis.analysisResult,
+    });
+  }
+
+  private buildTimeAcceleratorResponseDto(
+    ta: GetGeneralUrbanRetirementDenialTimeAcceleratorQueryResult,
+  ): GetGeneralUrbanRetirementDenialTimeAcceleratorResponseDto {
+    return GetGeneralUrbanRetirementDenialTimeAcceleratorResponseDto.build({
+      id: ta.id,
+      type: ta.type,
+      recognitionInss: ta.recognitionInss,
+      recognitionJudicial: ta.recognitionJudicial,
+      viability: ta.viability,
+      ...(ta.technicalNote !== null && { technicalNote: ta.technicalNote }),
+      ...(ta.startDate !== null && { startDate: ta.startDate }),
+      ...(ta.endDate !== null && { endDate: ta.endDate }),
+      ...(ta.institution !== null && { institution: ta.institution }),
+      affectsQualifyingPeriod: ta.affectsQualifyingPeriod,
+      createdAt: ta.createdAt,
+      updatedAt: ta.updatedAt,
     });
   }
 
