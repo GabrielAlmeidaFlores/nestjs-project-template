@@ -12,6 +12,7 @@ import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domai
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { AccidentAssistanceGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-grant/domain/repository/accident-assistance-grant-result/command/accident-assistance-grant-result.command.repository.gateway';
 import { AccidentAssistanceGrantResultEntity } from '@module/customer/analysis-tool/module/accident-assistance-grant/domain/schema/entity/accident-assistance-grant-result/accident-assistance-grant-result.entity';
+import { AccidentAssistanceGrantResultId } from '@module/customer/analysis-tool/module/accident-assistance-grant/domain/schema/entity/accident-assistance-grant-result/value-object/accident-assistance-grant-result-id.value-object';
 import { AccidentAssistanceTerminatedResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated-result/command/accident-assistance-terminated-result.command.repository.gateway';
 import { AccidentAssistanceTerminatedResultEntity } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-result/accident-assistance-terminated-result.entity';
 import { AccidentAssistanceTerminatedResultId } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-result/value-object/accident-assistance-terminated-result-id/accident-assistance-terminated-result-id.value-object';
@@ -54,6 +55,7 @@ import { DisabilityAssessmentForBpcAnalysisResultCommandRepositoryGateway } from
 import { DisabilityAssessmentForBpcAnalysisResultEntity } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis-result/disability-assessment-for-bpc-analysis-result.entity';
 import { DisabilityAssessmentForBpcAnalysisResultId } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis-result/value-object/disability-assessment-for-bpc-analysis-result-id/disability-assessment-for-bpc-analysis-result-id.value-object';
 import { DisabilityRetirementPlanningResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning-result/command/disability-retirement-planning-result.command.repository.gateway';
+import { DisabilityRetirementPlanningEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/disability-retirement-planning.entity';
 import { DisabilityRetirementPlanningResultEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-result/disability-retirement-planning-result.entity';
 import { DisabilityRetirementPlanningResultId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-result/value-object/disability-retirement-planning-result-id.value-object';
 import { DisabilityRetirementPlanningGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/repository/disability-retirement-planning-grant-result/command/disability-retirement-planning-grant-result.command.repository.gateway';
@@ -584,7 +586,10 @@ export class McpAnalysisRecordHandler {
           });
         }
         const props: Record<string, unknown> = {
-          id: r.id,
+          id:
+            r.id instanceof AccidentAssistanceGrantResultId
+              ? r.id
+              : new AccidentAssistanceGrantResultId(r.id),
           firstAnalysis: r.firstAnalysis,
           simplifiedAnalysis: r.simplifiedAnalysis,
           completeAnalysis: r.completeAnalysis,
@@ -1123,9 +1128,24 @@ export class McpAnalysisRecordHandler {
             message: 'No result found',
           });
         }
+        const planningEntity = new DisabilityRetirementPlanningEntity({
+          id: drpData.id,
+          currentPosition: drpData.currentPosition,
+          federativeEntity: drpData.federativeEntity,
+          state: drpData.state,
+          municipality: drpData.municipality,
+          publicServiceStartDate: drpData.publicServiceStartDate,
+          careerStartDate: drpData.careerStartDate,
+          analysisName: drpData.analysisName,
+          longTimeDisability: drpData.longTimeDisability,
+          administrativeProcessAnalysis: drpData.administrativeProcessAnalysis,
+          createdAt: drpData.createdAt,
+          updatedAt: drpData.updatedAt,
+        });
         const id = new DisabilityRetirementPlanningResultId(r.id);
         const props: Record<string, unknown> = {
           id,
+          disabilityRetirementPlanning: planningEntity,
           disabilityRetirementPlanningCompleteAnalysis:
             r.disabilityRetirementPlanningCompleteAnalysis,
           disabilityRetirementPlanningSimplifiedAnalysis:
