@@ -2,6 +2,7 @@ import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.v
 import { GeneralUrbanRetirementDenialPeriodCategoryEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-category.enum';
 import { GeneralUrbanRetirementDenialPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-consideration.enum';
 import { GeneralUrbanRetirementDenialPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-pendency-reason.enum';
+import { GeneralUrbanRetirementDenialPeriodTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-type.enum';
 import { GeneralUrbanRetirementDenialPeriodWorkTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-work-type.enum';
 import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
 import { RequestDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-boolean-property/request-dto-boolean-property.decorator';
@@ -56,6 +57,9 @@ export class GeneralUrbanRetirementDenialPeriodItemRequestDto extends BaseBuilda
 
   @RequestDtoEnumProperty(GeneralUrbanRetirementDenialPeriodWorkTypeEnum)
   public workType: GeneralUrbanRetirementDenialPeriodWorkTypeEnum;
+
+  @RequestDtoEnumProperty(GeneralUrbanRetirementDenialPeriodTypeEnum)
+  public type: GeneralUrbanRetirementDenialPeriodTypeEnum;
 
   @RequestDtoNumberProperty({ required: false })
   public impactMonths?: number;

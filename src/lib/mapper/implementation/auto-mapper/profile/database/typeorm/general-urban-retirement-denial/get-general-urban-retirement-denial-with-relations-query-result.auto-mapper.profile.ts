@@ -162,6 +162,7 @@ export class GetGeneralUrbanRetirementDenialWithRelationsQueryResultAutoMapperPr
       pendencyReason: source.pendencyReason,
       periodConsideration: source.periodConsideration,
       wantsToComplementViaMeuINSS: source.wantsToComplementViaMeuINSS,
+      type: source.type,
       status: source.status,
       generalUrbanRetirementDenialId: grantId,
       createdAt: source.createdAt,
