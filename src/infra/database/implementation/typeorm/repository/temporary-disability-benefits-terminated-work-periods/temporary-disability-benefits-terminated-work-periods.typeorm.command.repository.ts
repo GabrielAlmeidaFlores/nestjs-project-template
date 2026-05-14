@@ -9,6 +9,7 @@ import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { TemporaryDisabilityBenefitsTerminatedWorkPeriodsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/repository/temporary-disability-benefits-terminated-work-periods/command/temporary-disability-benefits-terminated-work-periods.command.repository.gateway';
 import { TemporaryDisabilityBenefitsTerminatedId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/schema/entity/temporary-disability-benefits-terminated/value-object/temporary-disability-benefits-terminated-id.value-object';
 import { TemporaryDisabilityBenefitsTerminatedWorkPeriodsEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/schema/entity/temporary-disability-benefits-terminated-work-periods/temporary-disability-benefits-terminated-work-periods.entity';
+import { TemporaryDisabilityBenefitsTerminatedWorkPeriodsId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/schema/entity/temporary-disability-benefits-terminated-work-periods/value-object/temporary-disability-benefits-terminated-work-periods-id.value-object';
 
 @Injectable()
 export class TemporaryDisabilityBenefitsTerminatedWorkPeriodsTypeormCommandRepository
@@ -56,6 +57,39 @@ export class TemporaryDisabilityBenefitsTerminatedWorkPeriodsTypeormCommandRepos
             id: temporaryDisabilityBenefitsTerminatedId.toString(),
           },
         });
+    };
+  }
+
+  public updateEndDateAndClearPendency(
+    id: TemporaryDisabilityBenefitsTerminatedWorkPeriodsId,
+    endDate: Date,
+  ): TransactionType {
+    return async (executor: unknown) => {
+      const manager = executor as EntityManager;
+
+      await manager
+        .getRepository(
+          TemporaryDisabilityBenefitsTerminatedWorkPeriodsTypeormEntity,
+        )
+        .update(id.toString(), {
+          endDate,
+          isPendency: false,
+          pendencyReason: null,
+        });
+    };
+  }
+
+  public softDeleteById(
+    id: TemporaryDisabilityBenefitsTerminatedWorkPeriodsId,
+  ): TransactionType {
+    return async (executor: unknown) => {
+      const manager = executor as EntityManager;
+
+      await manager
+        .getRepository(
+          TemporaryDisabilityBenefitsTerminatedWorkPeriodsTypeormEntity,
+        )
+        .softDelete(id.toString());
     };
   }
 }
