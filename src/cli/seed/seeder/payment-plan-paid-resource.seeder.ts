@@ -2359,6 +2359,15 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Primeira análise de revisão de aposentadoria por invalidez permanente com IA, combinando dados do caso com leitura e interpretação do CNIS. Gera parecer inicial técnico com detalhamento da carta de concessão, tempo de contribuição, salários de contribuição não considerados e ações recomendadas.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b4d5e6f7-a8b9-4c0d-9e1f-3a4b5c6d7e8f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REVISION_WORK_PERIOD_NO_END_DATE_DOCUMENT_ANALYSIS,
+      creditCost: 2,
+      title: 'REVISÃO APOSENTADORIA INVALIDEZ PERMANENTE - ANÁLISE DE VÍNCULO SEM DATA DE SAÍDA',
+      description:
+        'Análise de documentos para fechamento de vínculos empregatícios sem data de saída no contexto de revisão de Aposentadoria por Incapacidade Permanente (APIP). Examina CTPS, TRCT, FGTS e outros documentos para identificar a data de desligamento e avaliar o impacto no cálculo revisional.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('ea0b1c2d-3e4f-4a5b-9c6d-7e8f9a0b1c2d'),
       resource:
         PaymentPlanPaidResourceTypeEnum.ELDERLY_BPC_REJECTION_INSS_DECISION_ANALYSIS,
