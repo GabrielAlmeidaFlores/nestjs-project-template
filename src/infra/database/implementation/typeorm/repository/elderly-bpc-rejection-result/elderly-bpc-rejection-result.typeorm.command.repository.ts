@@ -45,6 +45,7 @@ export class ElderlyBpcRejectionResultTypeormCommandRepository
   ): ElderlyBpcRejectionResultTypeormEntity {
     return ElderlyBpcRejectionResultTypeormEntity.build({
       id: props.id.toString(),
+      inssDecisionAnalysis: props.inssDecisionAnalysis,
       completeAnalysis: props.completeAnalysis,
       simplifiedAnalysis: props.simplifiedAnalysis,
       elderlyBpcRejection: ElderlyBpcRejectionTypeormEntity.build({

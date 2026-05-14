@@ -5,6 +5,9 @@ import { ElderlyBpcRejectionTypeormEntity } from '@infra/database/implementation
 
 @Entity({ name: 'elderly_bpc_rejection_result' })
 export class ElderlyBpcRejectionResultTypeormEntity extends BaseTypeormEntity {
+  @Column({ name: 'inss_decision_analysis', type: 'longtext', nullable: true })
+  public inssDecisionAnalysis: string | null;
+
   @Column({ name: 'complete_analysis', type: 'longtext', nullable: true })
   public completeAnalysis: string | null;
 
