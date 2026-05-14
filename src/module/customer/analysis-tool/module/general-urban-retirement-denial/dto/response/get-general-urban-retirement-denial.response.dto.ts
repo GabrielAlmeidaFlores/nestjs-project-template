@@ -6,6 +6,11 @@ import { GeneralUrbanRetirementDenialPeriodCategoryEnum } from '@module/customer
 import { GeneralUrbanRetirementDenialPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-consideration.enum';
 import { GeneralUrbanRetirementDenialPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-pendency-reason.enum';
 import { GeneralUrbanRetirementDenialPeriodWorkTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-work-type.enum';
+import { GeneralUrbanRetirementDenialTimeAcceleratorRecognitionInssEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-time-accelerator/enum/general-urban-retirement-denial-time-accelerator-recognition-inss.enum';
+import { GeneralUrbanRetirementDenialTimeAcceleratorRecognitionJudicialEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-time-accelerator/enum/general-urban-retirement-denial-time-accelerator-recognition-judicial.enum';
+import { GeneralUrbanRetirementDenialTimeAcceleratorTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-time-accelerator/enum/general-urban-retirement-denial-time-accelerator-type.enum';
+import { GeneralUrbanRetirementDenialTimeAcceleratorViabilityEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-time-accelerator/enum/general-urban-retirement-denial-time-accelerator-viability.enum';
+import { GeneralUrbanRetirementDenialTimeAcceleratorId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-time-accelerator/value-object/general-urban-retirement-denial-time-accelerator-id/general-urban-retirement-denial-time-accelerator-id.value-object';
 import { GeneralUrbanRetirementDenialFirstAnalysisModel } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/model/generic/general-urban-retirement-denial-first-analysis.model';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-boolean-property/response-dto-boolean-property.decorator';
@@ -16,6 +21,54 @@ import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/d
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
+
+@ResponseDto()
+export class GetGeneralUrbanRetirementDenialTimeAcceleratorResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(GeneralUrbanRetirementDenialTimeAcceleratorId)
+  public id: GeneralUrbanRetirementDenialTimeAcceleratorId;
+
+  @ResponseDtoEnumProperty(GeneralUrbanRetirementDenialTimeAcceleratorTypeEnum)
+  public type: GeneralUrbanRetirementDenialTimeAcceleratorTypeEnum;
+
+  @ResponseDtoEnumProperty(
+    GeneralUrbanRetirementDenialTimeAcceleratorRecognitionInssEnum,
+  )
+  public recognitionInss: GeneralUrbanRetirementDenialTimeAcceleratorRecognitionInssEnum;
+
+  @ResponseDtoEnumProperty(
+    GeneralUrbanRetirementDenialTimeAcceleratorRecognitionJudicialEnum,
+  )
+  public recognitionJudicial: GeneralUrbanRetirementDenialTimeAcceleratorRecognitionJudicialEnum;
+
+  @ResponseDtoEnumProperty(
+    GeneralUrbanRetirementDenialTimeAcceleratorViabilityEnum,
+  )
+  public viability: GeneralUrbanRetirementDenialTimeAcceleratorViabilityEnum;
+
+  @ResponseDtoStringProperty({ required: false })
+  public technicalNote?: string;
+
+  @ResponseDtoDateProperty({ required: false })
+  public startDate?: Date;
+
+  @ResponseDtoDateProperty({ required: false })
+  public endDate?: Date;
+
+  @ResponseDtoStringProperty({ required: false })
+  public institution?: string;
+
+  @ResponseDtoBooleanProperty()
+  public affectsQualifyingPeriod: boolean;
+
+  @ResponseDtoDateProperty()
+  public createdAt: Date;
+
+  @ResponseDtoDateProperty()
+  public updatedAt: Date;
+
+  protected override readonly _type =
+    GetGeneralUrbanRetirementDenialTimeAcceleratorResponseDto.name;
+}
 
 @ResponseDto()
 export class GetGeneralUrbanRetirementDenialCompleteAnalysisClientDataResponseDto extends BaseBuildableDtoObject {
@@ -247,6 +300,12 @@ export class GetGeneralUrbanRetirementDenialResponseDto extends BaseBuildableDto
     { isArray: true, required: false },
   )
   public generalUrbanRetirementDenialPeriod?: GetGeneralUrbanRetirementDenialPeriodResponseDto[];
+
+  @ResponseDtoObjectProperty(
+    () => GetGeneralUrbanRetirementDenialTimeAcceleratorResponseDto,
+    { isArray: true, required: false },
+  )
+  public generalUrbanRetirementDenialTimeAccelerator?: GetGeneralUrbanRetirementDenialTimeAcceleratorResponseDto[];
 
   @ResponseDtoDateProperty()
   public createdAt: Date;
