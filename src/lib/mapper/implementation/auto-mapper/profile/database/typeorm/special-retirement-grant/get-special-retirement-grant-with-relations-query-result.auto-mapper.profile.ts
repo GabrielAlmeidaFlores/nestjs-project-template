@@ -101,16 +101,14 @@ export class GetSpecialRetirementGrantWithRelationsQueryResultAutoMapperProfile 
 
       return GetSpecialRetirementGrantWithRelationsQueryResult.build({
         id: new SpecialRetirementGrantId(source.id),
-        name: source.name ?? null,
-        specialActivity: source.specialActivity ?? null,
+        name: source.name,
+        specialActivity: source.specialActivity,
         cnisDocument: source.cnisDocument ?? null,
-        specialRetirementGrantResult: specialRetirementGrantResult ?? null,
+        specialRetirementGrantResult,
         createdBy:
           createdBy as GetOrganizationMemberWithCustomerRelationQueryResult,
-        updatedBy:
-          (updatedBy as GetOrganizationMemberWithCustomerRelationQueryResult) ??
-          null,
-        specialRetirementGrantBenefit: specialRetirementGrantBenefit ?? [],
+        updatedBy: updatedBy,
+        specialRetirementGrantBenefit: specialRetirementGrantBenefit,
         specialRetirementGrantLegalProceeding:
           specialRetirementGrantLegalProceeding,
         specialRetirementGrantDocument,

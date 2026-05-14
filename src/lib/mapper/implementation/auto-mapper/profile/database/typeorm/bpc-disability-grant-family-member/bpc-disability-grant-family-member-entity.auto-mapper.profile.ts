@@ -62,7 +62,8 @@ export class BpcDisabilityGrantFamilyMemberEntityAutoMapperProfile {
         BpcDisabilityGrantId: new BpcDisabilityGrantId(
           source.BpcDisabilityGrant.id,
         ),
-        BpcDisabilityGrantFamilyMemberDocument: bpcDisabilityGrantFamilyMemberDocument,
+        BpcDisabilityGrantFamilyMemberDocument:
+          bpcDisabilityGrantFamilyMemberDocument,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt ?? null,
@@ -100,7 +101,8 @@ export class BpcDisabilityGrantFamilyMemberEntityAutoMapperProfile {
         BpcDisabilityGrant: {
           id: source.BpcDisabilityGrantId.toString(),
         } as BpcDisabilityGrantTypeormEntity,
-        BpcDisabilityGrantFamilyMemberDocument: bpcDisabilityGrantFamilyMemberDocument,
+        BpcDisabilityGrantFamilyMemberDocument:
+          bpcDisabilityGrantFamilyMemberDocument,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,

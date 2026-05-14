@@ -9,6 +9,10 @@ import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
+import { TeacherRetirementPlanningActivityTypeEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/enum/teacher-retirement-planning-activity-type.enum';
+import { TeacherRetirementPlanningFederativeEntityEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/enum/teacher-retirement-planning-federative-entity.enum';
+import { TeacherRetirementPlanningEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
+import { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
 import { TeacherRetirementPlanningRppsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning/command/teacher-retirement-planning.command.repository.gateway';
 import { TeacherRetirementPlanningRppsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning/query/teacher-retirement-planning.query.repository.gateway';
 import { TeacherRetirementPlanningRppsResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/repository/teacher-retirement-planning-result/command/teacher-retirement-planning-result.command.repository.gateway';
@@ -32,7 +36,8 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 
 @Injectable()
 export class CreateTeacherRetirementPlanningResultRppsUseCase {
-  protected readonly _type = CreateTeacherRetirementPlanningResultRppsUseCase.name;
+  protected readonly _type =
+    CreateTeacherRetirementPlanningResultRppsUseCase.name;
 
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
@@ -83,7 +88,7 @@ export class CreateTeacherRetirementPlanningResultRppsUseCase {
 
     const analysisToolRecordQueryResult =
       await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByTeacherRetirementPlanningIdAndOrganizationIdAndAuthIdentityIdOrFail(
-        teacherRetirementPlanningId as any,
+        new TeacherRetirementPlanningId(teacherRetirementPlanningId.toString()),
         organizationSessionData.organizationId,
         sessionData.authIdentityId,
         TeacherRetirementPlanningRppsNotFoundError,
@@ -161,13 +166,16 @@ export class CreateTeacherRetirementPlanningResultRppsUseCase {
       updatedBy: analysisToolRecordQueryResult.analysisToolClient.updatedBy.id,
     });
 
+    const teacherRetirementPlanning =
+      this.buildTeacherRetirementPlanningEntity(planningEntity);
+
     const analysisToolRecord = new AnalysisToolRecordEntity({
       id: analysisToolRecordQueryResult.id,
       code: analysisToolRecordQueryResult.code,
       type: analysisToolRecordQueryResult.type,
       status: AnalysisStatusEnum.COMPLETED,
       analysisToolClient,
-      teacherRetirementPlanning: planningEntity as any,
+      teacherRetirementPlanning,
       createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
     });
@@ -237,6 +245,27 @@ export class CreateTeacherRetirementPlanningResultRppsUseCase {
 
     return CreateTeacherRetirementPlanningResultResponseDto.build({
       teacherRetirementPlanningCompleteAnalysis: completeAnalysisDto,
+    });
+  }
+
+  private buildTeacherRetirementPlanningEntity(
+    planningEntity: TeacherRetirementPlanningRppsEntity,
+  ): TeacherRetirementPlanningEntity {
+    return new TeacherRetirementPlanningEntity({
+      id: new TeacherRetirementPlanningId(planningEntity.id.toString()),
+      federativeEntity:
+        planningEntity.federativeEntity as TeacherRetirementPlanningFederativeEntityEnum,
+      state: planningEntity.state,
+      municipality: planningEntity.municipality,
+      analysisName: planningEntity.analysisName,
+      currentPosition: planningEntity.currentPosition,
+      activityType:
+        planningEntity.activityType as TeacherRetirementPlanningActivityTypeEnum,
+      publicServiceStartDate: planningEntity.publicServiceStartDate,
+      careerStartDate: planningEntity.careerStartDate,
+      administrativeProcessAnalysis:
+        planningEntity.administrativeProcessAnalysis,
+      teacherRetirementPlanningResult: null,
     });
   }
 }

@@ -30,9 +30,9 @@ import { CreateGeneralUrbanRetirementReviewRequestDto } from '@module/customer/a
 import { CreateMultipleGeneralUrbanRetirementReviewPeriodsRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/request/create-multiple-general-urban-retirement-review-periods.request.dto';
 import { ListGeneralUrbanRetirementReviewPeriodRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/request/list-general-urban-retirement-review-period.request.dto';
 import { ListGeneralUrbanRetirementReviewTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/request/list-general-urban-retirement-review-time-accelerator.request.dto';
-import { UpdateGeneralUrbanRetirementReviewRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/request/update-general-urban-retirement-review.request.dto';
 import { UpdateGeneralUrbanRetirementReviewPeriodRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/request/update-general-urban-retirement-review-period.request.dto';
 import { UpdateGeneralUrbanRetirementReviewResultRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/request/update-general-urban-retirement-review-result.request.dto';
+import { UpdateGeneralUrbanRetirementReviewRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/request/update-general-urban-retirement-review.request.dto';
 import { AnalyzeGeneralUrbanRetirementReviewCnisResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/response/analyze-general-urban-retirement-review-cnis.response.dto';
 import { AnalyzeGeneralUrbanRetirementReviewPppResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/response/analyze-general-urban-retirement-review-ppp.response.dto';
 import { CompareGeneralUrbanRetirementReviewCnisCtpsResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/response/compare-general-urban-retirement-review-cnis-ctps.response.dto';
@@ -53,9 +53,9 @@ import { GetGeneralUrbanRetirementReviewTimeAcceleratorFromAnalysisResponseDto }
 import { GetGeneralUrbanRetirementReviewResponse } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/response/get-general-urban-retirement-review.response.dto';
 import { ListGeneralUrbanRetirementReviewPeriodResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/response/list-general-urban-retirement-review-period.response.dto';
 import { ListGeneralUrbanRetirementReviewTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/response/list-general-urban-retirement-review-time-accelerator.response.dto';
-import { UpdateGeneralUrbanRetirementReviewResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/response/update-general-urban-retirement-review.response.dto';
 import { UpdateGeneralUrbanRetirementReviewPeriodResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/response/update-general-urban-retirement-review-period.response.dto';
 import { UpdateGeneralUrbanRetirementReviewResultResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/response/update-general-urban-retirement-review-result.response.dto';
+import { UpdateGeneralUrbanRetirementReviewResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-review/dto/response/update-general-urban-retirement-review.response.dto';
 import { AnalyzeApprenticeStudentUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/analyze-apprentice-student.use-case';
 import { AnalyzeCtpsOutsideCnisUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/analyze-ctps-outside-cnis.use-case';
 import { AnalyzeGeneralUrbanRetirementReviewPppUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/analyze-general-urban-retirement-review-ppp.use-case';
@@ -90,10 +90,10 @@ import { ListGeneralUrbanRetirementReviewPeriodUseCase } from '@module/customer/
 import { ListGeneralUrbanRetirementReviewTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/list-general-urban-retirement-review-time-accelerator.use-case';
 import { PeriodConsiderationActionUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/period-consideration-action.use-case';
 import { PeriodLeaveDateActionUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/period-leave-date-action.use-case';
-import { UpdateGeneralUrbanRetirementReviewUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/update-general-urban-retirement-review.use-case';
 import { UpdateGeneralUrbanRetirementReviewClientUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/update-general-urban-retirement-review-client.use-case';
 import { UpdateGeneralUrbanRetirementReviewPeriodUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/update-general-urban-retirement-review-period.use-case';
 import { UpdateGeneralUrbanRetirementReviewResultUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/update-general-urban-retirement-review-result.use-case';
+import { UpdateGeneralUrbanRetirementReviewUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-review/use-case/update-general-urban-retirement-review.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';

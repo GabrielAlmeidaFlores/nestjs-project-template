@@ -49,7 +49,9 @@ export class GetTeacherRetirementPlanningRppsPeriodItemResponseDto extends BaseB
   )
   public educationLevel: TeacherRetirementPlanningRppsPeriodItemEducationLevelEnum;
 
-  @ResponseDtoEnumProperty(TeacherRetirementPlanningRppsPeriodItemRolePerformedEnum)
+  @ResponseDtoEnumProperty(
+    TeacherRetirementPlanningRppsPeriodItemRolePerformedEnum,
+  )
   public rolePerformed: TeacherRetirementPlanningRppsPeriodItemRolePerformedEnum;
 
   @ResponseDtoObjectProperty(

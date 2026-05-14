@@ -14,10 +14,16 @@ export class CreateGeneralUrbanRetirementDenialResultClientDataResponseDto exten
   @ResponseDtoStringProperty({ example: '123.456.789-00' })
   public federalDocument: string;
 
-  @ResponseDtoDateProperty({ required: false, example: '2024-01-31T00:00:00.000Z' })
+  @ResponseDtoDateProperty({
+    required: false,
+    example: '2024-01-31T00:00:00.000Z',
+  })
   public lastAffiliationDate?: Date;
 
-  @ResponseDtoDateProperty({ required: false, example: '1988-05-10T00:00:00.000Z' })
+  @ResponseDtoDateProperty({
+    required: false,
+    example: '1988-05-10T00:00:00.000Z',
+  })
   public birthDate?: Date;
 
   @ResponseDtoStringProperty({ example: 'Feminino' })
@@ -35,7 +41,10 @@ export class CreateGeneralUrbanRetirementDenialResultRetirementRuleResponseDto e
   @ResponseDtoBooleanProperty()
   public isEligible: boolean;
 
-  @ResponseDtoDateProperty({ required: false, example: '2027-06-01T00:00:00.000Z' })
+  @ResponseDtoDateProperty({
+    required: false,
+    example: '2027-06-01T00:00:00.000Z',
+  })
   public eligibilityAvailableAt?: Date;
 
   @ResponseDtoNumberProperty({ example: 3580.75 })
@@ -47,7 +56,9 @@ export class CreateGeneralUrbanRetirementDenialResultRetirementRuleResponseDto e
   @ResponseDtoBooleanProperty()
   public isHighestCauseValue: boolean;
 
-  @ResponseDtoStringProperty({ example: 'Cumpre carência e tempo de contribuição para a regra analisada.' })
+  @ResponseDtoStringProperty({
+    example: 'Cumpre carência e tempo de contribuição para a regra analisada.',
+  })
   public retirementAnalysis: string;
 
   protected override readonly _type =
@@ -58,7 +69,15 @@ export class CreateGeneralUrbanRetirementDenialResultRetirementRuleResponseDto e
 export class CreateGeneralUrbanRetirementDenialResultResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoObjectProperty(
     () => CreateGeneralUrbanRetirementDenialResultClientDataResponseDto,
-    { example: { name: 'Maria da Silva', federalDocument: '123.456.789-00', lastAffiliationDate: '2024-01-31T00:00:00.000Z', birthDate: '1988-05-10T00:00:00.000Z', gender: 'Feminino' } },
+    {
+      example: {
+        name: 'Maria da Silva',
+        federalDocument: '123.456.789-00',
+        lastAffiliationDate: '2024-01-31T00:00:00.000Z',
+        birthDate: '1988-05-10T00:00:00.000Z',
+        gender: 'Feminino',
+      },
+    },
   )
   public clientData: CreateGeneralUrbanRetirementDenialResultClientDataResponseDto;
 
