@@ -4,6 +4,7 @@ import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.v
 import { GeneralUrbanRetirementDenialQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial/query/general-urban-retirement-denial.query.repository.gateway';
 import { GeneralUrbanRetirementDenialId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/value-object/general-urban-retirement-denial-id/general-urban-retirement-denial-id.value-object';
 import { GeneralUrbanRetirementDenialDocumentEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-document/general-urban-retirement-denial-document.entity';
+import { GeneralUrbanRetirementDenialPeriodTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-type.enum';
 import { GeneralUrbanRetirementDenialPeriodEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/general-urban-retirement-denial-period.entity';
 import { GeneralUrbanRetirementDenialPeriodDocumentEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period-document/general-urban-retirement-denial-period-document.entity';
 import { GeneralUrbanRetirementDenialPeriodEarningsHistoryEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period-earnings-history/general-urban-retirement-denial-period-earnings-history.entity';
@@ -193,6 +194,7 @@ export class GetGeneralUrbanRetirementDenialUseCase {
       startDate: period.startDate,
       ...(period.endDate !== null && { endDate: period.endDate }),
       workType: period.workType,
+      type: period.type,
       ...(period.bondOrigin !== null && { bondOrigin: period.bondOrigin }),
       ...(period.category !== null && { category: period.category }),
       ...(period.activityDescription !== null && {
@@ -318,6 +320,9 @@ export class GetGeneralUrbanRetirementDenialUseCase {
               endDate: period.endDate,
             }),
             workType: period.workType,
+            type:
+              period.type ??
+              GeneralUrbanRetirementDenialPeriodTypeEnum.COMMON_PERIOD,
             ...(this.hasValue(period.impactMonths) && {
               impactMonths: period.impactMonths,
             }),

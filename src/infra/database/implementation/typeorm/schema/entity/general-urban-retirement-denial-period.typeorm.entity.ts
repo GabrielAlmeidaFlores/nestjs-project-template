@@ -8,6 +8,7 @@ import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/sche
 import { GeneralUrbanRetirementDenialPeriodCategoryEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-category.enum';
 import { GeneralUrbanRetirementDenialPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-consideration.enum';
 import { GeneralUrbanRetirementDenialPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-pendency-reason.enum';
+import { GeneralUrbanRetirementDenialPeriodTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-type.enum';
 import { GeneralUrbanRetirementDenialPeriodWorkTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-work-type.enum';
 
 @Entity({ name: 'general_urban_retirement_denial_period' })
@@ -40,6 +41,14 @@ export class GeneralUrbanRetirementDenialPeriodTypeormEntity extends BaseTypeorm
     transformer: DateOnlyTransformer,
   })
   public endDate: Date | null;
+
+  @Column({
+    name: 'type',
+    type: 'simple-enum',
+    enum: GeneralUrbanRetirementDenialPeriodTypeEnum,
+    default: GeneralUrbanRetirementDenialPeriodTypeEnum.COMMON_PERIOD,
+  })
+  public type: GeneralUrbanRetirementDenialPeriodTypeEnum;
 
   @Column({
     name: 'work_type',

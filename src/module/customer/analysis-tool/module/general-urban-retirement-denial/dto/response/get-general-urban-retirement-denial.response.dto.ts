@@ -5,6 +5,7 @@ import { GeneralUrbanRetirementDenialDocumentTypeEnum } from '@module/customer/a
 import { GeneralUrbanRetirementDenialPeriodCategoryEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-category.enum';
 import { GeneralUrbanRetirementDenialPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-consideration.enum';
 import { GeneralUrbanRetirementDenialPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-pendency-reason.enum';
+import { GeneralUrbanRetirementDenialPeriodTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-type.enum';
 import { GeneralUrbanRetirementDenialPeriodWorkTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-work-type.enum';
 import { GeneralUrbanRetirementDenialFirstAnalysisModel } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/model/generic/general-urban-retirement-denial-first-analysis.model';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
@@ -150,6 +151,9 @@ export class GetGeneralUrbanRetirementDenialPeriodResponseDto extends BaseBuilda
 
   @ResponseDtoEnumProperty(GeneralUrbanRetirementDenialPeriodWorkTypeEnum)
   public workType: GeneralUrbanRetirementDenialPeriodWorkTypeEnum;
+
+  @ResponseDtoEnumProperty(GeneralUrbanRetirementDenialPeriodTypeEnum)
+  public type: GeneralUrbanRetirementDenialPeriodTypeEnum;
 
   @ResponseDtoStringProperty({ required: false })
   public bondOrigin?: string;

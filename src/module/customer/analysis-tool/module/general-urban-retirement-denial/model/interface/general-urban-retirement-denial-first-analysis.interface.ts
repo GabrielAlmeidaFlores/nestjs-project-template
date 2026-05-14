@@ -1,6 +1,7 @@
 import type { GeneralUrbanRetirementDenialPeriodCategoryEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-category.enum';
 import type { GeneralUrbanRetirementDenialPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-consideration.enum';
 import type { GeneralUrbanRetirementDenialPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-pendency-reason.enum';
+import type { GeneralUrbanRetirementDenialPeriodTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-type.enum';
 import type { GeneralUrbanRetirementDenialPeriodWorkTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-work-type.enum';
 
 export interface GeneralUrbanRetirementDenialFirstAnalysisEarningsHistoryItemInterface {
@@ -20,6 +21,7 @@ export interface GeneralUrbanRetirementDenialFirstAnalysisPeriodInterface {
   startDate: string;
   endDate: string | null | undefined;
   workType: GeneralUrbanRetirementDenialPeriodWorkTypeEnum;
+  type: GeneralUrbanRetirementDenialPeriodTypeEnum | null | undefined;
   impactMonths: number | null | undefined;
   graceMonths: number | null | undefined;
   isPendency: boolean;

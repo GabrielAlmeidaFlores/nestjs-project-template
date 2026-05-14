@@ -6,6 +6,7 @@ import type { GeneralUrbanRetirementDenialId } from '@module/customer/analysis-t
 import type { GeneralUrbanRetirementDenialPeriodCategoryEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-category.enum';
 import type { GeneralUrbanRetirementDenialPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-consideration.enum';
 import type { GeneralUrbanRetirementDenialPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-pendency-reason.enum';
+import type { GeneralUrbanRetirementDenialPeriodTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-type.enum';
 import type { GeneralUrbanRetirementDenialPeriodWorkTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-work-type.enum';
 import type { GeneralUrbanRetirementDenialPeriodEntityPropsInterface } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/general-urban-retirement-denial-period.entity.props.interface';
 
@@ -15,6 +16,7 @@ export class GeneralUrbanRetirementDenialPeriodEntity extends BaseEntity<General
   public readonly activityDescription: string | null;
   public readonly startDate: Date;
   public readonly endDate: Date | null;
+  public readonly type: GeneralUrbanRetirementDenialPeriodTypeEnum;
   public readonly workType: GeneralUrbanRetirementDenialPeriodWorkTypeEnum;
   public readonly impactMonths: number | null;
   public readonly graceMonths: number | null;
@@ -38,6 +40,7 @@ export class GeneralUrbanRetirementDenialPeriodEntity extends BaseEntity<General
     this.activityDescription = props.activityDescription ?? null;
     this.startDate = props.startDate;
     this.endDate = props.endDate ?? null;
+    this.type = props.type;
     this.workType = props.workType;
     this.impactMonths = props.impactMonths ?? null;
     this.graceMonths = props.graceMonths ?? null;

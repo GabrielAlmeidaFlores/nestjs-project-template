@@ -101,6 +101,7 @@ export class SaveGeneralUrbanRetirementDenialPeriodsUseCase {
             startDate: periodDto.startDate,
             endDate: periodDto.endDate ?? null,
             workType: periodDto.workType,
+            type: periodDto.type,
             impactMonths: periodDto.impactMonths ?? null,
             graceMonths: periodDto.graceMonths ?? null,
             isPendency: periodDto.isPendency,
