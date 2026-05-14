@@ -15,6 +15,11 @@ import { AccidentAssistanceGrantResultEntity } from '@module/customer/analysis-t
 import { AccidentAssistanceTerminatedResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated-result/command/accident-assistance-terminated-result.command.repository.gateway';
 import { AccidentAssistanceTerminatedResultEntity } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-result/accident-assistance-terminated-result.entity';
 import { AccidentAssistanceTerminatedResultId } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-result/value-object/accident-assistance-terminated-result-id/accident-assistance-terminated-result-id.value-object';
+import { AccidentBenefitRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/repository/accident-benefit-rejection/query/accident-benefit-rejection.query.repository.gateway';
+import { AccidentBenefitRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/repository/accident-benefit-rejection-result/command/accident-benefit-rejection-result.command.repository.gateway';
+import { AccidentBenefitRejectionId } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection/value-object/accident-benefit-rejection-id.value-object';
+import { AccidentBenefitRejectionResultEntity } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection-result/accident-benefit-rejection-result.entity';
+import { AccidentBenefitRejectionResultId } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/schema/entity/accident-benefit-rejection-result/value-object/accident-benefit-rejection-result-id.value-object';
 import { AdministrativeProcedureInssAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/repository/administrative-procedure-inss-analysis-result/command/administrative-procedure-inss-analysis-result.command.repository.gateway';
 import { AdministrativeProcedureInssAnalysisResultEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis-result/administrative-procedure-inss-analysis-result.entity';
 import { AdministrativeProcedureInssAnalysisResultId } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis-result/value-object/administrative-procedure-inss-analysis-result-id/administrative-procedure-inss-analysis-result-id.value-object';
@@ -48,6 +53,9 @@ import { DeathBenefitRejectionResultId } from '@module/customer/analysis-tool/mo
 import { DisabilityAssessmentForBpcAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/repository/disability-assessment-for-bpc-analysis-result/command/disability-assessment-for-bpc-analysis-result.command.repository.gateway';
 import { DisabilityAssessmentForBpcAnalysisResultEntity } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis-result/disability-assessment-for-bpc-analysis-result.entity';
 import { DisabilityAssessmentForBpcAnalysisResultId } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis-result/value-object/disability-assessment-for-bpc-analysis-result-id/disability-assessment-for-bpc-analysis-result-id.value-object';
+import { DisabilityRetirementPlanningResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning-result/command/disability-retirement-planning-result.command.repository.gateway';
+import { DisabilityRetirementPlanningResultEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-result/disability-retirement-planning-result.entity';
+import { DisabilityRetirementPlanningResultId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-result/value-object/disability-retirement-planning-result-id.value-object';
 import { DisabilityRetirementPlanningGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/repository/disability-retirement-planning-grant-result/command/disability-retirement-planning-grant-result.command.repository.gateway';
 import { DisabilityRetirementPlanningGrantResultEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-result/disability-retirement-planning-grant-result.entity';
 import { DisabilityRetirementPlanningGrantResultId } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant-result/value-object/disability-retirement-planning-grant-result-id.value-object';
@@ -92,6 +100,11 @@ import { PerCapitaIncomeForBpcAnalysisResultId } from '@module/customer/analysis
 import { RetirementPermanentDisabilityRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/repository/retirement-permanent-disability-rejection-result/command/retirement-permanent-disability-rejection-result.command.repository.gateway';
 import { RetirementPermanentDisabilityRejectionResultEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-result/retirement-permanent-disability-rejection-result.entity';
 import { RetirementPermanentDisabilityRejectionResultId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-result/value-object/retirement-permanent-disability-rejection-result-id/retirement-permanent-disability-rejection-result-id.value-object';
+import { RetirementPermanentDisabilityRevisionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision/query/retirement-permanent-disability-revision.query.repository.gateway';
+import { RetirementPermanentDisabilityRevisionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision-result/command/retirement-permanent-disability-revision-result.command.repository.gateway';
+import { RetirementPermanentDisabilityRevisionId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision/value-object/retirement-permanent-disability-revision-id.value-object';
+import { RetirementPermanentDisabilityRevisionResultEntity } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-result/retirement-permanent-disability-revision-result.entity';
+import { RetirementPermanentDisabilityRevisionResultId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-result/value-object/retirement-permanent-disability-revision-result-id/retirement-permanent-disability-revision-result-id.value-object';
 import { RetirementPlanningRgpsResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps-result/command/retirement-planning-rgps-result.repository.gateway';
 import { RetirementPlanningRgpsResultEntity } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps-result/retirement-planning-rgps-result.entity';
 import { RetirementPlanningRgpsResultId } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps-result/value-object/retirement-planning-rgps-result-id.value-object';
@@ -188,6 +201,7 @@ export class McpAnalysisRecordHandler {
     private readonly deathBenefitGrantResultCommandRepo: DeathBenefitGrantResultCommandRepositoryGateway,
     private readonly deathBenefitRejectionResultCommandRepo: DeathBenefitRejectionResultCommandRepositoryGateway,
     private readonly disabilityRetirementPlanningGrantResultCommandRepo: DisabilityRetirementPlanningGrantResultCommandRepositoryGateway,
+    private readonly disabilityRetirementPlanningResultCommandRepo: DisabilityRetirementPlanningResultCommandRepositoryGateway,
     private readonly temporaryDisabilityGrantResultCommandRepo: TemporaryDisabilityBenefitsGrantResultCommandRepositoryGateway,
     private readonly temporaryDisabilityTerminatedResultCommandRepo: TemporaryDisabilityBenefitsTerminatedResultCommandRepositoryGateway,
     private readonly temporaryIncapacityRejectionResultCommandRepo: TemporaryIncapacityBenefitRejectionResultCommandRepositoryGateway,
@@ -207,6 +221,10 @@ export class McpAnalysisRecordHandler {
     private readonly teacherRetirementPlanningRejectionResultCommandRepo: TeacherRetirementPlanningRejectionResultCommandRepositoryGateway,
     private readonly elderlyBpcRejectionQueryRepo: ElderlyBpcRejectionQueryRepositoryGateway,
     private readonly elderlyBpcRejectionResultCommandRepo: ElderlyBpcRejectionResultCommandRepositoryGateway,
+    private readonly accidentBenefitRejectionQueryRepo: AccidentBenefitRejectionQueryRepositoryGateway,
+    private readonly accidentBenefitRejectionResultCommandRepo: AccidentBenefitRejectionResultCommandRepositoryGateway,
+    private readonly retirementPermanentDisabilityRevisionQueryRepo: RetirementPermanentDisabilityRevisionQueryRepositoryGateway,
+    private readonly retirementPermanentDisabilityRevisionResultCommandRepo: RetirementPermanentDisabilityRevisionResultCommandRepositoryGateway,
   ) {}
 
   public async listAnalysisRecords(
@@ -1074,13 +1092,85 @@ export class McpAnalysisRecordHandler {
         break;
       }
 
-      case AnalysisToolRecordTypeEnum.DISABILITY_RETIREMENT_PLANNING:
-      case AnalysisToolRecordTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION:
-        throw new McpExecuteToolCallError({
-          toolName,
-          message:
-            'Update not supported for this analysis type due to complex entity requirements',
-        });
+      case AnalysisToolRecordTypeEnum.DISABILITY_RETIREMENT_PLANNING: {
+        const drpData = record.disabilityRetirementPlanning;
+        if (!drpData) {
+          throw new McpExecuteToolCallError({
+            toolName,
+            message: 'No disability retirement planning data found',
+          });
+        }
+        const r = drpData.result;
+        if (!r) {
+          throw new McpExecuteToolCallError({
+            toolName,
+            message: 'No result found',
+          });
+        }
+        const id = new DisabilityRetirementPlanningResultId(r.id);
+        const props: Record<string, unknown> = {
+          id,
+          disabilityRetirementPlanningCompleteAnalysis:
+            r.disabilityRetirementPlanningCompleteAnalysis,
+          disabilityRetirementPlanningSimplifiedAnalysis:
+            r.disabilityRetirementPlanningSimplifiedAnalysis,
+          disabilityRetirementPlanningCompleteAnalysisDownload:
+            r.disabilityRetirementPlanningCompleteAnalysisDownload,
+        };
+        props[fieldName] = newContent;
+        const entity = new DisabilityRetirementPlanningResultEntity(
+          props as unknown as ConstructorParameters<
+            typeof DisabilityRetirementPlanningResultEntity
+          >[0],
+        );
+        await this.transactionRepo.execute(
+          this.disabilityRetirementPlanningResultCommandRepo.updateDisabilityRetirementPlanningResult(
+            id,
+            entity,
+          ),
+        );
+        break;
+      }
+
+      case AnalysisToolRecordTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION: {
+        const drpRejData = record.disabilityRetirementPlanningRejection;
+        if (!drpRejData) {
+          throw new McpExecuteToolCallError({
+            toolName,
+            message: 'No disability retirement planning rejection data found',
+          });
+        }
+        const r = drpRejData.result;
+        if (!r) {
+          throw new McpExecuteToolCallError({
+            toolName,
+            message: 'No result found',
+          });
+        }
+        const id = new DisabilityRetirementPlanningResultId(r.id);
+        const props: Record<string, unknown> = {
+          id,
+          disabilityRetirementPlanningCompleteAnalysis:
+            r.disabilityRetirementPlanningCompleteAnalysis,
+          disabilityRetirementPlanningSimplifiedAnalysis:
+            r.disabilityRetirementPlanningSimplifiedAnalysis,
+          disabilityRetirementPlanningCompleteAnalysisDownload:
+            r.disabilityRetirementPlanningCompleteAnalysisDownload,
+        };
+        props[fieldName] = newContent;
+        const entity = new DisabilityRetirementPlanningResultEntity(
+          props as unknown as ConstructorParameters<
+            typeof DisabilityRetirementPlanningResultEntity
+          >[0],
+        );
+        await this.transactionRepo.execute(
+          this.disabilityRetirementPlanningResultCommandRepo.updateDisabilityRetirementPlanningResult(
+            id,
+            entity,
+          ),
+        );
+        break;
+      }
 
       case AnalysisToolRecordTypeEnum.GENERAL_URBAN_RETIREMENT_ANALYSIS: {
         const r =
@@ -1889,7 +1979,7 @@ export class McpAnalysisRecordHandler {
         throw new McpExecuteToolCallError({
           toolName,
           message:
-            'Update not supported for this analysis type due to complex entity requirements',
+            'Use the dedicated tool update_accident_benefit_rejection_result with the accident_benefit_rejection_id parameter instead',
         });
 
       case AnalysisToolRecordTypeEnum.TEACHER_RETIREMENT_PLANNING_REJECTION: {
@@ -1991,7 +2081,7 @@ export class McpAnalysisRecordHandler {
         throw new McpExecuteToolCallError({
           toolName,
           message:
-            'Update not supported for this analysis type due to complex entity requirements',
+            'Use the dedicated tool update_retirement_permanent_disability_revision_result with the retirement_permanent_disability_revision_id parameter instead',
         });
 
       default:
@@ -2001,6 +2091,217 @@ export class McpAnalysisRecordHandler {
         });
     }
 
+    return {
+      success: true,
+      message: `Field '${fieldName}' updated successfully`,
+    };
+  }
+
+  public async getAccidentBenefitRejection(
+    params: Record<string, unknown>,
+    toolName: string,
+  ): Promise<unknown> {
+    const { orgId, authId } = this.getOrgContext(params);
+    const rawId = params['accident_benefit_rejection_id'] as string;
+    if (!rawId) {
+      throw new McpExecuteToolCallError({
+        toolName,
+        message: 'accident_benefit_rejection_id is required',
+      });
+    }
+    const id = new AccidentBenefitRejectionId(rawId);
+    await this.analysisToolRecordQueryRepo.findWithRelationsByAccidentBenefitRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
+      id,
+      orgId,
+      authId,
+      McpRecordNotFoundError,
+    );
+    const result =
+      await this.accidentBenefitRejectionQueryRepo.findOneByAccidentBenefitRejectionIdOrFailWithRelations(
+        id,
+        McpRecordNotFoundError,
+      );
+    return result;
+  }
+
+  public async updateAccidentBenefitRejectionResult(
+    params: Record<string, unknown>,
+    toolName: string,
+  ): Promise<unknown> {
+    const { orgId, authId } = this.getOrgContext(params);
+    const rawId = params['accident_benefit_rejection_id'] as string;
+    const fieldName = params['field_name'] as string;
+    const newContent = params['new_content'] as string | null | undefined;
+    if (!rawId) {
+      throw new McpExecuteToolCallError({
+        toolName,
+        message: 'accident_benefit_rejection_id is required',
+      });
+    }
+    if (!fieldName) {
+      throw new McpExecuteToolCallError({
+        toolName,
+        message: 'field_name is required',
+      });
+    }
+    if (newContent === undefined || newContent === null) {
+      throw new McpExecuteToolCallError({
+        toolName,
+        message: 'new_content is required',
+      });
+    }
+    const id = new AccidentBenefitRejectionId(rawId);
+    await this.analysisToolRecordQueryRepo.findWithRelationsByAccidentBenefitRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
+      id,
+      orgId,
+      authId,
+      McpRecordNotFoundError,
+    );
+    const withRelations =
+      await this.accidentBenefitRejectionQueryRepo.findOneByAccidentBenefitRejectionIdOrFailWithRelations(
+        id,
+        McpRecordNotFoundError,
+      );
+    const r = withRelations.accidentBenefitRejectionResult;
+    if (!r) {
+      throw new McpExecuteToolCallError({
+        toolName,
+        message: 'No result found for this accident benefit rejection',
+      });
+    }
+    const resultId =
+      r.id instanceof AccidentBenefitRejectionResultId
+        ? r.id
+        : new AccidentBenefitRejectionResultId(r.id);
+    const props: Record<string, unknown> = {
+      id: resultId,
+      firstAnalysis: r.firstAnalysis,
+      secondAnalysis: r.secondAnalysis,
+      completeAnalysis: r.completeAnalysis,
+      simplifiedAnalysis: r.simplifiedAnalysis,
+      completeAnalysisDownload: r.completeAnalysisDownload,
+    };
+    props[fieldName] = newContent;
+    const entity = new AccidentBenefitRejectionResultEntity(
+      props as unknown as ConstructorParameters<
+        typeof AccidentBenefitRejectionResultEntity
+      >[0],
+    );
+    await this.transactionRepo.execute(
+      this.accidentBenefitRejectionResultCommandRepo.updateAccidentBenefitRejectionResult(
+        entity,
+      ),
+    );
+    return {
+      success: true,
+      message: `Field '${fieldName}' updated successfully`,
+    };
+  }
+
+  public async getRetirementPermanentDisabilityRevision(
+    params: Record<string, unknown>,
+    toolName: string,
+  ): Promise<unknown> {
+    const { orgId, authId } = this.getOrgContext(params);
+    const rawId = params[
+      'retirement_permanent_disability_revision_id'
+    ] as string;
+    if (!rawId) {
+      throw new McpExecuteToolCallError({
+        toolName,
+        message: 'retirement_permanent_disability_revision_id is required',
+      });
+    }
+    const id = new RetirementPermanentDisabilityRevisionId(rawId);
+    await this.analysisToolRecordQueryRepo.findWithRelationsByRetirementPermanentDisabilityRevisionIdAndOrganizationIdAndAuthIdentityIdOrFail(
+      id,
+      orgId,
+      authId,
+      McpRecordNotFoundError,
+    );
+    const result =
+      await this.retirementPermanentDisabilityRevisionQueryRepo.findOneByRetirementPermanentDisabilityRevisionIdOrFailWithRelations(
+        id,
+        McpRecordNotFoundError,
+      );
+    return result;
+  }
+
+  public async updateRetirementPermanentDisabilityRevisionResult(
+    params: Record<string, unknown>,
+    toolName: string,
+  ): Promise<unknown> {
+    const { orgId, authId } = this.getOrgContext(params);
+    const rawId = params[
+      'retirement_permanent_disability_revision_id'
+    ] as string;
+    const fieldName = params['field_name'] as string;
+    const newContent = params['new_content'] as string | null | undefined;
+    if (!rawId) {
+      throw new McpExecuteToolCallError({
+        toolName,
+        message: 'retirement_permanent_disability_revision_id is required',
+      });
+    }
+    if (!fieldName) {
+      throw new McpExecuteToolCallError({
+        toolName,
+        message: 'field_name is required',
+      });
+    }
+    if (newContent === undefined || newContent === null) {
+      throw new McpExecuteToolCallError({
+        toolName,
+        message: 'new_content is required',
+      });
+    }
+    const id = new RetirementPermanentDisabilityRevisionId(rawId);
+    await this.analysisToolRecordQueryRepo.findWithRelationsByRetirementPermanentDisabilityRevisionIdAndOrganizationIdAndAuthIdentityIdOrFail(
+      id,
+      orgId,
+      authId,
+      McpRecordNotFoundError,
+    );
+    const withRelations =
+      await this.retirementPermanentDisabilityRevisionQueryRepo.findOneByRetirementPermanentDisabilityRevisionIdOrFailWithRelations(
+        id,
+        McpRecordNotFoundError,
+      );
+    const r = withRelations.result;
+    if (!r) {
+      throw new McpExecuteToolCallError({
+        toolName,
+        message:
+          'No result found for this retirement permanent disability revision',
+      });
+    }
+    const resultId =
+      r.id instanceof RetirementPermanentDisabilityRevisionResultId
+        ? r.id
+        : new RetirementPermanentDisabilityRevisionResultId(r.id);
+    const props: Record<string, unknown> = {
+      id: resultId,
+      retirementPermanentDisabilityRevisionFirstAnalysis:
+        r.retirementPermanentDisabilityRevisionFirstAnalysis,
+      retirementPermanentDisabilityRevisionCompleteAnalysis:
+        r.retirementPermanentDisabilityRevisionCompleteAnalysis,
+      retirementPermanentDisabilityRevisionCompleteAnalysisDownload:
+        r.retirementPermanentDisabilityRevisionCompleteAnalysisDownload,
+      retirementPermanentDisabilityRevisionSimplifiedAnalysis:
+        r.retirementPermanentDisabilityRevisionSimplifiedAnalysis,
+    };
+    props[fieldName] = newContent;
+    const entity = new RetirementPermanentDisabilityRevisionResultEntity(
+      props as unknown as ConstructorParameters<
+        typeof RetirementPermanentDisabilityRevisionResultEntity
+      >[0],
+    );
+    await this.transactionRepo.execute(
+      this.retirementPermanentDisabilityRevisionResultCommandRepo.updateRetirementPermanentDisabilityRevisionResult(
+        resultId,
+        entity,
+      ),
+    );
     return {
       success: true,
       message: `Field '${fieldName}' updated successfully`,
