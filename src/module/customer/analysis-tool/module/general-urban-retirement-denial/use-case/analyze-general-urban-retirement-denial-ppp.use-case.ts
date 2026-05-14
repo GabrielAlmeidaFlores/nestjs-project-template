@@ -126,6 +126,12 @@ export class AnalyzeGeneralUrbanRetirementDenialPppUseCase {
           ...(this.hasValue(period.wantsToComplementViaMeuINSS) && {
             wantsToComplementViaMeuINSS: period.wantsToComplementViaMeuINSS,
           }),
+          ...(this.hasValue(
+            period.shouldConsiderLastRemunerationAsExitDate,
+          ) && {
+            shouldConsiderLastRemunerationAsExitDate:
+              period.shouldConsiderLastRemunerationAsExitDate,
+          }),
           status: period.status,
           ...(this.hasValue(period.hazardousAgents) && {
             hazardousAgents: period.hazardousAgents,
