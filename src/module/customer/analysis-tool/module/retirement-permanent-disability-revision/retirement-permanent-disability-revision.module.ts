@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { DatabaseModule } from '@infra/database/database.module';
+import { GenerativeIaModule } from '@infra/generative-ia/generative-ia.module';
 import { AnalysisActivityTrackerModule } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.module';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { CnisXRayAnalysisModule } from '@module/customer/analysis-tool/lib/cnis-x-ray-analysis/cnis-x-ray-analysis.module';
@@ -31,6 +32,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
   imports: [
     AuthModule,
     DatabaseModule,
+    GenerativeIaModule,
     OrganizationSessionModule,
     OrganizationCreditModule,
     PaymentPlanModule,
