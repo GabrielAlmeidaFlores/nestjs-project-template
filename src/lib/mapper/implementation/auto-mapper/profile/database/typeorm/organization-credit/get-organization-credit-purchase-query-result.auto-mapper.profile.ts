@@ -29,7 +29,7 @@ export class GetOrganizationCreditPurchaseQueryResultAutoMapperProfile {
     const convertOrmEntityToQueryResult = (
       source: OrganizationCreditPurchaseTypeormEntity,
     ): GetOrganizationCreditPurchaseQueryResult => {
-      if (!source.bankPayment || !source.organization) {
+      if (!source.organization) {
         throw new IncompleteSourceDataForMappingError({
           destinationClass: GetOrganizationCreditPurchaseQueryResult.name,
           sourceClass: OrganizationCreditPurchaseTypeormEntity.name,
@@ -39,7 +39,9 @@ export class GetOrganizationCreditPurchaseQueryResultAutoMapperProfile {
       return GetOrganizationCreditPurchaseQueryResult.build({
         id: new OrganizationCreditPurchaseId(source.id),
         organization: new OrganizationId(source.organization.id),
-        bankPayment: new BankPaymentId(source.bankPayment.id),
+        bankPayment: source.bankPayment
+          ? new BankPaymentId(source.bankPayment.id)
+          : null,
         creditAmount: source.creditAmount,
         validFrom: source.validFrom,
         createdAt: source.createdAt,
@@ -65,9 +67,11 @@ export class GetOrganizationCreditPurchaseQueryResultAutoMapperProfile {
         id: source.organization.toString(),
       } as OrganizationTypeormEntity;
 
-      const bankPayment = {
-        id: source.bankPayment.toString(),
-      } as BankPaymentTypeormEntity;
+      const bankPayment = source.bankPayment
+        ? ({
+            id: source.bankPayment.toString(),
+          } as BankPaymentTypeormEntity)
+        : undefined;
 
       return OrganizationCreditPurchaseTypeormEntity.build({
         id: source.id.toString(),
