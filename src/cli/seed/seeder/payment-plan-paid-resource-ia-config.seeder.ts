@@ -3567,8 +3567,6 @@ Extrato do FGTS: Se o usuário anexar extrato do FGTS, procure o código de movi
 # Modelo IA recomendado: Claude Sonnet 4 ou superior
 # Caso de uso: Parecer detalhado para entrega ao cliente
 
-# RETORNO EM JSON
-
 ---
 
 ## CONTEXTO E PAPEL
@@ -4326,87 +4324,6 @@ Antes de entregar o parecer, verifique:
 - [ ] Tom é profissional e empático
 - [ ] Recomendação está clara e bem fundamentada
 - [ ] Documento tem entre 8 e 15 páginas (quando impresso)
-
----
-
-## OUTPUT ESPERADO
-
-O output deve começar diretamente com:
-{
-        {
-  type: 'array',
-  items: {
-    type: 'object',
-    properties: {
-      regraDeAposentadoria: {
-        type: 'string',
-        description:
-          'Aposentadoria por tempo de contribuiçãos, aposentadoria por idade, etc.',
-          enum: [
-          'APOSENTADORIA_TEMPO_CONTRIBUICAO_DIREITO_ADQUIRIDO_EC103',
-          'APOSENTADORIA_IDADE_URBANA_DIREITO_ADQUIRIDO_EC103',
-          'APOSENTADORIA_TEMPO_CONTRIBUICAO_TRANSICAO_ART15_EC103',
-          'APOSENTADORIA_TEMPO_CONTRIBUICAO_TRANSICAO_ART16_EC103',
-          'APOSENTADORIA_TEMPO_CONTRIBUICAO_TRANSICAO_ART17_EC103',
-          'APOSENTADORIA_TEMPO_CONTRIBUICAO_TRANSICAO_ART20_EC103',
-          'APOSENTADORIA_IDADE_HIBRIDA_DIREITO_ADQUIRIDO_EC103',
-          'APOSENTADORIA_IDADE_URBANA_TRANSICAO_ART18_EC103',
-          'APOSENTADORIA_IDADE_HIBRIDA_TRANSICAO_ART18_EC103',
-          'APOSENTADORIA_PROGRAMADA_COMUM_ART19_EC103',
-          'APOSENTADORIA_PROGRAMADA_PROFESSOR_ART19_II_EC103',
-          'APOSENTADORIA_PROGRAMADA_PROFESSOR_DIREITO_ADQUIRIDO_EC103',
-          'APOSENTADORIA_PROGRAMADA_ESPECIAL_ART19_I_EC103',
-          'APOSENTADORIA_PROGRAMADA_ESPECIAL_TRANSICAO_ART21_EC103',
-          'APOSENTADORIA_PROGRAMADA_ESPECIAL_DIREITO_ADQUIRIDO_EC103',
-        ],
-      },
-      resultado: {
-        type: 'string',
-        enum: ['Atingido', 'Aguardando'],
-        description:
-          'Indica se o cliente já atingiu os requisitos para essa aposentadoria ou se ainda está aguardando.',
-      },
-      dataDoDireito: {
-        type: 'string',
-        description:
-          'Data em que o cliente atingiu ou atingirá os requisitos para essa aposentadoria, formatada como "DD de mês de AAAA".',
-      },
-      rmiPrevista: {
-        type: 'string',
-        description:
-          'Valor da Renda Mensal Inicial (RMI) prevista para essa aposentadoria, formatada como moeda brasileira (R$ X.XXX,XX).',
-      },
-      melhorRmi: {
-        type: 'boolean',
-        description:
-          'Indica se essa aposentadoria oferece a melhor RMI entre todas as opções disponíveis.',
-      },
-      maiorValorCausa: {
-        type: 'boolean',
-        description:
-          'Indica se essa aposentadoria oferece o maior valor de causa entre todas as opções disponíveis.',
-      },
-      detalhes: {
-        type: 'string',
-        description:
-          'Detalhes adicionais relevantes sobre essa aposentadoria, como vantagens, desvantagens, tempo de espera, etc. Ex.  Requisitos analisados:Tempo mínimo: 35 anos ➔ Idade mínima: 65 anos ➔ Carência mínima: 180 contribuições ➔ Cálculo da RMI:Média salarial: R$3.500,00 Coeficiente: 85% RMI estimada: R$ 2.980,00 Valor da causa: DIB: 15/12/2023 DER: 10/06/2024 Atrasados: 6 meses Valor da causa: R$ 17.880,00 (Estes detalhes devem ser sempre entregue em formato markdown)',
-      },
-    },
-    required: [
-      'regraDeAposentadoria',
-      'resultado',
-      'dataDoDireito',
-      'rmiPrevista',
-      'melhorRmi',
-      'maiorValorCausa',
-      'detalhes',
-    ],
-  },
-},
-
-
-
-E terminar com a assinatura do advogado.
 
 ---
 
@@ -8357,36 +8274,6 @@ E terminar com a assinatura.
 
 Gere uma ANÁLISE COMPLETA usando os documentos fornecidos (CNIS e PPPs) e os dados do cliente.
 
-A sua resposta DEVE ser um JSON válido seguindo EXATAMENTE o schema abaixo. NÃO retorne markdown, texto livre ou qualquer conteúdo fora do JSON.
-
-Schema obrigatório:
-{
-  "regrasAplicaveis": [
-    {
-      "modalidade": "Nome da regra/modalidade de aposentadoria especial (ex: Aposentadoria Especial 25 anos, Regra de Transição por Pontos, etc.)",
-      "cumprida": true/false (se o segurado já cumpriu os requisitos desta modalidade),
-      "dataDaAposentadoria": "Data estimada em que o segurado poderá se aposentar nesta modalidade (formato DD/MM/AAAA ou texto descritivo se já cumprida)",
-      "rmiPrevista": "Renda Mensal Inicial prevista para esta modalidade (valor em R$ ou descrição)",
-      "valorDaCausaEstimada": "Valor da causa estimado caso seja necessário ingressar judicialmente (valor em R$)",
-      "melhorRmi": true/false (se esta modalidade oferece a melhor RMI entre todas as analisadas),
-      "maiorValorDeCausa": true/false (se esta modalidade oferece o maior valor de causa entre todas),
-      "analiseDetalhada": "Texto detalhado em markdown com a análise completa desta modalidade, incluindo fundamentação legal, tempo de contribuição especial computado, carência, pontos críticos e recomendações específicas"
-    }
-  ],
-  "periodosReconhecidos": [
-    {
-      "origemDoVinculo": "Origem do vínculo empregatício (ex: CNIS, PPP, CTPS, etc.)",
-      "periodo": "Período do vínculo (formato DD/MM/AAAA a DD/MM/AAAA)",
-      "categoria": "Categoria da atividade especial (ex: 25 anos, 20 anos, 15 anos)",
-      "agentes": "Agentes nocivos identificados nos documentos (ex: ruído acima de 85 dB, agentes químicos, etc.)",
-      "tempoEspecial": "Tempo de atividade especial computado neste período",
-      "tempoConvertido": "Tempo convertido para tempo comum (fator de conversão aplicado)",
-      "status": "Status do reconhecimento do período (ex: Reconhecido pelo INSS, Pendente de comprovação, Necessita PPP, etc.)"
-    }
-  ],
-  "resultadoDaAnalise": "Texto completo em markdown com o resultado consolidado da análise, incluindo: 1) Resumo executivo, 2) Linha do tempo integrada (vínculos, remunerações e pendências), 3) Pontos críticos (PEXT, competências abaixo do mínimo, vínculos sem data fim), 4) Recomendação estratégica (via administrativa ou judicial, documentos faltantes e próximos passos)"
-}
-
 Regras importantes:
 - Analise TODAS as modalidades de aposentadoria especial aplicáveis ao caso.
 - Identifique e liste TODOS os períodos de atividade especial encontrados nos documentos.
@@ -8402,7 +8289,7 @@ Regras importantes:
       ),
       prompt: `Você é um especialista em Direito Previdenciário brasileiro e concessão de aposentadoria especial.
 
-Gere uma FIRST ANALYSIS em formato ESTRITAMENTE JSON compatível com o schema exigido pelo endpoint.
+Gere uma FIRST ANALYSIS com base nos dados fornecidos.
 
 Regras:
 - Baseie-se prioritariamente na análise processada do CNIS (JSON) e nos dados estruturados enviados em arquivos.
@@ -16624,8 +16511,6 @@ SAÍDA
 # Modelo IA recomendado: Claude Sonnet 4 ou superior
 # Caso de uso: Parecer detalhado para entrega ao cliente
 
-# RETORNO EM JSON
-
 ---
 
 ## CONTEXTO E PAPEL
@@ -17380,87 +17265,6 @@ Antes de entregar o parecer, verifique:
 - [ ] Tom é profissional e empático
 - [ ] Recomendação está clara e bem fundamentada
 - [ ] Documento tem entre 8 e 15 páginas (quando impresso)
-
----
-
-## OUTPUT ESPERADO
-
-O output deve começar diretamente com:
-{
-  {
-  type: 'array',
-  items: {
-    type: 'object',
-    properties: {
-      regraDeAposentadoria: {
-        type: 'string',
-        description:
-          'Aposentadoria por tempo de contribuiçãos, aposentadoria por idade, etc.',
-          enum: [
-          'APOSENTADORIA_TEMPO_CONTRIBUICAO_DIREITO_ADQUIRIDO_EC103',
-          'APOSENTADORIA_IDADE_URBANA_DIREITO_ADQUIRIDO_EC103',
-          'APOSENTADORIA_TEMPO_CONTRIBUICAO_TRANSICAO_ART15_EC103',
-          'APOSENTADORIA_TEMPO_CONTRIBUICAO_TRANSICAO_ART16_EC103',
-          'APOSENTADORIA_TEMPO_CONTRIBUICAO_TRANSICAO_ART17_EC103',
-          'APOSENTADORIA_TEMPO_CONTRIBUICAO_TRANSICAO_ART20_EC103',
-          'APOSENTADORIA_IDADE_HIBRIDA_DIREITO_ADQUIRIDO_EC103',
-          'APOSENTADORIA_IDADE_URBANA_TRANSICAO_ART18_EC103',
-          'APOSENTADORIA_IDADE_HIBRIDA_TRANSICAO_ART18_EC103',
-          'APOSENTADORIA_PROGRAMADA_COMUM_ART19_EC103',
-          'APOSENTADORIA_PROGRAMADA_PROFESSOR_ART19_II_EC103',
-          'APOSENTADORIA_PROGRAMADA_PROFESSOR_DIREITO_ADQUIRIDO_EC103',
-          'APOSENTADORIA_PROGRAMADA_ESPECIAL_ART19_I_EC103',
-          'APOSENTADORIA_PROGRAMADA_ESPECIAL_TRANSICAO_ART21_EC103',
-          'APOSENTADORIA_PROGRAMADA_ESPECIAL_DIREITO_ADQUIRIDO_EC103',
-        ],
-      },
-      resultado: {
-        type: 'string',
-        enum: ['Atingido', 'Aguardando'],
-        description:
-          'Indica se o cliente já atingiu os requisitos para essa aposentadoria ou se ainda está aguardando.',
-      },
-      dataDoDireito: {
-        type: 'string',
-        description:
-          'Data em que o cliente atingiu ou atingirá os requisitos para essa aposentadoria, formatada como "DD de mês de AAAA".',
-      },
-      rmiPrevista: {
-        type: 'string',
-        description:
-          'Valor da Renda Mensal Inicial (RMI) prevista para essa aposentadoria, formatada como moeda brasileira (R$ X.XXX,XX).',
-      },
-      melhorRmi: {
-        type: 'boolean',
-        description:
-          'Indica se essa aposentadoria oferece a melhor RMI entre todas as opções disponíveis.',
-      },
-      maiorValorCausa: {
-        type: 'boolean',
-        description:
-          'Indica se essa aposentadoria oferece o maior valor de causa entre todas as opções disponíveis.',
-      },
-      detalhes: {
-        type: 'string',
-        description:
-          'Detalhes adicionais relevantes sobre essa aposentadoria, como vantagens, desvantagens, tempo de espera, etc. Ex.  Requisitos analisados:Tempo mínimo: 35 anos ➔ Idade mínima: 65 anos ➔ Carência mínima: 180 contribuições ➔ Cálculo da RMI:Média salarial: R$3.500,00 Coeficiente: 85% RMI estimada: R$ 2.980,00 Valor da causa: DIB: 15/12/2023 DER: 10/06/2024 Atrasados: 6 meses Valor da causa: R$ 17.880,00 (Estes detalhes devem ser sempre entregue em formato markdown)',
-      },
-    },
-    required: [
-      'regraDeAposentadoria',
-      'resultado',
-      'dataDoDireito',
-      'rmiPrevista',
-      'melhorRmi',
-      'maiorValorCausa',
-      'detalhes',
-    ],
-  },
-},
-
-
-
-E terminar com a assinatura do advogado.
 
 ---
 
@@ -20116,58 +19920,49 @@ Orientar de forma clara e prática:
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
         PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_CNIS_ANALYSIS,
       ),
-      prompt: `Você é ELOY, especialista em CNIS e revisão previdenciária. Analise o CNIS enviado e retorne exclusivamente JSON válido com: clientData, periods, earningsHistory, pendencies, contributionTimeSummary, gracePeriodSummary e warnings. Identifique competências abaixo do mínimo, recolhimentos em atraso, vínculos sem data de saída e dados relevantes para revisão de aposentadoria urbana comum.`,
+      prompt: `Você é ELOY, especialista em CNIS e revisão previdenciária. Analise o CNIS enviado e identifique competências abaixo do mínimo, recolhimentos em atraso, vínculos sem data de saída e dados relevantes para revisão de aposentadoria urbana comum.`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
         PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_BENEFIT_AWARD_LETTER_ANALYSIS,
       ),
-      prompt: `Você é ELOY, especialista em carta de concessão previdenciária. Analise a carta de concessão enviada e retorne EXCLUSIVAMENTE JSON válido com os seguintes campos obrigatórios:
-
-- tipoBeneficio: tipo do benefício previdenciário concedido (ex: "Aposentadoria por Tempo de Contribuição")
-- nomeSegurado: nome completo do segurado beneficiário
-- dib: data de início do benefício no formato DD/MM/AAAA
-- rmi: renda mensal inicial do benefício (ex: "R$ 1.234,56")
-- rma: renda mensal atual do benefício (ex: "R$ 1.234,56")
-- competenciasNaoConsideradas: lista de competências (meses/anos de contribuição) que NÃO foram incluídas no cálculo do benefício pelo INSS. Para cada competência excluída identifique: o mês/ano no formato MM/AAAA, o valor da contribuição e o motivo pelo qual foi desconsiderada (ex: contribuição abaixo do teto, contribuição fora do período de cálculo, vínculo não reconhecido, etc.). Se não houver competências não consideradas, retorne uma lista vazia.
-
-Busque ativamente na carta de concessão por competências que foram omitidas ou desconsideradas no cálculo do benefício, pois estas representam potencial de revisão favorável ao segurado.`,
+      prompt: `Você é ELOY, especialista em carta de concessão previdenciária. Analise a carta de concessão enviada. Busque ativamente por competências que foram omitidas ou desconsideradas no cálculo do benefício, pois estas representam potencial de revisão favorável ao segurado. Extraia as informações de tipo de benefício, nome do segurado, data de início do benefício (DIB), renda mensal inicial (RMI), renda mensal atual (RMA) e liste todas as competências não consideradas no cálculo, indicando para cada uma o mês/ano, o valor da contribuição e o motivo da exclusão.`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
         PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_FIRST_ANALYSIS,
       ),
-      prompt: `Você é ELOY, especialista em revisão de aposentadoria urbana comum. Com base nos dados estruturados do cliente, na análise do CNIS e na análise da carta de concessão, retorne exclusivamente JSON válido com: clientData, benefitAwardLetterSummary, timeSummary, awardLetterXRay, cnisXRay, periods, timeAcceleratorsSummary, mainPendencies e preliminaryConclusion.`,
+      prompt: `Você é ELOY, especialista em revisão de aposentadoria urbana comum. Com base nos dados estruturados do cliente, na análise do CNIS e na análise da carta de concessão, elabore uma análise com dados do cliente, resumo da carta de concessão, resumo de tempo, raio-X da carta, raio-X do CNIS, períodos, resumo de aceleradores de tempo, pendências principais e conclusão preliminar.`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
         PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_COMPARE_CNIS_CTPS,
       ),
-      prompt: `Você é ELOY, especialista em confronto CNIS x CTPS. Compare os dados enviados e retorne exclusivamente JSON válido com: matchedPeriods, periodsOnlyInCnis, periodsOnlyInCtps, divergences, recommendedActions e summary.`,
+      prompt: `Você é ELOY, especialista em confronto CNIS x CTPS. Compare os dados enviados e identifique períodos correspondentes, períodos exclusivos em cada documento, divergências, ações recomendadas e elabore um resumo da análise.`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
         PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_SPECIAL_PERIOD_PPP_ANALYSIS,
       ),
-      prompt: `Você é ELOY, especialista em PPP e tempo especial. Analise o PPP e retorne exclusivamente JSON válido com: specialPeriods, harmfulAgents, legalFramework, conversionPossibility, estimatedGain, viability e technicalNote.`,
+      prompt: `Você é ELOY, especialista em PPP e tempo especial. Analise o PPP e identifique períodos especiais, agentes nocivos, enquadramento legal, possibilidade de conversão, ganho estimado, viabilidade e elabore uma nota técnica.`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
         PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_NO_END_DATE_DOCUMENTS_ANALYSIS,
       ),
-      prompt: `Você é ELOY, especialista em vínculos sem data de saída. Analise os documentos enviados e retorne exclusivamente JSON válido com: inferredEndDate, supportingDocuments, confidenceLevel, recommendedPeriodTreatment e technicalNote.`,
+      prompt: `Você é ELOY, especialista em vínculos sem data de saída. Analise os documentos enviados e infira a data de encerramento do vínculo, identifique os documentos de suporte, avalie o nível de confiança, recomende o tratamento do período e elabore uma nota técnica.`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
         PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_RURAL_TIME_ANALYSIS,
       ),
-      prompt: `Você é ELOY, especialista em tempo rural para revisão previdenciária. Retorne exclusivamente JSON válido com: timeAccelerators, supportingEvidence, legalRationale, viability, recognitionInss, recognitionJudicial e technicalNote.`,
+      prompt: `Você é ELOY, especialista em tempo rural para revisão previdenciária. Analise o período rural e identifique aceleradores de tempo, evidências de suporte, fundamentação legal, viabilidade, perspectivas de reconhecimento administrativo e judicial, e elabore uma nota técnica.`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
         PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW_MILITARY_SERVICE_ANALYSIS,
       ),
-      prompt: `Você é ELOY, especialista em contagem de serviço militar. Retorne exclusivamente JSON válido com: timeAccelerators, proofSummary, viability, recognitionInss, recognitionJudicial, affectsQualifyingPeriod e technicalNote.`,
+      prompt: `Você é ELOY, especialista em contagem de serviço militar. Analise o serviço militar e identifique aceleradores de tempo, resumo das provas, viabilidade, perspectivas de reconhecimento administrativo e judicial, impacto no período de carência, e elabore uma nota técnica.`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
