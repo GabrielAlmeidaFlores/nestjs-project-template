@@ -24,7 +24,7 @@ export interface GeneralUrbanRetirementDenialFirstAnalysisPeriodInterface {
   graceMonths: number | null | undefined;
   isPendency: boolean;
   competenceBelowTheMinimum: boolean;
-  contributionAverage: number | string | null | undefined;
+  contributionAverage: number | string | { value: string } | null | undefined;
   pendencyReason:
     | GeneralUrbanRetirementDenialPeriodPendencyReasonEnum
     | null
