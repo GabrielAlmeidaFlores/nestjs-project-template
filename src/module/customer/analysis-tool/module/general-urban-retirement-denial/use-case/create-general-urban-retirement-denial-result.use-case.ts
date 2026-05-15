@@ -3,8 +3,10 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { AnalysisToolRecordNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-record-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
@@ -50,6 +52,8 @@ export class CreateGeneralUrbanRetirementDenialResultUseCase {
     private readonly fileProcessorGateway: FileProcessorGateway,
     @Inject(AnalysisToolRecordQueryRepositoryGateway)
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordCommandRepositoryGateway)
+    private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
     @Inject(GeneralUrbanRetirementDenialQueryRepositoryGateway)
     private readonly generalUrbanRetirementDenialQueryRepositoryGateway: GeneralUrbanRetirementDenialQueryRepositoryGateway,
     @Inject(GeneralUrbanRetirementDenialResultCommandRepositoryGateway)
@@ -111,11 +115,19 @@ export class CreateGeneralUrbanRetirementDenialResultUseCase {
       throw new CnisDocumentIsNotValidError();
     }
 
-    const analysisToolClient = await this.findAnalysisToolClientOrFail(
-      generalUrbanRetirementDenialId,
-      organizationSessionData.organizationId,
-      sessionData.authIdentityId,
-    );
+    const analysisRecord =
+      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByGeneralUrbanRetirementDenialIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        generalUrbanRetirementDenialId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+        AnalysisToolRecordNotFoundError,
+      );
+
+    const analysisToolClient = new AnalysisToolClientEntity({
+      ...analysisRecord.analysisToolClient,
+      createdBy: analysisRecord.analysisToolClient.createdBy.id,
+      updatedBy: analysisRecord.analysisToolClient.updatedBy.id,
+    });
 
     const cnisData =
       await this.analysisProcessorGateway.parseCnisDocument(cnisBuffer);
@@ -172,6 +184,11 @@ export class CreateGeneralUrbanRetirementDenialResultUseCase {
       this.generalUrbanRetirementDenialResultCommandRepositoryGateway.updateGeneralUrbanRetirementDenialResult(
         existingResult.id,
         resultEntity,
+      ),
+      this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecordStatus(
+        analysisRecord.id,
+        AnalysisStatusEnum.COMPLETED,
+        organizationMember.id,
       ),
     ]);
 
@@ -334,29 +351,4 @@ export class CreateGeneralUrbanRetirementDenialResultUseCase {
     return [cnisBuffer, ...otherDocumentBuffers, ...periodDocumentBuffers];
   }
 
-  private findAnalysisToolClientOrFail(
-    generalUrbanRetirementDenialId: GeneralUrbanRetirementDenialId,
-    organizationId: OrganizationSessionDataModel['organizationId'],
-    authIdentityId: SessionDataModel['authIdentityId'],
-  ): Promise<AnalysisToolClientEntity> {
-    const recordPromise: ReturnType<
-      AnalysisToolRecordQueryRepositoryGateway['findWithRelationsByGeneralUrbanRetirementDenialIdAndOrganizationIdAndAuthIdentityIdOrFail']
-    > =
-      this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByGeneralUrbanRetirementDenialIdAndOrganizationIdAndAuthIdentityIdOrFail(
-        generalUrbanRetirementDenialId,
-        organizationId,
-        authIdentityId,
-        AnalysisToolRecordNotFoundError,
-      );
-
-    return recordPromise.then((record) => {
-      const analysisToolClient = record.analysisToolClient;
-
-      return new AnalysisToolClientEntity({
-        ...analysisToolClient,
-        createdBy: analysisToolClient.createdBy.id,
-        updatedBy: analysisToolClient.updatedBy.id,
-      });
-    });
-  }
 }

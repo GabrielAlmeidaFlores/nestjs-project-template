@@ -125,10 +125,15 @@ export class GeneralUrbanRetirementDenialController {
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async getById(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Param('id', new ParseValueObjectPipe(GeneralUrbanRetirementDenialId))
     generalUrbanRetirementDenialId: GeneralUrbanRetirementDenialId,
   ): Promise<GetGeneralUrbanRetirementDenialResponseDto> {
     return await this.getGeneralUrbanRetirementDenialUseCase.execute(
+      sessionData,
+      organizationSessionData,
       generalUrbanRetirementDenialId,
     );
   }
