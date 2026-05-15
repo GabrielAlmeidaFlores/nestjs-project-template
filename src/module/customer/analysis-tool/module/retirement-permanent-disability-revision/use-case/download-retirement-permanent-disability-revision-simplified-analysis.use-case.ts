@@ -81,12 +81,16 @@ export class DownloadRetirementPermanentDisabilityRevisionSimplifiedAnalysisUseC
       throw new RetirementPermanentDisabilityRevisionDoesNotContainSimplifiedAnalysisError();
     }
 
-    if (existingResult.retirementPermanentDisabilityRevisionCompleteAnalysis === null) {
+    if (
+      existingResult.retirementPermanentDisabilityRevisionCompleteAnalysis ===
+      null
+    ) {
       throw new RetirementPermanentDisabilityRevisionDoesNotContainSimplifiedAnalysisError();
     }
 
     let simplifiedAnalysis =
-      existingResult.retirementPermanentDisabilityRevisionSimplifiedAnalysis ?? null;
+      existingResult.retirementPermanentDisabilityRevisionSimplifiedAnalysis ??
+      null;
 
     if (simplifiedAnalysis === null) {
       const promptResponse =

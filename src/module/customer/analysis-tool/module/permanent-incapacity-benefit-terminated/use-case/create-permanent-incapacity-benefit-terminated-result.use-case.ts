@@ -168,9 +168,7 @@ export class CreatePermanentIncapacityBenefitTerminatedResultUseCase {
         promptResponse.prompt,
         JSON.stringify(cnisAnalysis),
         [
-          this.buildTerminationDataBuffer(
-            permanentIncapacityBenefitTerminated,
-          ),
+          this.buildTerminationDataBuffer(permanentIncapacityBenefitTerminated),
           ...documentBuffers,
         ],
       );
