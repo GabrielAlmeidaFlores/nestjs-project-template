@@ -1928,6 +1928,42 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise simplificada do direito ao Salário Maternidade com IA. Verifica o evento gerador, a carência e a qualidade de segurada, informando de forma objetiva sobre a elegibilidade ao benefício. Versão resumida e acessível para apresentação ao cliente.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f1a2b3c4-d5e6-4f7a-b8c9-d0e1f2a3b4c5'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_REJECTION_FIRST_ANALYSIS,
+      creditCost: 2,
+      title: 'INDEFERIMENTO SALÁRIO MATERNIDADE - PRIMEIRA ANÁLISE',
+      description:
+        'Primeira análise do indeferimento do Salário Maternidade com IA. Verifica o evento gerador, a qualidade de segurada, a carência e os motivos da negativa do INSS, identificando os pontos críticos para reversão do indeferimento. Indicado para um diagnóstico inicial rápido sobre a viabilidade de recurso.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a2b3c4d5-e6f7-4a8b-c9d0-e1f2a3b4c5d6'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_REJECTION_SECOND_ANALYSIS,
+      creditCost: 3,
+      title: 'INDEFERIMENTO SALÁRIO MATERNIDADE - SEGUNDA ANÁLISE',
+      description:
+        'Segunda análise do indeferimento do Salário Maternidade com IA. Aprofunda a avaliação dos períodos contributivos no CNIS X-Ray, analisa pendências identificadas (contribuições abaixo do mínimo, atrasos, vínculos sem data de saída) e orienta sobre a consideração ou desconsideração de cada período para fins de carência e qualidade de segurada.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b3c4d5e6-f7a8-4b9c-d0e1-f2a3b4c5d6e7'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_REJECTION_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title: 'INDEFERIMENTO SALÁRIO MATERNIDADE - ANÁLISE COMPLETA',
+      description:
+        'Análise completa do indeferimento do Salário Maternidade com IA. Examina o evento gerador, verifica a carência exigida por categoria de segurada, analisa a qualidade de segurada na data do fato gerador, avalia o histórico contributivo com base no CNIS X-Ray e nos documentos apresentados, identifica possíveis impedimentos e emite parecer técnico conclusivo com fundamentação legal e estratégia de reversão.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c4d5e6f7-a8b9-4c0d-e1f2-a3b4c5d6e7f8'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_REJECTION_SIMPLIFIED_ANALYSIS,
+      creditCost: 2,
+      title: 'INDEFERIMENTO SALÁRIO MATERNIDADE - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada do indeferimento do Salário Maternidade com IA. Verifica o evento gerador, a carência e a qualidade de segurada, informando de forma objetiva sobre a elegibilidade ao benefício e as chances de reversão do indeferimento. Versão resumida e acessível para apresentação ao cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d'),
       resource:
         PaymentPlanPaidResourceTypeEnum.BPC_DISABILITY_TERMINATION_INSS_DECISION_ANALYSIS,
@@ -2252,7 +2288,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.PERMANENT_INCAPACITY_BENEFIT_TERMINATED_FIRST_ANALYSIS,
       creditCost: 5,
-      title: 'Primeira Análise (Cessação Aposentadoria por Incapacidade Permanente)',
+      title:
+        'Primeira Análise (Cessação Aposentadoria por Incapacidade Permanente)',
       description:
         'Primeira análise de cessação de aposentadoria por incapacidade permanente com IA, combinando os dados estruturados do caso com a leitura e interpretação do CNIS. Gera parecer inicial técnico sobre tempo de contribuição, carência, períodos relevantes, pontos de atenção e viabilidade preliminar de reversão da cessação.',
     }),
@@ -2261,7 +2298,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.PERMANENT_INCAPACITY_BENEFIT_TERMINATED_COMPLETE_ANALYSIS,
       creditCost: 8,
-      title: 'Análise Completa (Cessação Aposentadoria por Incapacidade Permanente)',
+      title:
+        'Análise Completa (Cessação Aposentadoria por Incapacidade Permanente)',
       description:
         'Análise completa de cessação de aposentadoria por incapacidade permanente com IA. Consolida o histórico contributivo, os períodos analisados, a decisão de cessação do INSS e a condição de incapacidade, gerando parecer técnico detalhado com enquadramento nas regras aplicáveis, fundamentação jurídica, estratégia processual recomendada e perspectivas do caso.',
     }),
@@ -2270,7 +2308,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.PERMANENT_INCAPACITY_BENEFIT_TERMINATED_SIMPLIFIED_ANALYSIS,
       creditCost: 3,
-      title: 'Análise Simplificada (Cessação Aposentadoria por Incapacidade Permanente)',
+      title:
+        'Análise Simplificada (Cessação Aposentadoria por Incapacidade Permanente)',
       description:
         'Análise simplificada de cessação de aposentadoria por incapacidade permanente com IA. Resume os principais achados da análise completa, indica a viabilidade geral do caso, os pontos críticos e os próximos passos recomendados, em linguagem acessível para apresentação ao cliente.',
     }),
@@ -2363,7 +2402,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REVISION_WORK_PERIOD_NO_END_DATE_DOCUMENT_ANALYSIS,
       creditCost: 2,
-      title: 'REVISÃO APOSENTADORIA INVALIDEZ PERMANENTE - ANÁLISE DE VÍNCULO SEM DATA DE SAÍDA',
+      title:
+        'REVISÃO APOSENTADORIA INVALIDEZ PERMANENTE - ANÁLISE DE VÍNCULO SEM DATA DE SAÍDA',
       description:
         'Análise de documentos para fechamento de vínculos empregatícios sem data de saída no contexto de revisão de Aposentadoria por Incapacidade Permanente (APIP). Examina CTPS, TRCT, FGTS e outros documentos para identificar a data de desligamento e avaliar o impacto no cálculo revisional.',
     }),
