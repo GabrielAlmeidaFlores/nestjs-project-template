@@ -128,8 +128,10 @@ export class CreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalys
 
     await transactionCredit.commit();
 
-    return CreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisResponseDto.build({
-      result,
-    });
+    return CreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisResponseDto.build(
+      {
+        result,
+      },
+    );
   }
 }

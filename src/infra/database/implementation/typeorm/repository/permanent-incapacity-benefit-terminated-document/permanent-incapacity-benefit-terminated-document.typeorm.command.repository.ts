@@ -20,9 +20,7 @@ export class PermanentIncapacityBenefitTerminatedDocumentTypeormCommandRepositor
     PermanentIncapacityBenefitTerminatedDocumentTypeormCommandRepository.name;
 
   public constructor(
-    @InjectRepository(
-      PermanentIncapacityBenefitTerminatedDocumentTypeormEntity,
-    )
+    @InjectRepository(PermanentIncapacityBenefitTerminatedDocumentTypeormEntity)
     repository: Repository<PermanentIncapacityBenefitTerminatedDocumentTypeormEntity>,
     private readonly mapperGateway: MapperGateway,
   ) {
