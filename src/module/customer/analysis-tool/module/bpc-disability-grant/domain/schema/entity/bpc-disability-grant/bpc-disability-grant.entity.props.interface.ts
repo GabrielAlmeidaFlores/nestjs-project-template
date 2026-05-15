@@ -6,6 +6,7 @@ import type { BpcDisabilityGrantId } from '@module/customer/analysis-tool/module
 import type { BpcDisabilityGrantDocumentEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-document/bpc-disability-grant-document.entity';
 import type { BpcDisabilityGrantFamilyMemberEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member/bpc-disability-grant-family-member.entity';
 import type { BpcDisabilityGrantInssBenefitEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-inss-benefit/bpc-disability-grant-inss-benefit.entity';
+import type { BpcDisabilityGrantLegalRepresentativeOfAMinorEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-legal-representative-of-a-minor/bpc-disability-grant-legal-representative-of-a-minor.entity';
 import type { BpcDisabilityGrantLegalProceedingEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-legal-proceeding/bpc-disability-grant-legal-proceeding.entity';
 import type { BpcDisabilityGrantResultEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-result/bpc-disability-grant-result.entity';
 import type { DisabilityRetirementPlanningPeriodDisabilityCategoryEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-disability/enum/disability-retirement-planning-period-disability-category.enum';
@@ -31,6 +32,9 @@ export interface BpcDisabilityGrantEntityPropsInterface extends BaseEntityPropsI
     | null;
   BpcDisabilityGrantDocument?: BpcDisabilityGrantDocumentEntity[] | null;
   BpcDisabilityGrantInssBenefit?: BpcDisabilityGrantInssBenefitEntity[] | null;
+  BpcDisabilityGrantLegalRepresentativeOfAMinor?:
+    | BpcDisabilityGrantLegalRepresentativeOfAMinorEntity
+    | null;
   BpcDisabilityGrantLegalProceeding?:
     | BpcDisabilityGrantLegalProceedingEntity[]
     | null;

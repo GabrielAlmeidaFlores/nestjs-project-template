@@ -2,6 +2,7 @@
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
@@ -12,11 +13,13 @@ import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-pr
 import { BpcDisabilityGrantCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant/command/bpc-disability-grant.command.repository.gateway';
 import { BpcDisabilityGrantDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-document/command/bpc-disability-grant-document.command.repository.gateway';
 import { BpcDisabilityGrantInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-inss-benefit/command/bpc-disability-grant-inss-benefit.command.repository.gateway';
+import { BpcDisabilityGrantLegalRepresentativeOfAMinorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-legal-representative-of-a-minor/command/bpc-disability-grant-legal-representative-of-a-minor.command.repository.gateway';
 import { BpcDisabilityGrantLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-legal-proceeding/command/bpc-disability-grant-legal-proceeding.command.repository.gateway';
 import { BpcDisabilityGrantEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/bpc-disability-grant.entity';
 import { BpcDisabilityGrantId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/value-object/bpc-disability-grant-id/bpc-disability-grant-id.value-object';
 import { BpcDisabilityGrantDocumentEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-document/bpc-disability-grant-document.entity';
 import { BpcDisabilityGrantInssBenefitEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-inss-benefit/bpc-disability-grant-inss-benefit.entity';
+import { BpcDisabilityGrantLegalRepresentativeOfAMinorEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-legal-representative-of-a-minor/bpc-disability-grant-legal-representative-of-a-minor.entity';
 import { BpcDisabilityGrantLegalProceedingEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-legal-proceeding/bpc-disability-grant-legal-proceeding.entity';
 import { UpdateBpcDisabilityGrantRequestDto } from '@module/customer/analysis-tool/module/bpc-disability-grant/dto/request/update-bpc-disability-grant.request.dto';
 import { UpdateBpcDisabilityGrantResponseDto } from '@module/customer/analysis-tool/module/bpc-disability-grant/dto/response/update-bpc-disability-grant.response.dto';
@@ -40,6 +43,10 @@ export class UpdateBpcDisabilityGrantUseCase {
     private readonly bpcDisabilityGrantCommandRepositoryGateway: BpcDisabilityGrantCommandRepositoryGateway,
     @Inject(BpcDisabilityGrantInssBenefitCommandRepositoryGateway)
     private readonly bpcDisabilityGrantInssBenefitCommandRepositoryGateway: BpcDisabilityGrantInssBenefitCommandRepositoryGateway,
+    @Inject(
+      BpcDisabilityGrantLegalRepresentativeOfAMinorCommandRepositoryGateway,
+    )
+    private readonly bpcDisabilityGrantLegalRepresentativeOfAMinorCommandRepositoryGateway: BpcDisabilityGrantLegalRepresentativeOfAMinorCommandRepositoryGateway,
     @Inject(BpcDisabilityGrantLegalProceedingCommandRepositoryGateway)
     private readonly bpcDisabilityGrantLegalProceedingCommandRepositoryGateway: BpcDisabilityGrantLegalProceedingCommandRepositoryGateway,
     @Inject(BpcDisabilityGrantDocumentCommandRepositoryGateway)
@@ -191,41 +198,110 @@ export class UpdateBpcDisabilityGrantUseCase {
       }
     }
 
-    if (dto.documents !== undefined) {
+    if (dto.legalRepresentativeOfAMinor !== undefined) {
+      const hasLegalRepresentativeData =
+        dto.legalRepresentativeOfAMinor.name !== undefined ||
+        dto.legalRepresentativeOfAMinor.federalDocument !== undefined ||
+        dto.legalRepresentativeOfAMinor.birthDate !== undefined ||
+        dto.legalRepresentativeOfAMinor.minorUnderCustody !== undefined ||
+        dto.legalRepresentativeOfAMinor.kinship !== undefined;
+
+      if (hasLegalRepresentativeData) {
+        const representativeEntity =
+          new BpcDisabilityGrantLegalRepresentativeOfAMinorEntity({
+            name: dto.legalRepresentativeOfAMinor.name ?? null,
+            federalDocument:
+              dto.legalRepresentativeOfAMinor.federalDocument !== undefined
+                ? new FederalDocument(
+                    dto.legalRepresentativeOfAMinor.federalDocument,
+                  )
+                : null,
+            birthDate: dto.legalRepresentativeOfAMinor.birthDate ?? null,
+            minorUnderCustody:
+              dto.legalRepresentativeOfAMinor.minorUnderCustody ?? null,
+            kinship: dto.legalRepresentativeOfAMinor.kinship ?? null,
+            BpcDisabilityGrantId: bpcDisabilityGrantId,
+          });
+
+        if (dto.legalRepresentativeOfAMinor.id !== undefined) {
+          transactions.push(
+            this.bpcDisabilityGrantLegalRepresentativeOfAMinorCommandRepositoryGateway.updateBpcDisabilityGrantLegalRepresentativeOfAMinor(
+              dto.legalRepresentativeOfAMinor.id,
+              representativeEntity,
+            ),
+          );
+        } else {
+          transactions.push(
+            this.bpcDisabilityGrantLegalRepresentativeOfAMinorCommandRepositoryGateway.deleteAllByBpcDisabilityGrantId(
+              bpcDisabilityGrantId,
+            ),
+          );
+
+          transactions.push(
+            this.bpcDisabilityGrantLegalRepresentativeOfAMinorCommandRepositoryGateway.createBpcDisabilityGrantLegalRepresentativeOfAMinor(
+              representativeEntity,
+            ),
+          );
+        }
+      } else {
+        transactions.push(
+          this.bpcDisabilityGrantLegalRepresentativeOfAMinorCommandRepositoryGateway.deleteAllByBpcDisabilityGrantId(
+            bpcDisabilityGrantId,
+          ),
+        );
+      }
+    } else {
       transactions.push(
-        this.bpcDisabilityGrantDocumentCommandRepositoryGateway.deleteAllByBpcDisabilityGrantId(
+        this.bpcDisabilityGrantLegalRepresentativeOfAMinorCommandRepositoryGateway.deleteAllByBpcDisabilityGrantId(
           bpcDisabilityGrantId,
         ),
       );
+    }
 
-      for (const documentDto of dto.documents) {
-        const fileBuffer = Buffer.from(
-          documentDto.file.base64.toString(),
-          'base64',
+    if (dto.documents !== undefined) {
+      if (dto.documents.length === 0) {
+        transactions.push(
+          this.bpcDisabilityGrantDocumentCommandRepositoryGateway.deleteAllByBpcDisabilityGrantId(
+            bpcDisabilityGrantId,
+          ),
         );
-
-        const fileModel = FileModel.build({
-          buffer: fileBuffer,
-          originalName: documentDto.file.originalFileName,
-          size: fileBuffer.length,
-          encoding: '7bit',
-        });
-
-        const uploadedDocument =
-          await this.fileProcessorGateway.uploadFile(fileModel);
-
-        const documentEntity = new BpcDisabilityGrantDocumentEntity({
-          document: uploadedDocument,
-          type: documentDto.type,
-          BpcDisabilityGrantId: bpcDisabilityGrantId,
-        });
-
-        const documentTransactions =
-          this.bpcDisabilityGrantDocumentCommandRepositoryGateway.createManyBpcDisabilityGrantDocument(
-            [documentEntity],
+      } else {
+        for (const documentDto of dto.documents) {
+          transactions.push(
+            this.bpcDisabilityGrantDocumentCommandRepositoryGateway.deleteByBpcDisabilityGrantIdAndType(
+              bpcDisabilityGrantId,
+              documentDto.type,
+            ),
           );
 
-        transactions.push(...documentTransactions);
+          const fileBuffer = Buffer.from(
+            documentDto.file.base64.toString(),
+            'base64',
+          );
+
+          const fileModel = FileModel.build({
+            buffer: fileBuffer,
+            originalName: documentDto.file.originalFileName,
+            size: fileBuffer.length,
+            encoding: '7bit',
+          });
+
+          const uploadedDocument =
+            await this.fileProcessorGateway.uploadFile(fileModel);
+
+          const documentEntity = new BpcDisabilityGrantDocumentEntity({
+            document: uploadedDocument,
+            type: documentDto.type,
+            BpcDisabilityGrantId: bpcDisabilityGrantId,
+          });
+
+          const documentTransactions =
+            this.bpcDisabilityGrantDocumentCommandRepositoryGateway.createManyBpcDisabilityGrantDocument(
+              [documentEntity],
+            );
+
+          transactions.push(...documentTransactions);
+        }
       }
     }
 

@@ -960,6 +960,14 @@ export class AnalysisToolRecordTypeormQueryRepository
             },
           },
           specialRetirementGrant: {
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
             specialRetirementGrantBenefit: true,
             specialRetirementGrantLegalProceeding: true,
             specialRetirementGrantDocument: true,
@@ -2348,6 +2356,7 @@ export class AnalysisToolRecordTypeormQueryRepository
             BpcDisabilityGrantDocument: true,
             BpcDisabilityGrantInssBenefit: true,
             BpcDisabilityGrantLegalProceeding: true,
+            BpcDisabilityGrantLegalRepresentativeOfAMinor: true,
             BpcDisabilityGrantFamilyMember: {
               BpcDisabilityGrantFamilyMemberDocument: true,
             },
@@ -4258,12 +4267,26 @@ export class AnalysisToolRecordTypeormQueryRepository
       };
     }
 
+    if (analysisRelationKeys.includes('specialRetirementGrant')) {
+      relationsClause.specialRetirementGrant = {
+        createdBy: {
+          customer: true,
+          organization: true,
+        },
+        updatedBy: {
+          customer: true,
+          organization: true,
+        },
+      };
+    }
+
     for (const key of analysisRelationKeys) {
       if (
         key === 'speechGenerator' ||
         key === 'ruralTimeline' ||
         key === 'accidentAssistanceGrant' ||
-        key === 'permanentIncapacityBenefitTerminated'
+        key === 'permanentIncapacityBenefitTerminated' ||
+        key === 'specialRetirementGrant'
       ) {
         continue;
       }
