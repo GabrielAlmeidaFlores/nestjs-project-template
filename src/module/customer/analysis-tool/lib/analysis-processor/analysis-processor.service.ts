@@ -11025,7 +11025,15 @@ Processed CNIS analysis:
         analysisResult: {
           type: 'string',
           description:
-            'Texto explicativo completo sobre o resultado da análise, perspectivas processuais e recomendações para o caso de indeferimento.',
+            'Análise técnica completa e estruturada em formato Markdown, com cabeçalhos (##, ###), negrito, listas e tabelas onde aplicável. Deve conter obrigatoriamente as seguintes seções: ' +
+            '**1. Síntese do Caso** – Identificação do segurado, benefício, data da cessação e motivo alegado pelo INSS. ' +
+            '**2. Análise dos Requisitos Legais** – Verificação fundamentada de: qualidade de segurado na DFG, nexo causal acidente-lesão, redução permanente da capacidade laborativa (art. 86 da Lei 8.213/1991), consolidação das lesões sem incapacidade total para toda atividade, carência e histórico contributivo. ' +
+            '**3. Avaliação Médico-Pericial** – Análise crítica dos laudos apresentados, coerência entre diagnóstico e cessação, irregularidades identificadas na perícia do INSS, compatibilidade entre CID e sequela funcional. ' +
+            '**4. Análise do Histórico Previdenciário (CNIS)** – Vínculos empregatícios, contribuições antes e após o acidente, períodos não computados, histórico de benefícios concedidos ou negados. ' +
+            '**5. Enquadramento Jurisprudencial** – Precedentes do STJ, TRFs e súmulas relevantes; teses defensáveis no caso concreto. ' +
+            '**6. Estratégia Processual e Recomendações** – Viabilidade do recurso administrativo (CRPS), ação ordinária ou mandado de segurança; documentos adicionais necessários; estimativa de êxito; prazos críticos. ' +
+            '**7. Conclusão** – Parecer conclusivo fundamentado sobre a elegibilidade ao restabelecimento do Auxílio-Acidente. ' +
+            'A linguagem deve ser técnico-jurídica, objetiva e formal. Citar expressamente os artigos de lei e jurisprudência aplicáveis. Mínimo de 600 palavras.',
         },
         completeAnalysisDownload: {
           type: 'string',
