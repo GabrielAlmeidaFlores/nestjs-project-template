@@ -6,10 +6,12 @@ import { BpcDisabilityGrantDocumentTypeormEntity } from '@infra/database/impleme
 import { BpcDisabilityGrantFamilyMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant-family-member.typeorm.entity';
 import { BpcDisabilityGrantInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant-inss-benefit.typeorm.entity';
 import { BpcDisabilityGrantLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant-legal-proceeding.typeorm.entity';
+import { BpcDisabilityGrantLegalRepresentativeOfAMinorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant-legal-representative-of-a-minor.typeorm.entity';
 import { BpcDisabilityGrantResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant-result.typeorm.entity';
 import { BpcDisabilityGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant.typeorm.entity';
 import { GetBpcDisabilityGrantDocumentQueryResult } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant/query/result/get-bpc-disability-grant-document.query.result';
 import { GetBpcDisabilityGrantFamilyMemberQueryResult } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant/query/result/get-bpc-disability-grant-family-member.query.result';
+import { GetBpcDisabilityGrantLegalRepresentativeOfAMinorQueryResult } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant/query/result/get-bpc-disability-grant-legal-representative-of-a-minor.query.result';
 import { GetBpcDisabilityGrantWithRelationsQueryResult } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant/query/result/get-bpc-disability-grant-with-relations.query.result';
 import { GetBpcDisabilityGrantInssBenefitQueryResult } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-inss-benefit/query/result/get-bpc-disability-grant-inss-benefit.query.result';
 import { GetBpcDisabilityGrantLegalProceedingQueryResult } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-legal-proceeding/query/result/get-bpc-disability-grant-legal-proceeding.query.result';
@@ -68,6 +70,15 @@ export class GetBpcDisabilityGrantWithRelationsQueryResultAutoMapperProfile {
           ),
         ) ?? [];
 
+      const bpcDisabilityGrantLegalRepresentativeOfAMinor =
+        source.BpcDisabilityGrantLegalRepresentativeOfAMinor
+          ? this.mapper.map(
+              source.BpcDisabilityGrantLegalRepresentativeOfAMinor,
+              BpcDisabilityGrantLegalRepresentativeOfAMinorTypeormEntity,
+              GetBpcDisabilityGrantLegalRepresentativeOfAMinorQueryResult,
+            )
+          : null;
+
       const bpcDisabilityGrantLegalProceeding =
         source.BpcDisabilityGrantLegalProceeding?.map((item) =>
           this.mapper.map(
@@ -101,6 +112,8 @@ export class GetBpcDisabilityGrantWithRelationsQueryResultAutoMapperProfile {
         BpcDisabilityGrantFamilyMember: bpcDisabilityGrantFamilyMember,
         BpcDisabilityGrantDocument: bpcDisabilityGrantDocument,
         BpcDisabilityGrantInssBenefit: bpcDisabilityGrantInssBenefit,
+        BpcDisabilityGrantLegalRepresentativeOfAMinor:
+          bpcDisabilityGrantLegalRepresentativeOfAMinor,
         BpcDisabilityGrantLegalProceeding: bpcDisabilityGrantLegalProceeding,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,

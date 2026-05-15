@@ -46,6 +46,7 @@ export class BpcDisabilityGrantTypeormQueryRepository
           },
           BpcDisabilityGrantDocument: true,
           BpcDisabilityGrantInssBenefit: true,
+          BpcDisabilityGrantLegalRepresentativeOfAMinor: true,
           BpcDisabilityGrantLegalProceeding: true,
           BpcDisabilityGrantResult: true,
           analysisToolRecord: {

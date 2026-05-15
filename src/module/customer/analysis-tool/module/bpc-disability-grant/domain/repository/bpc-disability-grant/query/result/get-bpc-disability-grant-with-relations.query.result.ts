@@ -2,6 +2,7 @@
 
 import type { GetBpcDisabilityGrantDocumentQueryResult } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant/query/result/get-bpc-disability-grant-document.query.result';
 import type { GetBpcDisabilityGrantFamilyMemberQueryResult } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant/query/result/get-bpc-disability-grant-family-member.query.result';
+import type { GetBpcDisabilityGrantLegalRepresentativeOfAMinorQueryResult } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant/query/result/get-bpc-disability-grant-legal-representative-of-a-minor.query.result';
 import type { GetBpcDisabilityGrantInssBenefitQueryResult } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-inss-benefit/query/result/get-bpc-disability-grant-inss-benefit.query.result';
 import type { GetBpcDisabilityGrantLegalProceedingQueryResult } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-legal-proceeding/query/result/get-bpc-disability-grant-legal-proceeding.query.result';
 import type { GetBpcDisabilityGrantResultQueryResult } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-result/query/result/get-bpc-disability-grant-result.query.result';
@@ -33,6 +34,7 @@ export class GetBpcDisabilityGrantWithRelationsQueryResult extends BaseBuildable
   public readonly BpcDisabilityGrantFamilyMember: GetBpcDisabilityGrantFamilyMemberQueryResult[];
   public readonly BpcDisabilityGrantDocument: GetBpcDisabilityGrantDocumentQueryResult[];
   public readonly BpcDisabilityGrantInssBenefit: GetBpcDisabilityGrantInssBenefitQueryResult[];
+  public readonly BpcDisabilityGrantLegalRepresentativeOfAMinor: GetBpcDisabilityGrantLegalRepresentativeOfAMinorQueryResult | null;
   public readonly BpcDisabilityGrantLegalProceeding: GetBpcDisabilityGrantLegalProceedingQueryResult[];
   public readonly createdAt: Date;
   public readonly updatedAt: Date;

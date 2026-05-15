@@ -1,4 +1,10 @@
+import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { Email } from '@core/domain/schema/value-object/email/email.value-object';
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
+import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
+import { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/enum/analysis-tool-client-type.enum';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { GeneralUrbanRetirementDenialCategoryEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/enum/general-urban-retirement-denial-category.enum';
 import { GeneralUrbanRetirementDenialId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/value-object/general-urban-retirement-denial-id/general-urban-retirement-denial-id.value-object';
 import { GeneralUrbanRetirementDenialDocumentTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-document/enum/general-urban-retirement-denial-document-type.enum';
@@ -315,6 +321,33 @@ export class GetGeneralUrbanRetirementDenialResponseDto extends BaseBuildableDto
 
   @ResponseDtoDateProperty()
   public updatedAt: Date;
+
+  @ResponseDtoEnumProperty(AnalysisStatusEnum)
+  public status: AnalysisStatusEnum;
+
+  @ResponseDtoStringProperty({ required: false })
+  public clientName?: string;
+
+  @ResponseDtoValueObjectProperty(FederalDocument, { required: false })
+  public clientFederalDocument?: FederalDocument;
+
+  @ResponseDtoValueObjectProperty(Email, { required: false })
+  public clientEmail?: Email;
+
+  @ResponseDtoValueObjectProperty(Email, { required: false })
+  public clientCorporateEmail?: Email;
+
+  @ResponseDtoValueObjectProperty(PhoneNumber, { required: false })
+  public clientPhoneNumber?: PhoneNumber;
+
+  @ResponseDtoDateProperty({ required: false })
+  public clientBirthDate?: Date;
+
+  @ResponseDtoEnumProperty(GenderEnum, { required: false })
+  public clientGender?: GenderEnum;
+
+  @ResponseDtoEnumProperty(AnalysisToolClientTypeEnum, { required: false })
+  public clientType?: AnalysisToolClientTypeEnum;
 
   protected override readonly _type =
     GetGeneralUrbanRetirementDenialResponseDto.name;

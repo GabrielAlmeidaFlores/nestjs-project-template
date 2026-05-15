@@ -86,8 +86,8 @@ export class GeneralUrbanRetirementDenialPeriodItemRequestDto extends BaseBuilda
   @RequestDtoBooleanProperty({ required: false })
   public wantsToComplementViaMeuINSS?: boolean;
 
-  @RequestDtoBooleanProperty()
-  public shouldConsiderLastRemunerationAsExitDate: boolean;
+  @RequestDtoBooleanProperty({ required: false })
+  public shouldConsiderLastRemunerationAsExitDate?: boolean;
 
   @RequestDtoBooleanProperty()
   public status: boolean;
