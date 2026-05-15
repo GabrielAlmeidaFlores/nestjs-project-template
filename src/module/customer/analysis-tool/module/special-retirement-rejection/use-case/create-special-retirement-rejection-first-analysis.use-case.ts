@@ -257,12 +257,28 @@ export class CreateSpecialRetirementRejectionFirstAnalysisUseCase {
 
       cleanedJson = JSON.stringify(parsed);
 
+      this.validateWorkPeriodsOrThrow(parsed.workPeriods);
+
       return {
         cleanedJson,
         model: this.buildFirstAnalysisModel(parsed),
         workPeriods: parsed.workPeriods,
       };
     } catch {
+      throw new InvalidSpecialRetirementRejectionFirstAnalysisJsonError();
+    }
+  }
+
+  private validateWorkPeriodsOrThrow(
+    workPeriods: SpecialRetirementRejectionFirstAnalysisInterface['workPeriods'],
+  ): void {
+    const hasPendingPeriodWithoutEarningsHistory = workPeriods.some(
+      (workPeriod) =>
+        workPeriod.pendencyReason.length > 0 &&
+        workPeriod.earningsHistory.length === 0,
+    );
+
+    if (hasPendingPeriodWithoutEarningsHistory) {
       throw new InvalidSpecialRetirementRejectionFirstAnalysisJsonError();
     }
   }
@@ -348,21 +364,20 @@ export class CreateSpecialRetirementRejectionFirstAnalysisUseCase {
             specialPeriods: workPeriod.specialPeriods.map((sp) =>
               SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodModel.build(
                 {
-                  recognizedSpecialTime: sp.recognizedSpecialTime,
-                  companyName: sp.companyName,
+                  recognized: sp.recognized,
+                  company: sp.company,
                   cnpj: sp.cnpj,
-                  position: sp.position,
-                  comprobatoryDocument: sp.comprobatoryDocument,
-                  linkedToCnis: sp.linkedToCnis,
-                  containsCnisRemunerationInPeriod:
-                    sp.containsCnisRemunerationInPeriod,
-                  technicalJustification: sp.technicalJustification,
-                  additionalObservation: sp.additionalObservation,
+                  role: sp.role,
+                  supportingDocument: sp.supportingDocument,
+                  recordedInCnis: sp.recordedInCnis,
+                  remunerationRecordedInCnis: sp.remunerationRecordedInCnis,
+                  justification: sp.justification,
+                  observations: sp.observations,
                   lawyerObservation: sp.lawyerObservation,
                   exposureFrequency: sp.exposureFrequency,
                   informationSource: sp.informationSource,
-                  identifiedAgents: sp.identifiedAgents,
-                  efficientEpi: sp.efficientEpi,
+                  hazardousAgents: sp.hazardousAgents,
+                  epiEficaz: sp.epiEficaz,
                 },
               ),
             ),

@@ -9,31 +9,31 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @ResponseDto()
 export class SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodModel extends BaseBuildableDtoObject {
   @ResponseDtoBooleanProperty({ required: false })
-  public recognizedSpecialTime?: boolean;
+  public recognized?: boolean;
 
   @ResponseDtoStringProperty({ required: false })
-  public companyName?: string;
+  public company?: string;
 
   @ResponseDtoStringProperty({ required: false })
   public cnpj?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public position?: string;
+  public role?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public comprobatoryDocument?: string;
+  public supportingDocument?: string;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public linkedToCnis?: boolean;
+  public recordedInCnis?: boolean;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public containsCnisRemunerationInPeriod?: boolean;
+  public remunerationRecordedInCnis?: boolean;
 
   @ResponseDtoStringProperty({ required: false })
-  public technicalJustification?: string;
+  public justification?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public additionalObservation?: string;
+  public observations?: string;
 
   @ResponseDtoStringProperty({ required: false })
   public lawyerObservation?: string;
@@ -45,10 +45,10 @@ export class SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodModel exten
   public informationSource?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public identifiedAgents?: string;
+  public hazardousAgents?: string;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public efficientEpi?: boolean;
+  public epiEficaz?: boolean;
 
   protected override readonly _type =
     SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodModel.name;

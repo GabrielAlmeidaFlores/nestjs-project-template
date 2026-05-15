@@ -1235,6 +1235,11 @@ Análise processada do CNIS:
       GenerateResponseInputModel.build({
         systemInstruction,
         promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getSpecialRetirementRejectionCompleteAnalysisJsonSchema(),
+        }),
       }),
     );
   }
@@ -5699,17 +5704,28 @@ Processed CNIS analysis:
         category: {
           type: 'string',
           enum: [
-            'segurado_empregado',
+            'empregado_urbano',
+            'empregado_rural',
+            'empregado_domestico',
+            'trabalhador_avulso',
             'segurado_contribuinte_individual',
-            'segurado_facultativo',
+            'segurado_contribuinte_individual_prestador',
+            'mei',
             'segurado_especial',
-            'segurado_domestico',
-            'segurado_avulso',
+            'segurado_facultativo',
           ],
         },
         pendencyReason: {
           type: 'array',
-          items: { type: 'string' },
+          items: {
+            type: 'string',
+            enum: [
+              'contribuicoes_abaixo_do_minimo',
+              'periodo_sem_data_de_saida',
+              'contribuicao_em_atraso',
+              'vinculo_ausente_no_cnis',
+            ],
+          },
           description: 'Lista de motivos de pendencia do período',
         },
         periodConsideration: {
@@ -5735,7 +5751,7 @@ Processed CNIS analysis:
         earningsHistory: {
           type: 'array',
           description:
-            'Histórico de remunerações do período, com foco em competências abaixo do mínimo ou com pendências. Retornar array vazio se não houver.',
+            'Histórico de remunerações do período. Se o array `pendencyReason` estiver preenchido, este campo DEVE conter todas as competências do CNIS para o período — nunca retornar array vazio nesse caso. Retornar array vazio SOMENTE se `pendencyReason` estiver vazio.',
           items: {
             type: 'object',
             properties: {
@@ -5762,36 +5778,36 @@ Processed CNIS analysis:
           items: {
             type: 'object',
             properties: {
-              recognizedSpecialTime: { type: 'boolean' },
-              companyName: { type: 'string' },
+              recognized: { type: 'boolean' },
+              company: { type: 'string' },
               cnpj: { type: 'string' },
-              position: { type: 'string' },
-              comprobatoryDocument: { type: 'string' },
-              linkedToCnis: { type: 'boolean' },
-              containsCnisRemunerationInPeriod: { type: 'boolean' },
-              technicalJustification: { type: 'string' },
-              additionalObservation: { type: 'string' },
+              role: { type: 'string' },
+              supportingDocument: { type: 'string' },
+              recordedInCnis: { type: 'boolean' },
+              remunerationRecordedInCnis: { type: 'boolean' },
+              justification: { type: 'string' },
+              observations: { type: 'string' },
               lawyerObservation: { type: 'string' },
               exposureFrequency: { type: 'string' },
               informationSource: { type: 'string' },
-              identifiedAgents: { type: 'string' },
-              efficientEpi: { type: 'boolean' },
+              hazardousAgents: { type: 'string' },
+              epiEficaz: { type: 'boolean' },
             },
             required: [
-              'recognizedSpecialTime',
-              'companyName',
+              'recognized',
+              'company',
               'cnpj',
-              'position',
-              'comprobatoryDocument',
-              'linkedToCnis',
-              'containsCnisRemunerationInPeriod',
-              'technicalJustification',
-              'additionalObservation',
+              'role',
+              'supportingDocument',
+              'recordedInCnis',
+              'remunerationRecordedInCnis',
+              'justification',
+              'observations',
               'lawyerObservation',
               'exposureFrequency',
               'informationSource',
-              'identifiedAgents',
-              'efficientEpi',
+              'hazardousAgents',
+              'epiEficaz',
             ],
           },
         },
@@ -5918,6 +5934,52 @@ Processed CNIS analysis:
         'totalGracePeriodWithAccelerators',
         'workPeriods',
       ],
+    };
+  }
+
+  private getSpecialRetirementRejectionCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        retirementRules: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              ruleName: { type: 'string' },
+              fulfilled: { type: 'boolean' },
+              grantDate: {
+                type: 'string',
+                format: 'date',
+                description: 'YYYY-MM-DD',
+              },
+              expectedRmi: { type: 'number' },
+              causeValue: { type: 'number' },
+              bestRmi: { type: 'boolean' },
+              biggestCauseValue: { type: 'boolean' },
+              detaildAnalysis: {
+                type: 'string',
+                description: 'Análise detalhada em formato markdown',
+              },
+            },
+            required: [
+              'ruleName',
+              'fulfilled',
+              'grantDate',
+              'expectedRmi',
+              'causeValue',
+              'bestRmi',
+              'biggestCauseValue',
+              'detaildAnalysis',
+            ],
+          },
+        },
+        analysisResult: {
+          type: 'string',
+          description: 'Resultado final da análise em formato markdown',
+        },
+      },
+      required: ['retirementRules', 'analysisResult'],
     };
   }
 

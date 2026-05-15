@@ -251,62 +251,31 @@ export class GetSpecialRetirementRejectionWithRelationsQueryResultAutoMapperProf
       );
 
       const specialRetirementRejectionTechnicalDiagnosis =
-        source.specialRetirementRejectionTechnicalDiagnosis !== undefined &&
-        source.specialRetirementRejectionTechnicalDiagnosis !== null &&
-        source.specialRetirementRejectionTechnicalDiagnosis.length > 0
-          ? GetSpecialRetirementRejectionTechnicalDiagnosisQueryResult.build({
-              periodStartDate:
-                source.specialRetirementRejectionTechnicalDiagnosis[0]
-                  ?.periodStartDate ?? new Date(0),
-              periodEndDate:
-                source.specialRetirementRejectionTechnicalDiagnosis[0]
-                  ?.periodEndDate ?? new Date(0),
-              recognized:
-                source.specialRetirementRejectionTechnicalDiagnosis[0]
-                  ?.recognized ?? false,
-              justification:
-                source.specialRetirementRejectionTechnicalDiagnosis[0]
-                  ?.justification ?? '',
-              company:
-                source.specialRetirementRejectionTechnicalDiagnosis[0]
-                  ?.company ?? '',
-              cnpj:
-                source.specialRetirementRejectionTechnicalDiagnosis[0]?.cnpj ??
-                '',
-              role:
-                source.specialRetirementRejectionTechnicalDiagnosis[0]?.role ??
-                '',
-              supportingDocument:
-                source.specialRetirementRejectionTechnicalDiagnosis[0]
-                  ?.supportingDocument ?? '',
-              recordedInCnis:
-                source.specialRetirementRejectionTechnicalDiagnosis[0]
-                  ?.recordedInCnis ?? false,
-              remunerationRecordedInCnis:
-                source.specialRetirementRejectionTechnicalDiagnosis[0]
-                  ?.remunerationRecordedInCnis ?? false,
-              hazardousAgents:
-                source.specialRetirementRejectionTechnicalDiagnosis[0]
-                  ?.hazardousAgents ?? '',
-              informationSource:
-                source.specialRetirementRejectionTechnicalDiagnosis[0]
-                  ?.informationSource ?? '',
-              legalFramework:
-                source.specialRetirementRejectionTechnicalDiagnosis[0]
-                  ?.legalFramework ?? '',
-              epiEficaz:
-                source.specialRetirementRejectionTechnicalDiagnosis[0]
-                  ?.epiEficaz ?? null,
-              observations:
-                source.specialRetirementRejectionTechnicalDiagnosis[0]
-                  ?.observations ?? null,
-              createdAt:
-                source.specialRetirementRejectionTechnicalDiagnosis[0]
-                  ?.createdAt ?? new Date(0),
-              updatedAt:
-                source.specialRetirementRejectionTechnicalDiagnosis[0]
-                  ?.updatedAt ?? new Date(0),
-            })
+        (source.specialRetirementRejectionTechnicalDiagnosis ?? []).length > 0
+          ? (source.specialRetirementRejectionTechnicalDiagnosis ?? []).map(
+              (item) =>
+                GetSpecialRetirementRejectionTechnicalDiagnosisQueryResult.build(
+                  {
+                    periodStartDate: item.periodStartDate,
+                    periodEndDate: item.periodEndDate,
+                    recognized: item.recognized,
+                    justification: item.justification,
+                    company: item.company,
+                    cnpj: item.cnpj,
+                    role: item.role,
+                    supportingDocument: item.supportingDocument,
+                    recordedInCnis: item.recordedInCnis,
+                    remunerationRecordedInCnis: item.remunerationRecordedInCnis,
+                    hazardousAgents: item.hazardousAgents,
+                    informationSource: item.informationSource,
+                    legalFramework: item.legalFramework,
+                    epiEficaz: item.epiEficaz ?? null,
+                    observations: item.observations ?? null,
+                    createdAt: item.createdAt,
+                    updatedAt: item.updatedAt,
+                  },
+                ),
+            )
           : null;
 
       return GetSpecialRetirementRejectionWithRelationsQueryResult.build({

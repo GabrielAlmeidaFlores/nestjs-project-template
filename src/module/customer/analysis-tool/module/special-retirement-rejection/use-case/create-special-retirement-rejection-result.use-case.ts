@@ -3,8 +3,10 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
@@ -22,6 +24,7 @@ import {
   SpecialRetirementRejectionCompleteAnalysisModel,
   SpecialRetirementRejectionRetirementRuleModel,
 } from '@module/customer/analysis-tool/module/special-retirement-rejection/model/special-retirement-rejection-complete-analysis.model';
+import { AnalysisToolRecordNotFoundError } from '@module/customer/documents-sent-by-email/error/analysis-tool-record-not-found.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
@@ -57,6 +60,8 @@ export class CreateSpecialRetirementRejectionResultUseCase {
     private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(AnalysisToolRecordCommandRepositoryGateway)
+    private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
   ) {}
 
   public async execute(
@@ -110,6 +115,14 @@ export class CreateSpecialRetirementRejectionResultUseCase {
     if (!isCnisValid) {
       throw new CnisDocumentIsNotValidError();
     }
+
+    const analysisRecord =
+      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsBySpecialRetirementRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        specialRetirementRejectionId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+        AnalysisToolRecordNotFoundError,
+      );
 
     const analysisToolClient = this.buildAnalysisToolClientEntity(
       analysisToolRecordQueryResult,
@@ -177,7 +190,18 @@ export class CreateSpecialRetirementRejectionResultUseCase {
             resultEntity,
           );
 
-    const transactionOperations = [consumeCreditTransaction, resultTransaction];
+    const updateAnalysisToolRecordStatusTransaction =
+      this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecordStatus(
+        analysisRecord.id,
+        AnalysisStatusEnum.COMPLETED,
+        organizationMember.id,
+      );
+
+    const transactionOperations = [
+      consumeCreditTransaction,
+      resultTransaction,
+      updateAnalysisToolRecordStatusTransaction,
+    ];
 
     if (currentResult === null) {
       transactionOperations.push(
@@ -368,6 +392,26 @@ export class CreateSpecialRetirementRejectionResultUseCase {
       firstAnalysis:
         specialRetirementRejection.specialRetirementRejectionResult
           ?.firstAnalysis ?? null,
+      technicalDiagnosis: (
+        specialRetirementRejection.specialRetirementRejectionTechnicalDiagnosis ??
+        []
+      ).map((td) => ({
+        periodStartDate: td.periodStartDate,
+        periodEndDate: td.periodEndDate,
+        recognized: td.recognized,
+        justification: td.justification,
+        company: td.company,
+        cnpj: td.cnpj,
+        role: td.role,
+        supportingDocument: td.supportingDocument,
+        recordedInCnis: td.recordedInCnis,
+        remunerationRecordedInCnis: td.remunerationRecordedInCnis,
+        hazardousAgents: td.hazardousAgents,
+        informationSource: td.informationSource,
+        legalFramework: td.legalFramework,
+        epiEficaz: td.epiEficaz,
+        observations: td.observations,
+      })),
     };
 
     return Buffer.from(JSON.stringify(rejectionData, null, 2), 'utf-8');

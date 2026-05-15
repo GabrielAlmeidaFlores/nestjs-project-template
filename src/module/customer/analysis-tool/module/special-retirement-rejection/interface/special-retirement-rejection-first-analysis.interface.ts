@@ -1,20 +1,20 @@
 import type { SpecialRetirementRejectionWorkPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period/enum/special-retirement-rejection-work-period-pendency-reason.enum';
 
 export interface SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodInterface {
-  recognizedSpecialTime: boolean;
-  companyName: string;
+  recognized: boolean;
+  company: string;
   cnpj: string;
-  position: string;
-  comprobatoryDocument: string;
-  linkedToCnis: boolean;
-  containsCnisRemunerationInPeriod: boolean;
-  technicalJustification: string;
-  additionalObservation: string;
+  role: string;
+  supportingDocument: string;
+  recordedInCnis: boolean;
+  remunerationRecordedInCnis: boolean;
+  justification: string;
+  observations: string;
   lawyerObservation: string;
   exposureFrequency: string;
   informationSource: string;
-  identifiedAgents: string;
-  efficientEpi: boolean;
+  hazardousAgents: string;
+  epiEficaz: boolean;
 }
 
 export interface SpecialRetirementRejectionFirstAnalysisEarningsHistoryInterface {
