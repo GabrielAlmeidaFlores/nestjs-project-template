@@ -37,7 +37,10 @@ export class GetSpecialRetirementGrantWithRelationsQueryResultAutoMapperProfile 
     const convertOrmEntityToDomainEntity = (
       source: SpecialRetirementGrantTypeormEntity,
     ): GetSpecialRetirementGrantWithRelationsQueryResult => {
-      if (!source.createdBy || !source.updatedBy) {
+      const createdBySource = source.createdBy ?? source.updatedBy;
+      const updatedBySource = source.updatedBy ?? source.createdBy;
+
+      if (!createdBySource || !updatedBySource) {
         throw new IncompleteSourceDataForMappingError({
           destinationClass:
             GetSpecialRetirementGrantWithRelationsQueryResult.name,
@@ -54,13 +57,13 @@ export class GetSpecialRetirementGrantWithRelationsQueryResultAutoMapperProfile 
         : null;
 
       const createdBy = this.mapper.map(
-        source.createdBy,
+        createdBySource,
         OrganizationMemberTypeormEntity,
         GetOrganizationMemberWithCustomerRelationQueryResult,
       );
 
       const updatedBy = this.mapper.map(
-        source.updatedBy,
+        updatedBySource,
         OrganizationMemberTypeormEntity,
         GetOrganizationMemberWithCustomerRelationQueryResult,
       );

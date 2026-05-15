@@ -350,5 +350,4 @@ export class CreateGeneralUrbanRetirementDenialResultUseCase {
 
     return [cnisBuffer, ...otherDocumentBuffers, ...periodDocumentBuffers];
   }
-
 }

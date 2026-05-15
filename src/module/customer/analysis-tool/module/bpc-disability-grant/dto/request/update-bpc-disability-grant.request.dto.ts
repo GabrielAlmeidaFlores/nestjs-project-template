@@ -1,5 +1,7 @@
 ﻿import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { BpcDisabilityGrantCategoryEnum } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/enum/bpc-disability-grant-category.enum';
+import { BpcDisabilityGrantLegalRepresentativeOfAMinorKinshipEnum } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-legal-representative-of-a-minor/enum/bpc-disability-grant-legal-representative-of-a-minor-kinship.enum';
+import { BpcDisabilityGrantLegalRepresentativeOfAMinorId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-legal-representative-of-a-minor/value-object/bpc-disability-grant-legal-representative-of-a-minor-id/bpc-disability-grant-legal-representative-of-a-minor-id.value-object';
 import { CreateBpcDisabilityGrantDocumentItemRequestDto } from '@module/customer/analysis-tool/module/bpc-disability-grant/dto/request/create-bpc-disability-grant-document.request.dto';
 import { DisabilityRetirementPlanningPeriodDisabilityCategoryEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-disability/enum/disability-retirement-planning-period-disability-category.enum';
 import { RetirementPlanningDisabilityDegreeEnum } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-degree-enum';
@@ -11,6 +13,36 @@ import { RequestDtoObjectProperty } from '@shared/api/util/decorator/property/dt
 import { RequestDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-string-property/request-dto-string-property.decorator';
 import { RequestDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-value-object-property/request-dto-value-object-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
+
+@RequestDto()
+export class UpdateBpcDisabilityGrantLegalRepresentativeOfAMinorRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoValueObjectProperty(
+    BpcDisabilityGrantLegalRepresentativeOfAMinorId,
+    { required: false },
+  )
+  public readonly id?: BpcDisabilityGrantLegalRepresentativeOfAMinorId;
+
+  @RequestDtoStringProperty({ required: false })
+  public readonly name?: string;
+
+  @RequestDtoStringProperty({ required: false })
+  public readonly federalDocument?: string;
+
+  @RequestDtoDateProperty({ required: false })
+  public readonly birthDate?: Date;
+
+  @RequestDtoBooleanProperty({ required: false })
+  public readonly minorUnderCustody?: boolean;
+
+  @RequestDtoEnumProperty(
+    BpcDisabilityGrantLegalRepresentativeOfAMinorKinshipEnum,
+    { required: false },
+  )
+  public readonly kinship?: BpcDisabilityGrantLegalRepresentativeOfAMinorKinshipEnum;
+
+  protected override readonly _type =
+    UpdateBpcDisabilityGrantLegalRepresentativeOfAMinorRequestDto.name;
+}
 
 @RequestDto()
 export class UpdateBpcDisabilityGrantRequestDto extends BaseBuildableDtoObject {
@@ -69,6 +101,12 @@ export class UpdateBpcDisabilityGrantRequestDto extends BaseBuildableDtoObject {
 
   @RequestDtoStringProperty({ required: false, isArray: true })
   public readonly inssBenefitNumbers?: string[];
+
+  @RequestDtoObjectProperty(
+    () => UpdateBpcDisabilityGrantLegalRepresentativeOfAMinorRequestDto,
+    { required: false },
+  )
+  public readonly legalRepresentativeOfAMinor?: UpdateBpcDisabilityGrantLegalRepresentativeOfAMinorRequestDto;
 
   @RequestDtoStringProperty({ required: false, isArray: true })
   public readonly legalProceedingNumbers?: string[];
