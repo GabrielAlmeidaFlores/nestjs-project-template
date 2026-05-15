@@ -13,7 +13,9 @@ import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/sche
 import { AccidentAssistanceGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-grant/domain/repository/accident-assistance-grant-result/command/accident-assistance-grant-result.command.repository.gateway';
 import { AccidentAssistanceGrantResultEntity } from '@module/customer/analysis-tool/module/accident-assistance-grant/domain/schema/entity/accident-assistance-grant-result/accident-assistance-grant-result.entity';
 import { AccidentAssistanceGrantResultId } from '@module/customer/analysis-tool/module/accident-assistance-grant/domain/schema/entity/accident-assistance-grant-result/value-object/accident-assistance-grant-result-id.value-object';
+import { AccidentAssistanceTerminatedQueryRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated/query/accident-assistance-terminated.query.repository.gateway';
 import { AccidentAssistanceTerminatedResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/repository/accident-assistance-terminated-result/command/accident-assistance-terminated-result.command.repository.gateway';
+import { AccidentAssistanceTerminatedId } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated/value-object/accident-assistance-terminated-id/accident-assistance-terminated-id.value-object';
 import { AccidentAssistanceTerminatedResultEntity } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-result/accident-assistance-terminated-result.entity';
 import { AccidentAssistanceTerminatedResultId } from '@module/customer/analysis-tool/module/accident-assistance-terminated/domain/schema/entity/accident-assistance-terminated-result/value-object/accident-assistance-terminated-result-id/accident-assistance-terminated-result-id.value-object';
 import { AccidentBenefitRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/repository/accident-benefit-rejection/query/accident-benefit-rejection.query.repository.gateway';
@@ -165,6 +167,11 @@ import { TeacherRetirementPlanningRppsResultCommandRepositoryGateway } from '@mo
 import { TeacherRetirementPlanningRppsId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
 import { TeacherRetirementPlanningRppsResultEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning-result/teacher-retirement-planning-result.entity';
 import { TeacherRetirementPlanningRppsResultId } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning-result/value-object/teacher-retirement-planning-result-id.value-object';
+import { SpecialCategoryRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis/query/special-category-retirement-analysis.query.repository.gateway';
+import { SpecialCategoryRetirementAnalysisId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/value-object/special-category-retirement-analysis-id/special-category-retirement-analysis-id.value-object';
+import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
+import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { TemporaryDisabilityBenefitsGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant-result/command/temporary-disability-benefits-grant-result.command.repository.gateway';
 import { TemporaryDisabilityBenefitsGrantResultEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-result/temporary-disability-benefits-grant-result.entity';
 import { TemporaryDisabilityBenefitsGrantResultId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant-result/value-object/temporary-disability-benefits-grant-result-id.value-object';
@@ -174,6 +181,42 @@ import { TemporaryDisabilityBenefitsTerminatedResultId } from '@module/customer/
 import { TemporaryIncapacityBenefitRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-result/command/temporary-incapacity-benefit-rejection-result.command.repository.gateway';
 import { TemporaryIncapacityBenefitRejectionResultEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-result/temporary-incapacity-benefit-rejection-result.entity';
 import { TemporaryIncapacityBenefitRejectionResultId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-result/value-object/temporary-incapacity-benefit-rejection-result-id.value-object';
+import { AccidentAssistanceGrantId } from '@module/customer/analysis-tool/module/accident-assistance-grant/domain/schema/entity/accident-assistance-grant/value-object/accident-assistance-grant-id.value-object';
+import { AdministrativeProcedureInssAnalysisId } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/value-object/administrative-procedure-inss-analysis-id/administrative-procedure-inss-analysis-id.value-object';
+import { AudienceQuestionGeneratorId } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/value-object/audience-question-generator-id/audience-question-generator-id.value-object';
+import { BpcDisabilityDenialId } from '@module/customer/analysis-tool/module/bpc-disability-denial/domain/schema/entity/bpc-disability-denial/value-object/bpc-disability-denial-id/bpc-disability-denial-id.value-object';
+import { BpcDisabilityGrantId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/value-object/bpc-disability-grant-id/bpc-disability-grant-id.value-object';
+import { BpcDisabilityTerminationId } from '@module/customer/analysis-tool/module/bpc-disability-termination/domain/schema/entity/bpc-disability-termination/value-object/bpc-disability-termination-id/bpc-disability-termination-id.value-object';
+import { BpcElderlyAnalysisId } from '@module/customer/analysis-tool/module/bpc-elderly-analysis/domain/schema/entity/bpc-elderly-analysis/value-object/bpc-elderly-analysis-id/bpc-elderly-analysis-id.value-object';
+import { BpcElderlyCessationId } from '@module/customer/analysis-tool/module/bpc-elderly-cessation/domain/schema/entity/bpc-elderly-cessation/value-object/bpc-elderly-cessation-id/bpc-elderly-cessation-id.value-object';
+import { CnisFastAnalysisId } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
+import { DeathBenefitGrantId } from '@module/customer/analysis-tool/module/death-benefit-grant/domain/schema/entity/death-benefit-grant/value-object/death-benefit-grant-id.value-object';
+import { DeathBenefitRejectionId } from '@module/customer/analysis-tool/module/death-benefit-rejection/domain/schema/entity/death-benefit-rejection/value-object/death-benefit-rejection-id.value-object';
+import { DisabilityAssessmentForBpcAnalysisId } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/value-object/disability-assessment-for-bpc-analysis-id/disability-assessment-for-bpc-analysis-id.value-object';
+import { DisabilityRetirementPlanningId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
+import { DisabilityRetirementPlanningGrantId } from '@module/customer/analysis-tool/module/disability-retirement-planning-grant/domain/schema/entity/disability-retirement-planning-grant/value-object/disability-retirement-planning-grant-id.value-object';
+import { DisabilityRetirementPlanningRejectionId } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection/value-object/disability-retirement-planning-rejection-id/disability-retirement-planning-rejection-id.value-object';
+import { GeneralUrbanRetirementAnalysisId } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/value-object/general-urban-retirement-analysis-id.value-object';
+import { GeneralUrbanRetirementDenialId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/value-object/general-urban-retirement-denial-id/general-urban-retirement-denial-id.value-object';
+import { GeneralUrbanRetirementGrantId } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/value-object/general-urban-retirement-grant-id.value-object';
+import { GeneralUrbanRetirementReviewId } from '@module/customer/analysis-tool/module/general-urban-retirement-review/domain/schema/entity/general-urban-retirement-review/value-object/general-urban-retirement-review-id.value-object';
+import { InsuranceQualityAnalysisId } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/value-object/insurance-quality-analysis-id/insurance-quality-analysis-id.value-object';
+import { JudicialCaseAnalysisId } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/value-object/judicial-case-analysis-id/judicial-case-analysis-id.value-object';
+import { MaternityPayGrantId } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/value-object/maternity-pay-grant-id.value-object';
+import { MaternityPayRejectionId } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/schema/entity/maternity-pay-rejection/value-object/maternity-pay-rejection-id.value-object';
+import { MedicalAndSocialReportObjectionGeneratorAnalysisId } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/value-object/medical-and-social-report-objection-generator-analysis-id/medical-and-social-report-objection-generator-analysis-id.value-object';
+import { MedicalQuestionGeneratorId } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/value-object/medical-question-generator-id/medical-question-generator-id.value-object';
+import { PerCapitaIncomeForBpcAnalysisId } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/value-object/per-capita-income-for-bpc-analysis-id/per-capita-income-for-bpc-analysis-id.value-object';
+import { PermanentIncapacityBenefitTerminatedId } from '@module/customer/analysis-tool/module/permanent-incapacity-benefit-terminated/domain/schema/entity/permanent-incapacity-benefit-terminated/value-object/permanent-incapacity-benefit-terminated-id.value-object';
+import { RetirementPermanentDisabilityRejectionId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection/value-object/retirement-permanent-disability-rejection-id/retirement-permanent-disability-rejection-id.value-object';
+import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
+import { SpecialActivityId } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/value-object/special-activity-id.value-object';
+import { SpecialRetirementGrantId } from '@module/customer/analysis-tool/module/special-retirement-grant/domain/schema/entity/special-retirement-grant/value-object/special-retirement-grant-id/special-retirement-grant-id.value-object';
+import { SpecialRetirementRejectionId } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection/value-object/special-retirement-rejection-id.value-object';
+import { SpeechGeneratorId } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/value-object/speech-generator-id/speech-generator-id.value-object';
+import { TemporaryDisabilityBenefitsGrantId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/schema/entity/temporary-disability-benefits-grant/value-object/temporary-disability-benefits-grant-id.value-object';
+import { TemporaryDisabilityBenefitsTerminatedId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/schema/entity/temporary-disability-benefits-terminated/value-object/temporary-disability-benefits-terminated-id.value-object';
+import { TemporaryIncapacityBenefitRejectionId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/value-object/temporary-incapacity-benefit-rejection-id.value-object';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 
 @Injectable()
@@ -192,6 +235,7 @@ export class McpAnalysisRecordHandler {
     private readonly disabilityAssessmentBpcResultCommandRepo: DisabilityAssessmentForBpcAnalysisResultCommandRepositoryGateway,
     private readonly medicalAndSocialReportResultCommandRepo: MedicalAndSocialReportObjectionGeneratorAnalysisResultCommandRepositoryGateway,
     private readonly accidentAssistanceGrantResultCommandRepo: AccidentAssistanceGrantResultCommandRepositoryGateway,
+    private readonly accidentAssistanceTerminatedQueryRepo: AccidentAssistanceTerminatedQueryRepositoryGateway,
     private readonly accidentAssistanceTerminatedResultCommandRepo: AccidentAssistanceTerminatedResultCommandRepositoryGateway,
     private readonly bpcDisabilityGrantResultCommandRepo: BpcDisabilityGrantResultCommandRepositoryGateway,
     private readonly bpcDisabilityDenialResultCommandRepo: BpcDisabilityDenialResultCommandRepositoryGateway,
@@ -240,6 +284,9 @@ export class McpAnalysisRecordHandler {
     private readonly retirementPermanentDisabilityRevisionResultCommandRepo: RetirementPermanentDisabilityRevisionResultCommandRepositoryGateway,
     private readonly teacherRetirementPlanningRppsQueryRepo: TeacherRetirementPlanningRppsQueryRepositoryGateway,
     private readonly teacherRetirementPlanningRppsResultCommandRepo: TeacherRetirementPlanningRppsResultCommandRepositoryGateway,
+    private readonly specialCategoryRetirementAnalysisQueryRepo: SpecialCategoryRetirementAnalysisQueryRepositoryGateway,
+    private readonly analysisToolRecordCommandRepo: AnalysisToolRecordCommandRepositoryGateway,
+    private readonly organizationMemberQueryRepo: OrganizationMemberQueryRepositoryGateway,
   ) {}
 
   public async listAnalysisRecords(
@@ -2452,6 +2499,585 @@ export class McpAnalysisRecordHandler {
       success: true,
       message: `Field '${fieldName}' updated successfully`,
     };
+  }
+
+  public async getAccidentAssistanceTerminated(
+    params: Record<string, unknown>,
+    toolName: string,
+  ): Promise<unknown> {
+    const { orgId, authId } = this.getOrgContext(params);
+    const rawId = params['accident_assistance_terminated_id'] as string;
+    if (!rawId) {
+      throw new McpExecuteToolCallError({
+        toolName,
+        message: 'accident_assistance_terminated_id is required',
+      });
+    }
+    const id = new AccidentAssistanceTerminatedId(rawId);
+    await this.analysisToolRecordQueryRepo.findWithRelationsByAccidentAssistanceTerminatedIdAndOrganizationIdAndAuthIdentityIdOrFail(
+      id,
+      orgId,
+      authId,
+      McpRecordNotFoundError,
+    );
+    const result =
+      await this.accidentAssistanceTerminatedQueryRepo.findOneAccidentAssistanceTerminatedByIdOrFail(
+        id,
+        McpRecordNotFoundError,
+      );
+    return result;
+  }
+
+  public async updateAccidentAssistanceTerminatedResult(
+    params: Record<string, unknown>,
+    toolName: string,
+  ): Promise<unknown> {
+    const { orgId, authId } = this.getOrgContext(params);
+    const rawId = params['accident_assistance_terminated_id'] as string;
+    const fieldName = params['field_name'] as string;
+    const newContent = params['new_content'] as string | null | undefined;
+    if (!rawId)
+      throw new McpExecuteToolCallError({
+        toolName,
+        message: 'accident_assistance_terminated_id is required',
+      });
+    if (!fieldName)
+      throw new McpExecuteToolCallError({
+        toolName,
+        message: 'field_name is required',
+      });
+    if (newContent === undefined || newContent === null)
+      throw new McpExecuteToolCallError({
+        toolName,
+        message: 'new_content is required',
+      });
+
+    const id = new AccidentAssistanceTerminatedId(rawId);
+    await this.analysisToolRecordQueryRepo.findWithRelationsByAccidentAssistanceTerminatedIdAndOrganizationIdAndAuthIdentityIdOrFail(
+      id,
+      orgId,
+      authId,
+      McpRecordNotFoundError,
+    );
+
+    const withRelations =
+      await this.accidentAssistanceTerminatedQueryRepo.findOneAccidentAssistanceTerminatedByIdOrFail(
+        id,
+        McpRecordNotFoundError,
+      );
+    const r = withRelations.accidentAssistanceTerminatedResult;
+    if (!r)
+      throw new McpExecuteToolCallError({ toolName, message: 'No result found' });
+
+    const resultId = r.id;
+    const props: Record<string, unknown> = {
+      id: resultId,
+      accidentAssistanceTerminatedCompleteAnalysis:
+        r.accidentAssistanceTerminatedCompleteAnalysis,
+      accidentAssistanceTerminatedSimplifiedAnalysis:
+        r.accidentAssistanceTerminatedSimplifiedAnalysis,
+      decisionDetails: r.decisionDetails,
+      firstAnalysis: r.firstAnalysis,
+      completeAnalysisDownload: r.completeAnalysisDownload,
+    };
+    props[fieldName] = newContent;
+    const entity = new AccidentAssistanceTerminatedResultEntity(
+      props as unknown as ConstructorParameters<
+        typeof AccidentAssistanceTerminatedResultEntity
+      >[0],
+    );
+    await this.transactionRepo.execute(
+      this.accidentAssistanceTerminatedResultCommandRepo.updateAccidentAssistanceTerminatedResult(
+        resultId,
+        entity,
+      ),
+    );
+    return { success: true, message: `Field '${fieldName}' updated successfully` };
+  }
+
+  private async findAnalysisToolRecordByEntityIdAndType(
+    entityId: string,
+    analysisType: string,
+    orgId: OrganizationId,
+    authId: AuthIdentityId,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    // All entity IDs are Guid subclasses. We instantiate one to validate UUID format,
+    // then cast to the specific type required by each repo method.
+    const anyId = new AccidentAssistanceTerminatedId(entityId);
+    const repo = this.analysisToolRecordQueryRepo;
+    const err = McpRecordNotFoundError;
+
+    switch (analysisType) {
+      case AnalysisToolRecordTypeEnum.CNIS_FAST_ANALYSIS:
+        return repo.findWithRelationsByCnisFastAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as CnisFastAnalysisId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.RETIREMENT_PLANNING_RGPS:
+        return repo.findWithRelationsByRetirementPlanningRgpsIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as RetirementPlanningRgpsId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.RETIREMENT_PLANNING_RPPS:
+        return repo.findWithRelationsByRetirementPlanningRppsIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as RetirementPlanningRppsId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.TEACHER_RETIREMENT_PLANNING:
+      case AnalysisToolRecordTypeEnum.TEACHER_RETIREMENT_PLANNING_RPPS:
+        return repo.findWithRelationsByTeacherRetirementPlanningIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as TeacherRetirementPlanningId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.SPECIAL_ACTIVITY:
+        return repo.findWithRelationsBySpecialActivityIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as SpecialActivityId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.JUDICIAL_CASE_ANALYSIS:
+        return repo.findWithRelationsByJudicialCaseAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as JudicialCaseAnalysisId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS:
+        return repo.findWithRelationsByAdministrativeProcedureInssAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as AdministrativeProcedureInssAnalysisId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.AUDIENCE_QUESTIONS_GENERATOR:
+        return repo.findWithRelationsByAudienceQuestionGeneratorIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as AudienceQuestionGeneratorId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.MEDICAL_QUESTION_GENERATOR:
+        return repo.findWithRelationsByMedicalQuestionGeneratorIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as MedicalQuestionGeneratorId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.MEDICAL_AND_SOCIAL_REPORT_OBJECTION_GENERATOR_ANALYSIS:
+        return repo.findWithRelationsByMedicalAndSocialReportObjectionGeneratorAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as MedicalAndSocialReportObjectionGeneratorAnalysisId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.SPEECH_GENERATOR:
+        return repo.findWithRelationsBySpeechGeneratorIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as SpeechGeneratorId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.DISABILITY_ASSESSMENT_FOR_BPC_ANALYSIS:
+        return repo.findWithRelationsByDisabilityAssessmentForBpcAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as DisabilityAssessmentForBpcAnalysisId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.INSURANCE_QUALITY_ANALYSIS:
+        return repo.findWithRelationsByInsuranceQualityAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as InsuranceQualityAnalysisId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.PER_CAPITA_INCOME_FOR_BPC_ANALYSIS:
+        return repo.findWithRelationsByPerCapitaIncomeForBpcAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as PerCapitaIncomeForBpcAnalysisId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.RURAL_TIMELINE_ANALYSIS:
+        return repo.findWithRelationsByRuralTimelineAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as RuralTimelineAnalysisId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.DISABILITY_RETIREMENT_PLANNING:
+        return repo.findWithRelationsByDisabilityRetirementPlanningIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as DisabilityRetirementPlanningId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.GENERAL_URBAN_RETIREMENT_GRANT:
+        return repo.findWithRelationsByGeneralUrbanRetirementGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as GeneralUrbanRetirementGrantId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.GENERAL_URBAN_RETIREMENT_ANALYSIS:
+        return repo.findWithRelationsByGeneralUrbanRetirementAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as GeneralUrbanRetirementAnalysisId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.SPECIAL_RETIREMENT_GRANT:
+        return repo.findWithRelationsBySpecialRetirementGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as SpecialRetirementGrantId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.SPECIAL_RETIREMENT_REJECTION:
+        return repo.findWithRelationsBySpecialRetirementRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as SpecialRetirementRejectionId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.DISABILITY_RETIREMENT_PLANNING_GRANT:
+        return repo.findWithRelationsByDisabilityRetirementPlanningGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as DisabilityRetirementPlanningGrantId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.DEATH_BENEFIT_GRANT:
+        return repo.findWithRelationsByDeathBenefitGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as DeathBenefitGrantId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.DEATH_BENEFIT_REJECTION:
+        return repo.findWithRelationsByDeathBenefitRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as DeathBenefitRejectionId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.TEMPORARY_DISABILITY_BENEFITS_GRANT:
+        return repo.findWithRelationsByTemporaryDisabilityBenefitsGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as TemporaryDisabilityBenefitsGrantId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.RURAL_OR_HYBRID_RETIREMENT_REJECTION:
+        return repo.findWithRelationsByRuralOrHybridRetirementRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as RuralOrHybridRetirementRejectionId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.RURAL_OR_HYBRID_RETIREMENT_ANALYSIS:
+        return repo.findWithRelationsByRuralOrHybridRetirementAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as RuralOrHybridRetirementAnalysisId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.SURVIVOR_PENSION_ANALYSIS:
+        return repo.findWithRelationsBySurvivorPensionAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as SurvivorPensionAnalysisId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL:
+        return repo.findWithRelationsByGeneralUrbanRetirementDenialIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as GeneralUrbanRetirementDenialId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW:
+        return repo.findWithRelationsByGeneralUrbanRetirementReviewIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as GeneralUrbanRetirementReviewId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.ACCIDENT_BENEFIT_REJECTION:
+        return repo.findWithRelationsByAccidentBenefitRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as AccidentBenefitRejectionId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION:
+        return repo.findWithRelationsByDisabilityRetirementPlanningRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as DisabilityRetirementPlanningRejectionId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REJECTION:
+        return repo.findWithRelationsByRetirementPermanentDisabilityRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as RetirementPermanentDisabilityRejectionId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.BPC_DISABILITY_GRANT:
+        return repo.findWithRelationsByBpcDisabilityGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as BpcDisabilityGrantId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.BPC_DISABILITY_DENIAL:
+        return repo.findWithRelationsByBpcDisabilityDenialIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as BpcDisabilityDenialId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.BPC_ELDERLY_ANALYSIS:
+        return repo.findWithRelationsByBpcElderlyAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as BpcElderlyAnalysisId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.MATERNITY_PAY_REJECTION:
+        return repo.findWithRelationsByMaternityPayRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as MaternityPayRejectionId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_REJECTION:
+        return repo.findWithRelationsByTemporaryIncapacityBenefitRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as TemporaryIncapacityBenefitRejectionId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.TEMPORARY_DISABILITY_BENEFITS_TERMINATED:
+        return repo.findWithRelationsByTemporaryDisabilityBenefitsTerminatedIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as TemporaryDisabilityBenefitsTerminatedId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.PERMANENT_INCAPACITY_BENEFIT_TERMINATED:
+        return repo.findWithRelationsByPermanentIncapacityBenefitTerminatedIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as PermanentIncapacityBenefitTerminatedId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.BPC_ELDERLY_CESSATION:
+        return repo.findWithRelationsByBpcElderlyCessationIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as BpcElderlyCessationId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.MATERNITY_PAY_GRANT:
+        return repo.findWithRelationsByMaternityPayGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as MaternityPayGrantId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.TEACHER_RETIREMENT_PLANNING_REJECTION:
+        return repo.findWithRelationsByTeacherRetirementPlanningRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as TeacherRetirementPlanningRejectionId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.BPC_DISABILITY_TERMINATION:
+        return repo.findWithRelationsByBpcDisabilityTerminationIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as BpcDisabilityTerminationId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.ELDERLY_BPC_REJECTION:
+        return repo.findWithRelationsByElderlyBpcRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as ElderlyBpcRejectionId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.ACCIDENT_ASSISTANCE_TERMINATED:
+        return repo.findWithRelationsByAccidentAssistanceTerminatedIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as AccidentAssistanceTerminatedId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.ACCIDENT_ASSISTANCE_GRANT:
+        return repo.findWithRelationsByAccidentAssistanceGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as AccidentAssistanceGrantId,
+          orgId,
+          authId,
+          err,
+        );
+      case AnalysisToolRecordTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REVISION:
+        return repo.findWithRelationsByRetirementPermanentDisabilityRevisionIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          anyId as unknown as RetirementPermanentDisabilityRevisionId,
+          orgId,
+          authId,
+          err,
+        );
+      default:
+        throw new McpExecuteToolCallError({
+          toolName: 'findAnalysisToolRecordByEntityIdAndType',
+          message: `Analysis type '${analysisType}' does not support entity-based lookup. Use get_cnis_analysis_details with the AnalysisToolRecord ID instead.`,
+        });
+    }
+  }
+
+  public async getAnalysisByEntityId(
+    params: Record<string, unknown>,
+    toolName: string,
+  ): Promise<unknown> {
+    const { orgId, authId } = this.getOrgContext(params);
+    const entityId = params['entity_id'] as string;
+    const analysisType = params['analysis_type'] as string;
+    if (!entityId)
+      throw new McpExecuteToolCallError({ toolName, message: 'entity_id is required' });
+    if (!analysisType)
+      throw new McpExecuteToolCallError({
+        toolName,
+        message: 'analysis_type is required',
+      });
+    return this.findAnalysisToolRecordByEntityIdAndType(
+      entityId,
+      analysisType,
+      orgId,
+      authId,
+    );
+  }
+
+  public async updateAnalysisResultByEntityId(
+    params: Record<string, unknown>,
+    toolName: string,
+  ): Promise<unknown> {
+    const { orgId, authId } = this.getOrgContext(params);
+    const entityId = params['entity_id'] as string;
+    const analysisType = params['analysis_type'] as string;
+    const fieldName = params['field_name'] as string;
+    const newContent = params['new_content'] as string;
+    if (!entityId)
+      throw new McpExecuteToolCallError({ toolName, message: 'entity_id is required' });
+    if (!analysisType)
+      throw new McpExecuteToolCallError({
+        toolName,
+        message: 'analysis_type is required',
+      });
+    if (!fieldName)
+      throw new McpExecuteToolCallError({ toolName, message: 'field_name is required' });
+    if (newContent === undefined || newContent === null)
+      throw new McpExecuteToolCallError({
+        toolName,
+        message: 'new_content is required',
+      });
+
+    const record = await this.findAnalysisToolRecordByEntityIdAndType(
+      entityId,
+      analysisType,
+      orgId,
+      authId,
+    );
+    const recordId = record.id.toString();
+    return this.updateAnalysisResult({ ...params, record_id: recordId }, toolName);
+  }
+
+  public async getSpecialCategoryRetirementAnalysis(
+    params: Record<string, unknown>,
+    toolName: string,
+  ): Promise<unknown> {
+    const { orgId } = this.getOrgContext(params);
+    const entityId = params['entity_id'] as string;
+    if (!entityId)
+      throw new McpExecuteToolCallError({ toolName, message: 'entity_id is required' });
+    const id = new SpecialCategoryRetirementAnalysisId(entityId);
+    const analysis =
+      await this.specialCategoryRetirementAnalysisQueryRepo.findOneByIdAndOrganizationIdWithRelationsOrFail(
+        id,
+        orgId,
+        McpRecordNotFoundError,
+      );
+    return {
+      id: analysis.id.toString(),
+      analysisCustomName: analysis.analysisCustomName,
+      retirementAnalysisObjectiveType: analysis.retirementAnalysisObjectiveType,
+      publicServiceFederativeEntityName: analysis.publicServiceFederativeEntityName,
+      publicServiceStateAbbreviation: analysis.publicServiceStateAbbreviation,
+      hasConfirmedExposureToHarmfulAgents: analysis.hasConfirmedExposureToHarmfulAgents,
+      createdAt: analysis.createdAt,
+      updatedAt: analysis.updatedAt,
+      analysisResult: analysis.analysisResult
+        ? {
+            id: analysis.analysisResult.specialCategoryRetirementAnalysisResultId.toString(),
+            simplifiedAnalysisSummaryText: analysis.analysisResult.simplifiedAnalysisSummaryText,
+            fullAnalysisConclusionText: analysis.analysisResult.fullAnalysisConclusionText,
+            administrativeProcedureAnalysis: analysis.analysisResult.administrativeProcedureAnalysis,
+          }
+        : null,
+    };
+  }
+
+  public async updateAnalysisRecordStatus(
+    params: Record<string, unknown>,
+    toolName: string,
+  ): Promise<unknown> {
+    const { orgId, authId } = this.getOrgContext(params);
+    const recordId = params['record_id'] as string;
+    const status = params['status'] as string;
+    if (!recordId)
+      throw new McpExecuteToolCallError({ toolName, message: 'record_id is required' });
+    if (!status || !Object.values(AnalysisStatusEnum).includes(status as AnalysisStatusEnum))
+      throw new McpExecuteToolCallError({
+        toolName,
+        message: `status must be one of: ${Object.values(AnalysisStatusEnum).join(', ')}`,
+      });
+
+    const record =
+      await this.analysisToolRecordQueryRepo.findOneByAnalysisToolRecordIdAndAuthIdentityIdAndOrganizationIdWithRelationsOrFail(
+        new AnalysisToolRecordId(recordId),
+        orgId,
+        authId,
+        McpRecordNotFoundError,
+      );
+
+    const orgMember = await this.organizationMemberQueryRepo.findOneByCustomerIdAndAuthIdentityId(
+      authId,
+      orgId,
+    );
+    if (!orgMember)
+      throw new McpExecuteToolCallError({ toolName, message: 'Organization member not found' });
+
+    const tx = this.transactionRepo.execute([
+      this.analysisToolRecordCommandRepo.updateAnalysisToolRecordStatus(
+        record.id,
+        status as AnalysisStatusEnum,
+        orgMember.id,
+      ),
+    ]);
+    const result = await tx;
+    await result.commit();
+
+    return { success: true, record_id: recordId, status };
   }
 
   private getOrgContext(params: Record<string, unknown>): {
