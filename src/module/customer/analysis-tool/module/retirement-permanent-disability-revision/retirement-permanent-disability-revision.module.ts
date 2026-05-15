@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { DatabaseModule } from '@infra/database/database.module';
+import { GenerativeIaModule } from '@infra/generative-ia/generative-ia.module';
 import { AnalysisActivityTrackerModule } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.module';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { CnisXRayAnalysisModule } from '@module/customer/analysis-tool/lib/cnis-x-ray-analysis/cnis-x-ray-analysis.module';
@@ -18,6 +19,7 @@ import { DownloadRetirementPermanentDisabilityRevisionSimplifiedAnalysisUseCase 
 import { GetRetirementPermanentDisabilityRevisionUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/get-retirement-permanent-disability-revision.use-case';
 import { ResolveRetirementPermanentDisabilityRevisionConcessionLetterBreakdownPendencyUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/resolve-retirement-permanent-disability-revision-concession-letter-breakdown-pendency.use-case';
 import { ResolveRetirementPermanentDisabilityRevisionWorkPeriodsPendencyUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/resolve-retirement-permanent-disability-revision-work-periods-pendency.use-case';
+import { CreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/create-retirement-permanent-disability-revision-work-period-document-analysis.use-case';
 import { UpdateRetirementPermanentDisabilityRevisionWorkPeriodsUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/update-retirement-permanent-disability-revision-work-periods.use-case';
 import { UpdateRetirementPermanentDisabilityRevisionUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/update-retirement-permanent-disability-revision.use-case';
 import { UploadRetirementPermanentDisabilityRevisionDocumentsUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/upload-retirement-permanent-disability-revision-documents.use-case';
@@ -30,6 +32,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
   imports: [
     AuthModule,
     DatabaseModule,
+    GenerativeIaModule,
     OrganizationSessionModule,
     OrganizationCreditModule,
     PaymentPlanModule,
@@ -55,6 +58,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     UpdateRetirementPermanentDisabilityRevisionWorkPeriodsUseCase,
     ResolveRetirementPermanentDisabilityRevisionConcessionLetterBreakdownPendencyUseCase,
     ResolveRetirementPermanentDisabilityRevisionWorkPeriodsPendencyUseCase,
+    CreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisUseCase,
   ],
   exports: [],
 })

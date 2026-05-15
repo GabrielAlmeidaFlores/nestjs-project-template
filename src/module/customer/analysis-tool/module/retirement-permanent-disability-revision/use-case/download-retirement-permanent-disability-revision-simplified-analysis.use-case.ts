@@ -69,18 +69,6 @@ export class DownloadRetirementPermanentDisabilityRevisionSimplifiedAnalysisUseC
       RetirementPermanentDisabilityRevisionNotFoundError,
     );
 
-    const promptResponse =
-      await this.getPaymentPlanPaidResourcePromptUseCase.execute(
-        PaymentPlanPaidResourceTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REVISION_SIMPLIFIED_ANALYSIS,
-      );
-
-    const consumeCreditTransaction =
-      await this.consumeOrganizationCreditUseCase.execute(
-        organizationSessionData.organizationId,
-        PaymentPlanPaidResourceTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REVISION_SIMPLIFIED_ANALYSIS,
-        organizationMember.id,
-      );
-
     const analysisQueryResult =
       await this.retirementPermanentDisabilityRevisionQueryRepositoryGateway.findOneByRetirementPermanentDisabilityRevisionIdOrFailWithRelations(
         retirementPermanentDisabilityRevisionId,
@@ -93,26 +81,34 @@ export class DownloadRetirementPermanentDisabilityRevisionSimplifiedAnalysisUseC
       throw new RetirementPermanentDisabilityRevisionDoesNotContainSimplifiedAnalysisError();
     }
 
-    if (
-      existingResult.retirementPermanentDisabilityRevisionCompleteAnalysis ===
-      null
-    ) {
+    if (existingResult.retirementPermanentDisabilityRevisionCompleteAnalysis === null) {
       throw new RetirementPermanentDisabilityRevisionDoesNotContainSimplifiedAnalysisError();
     }
 
-    let simplifiedAnalysisJson =
-      existingResult.retirementPermanentDisabilityRevisionSimplifiedAnalysis;
+    let simplifiedAnalysis =
+      existingResult.retirementPermanentDisabilityRevisionSimplifiedAnalysis ?? null;
 
-    if (simplifiedAnalysisJson === null) {
+    if (simplifiedAnalysis === null) {
+      const promptResponse =
+        await this.getPaymentPlanPaidResourcePromptUseCase.execute(
+          PaymentPlanPaidResourceTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REVISION_SIMPLIFIED_ANALYSIS,
+        );
+
+      const consumeCreditTransaction =
+        await this.consumeOrganizationCreditUseCase.execute(
+          organizationSessionData.organizationId,
+          PaymentPlanPaidResourceTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REVISION_SIMPLIFIED_ANALYSIS,
+          organizationMember.id,
+        );
+
+      const completeAnalysisContent =
+        existingResult.retirementPermanentDisabilityRevisionCompleteAnalysisDownload ??
+        existingResult.retirementPermanentDisabilityRevisionCompleteAnalysis;
+
       const generated =
         await this.analysisProcessorGateway.getRetirementPermanentDisabilityRevisionSimplifiedAnalysis(
           promptResponse.prompt,
-          [
-            Buffer.from(
-              existingResult.retirementPermanentDisabilityRevisionCompleteAnalysis,
-              'utf-8',
-            ),
-          ],
+          [Buffer.from(completeAnalysisContent, 'utf-8')],
         );
 
       const updatedResultEntity =
@@ -142,19 +138,15 @@ export class DownloadRetirementPermanentDisabilityRevisionSimplifiedAnalysisUseC
 
       await transaction.commit();
 
-      simplifiedAnalysisJson = generated;
+      simplifiedAnalysis = generated;
     }
 
-    if (simplifiedAnalysisJson === null) {
+    if (simplifiedAnalysis === null || simplifiedAnalysis === '') {
       throw new RetirementPermanentDisabilityRevisionDoesNotContainSimplifiedAnalysisError();
     }
 
-    const htmlContent = await this.exportDocumentGateway.convertMarkdownToHtml(
-      simplifiedAnalysisJson,
-    );
-
     return this.exportDocumentGateway.downloadFileAsStreamable(
-      htmlContent,
+      simplifiedAnalysis,
       format,
       'analise_simplificada_revisao_aposentadoria_invalidez_permanente',
     );

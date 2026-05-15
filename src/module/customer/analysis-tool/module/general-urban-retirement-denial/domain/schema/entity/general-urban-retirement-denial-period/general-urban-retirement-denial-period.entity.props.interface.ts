@@ -22,6 +22,7 @@ export interface GeneralUrbanRetirementDenialPeriodEntityPropsInterface extends 
   pendencyReason?: GeneralUrbanRetirementDenialPeriodPendencyReasonEnum | null;
   periodConsideration?: GeneralUrbanRetirementDenialPeriodConsiderationEnum | null;
   wantsToComplementViaMeuINSS?: boolean | null;
+  shouldConsiderLastRemunerationAsExitDate: boolean;
   status: boolean;
   generalUrbanRetirementDenialId: GeneralUrbanRetirementDenialId;
 }
