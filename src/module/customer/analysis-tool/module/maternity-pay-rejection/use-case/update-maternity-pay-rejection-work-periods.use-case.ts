@@ -3,13 +3,18 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { MaternityPayRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection/query/maternity-pay-rejection.query.repository.gateway';
+import { MaternityPayRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection-result/command/maternity-pay-rejection-result.command.repository.gateway';
 import { MaternityPayRejectionWorkPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection-work-period/command/maternity-pay-rejection-work-period.command.repository.gateway';
 import { MaternityPayRejectionWorkPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection-work-period-document/command/maternity-pay-rejection-work-period-document.command.repository.gateway';
 import { MaternityPayRejectionWorkPeriodEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/repository/maternity-pay-rejection-work-period-earnings-history/command/maternity-pay-rejection-work-period-earnings-history.command.repository.gateway';
 import { MaternityPayRejectionId } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/schema/entity/maternity-pay-rejection/value-object/maternity-pay-rejection-id.value-object';
+import { MaternityPayRejectionResultEntity } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/schema/entity/maternity-pay-rejection-result/maternity-pay-rejection-result.entity';
 import { MaternityPayRejectionWorkPeriodEntity } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/schema/entity/maternity-pay-rejection-work-period/maternity-pay-rejection-work-period.entity';
 import { MaternityPayRejectionWorkPeriodId } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/schema/entity/maternity-pay-rejection-work-period/value-object/maternity-pay-rejection-work-period-id.value-object';
 import { MaternityPayRejectionWorkPeriodDocumentEntity } from '@module/customer/analysis-tool/module/maternity-pay-rejection/domain/schema/entity/maternity-pay-rejection-work-period-document/maternity-pay-rejection-work-period-document.entity';
@@ -30,8 +35,14 @@ export class UpdateMaternityPayRejectionWorkPeriodsUseCase {
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordCommandRepositoryGateway)
+    private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
     @Inject(MaternityPayRejectionQueryRepositoryGateway)
     private readonly maternityPayRejectionQueryRepositoryGateway: MaternityPayRejectionQueryRepositoryGateway,
+    @Inject(MaternityPayRejectionResultCommandRepositoryGateway)
+    private readonly maternityPayRejectionResultCommandRepositoryGateway: MaternityPayRejectionResultCommandRepositoryGateway,
     @Inject(MaternityPayRejectionWorkPeriodCommandRepositoryGateway)
     private readonly maternityPayRejectionWorkPeriodCommandRepositoryGateway: MaternityPayRejectionWorkPeriodCommandRepositoryGateway,
     @Inject(MaternityPayRejectionWorkPeriodDocumentCommandRepositoryGateway)
@@ -62,16 +73,45 @@ export class UpdateMaternityPayRejectionWorkPeriodsUseCase {
       throw new OrganizationMemberNotFoundError();
     }
 
-    await this.maternityPayRejectionQueryRepositoryGateway.findOneByMaternityPayRejectionIdOrFailWithRelations(
-      maternityPayRejectionId,
-      MaternityPayRejectionNotFoundError,
-    );
+    const rejection =
+      await this.maternityPayRejectionQueryRepositoryGateway.findOneByMaternityPayRejectionIdOrFailWithRelations(
+        maternityPayRejectionId,
+        MaternityPayRejectionNotFoundError,
+      );
+
+    const analysisToolRecord =
+      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByMaternityPayRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        maternityPayRejectionId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+        MaternityPayRejectionNotFoundError,
+      );
 
     const transactions: TransactionType[] = [
       this.maternityPayRejectionWorkPeriodCommandRepositoryGateway.deleteAllMaternityPayRejectionWorkPeriodByMaternityPayRejectionId(
         maternityPayRejectionId,
       ),
+      this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecordStatus(
+        analysisToolRecord.id,
+        AnalysisStatusEnum.IN_PROGRESS,
+        organizationMember.id,
+      ),
     ];
+
+    if (rejection.maternityPayRejectionResult !== null) {
+      transactions.push(
+        this.maternityPayRejectionResultCommandRepositoryGateway.updateMaternityPayRejectionResult(
+          new MaternityPayRejectionResultEntity({
+            id: rejection.maternityPayRejectionResult.id,
+            firstAnalysis: rejection.maternityPayRejectionResult.firstAnalysis,
+            secondAnalysis:
+              rejection.maternityPayRejectionResult.secondAnalysis,
+            completeAnalysis: null,
+            simplifiedAnalysis: null,
+          }),
+        ),
+      );
+    }
 
     for (const workPeriodDto of dto.workPeriods) {
       const workPeriodId = new MaternityPayRejectionWorkPeriodId();
