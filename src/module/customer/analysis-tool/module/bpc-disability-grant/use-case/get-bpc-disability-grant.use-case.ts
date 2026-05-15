@@ -305,7 +305,6 @@ export class GetBpcDisabilityGrantUseCase {
         disabilityProven: false,
         retirementRules: [],
         analysisResult: '',
-        analysisConclusion: '',
         createdAt: result.createdAt,
         updatedAt: result.updatedAt,
       });
@@ -323,7 +322,6 @@ export class GetBpcDisabilityGrantUseCase {
         this.buildRetirementRuleResponseDto(item),
       ),
       analysisResult: parsedResult.analysisResult,
-      analysisConclusion: parsedResult.analysisConclusion,
       createdAt: result.createdAt,
       updatedAt: result.updatedAt,
     });

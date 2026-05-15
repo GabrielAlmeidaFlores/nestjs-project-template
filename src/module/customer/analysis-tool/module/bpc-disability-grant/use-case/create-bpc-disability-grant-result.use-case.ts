@@ -224,7 +224,6 @@ export class CreateBpcDisabilityGrantResultUseCase {
         this.buildRetirementRuleResponseDto(item),
       ),
       analysisResult: parsedResult.analysisResult,
-      analysisConclusion: parsedResult.analysisConclusion,
     });
   }
 

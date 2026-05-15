@@ -10278,11 +10278,6 @@ Processed CNIS analysis:
           description:
             'Indica se a deficiência foi comprovada por laudo médico/pericial.',
         },
-        analysisConclusion: {
-          type: 'string',
-          description:
-            'Breve conclusão técnica da análise, indicando se o benefício é recomendável ou não, e quais os principais pontos de atenção.',
-        },
         retirementRules: {
           type: 'array',
           description:
@@ -10339,7 +10334,6 @@ Processed CNIS analysis:
         'disabilityProven',
         'retirementRules',
         'analysisResult',
-        'analysisConclusion',
       ],
     };
   }
