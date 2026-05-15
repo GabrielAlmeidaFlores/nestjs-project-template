@@ -9,6 +9,7 @@ import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { BpcDisabilityGrantDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-document/command/bpc-disability-grant-document.command.repository.gateway';
 import { BpcDisabilityGrantId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/value-object/bpc-disability-grant-id/bpc-disability-grant-id.value-object';
 import { BpcDisabilityGrantDocumentEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-document/bpc-disability-grant-document.entity';
+import { BpcDisabilityGrantDocumentTypeEnum } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-document/enum/bpc-disability-grant-document-type.enum';
 
 @Injectable()
 export class BpcDisabilityGrantDocumentTypeormCommandRepository
@@ -52,8 +53,24 @@ export class BpcDisabilityGrantDocumentTypeormCommandRepository
 
       await manager
         .getRepository(BpcDisabilityGrantDocumentTypeormEntity)
-        .softDelete({
+        .delete({
           BpcDisabilityGrant: { id: bpcDisabilityGrantId.toString() },
+        });
+    };
+  }
+
+  public deleteByBpcDisabilityGrantIdAndType(
+    bpcDisabilityGrantId: BpcDisabilityGrantId,
+    type: BpcDisabilityGrantDocumentTypeEnum,
+  ): TransactionType {
+    return async (executor: unknown) => {
+      const manager = executor as EntityManager;
+
+      await manager
+        .getRepository(BpcDisabilityGrantDocumentTypeormEntity)
+        .delete({
+          BpcDisabilityGrant: { id: bpcDisabilityGrantId.toString() },
+          type,
         });
     };
   }

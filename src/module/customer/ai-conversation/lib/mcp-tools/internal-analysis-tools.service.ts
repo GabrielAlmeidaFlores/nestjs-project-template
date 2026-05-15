@@ -219,6 +219,21 @@ export class InternalAnalysisToolsService extends McpToolsGateway {
         },
       }),
       McpToolModel.build({
+        name: 'get_accident_assistance_terminated',
+        description:
+          'Get accident assistance terminated (Auxílio Acidente Cessado) analysis details by accident_assistance_terminated_id. Use this for analyses of type ACCIDENT_ASSISTANCE_TERMINATED or when context says "Auxílio Acidente (Cessado)".',
+        parameters: {
+          type: 'object',
+          properties: {
+            accident_assistance_terminated_id: {
+              type: 'string',
+              description: 'The accident assistance terminated analysis ID (UUID)',
+            },
+          },
+          required: ['accident_assistance_terminated_id'],
+        },
+      }),
+      McpToolModel.build({
         name: 'get_accident_benefit_rejection',
         description:
           'Get accident benefit rejection analysis details by accident_benefit_rejection_id. Use this for analyses of type ACCIDENT_BENEFIT_REJECTION.',
@@ -350,6 +365,140 @@ export class InternalAnalysisToolsService extends McpToolsGateway {
           ],
         },
       }),
+      McpToolModel.build({
+        name: 'update_accident_assistance_terminated_result',
+        description:
+          'Update a specific field of an accident assistance terminated (Auxílio Acidente Cessado) analysis result. Fields: accidentAssistanceTerminatedCompleteAnalysis (JSON-stringified), accidentAssistanceTerminatedSimplifiedAnalysis, decisionDetails, firstAnalysis, completeAnalysisDownload.',
+        parameters: {
+          type: 'object',
+          properties: {
+            accident_assistance_terminated_id: {
+              type: 'string',
+              description: 'The accident assistance terminated analysis ID (UUID)',
+            },
+            field_name: {
+              type: 'string',
+              description: 'Name of the field to update',
+            },
+            new_content: {
+              type: 'string',
+              description: 'New content for the field',
+            },
+          },
+          required: [
+            'accident_assistance_terminated_id',
+            'field_name',
+            'new_content',
+          ],
+        },
+      }),
+      McpToolModel.build({
+        name: 'get_analysis_by_entity_id',
+        description:
+          'Get any guided analysis record by its entity UUID and analysis type. Use this when you have an entity UUID from context (e.g. "UUID: abc-123") along with the analysis type. Returns the full analysis record with all relations. For ACCIDENT_ASSISTANCE_TERMINATED type, prefer get_accident_assistance_terminated instead.',
+        parameters: {
+          type: 'object',
+          properties: {
+            entity_id: {
+              type: 'string',
+              description: 'The entity UUID from the analysis context',
+            },
+            analysis_type: {
+              type: 'string',
+              description:
+                'The analysis type enum value (e.g. "auxilio_acidente_cessado", "planejamento_previdenciario_rgps", "cessacao_auxilio_incapacidade_temporaria", etc.)',
+            },
+          },
+          required: ['entity_id', 'analysis_type'],
+        },
+      }),
+      McpToolModel.build({
+        name: 'update_analysis_result_by_entity_id',
+        description:
+          'Update a field of ANY guided analysis result using the entity UUID and analysis type from context. Use this when you need to update an analysis and have the entity UUID (not the AnalysisToolRecord ID). Finds the record first, then updates.',
+        parameters: {
+          type: 'object',
+          properties: {
+            entity_id: {
+              type: 'string',
+              description: 'The entity UUID from the analysis context',
+            },
+            analysis_type: {
+              type: 'string',
+              description:
+                'The analysis type enum value (e.g. "auxilio_acidente_cessado", "planejamento_previdenciario_rgps", etc.)',
+            },
+            field_name: {
+              type: 'string',
+              description: 'Name of the field to update',
+            },
+            new_content: {
+              type: 'string',
+              description: 'New content for the field',
+            },
+          },
+          required: ['entity_id', 'analysis_type', 'field_name', 'new_content'],
+        },
+      }),
+      McpToolModel.build({
+        name: 'get_special_category_retirement_analysis',
+        description:
+          'Get a special category retirement analysis (Aposentadoria Especial por Categoria) by its entity UUID. Returns analysis metadata and result fields.',
+        parameters: {
+          type: 'object',
+          properties: {
+            entity_id: {
+              type: 'string',
+              description: 'The SpecialCategoryRetirementAnalysis entity UUID',
+            },
+          },
+          required: ['entity_id'],
+        },
+      }),
+      McpToolModel.build({
+        name: 'update_analysis_record_status',
+        description:
+          'Update the status of an analysis record (AnalysisToolRecord). Valid statuses: in_progress, completed.',
+        parameters: {
+          type: 'object',
+          properties: {
+            record_id: {
+              type: 'string',
+              description: 'The AnalysisToolRecord UUID',
+            },
+            status: {
+              type: 'string',
+              description: 'New status: in_progress or completed',
+            },
+          },
+          required: ['record_id', 'status'],
+        },
+      }),
+      McpToolModel.build({
+        name: 'update_client_details',
+        description:
+          'Update fields of an analysis tool client (pessoa física/jurídica). Updatable fields: name, email, phone_number, birth_date (ISO date string), gender (MALE/FEMALE/OTHER), inss_password, client_type.',
+        parameters: {
+          type: 'object',
+          properties: {
+            client_id: {
+              type: 'string',
+              description: 'The AnalysisToolClient UUID',
+            },
+            name: { type: 'string', description: 'Full name' },
+            email: { type: 'string', description: 'Email address' },
+            phone_number: { type: 'string', description: 'Phone number (digits only or formatted)' },
+            birth_date: {
+              type: 'string',
+              description: 'Birth date in ISO format (YYYY-MM-DD)',
+            },
+            gender: { type: 'string', description: 'Gender: MALE, FEMALE, or OTHER' },
+            inss_password: { type: 'string', description: 'INSS portal password' },
+            client_type: { type: 'string', description: 'Client type enum value' },
+          },
+          required: ['client_id'],
+        },
+      }),
     ]);
   }
 
@@ -416,6 +565,11 @@ export class InternalAnalysisToolsService extends McpToolsGateway {
           p,
           'update_retirement_planning',
         ),
+      get_accident_assistance_terminated: (p) =>
+        this.analysisRecordHandler.getAccidentAssistanceTerminated(
+          p,
+          'get_accident_assistance_terminated',
+        ),
       get_accident_benefit_rejection: (p) =>
         this.analysisRecordHandler.getAccidentBenefitRejection(
           p,
@@ -446,6 +600,33 @@ export class InternalAnalysisToolsService extends McpToolsGateway {
           p,
           'update_teacher_retirement_planning_rpps_result',
         ),
+      update_accident_assistance_terminated_result: (p) =>
+        this.analysisRecordHandler.updateAccidentAssistanceTerminatedResult(
+          p,
+          'update_accident_assistance_terminated_result',
+        ),
+      get_analysis_by_entity_id: (p) =>
+        this.analysisRecordHandler.getAnalysisByEntityId(
+          p,
+          'get_analysis_by_entity_id',
+        ),
+      update_analysis_result_by_entity_id: (p) =>
+        this.analysisRecordHandler.updateAnalysisResultByEntityId(
+          p,
+          'update_analysis_result_by_entity_id',
+        ),
+      get_special_category_retirement_analysis: (p) =>
+        this.analysisRecordHandler.getSpecialCategoryRetirementAnalysis(
+          p,
+          'get_special_category_retirement_analysis',
+        ),
+      update_analysis_record_status: (p) =>
+        this.analysisRecordHandler.updateAnalysisRecordStatus(
+          p,
+          'update_analysis_record_status',
+        ),
+      update_client_details: (p) =>
+        this.clientHandler.updateClientDetails(p, 'update_client_details'),
     };
 
     const handler = toolMap[toolName];
@@ -476,8 +657,11 @@ export class InternalAnalysisToolsService extends McpToolsGateway {
 ## General rules
 - Use list_analysis_records to find records, then get_cnis_analysis_details with the record_id to read all fields.
 - Use update_cnis_analysis (or dedicated tools below) to update a specific field.
-- For ACCIDENT_BENEFIT_REJECTION, RETIREMENT_PERMANENT_DISABILITY_REVISION and TEACHER_RETIREMENT_PLANNING_RPPS, use dedicated get/update tools.
-- All 48 analysis types are supported.
+- For analyses where you have entity_id + analysis_type from context, use get_analysis_by_entity_id to read and update_analysis_result_by_entity_id to write. For ACCIDENT_ASSISTANCE_TERMINATED specifically, also has get_accident_assistance_terminated and update_accident_assistance_terminated_result.
+- For SPECIAL_CATEGORY_RETIREMENT, use get_special_category_retirement_analysis with the entity_id; update its result via update_cnis_analysis with the AnalysisToolRecord ID.
+- Use update_analysis_record_status to change a record status (in_progress / completed).
+- Use update_client_details to update client fields (name, email, phone_number, birth_date, gender, inss_password, client_type).
+- All 48 analysis types are supported via get_analysis_by_entity_id / update_analysis_result_by_entity_id.
 
 ## ⚠️ JSON-stringified fields (must provide valid JSON string when updating)
 These fields store JSON-serialized objects/arrays as plain strings.
