@@ -49,6 +49,7 @@ interface CompareCnisCtpsResultItemInterface {
     | null
     | undefined;
   wantsToComplementViaMeuINSS: boolean | null | undefined;
+  shouldConsiderLastRemunerationAsExitDate: boolean | null | undefined;
   status: boolean;
 }
 
@@ -220,6 +221,12 @@ export class CompareGeneralUrbanRetirementDenialCnisCtpsUseCase {
           ...(this.hasValue(period.wantsToComplementViaMeuINSS) && {
             wantsToComplementViaMeuINSS: period.wantsToComplementViaMeuINSS,
           }),
+          ...(this.hasValue(
+            period.shouldConsiderLastRemunerationAsExitDate,
+          ) && {
+            shouldConsiderLastRemunerationAsExitDate:
+              period.shouldConsiderLastRemunerationAsExitDate,
+          }),
           status: period.status,
         }),
       );
@@ -313,6 +320,11 @@ export class CompareGeneralUrbanRetirementDenialCnisCtpsUseCase {
             type: 'boolean',
             description:
               'Indica se o segurado deseja complementar o período via Meu INSS.',
+          },
+          shouldConsiderLastRemunerationAsExitDate: {
+            type: 'boolean',
+            description:
+              'Indica se deve considerar a última remuneração como data de saída do vínculo.',
           },
           status: {
             type: 'boolean',

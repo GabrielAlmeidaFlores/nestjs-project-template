@@ -1,6 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
+import { AnalysisToolRecordNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-record-not-found.error';
 import { GeneralUrbanRetirementDenialQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial/query/general-urban-retirement-denial.query.repository.gateway';
 import { GetGeneralUrbanRetirementDenialTimeAcceleratorQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial-time-accelerator/query/result/get-general-urban-retirement-denial-time-accelerator.query.result';
 import { GeneralUrbanRetirementDenialId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/value-object/general-urban-retirement-denial-id/general-urban-retirement-denial-id.value-object';
@@ -37,6 +39,8 @@ import {
   GeneralUrbanRetirementDenialResultInterface,
   GeneralUrbanRetirementDenialResultRetirementRuleInterface,
 } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/model/interface/general-urban-retirement-denial-result.interface';
+import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 @Injectable()
 export class GetGeneralUrbanRetirementDenialUseCase {
@@ -45,16 +49,27 @@ export class GetGeneralUrbanRetirementDenialUseCase {
   public constructor(
     @Inject(GeneralUrbanRetirementDenialQueryRepositoryGateway)
     private readonly generalUrbanRetirementDenialQueryRepositoryGateway: GeneralUrbanRetirementDenialQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
   ) {}
 
   public async execute(
+    sessionData: SessionDataModel,
+    organizationSessionData: OrganizationSessionDataModel,
     generalUrbanRetirementDenialId: GeneralUrbanRetirementDenialId,
   ): Promise<GetGeneralUrbanRetirementDenialResponseDto> {
-    const denial =
-      await this.generalUrbanRetirementDenialQueryRepositoryGateway.findOneByGeneralUrbanRetirementDenialIdOrFailWithRelations(
+    const [denial, analysisToolRecord] = await Promise.all([
+      this.generalUrbanRetirementDenialQueryRepositoryGateway.findOneByGeneralUrbanRetirementDenialIdOrFailWithRelations(
         generalUrbanRetirementDenialId,
         GeneralUrbanRetirementDenialNotFoundError,
-      );
+      ),
+      this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByGeneralUrbanRetirementDenialIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        generalUrbanRetirementDenialId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+        AnalysisToolRecordNotFoundError,
+      ),
+    ]);
 
     const periods = denial.generalUrbanRetirementDenialPeriod ?? [];
     const periodDocuments =
@@ -113,6 +128,33 @@ export class GetGeneralUrbanRetirementDenialUseCase {
       }),
       createdAt: denial.createdAt,
       updatedAt: denial.updatedAt,
+      status: analysisToolRecord.status,
+      ...(analysisToolRecord.analysisToolClient.name !== null && {
+        clientName: analysisToolRecord.analysisToolClient.name,
+      }),
+      ...(analysisToolRecord.analysisToolClient.federalDocument !== null && {
+        clientFederalDocument:
+          analysisToolRecord.analysisToolClient.federalDocument,
+      }),
+      ...(analysisToolRecord.analysisToolClient.email !== null && {
+        clientEmail: analysisToolRecord.analysisToolClient.email,
+      }),
+      ...(analysisToolRecord.analysisToolClient.corporateEmail !== null && {
+        clientCorporateEmail:
+          analysisToolRecord.analysisToolClient.corporateEmail,
+      }),
+      ...(analysisToolRecord.analysisToolClient.phoneNumber !== null && {
+        clientPhoneNumber: analysisToolRecord.analysisToolClient.phoneNumber,
+      }),
+      ...(analysisToolRecord.analysisToolClient.birthDate !== null && {
+        clientBirthDate: analysisToolRecord.analysisToolClient.birthDate,
+      }),
+      ...(analysisToolRecord.analysisToolClient.gender !== null && {
+        clientGender: analysisToolRecord.analysisToolClient.gender,
+      }),
+      ...(analysisToolRecord.analysisToolClient.clientType !== null && {
+        clientType: analysisToolRecord.analysisToolClient.clientType,
+      }),
     });
   }
 
@@ -240,6 +282,8 @@ export class GetGeneralUrbanRetirementDenialUseCase {
       ...(period.wantsToComplementViaMeuINSS !== null && {
         wantsToComplementViaMeuINSS: period.wantsToComplementViaMeuINSS,
       }),
+      shouldConsiderLastRemunerationAsExitDate:
+        period.shouldConsiderLastRemunerationAsExitDate,
       status: period.status,
       ...(periodDocuments.length > 0 && {
         generalUrbanRetirementDenialPeriodDocument: periodDocuments.map((doc) =>
@@ -368,6 +412,8 @@ export class GetGeneralUrbanRetirementDenialUseCase {
             ...(this.hasValue(period.wantsToComplementViaMeuINSS) && {
               wantsToComplementViaMeuINSS: period.wantsToComplementViaMeuINSS,
             }),
+            shouldConsiderLastRemunerationAsExitDate:
+              period.shouldConsiderLastRemunerationAsExitDate ?? false,
             status: period.status,
             earningsHistory: (this.hasValue(period.earningsHistory)
               ? period.earningsHistory
