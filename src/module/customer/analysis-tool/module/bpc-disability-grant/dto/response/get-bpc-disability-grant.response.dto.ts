@@ -89,9 +89,6 @@ export class GetBpcDisabilityGrantResultResponseDto extends BaseBuildableDtoObje
   @ResponseDtoStringProperty()
   public analysisResult: string;
 
-  @ResponseDtoStringProperty()
-  public analysisConclusion: string;
-
   @ResponseDtoDateProperty()
   public createdAt: Date;
 

@@ -57,9 +57,6 @@ export class CreateBpcDisabilityGrantResultResponseDto extends BaseBuildableDtoO
   @ResponseDtoStringProperty()
   public readonly analysisResult: string;
 
-  @ResponseDtoStringProperty()
-  public readonly analysisConclusion: string;
-
   protected override readonly _type =
     CreateBpcDisabilityGrantResultResponseDto.name;
 }
