@@ -77,6 +77,7 @@ import { BpcDisabilityGrantDocumentTypeormCommandRepository } from '@infra/datab
 import { BpcDisabilityGrantFamilyMemberTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-grant-family-member/bpc-disability-grant-family-member.typeorm.command.repository';
 import { BpcDisabilityGrantFamilyMemberDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-grant-family-member-document/bpc-disability-grant-family-member-document.typeorm.command.repository';
 import { BpcDisabilityGrantInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-grant-inss-benefit/bpc-disability-grant-inss-benefit.typeorm.command.repository';
+import { BpcDisabilityGrantLegalRepresentativeOfAMinorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-grant-legal-representative-of-a-minor/bpc-disability-grant-legal-representative-of-a-minor.typeorm.command.repository';
 import { BpcDisabilityGrantLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-grant-legal-proceeding/bpc-disability-grant-legal-proceeding.typeorm.command.repository';
 import { BpcDisabilityGrantResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-grant-result/bpc-disability-grant-result.typeorm.command.repository';
 import { BpcDisabilityTerminationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bpc-disability-termination/bpc-disability-termination.typeorm.command.repository';
@@ -765,6 +766,7 @@ import { BpcDisabilityGrantDocumentCommandRepositoryGateway } from '@module/cust
 import { BpcDisabilityGrantFamilyMemberCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-family-member/command/bpc-disability-grant-family-member.command.repository.gateway';
 import { BpcDisabilityGrantFamilyMemberDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-family-member-document/command/bpc-disability-grant-family-member-document.command.repository.gateway';
 import { BpcDisabilityGrantInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-inss-benefit/command/bpc-disability-grant-inss-benefit.command.repository.gateway';
+import { BpcDisabilityGrantLegalRepresentativeOfAMinorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-legal-representative-of-a-minor/command/bpc-disability-grant-legal-representative-of-a-minor.command.repository.gateway';
 import { BpcDisabilityGrantLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-legal-proceeding/command/bpc-disability-grant-legal-proceeding.command.repository.gateway';
 import { BpcDisabilityGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-result/command/bpc-disability-grant-result.command.repository.gateway';
 import { BpcDisabilityTerminationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-termination/domain/repository/bpc-disability-termination/command/bpc-disability-termination.command.repository.gateway';
@@ -1367,6 +1369,12 @@ const classProvider: ClassProvider[] = [
   {
     provide: AuthIdentityCommandRepositoryGateway,
     useClass: AuthIdentityTypeormCommandRepository,
+  },
+  {
+    provide:
+      BpcDisabilityGrantLegalRepresentativeOfAMinorCommandRepositoryGateway,
+    useClass:
+      BpcDisabilityGrantLegalRepresentativeOfAMinorTypeormCommandRepository,
   },
   {
     provide: AuthIdentityQueryRepositoryGateway,

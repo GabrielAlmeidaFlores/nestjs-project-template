@@ -15,4 +15,5 @@ export interface BpcDisabilityGrantResultInterface {
   disabilityProven: boolean;
   retirementRules: BpcDisabilityGrantRetirementRuleInterface[];
   analysisResult: string;
+  analysisConclusion: string;
 }

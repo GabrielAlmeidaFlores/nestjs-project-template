@@ -8,6 +8,8 @@ import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/sche
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { BpcDisabilityGrantCategoryEnum } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/enum/bpc-disability-grant-category.enum';
 import { BpcDisabilityGrantDenialReasonEnum } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/enum/bpc-disability-grant-denial-reason.enum';
+import { BpcDisabilityGrantLegalRepresentativeOfAMinorKinshipEnum } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-legal-representative-of-a-minor/enum/bpc-disability-grant-legal-representative-of-a-minor-kinship.enum';
+import { BpcDisabilityGrantLegalRepresentativeOfAMinorId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-legal-representative-of-a-minor/value-object/bpc-disability-grant-legal-representative-of-a-minor-id/bpc-disability-grant-legal-representative-of-a-minor-id.value-object';
 import { BpcDisabilityGrantId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/value-object/bpc-disability-grant-id/bpc-disability-grant-id.value-object';
 import { BpcDisabilityGrantDocumentTypeEnum } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-document/enum/bpc-disability-grant-document-type.enum';
 import { BpcDisabilityGrantFamilyMemberIncomeTypeEnum } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-family-member/enum/bpc-disability-grant-family-member-income-type.enum';
@@ -87,6 +89,9 @@ export class GetBpcDisabilityGrantResultResponseDto extends BaseBuildableDtoObje
   @ResponseDtoStringProperty()
   public analysisResult: string;
 
+  @ResponseDtoStringProperty()
+  public analysisConclusion: string;
+
   @ResponseDtoDateProperty()
   public createdAt: Date;
 
@@ -140,6 +145,38 @@ export class GetBpcDisabilityGrantFamilyMemberDocumentResponseDto extends BaseBu
 
   protected override readonly _type =
     GetBpcDisabilityGrantFamilyMemberDocumentResponseDto.name;
+}
+
+@ResponseDto()
+export class GetBpcDisabilityGrantLegalRepresentativeOfAMinorResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(
+    BpcDisabilityGrantLegalRepresentativeOfAMinorId,
+    { required: false },
+  )
+  public id?: BpcDisabilityGrantLegalRepresentativeOfAMinorId;
+
+  @ResponseDtoStringProperty({ required: false })
+  public name?: string;
+
+  @ResponseDtoValueObjectProperty(FederalDocument, { required: false })
+  public federalDocument?: FederalDocument;
+
+  @ResponseDtoDateProperty({ required: false })
+  public birthDate?: Date;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public minorUnderCustody?: boolean;
+
+  @ResponseDtoEnumProperty(
+    BpcDisabilityGrantLegalRepresentativeOfAMinorKinshipEnum,
+    {
+      required: false,
+    },
+  )
+  public kinship?: BpcDisabilityGrantLegalRepresentativeOfAMinorKinshipEnum;
+
+  protected override readonly _type =
+    GetBpcDisabilityGrantLegalRepresentativeOfAMinorResponseDto.name;
 }
 
 @ResponseDto()
@@ -273,6 +310,14 @@ export class GetBpcDisabilityGrantResponseDto extends BaseBuildableDtoObject {
 
   @ResponseDtoStringProperty({ required: false, isArray: true })
   public inssBenefitNumbers?: string[];
+
+  @ResponseDtoObjectProperty(
+    () => GetBpcDisabilityGrantLegalRepresentativeOfAMinorResponseDto,
+    {
+      required: false,
+    },
+  )
+  public legalRepresentativeOfAMinor?: GetBpcDisabilityGrantLegalRepresentativeOfAMinorResponseDto;
 
   @ResponseDtoStringProperty({ required: false, isArray: true })
   public legalProceedingNumbers?: string[];
