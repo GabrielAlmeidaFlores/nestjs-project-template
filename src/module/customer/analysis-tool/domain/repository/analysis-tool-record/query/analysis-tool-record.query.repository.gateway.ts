@@ -67,6 +67,13 @@ export abstract class AnalysisToolRecordQueryRepositoryGateway {
     err: ConstructorType<NotFoundError>,
   ): Promise<GetAnalysisToolRecordWithRelationsQueryResult>;
 
+  public abstract findOneByAnalysisToolRecordIdAndAuthIdentityIdAndOrganizationIdWithBaseRelationsOrFail(
+    id: AnalysisToolRecordId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult>;
+
   public abstract countByOrganizationIdAndAuthIdentityId(
     organizationId: OrganizationId,
     AuthIdentityId: AuthIdentityId,

@@ -156,12 +156,16 @@ export class ListAnalysisToolRecordUseCase {
       analysisToolRecord.temporaryDisabilityBenefitsTerminated ??
       analysisToolRecord.maternityPayRejection ??
       analysisToolRecord.retirementPermanentDisabilityRejection ??
+      analysisToolRecord.retirementPermanentDisabilityRevision ??
+      analysisToolRecord.specialCategoryRetirementAnalysis ??
+      analysisToolRecord.temporaryDisabilityBenefitsGrant ??
       analysisToolRecord.elderlyBpcRejection ??
       analysisToolRecord.bpcElderlyCessation;
 
     return (
       analysis?.id ??
       analysisToolRecord.accidentAssistanceGrant?.accidentAssistanceGrantId ??
+      analysisToolRecord.accidentBenefitRejection?.accidentBenefitRejectionId ??
       null
     );
   }

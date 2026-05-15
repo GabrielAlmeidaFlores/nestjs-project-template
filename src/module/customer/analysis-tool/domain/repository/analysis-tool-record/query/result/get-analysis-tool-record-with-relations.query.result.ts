@@ -52,6 +52,8 @@ import type { TeacherRetirementPlanningRejectionEntity } from '@module/customer/
 import type { GetTemporaryDisabilityBenefitsGrantWithRelationsQueryResult } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/domain/repository/temporary-disability-benefits-grant/query/result/get-temporary-disability-benefits-grant-with-relations.query.result';
 import type { GetTemporaryDisabilityBenefitsTerminatedWithRelationsQueryResult } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/repository/temporary-disability-benefits-terminated/query/result/get-temporary-disability-benefits-terminated-with-relations.query.result';
 import type { GetTemporaryIncapacityBenefitRejectionWithRelationsQueryResult } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection/query/result/get-temporary-incapacity-benefit-rejection-with-relations.query.result';
+import type { GetAccidentBenefitRejectionWithRelationsQueryResult } from '@module/customer/analysis-tool/module/accident-benefit-rejection/domain/repository/accident-benefit-rejection/query/result/get-accident-benefit-rejection-with-relations.query.result';
+import type { GetRetirementPermanentDisabilityRevisionWithRelationsQueryResult } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/repository/retirement-permanent-disability-revision/query/result/get-retirement-permanent-disability-revision-with-relations.query.result';
 
 export class GetAnalysisToolRecordWithRelationsQueryResult extends BaseBuildableObject {
   public readonly id: AnalysisToolRecordId;
@@ -102,6 +104,8 @@ export class GetAnalysisToolRecordWithRelationsQueryResult extends BaseBuildable
   public readonly maternityPayRejection: GetMaternityPayRejectionWithRelationsQueryResult | null;
   public readonly maternityPayGrant: GetMaternityPayGrantWithRelationsQueryResult | null;
   public readonly retirementPermanentDisabilityRejection: GetRetirementPermanentDisabilityRejectionWithRelationsQueryResult | null;
+  public readonly retirementPermanentDisabilityRevision: GetRetirementPermanentDisabilityRevisionWithRelationsQueryResult | null;
+  public readonly accidentBenefitRejection: GetAccidentBenefitRejectionWithRelationsQueryResult | null;
   public readonly elderlyBpcRejection: ElderlyBpcRejectionEntity | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;

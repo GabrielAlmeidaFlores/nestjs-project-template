@@ -422,6 +422,43 @@ export class AnalysisToolRecordTypeormQueryRepository
     return mappedData;
   }
 
+  public async findOneByAnalysisToolRecordIdAndAuthIdentityIdAndOrganizationIdWithBaseRelationsOrFail(
+    id: AnalysisToolRecordId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: Constructor<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const relationsClause = this.getRelationsClauseOperation([]);
+
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          id: id.toString(),
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: relationsClause,
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
   public async countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId(
     organizationId: OrganizationId,
     analysisToolClientId: AnalysisToolClientId,
