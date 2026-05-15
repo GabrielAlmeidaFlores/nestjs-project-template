@@ -575,6 +575,7 @@ import { BpcDisabilityGrantFamilyMemberDocumentTypeormEntity } from '@infra/data
 import { BpcDisabilityGrantFamilyMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant-family-member.typeorm.entity';
 import { BpcDisabilityGrantInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant-inss-benefit.typeorm.entity';
 import { BpcDisabilityGrantLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant-legal-proceeding.typeorm.entity';
+import { BpcDisabilityGrantLegalRepresentativeOfAMinorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant-legal-representative-of-a-minor.typeorm.entity';
 import { BpcDisabilityGrantResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant-result.typeorm.entity';
 import { BpcDisabilityGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-grant.typeorm.entity';
 import { BpcDisabilityTerminationDisabilityAssessmentDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bpc-disability-termination-disability-assessment-document.typeorm.entity';
@@ -1451,6 +1452,7 @@ export class TypeormIndex {
     BpcDisabilityGrantFamilyMemberDocumentTypeormEntity,
     BpcDisabilityGrantResultTypeormEntity,
     BpcDisabilityGrantInssBenefitTypeormEntity,
+    BpcDisabilityGrantLegalRepresentativeOfAMinorTypeormEntity,
     BpcDisabilityGrantLegalProceedingTypeormEntity,
     BpcDisabilityTerminationTypeormEntity,
     BpcDisabilityTerminationDisabilityAssessmentTypeormEntity,

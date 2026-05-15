@@ -12,6 +12,7 @@ import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/exp
 import { RetirementPermanentDisabilityRevisionId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision/value-object/retirement-permanent-disability-revision-id.value-object';
 import { RetirementPermanentDisabilityRevisionConcessionLetterBreakdownId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-concession-letter-breakdown/value-object/retirement-permanent-disability-revision-concession-letter-breakdown-id/retirement-permanent-disability-revision-concession-letter-breakdown-id.value-object';
 import { RetirementPermanentDisabilityRevisionWorkPeriodsId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-work-periods/value-object/retirement-permanent-disability-revision-work-periods-id.value-object';
+import { CreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisRequestDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/request/create-retirement-permanent-disability-revision-work-period-document-analysis.request.dto';
 import { CreateRetirementPermanentDisabilityRevisionWorkPeriodsRequestDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/request/create-retirement-permanent-disability-revision-work-periods.request.dto';
 import { CreateRetirementPermanentDisabilityRevisionRequestDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/request/create-retirement-permanent-disability-revision.request.dto';
 import { ResolveRetirementPermanentDisabilityRevisionConcessionLetterBreakdownPendencyRequestDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/request/resolve-retirement-permanent-disability-revision-concession-letter-breakdown-pendency.request.dto';
@@ -22,6 +23,7 @@ import { UpdateRetirementPermanentDisabilityRevisionRequestDto } from '@module/c
 import { UploadRetirementPermanentDisabilityRevisionDocumentsRequestDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/request/upload-retirement-permanent-disability-revision-document.request.dto';
 import { CreateRetirementPermanentDisabilityRevisionFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/response/create-retirement-permanent-disability-revision-first-analysis.response.dto';
 import { CreateRetirementPermanentDisabilityRevisionResultResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/response/create-retirement-permanent-disability-revision-result.response.dto';
+import { CreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/response/create-retirement-permanent-disability-revision-work-period-document-analysis.response.dto';
 import { CreateRetirementPermanentDisabilityRevisionWorkPeriodsResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/response/create-retirement-permanent-disability-revision-work-periods.response.dto';
 import { CreateRetirementPermanentDisabilityRevisionResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/response/create-retirement-permanent-disability-revision.response.dto';
 import { GetRetirementPermanentDisabilityRevisionResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/response/get-retirement-permanent-disability-revision.response.dto';
@@ -31,6 +33,7 @@ import { UpdateRetirementPermanentDisabilityRevisionResponseDto } from '@module/
 import { UploadRetirementPermanentDisabilityRevisionDocumentsResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/response/upload-retirement-permanent-disability-revision-document.response.dto';
 import { CreateRetirementPermanentDisabilityRevisionFirstAnalysisUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/create-retirement-permanent-disability-revision-first-analysis.use-case';
 import { CreateRetirementPermanentDisabilityRevisionResultUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/create-retirement-permanent-disability-revision-result.use-case';
+import { CreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/create-retirement-permanent-disability-revision-work-period-document-analysis.use-case';
 import { CreateRetirementPermanentDisabilityRevisionWorkPeriodsUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/create-retirement-permanent-disability-revision-work-periods.use-case';
 import { CreateRetirementPermanentDisabilityRevisionUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/create-retirement-permanent-disability-revision.use-case';
 import { DisabilityAnalysisUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/disability-analysis.use-case';
@@ -39,9 +42,6 @@ import { DownloadRetirementPermanentDisabilityRevisionSimplifiedAnalysisUseCase 
 import { GetRetirementPermanentDisabilityRevisionUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/get-retirement-permanent-disability-revision.use-case';
 import { ResolveRetirementPermanentDisabilityRevisionConcessionLetterBreakdownPendencyUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/resolve-retirement-permanent-disability-revision-concession-letter-breakdown-pendency.use-case';
 import { ResolveRetirementPermanentDisabilityRevisionWorkPeriodsPendencyUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/resolve-retirement-permanent-disability-revision-work-periods-pendency.use-case';
-import { CreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/create-retirement-permanent-disability-revision-work-period-document-analysis.use-case';
-import { CreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisRequestDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/request/create-retirement-permanent-disability-revision-work-period-document-analysis.request.dto';
-import { CreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisResponseDto } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/dto/response/create-retirement-permanent-disability-revision-work-period-document-analysis.response.dto';
 import { UpdateRetirementPermanentDisabilityRevisionWorkPeriodsUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/update-retirement-permanent-disability-revision-work-periods.use-case';
 import { UpdateRetirementPermanentDisabilityRevisionUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/update-retirement-permanent-disability-revision.use-case';
 import { UploadRetirementPermanentDisabilityRevisionDocumentsUseCase } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/use-case/upload-retirement-permanent-disability-revision-documents.use-case';
@@ -558,7 +558,8 @@ export class RetirementPermanentDisabilityRevisionController {
     tag: ['revisao-aposentadoria-invalidez-permanente'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
-      description: 'Análise de documento de período sem data de saída criada com sucesso.',
+      description:
+        'Análise de documento de período sem data de saída criada com sucesso.',
       type: CreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -567,7 +568,8 @@ export class RetirementPermanentDisabilityRevisionController {
     @GetSessionData() sessionData: SessionDataModel,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
-    @Body() dto: CreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisRequestDto,
+    @Body()
+    dto: CreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisRequestDto,
   ): Promise<CreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisResponseDto> {
     return await this.createRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisUseCase.execute(
       sessionData,

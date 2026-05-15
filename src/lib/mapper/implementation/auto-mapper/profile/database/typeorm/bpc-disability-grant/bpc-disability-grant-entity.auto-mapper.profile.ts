@@ -53,6 +53,7 @@ export class BpcDisabilityGrantEntityAutoMapperProfile {
         BpcDisabilityGrantFamilyMember: [],
         BpcDisabilityGrantDocument: [],
         BpcDisabilityGrantInssBenefit: [],
+        BpcDisabilityGrantLegalRepresentativeOfAMinor: null,
         BpcDisabilityGrantLegalProceeding: [],
         analysisToolRecordId: null,
         createdBy: new OrganizationMemberId(source.createdBy.id),

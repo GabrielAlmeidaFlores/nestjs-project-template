@@ -17,6 +17,7 @@ import {
   GetBpcDisabilityGrantDocumentResponseDto,
   GetBpcDisabilityGrantFamilyMemberDocumentResponseDto,
   GetBpcDisabilityGrantFamilyMemberResponseDto,
+  GetBpcDisabilityGrantLegalRepresentativeOfAMinorResponseDto,
   GetBpcDisabilityGrantResponseDto,
   GetBpcDisabilityGrantResponsibleResponseDto,
   GetBpcDisabilityGrantResultResponseDto,
@@ -156,6 +157,49 @@ export class GetBpcDisabilityGrantUseCase {
           bpcDisabilityGrantQueryResult.BpcDisabilityGrantInssBenefit.map(
             (benefit) => benefit.inssBenefitNumber,
           ),
+      }),
+      ...(bpcDisabilityGrantQueryResult.BpcDisabilityGrantLegalRepresentativeOfAMinor !==
+        null && {
+        legalRepresentativeOfAMinor:
+          GetBpcDisabilityGrantLegalRepresentativeOfAMinorResponseDto.build({
+            id: bpcDisabilityGrantQueryResult
+              .BpcDisabilityGrantLegalRepresentativeOfAMinor.id,
+            ...(bpcDisabilityGrantQueryResult
+              .BpcDisabilityGrantLegalRepresentativeOfAMinor.name !== null && {
+              name: bpcDisabilityGrantQueryResult
+                .BpcDisabilityGrantLegalRepresentativeOfAMinor.name,
+            }),
+            ...(bpcDisabilityGrantQueryResult
+              .BpcDisabilityGrantLegalRepresentativeOfAMinor.federalDocument !==
+              null && {
+              federalDocument:
+                bpcDisabilityGrantQueryResult
+                  .BpcDisabilityGrantLegalRepresentativeOfAMinor
+                  .federalDocument,
+            }),
+            ...(bpcDisabilityGrantQueryResult
+              .BpcDisabilityGrantLegalRepresentativeOfAMinor.birthDate !==
+              null && {
+              birthDate:
+                bpcDisabilityGrantQueryResult
+                  .BpcDisabilityGrantLegalRepresentativeOfAMinor.birthDate,
+            }),
+            ...(bpcDisabilityGrantQueryResult
+              .BpcDisabilityGrantLegalRepresentativeOfAMinor
+              .minorUnderCustody !== null && {
+              minorUnderCustody:
+                bpcDisabilityGrantQueryResult
+                  .BpcDisabilityGrantLegalRepresentativeOfAMinor
+                  .minorUnderCustody,
+            }),
+            ...(bpcDisabilityGrantQueryResult
+              .BpcDisabilityGrantLegalRepresentativeOfAMinor.kinship !==
+              null && {
+              kinship:
+                bpcDisabilityGrantQueryResult
+                  .BpcDisabilityGrantLegalRepresentativeOfAMinor.kinship,
+            }),
+          }),
       }),
       ...(bpcDisabilityGrantQueryResult.BpcDisabilityGrantLegalProceeding
         .length > 0 && {

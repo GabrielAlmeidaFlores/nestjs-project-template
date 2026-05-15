@@ -110,6 +110,8 @@ import { BpcDisabilityGrantInssBenefitEntityAutoMapperProfile } from '@lib/mappe
 import { GetBpcDisabilityGrantInssBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-grant-inss-benefit/get-bpc-disability-grant-inss-benefit-query-result.auto-mapper.profile';
 import { BpcDisabilityGrantLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-grant-legal-proceeding/bpc-disability-grant-legal-proceeding-entity.auto-mapper.profile';
 import { GetBpcDisabilityGrantLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-grant-legal-proceeding/get-bpc-disability-grant-legal-proceeding-query-result.auto-mapper.profile';
+import { BpcDisabilityGrantLegalRepresentativeOfAMinorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-grant-legal-representative-of-a-minor/bpc-disability-grant-legal-representative-of-a-minor-entity.auto-mapper.profile';
+import { GetBpcDisabilityGrantLegalRepresentativeOfAMinorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-grant-legal-representative-of-a-minor/get-bpc-disability-grant-legal-representative-of-a-minor-query-result.auto-mapper.profile';
 import { BpcDisabilityGrantResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-grant-result/bpc-disability-grant-result-entity.auto-mapper.profile';
 import { GetBpcDisabilityGrantResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-grant-result/get-bpc-disability-grant-result-query-result.auto-mapper.profile';
 import { BpcDisabilityTerminationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bpc-disability-termination/bpc-disability-termination-entity.auto-mapper.profile';
@@ -1253,6 +1255,7 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     BpcDisabilityGrantFamilyMemberEntityAutoMapperProfile,
     BpcDisabilityGrantFamilyMemberDocumentEntityAutoMapperProfile,
     BpcDisabilityGrantInssBenefitEntityAutoMapperProfile,
+    BpcDisabilityGrantLegalRepresentativeOfAMinorEntityAutoMapperProfile,
     BpcDisabilityGrantLegalProceedingEntityAutoMapperProfile,
     BpcDisabilityGrantResultEntityAutoMapperProfile,
     GetBpcDisabilityGrantQueryResultAutoMapperProfile,
@@ -1261,6 +1264,7 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetBpcDisabilityGrantFamilyMemberQueryResultAutoMapperProfile,
     GetBpcDisabilityGrantFamilyMemberDocumentQueryResultAutoMapperProfile,
     GetBpcDisabilityGrantInssBenefitQueryResultAutoMapperProfile,
+    GetBpcDisabilityGrantLegalRepresentativeOfAMinorQueryResultAutoMapperProfile,
     GetBpcDisabilityGrantLegalProceedingQueryResultAutoMapperProfile,
     GetBpcDisabilityGrantResultQueryResultAutoMapperProfile,
     BpcElderlyCessationInssBenefitEntityAutoMapperProfile,
