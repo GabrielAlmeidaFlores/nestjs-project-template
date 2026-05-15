@@ -400,7 +400,12 @@ export class GetGeneralUrbanRetirementDenialUseCase {
             competenceBelowTheMinimum: period.competenceBelowTheMinimum,
             ...(this.hasValue(period.contributionAverage) && {
               contributionAverage: new DecimalValue(
-                period.contributionAverage.toString(),
+                this.extractContributionAverageString(
+                  period.contributionAverage as
+                    | number
+                    | string
+                    | { value: string },
+                ),
               ),
             }),
             ...(this.hasValue(period.pendencyReason) && {
@@ -471,6 +476,15 @@ export class GetGeneralUrbanRetirementDenialUseCase {
       typeof value['analysisResult'] === 'string' &&
       typeof value['completeAnalysisDownload'] === 'string'
     );
+  }
+
+  private extractContributionAverageString(
+    value: number | string | { value: string },
+  ): string {
+    if (typeof value === 'object') {
+      return value.value;
+    }
+    return value.toString();
   }
 
   private isRecord(value: unknown): value is Record<string, unknown> {
