@@ -1,6 +1,7 @@
 ﻿import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
@@ -18,16 +19,15 @@ import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-pr
 import { BpcDisabilityGrantCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant/command/bpc-disability-grant.command.repository.gateway';
 import { BpcDisabilityGrantDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-document/command/bpc-disability-grant-document.command.repository.gateway';
 import { BpcDisabilityGrantInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-inss-benefit/command/bpc-disability-grant-inss-benefit.command.repository.gateway';
-import { BpcDisabilityGrantLegalRepresentativeOfAMinorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-legal-representative-of-a-minor/command/bpc-disability-grant-legal-representative-of-a-minor.command.repository.gateway';
 import { BpcDisabilityGrantLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-legal-proceeding/command/bpc-disability-grant-legal-proceeding.command.repository.gateway';
+import { BpcDisabilityGrantLegalRepresentativeOfAMinorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/repository/bpc-disability-grant-legal-representative-of-a-minor/command/bpc-disability-grant-legal-representative-of-a-minor.command.repository.gateway';
 import { BpcDisabilityGrantEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant/bpc-disability-grant.entity';
 import { BpcDisabilityGrantDocumentEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-document/bpc-disability-grant-document.entity';
 import { BpcDisabilityGrantInssBenefitEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-inss-benefit/bpc-disability-grant-inss-benefit.entity';
-import { BpcDisabilityGrantLegalRepresentativeOfAMinorEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-legal-representative-of-a-minor/bpc-disability-grant-legal-representative-of-a-minor.entity';
 import { BpcDisabilityGrantLegalProceedingEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-legal-proceeding/bpc-disability-grant-legal-proceeding.entity';
+import { BpcDisabilityGrantLegalRepresentativeOfAMinorEntity } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-legal-representative-of-a-minor/bpc-disability-grant-legal-representative-of-a-minor.entity';
 import { CreateBpcDisabilityGrantRequestDto } from '@module/customer/analysis-tool/module/bpc-disability-grant/dto/request/create-bpc-disability-grant.request.dto';
 import { CreateBpcDisabilityGrantResponseDto } from '@module/customer/analysis-tool/module/bpc-disability-grant/dto/response/create-bpc-disability-grant.response.dto';
-import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { FileModel } from '@shared/system/model/generic/file.model';
@@ -49,7 +49,9 @@ export class CreateBpcDisabilityGrantUseCase {
     private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
     @Inject(BpcDisabilityGrantInssBenefitCommandRepositoryGateway)
     private readonly bpcDisabilityGrantInssBenefitCommandRepositoryGateway: BpcDisabilityGrantInssBenefitCommandRepositoryGateway,
-    @Inject(BpcDisabilityGrantLegalRepresentativeOfAMinorCommandRepositoryGateway)
+    @Inject(
+      BpcDisabilityGrantLegalRepresentativeOfAMinorCommandRepositoryGateway,
+    )
     private readonly bpcDisabilityGrantLegalRepresentativeOfAMinorCommandRepositoryGateway: BpcDisabilityGrantLegalRepresentativeOfAMinorCommandRepositoryGateway,
     @Inject(BpcDisabilityGrantLegalProceedingCommandRepositoryGateway)
     private readonly bpcDisabilityGrantLegalProceedingCommandRepositoryGateway: BpcDisabilityGrantLegalProceedingCommandRepositoryGateway,
@@ -163,8 +165,7 @@ export class CreateBpcDisabilityGrantUseCase {
               new BpcDisabilityGrantLegalRepresentativeOfAMinorEntity({
                 name: dto.legalRepresentativeOfAMinor.name ?? null,
                 federalDocument:
-                  dto.legalRepresentativeOfAMinor.federalDocument !==
-                  undefined
+                  dto.legalRepresentativeOfAMinor.federalDocument !== undefined
                     ? new FederalDocument(
                         dto.legalRepresentativeOfAMinor.federalDocument,
                       )

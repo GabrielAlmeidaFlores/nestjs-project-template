@@ -4,8 +4,7 @@ import type { BpcDisabilityGrantId } from '@module/customer/analysis-tool/module
 import type { BpcDisabilityGrantLegalRepresentativeOfAMinorKinshipEnum } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-legal-representative-of-a-minor/enum/bpc-disability-grant-legal-representative-of-a-minor-kinship.enum';
 import type { BpcDisabilityGrantLegalRepresentativeOfAMinorId } from '@module/customer/analysis-tool/module/bpc-disability-grant/domain/schema/entity/bpc-disability-grant-legal-representative-of-a-minor/value-object/bpc-disability-grant-legal-representative-of-a-minor-id/bpc-disability-grant-legal-representative-of-a-minor-id.value-object';
 
-export interface BpcDisabilityGrantLegalRepresentativeOfAMinorEntityPropsInterface
-  extends BaseEntityPropsInterface<BpcDisabilityGrantLegalRepresentativeOfAMinorId> {
+export interface BpcDisabilityGrantLegalRepresentativeOfAMinorEntityPropsInterface extends BaseEntityPropsInterface<BpcDisabilityGrantLegalRepresentativeOfAMinorId> {
   name?: string | null;
   federalDocument?: FederalDocument | null;
   birthDate?: Date | null;
