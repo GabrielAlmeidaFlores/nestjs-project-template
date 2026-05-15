@@ -154,9 +154,7 @@ export class CreatePermanentIncapacityBenefitTerminatedFirstAnalysisUseCase {
         promptResponse.prompt,
         JSON.stringify(cnisAnalysis),
         [
-          this.buildTerminationDataBuffer(
-            permanentIncapacityBenefitTerminated,
-          ),
+          this.buildTerminationDataBuffer(permanentIncapacityBenefitTerminated),
           ...documentBuffers,
         ],
         true,
@@ -241,38 +239,36 @@ export class CreatePermanentIncapacityBenefitTerminatedFirstAnalysisUseCase {
       cleanedJson = JSON.stringify(raw);
 
       const clientData =
-        PermanentIncapacityBenefitTerminatedFirstAnalysisClientDataModel.build(
-          {
-            name: raw.clientData.name,
-            ...(this.hasValue(raw.clientData.cpf) && {
-              cpf: raw.clientData.cpf,
-            }),
-            ...(this.hasValue(raw.clientData.birthDate) && {
-              birthDate: raw.clientData.birthDate,
-            }),
-            ...(this.hasValue(raw.clientData.category) && {
-              category: raw.clientData.category,
-            }),
-            ...(this.hasValue(raw.clientData.nb) && {
-              nb: raw.clientData.nb,
-            }),
-            ...(this.hasValue(raw.clientData.judicialProcessNumber) && {
-              judicialProcessNumber: raw.clientData.judicialProcessNumber,
-            }),
-            ...(this.hasValue(raw.clientData.incapacityStartDate) && {
-              incapacityStartDate: raw.clientData.incapacityStartDate,
-            }),
-            ...(this.hasValue(entityClientData.gender) && {
-              gender: entityClientData.gender,
-            }),
-            ...(this.hasValue(entityClientData.email) && {
-              email: entityClientData.email,
-            }),
-            ...(this.hasValue(entityClientData.phone) && {
-              phone: entityClientData.phone,
-            }),
-          },
-        );
+        PermanentIncapacityBenefitTerminatedFirstAnalysisClientDataModel.build({
+          name: raw.clientData.name,
+          ...(this.hasValue(raw.clientData.cpf) && {
+            cpf: raw.clientData.cpf,
+          }),
+          ...(this.hasValue(raw.clientData.birthDate) && {
+            birthDate: raw.clientData.birthDate,
+          }),
+          ...(this.hasValue(raw.clientData.category) && {
+            category: raw.clientData.category,
+          }),
+          ...(this.hasValue(raw.clientData.nb) && {
+            nb: raw.clientData.nb,
+          }),
+          ...(this.hasValue(raw.clientData.judicialProcessNumber) && {
+            judicialProcessNumber: raw.clientData.judicialProcessNumber,
+          }),
+          ...(this.hasValue(raw.clientData.incapacityStartDate) && {
+            incapacityStartDate: raw.clientData.incapacityStartDate,
+          }),
+          ...(this.hasValue(entityClientData.gender) && {
+            gender: entityClientData.gender,
+          }),
+          ...(this.hasValue(entityClientData.email) && {
+            email: entityClientData.email,
+          }),
+          ...(this.hasValue(entityClientData.phone) && {
+            phone: entityClientData.phone,
+          }),
+        });
 
       const periods = (this.hasValue(raw.periods) ? raw.periods : []).map(
         (period) =>

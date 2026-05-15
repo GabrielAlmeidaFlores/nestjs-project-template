@@ -41,6 +41,7 @@ import { MaternityPayRejectionModule } from '@module/customer/analysis-tool/modu
 import { MedicalAndSocialReportObjectionGeneratorAnalysisModule } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.module';
 import { MedicalQuestionGeneratorModule } from '@module/customer/analysis-tool/module/medical-question-generator/medical-question-generator.module';
 import { PerCapitaIncomeForBpcAnalysisModule } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.module';
+import { PermanentIncapacityBenefitTerminatedModule } from '@module/customer/analysis-tool/module/permanent-incapacity-benefit-terminated/permanent-incapacity-benefit-terminated.module';
 import { RetirementPermanentDisabilityRejectionModule } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/retirement-permanent-disability-rejection.module';
 import { RetirementPermanentDisabilityRevisionModule } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/retirement-permanent-disability-revision.module';
 import { RetirementPlanningRgpsModule } from '@module/customer/analysis-tool/module/retirement-planning-rgps/retirement-planning-rgps.module';
@@ -60,7 +61,6 @@ import { TeacherRetirementPlanningRppsModule } from '@module/customer/analysis-t
 import { TemporaryDisabilityBenefitsGrantModule } from '@module/customer/analysis-tool/module/temporary-disability-benefits-grant/temporary-disability-benefits-grant.module';
 import { TemporaryDisabilityBenefitsTerminatedModule } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/temporary-disability-benefits-terminated.module';
 import { TemporaryIncapacityBenefitRejectionModule } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.module';
-import { PermanentIncapacityBenefitTerminatedModule } from '@module/customer/analysis-tool/module/permanent-incapacity-benefit-terminated/permanent-incapacity-benefit-terminated.module';
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
 import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
 import { DeleteAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-record.use-case';
