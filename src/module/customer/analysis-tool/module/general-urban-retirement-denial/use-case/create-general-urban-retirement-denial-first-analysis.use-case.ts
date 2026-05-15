@@ -16,6 +16,7 @@ import { GeneralUrbanRetirementDenialQueryRepositoryGateway } from '@module/cust
 import { GetGeneralUrbanRetirementDenialTimeAcceleratorQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial-time-accelerator/query/result/get-general-urban-retirement-denial-time-accelerator.query.result';
 import { GeneralUrbanRetirementDenialId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/value-object/general-urban-retirement-denial-id/general-urban-retirement-denial-id.value-object';
 import { GeneralUrbanRetirementDenialDocumentTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-document/enum/general-urban-retirement-denial-document-type.enum';
+import { GeneralUrbanRetirementDenialPeriodCategoryEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-category.enum';
 import { GeneralUrbanRetirementDenialPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-consideration.enum';
 import { GeneralUrbanRetirementDenialPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-pendency-reason.enum';
 import { GeneralUrbanRetirementDenialPeriodWorkTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-work-type.enum';
@@ -252,8 +253,11 @@ export class CreateGeneralUrbanRetirementDenialFirstAnalysisUseCase {
         (item) => item.seq === info.seq,
       );
 
+      const category = this.mapCategoryFromOrigemDoVinculo(origemDoVinculo);
+
       return GeneralUrbanRetirementDenialFirstAnalysisPeriodModel.build({
         ...(origemDoVinculo.length > 0 && { bondOrigin: origemDoVinculo }),
+        ...(category !== null && { category }),
         startDate: info.dataInicio ? this.formatDate(info.dataInicio) : '',
         ...(info.dataFim !== undefined && {
           endDate: this.formatDate(info.dataFim),
@@ -279,6 +283,50 @@ export class CreateGeneralUrbanRetirementDenialFirstAnalysisUseCase {
         }),
       });
     });
+  }
+
+  private mapCategoryFromOrigemDoVinculo(
+    origemDoVinculo: string,
+  ): GeneralUrbanRetirementDenialPeriodCategoryEnum | null {
+    const upper = origemDoVinculo.toUpperCase();
+
+    if (upper.includes('DOMÉSTICO') || upper.includes('DOMESTICO')) {
+      return GeneralUrbanRetirementDenialPeriodCategoryEnum.EMPREGO_DOMESTICO;
+    }
+    if (upper.includes('EMPREGADO') && upper.includes('RURAL')) {
+      return GeneralUrbanRetirementDenialPeriodCategoryEnum.EMPREGADO_RURAL;
+    }
+    if (
+      upper.includes('EMPREGADO') ||
+      upper.includes('PÚBLICO') ||
+      upper.includes('PUBLICO')
+    ) {
+      return GeneralUrbanRetirementDenialPeriodCategoryEnum.EMPREGADO_URBANO;
+    }
+    if (upper.includes('AVULSO')) {
+      return GeneralUrbanRetirementDenialPeriodCategoryEnum.TRABALHADOR_AVULSO;
+    }
+    if (upper.includes('MEI')) {
+      return GeneralUrbanRetirementDenialPeriodCategoryEnum.MEI;
+    }
+    if (upper.includes('ESPECIAL')) {
+      return GeneralUrbanRetirementDenialPeriodCategoryEnum.SEGURADO_ESPECIAL;
+    }
+    if (upper.includes('EQUIPARADO') || upper.includes('PRESTADOR')) {
+      return GeneralUrbanRetirementDenialPeriodCategoryEnum.CONTRIBUINTE_INDIVIDUAL_PRESTADOR;
+    }
+    if (
+      upper.includes('AUTÔNOMO') ||
+      upper.includes('AUTONOMO') ||
+      upper.includes('CONTRIBUINTE INDIVIDUAL')
+    ) {
+      return GeneralUrbanRetirementDenialPeriodCategoryEnum.CONTRIBUINTE_INDIVIDUAL_AUTONOMO;
+    }
+    if (upper.includes('FACULTATIVO') || upper.includes('RECOLHIMENTO')) {
+      return GeneralUrbanRetirementDenialPeriodCategoryEnum.SEGURADO_FACULTATIVO;
+    }
+
+    return null;
   }
 
   private buildEarningsHistory(
