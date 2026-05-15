@@ -18,6 +18,7 @@ import {
 import { MaternityPayRejectionNotFoundError } from '@module/customer/analysis-tool/module/maternity-pay-rejection/error/maternity-pay-rejection-not-found.error';
 import {
   MaternityPayRejectionBenefitInformationModel,
+  MaternityPayRejectionCarencyModel,
   MaternityPayRejectionFirstAnalysisModel,
   MaternityPayRejectionGracePeriodModel,
   MaternityPayRejectionRequirementDeadlineModel,
@@ -341,6 +342,18 @@ export class GetMaternityPayRejectionUseCase {
       return MaternityPayRejectionFirstAnalysisModel.build({
         insuredStatusManteined: parsed.insuredStatusManteined,
         insuredStatusAnalysisConclusion: parsed.insuredStatusAnalysisConclusion,
+        ...(parsed.carency && {
+          carency: MaternityPayRejectionCarencyModel.build({
+            isExempt: parsed.carency.isExempt,
+            status: parsed.carency.status,
+            details: parsed.carency.details,
+            legalBasis: parsed.carency.legalBasis,
+            ...(parsed.carency.contributionCount !== undefined &&
+              parsed.carency.contributionCount !== '' && {
+                contributionCount: parsed.carency.contributionCount,
+              }),
+          }),
+        }),
         gracePeriod,
         benefitInformation,
         requirementDeadline,
