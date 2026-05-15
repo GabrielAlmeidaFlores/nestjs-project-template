@@ -2405,7 +2405,6 @@ export class McpAnalysisRecordHandler {
       });
     }
     const rppsId = new TeacherRetirementPlanningRppsId(rawId);
-    // Auth check via the shared table method (same underlying DB row)
     await this.analysisToolRecordQueryRepo.findWithRelationsByTeacherRetirementPlanningIdAndOrganizationIdAndAuthIdentityIdOrFail(
       new TeacherRetirementPlanningId(rawId),
       orgId,
@@ -2449,7 +2448,6 @@ export class McpAnalysisRecordHandler {
       });
     }
     const rppsId = new TeacherRetirementPlanningRppsId(rawId);
-    // Auth check via the shared table method (same underlying DB row)
     await this.analysisToolRecordQueryRepo.findWithRelationsByTeacherRetirementPlanningIdAndOrganizationIdAndAuthIdentityIdOrFail(
       new TeacherRetirementPlanningId(rawId),
       orgId,
@@ -2601,8 +2599,6 @@ export class McpAnalysisRecordHandler {
     orgId: OrganizationId,
     authId: AuthIdentityId,
   ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
-    // All entity IDs are Guid subclasses. We instantiate one to validate UUID format,
-    // then cast to the specific type required by each repo method.
     const anyId = new AccidentAssistanceTerminatedId(entityId);
     const repo = this.analysisToolRecordQueryRepo;
     const err = McpRecordNotFoundError;
