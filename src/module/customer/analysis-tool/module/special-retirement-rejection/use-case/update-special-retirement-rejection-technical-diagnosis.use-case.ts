@@ -59,32 +59,36 @@ export class UpdateSpecialRetirementRejectionTechnicalDiagnosisUseCase {
       throw new SpecialRetirementRejectionNotFoundError();
     }
 
-    const technicalDiagnosis =
-      new SpecialRetirementRejectionTechnicalDiagnosisEntity({
-        periodStartDate: dto.periodStartDate,
-        periodEndDate: dto.periodEndDate,
-        recognized: dto.recognized,
-        justification: dto.justification,
-        company: dto.company,
-        cnpj: dto.cnpj,
-        role: dto.role,
-        supportingDocument: dto.supportingDocument,
-        recordedInCnis: dto.recordedInCnis,
-        remunerationRecordedInCnis: dto.remunerationRecordedInCnis,
-        hazardousAgents: dto.hazardousAgents,
-        informationSource: dto.informationSource,
-        legalFramework: dto.legalFramework,
-        epiEficaz: dto.epiEficaz ?? null,
-        observations: dto.observations ?? null,
-        specialRetirementRejectionId,
-      });
+    const technicalDiagnosisEntities = dto.items.map(
+      (item) =>
+        new SpecialRetirementRejectionTechnicalDiagnosisEntity({
+          periodStartDate: item.periodStartDate,
+          periodEndDate: item.periodEndDate,
+          recognized: item.recognized,
+          justification: item.justification,
+          company: item.company,
+          cnpj: item.cnpj,
+          role: item.role,
+          supportingDocument: item.supportingDocument,
+          recordedInCnis: item.recordedInCnis,
+          remunerationRecordedInCnis: item.remunerationRecordedInCnis,
+          hazardousAgents: item.hazardousAgents,
+          informationSource: item.informationSource,
+          legalFramework: item.legalFramework,
+          epiEficaz: item.epiEficaz ?? null,
+          observations: item.observations ?? null,
+          specialRetirementRejectionId,
+        }),
+    );
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       this.technicalDiagnosisCommandRepositoryGateway.deleteAllBySpecialRetirementRejectionId(
         specialRetirementRejectionId,
       ),
-      this.technicalDiagnosisCommandRepositoryGateway.updateSpecialRetirementRejectionTechnicalDiagnosis(
-        technicalDiagnosis,
+      ...technicalDiagnosisEntities.map((entity) =>
+        this.technicalDiagnosisCommandRepositoryGateway.createSpecialRetirementRejectionTechnicalDiagnosis(
+          entity,
+        ),
       ),
     ]);
 

@@ -52,7 +52,9 @@ export class GetSpecialRetirementRejectionWithRelationsQueryResult extends BaseB
   public readonly specialRetirementRejectionWorkSpecialPeriodLegalFramework:
     | SpecialRetirementRejectionWorkSpecialPeriodLegalFrameworkEntity[]
     | null;
-  public readonly specialRetirementRejectionTechnicalDiagnosis: GetSpecialRetirementRejectionTechnicalDiagnosisQueryResult | null;
+  public readonly specialRetirementRejectionTechnicalDiagnosis:
+    | GetSpecialRetirementRejectionTechnicalDiagnosisQueryResult[]
+    | null;
 
   protected override readonly _type =
     GetSpecialRetirementRejectionWithRelationsQueryResult.name;
