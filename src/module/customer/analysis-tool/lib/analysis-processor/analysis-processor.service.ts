@@ -2176,7 +2176,7 @@ Return strictly JSON compatible with the requested schema, with no external mark
 # IMPORTANTE
 - A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
 - Retorne estritamente um objeto JSON compatível com o schema solicitado.
-- O campo \`completeAnalysisDownload\` deve conter HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.
+- O campo \`completeAnalysisDownload\` deve conter a análise detalhada em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML.
 - O campo \`analysisResult\` deve conter um texto explicativo completo sobre o resultado da análise e as perspectivas processuais do caso.
 - Não incluir tag <br> na resposta no campo \`analysisResult\`.
 
@@ -2490,7 +2490,7 @@ Análise processada do CNIS:
 # IMPORTANTE
 - A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
 - Retorne estritamente um objeto JSON compatível com o schema solicitado.
-- O campo \`completeAnalysisDownload\` deve conter HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.
+- O campo \`completeAnalysisDownload\` deve conter a análise detalhada em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML.
 - O campo \`analysisResult\` deve conter um texto explicativo completo sobre o resultado da análise e as perspectivas processuais do caso.
 - Não incluir tag <br> na resposta no campo \`analysisResult\`.
 
@@ -2519,7 +2519,7 @@ Análise processada do CNIS:
 # IMPORTANTE
 - A análise técnica deve se basear prioritariamente nos dados fornecidots
 - Retorne estritamente um objeto JSON compatível com o schema solicitado.
-- O campo \`completeAnalysisDownload\` deve conter HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.
+- O campo \`completeAnalysisDownload\` deve conter a análise detalhada em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML.
 - Os demais campos deve ser respeitarem as descrições e orientações do schema, utilizando os dados fornecidos e evitando a inclusão de informações não suportadas pelos arquivos anexados.  
 `;
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
@@ -2668,9 +2668,9 @@ Análise processada do CNIS:
 # IMPORTANTE
 - A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
 - Retorne estritamente um objeto JSON compatível com o schema solicitado.
-- O campo \`completeAnalysisDownload\` deve conter HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.
+- O campo \`completeAnalysisDownload\` deve conter a análise detalhada em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML.
 - O campo \`analysisResult\` deve conter um texto explicativo completo sobre o resultado da análise e as perspectivas processuais do caso.
-- O campo \`simplifiedAnalysis\` deve conter a análise simplificada em Markdown, pronta para exportação.
+- O campo \`simplifiedAnalysis\` deve conter a análise simplificada em Markdown, pronta para exportação. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções.
 - Não incluir tag <br> na resposta no campo \`analysisResult\`.
 
 Análise processada do CNIS:
@@ -3174,7 +3174,7 @@ Análise processada do CNIS:
 # IMPORTANTE
 - A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
 - Retorne estritamente um objeto JSON compatível com o schema solicitado.
-- O campo \`completeAnalysisDownload\` deve conter HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF. Deve conter todos os dados analisados, e uma explicação técnica de todos os dados
+- O campo \`completeAnalysisDownload\` deve conter a análise detalhada em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML. Deve conter todos os dados analisados, e uma explicação técnica de todos os dados
 - O campo \`analysisDescription\` deve conter um texto explicativo completo sobre o resultado da análise e as perspectivas do caso.
 - Não incluir tag <br> na resposta no campo \`analysisDescription\`.
 
@@ -4373,7 +4373,7 @@ Processed CNIS analysis:
         completeAnalysisDownload: {
           type: 'string',
           description:
-            'Conteúdo HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF. Deve conter todos os dados analisados, e uma explicação técnica de todos os dados.',
+            'Análise completa em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML. Deve conter todos os dados analisados, e uma explicação técnica de todos os dados.',
         },
       },
       required: [
@@ -6905,7 +6905,7 @@ Processed CNIS analysis:
         completeAnalysisDownload: {
           type: 'string',
           description:
-            'Conteúdo HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.',
+            'Análise completa em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML.',
         },
       },
       required: [
@@ -8636,7 +8636,7 @@ Processed CNIS analysis:
         completeAnalysisDownload: {
           type: 'string',
           description:
-            'Conteúdo HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.',
+            'Análise completa em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML.',
         },
       },
       required: [
@@ -8956,11 +8956,11 @@ Processed CNIS analysis:
         completeAnalysisDownload: {
           type: 'string',
           description:
-            'Conteúdo HTML completo e bem formatado, pronto para conversão em PDF.',
+            'Análise completa em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML.',
         },
         simplifiedAnalysis: {
           type: 'string',
-          description: 'Análise simplificada em Markdown.',
+          description: 'Análise simplificada em Markdown. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML.',
         },
       },
       required: [
@@ -9769,7 +9769,7 @@ Processed CNIS analysis:
         completeAnalysisDownload: {
           type: 'string',
           description:
-            'Conteúdo HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF. Inclua todas as seções: elegibilidade, carência, qualidade de segurado, análise de incapacidade, regras aplicáveis e parecer conclusivo.',
+            'Análise completa em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML. Inclua todas as seções: elegibilidade, carência, qualidade de segurado, análise de incapacidade, regras aplicáveis e parecer conclusivo.',
         },
       },
       required: [
@@ -10176,7 +10176,7 @@ Processed CNIS analysis:
         completeAnalysisDownload: {
           type: 'string',
           description:
-            'Conteúdo HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.',
+            'Análise completa em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML.',
         },
       },
       required: [
@@ -10791,7 +10791,7 @@ Processed CNIS analysis:
         completeAnalysisDownload: {
           type: 'string',
           description:
-            'Detalhamento completo da análise, incluindo a avaliação de cada documento e uma explicação detalhada de cada caso. Conteúdo HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.',
+            'Detalhamento completo da análise, incluindo a avaliação de cada documento e uma explicação detalhada de cada caso. Análise completa em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML.',
         },
       },
       required: [
