@@ -15,9 +15,9 @@ import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-pr
 import { CnisDocumentIsNotValidError } from '@module/customer/analysis-tool/module/cnis-fast-analysis/error/cnis-document-is-not-valid.error';
 import { TemporaryIncapacityBenefitRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection/query/temporary-incapacity-benefit-rejection.query.repository.gateway';
 import { TemporaryIncapacityBenefitRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-result/command/temporary-incapacity-benefit-rejection-result.command.repository.gateway';
+import { TemporaryIncapacityBenefitRejectionEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.entity';
 import { TemporaryIncapacityBenefitRejectionId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/value-object/temporary-incapacity-benefit-rejection-id.value-object';
 import { TemporaryIncapacityBenefitRejectionDocumentTypeEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-document/enum/temporary-incapacity-benefit-rejection-document-type.enum';
-import { TemporaryIncapacityBenefitRejectionEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.entity';
 import { TemporaryIncapacityBenefitRejectionResultEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-result/temporary-incapacity-benefit-rejection-result.entity';
 import { TemporaryIncapacityBenefitRejectionResultId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-result/value-object/temporary-incapacity-benefit-rejection-result-id.value-object';
 import {
@@ -190,19 +190,25 @@ export class CreateTemporaryIncapacityBenefitRejectionResultUseCase {
       type: analysisToolRecordQueryResult.type,
       status: AnalysisStatusEnum.COMPLETED,
       analysisToolClient,
-      temporaryIncapacityBenefitRejection: new TemporaryIncapacityBenefitRejectionEntity({
-        id: temporaryIncapacityBenefitRejectionId,
-        analysisName: temporaryIncapacityBenefitRejection.analysisName,
-        requestEntryDate: temporaryIncapacityBenefitRejection.requestEntryDate,
-        denialDate: temporaryIncapacityBenefitRejection.denialDate,
-        requestedBenefitType: temporaryIncapacityBenefitRejection.requestedBenefitType,
-        category: temporaryIncapacityBenefitRejection.category,
-        denialReason: temporaryIncapacityBenefitRejection.denialReason,
-        denialReasonDescription: temporaryIncapacityBenefitRejection.denialReasonDescription,
-        condition: temporaryIncapacityBenefitRejection.condition,
-        conditionDescription: temporaryIncapacityBenefitRejection.conditionDescription,
-        temporaryIncapacityBenefitRejectionResultId: new TemporaryIncapacityBenefitRejectionResultId(existingResult.id),
-      }),
+      temporaryIncapacityBenefitRejection:
+        new TemporaryIncapacityBenefitRejectionEntity({
+          id: temporaryIncapacityBenefitRejectionId,
+          analysisName: temporaryIncapacityBenefitRejection.analysisName,
+          requestEntryDate:
+            temporaryIncapacityBenefitRejection.requestEntryDate,
+          denialDate: temporaryIncapacityBenefitRejection.denialDate,
+          requestedBenefitType:
+            temporaryIncapacityBenefitRejection.requestedBenefitType,
+          category: temporaryIncapacityBenefitRejection.category,
+          denialReason: temporaryIncapacityBenefitRejection.denialReason,
+          denialReasonDescription:
+            temporaryIncapacityBenefitRejection.denialReasonDescription,
+          condition: temporaryIncapacityBenefitRejection.condition,
+          conditionDescription:
+            temporaryIncapacityBenefitRejection.conditionDescription,
+          temporaryIncapacityBenefitRejectionResultId:
+            new TemporaryIncapacityBenefitRejectionResultId(existingResult.id),
+        }),
       createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
     });

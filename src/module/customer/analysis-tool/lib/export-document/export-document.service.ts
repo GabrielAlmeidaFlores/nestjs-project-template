@@ -47,7 +47,7 @@ function pxToMm(px: number): number {
 }
 
 function normalizeMarkdownTables(markdown: string): string {
-  let text = markdown.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  const text = markdown.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
 
   const lines = text.split('\n');
   const output: string[] = [];

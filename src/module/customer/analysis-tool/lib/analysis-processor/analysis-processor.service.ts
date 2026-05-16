@@ -8960,7 +8960,8 @@ Processed CNIS analysis:
         },
         simplifiedAnalysis: {
           type: 'string',
-          description: 'Análise simplificada em Markdown. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML.',
+          description:
+            'Análise simplificada em Markdown. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML.',
         },
       },
       required: [
