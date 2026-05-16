@@ -36,6 +36,7 @@ import { GeneralUrbanRetirementDenialPeriodCategoryEnum } from '@module/customer
 import { GeneralUrbanRetirementDenialPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-consideration.enum';
 import { GeneralUrbanRetirementDenialPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-pendency-reason.enum';
 import { RetirementPermanentDisabilityRejectionPeriodCategoryEnum } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-period/enum/retirement-permanent-disability-rejection-period-category.enum';
+import { SpecialRetirementRejectionWorkPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period/enum/special-retirement-rejection-work-period-pendency-reason.enum';
 import { TeacherRetirementPlanningRejectionWorkPeriodDocumentProbativeForceEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection-work-period/enum/teacher-retirement-planning-rejection-work-period-document-probative-force.enum';
 import { TeacherRetirementPlanningRejectionWorkPeriodTimelineClassificationEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection-work-period/enum/teacher-retirement-planning-rejection-work-period-timeline-classification.enum';
 import { TemporaryIncapacityBenefitRejectionCategoryEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/enum/temporary-incapacity-benefit-rejection-category.enum';
@@ -1204,6 +1205,7 @@ Análise processada do CNIS:
 - Não incluir tag <br> na resposta.
 - Retorne estritamente um objeto JSON compatível com o schema solicitado.
 - Para cada item de \`workPeriods\`, use prioritariamente os dados estruturados já enviados nos arquivos do prompt; não invente valores.
+- O valor \`LEAVE_DATE\` em \`pendencyReason\` só deve ser usado quando \`endDate\` estiver de fato ausente ou nulo nos dados do CNIS, no workPeriod; nunca inclua \`LEAVE_DATE\` em \`pendencyReason\` quando o período já tiver uma data de saída preenchida.
 
 Análise processada do CNIS:
   ${cnisAnalysisJson}
@@ -5719,12 +5721,9 @@ Processed CNIS analysis:
           type: 'array',
           items: {
             type: 'string',
-            enum: [
-              'contribuicoes_abaixo_do_minimo',
-              'periodo_sem_data_de_saida',
-              'contribuicao_em_atraso',
-              'vinculo_ausente_no_cnis',
-            ],
+            enum: Object.values(
+              SpecialRetirementRejectionWorkPeriodPendencyReasonEnum,
+            ),
           },
           description: 'Lista de motivos de pendencia do período',
         },
