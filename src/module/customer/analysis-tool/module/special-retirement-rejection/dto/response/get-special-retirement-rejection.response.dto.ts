@@ -7,6 +7,7 @@ import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone
 import { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/enum/analysis-tool-client-type.enum';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
+import { GetSpecialRetirementRejectionTechnicalDiagnosisQueryResult } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/repository/special-retirement-rejection-technical-diagnosis/query/result/get-special-retirement-rejection-technical-diagnosis.query.result';
 import { SpecialRetirementRejectionCategoryEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection/enum/special-retirement-rejection-category.enum';
 import { SpecialRetirementRejectionHarmfulAgentEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection/enum/special-retirement-rejection-harmful-agent.enum';
 import { SpecialRetirementRejectionRejectionReasonEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection/enum/special-retirement-rejection-rejection-reason.enum';
@@ -383,6 +384,12 @@ export class GetSpecialRetirementRejectionResponseDto extends BaseBuildableDtoOb
 
   @ResponseDtoDateProperty()
   public updatedAt: Date;
+
+  @ResponseDtoObjectProperty(
+    () => GetSpecialRetirementRejectionTechnicalDiagnosisQueryResult,
+    { required: false, isArray: true },
+  )
+  public technicalDiagnosis?: GetSpecialRetirementRejectionTechnicalDiagnosisQueryResult[];
 
   protected override readonly _type =
     GetSpecialRetirementRejectionResponseDto.name;
