@@ -159,8 +159,7 @@ export class PermanentIncapacityBenefitTerminatedFirstAnalysisModel extends Base
   public gracePeriodStatus: string;
 
   @ResponseDtoObjectProperty(
-    () =>
-      PermanentIncapacityBenefitTerminatedFirstAnalysisGracePeriodItemModel,
+    () => PermanentIncapacityBenefitTerminatedFirstAnalysisGracePeriodItemModel,
     { isArray: true },
   )
   public gracePeriods: PermanentIncapacityBenefitTerminatedFirstAnalysisGracePeriodItemModel[];

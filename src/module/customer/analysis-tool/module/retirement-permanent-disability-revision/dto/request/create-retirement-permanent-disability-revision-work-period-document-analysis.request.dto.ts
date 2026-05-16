@@ -16,7 +16,9 @@ export class FileDocumentRetirementPermanentDisabilityRevisionWorkPeriodDocument
 
 @RequestDto()
 export class DataCreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoValueObjectProperty(RetirementPermanentDisabilityRevisionWorkPeriodsId)
+  @RequestDtoValueObjectProperty(
+    RetirementPermanentDisabilityRevisionWorkPeriodsId,
+  )
   public retirementPermanentDisabilityRevisionWorkPeriodsId: RetirementPermanentDisabilityRevisionWorkPeriodsId;
 
   protected override readonly _type =
@@ -26,12 +28,14 @@ export class DataCreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAn
 @RequestDto()
 export class CreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisRequestDto extends BaseBuildableDtoObject {
   @RequestDtoObjectProperty(
-    () => DataCreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisRequestDto,
+    () =>
+      DataCreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisRequestDto,
   )
   public json: DataCreateRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisRequestDto;
 
   @RequestDtoObjectProperty(
-    () => FileDocumentRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisRequestDto,
+    () =>
+      FileDocumentRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisRequestDto,
     { required: true, isArray: true },
   )
   public documents: FileDocumentRetirementPermanentDisabilityRevisionWorkPeriodDocumentAnalysisRequestDto[];

@@ -74,25 +74,23 @@ export class PermanentIncapacityBenefitTerminatedInsuredStatusEntityAutoMapperPr
         (
           source: PermanentIncapacityBenefitTerminatedInsuredStatusEntity,
         ): PermanentIncapacityBenefitTerminatedInsuredStatusTypeormEntity =>
-          PermanentIncapacityBenefitTerminatedInsuredStatusTypeormEntity.build(
-            {
-              id: source.id.toString(),
-              involuntaryUnemployment: source.involuntaryUnemployment,
-              intentionToProveInvoluntaryUnemployment:
-                source.intentionToProveInvoluntaryUnemployment,
-              ruralInsuredClient: source.ruralInsuredClient,
-              ruralPeriodStartDate: source.ruralPeriodStartDate,
-              ruralPeriodEndDate: source.ruralPeriodEndDate,
-              documentsDescription: source.documentsDescription,
-              permanentIncapacityBenefitTerminated:
-                PermanentIncapacityBenefitTerminatedTypeormEntity.build({
-                  id: source.permanentIncapacityBenefitTerminatedId.toString(),
-                } as PermanentIncapacityBenefitTerminatedTypeormEntity),
-              createdAt: source.createdAt,
-              updatedAt: source.updatedAt,
-              deletedAt: source.deletedAt,
-            },
-          ),
+          PermanentIncapacityBenefitTerminatedInsuredStatusTypeormEntity.build({
+            id: source.id.toString(),
+            involuntaryUnemployment: source.involuntaryUnemployment,
+            intentionToProveInvoluntaryUnemployment:
+              source.intentionToProveInvoluntaryUnemployment,
+            ruralInsuredClient: source.ruralInsuredClient,
+            ruralPeriodStartDate: source.ruralPeriodStartDate,
+            ruralPeriodEndDate: source.ruralPeriodEndDate,
+            documentsDescription: source.documentsDescription,
+            permanentIncapacityBenefitTerminated:
+              PermanentIncapacityBenefitTerminatedTypeormEntity.build({
+                id: source.permanentIncapacityBenefitTerminatedId.toString(),
+              } as PermanentIncapacityBenefitTerminatedTypeormEntity),
+            createdAt: source.createdAt,
+            updatedAt: source.updatedAt,
+            deletedAt: source.deletedAt,
+          }),
       ),
     );
   }

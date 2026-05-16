@@ -21,10 +21,7 @@ export interface PermanentIncapacityBenefitTerminatedFirstAnalysisEarningsHistor
 
 export interface PermanentIncapacityBenefitTerminatedFirstAnalysisPeriodInterface {
   bondOrigin: string | null | undefined;
-  category:
-    | PermanentIncapacityBenefitTerminatedCategoryEnum
-    | null
-    | undefined;
+  category: PermanentIncapacityBenefitTerminatedCategoryEnum | null | undefined;
   activityDescription: string | null | undefined;
   startDate: string;
   endDate: string | null | undefined;

@@ -89,9 +89,7 @@ export class GetPermanentIncapacityBenefitTerminatedDocumentResponseDto extends 
   @ResponseDtoStringProperty()
   public document: string;
 
-  @ResponseDtoEnumProperty(
-    PermanentIncapacityBenefitTerminatedDocumentTypeEnum,
-  )
+  @ResponseDtoEnumProperty(PermanentIncapacityBenefitTerminatedDocumentTypeEnum)
   public type: PermanentIncapacityBenefitTerminatedDocumentTypeEnum;
 
   protected override readonly _type =
