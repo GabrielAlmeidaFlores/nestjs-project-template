@@ -3,8 +3,11 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { AnalysisToolRecordNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-record-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
@@ -14,6 +17,7 @@ import { TemporaryIncapacityBenefitRejectionQueryRepositoryGateway } from '@modu
 import { TemporaryIncapacityBenefitRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/repository/temporary-incapacity-benefit-rejection-result/command/temporary-incapacity-benefit-rejection-result.command.repository.gateway';
 import { TemporaryIncapacityBenefitRejectionId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/value-object/temporary-incapacity-benefit-rejection-id.value-object';
 import { TemporaryIncapacityBenefitRejectionDocumentTypeEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-document/enum/temporary-incapacity-benefit-rejection-document-type.enum';
+import { TemporaryIncapacityBenefitRejectionEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/temporary-incapacity-benefit-rejection.entity';
 import { TemporaryIncapacityBenefitRejectionResultEntity } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-result/temporary-incapacity-benefit-rejection-result.entity';
 import { TemporaryIncapacityBenefitRejectionResultId } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection-result/value-object/temporary-incapacity-benefit-rejection-result-id.value-object';
 import {
@@ -54,6 +58,8 @@ export class CreateTemporaryIncapacityBenefitRejectionResultUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(AnalysisToolRecordQueryRepositoryGateway)
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordCommandRepositoryGateway)
+    private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
     @Inject(TemporaryIncapacityBenefitRejectionQueryRepositoryGateway)
     private readonly temporaryIncapacityBenefitRejectionQueryRepositoryGateway: TemporaryIncapacityBenefitRejectionQueryRepositoryGateway,
     @Inject(TemporaryIncapacityBenefitRejectionResultCommandRepositoryGateway)
@@ -113,11 +119,19 @@ export class CreateTemporaryIncapacityBenefitRejectionResultUseCase {
       throw new CnisDocumentIsNotValidError();
     }
 
-    const analysisToolClient = await this.findAnalysisToolClientOrFail(
-      temporaryIncapacityBenefitRejectionId,
-      organizationSessionData.organizationId,
-      sessionData.authIdentityId,
-    );
+    const analysisToolRecordQueryResult =
+      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByTemporaryIncapacityBenefitRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        temporaryIncapacityBenefitRejectionId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+        AnalysisToolRecordNotFoundError,
+      );
+
+    const analysisToolClient = new AnalysisToolClientEntity({
+      ...analysisToolRecordQueryResult.analysisToolClient,
+      createdBy: analysisToolRecordQueryResult.analysisToolClient.createdBy.id,
+      updatedBy: analysisToolRecordQueryResult.analysisToolClient.updatedBy.id,
+    });
 
     const cnisData =
       await this.analysisProcessorGateway.parseCnisDocument(cnisBuffer);
@@ -170,10 +184,37 @@ export class CreateTemporaryIncapacityBenefitRejectionResultUseCase {
       simplifiedAnalysis: existingResult.simplifiedAnalysis,
     });
 
+    const analysisToolRecord = new AnalysisToolRecordEntity({
+      id: analysisToolRecordQueryResult.id,
+      code: analysisToolRecordQueryResult.code,
+      type: analysisToolRecordQueryResult.type,
+      status: AnalysisStatusEnum.COMPLETED,
+      analysisToolClient,
+      temporaryIncapacityBenefitRejection: new TemporaryIncapacityBenefitRejectionEntity({
+        id: temporaryIncapacityBenefitRejectionId,
+        analysisName: temporaryIncapacityBenefitRejection.analysisName,
+        requestEntryDate: temporaryIncapacityBenefitRejection.requestEntryDate,
+        denialDate: temporaryIncapacityBenefitRejection.denialDate,
+        requestedBenefitType: temporaryIncapacityBenefitRejection.requestedBenefitType,
+        category: temporaryIncapacityBenefitRejection.category,
+        denialReason: temporaryIncapacityBenefitRejection.denialReason,
+        denialReasonDescription: temporaryIncapacityBenefitRejection.denialReasonDescription,
+        condition: temporaryIncapacityBenefitRejection.condition,
+        conditionDescription: temporaryIncapacityBenefitRejection.conditionDescription,
+        temporaryIncapacityBenefitRejectionResultId: new TemporaryIncapacityBenefitRejectionResultId(existingResult.id),
+      }),
+      createdBy: analysisToolRecordQueryResult.createdBy.id,
+      updatedBy: organizationMember.id,
+    });
+
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       consumeCreditTransaction,
       this.temporaryIncapacityBenefitRejectionResultCommandRepositoryGateway.updateTemporaryIncapacityBenefitRejectionResult(
         resultEntity,
+      ),
+      this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecord(
+        analysisToolRecord.id,
+        analysisToolRecord,
       ),
     ]);
 
@@ -393,31 +434,5 @@ export class CreateTemporaryIncapacityBenefitRejectionResultUseCase {
       ...disabilityAnalysisDocumentBuffers,
       ...insuredStatusDocumentBuffers,
     ];
-  }
-
-  private findAnalysisToolClientOrFail(
-    temporaryIncapacityBenefitRejectionId: TemporaryIncapacityBenefitRejectionId,
-    organizationId: OrganizationSessionDataModel['organizationId'],
-    authIdentityId: SessionDataModel['authIdentityId'],
-  ): Promise<AnalysisToolClientEntity> {
-    const recordPromise: ReturnType<
-      AnalysisToolRecordQueryRepositoryGateway['findWithRelationsByTemporaryIncapacityBenefitRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail']
-    > =
-      this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByTemporaryIncapacityBenefitRejectionIdAndOrganizationIdAndAuthIdentityIdOrFail(
-        temporaryIncapacityBenefitRejectionId,
-        organizationId,
-        authIdentityId,
-        AnalysisToolRecordNotFoundError,
-      );
-
-    return recordPromise.then((record) => {
-      const analysisToolClient = record.analysisToolClient;
-
-      return new AnalysisToolClientEntity({
-        ...analysisToolClient,
-        createdBy: analysisToolClient.createdBy.id,
-        updatedBy: analysisToolClient.updatedBy.id,
-      });
-    });
   }
 }

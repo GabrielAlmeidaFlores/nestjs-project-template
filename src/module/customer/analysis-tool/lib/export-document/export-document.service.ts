@@ -187,9 +187,9 @@ export class ExportDocumentService implements ExportDocumentGateway {
         font-size: 12pt;
         color: #111;
       }
-      h1 { font-size: 24pt; margin-bottom: 10px; color: #222; }
-      h2 { font-size: 20pt; margin-bottom: 8px; color: #333; }
-      h3 { font-size: 16pt; margin-bottom: 6px; color: #444; }
+      h1 { font-size: 24pt; margin-bottom: 10px; color: #222 !important; }
+      h2 { font-size: 20pt; margin-bottom: 8px; color: #222 !important; }
+      h3 { font-size: 16pt; margin-bottom: 6px; color: #222 !important; }
       p { margin: 8px 0; }
       strong { font-weight: bold; }
       em { font-style: italic; }
@@ -223,9 +223,12 @@ export class ExportDocumentService implements ExportDocumentGateway {
     const isHtml =
       typeof markdownContent === 'string' &&
       markdownContent.trimStart().startsWith('<');
+    const normalizedContent = isHtml
+      ? markdownContent
+      : this._normalizeMarkdownHeadings(markdownContent);
     const htmlContent = isHtml
       ? markdownContent
-      : await this.convertMarkdownToHtml(markdownContent);
+      : await this.convertMarkdownToHtml(normalizedContent);
 
     switch (format.toLowerCase()) {
       case 'pdf':
@@ -257,6 +260,23 @@ export class ExportDocumentService implements ExportDocumentGateway {
       type: contentType,
       disposition: `attachment; filename="${filename}"`,
     });
+  }
+
+  private _normalizeMarkdownHeadings(markdown: string): string {
+    let firstH1Found = false;
+    return markdown
+      .split('\n')
+      .map((line) => {
+        if (/^# [^#]/.test(line)) {
+          if (!firstH1Found) {
+            firstH1Found = true;
+            return line;
+          }
+          return `## ${line.slice(2)}`;
+        }
+        return line;
+      })
+      .join('\n');
   }
 
   private _buildFullHtmlDocument(htmlBody: string): string {

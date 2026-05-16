@@ -2176,7 +2176,7 @@ Return strictly JSON compatible with the requested schema, with no external mark
 # IMPORTANTE
 - A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
 - Retorne estritamente um objeto JSON compatível com o schema solicitado.
-- O campo \`completeAnalysisDownload\` deve conter HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.
+- O campo \`completeAnalysisDownload\` deve conter a análise detalhada em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML.
 - O campo \`analysisResult\` deve conter um texto explicativo completo sobre o resultado da análise e as perspectivas processuais do caso.
 - Não incluir tag <br> na resposta no campo \`analysisResult\`.
 
@@ -2490,7 +2490,7 @@ Análise processada do CNIS:
 # IMPORTANTE
 - A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
 - Retorne estritamente um objeto JSON compatível com o schema solicitado.
-- O campo \`completeAnalysisDownload\` deve conter HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.
+- O campo \`completeAnalysisDownload\` deve conter a análise detalhada em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML.
 - O campo \`analysisResult\` deve conter um texto explicativo completo sobre o resultado da análise e as perspectivas processuais do caso.
 - Não incluir tag <br> na resposta no campo \`analysisResult\`.
 
@@ -2519,7 +2519,7 @@ Análise processada do CNIS:
 # IMPORTANTE
 - A análise técnica deve se basear prioritariamente nos dados fornecidots
 - Retorne estritamente um objeto JSON compatível com o schema solicitado.
-- O campo \`completeAnalysisDownload\` deve conter HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.
+- O campo \`completeAnalysisDownload\` deve conter a análise detalhada em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML.
 - Os demais campos deve ser respeitarem as descrições e orientações do schema, utilizando os dados fornecidos e evitando a inclusão de informações não suportadas pelos arquivos anexados.  
 `;
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
@@ -2668,9 +2668,9 @@ Análise processada do CNIS:
 # IMPORTANTE
 - A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
 - Retorne estritamente um objeto JSON compatível com o schema solicitado.
-- O campo \`completeAnalysisDownload\` deve conter HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.
+- O campo \`completeAnalysisDownload\` deve conter a análise detalhada em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML.
 - O campo \`analysisResult\` deve conter um texto explicativo completo sobre o resultado da análise e as perspectivas processuais do caso.
-- O campo \`simplifiedAnalysis\` deve conter a análise simplificada em Markdown, pronta para exportação.
+- O campo \`simplifiedAnalysis\` deve conter a análise simplificada em Markdown, pronta para exportação. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções.
 - Não incluir tag <br> na resposta no campo \`analysisResult\`.
 
 Análise processada do CNIS:
@@ -3174,7 +3174,7 @@ Análise processada do CNIS:
 # IMPORTANTE
 - A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
 - Retorne estritamente um objeto JSON compatível com o schema solicitado.
-- O campo \`completeAnalysisDownload\` deve conter HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF. Deve conter todos os dados analisados, e uma explicação técnica de todos os dados
+- O campo \`completeAnalysisDownload\` deve conter a análise detalhada em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML. Deve conter todos os dados analisados, e uma explicação técnica de todos os dados
 - O campo \`analysisDescription\` deve conter um texto explicativo completo sobre o resultado da análise e as perspectivas do caso.
 - Não incluir tag <br> na resposta no campo \`analysisDescription\`.
 
@@ -3741,7 +3741,7 @@ Processed CNIS analysis:
               detailedAnalysis: {
                 type: 'string',
                 description:
-                  'Análise detalhada dos requisitos e resultado para esta regra específica. Retorne texto simples sem markdown, sem asteriscos, sem hashtags. Use \\n para separar cada linha. Estruture em três blocos separados por uma linha em branco (\\n\\n): (1) "📊 Requisitos analisados:" seguido de cada requisito em linha separada com "→ ✅" ou "→ ❌"; (2) "💰 Cálculo da RMI:" com cada item em linha separada (média salarial, coeficiente, RMI estimada); (3) "⚠️ Valor da causa:" com cada item em linha separada (DIB, DER, tempo de atraso, valor em R$). Omita blocos cujos dados não estejam disponíveis.',
+                  'Análise técnica detalhada e completa dos requisitos para esta regra específica. Retorne em formato **Markdown rico** com as seguintes seções obrigatórias: ## Fundamento Legal (artigos aplicáveis), ## Requisitos Verificados (lista com ✅/❌ para cada critério), ## Análise Técnica (raciocínio jurídico com datas, cálculos e fundamentação), ## Cálculo da RMI (média salarial, coeficiente, RMI estimada, valor da causa), ## Conclusão (viabilidade e impacto estratégico). Use **negrito**, listas, subtítulos ### e parágrafos. Mínimo de 300 palavras.',
               },
             },
             required: [
@@ -4373,7 +4373,7 @@ Processed CNIS analysis:
         completeAnalysisDownload: {
           type: 'string',
           description:
-            'Conteúdo HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF. Deve conter todos os dados analisados, e uma explicação técnica de todos os dados.',
+            'Análise completa em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML. Deve conter todos os dados analisados, e uma explicação técnica de todos os dados.',
         },
       },
       required: [
@@ -4676,7 +4676,7 @@ Processed CNIS analysis:
               detailedAnalysis: {
                 type: 'string',
                 description:
-                  'Análise detalhada dos requisitos e resultado para esta regra específica. Retorne texto simples sem markdown, sem asteriscos, sem hashtags. Use \\n para separar cada linha. Estruture em três blocos separados por uma linha em branco (\\n\\n): (1) "📊 Requisitos analisados:" seguido de cada requisito em linha separada com "→ ✅" ou "→ ❌"; (2) "💰 Cálculo da RMI:" com cada item em linha separada (média salarial, coeficiente, RMI estimada); (3) "⚠️ Valor da causa:" com cada item em linha separada (DIB, DER, tempo de atraso, valor em R$). Omita blocos cujos dados não estejam disponíveis.',
+                  'Análise técnica detalhada e completa dos requisitos para esta regra específica. Retorne em formato **Markdown rico** com as seguintes seções obrigatórias:\n## Fundamento Legal\nArtigos e dispositivos legais aplicáveis.\n## Requisitos Verificados\nUse lista markdown (`- ✅ Requisito: ...` ou `- ❌ Requisito: ...`) para cada critério, com valor atual e valor exigido.\n## Análise Técnica\nRaciocínio jurídico detalhado com datas, cálculos e fundamentação. Use ### para subtópicos.\n## Cálculo da RMI\nUse uma **tabela markdown** com colunas: Item | Valor. Inclua média salarial, coeficiente, RMI estimada, valor da causa.\n## Conclusão\nViabilidade e impacto estratégico em forma de lista e parágrafo.\nUse **negrito** para valores e datas importantes. Mínimo de 300 palavras.',
               },
             },
             required: [
@@ -4692,7 +4692,7 @@ Processed CNIS analysis:
         analysisResult: {
           type: 'string',
           description:
-            'Parecer técnico conclusivo completo da análise, incluindo verificação de carência, qualidade de segurado, análise de incapacidade, regras de aposentadoria aplicáveis e recomendações técnicas. Retorne em formato Markdown (use ##, ###, **negrito**, listas com - e parágrafos)',
+            'Parecer técnico conclusivo completo da análise em formato **Markdown rico**. Deve conter obrigatoriamente as seções:\n## Contextualização do Caso\nDescrição do caso, histórico e contexto.\n## Análise da Qualidade de Segurado\nUse tabela markdown (Data Última Contribuição | DII | Período de Graça | Status) e conclusão objetiva.\n## Análise da Carência\nUse tabela markdown (Total Contribuições | Mínimo Exigido | Resultado) e análise.\n## Análise da Incapacidade Laborativa\nCIDs com descrição, documentos apresentados, impacto laboral em lista (`- `), análise pericial.\n## Regras de Aposentadoria Alternativas\nUma ### subseção por regra com tabela de requisitos e conclusão.\n## Pontos Críticos e Riscos\nUse lista numerada para cada risco/lacuna identificada.\n## Conclusão e Recomendação Estratégica\nVia recomendada, próximos passos em lista numerada, documentos prioritários em lista.\nUse **negrito** para valores e datas. Mínimo de 600 palavras.',
         },
       },
       required: [
@@ -6905,7 +6905,7 @@ Processed CNIS analysis:
         completeAnalysisDownload: {
           type: 'string',
           description:
-            'Conteúdo HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.',
+            'Análise completa em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML.',
         },
       },
       required: [
@@ -7380,7 +7380,7 @@ Processed CNIS analysis:
               detailedAnalysis: {
                 type: 'string',
                 description:
-                  'Análise detalhada dos requisitos e resultado para esta regra específica.',
+                  'Análise técnica detalhada e completa dos requisitos para esta regra específica. Retorne em formato **Markdown rico** com as seguintes seções obrigatórias: ## Fundamento Legal (artigos aplicáveis), ## Requisitos Verificados (lista com ✅/❌ para cada critério), ## Análise Técnica (raciocínio jurídico com datas, cálculos e fundamentação), ## Cálculo da RMI (média salarial, coeficiente, RMI estimada, valor da causa), ## Conclusão (viabilidade e impacto estratégico). Use **negrito**, listas, subtítulos ### e parágrafos. Mínimo de 300 palavras.',
               },
             },
             required: [
@@ -7396,7 +7396,7 @@ Processed CNIS analysis:
         analysisResult: {
           type: 'string',
           description:
-            'Parecer técnico conclusivo completo da análise do indeferimento de acidente, incluindo estratégia processual e recomendações. Retorne em formato Markdown.',
+            'Parecer técnico conclusivo completo da análise do indeferimento de acidente em formato **Markdown rico**, com seções: ## Contextualização do Caso, ## Análise do Evento Gerador, ## Análise das Sequelas e Incapacidade, ## Regras de Benefício Aplicáveis, ## Estratégia Processual, ## Conclusão e Recomendação. Use **negrito**, listas, subtítulos ### e parágrafos. Mínimo de 500 palavras.',
         },
       },
       required: ['retirementRules', 'analysisResult'],
@@ -7461,7 +7461,8 @@ Processed CNIS analysis:
               },
               detailedAnalysis: {
                 type: 'string',
-                description: 'Análise detalhada da regra em formato markdown',
+                description:
+                  'Análise técnica detalhada e completa dos requisitos para esta regra de pensão por morte. Retorne em formato **Markdown rico** com as seguintes seções obrigatórias: ## Fundamento Legal (artigos da Lei 8.213/91 aplicáveis), ## Requisitos Verificados (lista com ✅/❌), ## Análise Técnica (qualidade de segurado do falecido, dependentes habilitados, cotas, rateio), ## Cálculo do Benefício (RMI, cotas, prazo), ## Conclusão e Recomendação Estratégica. Use **negrito**, listas, subtítulos ### e parágrafos. Mínimo de 300 palavras.',
               },
             },
             required: ['ruleName', 'result', 'detailedAnalysis'],
@@ -7972,7 +7973,8 @@ Processed CNIS analysis:
               },
               detailedAnalysis: {
                 type: 'string',
-                description: 'Análise detalhada da regra em formato markdown',
+                description:
+                  'Análise técnica detalhada e completa dos requisitos para esta regra de pensão por morte. Retorne em formato **Markdown rico** com as seguintes seções obrigatórias: ## Fundamento Legal (artigos da Lei 8.213/91 aplicáveis), ## Requisitos Verificados (lista com ✅/❌), ## Análise Técnica (qualidade de segurado do falecido, dependentes habilitados, cotas, rateio), ## Cálculo do Benefício (RMI, cotas, prazo), ## Conclusão e Recomendação Estratégica. Use **negrito**, listas, subtítulos ### e parágrafos. Mínimo de 300 palavras.',
               },
             },
             required: ['ruleName', 'result', 'detailedAnalysis'],
@@ -8634,7 +8636,7 @@ Processed CNIS analysis:
         completeAnalysisDownload: {
           type: 'string',
           description:
-            'Conteúdo HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.',
+            'Análise completa em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML.',
         },
       },
       required: [
@@ -8954,11 +8956,11 @@ Processed CNIS analysis:
         completeAnalysisDownload: {
           type: 'string',
           description:
-            'Conteúdo HTML completo e bem formatado, pronto para conversão em PDF.',
+            'Análise completa em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML.',
         },
         simplifiedAnalysis: {
           type: 'string',
-          description: 'Análise simplificada em Markdown.',
+          description: 'Análise simplificada em Markdown. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML.',
         },
       },
       required: [
@@ -9746,7 +9748,7 @@ Processed CNIS analysis:
               detailedAnalysis: {
                 type: 'string',
                 description:
-                  'Análise detalhada desta modalidade de aposentadoria, incluindo requisitos, cálculos, fundamentação legal e viabilidade',
+                  'Análise técnica detalhada e completa dos requisitos para esta modalidade de aposentadoria. Retorne em formato **Markdown rico** com as seguintes seções obrigatórias:\n## Fundamento Legal\nArtigos e dispositivos legais aplicáveis.\n## Requisitos Verificados\nUse lista markdown (`- ✅ Requisito: ...` ou `- ❌ Requisito: ...`) para cada critério, com valor atual e valor exigido.\n## Análise Técnica\nRaciocínio jurídico detalhado com datas, cálculos e fundamentação. Use ### para subtópicos.\n## Cálculo da RMI\nUse uma **tabela markdown** com colunas: Item | Valor. Inclua média salarial, coeficiente, RMI estimada, valor da causa.\n## Conclusão\nViabilidade e impacto estratégico em forma de lista e parágrafo.\nUse **negrito** para valores e datas importantes. Mínimo de 300 palavras.',
               },
             },
             required: [
@@ -9762,12 +9764,12 @@ Processed CNIS analysis:
         analysisResult: {
           type: 'string',
           description:
-            'Parecer técnico conclusivo completo da análise, incluindo verificação de carência, qualidade de segurado, análise de incapacidade e recomendações técnicas. Retorne em formato Markdown (use ##, ###, **negrito**, listas com - e parágrafos)',
+            'Parecer técnico conclusivo completo da análise do indeferimento em formato **Markdown rico**. Deve conter obrigatoriamente as seções:\n## Contextualização do Caso\nDescrição do caso, histórico e contexto.\n## Análise da Decisão de Indeferimento\nFundamentos legais do INSS, pontos contestáveis em lista (`- `).\n## Análise da Qualidade de Segurado\nUse tabela markdown (Data Última Contribuição | DII | Período de Graça | Status) e conclusão objetiva.\n## Análise da Carência\nUse tabela markdown (Total Contribuições | Mínimo Exigido | Resultado) e análise.\n## Análise da Incapacidade Laborativa\nCIDs com descrição, documentos apresentados, impacto laboral em lista (`- `), análise pericial.\n## Regras de Aposentadoria Alternativas\nUma ### subseção por regra com tabela de requisitos e conclusão.\n## Pontos Críticos e Riscos\nUse lista numerada para cada risco/lacuna identificada.\n## Conclusão e Recomendação Estratégica\nVia recomendada, próximos passos em lista numerada, documentos prioritários em lista.\nUse **negrito** para valores e datas. Mínimo de 600 palavras.',
         },
         completeAnalysisDownload: {
           type: 'string',
           description:
-            'Conteúdo HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF. Inclua todas as seções: elegibilidade, carência, qualidade de segurado, análise de incapacidade, regras aplicáveis e parecer conclusivo.',
+            'Análise completa em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML. Inclua todas as seções: elegibilidade, carência, qualidade de segurado, análise de incapacidade, regras aplicáveis e parecer conclusivo.',
         },
       },
       required: [
@@ -10153,7 +10155,7 @@ Processed CNIS analysis:
               detailedAnalysis: {
                 type: 'string',
                 description:
-                  'Análise detalhada desta modalidade de aposentadoria',
+                  'Análise técnica detalhada e completa dos requisitos para esta modalidade de aposentadoria. Retorne em formato **Markdown rico** com as seguintes seções obrigatórias: ## Fundamento Legal (artigos aplicáveis), ## Requisitos Verificados (lista com ✅/❌ para cada critério), ## Análise Técnica (raciocínio jurídico com datas, cálculos e fundamentação), ## Cálculo da RMI (média salarial, coeficiente, RMI estimada, valor da causa), ## Conclusão (viabilidade e impacto estratégico). Use **negrito**, listas, subtítulos ### e parágrafos. Mínimo de 300 palavras.',
               },
             },
             required: [
@@ -10174,7 +10176,7 @@ Processed CNIS analysis:
         completeAnalysisDownload: {
           type: 'string',
           description:
-            'Conteúdo HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.',
+            'Análise completa em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML.',
         },
       },
       required: [
@@ -10774,7 +10776,8 @@ Processed CNIS analysis:
               },
               detailedAnalysis: {
                 type: 'string',
-                description: 'Análise detalhada desta regra',
+                description:
+                  'Análise técnica detalhada e completa dos requisitos para esta modalidade de aposentadoria. Retorne em formato **Markdown rico** com as seguintes seções obrigatórias: ## Fundamento Legal (artigos aplicáveis), ## Requisitos Verificados (lista com ✅/❌ para cada critério), ## Análise Técnica (raciocínio jurídico com datas, cálculos e fundamentação), ## Cálculo da RMI (média salarial, coeficiente, RMI estimada, valor da causa), ## Conclusão (viabilidade e impacto estratégico). Use **negrito**, listas, subtítulos ### e parágrafos. Mínimo de 300 palavras.',
               },
             },
             required: ['ruleName', 'result', 'detailedAnalysis'],
@@ -10788,7 +10791,7 @@ Processed CNIS analysis:
         completeAnalysisDownload: {
           type: 'string',
           description:
-            'Detalhamento completo da análise, incluindo a avaliação de cada documento e uma explicação detalhada de cada caso. Conteúdo HTML completo e bem formatado com toda a análise detalhada, pronto para conversão em PDF.',
+            'Detalhamento completo da análise, incluindo a avaliação de cada documento e uma explicação detalhada de cada caso. Análise completa em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML.',
         },
       },
       required: [
