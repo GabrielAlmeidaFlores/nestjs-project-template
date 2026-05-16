@@ -119,7 +119,7 @@ export class GetTemporaryIncapacityBenefitRejectionWithRelationsQueryResult {
     email: string | null;
     sex: string | null;
     phone: string | null;
-  };
+  } | null;
 
   protected readonly _type =
     GetTemporaryIncapacityBenefitRejectionWithRelationsQueryResult.name;

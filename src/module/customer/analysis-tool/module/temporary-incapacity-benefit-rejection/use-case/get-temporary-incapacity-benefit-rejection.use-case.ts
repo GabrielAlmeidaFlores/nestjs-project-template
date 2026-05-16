@@ -57,7 +57,12 @@ export class GetTemporaryIncapacityBenefitRejectionUseCase {
       result.result !== null && result.result.firstAnalysis !== null
         ? this.parseStoredFirstAnalysis(
             result.result.firstAnalysis,
-            result.analysisToolClient,
+            result.analysisToolClient ?? {
+              name: null,
+              email: null,
+              sex: null,
+              phone: null,
+            },
           )
         : null;
 
@@ -79,20 +84,22 @@ export class GetTemporaryIncapacityBenefitRejectionUseCase {
 
     return GetTemporaryIncapacityBenefitRejectionResponseDto.build({
       temporaryIncapacityBenefitRejectionId: result.id,
-      analysisToolClient:
-        GetTemporaryIncapacityBenefitRejectionAnalysisToolClientResponseDto.build(
-          {
-            analysisToolClientId: new AnalysisToolClientId(
-              result.analysisToolClient.analysisToolClientId,
-            ),
-            ...(result.analysisToolClient.name !== null && {
-              name: result.analysisToolClient.name,
-            }),
-            ...(result.analysisToolClient.birthDate !== null && {
-              birthDate: result.analysisToolClient.birthDate,
-            }),
-          },
-        ),
+      ...(result.analysisToolClient !== null && {
+        analysisToolClient:
+          GetTemporaryIncapacityBenefitRejectionAnalysisToolClientResponseDto.build(
+            {
+              analysisToolClientId: new AnalysisToolClientId(
+                result.analysisToolClient.analysisToolClientId,
+              ),
+              ...(result.analysisToolClient.name !== null && {
+                name: result.analysisToolClient.name,
+              }),
+              ...(result.analysisToolClient.birthDate !== null && {
+                birthDate: result.analysisToolClient.birthDate,
+              }),
+            },
+          ),
+      }),
       ...(result.analysisName !== null && {
         analysisName: result.analysisName,
       }),
