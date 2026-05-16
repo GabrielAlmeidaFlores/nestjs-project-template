@@ -5,6 +5,26 @@ import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/d
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
+export class MaternityPayRejectionCarencyModel extends BaseBuildableDtoObject {
+  @ResponseDtoBooleanProperty()
+  public readonly isExempt: boolean;
+
+  @ResponseDtoStringProperty()
+  public readonly status: string;
+
+  @ResponseDtoStringProperty()
+  public readonly details: string;
+
+  @ResponseDtoStringProperty()
+  public readonly legalBasis: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public readonly contributionCount?: string;
+
+  protected override readonly _type = MaternityPayRejectionCarencyModel.name;
+}
+
+@ResponseDto()
 export class MaternityPayRejectionGracePeriodModel extends BaseBuildableDtoObject {
   @ResponseDtoBooleanProperty()
   public readonly withinTheGracePeriod: boolean;
@@ -83,6 +103,11 @@ export class MaternityPayRejectionFirstAnalysisModel extends BaseBuildableDtoObj
 
   @ResponseDtoStringProperty()
   public readonly insuredStatusAnalysisConclusion: string;
+
+  @ResponseDtoObjectProperty(() => MaternityPayRejectionCarencyModel, {
+    required: false,
+  })
+  public readonly carency?: MaternityPayRejectionCarencyModel;
 
   @ResponseDtoObjectProperty(() => MaternityPayRejectionGracePeriodModel)
   public readonly gracePeriod: MaternityPayRejectionGracePeriodModel;

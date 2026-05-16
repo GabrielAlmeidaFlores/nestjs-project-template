@@ -1,6 +1,13 @@
 export interface MaternityPayRejectionFirstAnalysisInterface {
   insuredStatusManteined: boolean;
   insuredStatusAnalysisConclusion: string;
+  carency?: {
+    isExempt: boolean;
+    status: string;
+    details: string;
+    legalBasis: string;
+    contributionCount?: string;
+  };
   gracePeriod: {
     withinTheGracePeriod: boolean;
     situation: string;
