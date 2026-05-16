@@ -227,7 +227,8 @@ export class InternalAnalysisToolsService extends McpToolsGateway {
           properties: {
             accident_assistance_terminated_id: {
               type: 'string',
-              description: 'The accident assistance terminated analysis ID (UUID)',
+              description:
+                'The accident assistance terminated analysis ID (UUID)',
             },
           },
           required: ['accident_assistance_terminated_id'],
@@ -374,7 +375,8 @@ export class InternalAnalysisToolsService extends McpToolsGateway {
           properties: {
             accident_assistance_terminated_id: {
               type: 'string',
-              description: 'The accident assistance terminated analysis ID (UUID)',
+              description:
+                'The accident assistance terminated analysis ID (UUID)',
             },
             field_name: {
               type: 'string',
@@ -487,14 +489,26 @@ export class InternalAnalysisToolsService extends McpToolsGateway {
             },
             name: { type: 'string', description: 'Full name' },
             email: { type: 'string', description: 'Email address' },
-            phone_number: { type: 'string', description: 'Phone number (digits only or formatted)' },
+            phone_number: {
+              type: 'string',
+              description: 'Phone number (digits only or formatted)',
+            },
             birth_date: {
               type: 'string',
               description: 'Birth date in ISO format (YYYY-MM-DD)',
             },
-            gender: { type: 'string', description: 'Gender: MALE, FEMALE, or OTHER' },
-            inss_password: { type: 'string', description: 'INSS portal password' },
-            client_type: { type: 'string', description: 'Client type enum value' },
+            gender: {
+              type: 'string',
+              description: 'Gender: MALE, FEMALE, or OTHER',
+            },
+            inss_password: {
+              type: 'string',
+              description: 'INSS portal password',
+            },
+            client_type: {
+              type: 'string',
+              description: 'Client type enum value',
+            },
           },
           required: ['client_id'],
         },
