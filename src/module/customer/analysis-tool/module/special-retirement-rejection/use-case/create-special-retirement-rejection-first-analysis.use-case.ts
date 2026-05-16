@@ -257,28 +257,12 @@ export class CreateSpecialRetirementRejectionFirstAnalysisUseCase {
 
       cleanedJson = JSON.stringify(parsed);
 
-      this.validateWorkPeriodsOrThrow(parsed.workPeriods);
-
       return {
         cleanedJson,
         model: this.buildFirstAnalysisModel(parsed),
         workPeriods: parsed.workPeriods,
       };
     } catch {
-      throw new InvalidSpecialRetirementRejectionFirstAnalysisJsonError();
-    }
-  }
-
-  private validateWorkPeriodsOrThrow(
-    workPeriods: SpecialRetirementRejectionFirstAnalysisInterface['workPeriods'],
-  ): void {
-    const hasPendingPeriodWithoutEarningsHistory = workPeriods.some(
-      (workPeriod) =>
-        workPeriod.pendencyReason.length > 0 &&
-        workPeriod.earningsHistory.length === 0,
-    );
-
-    if (hasPendingPeriodWithoutEarningsHistory) {
       throw new InvalidSpecialRetirementRejectionFirstAnalysisJsonError();
     }
   }

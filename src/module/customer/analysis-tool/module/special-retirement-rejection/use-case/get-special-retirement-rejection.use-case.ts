@@ -390,6 +390,13 @@ export class GetSpecialRetirementRejectionUseCase {
       }),
       createdAt: analysisToolRecordQueryResult.createdAt,
       updatedAt: analysisToolRecordQueryResult.updatedAt,
+      ...(specialRetirementRejection.specialRetirementRejectionTechnicalDiagnosis !==
+        null &&
+        specialRetirementRejection.specialRetirementRejectionTechnicalDiagnosis
+          .length > 0 && {
+          technicalDiagnosis:
+            specialRetirementRejection.specialRetirementRejectionTechnicalDiagnosis,
+        }),
     });
   }
 
