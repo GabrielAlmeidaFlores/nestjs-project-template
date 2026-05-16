@@ -183,6 +183,11 @@ export class AnalysisToolRecordTypeormQueryRepository
         'accidentAssistanceTerminated',
       [AnalysisToolRecordTypeEnum.ACCIDENT_ASSISTANCE_GRANT]:
         'accidentAssistanceGrant',
+      [AnalysisToolRecordTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REJECTION]:
+        'retirementPermanentDisabilityRejection',
+      [AnalysisToolRecordTypeEnum.ELDERLY_BPC_REJECTION]: 'elderlyBpcRejection',
+      [AnalysisToolRecordTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REVISION]:
+        'retirementPermanentDisabilityRevision',
     };
   }
 
