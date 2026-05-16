@@ -3,8 +3,10 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
@@ -42,6 +44,8 @@ export class CreateMaternityPayRejectionFirstAnalysisUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(AnalysisToolRecordQueryRepositoryGateway)
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordCommandRepositoryGateway)
+    private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
     @Inject(MaternityPayRejectionCommandRepositoryGateway)
     private readonly maternityPayRejectionCommandRepositoryGateway: MaternityPayRejectionCommandRepositoryGateway,
     @Inject(MaternityPayRejectionQueryRepositoryGateway)
@@ -154,9 +158,9 @@ export class CreateMaternityPayRejectionFirstAnalysisUseCase {
     const resultEntity = new MaternityPayRejectionResultEntity({
       ...(existingResult !== null && { id: existingResult.id }),
       firstAnalysis: firstAnalysisResponse,
-      secondAnalysis: existingResult?.secondAnalysis ?? null,
-      completeAnalysis: existingResult?.completeAnalysis ?? null,
-      simplifiedAnalysis: existingResult?.simplifiedAnalysis ?? null,
+      secondAnalysis: null,
+      completeAnalysis: null,
+      simplifiedAnalysis: null,
     });
 
     const resultTransaction =
@@ -168,7 +172,15 @@ export class CreateMaternityPayRejectionFirstAnalysisUseCase {
             resultEntity,
           );
 
-    const transactionOperations = [consumeCreditTransaction, resultTransaction];
+    const transactionOperations = [
+      consumeCreditTransaction,
+      resultTransaction,
+      this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecordStatus(
+        analysisToolRecord.id,
+        AnalysisStatusEnum.IN_PROGRESS,
+        organizationMember.id,
+      ),
+    ];
 
     if (existingResult === null) {
       transactionOperations.push(
