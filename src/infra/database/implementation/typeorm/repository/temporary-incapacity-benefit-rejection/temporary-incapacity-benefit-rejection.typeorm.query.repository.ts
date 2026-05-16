@@ -48,6 +48,9 @@ export class TemporaryIncapacityBenefitRejectionTypeormQueryRepository
             earningsHistory: true,
           },
           inssBenefits: true,
+          analysisToolRecord: {
+            analysisToolClient: true,
+          },
         },
       },
       err,
