@@ -351,8 +351,9 @@ export class GetTemporaryIncapacityBenefitRejectionResponseDto extends BaseBuild
 
   @ResponseDtoObjectProperty(
     () => GetTemporaryIncapacityBenefitRejectionAnalysisToolClientResponseDto,
+    { required: false },
   )
-  public analysisToolClient: GetTemporaryIncapacityBenefitRejectionAnalysisToolClientResponseDto;
+  public analysisToolClient?: GetTemporaryIncapacityBenefitRejectionAnalysisToolClientResponseDto;
 
   @ResponseDtoObjectProperty(
     () => GetTemporaryIncapacityBenefitRejectionResultResponseDto,
