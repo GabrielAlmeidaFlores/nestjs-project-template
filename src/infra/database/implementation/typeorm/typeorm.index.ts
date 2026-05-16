@@ -925,10 +925,10 @@ import { SpecialRetirementRejectionDocumentTypeormEntity } from '@infra/database
 import { SpecialRetirementRejectionInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-inss-benefit.typeorm.entity';
 import { SpecialRetirementRejectionLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-legal-proceeding.typeorm.entity';
 import { SpecialRetirementRejectionResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-result.typeorm.entity';
+import { SpecialRetirementRejectionTechnicalDiagnosisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-technical-diagnosis.typeorm.entity';
 import { SpecialRetirementRejectionWorkPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-work-period-document.typeorm.entity';
 import { SpecialRetirementRejectionWorkPeriodEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-work-period-earnings-history.typeorm.entity';
 import { SpecialRetirementRejectionWorkPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-work-period.typeorm.entity';
-import { SpecialRetirementRejectionTechnicalDiagnosisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-technical-diagnosis.typeorm.entity';
 import { SpecialRetirementRejectionWorkSpecialPeriodLegalFrameworkTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-work-special-period-legal-framework.typeorm.entity';
 import { SpecialRetirementRejectionWorkSpecialPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-work-special-period.typeorm.entity';
 import { SpecialRetirementRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection.typeorm.entity';

@@ -2252,7 +2252,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.PERMANENT_INCAPACITY_BENEFIT_TERMINATED_FIRST_ANALYSIS,
       creditCost: 5,
-      title: 'Primeira Análise (Cessação Aposentadoria por Incapacidade Permanente)',
+      title:
+        'Primeira Análise (Cessação Aposentadoria por Incapacidade Permanente)',
       description:
         'Primeira análise de cessação de aposentadoria por incapacidade permanente com IA, combinando os dados estruturados do caso com a leitura e interpretação do CNIS. Gera parecer inicial técnico sobre tempo de contribuição, carência, períodos relevantes, pontos de atenção e viabilidade preliminar de reversão da cessação.',
     }),
@@ -2261,7 +2262,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.PERMANENT_INCAPACITY_BENEFIT_TERMINATED_COMPLETE_ANALYSIS,
       creditCost: 8,
-      title: 'Análise Completa (Cessação Aposentadoria por Incapacidade Permanente)',
+      title:
+        'Análise Completa (Cessação Aposentadoria por Incapacidade Permanente)',
       description:
         'Análise completa de cessação de aposentadoria por incapacidade permanente com IA. Consolida o histórico contributivo, os períodos analisados, a decisão de cessação do INSS e a condição de incapacidade, gerando parecer técnico detalhado com enquadramento nas regras aplicáveis, fundamentação jurídica, estratégia processual recomendada e perspectivas do caso.',
     }),
@@ -2270,7 +2272,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.PERMANENT_INCAPACITY_BENEFIT_TERMINATED_SIMPLIFIED_ANALYSIS,
       creditCost: 3,
-      title: 'Análise Simplificada (Cessação Aposentadoria por Incapacidade Permanente)',
+      title:
+        'Análise Simplificada (Cessação Aposentadoria por Incapacidade Permanente)',
       description:
         'Análise simplificada de cessação de aposentadoria por incapacidade permanente com IA. Resume os principais achados da análise completa, indica a viabilidade geral do caso, os pontos críticos e os próximos passos recomendados, em linguagem acessível para apresentação ao cliente.',
     }),
@@ -2363,7 +2366,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REVISION_WORK_PERIOD_NO_END_DATE_DOCUMENT_ANALYSIS,
       creditCost: 2,
-      title: 'REVISÃO APOSENTADORIA INVALIDEZ PERMANENTE - ANÁLISE DE VÍNCULO SEM DATA DE SAÍDA',
+      title:
+        'REVISÃO APOSENTADORIA INVALIDEZ PERMANENTE - ANÁLISE DE VÍNCULO SEM DATA DE SAÍDA',
       description:
         'Análise de documentos para fechamento de vínculos empregatícios sem data de saída no contexto de revisão de Aposentadoria por Incapacidade Permanente (APIP). Examina CTPS, TRCT, FGTS e outros documentos para identificar a data de desligamento e avaliar o impacto no cálculo revisional.',
     }),
