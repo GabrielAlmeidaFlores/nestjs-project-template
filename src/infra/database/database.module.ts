@@ -46,6 +46,8 @@ import { AffiliateCustomerPaymentPlanTypeormQueryRepository } from '@infra/datab
 import { AnalysisToolClientTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client/analysis-tool-client.typeorm.command.repository';
 import { AnalysisToolClientTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client/analysis-tool-client.typeorm.query.repository';
 import { AnalysisToolClientInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client-inss-benefit/analysis-tool-client-inss-benefit.typeorm.command.repository';
+import { AnalysisToolClientInterviewFormTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client-interview-form/analysis-tool-client-interview-form.typeorm.command.repository';
+import { AnalysisToolClientInterviewFormTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client-interview-form/analysis-tool-client-interview-form.typeorm.query.repository';
 import { AnalysisToolClientLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client-legal-proceeding/analysis-tool-client-legal-proceeding.typeorm.command.repository';
 import { AnalysisToolClientLegalProceedingTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client-legal-proceeding/analysis-tool-client-legal-proceeding.typeorm.query.repository';
 import { AnalysisToolRecordTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-record/analysis-tool-record.typeorm.command.repository';
@@ -710,6 +712,8 @@ import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analy
 import { AnalysisToolClientInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-inss-benefit/command/analysis-tool-client-inss-benefit.command.repository.gateway';
 import { AnalysisToolClientLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/command/analysis-tool-client-legal-proceeding.command.repository.gateway';
 import { AnalysisToolClientLegalProceedingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/analysis-tool-client-legal-proceeding.query.repository.gateway';
+import { AnalysisToolClientInterviewFormCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-interview-form/command/analysis-tool-client-interview-form.command.repository.gateway';
+import { AnalysisToolClientInterviewFormQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-interview-form/query/analysis-tool-client-interview-form.query.repository.gateway';
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { CidTenCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cid-ten/command/cid-ten.command.repository.gateway';
@@ -2102,6 +2106,14 @@ const classProvider: ClassProvider[] = [
   {
     provide: AnalysisToolClientLegalProceedingQueryRepositoryGateway,
     useClass: AnalysisToolClientLegalProceedingTypeormQueryRepository,
+  },
+  {
+    provide: AnalysisToolClientInterviewFormCommandRepositoryGateway,
+    useClass: AnalysisToolClientInterviewFormTypeormCommandRepository,
+  },
+  {
+    provide: AnalysisToolClientInterviewFormQueryRepositoryGateway,
+    useClass: AnalysisToolClientInterviewFormTypeormQueryRepository,
   },
   {
     provide: CidTenCommandRepositoryGateway,

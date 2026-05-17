@@ -61,6 +61,8 @@ import { GetAnalysisToolClientInssBenefitQueryResultAutoMapperProfile } from '@l
 import { AnalysisToolClientLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client-legal-proceeding/analysis-tool-client-legal-proceeding-entity.auto-mapper.profile';
 import { GetAnalysisToolClientLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client-legal-proceeding/get-analysis-tool-client-legal-proceeding-query-result.auto-mapper.profile';
 import { GetAnalysisToolClientLegalProceedingWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client-legal-proceeding/get-analysis-tool-client-legal-proceeding-with-relations-query-result.auto-mapper.profile';
+import { AnalysisToolClientInterviewFormEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client-interview-form/analysis-tool-client-interview-form-entity.auto-mapper.profile';
+import { GetAnalysisToolClientInterviewFormQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client-interview-form/get-analysis-tool-client-interview-form-query-result.auto-mapper.profile';
 import { AnalysisToolRecordEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-record/analysis-tool-record-entity.auto-mapper.profile';
 import { GetAnalysisToolRecordWithFullRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-record/get-analysis-tool-record-with-full-relations-query-result.auto-mapper.profile';
 import { GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-record/get-analysis-tool-record-with-relations-query-result.auto-mapper.profile';
@@ -822,6 +824,8 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     AnalysisToolClientInssBenefitEntityAutoMapperProfile,
     GetAnalysisToolClientLegalProceedingQueryResultAutoMapperProfile,
     AnalysisToolClientLegalProceedingEntityAutoMapperProfile,
+    AnalysisToolClientInterviewFormEntityAutoMapperProfile,
+    GetAnalysisToolClientInterviewFormQueryResultAutoMapperProfile,
     GetAuthIdentityWithRelationsQueryResultAutoMapperProfile,
     AdminEntityAutoMapperProfile,
     GetAdminQueryResultAutoMapperProfile,
