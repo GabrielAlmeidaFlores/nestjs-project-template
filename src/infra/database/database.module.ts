@@ -277,6 +277,8 @@ import { InsuranceQualityAnalysisDocumentTypeormCommandRepository } from '@infra
 import { InsuranceQualityAnalysisInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis-inss-benefit/insurance-quality-analysis-inss-benefit.typeorm.command.repository';
 import { InsuranceQualityAnalysisLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis-legal-proceeding/insurance-quality-analysis-legal-proceeding.typeorm.command.repository';
 import { InsuranceQualityAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis-result/insurance-quality-analysis-result.typeorm.command.repository';
+import { InterviewFormTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/interview-form/interview-form.typeorm.command.repository';
+import { InterviewFormTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/interview-form/interview-form.typeorm.query.repository';
 import { JudicialCaseAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/judicial-case-analysis/judicial-case-analysis.typeorm.command.repository';
 import { JudicialCaseAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/judicial-case-analysis/judicial-case-analysis.typeorm.query.repository';
 import { JudicialCaseAnalysisBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/judicial-case-analysis-benefit/judicial-case-analysis-benefit.typeorm.command.repository';
@@ -950,6 +952,8 @@ import { InsuranceQualityAnalysisDocumentCommandRepositoryGateway } from '@modul
 import { InsuranceQualityAnalysisInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis-inss-benefit/command/insurance-quality-analysis-inss-benefit.command.repository.gateway';
 import { InsuranceQualityAnalysisLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis-legal-proceeding/command/insurance-quality-analysis-legal-proceeding.command.repository.gateway';
 import { InsuranceQualityAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis-result/command/insurance-quality-analysis-result.command.repository.gateway';
+import { InterviewFormCommandRepositoryGateway } from '@module/customer/analysis-tool/module/interview-form/domain/repository/interview-form/command/interview-form.command.repository.gateway';
+import { InterviewFormQueryRepositoryGateway } from '@module/customer/analysis-tool/module/interview-form/domain/repository/interview-form/query/interview-form.query.repository.gateway';
 import { JudicialCaseAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/repository/judicial-case-analysis/command/judicial-case-analysis.command.repository.gateway';
 import { JudicialCaseAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/repository/judicial-case-analysis/query/judicial-case-analysis.query.repository.gateway';
 import { JudicialCaseAnalysisBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/repository/judicial-case-analysis-benefit/command/judicial-case-analysis-benefit.command.repository.gateway';
@@ -1936,6 +1940,14 @@ const classProvider: ClassProvider[] = [
   {
     provide: InsuranceQualityAnalysisLegalProceedingCommandRepositoryGateway,
     useClass: InsuranceQualityAnalysisLegalProceedingTypeormCommandRepository,
+  },
+  {
+    provide: InterviewFormCommandRepositoryGateway,
+    useClass: InterviewFormTypeormCommandRepository,
+  },
+  {
+    provide: InterviewFormQueryRepositoryGateway,
+    useClass: InterviewFormTypeormQueryRepository,
   },
   {
     provide: AnalysisToolClientCommandRepositoryGateway,

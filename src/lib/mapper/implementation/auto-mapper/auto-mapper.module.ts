@@ -347,6 +347,8 @@ import { GetInsuranceQualityAnalysisLegalProceedingQueryResultAutoMapperProfile 
 import { InsuranceQualityAnalysisLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis-legal-proceeding/insurance-quality-analysis-legal-proceeding-entity.auto-mapper.profile';
 import { GetInsuranceQualityAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis-result/get-insurance-quality-analysis-result-query-result.auto-mapper.profile';
 import { InsuranceQualityAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis-result/insurance-quality-analysis-result-entity.auto-mapper.profile';
+import { GetInterviewFormQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/interview-form/get-interview-form-query-result.auto-mapper.profile';
+import { InterviewFormEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/interview-form/interview-form-entity.auto-mapper.profile';
 import { GetJudicialCaseAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis/get-judicial-case-analysis-query-result.auto-mapper.profile';
 import { GetJudicialCaseAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis/get-judicial-case-analysis-with-relations-query-result.auto-mapper.profile';
 import { JudicialCaseAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis/judicial-case-analysis-entity.auto-mapper.profile';
@@ -769,6 +771,8 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetInsuranceQualityAnalysisInssBenefitQueryResultAutoMapperProfile,
     InsuranceQualityAnalysisLegalProceedingEntityAutoMapperProfile,
     GetInsuranceQualityAnalysisLegalProceedingQueryResultAutoMapperProfile,
+    InterviewFormEntityAutoMapperProfile,
+    GetInterviewFormQueryResultAutoMapperProfile,
     GetSpeechGeneratorDocumentQueryResultAutoMapperProfile,
     SpeechGeneratorDocumentEntityAutoMapperProfile,
     GetSpeechGeneratorResultQueryResultAutoMapperProfile,

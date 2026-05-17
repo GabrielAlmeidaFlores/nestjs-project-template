@@ -216,6 +216,8 @@ import { InsuranceQualityAnalysisDocumentTypeormCommandRepository } from '@infra
 import { InsuranceQualityAnalysisInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis-inss-benefit/insurance-quality-analysis-inss-benefit.typeorm.command.repository';
 import { InsuranceQualityAnalysisLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis-legal-proceeding/insurance-quality-analysis-legal-proceeding.typeorm.command.repository';
 import { InsuranceQualityAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis-result/insurance-quality-analysis-result.typeorm.command.repository';
+import { InterviewFormTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/interview-form/interview-form.typeorm.command.repository';
+import { InterviewFormTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/interview-form/interview-form.typeorm.query.repository';
 import { JudicialCaseAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/judicial-case-analysis/judicial-case-analysis.typeorm.command.repository';
 import { JudicialCaseAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/judicial-case-analysis/judicial-case-analysis.typeorm.query.repository';
 import { JudicialCaseAnalysisBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/judicial-case-analysis-benefit/judicial-case-analysis-benefit.typeorm.command.repository';
@@ -727,6 +729,7 @@ import { InsuranceQualityAnalysisInssBenefitTypeormEntity } from '@infra/databas
 import { InsuranceQualityAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis-legal-proceeding.typeorm.entity';
 import { InsuranceQualityAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis-result.typeorm.entity';
 import { InsuranceQualityAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis.typeorm.entity';
+import { InterviewFormTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/interview-form.typeorm.entity';
 import { JudicialCaseAnalysisBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis-benefit.typeorm.entity';
 import { JudicialCaseAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis-document.typeorm.entity';
 import { JudicialCaseAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis-legal-proceeding.typeorm.entity';
@@ -1273,6 +1276,7 @@ export class TypeormIndex {
     InsuranceQualityAnalysisResultTypeormEntity,
     InsuranceQualityAnalysisInssBenefitTypeormEntity,
     InsuranceQualityAnalysisLegalProceedingTypeormEntity,
+    InterviewFormTypeormEntity,
     SpecialActivityTypeormEntity,
     SpecialActivityDocumentTypeormEntity,
     SpecialActivityResultTypeormEntity,
@@ -1815,6 +1819,8 @@ export class TypeormIndex {
     InsuranceQualityAnalysisLegalProceedingTypeormCommandRepository,
     InsuranceQualityAnalysisTypeormQueryRepository,
     InsuranceQualityAnalysisResultTypeormCommandRepository,
+    InterviewFormTypeormCommandRepository,
+    InterviewFormTypeormQueryRepository,
     SpecialActivityTypeormCommandRepository,
     SpecialActivityTypeormQueryRepository,
     SpecialActivityResultTypeormCommandRepository,
