@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { DatabaseModule } from '@infra/database/database.module';
 import { CnisAnalyzerModule } from '@lib/cnis-analyzer/cnis-analyzer.module';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
+import { CnisXRayAnalysisModule } from '@module/customer/analysis-tool/lib/cnis-x-ray-analysis/cnis-x-ray-analysis.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
 import { MaternityPayRejectionController } from '@module/customer/analysis-tool/module/maternity-pay-rejection/maternity-pay-rejection.controller';
@@ -25,6 +26,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     AuthModule,
     DatabaseModule,
     AnalysisProcessorModule,
+    CnisXRayAnalysisModule,
     ExportDocumentModule,
     OrganizationSessionModule,
     OrganizationCreditModule,
