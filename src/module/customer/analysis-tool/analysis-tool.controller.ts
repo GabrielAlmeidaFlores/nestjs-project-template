@@ -32,6 +32,11 @@ import { GetAnalysisToolClientInterviewFormResponseDto } from '@module/customer/
 import { UpsertAnalysisToolClientInterviewFormUseCase } from '@module/customer/analysis-tool/use-case/upsert-analysis-tool-client-interview-form.use-case';
 import { GetAnalysisToolClientInterviewFormUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client-interview-form.use-case';
 import { GenerateAnalysisToolClientInterviewFormDocumentUseCase } from '@module/customer/analysis-tool/use-case/generate-analysis-tool-client-interview-form-document.use-case';
+import { UpsertAnalysisToolClientCadastralFormRequestDto } from '@module/customer/analysis-tool/dto/request/upsert-analysis-tool-client-cadastral-form.request.dto';
+import { GetAnalysisToolClientCadastralFormResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client-cadastral-form.response.dto';
+import { UpsertAnalysisToolClientCadastralFormUseCase } from '@module/customer/analysis-tool/use-case/upsert-analysis-tool-client-cadastral-form.use-case';
+import { GetAnalysisToolClientCadastralFormUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client-cadastral-form.use-case';
+import { GenerateAnalysisToolClientCadastralFormDocumentUseCase } from '@module/customer/analysis-tool/use-case/generate-analysis-tool-client-cadastral-form-document.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
@@ -62,6 +67,9 @@ export class AnalysisToolController {
     private readonly upsertAnalysisToolClientInterviewFormUseCase: UpsertAnalysisToolClientInterviewFormUseCase,
     private readonly getAnalysisToolClientInterviewFormUseCase: GetAnalysisToolClientInterviewFormUseCase,
     private readonly generateAnalysisToolClientInterviewFormDocumentUseCase: GenerateAnalysisToolClientInterviewFormDocumentUseCase,
+    private readonly upsertAnalysisToolClientCadastralFormUseCase: UpsertAnalysisToolClientCadastralFormUseCase,
+    private readonly getAnalysisToolClientCadastralFormUseCase: GetAnalysisToolClientCadastralFormUseCase,
+    private readonly generateAnalysisToolClientCadastralFormDocumentUseCase: GenerateAnalysisToolClientCadastralFormDocumentUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -439,6 +447,95 @@ export class AnalysisToolController {
     analysisToolClientId: AnalysisToolClientId,
   ): Promise<StreamableFile> {
     return await this.generateAnalysisToolClientInterviewFormDocumentUseCase.execute(
+      analysisToolClientId,
+      organizationSessionData,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Salvar ficha cadastral do cliente',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'analysis-tool-client/:analysisToolClientId/cadastral-form',
+      method: RequestMethod.PUT,
+      type: UpsertAnalysisToolClientCadastralFormRequestDto,
+    },
+    tag: ['ficha-cadastral'],
+    successResponse: {
+      statusCode: HttpStatus.NO_CONTENT,
+      description: 'Ficha cadastral salva com sucesso.',
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async upsertAnalysisToolClientCadastralForm(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'analysisToolClientId',
+      new ParseValueObjectPipe(AnalysisToolClientId),
+    )
+    analysisToolClientId: AnalysisToolClientId,
+    @Body() dto: UpsertAnalysisToolClientCadastralFormRequestDto,
+  ): Promise<{ success: boolean }> {
+    return await this.upsertAnalysisToolClientCadastralFormUseCase.execute(
+      analysisToolClientId,
+      organizationSessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Obter ficha cadastral do cliente',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'analysis-tool-client/:analysisToolClientId/cadastral-form',
+      method: RequestMethod.GET,
+    },
+    tag: ['ficha-cadastral'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Ficha cadastral retornada com sucesso.',
+      type: GetAnalysisToolClientCadastralFormResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async getAnalysisToolClientCadastralForm(
+    @Param(
+      'analysisToolClientId',
+      new ParseValueObjectPipe(AnalysisToolClientId),
+    )
+    analysisToolClientId: AnalysisToolClientId,
+  ): Promise<GetAnalysisToolClientCadastralFormResponseDto> {
+    return await this.getAnalysisToolClientCadastralFormUseCase.execute(
+      analysisToolClientId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Gerar documento da ficha cadastral',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'analysis-tool-client/:analysisToolClientId/cadastral-form/generate-document',
+      method: RequestMethod.GET,
+    },
+    tag: ['ficha-cadastral'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Documento da ficha cadastral gerado com sucesso.',
+      type: StreamableFile,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async generateAnalysisToolClientCadastralFormDocument(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'analysisToolClientId',
+      new ParseValueObjectPipe(AnalysisToolClientId),
+    )
+    analysisToolClientId: AnalysisToolClientId,
+  ): Promise<StreamableFile> {
+    return await this.generateAnalysisToolClientCadastralFormDocumentUseCase.execute(
       analysisToolClientId,
       organizationSessionData,
     );

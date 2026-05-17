@@ -1,16 +1,17 @@
 import { MigrationInterface, QueryRunner, Table, TableForeignKey, TableIndex } from 'typeorm';
 
-export class AddAnalysisToolClientInterviewForm20260515000000 implements MigrationInterface {
+export class AddAnalysisToolClientCadastralForm20260516000000 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'analysis_tool_client_interview_form',
+        name: 'analysis_tool_client_cadastral_form',
         columns: [
           { name: 'id', type: 'char', length: '36', isPrimary: true },
           { name: 'analysis_tool_client_id', type: 'char', length: '36', isNullable: false },
           { name: 'rg', type: 'varchar', length: '50', isNullable: true },
           { name: 'nit', type: 'varchar', length: '50', isNullable: true },
           { name: 'occupation', type: 'varchar', length: '255', isNullable: true },
+          { name: 'marital_status', type: 'varchar', length: '100', isNullable: true },
           { name: 'neighborhood', type: 'varchar', length: '255', isNullable: true },
           { name: 'street', type: 'varchar', length: '255', isNullable: true },
           { name: 'address_number', type: 'varchar', length: '50', isNullable: true },
@@ -18,7 +19,7 @@ export class AddAnalysisToolClientInterviewForm20260515000000 implements Migrati
           { name: 'father_name', type: 'varchar', length: '255', isNullable: true },
           { name: 'spouse_name', type: 'varchar', length: '255', isNullable: true },
           { name: 'ctps_number', type: 'varchar', length: '100', isNullable: true },
-          { name: 'is_married', type: 'boolean', isNullable: true },
+          { name: 'own_house', type: 'boolean', isNullable: true },
           { name: 'has_children', type: 'boolean', isNullable: true },
           { name: 'children_names', type: 'text', isNullable: true },
           { name: 'is_retired', type: 'boolean', isNullable: true },
@@ -72,16 +73,15 @@ export class AddAnalysisToolClientInterviewForm20260515000000 implements Migrati
           { name: 'doc_all_ctps', type: 'boolean', isNullable: true },
           { name: 'doc_public_admin_contracts', type: 'boolean', isNullable: true },
           { name: 'doc_others', type: 'text', isNullable: true },
-          { name: 'created_at', type: 'timestamp', default: 'CURRENT_TIMESTAMP' },
-          { name: 'updated_at', type: 'timestamp', default: 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' },
-          { name: 'deleted_at', type: 'timestamp', isNullable: true },
+          { name: 'created_at', type: 'timestamp', default: 'CURRENT_TIMESTAMP', isNullable: false },
+          { name: 'updated_at', type: 'timestamp', default: 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP', isNullable: false },
         ],
       }),
       true,
     );
 
     await queryRunner.createForeignKey(
-      'analysis_tool_client_interview_form',
+      'analysis_tool_client_cadastral_form',
       new TableForeignKey({
         columnNames: ['analysis_tool_client_id'],
         referencedColumnNames: ['id'],
@@ -91,9 +91,9 @@ export class AddAnalysisToolClientInterviewForm20260515000000 implements Migrati
     );
 
     await queryRunner.createIndex(
-      'analysis_tool_client_interview_form',
+      'analysis_tool_client_cadastral_form',
       new TableIndex({
-        name: 'IDX_UNIQUE_ANALYSIS_TOOL_CLIENT_INTERVIEW_FORM_CLIENT_ID',
+        name: 'IDX_analysis_tool_client_cadastral_form_client_id',
         columnNames: ['analysis_tool_client_id'],
         isUnique: true,
       }),
@@ -101,6 +101,6 @@ export class AddAnalysisToolClientInterviewForm20260515000000 implements Migrati
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('analysis_tool_client_interview_form');
+    await queryRunner.dropTable('analysis_tool_client_cadastral_form', true);
   }
 }

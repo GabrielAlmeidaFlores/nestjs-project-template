@@ -2,15 +2,15 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
-import { AnalysisToolClientInterviewFormTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client-interview-form.typeorm.entity';
+import { AnalysisToolClientCadastralFormTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client-cadastral-form.typeorm.entity';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
-import { AnalysisToolClientInterviewFormEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-interview-form/analysis-tool-client-interview-form.entity';
-import { AnalysisToolClientInterviewFormId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-interview-form/value-object/analysis-tool-client-interview-form-id/analysis-tool-client-interview-form-id.value-object';
+import { AnalysisToolClientCadastralFormEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-cadastral-form/analysis-tool-client-cadastral-form.entity';
+import { AnalysisToolClientCadastralFormId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-cadastral-form/value-object/analysis-tool-client-cadastral-form-id/analysis-tool-client-cadastral-form-id.value-object';
 
 @Injectable()
-export class AnalysisToolClientInterviewFormEntityAutoMapperProfile {
-  protected readonly _type = AnalysisToolClientInterviewFormEntityAutoMapperProfile.name;
+export class AnalysisToolClientCadastralFormEntityAutoMapperProfile {
+  protected readonly _type = AnalysisToolClientCadastralFormEntityAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();
@@ -23,40 +23,40 @@ export class AnalysisToolClientInterviewFormEntityAutoMapperProfile {
 
   private mapOrmEntityToDomainEntity(): void {
     const convert = (
-      source: AnalysisToolClientInterviewFormTypeormEntity,
-    ): AnalysisToolClientInterviewFormEntity => {
+      source: AnalysisToolClientCadastralFormTypeormEntity,
+    ): AnalysisToolClientCadastralFormEntity => {
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         AnalysisToolClientTypeormEntity,
         AnalysisToolClientEntity,
       );
 
-      return new AnalysisToolClientInterviewFormEntity({
+      return new AnalysisToolClientCadastralFormEntity({
         ...source,
-        id: new AnalysisToolClientInterviewFormId(source.id),
+        id: new AnalysisToolClientCadastralFormId(source.id),
         analysisToolClient,
       });
     };
 
     createMap(
       this.mapper,
-      AnalysisToolClientInterviewFormTypeormEntity,
-      AnalysisToolClientInterviewFormEntity,
+      AnalysisToolClientCadastralFormTypeormEntity,
+      AnalysisToolClientCadastralFormEntity,
       constructUsing(convert),
     );
   }
 
   private mapDomainEntityToOrmEntity(): void {
     const convert = (
-      source: AnalysisToolClientInterviewFormEntity,
-    ): AnalysisToolClientInterviewFormTypeormEntity => {
+      source: AnalysisToolClientCadastralFormEntity,
+    ): AnalysisToolClientCadastralFormTypeormEntity => {
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         AnalysisToolClientEntity,
         AnalysisToolClientTypeormEntity,
       );
 
-      return AnalysisToolClientInterviewFormTypeormEntity.build({
+      return AnalysisToolClientCadastralFormTypeormEntity.build({
         ...source,
         id: source.id.toString(),
         analysisToolClient,
@@ -65,8 +65,8 @@ export class AnalysisToolClientInterviewFormEntityAutoMapperProfile {
 
     createMap(
       this.mapper,
-      AnalysisToolClientInterviewFormEntity,
-      AnalysisToolClientInterviewFormTypeormEntity,
+      AnalysisToolClientCadastralFormEntity,
+      AnalysisToolClientCadastralFormTypeormEntity,
       constructUsing(convert),
     );
   }
