@@ -1,4 +1,4 @@
-import { Body, HttpStatus, Param, Query, RequestMethod } from '@nestjs/common';
+import { Body, HttpStatus, Param, Query, RequestMethod, StreamableFile } from '@nestjs/common';
 
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
@@ -27,6 +27,11 @@ import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/us
 import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case';
 import { ListCidTenUseCase } from '@module/customer/analysis-tool/use-case/list-cid-ten.use-case';
 import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/update-analysis-tool-client.use-case';
+import { UpsertAnalysisToolClientInterviewFormRequestDto } from '@module/customer/analysis-tool/dto/request/upsert-analysis-tool-client-interview-form.request.dto';
+import { GetAnalysisToolClientInterviewFormResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client-interview-form.response.dto';
+import { UpsertAnalysisToolClientInterviewFormUseCase } from '@module/customer/analysis-tool/use-case/upsert-analysis-tool-client-interview-form.use-case';
+import { GetAnalysisToolClientInterviewFormUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client-interview-form.use-case';
+import { GenerateAnalysisToolClientInterviewFormDocumentUseCase } from '@module/customer/analysis-tool/use-case/generate-analysis-tool-client-interview-form-document.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
@@ -54,6 +59,9 @@ export class AnalysisToolController {
     private readonly listCidTenUseCase: ListCidTenUseCase,
     private readonly getAnalysisToolRecordStatisticsUseCase: GetAnalysisToolRecordStatisticsUseCase,
     private readonly listAnalysisToolClientLegalProceedingUseCase: ListAnalysisToolClientLegalProceedingWithCombinedFiltersUseCase,
+    private readonly upsertAnalysisToolClientInterviewFormUseCase: UpsertAnalysisToolClientInterviewFormUseCase,
+    private readonly getAnalysisToolClientInterviewFormUseCase: GetAnalysisToolClientInterviewFormUseCase,
+    private readonly generateAnalysisToolClientInterviewFormDocumentUseCase: GenerateAnalysisToolClientInterviewFormDocumentUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -345,5 +353,94 @@ export class AnalysisToolController {
     @Query() dto: ListDataRequestDto,
   ): Promise<ListCidTenResponseDto> {
     return await this.listCidTenUseCase.execute(dto);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Salvar ficha de entrevista do cliente',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'analysis-tool-client/:analysisToolClientId/interview-form',
+      method: RequestMethod.PUT,
+      type: UpsertAnalysisToolClientInterviewFormRequestDto,
+    },
+    tag: ['ficha-de-entrevista'],
+    successResponse: {
+      statusCode: HttpStatus.NO_CONTENT,
+      description: 'Ficha de entrevista salva com sucesso.',
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async upsertAnalysisToolClientInterviewForm(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'analysisToolClientId',
+      new ParseValueObjectPipe(AnalysisToolClientId),
+    )
+    analysisToolClientId: AnalysisToolClientId,
+    @Body() dto: UpsertAnalysisToolClientInterviewFormRequestDto,
+  ): Promise<{ success: boolean }> {
+    return await this.upsertAnalysisToolClientInterviewFormUseCase.execute(
+      analysisToolClientId,
+      organizationSessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Obter ficha de entrevista do cliente',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'analysis-tool-client/:analysisToolClientId/interview-form',
+      method: RequestMethod.GET,
+    },
+    tag: ['ficha-de-entrevista'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Ficha de entrevista retornada com sucesso.',
+      type: GetAnalysisToolClientInterviewFormResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async getAnalysisToolClientInterviewForm(
+    @Param(
+      'analysisToolClientId',
+      new ParseValueObjectPipe(AnalysisToolClientId),
+    )
+    analysisToolClientId: AnalysisToolClientId,
+  ): Promise<GetAnalysisToolClientInterviewFormResponseDto> {
+    return await this.getAnalysisToolClientInterviewFormUseCase.execute(
+      analysisToolClientId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Gerar documento da ficha de entrevista',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'analysis-tool-client/:analysisToolClientId/interview-form/generate-document',
+      method: RequestMethod.GET,
+    },
+    tag: ['ficha-de-entrevista'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Documento da ficha de entrevista gerado com sucesso.',
+      type: StreamableFile,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async generateAnalysisToolClientInterviewFormDocument(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'analysisToolClientId',
+      new ParseValueObjectPipe(AnalysisToolClientId),
+    )
+    analysisToolClientId: AnalysisToolClientId,
+  ): Promise<StreamableFile> {
+    return await this.generateAnalysisToolClientInterviewFormDocumentUseCase.execute(
+      analysisToolClientId,
+      organizationSessionData,
+    );
   }
 }

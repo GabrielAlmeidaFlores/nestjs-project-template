@@ -37,6 +37,8 @@ import { AffiliateCustomerPaymentPlanTypeormQueryRepository } from '@infra/datab
 import { AnalysisToolClientTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client/analysis-tool-client.typeorm.command.repository';
 import { AnalysisToolClientTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client/analysis-tool-client.typeorm.query.repository';
 import { AnalysisToolClientInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client-inss-benefit/analysis-tool-client-inss-benefit.typeorm.command.repository';
+import { AnalysisToolClientInterviewFormTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client-interview-form/analysis-tool-client-interview-form.typeorm.command.repository';
+import { AnalysisToolClientInterviewFormTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client-interview-form/analysis-tool-client-interview-form.typeorm.query.repository';
 import { AnalysisToolClientLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client-legal-proceeding/analysis-tool-client-legal-proceeding.typeorm.command.repository';
 import { AnalysisToolRecordTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-record/analysis-tool-record.typeorm.command.repository';
 import { AnalysisToolRecordTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-record/analysis-tool-record.typeorm.query.repository';
@@ -554,6 +556,7 @@ import { AffiliateCustomerTypeormEntity } from '@infra/database/implementation/t
 import { AnalysisToolClientInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client-inss-benefit.typeorm.entity';
 import { AnalysisToolClientLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client-legal-proceeding.typeorm.entity';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
+import { AnalysisToolClientInterviewFormTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client-interview-form.typeorm.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { AudienceQuestionGeneratorBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator-benefit.typeorm.entity';
 import { AudienceQuestionGeneratorDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator-document.typeorm.entity';
@@ -1046,6 +1049,7 @@ export class TypeormIndex {
     AnalysisToolClientInssBenefitTypeormEntity,
     CnisFastAnalysisLegalProceedingTypeormEntity,
     AnalysisToolClientTypeormEntity,
+    AnalysisToolClientInterviewFormTypeormEntity,
     CnisFastAnalysisResultTypeormEntity,
     CnisFastAnalysisTypeormEntity,
     LegalPleadingTypeormEntity,
@@ -1599,6 +1603,8 @@ export class TypeormIndex {
     CustomerAddressTypeormCommandRepository,
     CustomerTermsAcceptanceTypeormQueryRepository,
     AnalysisToolClientInssBenefitTypeormCommandRepository,
+    AnalysisToolClientInterviewFormTypeormCommandRepository,
+    AnalysisToolClientInterviewFormTypeormQueryRepository,
     AnalysisToolClientLegalProceedingTypeormCommandRepository,
     AdminTypeormCommandRepository,
     AdminTypeormQueryRepository,
