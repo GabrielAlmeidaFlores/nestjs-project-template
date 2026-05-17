@@ -48,6 +48,8 @@ import { AnalysisToolClientTypeormQueryRepository } from '@infra/database/implem
 import { AnalysisToolClientInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client-inss-benefit/analysis-tool-client-inss-benefit.typeorm.command.repository';
 import { AnalysisToolClientInterviewFormTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client-interview-form/analysis-tool-client-interview-form.typeorm.command.repository';
 import { AnalysisToolClientInterviewFormTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client-interview-form/analysis-tool-client-interview-form.typeorm.query.repository';
+import { AnalysisToolClientCadastralFormTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client-cadastral-form/analysis-tool-client-cadastral-form.typeorm.command.repository';
+import { AnalysisToolClientCadastralFormTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client-cadastral-form/analysis-tool-client-cadastral-form.typeorm.query.repository';
 import { AnalysisToolClientLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client-legal-proceeding/analysis-tool-client-legal-proceeding.typeorm.command.repository';
 import { AnalysisToolClientLegalProceedingTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client-legal-proceeding/analysis-tool-client-legal-proceeding.typeorm.query.repository';
 import { AnalysisToolRecordTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-record/analysis-tool-record.typeorm.command.repository';
@@ -714,6 +716,8 @@ import { AnalysisToolClientLegalProceedingCommandRepositoryGateway } from '@modu
 import { AnalysisToolClientLegalProceedingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/analysis-tool-client-legal-proceeding.query.repository.gateway';
 import { AnalysisToolClientInterviewFormCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-interview-form/command/analysis-tool-client-interview-form.command.repository.gateway';
 import { AnalysisToolClientInterviewFormQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-interview-form/query/analysis-tool-client-interview-form.query.repository.gateway';
+import { AnalysisToolClientCadastralFormCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-cadastral-form/command/analysis-tool-client-cadastral-form.command.repository.gateway';
+import { AnalysisToolClientCadastralFormQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-cadastral-form/query/analysis-tool-client-cadastral-form.query.repository.gateway';
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { CidTenCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cid-ten/command/cid-ten.command.repository.gateway';
@@ -2114,6 +2118,14 @@ const classProvider: ClassProvider[] = [
   {
     provide: AnalysisToolClientInterviewFormQueryRepositoryGateway,
     useClass: AnalysisToolClientInterviewFormTypeormQueryRepository,
+  },
+  {
+    provide: AnalysisToolClientCadastralFormCommandRepositoryGateway,
+    useClass: AnalysisToolClientCadastralFormTypeormCommandRepository,
+  },
+  {
+    provide: AnalysisToolClientCadastralFormQueryRepositoryGateway,
+    useClass: AnalysisToolClientCadastralFormTypeormQueryRepository,
   },
   {
     provide: CidTenCommandRepositoryGateway,

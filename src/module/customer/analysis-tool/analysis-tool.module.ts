@@ -76,6 +76,9 @@ import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/
 import { UpsertAnalysisToolClientInterviewFormUseCase } from '@module/customer/analysis-tool/use-case/upsert-analysis-tool-client-interview-form.use-case';
 import { GetAnalysisToolClientInterviewFormUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client-interview-form.use-case';
 import { GenerateAnalysisToolClientInterviewFormDocumentUseCase } from '@module/customer/analysis-tool/use-case/generate-analysis-tool-client-interview-form-document.use-case';
+import { UpsertAnalysisToolClientCadastralFormUseCase } from '@module/customer/analysis-tool/use-case/upsert-analysis-tool-client-cadastral-form.use-case';
+import { GetAnalysisToolClientCadastralFormUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client-cadastral-form.use-case';
+import { GenerateAnalysisToolClientCadastralFormDocumentUseCase } from '@module/customer/analysis-tool/use-case/generate-analysis-tool-client-cadastral-form-document.use-case';
 import { GetAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding.use-case-gateway';
 import { ListAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/list-analysis-tool-client-legal-proceeding.use-case-gateway';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
@@ -167,6 +170,9 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     UpsertAnalysisToolClientInterviewFormUseCase,
     GetAnalysisToolClientInterviewFormUseCase,
     GenerateAnalysisToolClientInterviewFormDocumentUseCase,
+    UpsertAnalysisToolClientCadastralFormUseCase,
+    GetAnalysisToolClientCadastralFormUseCase,
+    GenerateAnalysisToolClientCadastralFormDocumentUseCase,
     {
       provide: ListAnalysisToolClientLegalProceedingUseCaseGateway,
       useClass: ListAnalysisToolClientLegalProceedingUseCase,
