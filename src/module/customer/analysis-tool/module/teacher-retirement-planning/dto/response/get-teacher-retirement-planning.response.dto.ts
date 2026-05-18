@@ -34,23 +34,23 @@ export class GetTeacherRetirementPlanningPeriodItemResponseDto extends BaseBuild
   public startDate: Date;
 
   @ResponseDtoDateProperty()
-  public endDate: Date;
+  public endDate: Date | null;
 
   @ResponseDtoStringProperty()
-  public institutionName: string;
+  public institutionName: string | null;
 
   @ResponseDtoEnumProperty(
     TeacherRetirementPlanningPeriodItemInstitutionTypeEnum,
   )
-  public institutionType: TeacherRetirementPlanningPeriodItemInstitutionTypeEnum;
+  public institutionType: TeacherRetirementPlanningPeriodItemInstitutionTypeEnum | null;
 
   @ResponseDtoEnumProperty(
     TeacherRetirementPlanningPeriodItemEducationLevelEnum,
   )
-  public educationLevel: TeacherRetirementPlanningPeriodItemEducationLevelEnum;
+  public educationLevel: TeacherRetirementPlanningPeriodItemEducationLevelEnum | null;
 
   @ResponseDtoEnumProperty(TeacherRetirementPlanningPeriodItemRolePerformedEnum)
-  public rolePerformed: TeacherRetirementPlanningPeriodItemRolePerformedEnum;
+  public rolePerformed: TeacherRetirementPlanningPeriodItemRolePerformedEnum | null;
 
   @ResponseDtoObjectProperty(
     () => GetTeacherRetirementPlanningPeriodItemDocumentResponseDto,

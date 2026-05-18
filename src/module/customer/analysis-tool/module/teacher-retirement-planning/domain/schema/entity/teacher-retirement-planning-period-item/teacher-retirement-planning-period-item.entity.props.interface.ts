@@ -9,8 +9,8 @@ export interface TeacherRetirementPlanningPeriodItemEntityPropsInterface extends
   startDate: Date;
   endDate: Date;
   institutionName: string;
-  institutionType: TeacherRetirementPlanningPeriodItemInstitutionTypeEnum;
-  educationLevel: TeacherRetirementPlanningPeriodItemEducationLevelEnum;
-  rolePerformed: TeacherRetirementPlanningPeriodItemRolePerformedEnum;
+  institutionType: TeacherRetirementPlanningPeriodItemInstitutionTypeEnum | null;
+  educationLevel: TeacherRetirementPlanningPeriodItemEducationLevelEnum | null;
+  rolePerformed: TeacherRetirementPlanningPeriodItemRolePerformedEnum | null;
   teacherRetirementPlanningPeriod: TeacherRetirementPlanningPeriodEntity;
 }

@@ -34,25 +34,25 @@ export class GetTeacherRetirementPlanningRppsPeriodItemResponseDto extends BaseB
   public startDate: Date;
 
   @ResponseDtoDateProperty()
-  public endDate: Date;
+  public endDate: Date | null;
 
   @ResponseDtoStringProperty()
-  public institutionName: string;
+  public institutionName: string | null;
 
   @ResponseDtoEnumProperty(
     TeacherRetirementPlanningRppsPeriodItemInstitutionTypeEnum,
   )
-  public institutionType: TeacherRetirementPlanningRppsPeriodItemInstitutionTypeEnum;
+  public institutionType: TeacherRetirementPlanningRppsPeriodItemInstitutionTypeEnum | null;
 
   @ResponseDtoEnumProperty(
     TeacherRetirementPlanningRppsPeriodItemEducationLevelEnum,
   )
-  public educationLevel: TeacherRetirementPlanningRppsPeriodItemEducationLevelEnum;
+  public educationLevel: TeacherRetirementPlanningRppsPeriodItemEducationLevelEnum | null;
 
   @ResponseDtoEnumProperty(
     TeacherRetirementPlanningRppsPeriodItemRolePerformedEnum,
   )
-  public rolePerformed: TeacherRetirementPlanningRppsPeriodItemRolePerformedEnum;
+  public rolePerformed: TeacherRetirementPlanningRppsPeriodItemRolePerformedEnum | null;
 
   @ResponseDtoObjectProperty(
     () => GetTeacherRetirementPlanningRppsPeriodItemDocumentResponseDto,

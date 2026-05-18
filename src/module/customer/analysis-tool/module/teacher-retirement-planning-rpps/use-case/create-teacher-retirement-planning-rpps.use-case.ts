@@ -216,12 +216,16 @@ export class CreateTeacherRetirementPlanningRppsUseCase {
   ): TeacherRetirementPlanningEntity {
     return new TeacherRetirementPlanningEntity({
       id: new TeacherRetirementPlanningId(planning.id.toString()),
-      federativeEntity: this.mapFederativeEntity(planning.federativeEntity),
+      federativeEntity: this.mapFederativeEntity(
+        planning.federativeEntity as TeacherRetirementPlanningRppsFederativeEntityEnum,
+      ),
       state: planning.state,
       municipality: planning.municipality,
       analysisName: planning.analysisName,
       currentPosition: planning.currentPosition,
-      activityType: this.mapActivityType(planning.activityType),
+      activityType: this.mapActivityType(
+        planning.activityType as TeacherRetirementPlanningRppsActivityTypeEnum,
+      ),
       publicServiceStartDate: planning.publicServiceStartDate,
       careerStartDate: planning.careerStartDate,
       administrativeProcessAnalysis: planning.administrativeProcessAnalysis,
