@@ -78,7 +78,7 @@ export class UpdateTeacherRetirementPlanningPeriodRppsUseCase {
 
     const planningEntity = new TeacherRetirementPlanningRppsEntity({
       id: planning.id,
-      federativeEntity: planning.federativeEntity ?? null,
+      federativeEntity: planning.federativeEntity,
       state: planning.state,
       municipality: planning.municipality,
       analysisName: planning.analysisName,
@@ -213,7 +213,7 @@ export class UpdateTeacherRetirementPlanningPeriodRppsUseCase {
       };
     }
 
-    if (!itemDto.startDate || !itemDto.endDate) {
+    if (itemDto.endDate === undefined) {
       throw new TeacherRetirementPlanningRppsPeriodItemDatesRequiredForPartTimeError();
     }
 

@@ -95,7 +95,7 @@ export class CreateTeacherRetirementPlanningPeriodRppsUseCase {
 
       const period = new TeacherRetirementPlanningRppsPeriodEntity({
         id: periodId,
-        startDate: periodDto.startDate ?? null,
+        startDate: periodDto.startDate,
         endDate: periodDto.endDate ?? null,
         positionName: periodDto.positionName ?? null,
         careerName: periodDto.careerName ?? null,
@@ -191,7 +191,7 @@ export class CreateTeacherRetirementPlanningPeriodRppsUseCase {
       };
     }
 
-    if (!itemDto.startDate || !itemDto.endDate) {
+    if (itemDto.endDate === undefined) {
       throw new TeacherRetirementPlanningRppsPeriodItemDatesRequiredForPartTimeError();
     }
 

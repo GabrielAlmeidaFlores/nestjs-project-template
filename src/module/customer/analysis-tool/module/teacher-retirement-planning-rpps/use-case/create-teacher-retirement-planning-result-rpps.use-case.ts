@@ -262,9 +262,7 @@ export class CreateTeacherRetirementPlanningResultRppsUseCase {
       municipality: planningEntity.municipality,
       analysisName: planningEntity.analysisName,
       currentPosition: planningEntity.currentPosition,
-      activityType: this.mapActivityType(
-        planningEntity.activityType as TeacherRetirementPlanningRppsActivityTypeEnum,
-      ),
+      activityType: this.mapActivityType(planningEntity.activityType),
       publicServiceStartDate: planningEntity.publicServiceStartDate,
       careerStartDate: planningEntity.careerStartDate,
       administrativeProcessAnalysis:
