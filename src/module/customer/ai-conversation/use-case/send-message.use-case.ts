@@ -222,7 +222,13 @@ export class SendMessageUseCase {
     organizationSessionData: OrganizationSessionDataModel,
     paymentPlanPaidResourceType: PaymentPlanPaidResourceTypeEnum,
   ): Promise<string> {
-    const mcpTools = await this.mcpToolsGateway.getAvailableTools();
+    const isMcpDisabled =
+      paymentPlanPaidResourceType ===
+      PaymentPlanPaidResourceTypeEnum.ELOY_CHAT_WINNING_LEGAL_THESIS_RESEARCH;
+
+    const mcpTools = isMcpDisabled
+      ? []
+      : await this.mcpToolsGateway.getAvailableTools();
 
     dto.json.message = `
 ${dto.json.message}
@@ -291,6 +297,12 @@ context: ${dto.json.context ?? 'N/A'}
   - get_legal_pleading_details (para petições)
   - get_client_details (para clientes)
   - get_retirement_planning_details (para planejamentos RPPS)
+  - get_accident_assistance_terminated (para análises de Auxílio Acidente Cessado / ACCIDENT_ASSISTANCE_TERMINATED)
+  - get_special_category_retirement_analysis (para Aposentadoria Especial por Categoria / SPECIAL_CATEGORY_RETIREMENT)
+- Se o contexto contém "UUID: <uuid>" junto com "Tipo de Análise: <tipo>", use get_analysis_by_entity_id com o entity_id e o analysis_type correspondente
+- Para atualizar campos de uma análise a partir do UUID do contexto, use update_analysis_result_by_entity_id
+- Para alterar o status de um registro de análise (in_progress / completed), use update_analysis_record_status com o record_id
+- Os valores de analysis_type são os valores do enum (ex: "auxilio_acidente_cessado" para Auxílio Acidente Cessado, "planejamento_previdenciario_rgps" para RGPS, etc.)
 - Após buscar os dados, apresente ao usuário de forma amigável (nome, código, etc) - NUNCA mostre o UUID de volta
 - Se não souber qual tipo de entidade o UUID representa, tente as ferramentas de busca mais comuns primeiro
 
@@ -308,7 +320,7 @@ context: ${dto.json.context ?? 'N/A'}
   2. Procure por ferramentas MCP disponíveis para atualização:
      - Para análises CNIS: "update_cnis_analysis"
      - Para petições: "update_legal_pleading" 
-     - Para clientes: "update_client"
+     - Para clientes: "update_client_details" (campos: name, email, phone_number, birth_date, gender, inss_password, client_type)
      - Para outros: verifique tools disponíveis com prefixo "update_"
   3. Prepare o novo conteúdo/texto melhorado/modificado conforme solicitado pelo usuário
   4. CONFIRME com o usuário: "Preparei o seguinte conteúdo melhorado: [mostrar preview]. Você confirma que deseja SALVAR estas alterações no banco de dados?"

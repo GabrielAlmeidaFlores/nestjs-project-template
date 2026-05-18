@@ -136,18 +136,20 @@ export class PdfJSService extends PdfUtil implements CnisProcessorGateway {
   protected override readonly _type = PdfJSService.name;
 
   public async validateCnisDocument(pdf: Buffer): Promise<boolean> {
-    const parsedCnis = await this.parseCnisDocument(pdf);
+    try {
+      const parsedCnis = await this.parseCnisDocument(pdf);
 
-    if (
-      parsedCnis.affiliateIdentification === undefined ||
-      parsedCnis.socialSecurityRelations === undefined
-    ) {
+      if (
+        parsedCnis.affiliateIdentification === undefined ||
+        parsedCnis.socialSecurityRelations === undefined
+      ) {
+        return false;
+      }
+
+      return parsedCnis.socialSecurityRelations.length > 0;
+    } catch {
       return false;
     }
-
-    const verify = parsedCnis.socialSecurityRelations.length > 0;
-
-    return verify;
   }
 
   public async parseCnisDocument(pdf: Buffer): Promise<CnisModel> {

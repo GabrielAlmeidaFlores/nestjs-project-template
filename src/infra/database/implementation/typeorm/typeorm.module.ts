@@ -8,7 +8,12 @@ import { MapperModule } from '@lib/mapper/mapper.module';
   imports: [
     MapperModule,
     TypeormIndex.dynamicModule,
-    TypeOrmModule.forRoot(TypeormIndex.dataSourceConfig),
+    TypeOrmModule.forRootAsync({
+      useFactory: () => ({
+        ...TypeormIndex.dataSourceConfig,
+        autoLoadEntities: true,
+      }),
+    }),
   ],
   providers: TypeormIndex.repositories,
   exports: [TypeormIndex.dynamicModule, ...TypeormIndex.repositories],

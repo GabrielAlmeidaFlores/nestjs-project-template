@@ -1,0 +1,497 @@
+import { Inject, Injectable } from '@nestjs/common';
+
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
+import { AnalysisToolRecordNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-record-not-found.error';
+import { GeneralUrbanRetirementDenialQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial/query/general-urban-retirement-denial.query.repository.gateway';
+import { GetGeneralUrbanRetirementDenialTimeAcceleratorQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/repository/general-urban-retirement-denial-time-accelerator/query/result/get-general-urban-retirement-denial-time-accelerator.query.result';
+import { GeneralUrbanRetirementDenialId } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial/value-object/general-urban-retirement-denial-id/general-urban-retirement-denial-id.value-object';
+import { GeneralUrbanRetirementDenialDocumentEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-document/general-urban-retirement-denial-document.entity';
+import { GeneralUrbanRetirementDenialPeriodEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/general-urban-retirement-denial-period.entity';
+import { GeneralUrbanRetirementDenialPeriodDocumentEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period-document/general-urban-retirement-denial-period-document.entity';
+import { GeneralUrbanRetirementDenialPeriodEarningsHistoryEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period-earnings-history/general-urban-retirement-denial-period-earnings-history.entity';
+import { GeneralUrbanRetirementDenialResultEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-result/general-urban-retirement-denial-result.entity';
+import {
+  GetGeneralUrbanRetirementDenialCompleteAnalysisClientDataResponseDto,
+  GetGeneralUrbanRetirementDenialCompleteAnalysisResponseDto,
+  GetGeneralUrbanRetirementDenialCompleteAnalysisRetirementRuleResponseDto,
+  GetGeneralUrbanRetirementDenialCurrentResultResponseDto,
+  GetGeneralUrbanRetirementDenialDocumentResponseDto,
+  GetGeneralUrbanRetirementDenialPeriodDocumentResponseDto,
+  GetGeneralUrbanRetirementDenialPeriodEarningsHistoryResponseDto,
+  GetGeneralUrbanRetirementDenialPeriodResponseDto,
+  GetGeneralUrbanRetirementDenialResponseDto,
+  GetGeneralUrbanRetirementDenialTimeAcceleratorResponseDto,
+} from '@module/customer/analysis-tool/module/general-urban-retirement-denial/dto/response/get-general-urban-retirement-denial.response.dto';
+import { GeneralUrbanRetirementDenialNotFoundError } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/error/general-urban-retirement-denial-not-found.error';
+import { InvalidGeneralUrbanRetirementDenialFirstAnalysisJsonError } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/error/invalid-general-urban-retirement-denial-first-analysis-json.error';
+import { InvalidGeneralUrbanRetirementDenialResultJsonError } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/error/invalid-general-urban-retirement-denial-result-json.error';
+import {
+  GeneralUrbanRetirementDenialFirstAnalysisClientDataModel,
+  GeneralUrbanRetirementDenialFirstAnalysisEarningsHistoryItemModel,
+  GeneralUrbanRetirementDenialFirstAnalysisModel,
+  GeneralUrbanRetirementDenialFirstAnalysisPeriodModel,
+  GeneralUrbanRetirementDenialFirstAnalysisTimeSummaryModel,
+  GeneralUrbanRetirementDenialFirstAnalysisTimeSummaryScenarioModel,
+} from '@module/customer/analysis-tool/module/general-urban-retirement-denial/model/generic/general-urban-retirement-denial-first-analysis.model';
+import { GeneralUrbanRetirementDenialFirstAnalysisInterface } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/model/interface/general-urban-retirement-denial-first-analysis.interface';
+import {
+  GeneralUrbanRetirementDenialResultInterface,
+  GeneralUrbanRetirementDenialResultRetirementRuleInterface,
+} from '@module/customer/analysis-tool/module/general-urban-retirement-denial/model/interface/general-urban-retirement-denial-result.interface';
+import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+
+@Injectable()
+export class GetGeneralUrbanRetirementDenialUseCase {
+  protected readonly _type = GetGeneralUrbanRetirementDenialUseCase.name;
+
+  public constructor(
+    @Inject(GeneralUrbanRetirementDenialQueryRepositoryGateway)
+    private readonly generalUrbanRetirementDenialQueryRepositoryGateway: GeneralUrbanRetirementDenialQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
+  ) {}
+
+  public async execute(
+    sessionData: SessionDataModel,
+    organizationSessionData: OrganizationSessionDataModel,
+    generalUrbanRetirementDenialId: GeneralUrbanRetirementDenialId,
+  ): Promise<GetGeneralUrbanRetirementDenialResponseDto> {
+    const [denial, analysisToolRecord] = await Promise.all([
+      this.generalUrbanRetirementDenialQueryRepositoryGateway.findOneByGeneralUrbanRetirementDenialIdOrFailWithRelations(
+        generalUrbanRetirementDenialId,
+        GeneralUrbanRetirementDenialNotFoundError,
+      ),
+      this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByGeneralUrbanRetirementDenialIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        generalUrbanRetirementDenialId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+        AnalysisToolRecordNotFoundError,
+      ),
+    ]);
+
+    const periods = denial.generalUrbanRetirementDenialPeriod ?? [];
+    const periodDocuments =
+      denial.generalUrbanRetirementDenialPeriodDocument ?? [];
+    const periodEarningsHistories =
+      denial.generalUrbanRetirementDenialPeriodEarningsHistory ?? [];
+
+    const periodResponseDtos = periods.map((period) =>
+      this.buildPeriodResponseDto(
+        period,
+        this.findPeriodDocuments(periodDocuments, period),
+        this.findPeriodEarningsHistories(periodEarningsHistories, period),
+      ),
+    );
+
+    const timeAcceleratorDtos = (
+      denial.generalUrbanRetirementDenialTimeAccelerator ?? []
+    ).map((ta) => this.buildTimeAcceleratorResponseDto(ta));
+
+    return GetGeneralUrbanRetirementDenialResponseDto.build({
+      generalUrbanRetirementDenialId: denial.id,
+      ...(denial.analysisName !== null && {
+        analysisName: denial.analysisName,
+      }),
+      ...(denial.requestEntryDate !== null && {
+        requestEntryDate: denial.requestEntryDate,
+      }),
+      ...(denial.denialDate !== null && { denialDate: denial.denialDate }),
+      ...(denial.requestedBenefitType !== null && {
+        requestedBenefitType: denial.requestedBenefitType,
+      }),
+      ...(denial.category !== null && { category: denial.category }),
+      ...(denial.generalUrbanRetirementDenialInssBenefit !== null &&
+        denial.generalUrbanRetirementDenialInssBenefit.length > 0 && {
+          inssBenefitNumber: denial.generalUrbanRetirementDenialInssBenefit.map(
+            (b) => b.inssBenefit,
+          ),
+        }),
+      ...(denial.generalUrbanRetirementDenialResult !== null && {
+        generalUrbanRetirementDenialResult: this.buildResultResponseDto(
+          denial.generalUrbanRetirementDenialResult,
+        ),
+      }),
+      ...(denial.generalUrbanRetirementDenialDocument !== null &&
+        denial.generalUrbanRetirementDenialDocument.length > 0 && {
+          generalUrbanRetirementDenialDocument:
+            denial.generalUrbanRetirementDenialDocument.map((doc) =>
+              this.buildDocumentResponseDto(doc),
+            ),
+        }),
+      ...(periodResponseDtos.length > 0 && {
+        generalUrbanRetirementDenialPeriod: periodResponseDtos,
+      }),
+      ...(timeAcceleratorDtos.length > 0 && {
+        generalUrbanRetirementDenialTimeAccelerator: timeAcceleratorDtos,
+      }),
+      createdAt: denial.createdAt,
+      updatedAt: denial.updatedAt,
+      status: analysisToolRecord.status,
+      ...(analysisToolRecord.analysisToolClient.name !== null && {
+        clientName: analysisToolRecord.analysisToolClient.name,
+      }),
+      ...(analysisToolRecord.analysisToolClient.federalDocument !== null && {
+        clientFederalDocument:
+          analysisToolRecord.analysisToolClient.federalDocument,
+      }),
+      ...(analysisToolRecord.analysisToolClient.email !== null && {
+        clientEmail: analysisToolRecord.analysisToolClient.email,
+      }),
+      ...(analysisToolRecord.analysisToolClient.corporateEmail !== null && {
+        clientCorporateEmail:
+          analysisToolRecord.analysisToolClient.corporateEmail,
+      }),
+      ...(analysisToolRecord.analysisToolClient.phoneNumber !== null && {
+        clientPhoneNumber: analysisToolRecord.analysisToolClient.phoneNumber,
+      }),
+      ...(analysisToolRecord.analysisToolClient.birthDate !== null && {
+        clientBirthDate: analysisToolRecord.analysisToolClient.birthDate,
+      }),
+      ...(analysisToolRecord.analysisToolClient.gender !== null && {
+        clientGender: analysisToolRecord.analysisToolClient.gender,
+      }),
+      ...(analysisToolRecord.analysisToolClient.clientType !== null && {
+        clientType: analysisToolRecord.analysisToolClient.clientType,
+      }),
+    });
+  }
+
+  private buildResultResponseDto(
+    result: GeneralUrbanRetirementDenialResultEntity,
+  ): GetGeneralUrbanRetirementDenialCurrentResultResponseDto {
+    const parsedFirstAnalysis =
+      result.firstAnalysis !== null
+        ? this.parseStoredFirstAnalysis(result.firstAnalysis)
+        : null;
+
+    const parsedCompleteAnalysis =
+      result.completeAnalysis !== null
+        ? this.parseStoredCompleteAnalysis(result.completeAnalysis)
+        : null;
+
+    return GetGeneralUrbanRetirementDenialCurrentResultResponseDto.build({
+      ...(result.inssDecisionAnalysis !== null && {
+        inssDecisionAnalysis: result.inssDecisionAnalysis,
+      }),
+      ...(parsedFirstAnalysis !== null && {
+        generalUrbanRetirementDenialFirstAnalysis: parsedFirstAnalysis,
+      }),
+      ...(parsedCompleteAnalysis !== null && {
+        generalUrbanRetirementDenialCompleteAnalysis:
+          this.buildCompleteAnalysisResponseDto(parsedCompleteAnalysis),
+      }),
+    });
+  }
+
+  private buildCompleteAnalysisResponseDto(
+    parsedCompleteAnalysis: GeneralUrbanRetirementDenialResultInterface,
+  ): GetGeneralUrbanRetirementDenialCompleteAnalysisResponseDto {
+    return GetGeneralUrbanRetirementDenialCompleteAnalysisResponseDto.build({
+      clientData:
+        GetGeneralUrbanRetirementDenialCompleteAnalysisClientDataResponseDto.build(
+          {
+            name: parsedCompleteAnalysis.clientData.name,
+            federalDocument: parsedCompleteAnalysis.clientData.federalDocument,
+            ...(parsedCompleteAnalysis.clientData.lastAffiliationDate !==
+              null && {
+              lastAffiliationDate: new Date(
+                parsedCompleteAnalysis.clientData.lastAffiliationDate,
+              ),
+            }),
+            ...(parsedCompleteAnalysis.clientData.birthDate !== null && {
+              birthDate: new Date(parsedCompleteAnalysis.clientData.birthDate),
+            }),
+            gender: parsedCompleteAnalysis.clientData.gender,
+          },
+        ),
+      retirementRules: parsedCompleteAnalysis.retirementRules.map(
+        (rule: GeneralUrbanRetirementDenialResultRetirementRuleInterface) =>
+          GetGeneralUrbanRetirementDenialCompleteAnalysisRetirementRuleResponseDto.build(
+            {
+              retirementRuleName: rule.retirementRuleName,
+              isEligible: rule.isEligible,
+              ...(rule.eligibilityAvailableAt !== null && {
+                eligibilityAvailableAt: new Date(rule.eligibilityAvailableAt),
+              }),
+              expectedMonthlyBenefit: rule.expectedMonthlyBenefit,
+              isBestRmi: rule.isBestRmi,
+              isHighestCauseValue: rule.isHighestCauseValue,
+              retirementAnalysis: rule.retirementAnalysis,
+            },
+          ),
+      ),
+      analysisResult: parsedCompleteAnalysis.analysisResult,
+    });
+  }
+
+  private buildTimeAcceleratorResponseDto(
+    ta: GetGeneralUrbanRetirementDenialTimeAcceleratorQueryResult,
+  ): GetGeneralUrbanRetirementDenialTimeAcceleratorResponseDto {
+    return GetGeneralUrbanRetirementDenialTimeAcceleratorResponseDto.build({
+      id: ta.id,
+      type: ta.type,
+      recognitionInss: ta.recognitionInss,
+      recognitionJudicial: ta.recognitionJudicial,
+      viability: ta.viability,
+      ...(ta.technicalNote !== null && { technicalNote: ta.technicalNote }),
+      ...(ta.startDate !== null && { startDate: ta.startDate }),
+      ...(ta.endDate !== null && { endDate: ta.endDate }),
+      ...(ta.institution !== null && { institution: ta.institution }),
+      affectsQualifyingPeriod: ta.affectsQualifyingPeriod,
+      createdAt: ta.createdAt,
+      updatedAt: ta.updatedAt,
+    });
+  }
+
+  private buildDocumentResponseDto(
+    document: GeneralUrbanRetirementDenialDocumentEntity,
+  ): GetGeneralUrbanRetirementDenialDocumentResponseDto {
+    return GetGeneralUrbanRetirementDenialDocumentResponseDto.build({
+      document: document.document,
+      type: document.type,
+    });
+  }
+
+  private buildPeriodResponseDto(
+    period: GeneralUrbanRetirementDenialPeriodEntity,
+    periodDocuments: GeneralUrbanRetirementDenialPeriodDocumentEntity[],
+    earningsHistories: GeneralUrbanRetirementDenialPeriodEarningsHistoryEntity[],
+  ): GetGeneralUrbanRetirementDenialPeriodResponseDto {
+    return GetGeneralUrbanRetirementDenialPeriodResponseDto.build({
+      startDate: period.startDate,
+      ...(period.endDate !== null && { endDate: period.endDate }),
+      workType: period.workType,
+      ...(period.bondOrigin !== null && { bondOrigin: period.bondOrigin }),
+      ...(period.category !== null && { category: period.category }),
+      ...(period.activityDescription !== null && {
+        activityDescription: period.activityDescription,
+      }),
+      isPendency: period.isPendency,
+      competenceBelowTheMinimum: period.competenceBelowTheMinimum,
+      ...(period.pendencyReason !== null && {
+        pendencyReason: period.pendencyReason,
+      }),
+      ...(period.periodConsideration !== null && {
+        periodConsideration: period.periodConsideration,
+      }),
+      ...(period.contributionAverage !== null && {
+        contributionAverage: period.contributionAverage,
+      }),
+      ...(period.wantsToComplementViaMeuINSS !== null && {
+        wantsToComplementViaMeuINSS: period.wantsToComplementViaMeuINSS,
+      }),
+      shouldConsiderLastRemunerationAsExitDate:
+        period.shouldConsiderLastRemunerationAsExitDate,
+      status: period.status,
+      ...(periodDocuments.length > 0 && {
+        generalUrbanRetirementDenialPeriodDocument: periodDocuments.map((doc) =>
+          GetGeneralUrbanRetirementDenialPeriodDocumentResponseDto.build({
+            document: doc.document,
+          }),
+        ),
+      }),
+      ...(earningsHistories.length > 0 && {
+        earningsHistory: earningsHistories.map((hist) =>
+          GetGeneralUrbanRetirementDenialPeriodEarningsHistoryResponseDto.build(
+            {
+              ...(hist.competence !== null && { competence: hist.competence }),
+              ...(hist.value !== null && { value: hist.value }),
+            },
+          ),
+        ),
+      }),
+    });
+  }
+
+  private findPeriodDocuments(
+    allDocs: GeneralUrbanRetirementDenialPeriodDocumentEntity[],
+    period: GeneralUrbanRetirementDenialPeriodEntity,
+  ): GeneralUrbanRetirementDenialPeriodDocumentEntity[] {
+    return allDocs.filter(
+      (doc) =>
+        doc.generalUrbanRetirementDenialPeriodId.toString() ===
+        period.id.toString(),
+    );
+  }
+
+  private findPeriodEarningsHistories(
+    allHistories: GeneralUrbanRetirementDenialPeriodEarningsHistoryEntity[],
+    period: GeneralUrbanRetirementDenialPeriodEntity,
+  ): GeneralUrbanRetirementDenialPeriodEarningsHistoryEntity[] {
+    return allHistories.filter(
+      (hist) =>
+        hist.generalUrbanRetirementDenialPeriodId.toString() ===
+        period.id.toString(),
+    );
+  }
+
+  private parseStoredFirstAnalysis(
+    jsonString: string,
+  ): GeneralUrbanRetirementDenialFirstAnalysisModel | null {
+    try {
+      const raw = JSON.parse(
+        jsonString,
+      ) as GeneralUrbanRetirementDenialFirstAnalysisInterface;
+
+      return GeneralUrbanRetirementDenialFirstAnalysisModel.build({
+        clientData:
+          GeneralUrbanRetirementDenialFirstAnalysisClientDataModel.build({
+            name: raw.clientData.name,
+            ...(this.hasValue(raw.clientData.cpf) && {
+              cpf: raw.clientData.cpf,
+            }),
+            ...(this.hasValue(raw.clientData.nit) && {
+              nit: raw.clientData.nit,
+            }),
+            ...(this.hasValue(raw.clientData.birthDate) && {
+              birthDate: raw.clientData.birthDate,
+            }),
+          }),
+        timeSummary:
+          GeneralUrbanRetirementDenialFirstAnalysisTimeSummaryModel.build({
+            contributionTime:
+              GeneralUrbanRetirementDenialFirstAnalysisTimeSummaryScenarioModel.build(
+                {
+                  withoutResolvingPendencies:
+                    raw.timeSummary.contributionTime.withoutResolvingPendencies,
+                  resolvingPendencies:
+                    raw.timeSummary.contributionTime.resolvingPendencies,
+                  withTimeAccelerators:
+                    raw.timeSummary.contributionTime.withTimeAccelerators,
+                },
+              ),
+            gracePeriod:
+              GeneralUrbanRetirementDenialFirstAnalysisTimeSummaryScenarioModel.build(
+                {
+                  withoutResolvingPendencies:
+                    raw.timeSummary.gracePeriod.withoutResolvingPendencies,
+                  resolvingPendencies:
+                    raw.timeSummary.gracePeriod.resolvingPendencies,
+                  withTimeAccelerators:
+                    raw.timeSummary.gracePeriod.withTimeAccelerators,
+                },
+              ),
+          }),
+        periods: (this.hasValue(raw.periods) ? raw.periods : []).map((period) =>
+          GeneralUrbanRetirementDenialFirstAnalysisPeriodModel.build({
+            ...(this.hasValue(period.bondOrigin) && {
+              bondOrigin: period.bondOrigin,
+            }),
+            ...(this.hasValue(period.category) && {
+              category: period.category,
+            }),
+            ...(this.hasValue(period.activityDescription) && {
+              activityDescription: period.activityDescription,
+            }),
+            startDate: period.startDate,
+            ...(this.hasValue(period.endDate) && {
+              endDate: period.endDate,
+            }),
+            workType: period.workType,
+            ...(this.hasValue(period.impactMonths) && {
+              impactMonths: period.impactMonths,
+            }),
+            ...(this.hasValue(period.graceMonths) && {
+              graceMonths: period.graceMonths,
+            }),
+            isPendency: period.isPendency,
+            competenceBelowTheMinimum: period.competenceBelowTheMinimum,
+            ...(this.hasValue(period.contributionAverage) && {
+              contributionAverage: new DecimalValue(
+                this.extractContributionAverageString(
+                  period.contributionAverage as
+                    | number
+                    | string
+                    | { value: string },
+                ),
+              ),
+            }),
+            ...(this.hasValue(period.pendencyReason) && {
+              pendencyReason: period.pendencyReason,
+            }),
+            ...(this.hasValue(period.periodConsideration) && {
+              periodConsideration: period.periodConsideration,
+            }),
+            ...(this.hasValue(period.wantsToComplementViaMeuINSS) && {
+              wantsToComplementViaMeuINSS: period.wantsToComplementViaMeuINSS,
+            }),
+            shouldConsiderLastRemunerationAsExitDate:
+              period.shouldConsiderLastRemunerationAsExitDate ?? false,
+            status: period.status,
+            earningsHistory: (this.hasValue(period.earningsHistory)
+              ? period.earningsHistory
+              : []
+            ).map((item) =>
+              GeneralUrbanRetirementDenialFirstAnalysisEarningsHistoryItemModel.build(
+                {
+                  ...(this.hasValue(item.competence) && {
+                    competence: item.competence,
+                  }),
+                  ...(this.hasValue(item.value) && { value: item.value }),
+                  ...(this.hasValue(item.pendencyType) && {
+                    pendencyType: item.pendencyType,
+                  }),
+                  ...(this.hasValue(item.collectedAt) && {
+                    collectedAt: item.collectedAt,
+                  }),
+                },
+              ),
+            ),
+          }),
+        ),
+      });
+    } catch {
+      throw new InvalidGeneralUrbanRetirementDenialFirstAnalysisJsonError();
+    }
+  }
+
+  private parseStoredCompleteAnalysis(
+    jsonString: string,
+  ): GeneralUrbanRetirementDenialResultInterface {
+    try {
+      const parsed: unknown = JSON.parse(jsonString);
+
+      if (!this.isCompleteResultAnalysis(parsed)) {
+        throw new InvalidGeneralUrbanRetirementDenialResultJsonError();
+      }
+
+      return parsed;
+    } catch {
+      throw new InvalidGeneralUrbanRetirementDenialResultJsonError();
+    }
+  }
+
+  private isCompleteResultAnalysis(
+    value: unknown,
+  ): value is GeneralUrbanRetirementDenialResultInterface {
+    if (!this.isRecord(value)) {
+      return false;
+    }
+
+    return (
+      this.isRecord(value['clientData']) &&
+      Array.isArray(value['retirementRules']) &&
+      typeof value['analysisResult'] === 'string' &&
+      typeof value['completeAnalysisDownload'] === 'string'
+    );
+  }
+
+  private extractContributionAverageString(
+    value: number | string | { value: string },
+  ): string {
+    if (typeof value === 'object') {
+      return value.value;
+    }
+    return value.toString();
+  }
+
+  private isRecord(value: unknown): value is Record<string, unknown> {
+    return typeof value === 'object' && value !== null;
+  }
+
+  private hasValue<T>(value: T | null | undefined): value is T {
+    return value !== null && value !== undefined;
+  }
+}

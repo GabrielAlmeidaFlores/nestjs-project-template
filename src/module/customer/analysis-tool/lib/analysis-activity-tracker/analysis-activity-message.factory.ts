@@ -28,6 +28,8 @@ export class AnalysisActivityMessageFactory {
     [AnalysisToolRecordTypeEnum.SPEECH_GENERATOR]: 'Gerador de discurso',
     [AnalysisToolRecordTypeEnum.DISABILITY_ASSESSMENT_FOR_BPC_ANALYSIS]:
       'Avaliação de deficiência para BPC',
+    [AnalysisToolRecordTypeEnum.MATERNITY_PAY_REJECTION]:
+      'Indeferimento de salário maternidade',
     [AnalysisToolRecordTypeEnum.PER_CAPITA_INCOME_FOR_BPC_ANALYSIS]:
       'Análise de renda per capita para BPC',
     [AnalysisToolRecordTypeEnum.RURAL_TIMELINE_ANALYSIS]:
@@ -36,6 +38,74 @@ export class AnalysisActivityMessageFactory {
       'Gerador de perguntas de audiência',
     [AnalysisToolRecordTypeEnum.INSURANCE_QUALITY_ANALYSIS]:
       'Análise da qualidade do segurado',
+    [AnalysisToolRecordTypeEnum.TEACHER_RETIREMENT_PLANNING]:
+      'Planejamento previdenciário para professores',
+    [AnalysisToolRecordTypeEnum.TEACHER_RETIREMENT_PLANNING_RPPS]:
+      'Aposentadoria do Professor (RPPS)',
+    [AnalysisToolRecordTypeEnum.DISABILITY_RETIREMENT_PLANNING]:
+      'Planejamento de aposentadoria para deficiente',
+    [AnalysisToolRecordTypeEnum.GENERAL_URBAN_RETIREMENT_GRANT]:
+      'Concessão de aposentadoria urbana geral',
+    [AnalysisToolRecordTypeEnum.GENERAL_URBAN_RETIREMENT_ANALYSIS]:
+      'Análise de aposentadoria urbana geral',
+    [AnalysisToolRecordTypeEnum.SPECIAL_CATEGORY_RETIREMENT]:
+      'Aposentadoria categoria especial',
+    [AnalysisToolRecordTypeEnum.DISABILITY_RETIREMENT_PLANNING_GRANT]:
+      'Concessão de aposentadoria para deficiente',
+    [AnalysisToolRecordTypeEnum.DEATH_BENEFIT_GRANT]:
+      'Concessão de pensão por morte',
+    [AnalysisToolRecordTypeEnum.DEATH_BENEFIT_REJECTION]:
+      'Indeferimento de pensão por morte',
+    [AnalysisToolRecordTypeEnum.SPECIAL_RETIREMENT_GRANT]:
+      'Concessão de aposentadoria especial',
+    [AnalysisToolRecordTypeEnum.SPECIAL_RETIREMENT_REJECTION]:
+      'Indeferimento de aposentadoria especial',
+    [AnalysisToolRecordTypeEnum.TEMPORARY_DISABILITY_BENEFITS_GRANT]:
+      'Concessão de benefício por incapacidade temporária',
+    [AnalysisToolRecordTypeEnum.TEMPORARY_DISABILITY_BENEFITS_TERMINATED]:
+      'Cessação de auxílio por incapacidade temporária',
+    [AnalysisToolRecordTypeEnum.PERMANENT_INCAPACITY_BENEFIT_TERMINATED]:
+      'Cessação de aposentadoria por incapacidade permanente',
+    [AnalysisToolRecordTypeEnum.RURAL_OR_HYBRID_RETIREMENT_REJECTION]:
+      'Indeferimento de aposentadoria rural ou híbrida',
+    [AnalysisToolRecordTypeEnum.RURAL_OR_HYBRID_RETIREMENT_ANALYSIS]:
+      'Análise de aposentadoria rural ou híbrida',
+    [AnalysisToolRecordTypeEnum.SURVIVOR_PENSION_ANALYSIS]:
+      'Análise de pensão por morte',
+    [AnalysisToolRecordTypeEnum.GENERAL_URBAN_RETIREMENT_DENIAL]:
+      'Indeferimento de aposentadoria urbana geral',
+    [AnalysisToolRecordTypeEnum.GENERAL_URBAN_RETIREMENT_REVIEW]:
+      'Revisão de aposentadoria urbana geral',
+    [AnalysisToolRecordTypeEnum.ACCIDENT_BENEFIT_REJECTION]:
+      'Indeferimento de auxílio-acidente',
+    [AnalysisToolRecordTypeEnum.DISABILITY_RETIREMENT_PLANNING_REJECTION]:
+      'Indeferimento de aposentadoria para deficiente',
+    [AnalysisToolRecordTypeEnum.BPC_DISABILITY_DENIAL]:
+      'Indeferimento de BPC Pessoa com Deficiência',
+    [AnalysisToolRecordTypeEnum.BPC_DISABILITY_GRANT]:
+      'Concessão de BPC Pessoa com Deficiência',
+    [AnalysisToolRecordTypeEnum.BPC_ELDERLY_ANALYSIS]:
+      'Análise de BPC ao Idoso',
+    [AnalysisToolRecordTypeEnum.BPC_ELDERLY_CESSATION]:
+      'Cessação de BPC ao Idoso',
+    [AnalysisToolRecordTypeEnum.TEMPORARY_INCAPACITY_BENEFIT_REJECTION]:
+      'Indeferimento de benefício por incapacidade temporária',
+    [AnalysisToolRecordTypeEnum.MATERNITY_PAY_GRANT]:
+      'Concessão de salário maternidade',
+    [AnalysisToolRecordTypeEnum.TEACHER_RETIREMENT_PLANNING_REJECTION]:
+      'Indeferimento de aposentadoria de professor',
+    [AnalysisToolRecordTypeEnum.BPC_DISABILITY_TERMINATION]:
+      'Cessação de BPC Pessoa com Deficiência',
+    [AnalysisToolRecordTypeEnum.ACCIDENT_ASSISTANCE_TERMINATED]:
+      'Auxílio-acidente cessado',
+    [AnalysisToolRecordTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REJECTION]:
+      'Indeferimento de aposentadoria por incapacidade permanente',
+    [AnalysisToolRecordTypeEnum.ELDERLY_BPC_REJECTION]:
+      'Indeferimento de BPC ao Idoso',
+    [AnalysisToolRecordTypeEnum.ACCIDENT_ASSISTANCE_GRANT]:
+      'Concessão de auxílio-acidente',
+    [AnalysisToolRecordTypeEnum.RETIREMENT_PERMANENT_DISABILITY_REVISION]:
+      'Revisão de aposentadoria por invalidez permanente',
   };
 
   private static readonly actionLabelMap: Record<
