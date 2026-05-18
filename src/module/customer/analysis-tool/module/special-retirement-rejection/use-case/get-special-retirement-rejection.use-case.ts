@@ -8,6 +8,7 @@ import { SpecialRetirementRejectionHarmfulAgentEnum } from '@module/customer/ana
 import { SpecialRetirementRejectionRejectionReasonEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection/enum/special-retirement-rejection-rejection-reason.enum';
 import { SpecialRetirementRejectionId } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection/value-object/special-retirement-rejection-id.value-object';
 import { SpecialRetirementRejectionDocumentTypeEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-document/enum/special-retirement-rejection-document-type.enum';
+import { SpecialRetirementRejectionWorkPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period/enum/special-retirement-rejection-work-period-pendency-reason.enum';
 import { SpecialRetirementRejectionWorkPeriodDocumentTypeEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period-document/enum/special-retirement-rejection-work-period-document-type.enum';
 import {
   GetSpecialRetirementRejectionClientResponseDto,
@@ -501,7 +502,10 @@ export class GetSpecialRetirementRejectionUseCase {
           SpecialRetirementRejectionFirstAnalysisWorkPeriodModel.build({
             bondOrigin: workPeriod.bondOrigin,
             startDate: workPeriod.startDate,
-            endDate: workPeriod.endDate,
+            ...(workPeriod.endDate !== undefined &&
+              !workPeriod.pendencyReason.includes(
+                SpecialRetirementRejectionWorkPeriodPendencyReasonEnum.LEAVE_DATE,
+              ) && { endDate: workPeriod.endDate }),
             category: workPeriod.category,
             pendencyReason: workPeriod.pendencyReason,
             periodConsideration: workPeriod.periodConsideration,

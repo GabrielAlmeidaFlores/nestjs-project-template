@@ -89,8 +89,8 @@ export class SpecialRetirementRejectionFirstAnalysisWorkPeriodModel extends Base
   @ResponseDtoStringProperty()
   public startDate: string;
 
-  @ResponseDtoStringProperty()
-  public endDate: string;
+  @ResponseDtoStringProperty({ required: false })
+  public endDate?: string;
 
   @ResponseDtoStringProperty()
   public category: string;
