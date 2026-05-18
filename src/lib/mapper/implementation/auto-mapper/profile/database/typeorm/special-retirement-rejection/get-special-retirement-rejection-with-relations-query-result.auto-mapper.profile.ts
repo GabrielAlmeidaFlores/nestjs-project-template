@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { SpecialRetirementRejectionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection.typeorm.entity';
 import { GetSpecialRetirementRejectionWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/repository/special-retirement-rejection/query/result/get-special-retirement-rejection-with-relations.query.result';
+import { GetSpecialRetirementRejectionTechnicalDiagnosisQueryResult } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/repository/special-retirement-rejection-technical-diagnosis/query/result/get-special-retirement-rejection-technical-diagnosis.query.result';
 import { SpecialRetirementRejectionEntity } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection/special-retirement-rejection.entity';
 import { SpecialRetirementRejectionId } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection/value-object/special-retirement-rejection-id.value-object';
 import { SpecialRetirementRejectionDocumentEntity } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-document/special-retirement-rejection-document.entity';
@@ -249,6 +250,34 @@ export class GetSpecialRetirementRejectionWithRelationsQueryResultAutoMapperProf
         ),
       );
 
+      const specialRetirementRejectionTechnicalDiagnosis =
+        (source.specialRetirementRejectionTechnicalDiagnosis ?? []).length > 0
+          ? (source.specialRetirementRejectionTechnicalDiagnosis ?? []).map(
+              (item) =>
+                GetSpecialRetirementRejectionTechnicalDiagnosisQueryResult.build(
+                  {
+                    periodStartDate: item.periodStartDate,
+                    periodEndDate: item.periodEndDate,
+                    recognized: item.recognized,
+                    justification: item.justification,
+                    company: item.company,
+                    cnpj: item.cnpj,
+                    role: item.role,
+                    supportingDocument: item.supportingDocument,
+                    recordedInCnis: item.recordedInCnis,
+                    remunerationRecordedInCnis: item.remunerationRecordedInCnis,
+                    hazardousAgents: item.hazardousAgents,
+                    informationSource: item.informationSource,
+                    legalFramework: item.legalFramework,
+                    epiEficaz: item.epiEficaz ?? null,
+                    observations: item.observations ?? null,
+                    createdAt: item.createdAt,
+                    updatedAt: item.updatedAt,
+                  },
+                ),
+            )
+          : null;
+
       return GetSpecialRetirementRejectionWithRelationsQueryResult.build({
         id: new SpecialRetirementRejectionId(source.id),
         specialRetirementRejectionId: new SpecialRetirementRejectionId(
@@ -274,6 +303,7 @@ export class GetSpecialRetirementRejectionWithRelationsQueryResultAutoMapperProf
         specialRetirementRejectionWorkPeriodEarningsHistory,
         specialRetirementRejectionWorkSpecialPeriod,
         specialRetirementRejectionWorkSpecialPeriodLegalFramework,
+        specialRetirementRejectionTechnicalDiagnosis,
       });
     };
 
