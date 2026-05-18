@@ -11,6 +11,8 @@ import { RuralTimelineAnalysisCommandRepositoryGateway } from '@module/customer/
 import { RuralTimelineAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/rural-timeline-analysis.query.repository.gateway';
 import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
+import { RuralTimelineAnalysisPeriodDocumentHolderTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/enum/rural-timeline-analysis-period-document-holder-type.enum';
+import { RuralTimelineAnalysisPeriodDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/enum/rural-timeline-analysis-period-document-type.enum';
 import { GenerateRuralTimelineConsolidatedDocumentAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/generate-rural-timeline-consolidated-document-analysis.response.dto';
 import { ConsolidatedDocumentAnalysisGenerationFailedError } from '@module/customer/analysis-tool/module/rural-timeline-analysis/error/consolidated-document-analysis-generation-failed.error';
 import { NoDocumentsFoundForConsolidatedAnalysisError } from '@module/customer/analysis-tool/module/rural-timeline-analysis/error/no-documents-found-for-consolidated-analysis.error';
@@ -85,31 +87,48 @@ export class GenerateRuralTimelineConsolidatedDocumentAnalysisUseCase {
       workerType: string | null;
       workRegimeType: string | null;
       documentAnalysis: string | null;
-      documents: Array<{ type: string; year: number | null }>;
+      documents: Array<{
+        originalFileName: string;
+        type: string;
+        typeLabel: string;
+        year: number | null;
+        holderType: string | null;
+        holderLabel: string;
+        holderName: string;
+        probatoryPurpose: string | null;
+      }>;
     }> = [];
 
     for (const period of ruralTimelineAnalysis.ruralTimelineAnalysisPeriod) {
-      const analyzedDocuments =
-        period.ruralTimelineAnalysisPeriodDocument.filter(
-          (doc) =>
-            doc.documentYear !== null ||
-            doc.documentHolderType !== null ||
-            doc.selfOwned !== null ||
-            doc.probatoryPurpose !== null,
-        );
+      const attachedDocuments = period.ruralTimelineAnalysisPeriodDocument;
 
-      if (analyzedDocuments.length > 0) {
+      if (attachedDocuments.length > 0) {
         const periodDocuments = [];
 
-        for (const doc of analyzedDocuments) {
+        for (const doc of attachedDocuments) {
           const buffer = await this.fileProcessorGateway.getFileBuffer(
             doc.document,
           );
+          const originalFileName =
+            await this.fileProcessorGateway.getOriginalFileName(doc.document);
           allDocumentBuffers.push(buffer);
 
           periodDocuments.push({
+            originalFileName,
             type: doc.type,
+            typeLabel: this.mapDocumentTypeLabel(doc.type),
             year: doc.documentYear ?? null,
+            holderType: doc.documentHolderType,
+            holderLabel: this.mapDocumentHolderLabel(doc.documentHolderType),
+            holderName: this.resolveDocumentHolderName(
+              doc.documentHolderType,
+              clientName ?? 'Cliente',
+              period.ruralTimelineAnalysisPeriodFamilyGroupMember.map(
+                (member) => member.name,
+              ),
+              period.ruralTimelineAnalysisPeriodProperty?.ownerName ?? null,
+            ),
+            probatoryPurpose: doc.probatoryPurpose ?? null,
           });
         }
 
@@ -153,7 +172,9 @@ export class GenerateRuralTimelineConsolidatedDocumentAnalysisUseCase {
       2,
     );
 
-    const systemInstruction = promptResponse.prompt;
+    const systemInstruction = this.buildConsolidatedAnalysisSystemInstruction(
+      promptResponse.prompt,
+    );
 
     const analysisResult =
       await this.generativeIaGateway.generateFlashResponseFromPromptAndFiles(
@@ -194,5 +215,70 @@ export class GenerateRuralTimelineConsolidatedDocumentAnalysisUseCase {
     return GenerateRuralTimelineConsolidatedDocumentAnalysisResponseDto.build({
       ruralTimelinePeriodDocumentAnalysis: analysisResult,
     });
+  }
+
+  private mapDocumentTypeLabel(
+    type: RuralTimelineAnalysisPeriodDocumentTypeEnum,
+  ): string {
+    switch (type) {
+      case RuralTimelineAnalysisPeriodDocumentTypeEnum.CTPS:
+        return 'CTPS';
+      case RuralTimelineAnalysisPeriodDocumentTypeEnum.SELF_OWNED_DOCUMENT:
+        return 'Documento em nome do cliente';
+      case RuralTimelineAnalysisPeriodDocumentTypeEnum.FAMILY_GROUP_OWNED_DOCUMENT:
+        return 'Documento em nome de familiar';
+      case RuralTimelineAnalysisPeriodDocumentTypeEnum.THIRD_PARTY_OWNED_DOCUMENT:
+        return 'Documento em nome de terceiro';
+      default:
+        return type;
+    }
+  }
+
+  private mapDocumentHolderLabel(
+    holderType: RuralTimelineAnalysisPeriodDocumentHolderTypeEnum | null,
+  ): string {
+    switch (holderType) {
+      case RuralTimelineAnalysisPeriodDocumentHolderTypeEnum.CLIENT:
+        return 'Cliente';
+      case RuralTimelineAnalysisPeriodDocumentHolderTypeEnum.FAMILY_GROUP_MEMBER:
+        return 'Membro do grupo familiar';
+      case RuralTimelineAnalysisPeriodDocumentHolderTypeEnum.THIRD_PARTY:
+        return 'Terceiro';
+      default:
+        return 'Não identificado';
+    }
+  }
+
+  private resolveDocumentHolderName(
+    holderType: RuralTimelineAnalysisPeriodDocumentHolderTypeEnum | null,
+    clientName: string,
+    familyGroupNames: string[],
+    thirdPartyOwnerName: string | null,
+  ): string {
+    switch (holderType) {
+      case RuralTimelineAnalysisPeriodDocumentHolderTypeEnum.CLIENT:
+        return clientName;
+      case RuralTimelineAnalysisPeriodDocumentHolderTypeEnum.FAMILY_GROUP_MEMBER:
+        return familyGroupNames.length > 0
+          ? familyGroupNames.join(', ')
+          : 'Membro do grupo familiar';
+      case RuralTimelineAnalysisPeriodDocumentHolderTypeEnum.THIRD_PARTY:
+        return thirdPartyOwnerName ?? 'Terceiro não identificado';
+      default:
+        return 'Não identificado';
+    }
+  }
+
+  private buildConsolidatedAnalysisSystemInstruction(
+    basePrompt: string,
+  ): string {
+    return `${basePrompt}
+
+Instrução complementar obrigatória:
+- Logo após cada título "#### Período [X]: [Data início] a [Data fim]", inclua obrigatoriamente uma tabela em markdown com TODOS os documentos rurais anexados àquele período.
+- A tabela deve ter exatamente estas colunas: "Tipo de documento" | "Ano emissão documento" | "Pertencente a quem o documento" | "Finalidade probatória rural".
+- Preencha a tabela com base nos documentos anexados e no contexto estruturado recebido.
+- Quando alguma informação específica não puder ser determinada com segurança, escreva "Não identificado".
+- Mesmo que exista apenas um documento no período, a tabela deve ser exibida.`;
   }
 }
