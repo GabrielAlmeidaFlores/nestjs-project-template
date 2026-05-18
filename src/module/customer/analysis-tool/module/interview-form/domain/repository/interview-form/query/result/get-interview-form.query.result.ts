@@ -27,6 +27,13 @@ export class GetInterviewFormQueryResult extends BaseBuildableObject {
   public readonly clientCtps: string | null;
   public readonly clientHasDisclosure: boolean | null;
   public readonly clientHasRpc: boolean | null;
+  public readonly clientRegistrationDate: string | null;
+  public readonly clientAge: string | null;
+  public readonly clientNeighborhood: string | null;
+  public readonly clientStreet: string | null;
+  public readonly clientStreetNumber: string | null;
+  public readonly clientIsMarriedOrInUnion: boolean | null;
+  public readonly clientHasChildren: boolean | null;
   public readonly childrenNames: string[];
 
   public readonly isRetired: boolean | null;

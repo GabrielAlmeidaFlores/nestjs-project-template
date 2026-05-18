@@ -48,6 +48,13 @@ export class GetInterviewFormQueryResultAutoMapperProfile {
         clientCtps: source.clientCtps,
         clientHasDisclosure: source.clientHasDisclosure,
         clientHasRpc: source.clientHasRpc,
+        clientRegistrationDate: source.clientRegistrationDate,
+        clientAge: source.clientAge,
+        clientNeighborhood: source.clientNeighborhood,
+        clientStreet: source.clientStreet,
+        clientStreetNumber: source.clientStreetNumber,
+        clientIsMarriedOrInUnion: source.clientIsMarriedOrInUnion,
+        clientHasChildren: source.clientHasChildren,
         childrenNames: source.childrenNames ?? [],
         isRetired: source.isRetired,
         hasReceivedOrReceivesSocialSecurityBenefit:
