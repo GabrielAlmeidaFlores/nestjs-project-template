@@ -23,8 +23,8 @@ export class TeacherRetirementPlanningPeriodItemEntity extends BaseEntity<Teache
   ) {
     super(TeacherRetirementPlanningPeriodItemId, props);
     this.startDate = props.startDate;
-    this.endDate = props.endDate ?? null;
-    this.institutionName = props.institutionName ?? null;
+    this.endDate = props.endDate;
+    this.institutionName = props.institutionName;
     this.institutionType = props.institutionType ?? null;
     this.educationLevel = props.educationLevel ?? null;
     this.rolePerformed = props.rolePerformed ?? null;

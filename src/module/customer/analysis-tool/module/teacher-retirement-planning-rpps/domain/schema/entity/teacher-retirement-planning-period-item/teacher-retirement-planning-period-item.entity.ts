@@ -22,7 +22,7 @@ export class TeacherRetirementPlanningRppsPeriodItemEntity extends BaseEntity<Te
     props: TeacherRetirementPlanningRppsPeriodItemEntityPropsInterface,
   ) {
     super(TeacherRetirementPlanningRppsPeriodItemId, props);
-    this.startDate = props.startDate ?? null;
+    this.startDate = props.startDate;
     this.endDate = props.endDate ?? null;
     this.institutionName = props.institutionName ?? null;
     this.institutionType = props.institutionType ?? null;

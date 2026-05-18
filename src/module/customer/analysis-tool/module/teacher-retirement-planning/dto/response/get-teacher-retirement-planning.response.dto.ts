@@ -33,24 +33,31 @@ export class GetTeacherRetirementPlanningPeriodItemResponseDto extends BaseBuild
   @ResponseDtoDateProperty()
   public startDate: Date;
 
-  @ResponseDtoDateProperty()
-  public endDate: Date | null;
+  @ResponseDtoDateProperty({ required: false })
+  public endDate?: Date;
 
-  @ResponseDtoStringProperty()
-  public institutionName: string | null;
+  @ResponseDtoStringProperty({ required: false })
+  public institutionName?: string;
 
   @ResponseDtoEnumProperty(
     TeacherRetirementPlanningPeriodItemInstitutionTypeEnum,
+    { required: false },
   )
-  public institutionType: TeacherRetirementPlanningPeriodItemInstitutionTypeEnum | null;
+  public institutionType?: TeacherRetirementPlanningPeriodItemInstitutionTypeEnum;
 
   @ResponseDtoEnumProperty(
     TeacherRetirementPlanningPeriodItemEducationLevelEnum,
+    { required: false },
   )
-  public educationLevel: TeacherRetirementPlanningPeriodItemEducationLevelEnum | null;
+  public educationLevel?: TeacherRetirementPlanningPeriodItemEducationLevelEnum;
 
-  @ResponseDtoEnumProperty(TeacherRetirementPlanningPeriodItemRolePerformedEnum)
-  public rolePerformed: TeacherRetirementPlanningPeriodItemRolePerformedEnum | null;
+  @ResponseDtoEnumProperty(
+    TeacherRetirementPlanningPeriodItemRolePerformedEnum,
+    {
+      required: false,
+    },
+  )
+  public rolePerformed?: TeacherRetirementPlanningPeriodItemRolePerformedEnum;
 
   @ResponseDtoObjectProperty(
     () => GetTeacherRetirementPlanningPeriodItemDocumentResponseDto,

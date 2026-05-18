@@ -143,7 +143,7 @@ export class UpdateTeacherRetirementPlanningPeriodUseCase {
           id: new TeacherRetirementPlanningPeriodItemId(),
           startDate,
           endDate,
-          institutionName: itemDto.institutionName ?? null,
+          institutionName: itemDto.institutionName,
           institutionType: itemDto.institutionType ?? null,
           educationLevel: itemDto.educationLevel ?? null,
           rolePerformed: itemDto.rolePerformed ?? null,
