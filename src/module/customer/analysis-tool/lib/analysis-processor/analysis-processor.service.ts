@@ -36,6 +36,7 @@ import { GeneralUrbanRetirementDenialPeriodCategoryEnum } from '@module/customer
 import { GeneralUrbanRetirementDenialPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-consideration.enum';
 import { GeneralUrbanRetirementDenialPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-denial/domain/schema/entity/general-urban-retirement-denial-period/enum/general-urban-retirement-denial-period-pendency-reason.enum';
 import { RetirementPermanentDisabilityRejectionPeriodCategoryEnum } from '@module/customer/analysis-tool/module/retirement-permanent-disability-rejection/domain/schema/entity/retirement-permanent-disability-rejection-period/enum/retirement-permanent-disability-rejection-period-category.enum';
+import { SpecialRetirementRejectionWorkPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period/enum/special-retirement-rejection-work-period-pendency-reason.enum';
 import { TeacherRetirementPlanningRejectionWorkPeriodDocumentProbativeForceEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection-work-period/enum/teacher-retirement-planning-rejection-work-period-document-probative-force.enum';
 import { TeacherRetirementPlanningRejectionWorkPeriodTimelineClassificationEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rejection/domain/schema/entity/teacher-retirement-planning-rejection-work-period/enum/teacher-retirement-planning-rejection-work-period-timeline-classification.enum';
 import { TemporaryIncapacityBenefitRejectionCategoryEnum } from '@module/customer/analysis-tool/module/temporary-incapacity-benefit-rejection/domain/schema/entity/temporary-incapacity-benefit-rejection/enum/temporary-incapacity-benefit-rejection-category.enum';
@@ -1204,6 +1205,7 @@ Análise processada do CNIS:
 - Não incluir tag <br> na resposta.
 - Retorne estritamente um objeto JSON compatível com o schema solicitado.
 - Para cada item de \`workPeriods\`, use prioritariamente os dados estruturados já enviados nos arquivos do prompt; não invente valores.
+- O valor \`LEAVE_DATE\` em \`pendencyReason\` só deve ser usado quando \`endDate\` estiver de fato ausente ou nulo nos dados do CNIS, no workPeriod; nunca inclua \`LEAVE_DATE\` em \`pendencyReason\` quando o período já tiver uma data de saída preenchida.
 
 Análise processada do CNIS:
   ${cnisAnalysisJson}
@@ -1235,6 +1237,11 @@ Análise processada do CNIS:
       GenerateResponseInputModel.build({
         systemInstruction,
         promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema:
+            this.getSpecialRetirementRejectionCompleteAnalysisJsonSchema(),
+        }),
       }),
     );
   }
@@ -5699,17 +5706,25 @@ Processed CNIS analysis:
         category: {
           type: 'string',
           enum: [
-            'segurado_empregado',
+            'empregado_urbano',
+            'empregado_rural',
+            'empregado_domestico',
+            'trabalhador_avulso',
             'segurado_contribuinte_individual',
-            'segurado_facultativo',
+            'segurado_contribuinte_individual_prestador',
+            'mei',
             'segurado_especial',
-            'segurado_domestico',
-            'segurado_avulso',
+            'segurado_facultativo',
           ],
         },
         pendencyReason: {
           type: 'array',
-          items: { type: 'string' },
+          items: {
+            type: 'string',
+            enum: Object.values(
+              SpecialRetirementRejectionWorkPeriodPendencyReasonEnum,
+            ),
+          },
           description: 'Lista de motivos de pendencia do período',
         },
         periodConsideration: {
@@ -5735,7 +5750,7 @@ Processed CNIS analysis:
         earningsHistory: {
           type: 'array',
           description:
-            'Histórico de remunerações do período, com foco em competências abaixo do mínimo ou com pendências. Retornar array vazio se não houver.',
+            'Histórico de remunerações do período. Se o array `pendencyReason` estiver preenchido, este campo DEVE conter todas as competências do CNIS para o período — nunca retornar array vazio nesse caso. Retornar array vazio SOMENTE se `pendencyReason` estiver vazio.',
           items: {
             type: 'object',
             properties: {
@@ -5762,36 +5777,36 @@ Processed CNIS analysis:
           items: {
             type: 'object',
             properties: {
-              recognizedSpecialTime: { type: 'boolean' },
-              companyName: { type: 'string' },
+              recognized: { type: 'boolean' },
+              company: { type: 'string' },
               cnpj: { type: 'string' },
-              position: { type: 'string' },
-              comprobatoryDocument: { type: 'string' },
-              linkedToCnis: { type: 'boolean' },
-              containsCnisRemunerationInPeriod: { type: 'boolean' },
-              technicalJustification: { type: 'string' },
-              additionalObservation: { type: 'string' },
+              role: { type: 'string' },
+              supportingDocument: { type: 'string' },
+              recordedInCnis: { type: 'boolean' },
+              remunerationRecordedInCnis: { type: 'boolean' },
+              justification: { type: 'string' },
+              observations: { type: 'string' },
               lawyerObservation: { type: 'string' },
               exposureFrequency: { type: 'string' },
               informationSource: { type: 'string' },
-              identifiedAgents: { type: 'string' },
-              efficientEpi: { type: 'boolean' },
+              hazardousAgents: { type: 'string' },
+              epiEficaz: { type: 'boolean' },
             },
             required: [
-              'recognizedSpecialTime',
-              'companyName',
+              'recognized',
+              'company',
               'cnpj',
-              'position',
-              'comprobatoryDocument',
-              'linkedToCnis',
-              'containsCnisRemunerationInPeriod',
-              'technicalJustification',
-              'additionalObservation',
+              'role',
+              'supportingDocument',
+              'recordedInCnis',
+              'remunerationRecordedInCnis',
+              'justification',
+              'observations',
               'lawyerObservation',
               'exposureFrequency',
               'informationSource',
-              'identifiedAgents',
-              'efficientEpi',
+              'hazardousAgents',
+              'epiEficaz',
             ],
           },
         },
@@ -5918,6 +5933,52 @@ Processed CNIS analysis:
         'totalGracePeriodWithAccelerators',
         'workPeriods',
       ],
+    };
+  }
+
+  private getSpecialRetirementRejectionCompleteAnalysisJsonSchema(): object {
+    return {
+      type: 'object',
+      properties: {
+        retirementRules: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              ruleName: { type: 'string' },
+              fulfilled: { type: 'boolean' },
+              grantDate: {
+                type: 'string',
+                format: 'date',
+                description: 'YYYY-MM-DD',
+              },
+              expectedRmi: { type: 'number' },
+              causeValue: { type: 'number' },
+              bestRmi: { type: 'boolean' },
+              biggestCauseValue: { type: 'boolean' },
+              detaildAnalysis: {
+                type: 'string',
+                description: 'Análise detalhada em formato markdown',
+              },
+            },
+            required: [
+              'ruleName',
+              'fulfilled',
+              'grantDate',
+              'expectedRmi',
+              'causeValue',
+              'bestRmi',
+              'biggestCauseValue',
+              'detaildAnalysis',
+            ],
+          },
+        },
+        analysisResult: {
+          type: 'string',
+          description: 'Resultado final da análise em formato markdown',
+        },
+      },
+      required: ['retirementRules', 'analysisResult'],
     };
   }
 

@@ -1,5 +1,7 @@
+import { SpecialRetirementRejectionWorkPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period/enum/special-retirement-rejection-work-period-pendency-reason.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-boolean-property/response-dto-boolean-property.decorator';
+import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
 import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
@@ -7,31 +9,31 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @ResponseDto()
 export class SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodModel extends BaseBuildableDtoObject {
   @ResponseDtoBooleanProperty({ required: false })
-  public recognizedSpecialTime?: boolean;
+  public recognized?: boolean;
 
   @ResponseDtoStringProperty({ required: false })
-  public companyName?: string;
+  public company?: string;
 
   @ResponseDtoStringProperty({ required: false })
   public cnpj?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public position?: string;
+  public role?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public comprobatoryDocument?: string;
+  public supportingDocument?: string;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public linkedToCnis?: boolean;
+  public recordedInCnis?: boolean;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public containsCnisRemunerationInPeriod?: boolean;
+  public remunerationRecordedInCnis?: boolean;
 
   @ResponseDtoStringProperty({ required: false })
-  public technicalJustification?: string;
+  public justification?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public additionalObservation?: string;
+  public observations?: string;
 
   @ResponseDtoStringProperty({ required: false })
   public lawyerObservation?: string;
@@ -43,10 +45,10 @@ export class SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodModel exten
   public informationSource?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public identifiedAgents?: string;
+  public hazardousAgents?: string;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public efficientEpi?: boolean;
+  public epiEficaz?: boolean;
 
   protected override readonly _type =
     SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodModel.name;
@@ -87,14 +89,17 @@ export class SpecialRetirementRejectionFirstAnalysisWorkPeriodModel extends Base
   @ResponseDtoStringProperty()
   public startDate: string;
 
-  @ResponseDtoStringProperty()
-  public endDate: string;
+  @ResponseDtoStringProperty({ required: false })
+  public endDate?: string;
 
   @ResponseDtoStringProperty()
   public category: string;
 
-  @ResponseDtoStringProperty({ isArray: true })
-  public pendencyReason: string[];
+  @ResponseDtoEnumProperty(
+    SpecialRetirementRejectionWorkPeriodPendencyReasonEnum,
+    { isArray: true },
+  )
+  public pendencyReason: SpecialRetirementRejectionWorkPeriodPendencyReasonEnum[];
 
   @ResponseDtoStringProperty()
   public periodConsideration: string;
