@@ -27,13 +27,13 @@ export class CreateTeacherRetirementPlanningPeriodItemDocumentRequestDto extends
 @RequestDto()
 export class CreateTeacherRetirementPlanningPeriodItemRequestDto extends BaseBuildableDtoObject {
   @RequestDtoDateProperty({ required: false })
-  public readonly startDate: Date;
+  public readonly startDate?: Date;
 
   @RequestDtoDateProperty({ required: false })
-  public readonly endDate: Date;
+  public readonly endDate?: Date;
 
   @RequestDtoStringProperty({ required: false })
-  public readonly institutionName: string;
+  public readonly institutionName?: string;
 
   @RequestDtoEnumProperty(
     TeacherRetirementPlanningRppsPeriodItemInstitutionTypeEnum,
@@ -41,7 +41,7 @@ export class CreateTeacherRetirementPlanningPeriodItemRequestDto extends BaseBui
       required: false,
     },
   )
-  public readonly institutionType: TeacherRetirementPlanningRppsPeriodItemInstitutionTypeEnum;
+  public readonly institutionType?: TeacherRetirementPlanningRppsPeriodItemInstitutionTypeEnum;
 
   @RequestDtoEnumProperty(
     TeacherRetirementPlanningRppsPeriodItemEducationLevelEnum,
@@ -49,7 +49,7 @@ export class CreateTeacherRetirementPlanningPeriodItemRequestDto extends BaseBui
       required: false,
     },
   )
-  public readonly educationLevel: TeacherRetirementPlanningRppsPeriodItemEducationLevelEnum;
+  public readonly educationLevel?: TeacherRetirementPlanningRppsPeriodItemEducationLevelEnum;
 
   @RequestDtoEnumProperty(
     TeacherRetirementPlanningRppsPeriodItemRolePerformedEnum,
@@ -57,7 +57,7 @@ export class CreateTeacherRetirementPlanningPeriodItemRequestDto extends BaseBui
       required: false,
     },
   )
-  public readonly rolePerformed: TeacherRetirementPlanningRppsPeriodItemRolePerformedEnum;
+  public readonly rolePerformed?: TeacherRetirementPlanningRppsPeriodItemRolePerformedEnum;
 
   @RequestDtoObjectProperty(
     () => CreateTeacherRetirementPlanningPeriodItemDocumentRequestDto,
@@ -72,24 +72,24 @@ export class CreateTeacherRetirementPlanningPeriodItemRequestDto extends BaseBui
 @RequestDto()
 export class CreateTeacherRetirementPlanningPeriodRequestDto extends BaseBuildableDtoObject {
   @RequestDtoDateProperty({ required: false })
-  public readonly startDate: Date;
+  public readonly startDate?: Date;
 
   @RequestDtoDateProperty({ required: false })
-  public readonly endDate: Date;
+  public readonly endDate?: Date;
 
   @RequestDtoStringProperty({ required: false })
-  public readonly positionName: string;
+  public readonly positionName?: string;
 
   @RequestDtoStringProperty({ required: false })
-  public readonly careerName: string;
+  public readonly careerName?: string;
 
   @RequestDtoEnumProperty(TeacherRetirementPlanningRppsPeriodServiceTypeEnum, {
     required: false,
   })
-  public readonly serviceType: TeacherRetirementPlanningRppsPeriodServiceTypeEnum;
+  public readonly serviceType?: TeacherRetirementPlanningRppsPeriodServiceTypeEnum;
 
   @RequestDtoStringProperty({ required: false })
-  public readonly department: string;
+  public readonly department?: string;
 
   @RequestDtoObjectProperty(
     () => CreateTeacherRetirementPlanningPeriodItemRequestDto,
@@ -98,7 +98,7 @@ export class CreateTeacherRetirementPlanningPeriodRequestDto extends BaseBuildab
       isArray: true,
     },
   )
-  public readonly items: CreateTeacherRetirementPlanningPeriodItemRequestDto[];
+  public readonly items?: CreateTeacherRetirementPlanningPeriodItemRequestDto[];
 
   protected override readonly _type =
     CreateTeacherRetirementPlanningPeriodRequestDto.name;
@@ -107,10 +107,10 @@ export class CreateTeacherRetirementPlanningPeriodRequestDto extends BaseBuildab
 @RequestDto()
 export class CreateTeacherRetirementPlanningRemunerationItemRequestDto extends BaseBuildableDtoObject {
   @RequestDtoDateProperty({ required: false })
-  public readonly contributionDate: Date;
+  public readonly contributionDate?: Date;
 
   @RequestDtoValueObjectProperty(DecimalValue, { required: false })
-  public readonly amount: DecimalValue;
+  public readonly amount?: DecimalValue;
 
   protected override readonly _type =
     CreateTeacherRetirementPlanningRemunerationItemRequestDto.name;
@@ -130,8 +130,10 @@ export class CreateTeacherRetirementPlanningRppsRequestDto extends BaseBuildable
   @RequestDtoValueObjectProperty(AnalysisToolClientId)
   public readonly analysisToolClientId: AnalysisToolClientId;
 
-  @RequestDtoEnumProperty(TeacherRetirementPlanningRppsFederativeEntityEnum)
-  public readonly federativeEntity: TeacherRetirementPlanningRppsFederativeEntityEnum;
+  @RequestDtoEnumProperty(TeacherRetirementPlanningRppsFederativeEntityEnum, {
+    required: false,
+  })
+  public readonly federativeEntity?: TeacherRetirementPlanningRppsFederativeEntityEnum;
 
   @RequestDtoStringProperty({ required: false })
   public readonly state?: string;
