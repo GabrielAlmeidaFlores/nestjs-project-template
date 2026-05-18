@@ -122,9 +122,9 @@ export class CreateTeacherRetirementPlanningPeriodUseCase {
           startDate,
           endDate,
           institutionName: itemDto.institutionName,
-          institutionType: itemDto.institutionType,
-          educationLevel: itemDto.educationLevel,
-          rolePerformed: itemDto.rolePerformed,
+          institutionType: itemDto.institutionType ?? null,
+          educationLevel: itemDto.educationLevel ?? null,
+          rolePerformed: itemDto.rolePerformed ?? null,
           teacherRetirementPlanningPeriod: period,
         });
 

@@ -7,10 +7,10 @@ import type { TeacherRetirementPlanningRppsPeriodItemId } from '@module/customer
 
 export interface TeacherRetirementPlanningRppsPeriodItemEntityPropsInterface extends BaseEntityPropsInterface<TeacherRetirementPlanningRppsPeriodItemId> {
   startDate: Date;
-  endDate: Date;
-  institutionName: string;
-  institutionType: TeacherRetirementPlanningRppsPeriodItemInstitutionTypeEnum;
-  educationLevel: TeacherRetirementPlanningRppsPeriodItemEducationLevelEnum;
-  rolePerformed: TeacherRetirementPlanningRppsPeriodItemRolePerformedEnum;
+  endDate?: Date | null;
+  institutionName?: string | null;
+  institutionType?: TeacherRetirementPlanningRppsPeriodItemInstitutionTypeEnum | null;
+  educationLevel?: TeacherRetirementPlanningRppsPeriodItemEducationLevelEnum | null;
+  rolePerformed?: TeacherRetirementPlanningRppsPeriodItemRolePerformedEnum | null;
   teacherRetirementPlanningPeriod: TeacherRetirementPlanningRppsPeriodEntity;
 }

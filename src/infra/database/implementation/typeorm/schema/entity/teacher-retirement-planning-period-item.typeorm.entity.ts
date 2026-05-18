@@ -22,41 +22,41 @@ export class TeacherRetirementPlanningPeriodItemTypeormEntity extends BaseTypeor
     name: 'end_date',
     type: 'date',
     transformer: DateOnlyTransformer,
-    nullable: false,
+    nullable: true,
   })
-  public endDate: Date;
+  public endDate: Date | null;
 
   @Column({
     name: 'institution_name',
     type: 'varchar',
     length: 255,
-    nullable: false,
+    nullable: true,
   })
-  public institutionName: string;
+  public institutionName: string | null;
 
   @Column({
     name: 'institution_type',
-    type: 'simple-enum',
-    enum: TeacherRetirementPlanningPeriodItemInstitutionTypeEnum,
-    nullable: false,
+    type: 'varchar',
+    length: 255,
+    nullable: true,
   })
-  public institutionType: TeacherRetirementPlanningPeriodItemInstitutionTypeEnum;
+  public institutionType: TeacherRetirementPlanningPeriodItemInstitutionTypeEnum | null;
 
   @Column({
     name: 'education_level',
-    type: 'simple-enum',
-    enum: TeacherRetirementPlanningPeriodItemEducationLevelEnum,
-    nullable: false,
+    type: 'varchar',
+    length: 255,
+    nullable: true,
   })
-  public educationLevel: TeacherRetirementPlanningPeriodItemEducationLevelEnum;
+  public educationLevel: TeacherRetirementPlanningPeriodItemEducationLevelEnum | null;
 
   @Column({
     name: 'role_performed',
-    type: 'simple-enum',
-    enum: TeacherRetirementPlanningPeriodItemRolePerformedEnum,
-    nullable: false,
+    type: 'varchar',
+    length: 255,
+    nullable: true,
   })
-  public rolePerformed: TeacherRetirementPlanningPeriodItemRolePerformedEnum;
+  public rolePerformed: TeacherRetirementPlanningPeriodItemRolePerformedEnum | null;
 
   @ManyToOne(
     () => TeacherRetirementPlanningPeriodTypeormEntity,

@@ -105,7 +105,7 @@ export class CreateTeacherRetirementPlanningRppsUseCase {
     const teacherRetirementPlanningRpps =
       new TeacherRetirementPlanningRppsEntity({
         id: teacherRetirementPlanningRppsId,
-        federativeEntity: dto.federativeEntity,
+        federativeEntity: dto.federativeEntity ?? null,
         state: dto.state as StateCodeEnum,
         municipality: dto.municipality ?? null,
         analysisName: dto.analysisName ?? null,
@@ -216,7 +216,9 @@ export class CreateTeacherRetirementPlanningRppsUseCase {
   ): TeacherRetirementPlanningEntity {
     return new TeacherRetirementPlanningEntity({
       id: new TeacherRetirementPlanningId(planning.id.toString()),
-      federativeEntity: this.mapFederativeEntity(planning.federativeEntity),
+      federativeEntity: this.mapFederativeEntity(
+        planning.federativeEntity as TeacherRetirementPlanningRppsFederativeEntityEnum,
+      ),
       state: planning.state,
       municipality: planning.municipality,
       analysisName: planning.analysisName,

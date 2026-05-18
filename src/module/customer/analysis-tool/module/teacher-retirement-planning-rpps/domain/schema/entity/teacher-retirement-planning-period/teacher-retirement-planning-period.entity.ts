@@ -6,12 +6,12 @@ import type { TeacherRetirementPlanningRppsPeriodServiceTypeEnum } from '@module
 import type { TeacherRetirementPlanningRppsPeriodEntityPropsInterface } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning-period/teacher-retirement-planning-period.entity.props.interface';
 
 export class TeacherRetirementPlanningRppsPeriodEntity extends BaseEntity<TeacherRetirementPlanningRppsPeriodId> {
-  public readonly startDate: Date;
-  public readonly endDate: Date;
-  public readonly positionName: string;
-  public readonly careerName: string;
-  public readonly serviceType: TeacherRetirementPlanningRppsPeriodServiceTypeEnum;
-  public readonly department: string;
+  public readonly startDate: Date | null;
+  public readonly endDate: Date | null;
+  public readonly positionName: string | null;
+  public readonly careerName: string | null;
+  public readonly serviceType: TeacherRetirementPlanningRppsPeriodServiceTypeEnum | null;
+  public readonly department: string | null;
   public readonly teacherRetirementPlanning: TeacherRetirementPlanningRppsEntity;
 
   protected readonly _type = TeacherRetirementPlanningRppsPeriodEntity.name;
@@ -21,11 +21,11 @@ export class TeacherRetirementPlanningRppsPeriodEntity extends BaseEntity<Teache
   ) {
     super(TeacherRetirementPlanningRppsPeriodId, props);
     this.startDate = props.startDate;
-    this.endDate = props.endDate;
-    this.positionName = props.positionName;
-    this.careerName = props.careerName;
-    this.serviceType = props.serviceType;
-    this.department = props.department;
+    this.endDate = props.endDate ?? null;
+    this.positionName = props.positionName ?? null;
+    this.careerName = props.careerName ?? null;
+    this.serviceType = props.serviceType ?? null;
+    this.department = props.department ?? null;
     this.teacherRetirementPlanning = props.teacherRetirementPlanning;
   }
 }
