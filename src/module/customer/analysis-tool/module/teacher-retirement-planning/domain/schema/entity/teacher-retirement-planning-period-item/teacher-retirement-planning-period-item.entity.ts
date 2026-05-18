@@ -9,11 +9,11 @@ import type { TeacherRetirementPlanningPeriodItemEntityPropsInterface } from '@m
 
 export class TeacherRetirementPlanningPeriodItemEntity extends BaseEntity<TeacherRetirementPlanningPeriodItemId> {
   public readonly startDate: Date;
-  public readonly endDate: Date;
-  public readonly institutionName: string;
-  public readonly institutionType: TeacherRetirementPlanningPeriodItemInstitutionTypeEnum;
-  public readonly educationLevel: TeacherRetirementPlanningPeriodItemEducationLevelEnum;
-  public readonly rolePerformed: TeacherRetirementPlanningPeriodItemRolePerformedEnum;
+  public readonly endDate: Date | null;
+  public readonly institutionName: string | null;
+  public readonly institutionType: TeacherRetirementPlanningPeriodItemInstitutionTypeEnum | null;
+  public readonly educationLevel: TeacherRetirementPlanningPeriodItemEducationLevelEnum | null;
+  public readonly rolePerformed: TeacherRetirementPlanningPeriodItemRolePerformedEnum | null;
   public readonly teacherRetirementPlanningPeriod: TeacherRetirementPlanningPeriodEntity;
 
   protected readonly _type = TeacherRetirementPlanningPeriodItemEntity.name;
@@ -23,11 +23,11 @@ export class TeacherRetirementPlanningPeriodItemEntity extends BaseEntity<Teache
   ) {
     super(TeacherRetirementPlanningPeriodItemId, props);
     this.startDate = props.startDate;
-    this.endDate = props.endDate;
-    this.institutionName = props.institutionName;
-    this.institutionType = props.institutionType;
-    this.educationLevel = props.educationLevel;
-    this.rolePerformed = props.rolePerformed;
+    this.endDate = props.endDate ?? null;
+    this.institutionName = props.institutionName ?? null;
+    this.institutionType = props.institutionType ?? null;
+    this.educationLevel = props.educationLevel ?? null;
+    this.rolePerformed = props.rolePerformed ?? null;
     this.teacherRetirementPlanningPeriod =
       props.teacherRetirementPlanningPeriod;
   }

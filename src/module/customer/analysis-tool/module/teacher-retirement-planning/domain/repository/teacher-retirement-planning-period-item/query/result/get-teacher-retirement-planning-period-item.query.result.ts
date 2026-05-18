@@ -9,11 +9,11 @@ import type { TeacherRetirementPlanningPeriodItemId } from '@module/customer/ana
 export class GetTeacherRetirementPlanningPeriodItemQueryResult extends BaseBuildableObject {
   public readonly id: TeacherRetirementPlanningPeriodItemId;
   public readonly startDate: Date;
-  public readonly endDate: Date;
-  public readonly institutionName: string;
-  public readonly institutionType: TeacherRetirementPlanningPeriodItemInstitutionTypeEnum;
-  public readonly educationLevel: TeacherRetirementPlanningPeriodItemEducationLevelEnum;
-  public readonly rolePerformed: TeacherRetirementPlanningPeriodItemRolePerformedEnum;
+  public readonly endDate: Date | null;
+  public readonly institutionName: string | null;
+  public readonly institutionType: TeacherRetirementPlanningPeriodItemInstitutionTypeEnum | null;
+  public readonly educationLevel: TeacherRetirementPlanningPeriodItemEducationLevelEnum | null;
+  public readonly rolePerformed: TeacherRetirementPlanningPeriodItemRolePerformedEnum | null;
   public readonly documents: GetTeacherRetirementPlanningPeriodItemDocumentQueryResult[];
   public readonly createdAt: Date;
   public readonly updatedAt: Date;

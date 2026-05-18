@@ -84,7 +84,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise simplificada do planejamento previdenciário de professor com IA, apresentando diagnóstico objetivo de elegibilidade, pontos de atenção e próximos passos recomendados.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d'),
+      id: new PaymentPlanPaidResourceId('6caaef15-be5f-4f93-84c8-ed8d0c6c273b'),
       resource:
         PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_RPPS_COMPLETE_ANALYSIS,
       creditCost: 8,
@@ -93,7 +93,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Planejamento completo de aposentadoria para professor do RPPS com IA. Analisa períodos de magistério no serviço público, vínculos por instituição, remunerações, regras específicas do ente federativo e processos para estimar cenários e estratégia previdenciária mais vantajosa.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e'),
+      id: new PaymentPlanPaidResourceId('6caaef25-be5f-4f93-84c8-ed8d0c6c283b'),
       resource:
         PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_RPPS_SIMPLIFIED_ANALYSIS,
       creditCost: 5,
@@ -1937,7 +1937,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Primeira análise do indeferimento do Salário Maternidade com IA. Verifica o evento gerador, a qualidade de segurada, a carência e os motivos da negativa do INSS, identificando os pontos críticos para reversão do indeferimento. Indicado para um diagnóstico inicial rápido sobre a viabilidade de recurso.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('a2b3c4d5-e6f7-4a8b-c9d0-e1f2a3b4c5d6'),
+      id: new PaymentPlanPaidResourceId('f1a3b3c4-d5e6-4f7a-b8c9-d0e1f2a3b4c5'),
       resource:
         PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_REJECTION_SECOND_ANALYSIS,
       creditCost: 3,
@@ -1946,7 +1946,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Segunda análise do indeferimento do Salário Maternidade com IA. Aprofunda a avaliação dos períodos contributivos no CNIS X-Ray, analisa pendências identificadas (contribuições abaixo do mínimo, atrasos, vínculos sem data de saída) e orienta sobre a consideração ou desconsideração de cada período para fins de carência e qualidade de segurada.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('b3c4d5e6-f7a8-4b9c-d0e1-f2a3b4c5d6e7'),
+      id: new PaymentPlanPaidResourceId('f1a2b3c5-d5e6-4f7a-b8c9-d0e1f2a3b4c5'),
       resource:
         PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_REJECTION_COMPLETE_ANALYSIS,
       creditCost: 5,
@@ -1955,7 +1955,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise completa do indeferimento do Salário Maternidade com IA. Examina o evento gerador, verifica a carência exigida por categoria de segurada, analisa a qualidade de segurada na data do fato gerador, avalia o histórico contributivo com base no CNIS X-Ray e nos documentos apresentados, identifica possíveis impedimentos e emite parecer técnico conclusivo com fundamentação legal e estratégia de reversão.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('c4d5e6f7-a8b9-4c0d-e1f2-a3b4c5d6e7f8'),
+      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b2c5d'),
       resource:
         PaymentPlanPaidResourceTypeEnum.MATERNITY_PAY_REJECTION_SIMPLIFIED_ANALYSIS,
       creditCost: 2,

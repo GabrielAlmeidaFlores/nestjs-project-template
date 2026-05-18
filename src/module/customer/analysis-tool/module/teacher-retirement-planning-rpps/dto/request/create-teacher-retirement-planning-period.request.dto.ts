@@ -38,8 +38,8 @@ export class CreateTeacherRetirementPlanningPeriodItemRequestDto extends BaseBui
   )
   public readonly workloadType?: TeacherRetirementPlanningRppsPeriodItemWorkloadTypeEnum;
 
-  @RequestDtoStringProperty({ required: true })
-  public readonly institutionName: string;
+  @RequestDtoStringProperty({ required: false })
+  public readonly institutionName?: string;
 
   @RequestDtoEnumProperty(
     TeacherRetirementPlanningRppsPeriodItemInstitutionTypeEnum,
