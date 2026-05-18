@@ -17,6 +17,7 @@ import { SpecialRetirementRejectionDocumentTypeEnum } from '@module/customer/ana
 import { SpecialRetirementRejectionResultEntity } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-result/special-retirement-rejection-result.entity';
 import { SpecialRetirementRejectionWorkPeriodActivityTypeEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period/enum/special-retirement-rejection-work-period-activity-type.enum';
 import { SpecialRetirementRejectionWorkPeriodCategoryEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period/enum/special-retirement-rejection-work-period-category.enum';
+import { SpecialRetirementRejectionWorkPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period/enum/special-retirement-rejection-work-period-pendency-reason.enum';
 import { SpecialRetirementRejectionWorkPeriodPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period/enum/special-retirement-rejection-work-period-period-consideration.enum';
 import { SpecialRetirementRejectionWorkPeriodEntity } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period/special-retirement-rejection-work-period.entity';
 import { CreateSpecialRetirementRejectionFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/special-retirement-rejection/dto/response/create-special-retirement-rejection-first-analysis.response.dto';
@@ -305,7 +306,10 @@ export class CreateSpecialRetirementRejectionFirstAnalysisUseCase {
         SpecialRetirementRejectionFirstAnalysisWorkPeriodModel.build({
           bondOrigin: workPeriod.bondOrigin,
           startDate: workPeriod.startDate,
-          endDate: workPeriod.endDate,
+          ...(workPeriod.endDate !== undefined &&
+            !workPeriod.pendencyReason.includes(
+              SpecialRetirementRejectionWorkPeriodPendencyReasonEnum.LEAVE_DATE,
+            ) && { endDate: workPeriod.endDate }),
           category: workPeriod.category,
           pendencyReason: workPeriod.pendencyReason,
           periodConsideration: workPeriod.periodConsideration,
@@ -348,21 +352,20 @@ export class CreateSpecialRetirementRejectionFirstAnalysisUseCase {
             specialPeriods: workPeriod.specialPeriods.map((sp) =>
               SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodModel.build(
                 {
-                  recognizedSpecialTime: sp.recognizedSpecialTime,
-                  companyName: sp.companyName,
+                  recognized: sp.recognized,
+                  company: sp.company,
                   cnpj: sp.cnpj,
-                  position: sp.position,
-                  comprobatoryDocument: sp.comprobatoryDocument,
-                  linkedToCnis: sp.linkedToCnis,
-                  containsCnisRemunerationInPeriod:
-                    sp.containsCnisRemunerationInPeriod,
-                  technicalJustification: sp.technicalJustification,
-                  additionalObservation: sp.additionalObservation,
+                  role: sp.role,
+                  supportingDocument: sp.supportingDocument,
+                  recordedInCnis: sp.recordedInCnis,
+                  remunerationRecordedInCnis: sp.remunerationRecordedInCnis,
+                  justification: sp.justification,
+                  observations: sp.observations,
                   lawyerObservation: sp.lawyerObservation,
                   exposureFrequency: sp.exposureFrequency,
                   informationSource: sp.informationSource,
-                  identifiedAgents: sp.identifiedAgents,
-                  efficientEpi: sp.efficientEpi,
+                  hazardousAgents: sp.hazardousAgents,
+                  epiEficaz: sp.epiEficaz,
                 },
               ),
             ),
@@ -416,7 +419,9 @@ export class CreateSpecialRetirementRejectionFirstAnalysisUseCase {
         id: workPeriod.id.toString(),
         bondOrigin: workPeriod.bondOrigin,
         startDate: workPeriod.startDate,
-        endDate: workPeriod.endDate,
+        ...(!(workPeriod.pendencyReason ?? []).includes(
+          SpecialRetirementRejectionWorkPeriodPendencyReasonEnum.LEAVE_DATE,
+        ) && { endDate: workPeriod.endDate }),
         category: workPeriod.category,
         pendencyReason: workPeriod.pendencyReason,
         periodConsideration: workPeriod.periodConsideration,
@@ -504,7 +509,13 @@ export class CreateSpecialRetirementRejectionFirstAnalysisUseCase {
           startDate: workPeriod.startDate
             ? new Date(workPeriod.startDate)
             : null,
-          endDate: workPeriod.endDate ? new Date(workPeriod.endDate) : null,
+          endDate: workPeriod.pendencyReason.includes(
+            SpecialRetirementRejectionWorkPeriodPendencyReasonEnum.LEAVE_DATE,
+          )
+            ? null
+            : workPeriod.endDate !== undefined
+              ? new Date(workPeriod.endDate)
+              : null,
           category:
             workPeriod.category as SpecialRetirementRejectionWorkPeriodCategoryEnum,
           pendencyReason: workPeriod.pendencyReason,

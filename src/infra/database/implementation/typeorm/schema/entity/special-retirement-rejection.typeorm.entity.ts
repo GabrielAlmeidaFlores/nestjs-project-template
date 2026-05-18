@@ -5,6 +5,7 @@ import { SpecialRetirementRejectionDocumentTypeormEntity } from '@infra/database
 import { SpecialRetirementRejectionInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-inss-benefit.typeorm.entity';
 import { SpecialRetirementRejectionLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-legal-proceeding.typeorm.entity';
 import { SpecialRetirementRejectionResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-result.typeorm.entity';
+import { SpecialRetirementRejectionTechnicalDiagnosisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-technical-diagnosis.typeorm.entity';
 import { SpecialRetirementRejectionWorkPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-retirement-rejection-work-period.typeorm.entity';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 
@@ -112,6 +113,14 @@ export class SpecialRetirementRejectionTypeormEntity extends BaseTypeormEntity {
   )
   public specialRetirementRejectionWorkPeriod?:
     | SpecialRetirementRejectionWorkPeriodTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => SpecialRetirementRejectionTechnicalDiagnosisTypeormEntity,
+    (entity) => entity.specialRetirementRejection,
+  )
+  public specialRetirementRejectionTechnicalDiagnosis?:
+    | SpecialRetirementRejectionTechnicalDiagnosisTypeormEntity[]
     | undefined;
 
   protected override readonly _type =

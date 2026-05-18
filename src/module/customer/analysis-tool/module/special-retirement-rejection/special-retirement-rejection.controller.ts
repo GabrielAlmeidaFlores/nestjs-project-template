@@ -10,21 +10,27 @@ import {
 
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { SpecialRetirementRejectionId } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection/value-object/special-retirement-rejection-id.value-object';
+import { CreateSpecialRetirementRejectionTechnicalDiagnosisRequestDto } from '@module/customer/analysis-tool/module/special-retirement-rejection/dto/request/create-special-retirement-rejection-technical-diagnosis.request.dto';
 import { CreateSpecialRetirementRejectionRequestDto } from '@module/customer/analysis-tool/module/special-retirement-rejection/dto/request/create-special-retirement-rejection.request.dto';
+import { UpdateSpecialRetirementRejectionTechnicalDiagnosisRequestDto } from '@module/customer/analysis-tool/module/special-retirement-rejection/dto/request/update-special-retirement-rejection-technical-diagnosis.request.dto';
 import { UpdateSpecialRetirementRejectionWorkPeriodsRequestDto } from '@module/customer/analysis-tool/module/special-retirement-rejection/dto/request/update-special-retirement-rejection-work-periods.request.dto';
 import { UpdateSpecialRetirementRejectionRequestDto } from '@module/customer/analysis-tool/module/special-retirement-rejection/dto/request/update-special-retirement-rejection.request.dto';
 import { CreateSpecialRetirementRejectionFirstAnalysisResponseDto } from '@module/customer/analysis-tool/module/special-retirement-rejection/dto/response/create-special-retirement-rejection-first-analysis.response.dto';
 import { CreateSpecialRetirementRejectionResultResponseDto } from '@module/customer/analysis-tool/module/special-retirement-rejection/dto/response/create-special-retirement-rejection-result.response.dto';
+import { CreateSpecialRetirementRejectionTechnicalDiagnosisResponseDto } from '@module/customer/analysis-tool/module/special-retirement-rejection/dto/response/create-special-retirement-rejection-technical-diagnosis.response.dto';
 import { CreateSpecialRetirementRejectionResponseDto } from '@module/customer/analysis-tool/module/special-retirement-rejection/dto/response/create-special-retirement-rejection.response.dto';
 import { GetSpecialRetirementRejectionResponseDto } from '@module/customer/analysis-tool/module/special-retirement-rejection/dto/response/get-special-retirement-rejection.response.dto';
+import { UpdateSpecialRetirementRejectionTechnicalDiagnosisResponseDto } from '@module/customer/analysis-tool/module/special-retirement-rejection/dto/response/update-special-retirement-rejection-technical-diagnosis.response.dto';
 import { UpdateSpecialRetirementRejectionWorkPeriodsResponseDto } from '@module/customer/analysis-tool/module/special-retirement-rejection/dto/response/update-special-retirement-rejection-work-periods.response.dto';
 import { UpdateSpecialRetirementRejectionResponseDto } from '@module/customer/analysis-tool/module/special-retirement-rejection/dto/response/update-special-retirement-rejection.response.dto';
 import { CreateSpecialRetirementRejectionFirstAnalysisUseCase } from '@module/customer/analysis-tool/module/special-retirement-rejection/use-case/create-special-retirement-rejection-first-analysis.use-case';
 import { CreateSpecialRetirementRejectionResultUseCase } from '@module/customer/analysis-tool/module/special-retirement-rejection/use-case/create-special-retirement-rejection-result.use-case';
+import { CreateSpecialRetirementRejectionTechnicalDiagnosisUseCase } from '@module/customer/analysis-tool/module/special-retirement-rejection/use-case/create-special-retirement-rejection-technical-diagnosis.use-case';
 import { CreateSpecialRetirementRejectionUseCase } from '@module/customer/analysis-tool/module/special-retirement-rejection/use-case/create-special-retirement-rejection.use-case';
 import { DownloadSpecialRetirementRejectionCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/special-retirement-rejection/use-case/download-special-retirement-rejection-complete-analysis.use-case';
 import { DownloadSpecialRetirementRejectionSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/special-retirement-rejection/use-case/download-special-retirement-rejection-simplified-analysis.use-case';
 import { GetSpecialRetirementRejectionUseCase } from '@module/customer/analysis-tool/module/special-retirement-rejection/use-case/get-special-retirement-rejection.use-case';
+import { UpdateSpecialRetirementRejectionTechnicalDiagnosisUseCase } from '@module/customer/analysis-tool/module/special-retirement-rejection/use-case/update-special-retirement-rejection-technical-diagnosis.use-case';
 import { UpdateSpecialRetirementRejectionWorkPeriodsUseCase } from '@module/customer/analysis-tool/module/special-retirement-rejection/use-case/update-special-retirement-rejection-work-periods.use-case';
 import { UpdateSpecialRetirementRejectionUseCase } from '@module/customer/analysis-tool/module/special-retirement-rejection/use-case/update-special-retirement-rejection.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -51,6 +57,8 @@ export class SpecialRetirementRejectionController {
     private readonly createSpecialRetirementRejectionResultUseCase: CreateSpecialRetirementRejectionResultUseCase,
     private readonly downloadSpecialRetirementRejectionCompleteAnalysisUseCase: DownloadSpecialRetirementRejectionCompleteAnalysisUseCase,
     private readonly downloadSpecialRetirementRejectionSimplifiedAnalysisUseCase: DownloadSpecialRetirementRejectionSimplifiedAnalysisUseCase,
+    private readonly createSpecialRetirementRejectionTechnicalDiagnosisUseCase: CreateSpecialRetirementRejectionTechnicalDiagnosisUseCase,
+    private readonly updateSpecialRetirementRejectionTechnicalDiagnosisUseCase: UpdateSpecialRetirementRejectionTechnicalDiagnosisUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -323,6 +331,78 @@ export class SpecialRetirementRejectionController {
       organizationSessionData,
       specialRetirementRejectionId,
       format,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Adicionar diagnóstico técnico do indeferimento de aposentadoria especial',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':specialRetirementRejectionId/technical-diagnosis',
+      method: RequestMethod.POST,
+      type: CreateSpecialRetirementRejectionTechnicalDiagnosisRequestDto,
+    },
+    tag: ['indeferimento-aposentadoria-especial'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Diagnóstico técnico criado com sucesso.',
+      type: CreateSpecialRetirementRejectionTechnicalDiagnosisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createTechnicalDiagnosis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'specialRetirementRejectionId',
+      new ParseValueObjectPipe(SpecialRetirementRejectionId),
+    )
+    specialRetirementRejectionId: SpecialRetirementRejectionId,
+    @Body() dto: CreateSpecialRetirementRejectionTechnicalDiagnosisRequestDto,
+  ): Promise<CreateSpecialRetirementRejectionTechnicalDiagnosisResponseDto> {
+    return await this.createSpecialRetirementRejectionTechnicalDiagnosisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      specialRetirementRejectionId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Atualizar diagnóstico técnico do indeferimento de aposentadoria especial',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':specialRetirementRejectionId/technical-diagnosis',
+      method: RequestMethod.PATCH,
+      type: UpdateSpecialRetirementRejectionTechnicalDiagnosisRequestDto,
+    },
+    tag: ['indeferimento-aposentadoria-especial'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Diagnóstico técnico atualizado com sucesso.',
+      type: UpdateSpecialRetirementRejectionTechnicalDiagnosisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateTechnicalDiagnosis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'specialRetirementRejectionId',
+      new ParseValueObjectPipe(SpecialRetirementRejectionId),
+    )
+    specialRetirementRejectionId: SpecialRetirementRejectionId,
+    @Body() dto: UpdateSpecialRetirementRejectionTechnicalDiagnosisRequestDto,
+  ): Promise<UpdateSpecialRetirementRejectionTechnicalDiagnosisResponseDto> {
+    return await this.updateSpecialRetirementRejectionTechnicalDiagnosisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      specialRetirementRejectionId,
+      dto,
     );
   }
 }
