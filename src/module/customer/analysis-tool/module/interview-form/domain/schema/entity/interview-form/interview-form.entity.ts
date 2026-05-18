@@ -70,6 +70,27 @@ export class InterviewFormEntity extends BaseEntity<InterviewFormId> {
   @Description('Possui RPC.')
   public readonly clientHasRpc: boolean | null;
 
+  @Description('Data de cadastro do cliente.')
+  public readonly clientRegistrationDate: string | null;
+
+  @Description('Idade do cliente.')
+  public readonly clientAge: string | null;
+
+  @Description('Bairro do cliente.')
+  public readonly clientNeighborhood: string | null;
+
+  @Description('Rua do cliente.')
+  public readonly clientStreet: string | null;
+
+  @Description('Número do endereço do cliente.')
+  public readonly clientStreetNumber: string | null;
+
+  @Description('É casado ou vive em união estável.')
+  public readonly clientIsMarriedOrInUnion: boolean | null;
+
+  @Description('Tem filhos.')
+  public readonly clientHasChildren: boolean | null;
+
   @Description('Nomes dos filhos.')
   public readonly childrenNames: string[];
 
@@ -272,6 +293,13 @@ export class InterviewFormEntity extends BaseEntity<InterviewFormId> {
     this.clientCtps = props.clientCtps ?? null;
     this.clientHasDisclosure = props.clientHasDisclosure ?? null;
     this.clientHasRpc = props.clientHasRpc ?? null;
+    this.clientRegistrationDate = props.clientRegistrationDate ?? null;
+    this.clientAge = props.clientAge ?? null;
+    this.clientNeighborhood = props.clientNeighborhood ?? null;
+    this.clientStreet = props.clientStreet ?? null;
+    this.clientStreetNumber = props.clientStreetNumber ?? null;
+    this.clientIsMarriedOrInUnion = props.clientIsMarriedOrInUnion ?? null;
+    this.clientHasChildren = props.clientHasChildren ?? null;
     this.childrenNames = props.childrenNames ?? [];
 
     // Dados Laborativos e Previdenciários

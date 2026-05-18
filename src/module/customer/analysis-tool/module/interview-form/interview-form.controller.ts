@@ -79,7 +79,7 @@ export class InterviewFormController {
       new ParseValueObjectPipe(AnalysisToolClientId),
     )
     analysisToolClientId: AnalysisToolClientId,
-  ): Promise<GetInterviewFormResponseDto | null> {
+  ): Promise<GetInterviewFormResponseDto> {
     return await this.getInterviewFormByAnalysisToolClientIdUseCase.execute(
       sessionData,
       organizationSessionData,

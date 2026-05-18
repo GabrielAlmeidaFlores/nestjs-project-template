@@ -71,6 +71,27 @@ export class UpsertInterviewFormRequestDto extends BaseBuildableDtoObject {
   @RequestDtoBooleanProperty({ required: false })
   public clientHasRpc?: boolean;
 
+  @RequestDtoStringProperty({ required: false })
+  public clientRegistrationDate?: string;
+
+  @RequestDtoStringProperty({ required: false })
+  public clientAge?: string;
+
+  @RequestDtoStringProperty({ required: false })
+  public clientNeighborhood?: string;
+
+  @RequestDtoStringProperty({ required: false })
+  public clientStreet?: string;
+
+  @RequestDtoStringProperty({ required: false })
+  public clientStreetNumber?: string;
+
+  @RequestDtoBooleanProperty({ required: false })
+  public clientIsMarriedOrInUnion?: boolean;
+
+  @RequestDtoBooleanProperty({ required: false })
+  public clientHasChildren?: boolean;
+
   @RequestDtoStringProperty({ required: false, isArray: true })
   public childrenNames?: string[];
 

@@ -79,6 +79,13 @@ export class UpsertInterviewFormUseCase {
       clientCtps: dto.clientCtps ?? null,
       clientHasDisclosure: dto.clientHasDisclosure ?? null,
       clientHasRpc: dto.clientHasRpc ?? null,
+      clientRegistrationDate: dto.clientRegistrationDate ?? null,
+      clientAge: dto.clientAge ?? null,
+      clientNeighborhood: dto.clientNeighborhood ?? null,
+      clientStreet: dto.clientStreet ?? null,
+      clientStreetNumber: dto.clientStreetNumber ?? null,
+      clientIsMarriedOrInUnion: dto.clientIsMarriedOrInUnion ?? null,
+      clientHasChildren: dto.clientHasChildren ?? null,
       childrenNames: dto.childrenNames ?? null,
       isRetired: dto.isRetired ?? null,
       hasReceivedOrReceivesSocialSecurityBenefit:

@@ -23,7 +23,7 @@ export class GetInterviewFormByAnalysisToolClientIdUseCase {
     _sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
     analysisToolClientId: AnalysisToolClientId,
-  ): Promise<GetInterviewFormResponseDto | null> {
+  ): Promise<GetInterviewFormResponseDto> {
     await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
       analysisToolClientId,
       organizationSessionData.organizationId,
@@ -37,7 +37,7 @@ export class GetInterviewFormByAnalysisToolClientIdUseCase {
       );
 
     if (result === null) {
-      return null;
+      return {} as GetInterviewFormResponseDto;
     }
 
     return GetInterviewFormResponseDto.build({
@@ -62,6 +62,13 @@ export class GetInterviewFormByAnalysisToolClientIdUseCase {
       clientCtps: result.clientCtps,
       clientHasDisclosure: result.clientHasDisclosure,
       clientHasRpc: result.clientHasRpc,
+      clientRegistrationDate: result.clientRegistrationDate,
+      clientAge: result.clientAge,
+      clientNeighborhood: result.clientNeighborhood,
+      clientStreet: result.clientStreet,
+      clientStreetNumber: result.clientStreetNumber,
+      clientIsMarriedOrInUnion: result.clientIsMarriedOrInUnion,
+      clientHasChildren: result.clientHasChildren,
       childrenNames: result.childrenNames,
       isRetired: result.isRetired,
       hasReceivedOrReceivesSocialSecurityBenefit:

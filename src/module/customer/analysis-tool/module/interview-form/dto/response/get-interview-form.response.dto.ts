@@ -11,13 +11,12 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 
 @ResponseDto()
 export class GetInterviewFormResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoValueObjectProperty(InterviewFormId)
-  public interviewFormId: InterviewFormId;
+  @ResponseDtoValueObjectProperty(InterviewFormId, { required: false })
+  public interviewFormId: InterviewFormId | null;
 
-  @ResponseDtoStringProperty()
-  public analysisToolClientId: string;
+  @ResponseDtoStringProperty({ required: false })
+  public analysisToolClientId: string | null;
 
-  // Dados do Cliente
   @ResponseDtoStringProperty({ required: false })
   public clientName: string | null;
 
@@ -75,10 +74,30 @@ export class GetInterviewFormResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoBooleanProperty({ required: false })
   public clientHasRpc: boolean | null;
 
-  @ResponseDtoStringProperty({ isArray: true })
-  public childrenNames: string[];
+  @ResponseDtoStringProperty({ required: false })
+  public clientRegistrationDate: string | null;
 
-  // Dados Laborativos e Previdenciários
+  @ResponseDtoStringProperty({ required: false })
+  public clientAge: string | null;
+
+  @ResponseDtoStringProperty({ required: false })
+  public clientNeighborhood: string | null;
+
+  @ResponseDtoStringProperty({ required: false })
+  public clientStreet: string | null;
+
+  @ResponseDtoStringProperty({ required: false })
+  public clientStreetNumber: string | null;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public clientIsMarriedOrInUnion: boolean | null;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public clientHasChildren: boolean | null;
+
+  @ResponseDtoStringProperty({ isArray: true, required: false })
+  public childrenNames: string[] | null;
+
   @ResponseDtoBooleanProperty({ required: false })
   public isRetired: boolean | null;
 
@@ -112,7 +131,6 @@ export class GetInterviewFormResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoBooleanProperty({ required: false })
   public receivesBolsaFamilia: boolean | null;
 
-  // Atividades Especiais
   @ResponseDtoBooleanProperty({ required: false })
   public hasWorkedInSpecialActivities: boolean | null;
 
@@ -143,14 +161,12 @@ export class GetInterviewFormResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoBooleanProperty({ required: false })
   public hasWorkedExposedToExcessiveNoise: boolean | null;
 
-  // Trabalho Rural
   @ResponseDtoBooleanProperty({ required: false })
   public hasWorkedInRuralArea: boolean | null;
 
   @ResponseDtoBooleanProperty({ required: false })
   public familyLivedInRuralAreaDuringChildhood: boolean | null;
 
-  // Serviço Público
   @ResponseDtoBooleanProperty({ required: false })
   public hasWorkedInPublicService: boolean | null;
 
@@ -160,7 +176,6 @@ export class GetInterviewFormResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoBooleanProperty({ required: false })
   public hasBeenCommissionedByPublicAdministration: boolean | null;
 
-  // Dados de Saúde Ocupacional
   @ResponseDtoStringProperty({ required: false })
   public hasBeenHospitalized: string | null;
 
@@ -200,7 +215,6 @@ export class GetInterviewFormResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty({ required: false })
   public hasAccidentReport: string | null;
 
-  // Histórico Processual
   @ResponseDtoStringProperty({ required: false })
   public hasAdministrativeClaimWithInss: string | null;
 
@@ -213,7 +227,6 @@ export class GetInterviewFormResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty({ required: false })
   public hasRequestedAdministrativeOrJudicialReview: string | null;
 
-  // Documentos Entregues
   @ResponseDtoBooleanProperty({ required: false })
   public hasRgCpfProofOfResidence: boolean | null;
 
@@ -244,11 +257,11 @@ export class GetInterviewFormResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty({ required: false })
   public otherDocumentsDescription: string | null;
 
-  @ResponseDtoDateProperty()
-  public createdAt: Date;
+  @ResponseDtoDateProperty({ required: false })
+  public createdAt: Date | null;
 
-  @ResponseDtoDateProperty()
-  public updatedAt: Date;
+  @ResponseDtoDateProperty({ required: false })
+  public updatedAt: Date | null;
 
   protected override readonly _type = GetInterviewFormResponseDto.name;
 }

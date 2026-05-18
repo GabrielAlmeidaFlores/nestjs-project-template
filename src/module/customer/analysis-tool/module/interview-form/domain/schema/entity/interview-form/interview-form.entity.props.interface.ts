@@ -28,6 +28,13 @@ export interface InterviewFormEntityPropsInterface extends BaseEntityPropsInterf
   clientCtps?: string | null;
   clientHasDisclosure?: boolean | null;
   clientHasRpc?: boolean | null;
+  clientRegistrationDate?: string | null;
+  clientAge?: string | null;
+  clientNeighborhood?: string | null;
+  clientStreet?: string | null;
+  clientStreetNumber?: string | null;
+  clientIsMarriedOrInUnion?: boolean | null;
+  clientHasChildren?: boolean | null;
   childrenNames?: string[] | null;
 
   // Dados Laborativos e Previdenciários
