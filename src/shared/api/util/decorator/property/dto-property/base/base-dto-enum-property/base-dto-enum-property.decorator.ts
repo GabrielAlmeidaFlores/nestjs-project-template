@@ -28,6 +28,11 @@ export function BaseDtoEnumProperty(
 
   if (!propertyIsRequired) {
     decorators.unshift(IsOptional());
+    decorators.unshift(
+      Transform(({ value }: { value: unknown }) =>
+        value === '' ? undefined : value,
+      ),
+    );
   }
 
   if (isArray) {

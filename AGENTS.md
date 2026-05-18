@@ -75,6 +75,7 @@ src/
 │   │       ├── dto/             # Presentation layer
 │   │       │   ├── request/     # Input DTOs
 │   │       │   └── response/    # Output DTOs
+│   │       ├── interface/       # TypeScript interfaces (shared within the module)
 │   │       ├── error/           # Domain-specific errors
 │   │       ├── *.controller.ts  # HTTP controllers
 │   │       └── *.module.ts      # NestJS module
@@ -191,6 +192,88 @@ export class AnalysisEntity extends BaseEntity<AnalysisId> {
 
   public isCompleted(): boolean {
     return this.status === AnalysisStatusEnum.COMPLETED;
+  }
+}
+```
+
+#### Entity Field Validation Pattern ⚠️ MANDATORY
+
+**When a domain entity needs to validate a plain string (or primitive) field**, use `static validate*` methods with `validateAllOrThrow` — NOT inline logic in the constructor.
+
+**Rules**:
+- ✅ Validation logic in a `public static validate{FieldName}` method
+- ✅ Call the static validator **before** `super()` when the field is non-nullable; call it conditionally (guard for null/undefined) before `super()` when the field is optional/nullable
+- ✅ Use `this.validateAllOrThrow(conditions[], () => new SpecificError())` inside the static method
+- ✅ Throw a specific `InvalidInputError` subclass located in the module's `error/` folder
+- ❌ NO inline `if/throw` blocks in the constructor body
+- ❌ NO module-level constants for validation limits (keep them as local variables inside the static method)
+
+**Example — optional nullable field**:
+
+```typescript
+import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { InvalidPublicServiceStateAbbreviationError } from '@module/.../error/invalid-public-service-state-abbreviation.error';
+
+export class SomeEntity extends BaseEntity<SomeId> {
+  public readonly publicServiceStateAbbreviation: string | null;
+
+  protected readonly _type = SomeEntity.name;
+
+  public constructor(props: SomeEntityPropsInterface) {
+    if (props.publicServiceStateAbbreviation != null) {
+      SomeEntity.validatePublicServiceStateAbbreviation(
+        props.publicServiceStateAbbreviation,
+      );
+    }
+
+    super(SomeId, props);
+    this.publicServiceStateAbbreviation =
+      props.publicServiceStateAbbreviation ?? null;
+  }
+
+  public static validatePublicServiceStateAbbreviation(
+    abbreviation: string,
+  ): void {
+    const maxLength = 2;
+
+    const hasMaximumLength = abbreviation.length <= maxLength;
+
+    this.validateAllOrThrow(
+      [hasMaximumLength],
+      () => new InvalidPublicServiceStateAbbreviationError(),
+    );
+  }
+}
+```
+
+**Example — required field (validated before `super()`)**:
+
+```typescript
+export class CustomerEntity extends BaseEntity<CustomerId> {
+  public readonly name: string;
+
+  protected readonly _type = CustomerEntity.name;
+
+  public constructor(props: CustomerEntityPropsInterface) {
+    CustomerEntity.validateName(props.name);
+
+    super(CustomerId, props);
+    this.name = props.name;
+  }
+
+  public static validateName(name: string): void {
+    const minLength = 3;
+    const maxLength = 50;
+    const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/;
+
+    this.validateAllOrThrow(
+      [
+        name.length >= minLength,
+        name.length <= maxLength,
+        nameRegex.test(name),
+      ],
+      () => new InvalidCustomerNameError({ minLength, maxLength }),
+    );
   }
 }
 ```
@@ -883,6 +966,43 @@ return AnalysisEntity.build({
 });
 ```
 
+#### ⚠️ CRITICAL: Domain→ORM Relation Mapping — ALWAYS use `this.mapper.map()`
+
+**NEVER use the `{ id: ... } as TypeormEntity` cast pattern** to map relations in the Domain→ORM direction. Always delegate to `this.mapper.map()` so the registered profile handles the conversion correctly.
+
+```typescript
+// ❌ WRONG — casting with only the ID (bypasses the registered mapper profile)
+const ruralOrHybridRetirementRejection =
+  source.ruralOrHybridRetirementRejection !== null
+    ? ({
+        id: source.ruralOrHybridRetirementRejection.id.toString(),
+      } as RuralOrHybridRetirementRejectionTypeormEntity)
+    : null;
+
+// ✅ CORRECT — delegate to the registered mapper profile
+const ruralOrHybridRetirementRejection =
+  source.ruralOrHybridRetirementRejection !== null
+    ? this.mapper.map(
+        source.ruralOrHybridRetirementRejection,
+        RuralOrHybridRetirementRejectionEntity,
+        RuralOrHybridRetirementRejectionTypeormEntity,
+      )
+    : null;
+```
+
+**Why this matters:**
+
+1. **Correctness**: TypeORM uses the full relation object (not just an ID stub) to resolve FK columns correctly
+2. **Consistency**: All relation mappings follow the same pattern regardless of direction
+3. **Maintainability**: The registered profile is the single source of truth for the transformation
+
+**Rules:**
+
+- ✅ Always use `this.mapper.map(source.field, DomainEntity, TypeormEntity)` for nullable relations in the Domain→ORM converter
+- ✅ Import both the Domain entity and the TypeORM entity in the mapper profile file
+- ❌ NO `{ id: source.field.id.toString() } as SomeTypeormEntity` casts
+- ❌ NO manually constructing partial TypeORM entities as relation stubs
+
 ---
 
 ## Mandatory Code Patterns
@@ -899,6 +1019,27 @@ protected readonly _type = ClassName.name;
 
 // In classes that extend another class
 protected override readonly _type = ClassName.name;
+```
+
+**⚠️ EXCEPTION: Abstract Gateway Classes** — Abstract repository gateway classes (used as NestJS DI tokens with `implements`, NOT `extends`) must **NOT** have `_type`. Adding `protected _type` to an abstract class used with `implements` causes TS2720 ("Property '_type' is protected but type is not a class derived from..."). Repository gateway abstract classes are never instantiated and serve purely as DI tokens — they do not need `_type`.
+
+```typescript
+// ❌ WRONG - adding _type to an abstract gateway class used as DI token
+export abstract class AnalysisQueryRepositoryGateway {
+  protected readonly _type = AnalysisQueryRepositoryGateway.name; // ❌ causes TS2720
+  public abstract findById(id: AnalysisId): Promise<AnalysisEntity | null>;
+}
+
+// ✅ CORRECT - abstract gateway has NO _type
+export abstract class AnalysisQueryRepositoryGateway {
+  public abstract findById(id: AnalysisId): Promise<AnalysisEntity | null>;
+}
+
+// ✅ CORRECT - the implementing class has _type
+@Injectable()
+export class AnalysisTypeormQueryRepository implements AnalysisQueryRepositoryGateway {
+  protected readonly _type = AnalysisTypeormQueryRepository.name; // ✅
+}
 ```
 
 **Examples**:
@@ -1092,7 +1233,33 @@ export class SomeService {
 - Enums that are used across multiple unrelated modules
 - True application-wide configuration (should be in dedicated config files)
 
-### 4. DTO Property Decorators
+### 4. `interface/` vs `model/` Folder Separation ⚠️ MANDATORY
+
+**CRITICAL**: TypeScript interfaces and classes are fundamentally different and MUST live in separate folders.
+
+- **`interface/`** — TypeScript `interface` declarations shared within the module (e.g. AI response shapes, query result structures, JSON schemas). Example: `rural-or-hybrid-retirement-analysis-result.interface.ts`
+- **`model/`** — TypeScript `class` declarations (plain data models that are not entities or DTOs). Example: a `SomeModel` class with methods or computed properties.
+
+**Rules:**
+
+- ✅ Interfaces go in `interface/` at the module root
+- ✅ Classes go in `model/` at the module root
+- ❌ NEVER put interface files inside `model/interface/` — `model` implies a class, not an interface
+- ❌ NEVER mix interfaces and classes in the same folder
+
+```
+src/module/customer/analysis-tool/module/{feature}/
+├── domain/
+├── dto/
+├── error/
+├── interface/   ← *.interface.ts files go here
+├── model/       ← class-based models go here (if needed)
+├── use-case/
+├── *.controller.ts
+└── *.module.ts
+```
+
+### 5. DTO Property Decorators
 
 #### Request DTO Pattern
 
@@ -1538,6 +1705,41 @@ export class AnalysisTypeormEntity extends BaseTypeormEntity {
 - `CryptographyTransformer` - Encrypts/decrypts sensitive data
 - `HashTransformer` - One-way password hashing
 
+**⚠️ CRITICAL: Decimal Fields MUST use `DecimalValue` Value Object**
+
+For columns declared as `type: 'decimal'` in TypeORM:
+
+- **TypeORM entity**: Keep property type as `string` (or `string | null`) — TypeORM returns decimals as strings from MySQL
+- **Domain entity / Query result**: Use `DecimalValue` (or `DecimalValue | null`) from `@core/domain/schema/value-object/decimal/decimal.value-object`
+- **AutoMapper ORM→Domain**: `new DecimalValue(source.field)` or `source.field !== null ? new DecimalValue(source.field) : null`
+- **AutoMapper Domain→ORM**: `source.field.toString()` or `source.field !== null ? source.field.toString() : null`
+- **Request DTO**: `@RequestDtoValueObjectProperty(DecimalValue)` + `public field: DecimalValue`
+- **Response DTO**: `@ResponseDtoValueObjectProperty(DecimalValue)` + `public field: DecimalValue`
+- **NEVER use `number` type** or `parseFloat()` / `.toNumber()` for decimal persistence — always use `DecimalValue`
+
+```typescript
+// TypeORM entity — keep as string
+@Column({ name: 'gross_amount', type: 'decimal', precision: 15, scale: 2, nullable: true })
+public grossAmount: string | null;
+
+// Domain entity / Query result — use DecimalValue
+public readonly grossAmount: DecimalValue | null;
+
+// Mapper ORM→Domain
+grossAmount: source.grossAmount !== null ? new DecimalValue(source.grossAmount) : null,
+
+// Mapper Domain→ORM
+grossAmount: source.grossAmount !== null ? source.grossAmount.toString() : null,
+
+// Request DTO
+@RequestDtoValueObjectProperty(DecimalValue)
+public grossAmount: DecimalValue;
+
+// Response DTO
+@ResponseDtoValueObjectProperty(DecimalValue, { required: false })
+public grossAmount?: DecimalValue;
+```
+
 **⚠️ CRITICAL: Choosing the Correct Date Transformer**
 
 MySQL has different date/time column types that require different transformers:
@@ -1845,8 +2047,12 @@ public async execute(
 - ✅ If controller has no Request DTO, use case should NOT have one either
 - ✅ Use cases accept only what they need (no unnecessary wrapper objects)
 - ✅ Request DTOs are used for **request body** validation and **complex query parameters**
+- ✅ **`@Param` variable name MUST match the Value Object class name in camelCase** (e.g., `SpecialCategoryRetirementAnalysisId` → `specialCategoryRetirementAnalysisId`)
+- ✅ If the parent ID param is not used in the method logic, **do not declare it at all** — NestJS will still match the route correctly
 - ❌ NO unnecessary Request DTOs just to wrap a single path parameter
 - ❌ NO intermediate wrapper objects in use case signatures
+- ❌ NO generic names like `id`, `analysisId`, `workPeriodId` — always use the full Value Object class name in camelCase
+- ❌ NO unused `@Param` declarations — if the param is not used, omit it entirely
 
 **How ParseValueObjectPipe Works:**
 
@@ -1856,6 +2062,27 @@ public async execute(
 4. Returns the typed Value Object to the controller method
 5. Controller passes it directly to the use case
 
+**`@Param` Variable Naming Rule:**
+
+The variable name MUST match the Value Object class name in camelCase — never use generic names like `id`, `analysisId`, or `workPeriodId`.
+
+```typescript
+// ❌ WRONG — generic name
+@Param('id', new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId))
+id: SpecialCategoryRetirementAnalysisId,
+
+// ✅ CORRECT — name matches the Value Object class (camelCase)
+@Param('id', new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId))
+specialCategoryRetirementAnalysisId: SpecialCategoryRetirementAnalysisId,
+
+// ✅ CORRECT — parent ID not used in logic: don't declare it at all
+// The route `:analysisId/work-period/:workPeriodId` still matches correctly
+public async deleteWorkPeriod(
+  @Param('workPeriodId', new ParseValueObjectPipe(WorkPeriodId))
+  specialCategoryRetirementAnalysisWorkPeriodId: WorkPeriodId,
+): Promise<...> { ... }
+```
+
 **Benefits:**
 
 - ✅ Automatic validation at the pipe layer
@@ -1864,6 +2091,89 @@ public async execute(
 - ✅ Cleaner code: no unnecessary wrapper objects
 - ✅ Consistent with established patterns in the codebase
 - ✅ Errors caught early (before reaching use case)
+
+#### ⚠️ CRITICAL: REST Resource Hierarchy in Route Paths
+
+**RULE**: Every endpoint that operates on a child resource MUST include the parent resource ID in the route path. Parent IDs **MUST NEVER** appear in the request body (DTO).
+
+This applies to all HTTP methods: POST, GET, PATCH, DELETE.
+
+**Examples of correct resource hierarchy:**
+
+```
+POST   /:analysisId/work-period                             ← create child
+PATCH  /:analysisId/work-period/:workPeriodId               ← update child
+DELETE /:analysisId/work-period/:workPeriodId               ← delete child
+POST   /:workPeriodId/period-document                       ← create grandchild
+DELETE /:workPeriodId/period-document/:periodDocumentId     ← delete grandchild
+PATCH  /:analysisId/remuneration/:remunerationId            ← update child
+DELETE /:analysisId/remuneration/:remunerationId            ← delete child
+```
+
+**❌ WRONG — parent ID in the request body:**
+
+```typescript
+// ❌ BAD: analysisId belongs in the route, not the body
+@RequestDto()
+export class CreateWorkPeriodRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoValueObjectProperty(AnalysisId)
+  public analysisId: AnalysisId; // ❌ Should be a route param
+
+  @RequestDtoDateProperty()
+  public startDate: Date;
+}
+```
+
+**✅ CORRECT — parent ID as route param, use case receives it directly:**
+
+```typescript
+// ✅ DTO only contains data fields
+@RequestDto()
+export class CreateWorkPeriodRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoDateProperty()
+  public startDate: Date;
+}
+
+// ✅ Controller: parent ID comes from route
+@BuildEndpointSpecification({ http: { path: ':analysisId/work-period', method: RequestMethod.POST, ... }, ... })
+public async createWorkPeriod(
+  @Param('analysisId', new ParseValueObjectPipe(AnalysisId))
+  analysisId: AnalysisId,
+  @Body() dto: CreateWorkPeriodRequestDto,
+): Promise<CreateWorkPeriodResponseDto> {
+  return this.createWorkPeriodUseCase.execute(analysisId, dto);
+}
+
+// ✅ Use case receives parent ID as explicit parameter
+public async execute(
+  analysisId: AnalysisId,
+  dto: CreateWorkPeriodRequestDto,
+): Promise<CreateWorkPeriodResponseDto> { ... }
+```
+
+**When the parent ID is not used in the use case logic** (e.g., PATCH/DELETE where only the child ID is needed), still declare the `@Param` with a `_` prefix to signal intentional non-use:
+
+```typescript
+public async deleteWorkPeriod(
+  @Param('analysisId', new ParseValueObjectPipe(AnalysisId))
+  _analysisId: AnalysisId,           // ← declared for REST hierarchy, not used in logic
+  @Param('workPeriodId', new ParseValueObjectPipe(WorkPeriodId))
+  workPeriodId: WorkPeriodId,
+): Promise<DeleteWorkPeriodResponseDto> {
+  return this.deleteWorkPeriodUseCase.execute(workPeriodId);
+}
+```
+
+**Rules:**
+
+- ✅ Parent IDs MUST appear in the route path
+- ✅ All HTTP methods (POST, PATCH, DELETE) for child resources include the parent ID in the path
+- ✅ When the parent ID is unused in logic, prefix the parameter with `_`
+- ✅ DTOs contain only data fields — never entity relationship IDs
+- ❌ NO parent IDs in request body DTOs
+- ❌ NO flat routes like `work-period/:id` when a parent resource exists
+
+---
 
 #### ⚠️ CRITICAL: Query Parameter DTO Pattern
 
@@ -2345,35 +2655,23 @@ const resource = list.resource.map((attendant) =>
 Use when the calculation is an intrinsic part of the query (e.g., COUNT via JOIN/subquery on the same table) and the field would never make sense without that context. Must be standardized:
 
 - The field must be declared with a clear name indicating it is computed (e.g., `resolvedTicketsCount`, not `count`)
-- The TypeORM repository query is responsible for populating it (via `getRawAndEntities()` or subquery)
+- The TypeORM repository query is responsible for populating it using a **separate count query** (QueryBuilder is prohibited — see Repository Implementation rules)
 - The query result documents (via field name) that the value is computed
 
+Since `QueryBuilder` is prohibited, implement batch counts via a separate `find` + aggregation in the use case, or via a TypeORM `count` call:
+
 ```typescript
-// query result — explicitly named computed field
-export class GetSupportAttendantQueryResult extends BaseBuildableObject {
-  public readonly id: SupportAttendantId;
-  public readonly name: string;
-  public readonly resolvedTicketsCount: number; // ✅ allowed if part of the main query
-}
-
-// typeorm repo — computes via subquery
-const { entities, raw } = await this.repository
-  .createQueryBuilder('attendant')
-  .addSelect(
-    (sub) => sub.select('COUNT(t.id)').from('support_ticket', 't')
-      .where('t.assigned_attendant_id = attendant.id')
-      .andWhere('t.status = :s'),
-    'resolvedCount',
-  )
-  .setParameter('s', SupportTicketStatusEnum.RESOLVED)
-  .getRawAndEntities();
-
-const resource = entities.map((attendant, i) =>
-  GetSupportAttendantQueryResult.build({
-    id: new SupportAttendantId(attendant.id),
-    name: attendant.name,
-    resolvedTicketsCount: Number(raw[i]?.resolvedCount ?? 0),
-  }),
+// ✅ CORRECT — batch count without QueryBuilder
+const countPerResult = await Promise.all(
+  resultIds.map(async (id) => ({
+    id,
+    count: await manager.getRepository(TicketTypeormEntity).count({
+      where: {
+        assignedAttendant: { id: id.toString() },
+        status: SupportTicketStatusEnum.RESOLVED,
+      },
+    }),
+  })),
 );
 ```
 
@@ -2884,6 +3182,84 @@ When a discount is expired or the limit is reached, return an empty/zero-discoun
 
 ---
 
+### 12. AI Analysis JSON Schema Pattern ⚠️ MANDATORY
+
+**RULE**: The JSON structure returned by the AI model MUST be defined via a `private get*JsonSchema(): object` method inside `AnalysisProcessorService`. **NEVER describe the JSON structure in the prompt/seeder text.**
+
+The prompt (stored in the DB via the seeder) is responsible only for **instructions and context** — what the AI should analyse and how. The **schema** enforces the output shape.
+
+**❌ WRONG — JSON structure described in the prompt:**
+
+```
+// In payment-plan-paid-resource-ia-config.seeder.ts
+prompt: `...
+ESTRUTURA OBRIGATÓRIA DO JSON:
+{
+  "resumoDoCaso": "...",
+  "sinteseDoCnis": "..."
+}
+`
+```
+
+**✅ CORRECT — JSON structure defined in the analysis-processor schema method:**
+
+```typescript
+// In analysis-processor.service.ts
+private getMyAnalysisJsonSchema(): object {
+  return {
+    type: 'object',
+    properties: {
+      insuredStatus:   { type: 'boolean', description: '...' },
+      gracePeriods: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            event:       { type: 'string' },
+            date:        { type: 'string' },
+            observation: { type: 'string' },
+          },
+          required: ['event', 'date', 'observation'],
+        },
+      },
+    },
+    required: ['insuredStatus', 'gracePeriods'],
+  };
+}
+```
+
+The schema **must exactly match** the corresponding `*Interface` file under `interface/`. If the interface has key `insuredStatus: boolean`, the schema must have `insuredStatus: { type: 'boolean' }`.
+
+**Rules:**
+
+- ✅ JSON schema is defined in `AnalysisProcessorService` as a private `get{Feature}JsonSchema()` method
+- ✅ Schema keys and types must match the `*Interface` file exactly
+- ✅ Use `required: [...]` in the schema so the AI is forced to return all mandatory fields
+- ✅ Prompt text describes only the analysis instructions (no JSON structure)
+- ✅ Seeder prompt is kept clear and concise — no JSON examples or schema
+- ❌ NO JSON structure in prompts or seeders — the prompt **NEVER** mentions field names, JSON objects, or example values
+- ❌ NO mismatch between schema keys and interface fields
+
+---
+
+### 13. Seeder Completeness Rules ⚠️ MANDATORY
+
+**RULE 1 — Seed ALL enum values, not just the one that triggered an error.**
+
+When a `PaymentPlanPaidResourceIaConfigNotFoundError` (or similar) occurs for one resource type, always check whether **all** other values of the same enum family are also seeded. A missing entry for one type strongly implies other types are missing too.
+
+**RULE 2 — Time Accelerators are generic resource types shared across features.**
+
+`TIME_ACCELERATOR_*` resource types (e.g. `TIME_ACCELERATOR_RURAL_TIME_ANALYSIS`, `TIME_ACCELERATOR_MILITARY_SERVICE_ANALYSIS`) are **generic** and already seeded once for the whole platform. When implementing a new analysis feature that uses time accelerators, do **NOT** create new `PaymentPlanPaidResource` seed entries for them — they reuse the existing ones.
+
+Only the analysis-specific types (e.g. `RURAL_OR_HYBRID_RETIREMENT_REJECTION_FIRST_ANALYSIS`, `RURAL_OR_HYBRID_RETIREMENT_REJECTION_COMPLETE_ANALYSIS`, `RURAL_OR_HYBRID_RETIREMENT_REJECTION_SIMPLIFIED_ANALYSIS`) need their own seed entries.
+
+**RULE 3 — Seeder prompt never mentions JSON.**
+
+This is a duplicate of Rule 12 above and applies specifically to the `payment-plan-paid-resource-ia-config.seeder.ts` file. The `prompt` field stored in the DB is for **instructions only**. The JSON schema shape is exclusively the responsibility of the `get*JsonSchema()` method in `AnalysisProcessorService`.
+
+---
+
 ## Testing Guidelines
 
 ### Test Structure
@@ -3053,3 +3429,83 @@ export class MyTypeormEntity extends BaseBuildableObject {
 ---
 
 **Remember**: Clean Architecture is about separation of concerns and dependency direction. The domain is the heart of your application, and everything else supports it.
+
+---
+
+## Novo tipo de análise: checklist obrigatório para aparecer na listagem ⚠️
+
+Ao criar um **novo tipo de análise** (novo módulo em `analysis-tool/module/`), são necessários **4 passos obrigatórios** para que ele apareça corretamente na listagem `/customer/analysis-tool/analysis-tool-record`.
+
+### 1. Enum `AnalysisToolRecordTypeEnum`
+Adicione o novo tipo em:
+`src/module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum.ts`
+
+```typescript
+MY_NEW_ANALYSIS = 'meu_novo_tipo',
+```
+
+---
+
+### 2. Relação na entidade `AnalysisToolRecordTypeormEntity`
+Adicione o campo `@OneToOne` correspondente em:
+`src/infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity.ts`
+
+```typescript
+@OneToOne(() => MyNewAnalysisTypeormEntity, { nullable: true, eager: false })
+@JoinColumn({ name: 'my_new_analysis_id' })
+public myNewAnalysis?: MyNewAnalysisTypeormEntity | null;
+```
+
+---
+
+### 3. `atLeastOneRelationNotNull` no query repository ❌ PONTO MAIS ESQUECIDO
+Arquivo: `src/infra/database/implementation/typeorm/repository/analysis-tool-record/analysis-tool-record.typeorm.query.repository.ts`
+
+Existem **dois** arrays `atLeastOneRelationNotNull` no arquivo (um no método `listByOrganizationIdAndAuthIdentityId`, outro no método de estatísticas por ano). Adicione a nova relação em **ambos**:
+
+```typescript
+{ myNewAnalysis: Not(IsNull()) },
+```
+
+Também adicione a relação no método `getEntityRelationsKey()` no mesmo arquivo:
+
+```typescript
+'myNewAnalysis',
+```
+
+> **Por que isso existe?** A query de listagem exige que o registro tenha ao menos uma relação não-nula para ser retornado. Sem isso, registros do novo tipo são silenciosamente omitidos da listagem — o BD tem os dados, mas a query não os retorna.
+
+---
+
+### 4. Chain de `analysis` no use case de listagem ❌ PONTO MAIS ESQUECIDO
+Arquivo: `src/module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case.ts`
+
+Adicione a nova análise na chain de `??` da variável `analysis`:
+
+```typescript
+const analysis =
+  analysisToolRecord.cnisFastAnalysis ??
+  // ... demais tipos ...
+  analysisToolRecord.myNewAnalysis; // ← adicionar aqui
+```
+
+> **Se o tipo tiver campo de ID customizado** (como `myNewAnalysisId` em vez de `.id`), adicione nos casos especiais de `analysisId` logo abaixo:
+> ```typescript
+> const analysisId =
+>   analysis?.id ??
+>   analysisToolRecord.myNewAnalysis?.myNewAnalysisId ?? // ← caso especial
+>   null;
+> ```
+
+> **Por que isso existe?** Mesmo que a query retorne o registro, o use case descarta qualquer item onde `analysisId === null`. Se a análise não estiver na chain, o `analysisId` nunca é preenchido e o registro é filtrado antes de chegar ao frontend.
+
+---
+
+### Resumo rápido
+
+| Arquivo | O que fazer |
+|--------|-------------|
+| `enum/analysis-tool-record-type.enum.ts` | Adicionar valor do enum |
+| `schema/entity/analysis-tool-record.typeorm.entity.ts` | Adicionar `@OneToOne` |
+| `repository/analysis-tool-record/...query.repository.ts` | Adicionar em **ambos** os `atLeastOneRelationNotNull` e em `getEntityRelationsKey()` |
+| `use-case/list-analysis-tool-record.use-case.ts` | Adicionar na chain `analysis ??` |
