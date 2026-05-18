@@ -4,12 +4,12 @@ import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/t
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
+import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { InterviewFormCommandRepositoryGateway } from '@module/customer/analysis-tool/module/interview-form/domain/repository/interview-form/command/interview-form.command.repository.gateway';
 import { InterviewFormQueryRepositoryGateway } from '@module/customer/analysis-tool/module/interview-form/domain/repository/interview-form/query/interview-form.query.repository.gateway';
 import { InterviewFormEntity } from '@module/customer/analysis-tool/module/interview-form/domain/schema/entity/interview-form/interview-form.entity';
 import { UpsertInterviewFormRequestDto } from '@module/customer/analysis-tool/module/interview-form/dto/request/upsert-interview-form.request.dto';
 import { UpsertInterviewFormResponseDto } from '@module/customer/analysis-tool/module/interview-form/dto/response/upsert-interview-form.response.dto';
-import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
