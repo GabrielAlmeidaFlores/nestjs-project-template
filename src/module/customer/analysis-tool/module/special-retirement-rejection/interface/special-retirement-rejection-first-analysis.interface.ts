@@ -30,7 +30,7 @@ export interface SpecialRetirementRejectionFirstAnalysisEarningsHistoryInterface
 export interface SpecialRetirementRejectionFirstAnalysisWorkPeriodInterface {
   bondOrigin: string;
   startDate: string;
-  endDate: string;
+  endDate?: string;
   category: string;
   pendencyReason: SpecialRetirementRejectionWorkPeriodPendencyReasonEnum[];
   periodConsideration: string;

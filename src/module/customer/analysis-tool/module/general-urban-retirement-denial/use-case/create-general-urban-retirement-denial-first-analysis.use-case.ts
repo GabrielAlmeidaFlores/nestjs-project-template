@@ -255,9 +255,11 @@ export class CreateGeneralUrbanRetirementDenialFirstAnalysisUseCase {
       return GeneralUrbanRetirementDenialFirstAnalysisPeriodModel.build({
         ...(origemDoVinculo.length > 0 && { bondOrigin: origemDoVinculo }),
         startDate: info.dataInicio ? this.formatDate(info.dataInicio) : '',
-        ...(info.dataFim !== undefined && {
-          endDate: this.formatDate(info.dataFim),
-        }),
+        ...(info.dataFim !== undefined &&
+          reasonPendency !==
+            GeneralUrbanRetirementDenialPeriodPendencyReasonEnum.LEAVE_DATE && {
+            endDate: this.formatDate(info.dataFim),
+          }),
         workType,
         competenceBelowTheMinimum,
         contributionAverage: new DecimalValue(contributionAverage),
