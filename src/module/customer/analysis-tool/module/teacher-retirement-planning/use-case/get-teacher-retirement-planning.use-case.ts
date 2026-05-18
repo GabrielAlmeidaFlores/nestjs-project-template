@@ -110,11 +110,21 @@ export class GetTeacherRetirementPlanningUseCase {
             period.items.map(async (item) =>
               GetTeacherRetirementPlanningPeriodItemResponseDto.build({
                 startDate: item.startDate,
-                endDate: item.endDate,
-                institutionName: item.institutionName,
-                institutionType: item.institutionType,
-                educationLevel: item.educationLevel,
-                rolePerformed: item.rolePerformed,
+                ...(item.endDate !== null && {
+                  endDate: item.endDate,
+                }),
+                ...(item.institutionName !== null && {
+                  institutionName: item.institutionName,
+                }),
+                ...(item.institutionType !== null && {
+                  institutionType: item.institutionType,
+                }),
+                ...(item.educationLevel !== null && {
+                  educationLevel: item.educationLevel,
+                }),
+                ...(item.rolePerformed !== null && {
+                  rolePerformed: item.rolePerformed,
+                }),
                 documents: await Promise.all(
                   item.documents.map(async (document) => {
                     const fileBuffer =

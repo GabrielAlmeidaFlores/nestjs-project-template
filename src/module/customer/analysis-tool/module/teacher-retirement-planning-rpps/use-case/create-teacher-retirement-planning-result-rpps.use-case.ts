@@ -256,7 +256,7 @@ export class CreateTeacherRetirementPlanningResultRppsUseCase {
     return new TeacherRetirementPlanningEntity({
       id: new TeacherRetirementPlanningId(planningEntity.id.toString()),
       federativeEntity: this.mapFederativeEntity(
-        planningEntity.federativeEntity,
+        planningEntity.federativeEntity as TeacherRetirementPlanningRppsFederativeEntityEnum,
       ),
       state: planningEntity.state,
       municipality: planningEntity.municipality,

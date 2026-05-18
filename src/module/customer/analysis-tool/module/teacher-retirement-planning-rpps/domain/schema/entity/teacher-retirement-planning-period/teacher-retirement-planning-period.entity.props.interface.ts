@@ -5,10 +5,10 @@ import type { TeacherRetirementPlanningRppsPeriodId } from '@module/customer/ana
 
 export interface TeacherRetirementPlanningRppsPeriodEntityPropsInterface extends BaseEntityPropsInterface<TeacherRetirementPlanningRppsPeriodId> {
   startDate: Date;
-  endDate: Date;
-  positionName: string;
-  careerName: string;
-  serviceType: TeacherRetirementPlanningRppsPeriodServiceTypeEnum;
-  department: string;
+  endDate?: Date | null;
+  positionName?: string | null;
+  careerName?: string | null;
+  serviceType?: TeacherRetirementPlanningRppsPeriodServiceTypeEnum | null;
+  department?: string | null;
   teacherRetirementPlanning: TeacherRetirementPlanningRppsEntity;
 }

@@ -89,7 +89,7 @@ export class UpdateTeacherRetirementPlanningRppsUseCase {
 
     const teacherRetirementPlanning = new TeacherRetirementPlanningRppsEntity({
       id: currentPlanning.id,
-      federativeEntity: dto.federativeEntity,
+      federativeEntity: dto.federativeEntity ?? null,
       state: dto.state !== undefined ? (dto.state as StateCodeEnum) : null,
       municipality: dto.municipality ?? null,
       analysisName: dto.analysisName ?? null,
