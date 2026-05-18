@@ -1,0 +1,66 @@
+import type { SpecialRetirementRejectionWorkPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/special-retirement-rejection/domain/schema/entity/special-retirement-rejection-work-period/enum/special-retirement-rejection-work-period-pendency-reason.enum';
+
+export interface SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodInterface {
+  recognized: boolean;
+  company: string;
+  cnpj: string;
+  role: string;
+  supportingDocument: string;
+  recordedInCnis: boolean;
+  remunerationRecordedInCnis: boolean;
+  justification: string;
+  observations: string;
+  lawyerObservation: string;
+  exposureFrequency: string;
+  informationSource: string;
+  hazardousAgents: string;
+  epiEficaz: boolean;
+}
+
+export interface SpecialRetirementRejectionFirstAnalysisEarningsHistoryInterface {
+  competence?: string;
+  remuneration?: string;
+  indicators?: string;
+  paymentDate?: string;
+  contribution?: string;
+  contributionSalary?: string;
+  competenceBelowTheMinimum?: boolean;
+}
+
+export interface SpecialRetirementRejectionFirstAnalysisWorkPeriodInterface {
+  bondOrigin: string;
+  startDate: string;
+  endDate?: string;
+  category: string;
+  pendencyReason: SpecialRetirementRejectionWorkPeriodPendencyReasonEnum[];
+  periodConsideration: string;
+  contributionAverage: string;
+  status: string;
+  gracePeriod: string;
+  activityType: string;
+  earningsHistory: SpecialRetirementRejectionFirstAnalysisEarningsHistoryInterface[];
+  specialPeriods: SpecialRetirementRejectionFirstAnalysisWorkSpecialPeriodInterface[];
+}
+
+export interface SpecialRetirementRejectionFirstAnalysisInterface {
+  decisionAnalysis: string;
+  specialTimeWithoutResolvingPendencies: string;
+  specialTimeResolvingPendencies: string;
+  specialTimeWithAccelerators: string;
+  commonTimeWithoutResolvingPendencies: string;
+  commonTimeResolvingPendencies: string;
+  commonTimeWithAccelerators: string;
+  totalTimeWithoutResolvingPendencies: string;
+  totalTimeResolvingPendencies: string;
+  totalTimeWithAccelerators: string;
+  specialGracePeriodWithoutResolvingPendencies: string;
+  specialGracePeriodResolvingPendencies: string;
+  specialGracePeriodWithAccelerators: string;
+  commonGracePeriodWithoutResolvingPendencies: string;
+  commonGracePeriodResolvingPendencies: string;
+  commonGracePeriodWithAccelerators: string;
+  totalGracePeriodWithoutResolvingPendencies: string;
+  totalGracePeriodResolvingPendencies: string;
+  totalGracePeriodWithAccelerators: string;
+  workPeriods: SpecialRetirementRejectionFirstAnalysisWorkPeriodInterface[];
+}

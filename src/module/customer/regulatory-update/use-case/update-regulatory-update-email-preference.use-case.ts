@@ -44,6 +44,8 @@ export class UpdateRegulatoryUpdateEmailPreferenceUseCase {
       ...(existing && { id: existing.id }),
       customerId: customer.id,
       emailEnabled: dto.emailEnabled,
+      sendFrequency: dto.sendFrequency ?? null,
+      sendDays: dto.sendDays ?? null,
     });
 
     const transaction = await this.baseTransactionRepositoryGateway.execute(
