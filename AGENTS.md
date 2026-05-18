@@ -578,53 +578,13 @@ export class AnalysisTypeormEntity extends BaseTypeormEntity {
 **Rules**:
 
 - ✅ Implement gateway interfaces
-- ✅ Use TypeORM Repository
+- ✅ Use TypeORM Repository (`find`, `findOne`, `findAndCount`, `count`)
 - ✅ Use AutoMapper to map TypeORM ↔ Domain entities
 - ✅ Handle database-specific logic
 - ❌ NO business logic
 - ❌ NO direct entity exposure to use cases
-- ❌ **NO `QueryBuilder` / `createQueryBuilder()`** — STRICTLY FORBIDDEN
-
-#### ⚠️ CRITICAL: QueryBuilder is Prohibited
-
-**NEVER use `createQueryBuilder()`, `QueryBuilder`, `getRawAndEntities()`, `getRawMany()`, or any other QueryBuilder API.**
-
-Use the TypeORM `Repository` API methods exclusively:
-- `repo.find(options)` — list with `FindManyOptions`
-- `repo.findOne(options)` — single result with `FindOneOptions`
-- `repo.save(entity)` — insert/update via base command repository
-- `repo.update(criteria, data)` — update by criteria
-- `repo.softDelete(criteria)` — soft delete by criteria
-- `repo.count(options)` — count
-
-**Batch soft delete (replaces QueryBuilder `.softDelete().where(...)`):**
-
-```typescript
-// ❌ WRONG — QueryBuilder soft delete
-return async (executor: unknown) => {
-  const manager = executor as EntityManager;
-  await manager
-    .getRepository(ChildTypeormEntity)
-    .createQueryBuilder()
-    .softDelete()
-    .where('parent_id = :id', { id: parentId.toString() })
-    .execute();
-};
-
-// ✅ CORRECT — Repository API soft delete by relation
-return async (executor: unknown) => {
-  const manager = executor as EntityManager;
-  await manager
-    .getRepository(ChildTypeormEntity)
-    .softDelete({ parent: { id: parentId.toString() } });
-};
-```
-
-**Why QueryBuilder is prohibited:**
-1. **Readability**: Repository API is declarative and easier to understand
-2. **Type safety**: `FindOptionsWhere` is fully typed; QueryBuilder strings are not
-3. **Consistency**: One pattern throughout the entire codebase
-4. **Maintenance**: No raw SQL-like strings that can silently break on renames
+- ❌ **NO `createQueryBuilder` / QueryBuilder** — use the TypeORM `find`/`findAndCount`/`findOne` API. QueryBuilder is only acceptable in extreme edge cases where the ORM API genuinely cannot express the query (e.g. complex CTEs). Document clearly why if ever used.
+- ❌ **Never use `createQueryBuilder` to work around soft-delete on relations** — use the two-step pattern instead: first `findAndCount` with `select: { id: true }` (no `withDeleted`) to paginate non-deleted main records, then `find({ where: { id: In(ids) }, withDeleted: true, relations: {...} })` to load full data including soft-deleted relations.
 
 **Example**:
 
