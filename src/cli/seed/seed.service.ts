@@ -4,6 +4,7 @@ import { SeederInterface } from '@cli/seed/interface/seeder.interface';
 import { AdminSeeder } from '@cli/seed/seeder/admin.seeder';
 import { AffiliateCustomerConfigSeeder } from '@cli/seed/seeder/affiliate-customer-config.seeder';
 import { CidTenSeeder } from '@cli/seed/seeder/cid-ten.seeder';
+import { CreditPackSeeder } from '@cli/seed/seeder/credit-pack.seeder';
 import { CustomerTermsSeeder } from '@cli/seed/seeder/customer-terms.seeder';
 import { OrganizationCustomizationDocumentFooterTemplateSeeder } from '@cli/seed/seeder/organization-customization-document-footer-template.seeder';
 import { OrganizationCustomizationDocumentHeaderTemplateSeeder } from '@cli/seed/seeder/organization-customization-document-header-template.seeder';
@@ -29,6 +30,7 @@ export class SeedService {
     private readonly paymentPlanPaidResourceSeeder: PaymentPlanPaidResourceSeeder,
     private readonly paymentPlanPaidResourceIaConfigSeeder: PaymentPlanPaidResourceIaConfigSeeder,
     private readonly paymentPlanSeeder: PaymentPlanSeeder,
+    private readonly creditPackSeeder: CreditPackSeeder,
     private readonly organizationCustomizationDocumentHeaderTemplateSeeder: OrganizationCustomizationDocumentHeaderTemplateSeeder,
     private readonly organizationCustomizationDocumentFooterTemplateSeeder: OrganizationCustomizationDocumentFooterTemplateSeeder,
     private readonly regulatoryUpdateMonitoredSourceSeeder: RegulatoryUpdateMonitoredSourceSeeder,
@@ -42,6 +44,7 @@ export class SeedService {
       this.paymentPlanPaidResourceSeeder,
       this.paymentPlanPaidResourceIaConfigSeeder,
       this.paymentPlanSeeder,
+      this.creditPackSeeder,
       this.cidTenSeeder,
       this.organizationCustomizationDocumentHeaderTemplateSeeder,
       this.organizationCustomizationDocumentFooterTemplateSeeder,
@@ -79,6 +82,7 @@ export class SeedService {
         await this.baseTransactionRepositoryGateway.execute(transactions);
 
       await transaction.commit();
+      transactions.length = 0;
     }
   }
 }

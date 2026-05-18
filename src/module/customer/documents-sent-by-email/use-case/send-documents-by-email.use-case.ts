@@ -238,6 +238,18 @@ export class SendDocumentsByEmailUseCase {
               AnalysisToolRecordNotFoundError,
             );
           }
+          case AnalysisToolRecordTypeEnum.BPC_DISABILITY_DENIAL: {
+            if (!baseRecord.bpcDisabilityDenial?.id) {
+              throw new AnalysisToolRecordNotFoundError();
+            }
+
+            return await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByBpcDisabilityDenialIdAndOrganizationIdAndAuthIdentityIdOrFail(
+              baseRecord.bpcDisabilityDenial.id,
+              organizationSessionData.organizationId,
+              sessionData.authIdentityId,
+              AnalysisToolRecordNotFoundError,
+            );
+          }
           default:
             return baseRecord;
         }
@@ -450,6 +462,13 @@ export class SendDocumentsByEmailUseCase {
           record.insuranceQualityAnalysis?.insuranceQualityAnalysisResult;
 
         return result?.analysisSummary ?? null;
+      }
+      case AnalysisToolRecordTypeEnum.BPC_DISABILITY_DENIAL: {
+        const result = record.bpcDisabilityDenial?.bpcDisabilityDenialResult;
+
+        return isSimplified
+          ? result?.simplifiedAnalysis
+          : (result?.completeAnalysisDownload ?? result?.completeAnalysis);
       }
       default:
         return null;
