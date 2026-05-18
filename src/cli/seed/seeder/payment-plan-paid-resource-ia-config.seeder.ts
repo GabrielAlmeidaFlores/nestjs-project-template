@@ -14232,6 +14232,10 @@ Gere uma análise estruturada em markdown com os seguintes tópicos:
 [Para cada período, uma subseção com análise específica]
 
 #### Período [X]: [Data início] a [Data fim]
+| Tipo de documento | Ano emissão documento | Pertencente a quem o documento | Finalidade probatória rural |
+| --- | --- | --- | --- |
+[Liste todos os documentos anexados ao período nesta tabela]
+
 - **Cobertura Documental:** 
 - **Força Probatória:**
 - **Avaliação:**
@@ -14260,7 +14264,9 @@ Gere uma análise estruturada em markdown com os seguintes tópicos:
 - Considere Lei 8.213/91, Decreto 3.048/99 e IN INSS 128/2022
 - Avalie possibilidade de economia familiar
 - Seja realista e criterioso, mas não excessivamente pessimista
-- Priorize orientações práticas e acionáveis`,
+- Priorize orientações práticas e acionáveis
+- A tabela de documentos rurais anexados por período é obrigatória e deve aparecer imediatamente após cada subtítulo de período
+- Se algum dado da tabela não puder ser identificado com segurança, escreva "Não identificado"`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
