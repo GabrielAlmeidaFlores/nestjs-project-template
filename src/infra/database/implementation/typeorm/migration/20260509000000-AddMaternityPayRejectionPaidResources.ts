@@ -250,13 +250,21 @@ export class AddMaternityPayRejectionPaidResources20260509000000 implements Migr
         [resource.id, resource.resource, resource.creditCost, resource.title, resource.description],
       );
 
+      // Fetch the actual id after upsert — the row may already exist with a different id
+      // (e.g. inserted via seeder before this migration was applied)
+      const rows: Array<{ id: string }> = await queryRunner.query(
+        `SELECT \`id\` FROM \`payment_plan_paid_resource\` WHERE \`resource\` = ?`,
+        [resource.resource],
+      );
+      const actualId = rows[0]?.id ?? resource.id;
+
       await queryRunner.query(
         `INSERT INTO \`payment_plan_paid_resource_ia_config\` (\`id\`, \`created_at\`, \`updated_at\`, \`deleted_at\`, \`prompt\`, \`payment_plan_paid_resource_id\`)
          VALUES (UUID(), CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), NULL, ?, ?)
          ON DUPLICATE KEY UPDATE
            \`prompt\` = VALUES(\`prompt\`),
            \`updated_at\` = CURRENT_TIMESTAMP(6)`,
-        [resource.prompt, resource.id],
+        [resource.prompt, actualId],
       );
     }
   }

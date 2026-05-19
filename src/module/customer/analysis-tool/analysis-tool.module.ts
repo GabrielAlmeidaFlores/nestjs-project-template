@@ -34,6 +34,7 @@ import { GeneralUrbanRetirementDenialModule } from '@module/customer/analysis-to
 import { GeneralUrbanRetirementGrantModule } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/general-urban-retirement-grant.module';
 import { GeneralUrbanRetirementReviewModule } from '@module/customer/analysis-tool/module/general-urban-retirement-review/general-urban-retirement-review.module';
 import { InsuranceQualityAnalysisModule } from '@module/customer/analysis-tool/module/insurance-quality-analysis/insurance-quality-analysis.module';
+import { InterviewFormModule } from '@module/customer/analysis-tool/module/interview-form/interview-form.module';
 import { JudicialCaseAnalysisModule } from '@module/customer/analysis-tool/module/judicial-case-analysis/judicial-case-analysis.module';
 import { LegalPleadingModule } from '@module/customer/analysis-tool/module/legal-pleading/legal-pleading.module';
 import { MaternityPayGrantModule } from '@module/customer/analysis-tool/module/maternity-pay-grant/maternity-pay-grant.module';
@@ -146,6 +147,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     MaternityPayRejectionModule,
     RetirementPermanentDisabilityRejectionModule,
     RetirementPermanentDisabilityRevisionModule,
+    InterviewFormModule,
   ],
   controllers: [AnalysisToolController],
   providers: [
