@@ -18,6 +18,7 @@ import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/mod
 import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
 import { RetirementPlanningRppsRemunerationEntity } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-remuneration/retirement-planning-rpps-remuneration.entity';
 import { RetirementPlanningRppsRemunerationId } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-remuneration/value-object/retirement-planning-rpps-remuneration-id.value-object';
+import { RetirementPlanningRppsRemunerationCalculationEntity } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-remuneration-calculation/retirement-planning-rpps-remuneration-calculation.entity';
 import { UpdateRetirementPlanningRppsRemunerationRequestDto } from '@module/customer/analysis-tool/module/retirement-planning-rpps/dto/request/update-retirement-planning-rpps-remuneration.request.dto';
 import { UpdateRetirementPlanningRppsRemunerationResponseDto } from '@module/customer/analysis-tool/module/retirement-planning-rpps/dto/response/update-retirement-planning-rpps-remuneration.response.dto';
 import { RetirementPlanningRppsNotFoundError } from '@module/customer/analysis-tool/module/retirement-planning-rpps/error/retirement-planning-rpps-not-found.error';
@@ -140,14 +141,34 @@ export class UpdateRetirementPlanningRppsRemunerationUseCase {
       this.remunerationCalculatorGateway.calculate(
         dto.remunerations.map((remunerationDto) =>
           RemunerationDataInputModel.build({
+            remunerationDate: new Date(
+              remunerationDto.remunerationDate.getFullYear(),
+              remunerationDto.remunerationDate.getMonth(),
+              1,
+            ),
             remunerationAmount: remunerationDto.remunerationAmount,
           }),
         ),
       );
 
+    const retirementPlanningRppsRemunerationCalculationEntity =
+      new RetirementPlanningRppsRemunerationCalculationEntity({
+        totalCompetencies:
+          retirementPlanningRppsRemunerationCalculation.totalCompetencies,
+        totalAmount: retirementPlanningRppsRemunerationCalculation.totalAmount,
+        averageAmount:
+          retirementPlanningRppsRemunerationCalculation.averageAmount,
+        topEightyPercentCompetencies:
+          retirementPlanningRppsRemunerationCalculation.topEightyPercentCompetencies,
+        bottomTwentyPercentCompetencies:
+          retirementPlanningRppsRemunerationCalculation.bottomTwentyPercentCompetencies,
+        topEightyPercentAverageAmount:
+          retirementPlanningRppsRemunerationCalculation.topEightyPercentAverageAmount,
+      });
+
     transactionOperations.push(
       this.retirementPlanningRppsRemunerationCalculationCommandRepositoryGateway.createRetirementPlanningRppsRemunerationCalculation(
-        retirementPlanningRppsRemunerationCalculation,
+        retirementPlanningRppsRemunerationCalculationEntity,
       ),
     );
 
@@ -156,7 +177,8 @@ export class UpdateRetirementPlanningRppsRemunerationUseCase {
         id: retirementPlanningRpps.id,
         careerStartDate: retirementPlanningRpps.careerStartDate,
         publicServiceStartDate: retirementPlanningRpps.publicServiceStartDate,
-        retirementPlanningRppsRemunerationCalculation,
+        retirementPlanningRppsRemunerationCalculation:
+          retirementPlanningRppsRemunerationCalculationEntity,
       });
 
     transactionOperations.push(

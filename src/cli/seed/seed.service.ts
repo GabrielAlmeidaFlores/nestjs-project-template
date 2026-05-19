@@ -18,6 +18,7 @@ import { TransactionType } from '@core/domain/repository/base/transaction/type/t
 @Injectable()
 export class SeedService {
   protected readonly _type = SeedService.name;
+  private readonly batchSize: number;
 
   public constructor(
     @Inject(BaseTransactionRepositoryGateway)
@@ -34,9 +35,9 @@ export class SeedService {
     private readonly organizationCustomizationDocumentHeaderTemplateSeeder: OrganizationCustomizationDocumentHeaderTemplateSeeder,
     private readonly organizationCustomizationDocumentFooterTemplateSeeder: OrganizationCustomizationDocumentFooterTemplateSeeder,
     private readonly regulatoryUpdateMonitoredSourceSeeder: RegulatoryUpdateMonitoredSourceSeeder,
-  ) {}
-
-  private readonly batchSize = 50;
+  ) {
+    this.batchSize = 50;
+  }
 
   public async seed(): Promise<void> {
     const seeders: Array<SeederInterface> = [

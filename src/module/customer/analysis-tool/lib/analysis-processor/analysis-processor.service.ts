@@ -582,8 +582,6 @@ Análise processada do CNIS:
                         'employmentLinkStartDate',
                         'employmentLinkEndDate',
                         'employmentLinkSupportingDocument',
-                        'employmentLinkPresentInCNIS',
-                        'employmentLinkEarningsInCNIS',
                         'harmfulAgentsHasAny',
                         'harmfulAgentsExposureFrequency',
                         'harmfulAgentsInformationSource',

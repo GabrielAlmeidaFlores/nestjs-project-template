@@ -2,6 +2,8 @@ import { Injectable, Inject } from '@nestjs/common';
 
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { RemunerationDataInputModel } from '@module/customer/analysis-tool/lib/remuneration-calculator/model/input/remuneration-data.input.model';
+import { RemunerationCalculatorGateway } from '@module/customer/analysis-tool/lib/remuneration-calculator/remuneration-calculator.gateway';
 import { RetirementPlanningRppsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps/query/retirement-planning-rpps.query.repository.gateway';
 import { ListRetirementPlanningRppsRemunerationQueryParam } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps-remuneration/query/param/list-retirement-planning-rpps-remuneration.query.param';
 import { RetirementPlanningRppsRemunerationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps-remuneration/retirement-planning-rpps-remuneration.query.repository.gateway';
@@ -20,6 +22,8 @@ export class ListRetirementPlanningRppsRemunerationUseCase {
   public constructor(
     @Inject(RetirementPlanningRppsQueryRepositoryGateway)
     protected readonly retirementPlanningRppsQueryRepositoryGateway: RetirementPlanningRppsQueryRepositoryGateway,
+    @Inject(RemunerationCalculatorGateway)
+    protected readonly remunerationCalculatorGateway: RemunerationCalculatorGateway,
     @Inject(OrganizationMemberQueryRepositoryGateway)
     protected readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(RetirementPlanningRppsRemunerationQueryRepositoryGateway)
@@ -56,12 +60,22 @@ export class ListRetirementPlanningRppsRemunerationUseCase {
         new ListRetirementPlanningRppsRemunerationQueryParam(dto),
       );
 
-    const resource = remunerationList.resource.map((remuneration) =>
-      GetRetirementPlanningRppsRemunerationResponseDto.build({
+    const resource = remunerationList.resource.map((remuneration) => {
+      const remunerationDetail =
+        this.remunerationCalculatorGateway.calculateRemuneration(
+          RemunerationDataInputModel.build({
+            remunerationDate: remuneration.remunerationDate,
+            remunerationAmount: remuneration.remunerationAmount,
+          }),
+        );
+
+      return GetRetirementPlanningRppsRemunerationResponseDto.build({
         remunerationDate: remuneration.remunerationDate,
         remunerationAmount: remuneration.remunerationAmount,
-      }),
-    );
+        correctionFactor: remunerationDetail.correctionFactor,
+        updatedRemunerationAmount: remunerationDetail.updatedRemunerationAmount,
+      });
+    });
 
     return ListRetirementPlanningRppsRemunerationResponseDto.build({
       ...remunerationList,
