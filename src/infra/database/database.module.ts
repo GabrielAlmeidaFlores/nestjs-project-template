@@ -209,6 +209,8 @@ import { ElderlyBpcRejectionFamiliarGroupDocumentTypeormCommandRepository } from
 import { ElderlyBpcRejectionInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection-inss-benefit/elderly-bpc-rejection-inss-benefit.typeorm.command.repository';
 import { ElderlyBpcRejectionLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection-legal-proceeding/elderly-bpc-rejection-legal-proceeding.typeorm.command.repository';
 import { ElderlyBpcRejectionResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/elderly-bpc-rejection-result/elderly-bpc-rejection-result.typeorm.command.repository';
+import { FeeContractGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/fee-contract-generator-analysis-result/fee-contract-generator-analysis-result.typeorm.command.repository';
+import { FeeContractGeneratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/fee-contract-generator-analysis-result/fee-contract-generator-analysis-result.typeorm.query.repository';
 import { FullOpinionGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/full-opinion-generator-analysis-result/full-opinion-generator-analysis-result.typeorm.command.repository';
 import { FullOpinionGeneratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/full-opinion-generator-analysis-result/full-opinion-generator-analysis-result.typeorm.query.repository';
 import { GeneralUrbanRetirementAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-analysis/general-urban-retirement-analysis.typeorm.command.repository';
@@ -277,6 +279,10 @@ import { InsuranceQualityAnalysisDocumentTypeormCommandRepository } from '@infra
 import { InsuranceQualityAnalysisInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis-inss-benefit/insurance-quality-analysis-inss-benefit.typeorm.command.repository';
 import { InsuranceQualityAnalysisLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis-legal-proceeding/insurance-quality-analysis-legal-proceeding.typeorm.command.repository';
 import { InsuranceQualityAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis-result/insurance-quality-analysis-result.typeorm.command.repository';
+import { InterviewFormTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/interview-form/interview-form.typeorm.command.repository';
+import { InterviewFormTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/interview-form/interview-form.typeorm.query.repository';
+import { JefWaiverDeclarationGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/jef-waiver-declaration-generator-analysis-result/jef-waiver-declaration-generator-analysis-result.typeorm.command.repository';
+import { JefWaiverDeclarationGeneratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/jef-waiver-declaration-generator-analysis-result/jef-waiver-declaration-generator-analysis-result.typeorm.query.repository';
 import { JudicialCaseAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/judicial-case-analysis/judicial-case-analysis.typeorm.command.repository';
 import { JudicialCaseAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/judicial-case-analysis/judicial-case-analysis.typeorm.query.repository';
 import { JudicialCaseAnalysisBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/judicial-case-analysis-benefit/judicial-case-analysis-benefit.typeorm.command.repository';
@@ -388,6 +394,10 @@ import { PermanentIncapacityBenefitTerminatedResultTypeormCommandRepository } fr
 import { PermanentIncapacityBenefitTerminatedWorkPeriodsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/permanent-incapacity-benefit-terminated-work-periods/permanent-incapacity-benefit-terminated-work-periods.typeorm.command.repository';
 import { PermanentIncapacityBenefitTerminatedWorkPeriodsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/permanent-incapacity-benefit-terminated-work-periods/permanent-incapacity-benefit-terminated-work-periods.typeorm.query.repository';
 import { PermanentIncapacityBenefitTerminatedWorkPeriodsEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/permanent-incapacity-benefit-terminated-work-periods-earnings-history/permanent-incapacity-benefit-terminated-work-periods-earnings-history.typeorm.command.repository';
+import { PovertyDeclarationGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/poverty-declaration-generator-analysis-result/poverty-declaration-generator-analysis-result.typeorm.command.repository';
+import { PovertyDeclarationGeneratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/poverty-declaration-generator-analysis-result/poverty-declaration-generator-analysis-result.typeorm.query.repository';
+import { PowerOfAttorneyGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/power-of-attorney-generator-analysis-result/power-of-attorney-generator-analysis-result.typeorm.command.repository';
+import { PowerOfAttorneyGeneratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/power-of-attorney-generator-analysis-result/power-of-attorney-generator-analysis-result.typeorm.query.repository';
 import { RegulatoryUpdateTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/regulatory-update/regulatory-update.typeorm.command.repository';
 import { RegulatoryUpdateTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/regulatory-update/regulatory-update.typeorm.query.repository';
 import { RegulatoryUpdateEmailPreferenceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/regulatory-update-email-preference/regulatory-update-email-preference.typeorm.command.repository';
@@ -952,6 +962,8 @@ import { InsuranceQualityAnalysisDocumentCommandRepositoryGateway } from '@modul
 import { InsuranceQualityAnalysisInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis-inss-benefit/command/insurance-quality-analysis-inss-benefit.command.repository.gateway';
 import { InsuranceQualityAnalysisLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis-legal-proceeding/command/insurance-quality-analysis-legal-proceeding.command.repository.gateway';
 import { InsuranceQualityAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis-result/command/insurance-quality-analysis-result.command.repository.gateway';
+import { InterviewFormCommandRepositoryGateway } from '@module/customer/analysis-tool/module/interview-form/domain/repository/interview-form/command/interview-form.command.repository.gateway';
+import { InterviewFormQueryRepositoryGateway } from '@module/customer/analysis-tool/module/interview-form/domain/repository/interview-form/query/interview-form.query.repository.gateway';
 import { JudicialCaseAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/repository/judicial-case-analysis/command/judicial-case-analysis.command.repository.gateway';
 import { JudicialCaseAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/repository/judicial-case-analysis/query/judicial-case-analysis.query.repository.gateway';
 import { JudicialCaseAnalysisBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/repository/judicial-case-analysis-benefit/command/judicial-case-analysis-benefit.command.repository.gateway';
@@ -1306,10 +1318,18 @@ import { OrganizationCreditPackPurchaseCommandRepositoryGateway } from '@module/
 import { OrganizationCreditPackPurchaseQueryRepositoryGateway } from '@module/customer/credit-pack/domain/repository/organization-credit-pack-purchase/query/organization-credit-pack-purchase.query.repository.gateway';
 import { AdministrativeRequestGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/administrative-request/domain/repository/administrative-request-generator-analysis-result/command/administrative-request-generator.command.repository.gateway';
 import { AdministrativeRequestGeneratorQueryRepositoryGateway } from '@module/customer/documents-to-be-generated/module/administrative-request/domain/repository/administrative-request-generator-analysis-result/query/administrative-request-generator.query.repository.gateway';
+import { FeeContractGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/fee-contract/domain/repository/fee-contract-generator-analysis-result/command/fee-contract-generator.command.repository.gateway';
+import { FeeContractGeneratorQueryRepositoryGateway } from '@module/customer/documents-to-be-generated/module/fee-contract/domain/repository/fee-contract-generator-analysis-result/query/fee-contract-generator.query.repository.gateway';
 import { FullOpinionGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/full-opinion/domain/repository/full-opinion-generator-analysis-result/command/full-opinion-generator.command.repository.gateway';
 import { FullOpinionGeneratorQueryRepositoryGateway } from '@module/customer/documents-to-be-generated/module/full-opinion/domain/repository/full-opinion-generator-analysis-result/query/full-opinion-generator.query.repository.gateway';
 import { InitialPetitionGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/initial-petition/domain/repository/initial-petition-generator-analysis-result/command/initial-petition-generator.command.repository.gateway';
 import { InitialPetitionGeneratorQueryRepositoryGateway } from '@module/customer/documents-to-be-generated/module/initial-petition/domain/repository/initial-petition-generator-analysis-result/query/initial-petition-generator.query.repository.gateway';
+import { JefWaiverDeclarationGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/jef-waiver-declaration/domain/repository/jef-waiver-declaration-generator-analysis-result/command/jef-waiver-declaration-generator.command.repository.gateway';
+import { JefWaiverDeclarationGeneratorQueryRepositoryGateway } from '@module/customer/documents-to-be-generated/module/jef-waiver-declaration/domain/repository/jef-waiver-declaration-generator-analysis-result/query/jef-waiver-declaration-generator.query.repository.gateway';
+import { PovertyDeclarationGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/poverty-declaration/domain/repository/poverty-declaration-generator-analysis-result/command/poverty-declaration-generator.command.repository.gateway';
+import { PovertyDeclarationGeneratorQueryRepositoryGateway } from '@module/customer/documents-to-be-generated/module/poverty-declaration/domain/repository/poverty-declaration-generator-analysis-result/query/poverty-declaration-generator.query.repository.gateway';
+import { PowerOfAttorneyGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/power-of-attorney/domain/repository/power-of-attorney-generator-analysis-result/command/power-of-attorney-generator.command.repository.gateway';
+import { PowerOfAttorneyGeneratorQueryRepositoryGateway } from '@module/customer/documents-to-be-generated/module/power-of-attorney/domain/repository/power-of-attorney-generator-analysis-result/query/power-of-attorney-generator.query.repository.gateway';
 import { LegalProceedingDetailCommandRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/command/legal-proceeding-detail.command.repository.gateway';
 import { LegalProceedingDetailQueryRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/legal-proceeding-detail.query.repository.gateway';
 import { MiniAdvisorCommandRepositoryGateway } from '@module/customer/mini-advisor/domain/repository/mini-advisor/command/mini-advisor.command.repository.gateway';
@@ -1821,6 +1841,38 @@ const classProvider: ClassProvider[] = [
     useClass: InitialPetitionGeneratorTypeormQueryRepository,
   },
   {
+    provide: FeeContractGeneratorCommandRepositoryGateway,
+    useClass: FeeContractGeneratorTypeormCommandRepository,
+  },
+  {
+    provide: FeeContractGeneratorQueryRepositoryGateway,
+    useClass: FeeContractGeneratorTypeormQueryRepository,
+  },
+  {
+    provide: PowerOfAttorneyGeneratorCommandRepositoryGateway,
+    useClass: PowerOfAttorneyGeneratorTypeormCommandRepository,
+  },
+  {
+    provide: PowerOfAttorneyGeneratorQueryRepositoryGateway,
+    useClass: PowerOfAttorneyGeneratorTypeormQueryRepository,
+  },
+  {
+    provide: JefWaiverDeclarationGeneratorCommandRepositoryGateway,
+    useClass: JefWaiverDeclarationGeneratorTypeormCommandRepository,
+  },
+  {
+    provide: JefWaiverDeclarationGeneratorQueryRepositoryGateway,
+    useClass: JefWaiverDeclarationGeneratorTypeormQueryRepository,
+  },
+  {
+    provide: PovertyDeclarationGeneratorCommandRepositoryGateway,
+    useClass: PovertyDeclarationGeneratorTypeormCommandRepository,
+  },
+  {
+    provide: PovertyDeclarationGeneratorQueryRepositoryGateway,
+    useClass: PovertyDeclarationGeneratorTypeormQueryRepository,
+  },
+  {
     provide: AdministrativeRequestGeneratorCommandRepositoryGateway,
     useClass: AdministrativeRequestGeneratorTypeormCommandRepository,
   },
@@ -1951,6 +2003,14 @@ const classProvider: ClassProvider[] = [
   {
     provide: InsuranceQualityAnalysisLegalProceedingCommandRepositoryGateway,
     useClass: InsuranceQualityAnalysisLegalProceedingTypeormCommandRepository,
+  },
+  {
+    provide: InterviewFormCommandRepositoryGateway,
+    useClass: InterviewFormTypeormCommandRepository,
+  },
+  {
+    provide: InterviewFormQueryRepositoryGateway,
+    useClass: InterviewFormTypeormQueryRepository,
   },
   {
     provide: AnalysisToolClientCommandRepositoryGateway,
