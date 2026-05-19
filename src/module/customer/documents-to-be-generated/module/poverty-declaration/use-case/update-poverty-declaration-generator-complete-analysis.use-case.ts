@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 import { PovertyDeclarationGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/poverty-declaration/domain/repository/poverty-declaration-generator-analysis-result/command/poverty-declaration-generator.command.repository.gateway';
 import { PovertyDeclarationGeneratorQueryRepositoryGateway } from '@module/customer/documents-to-be-generated/module/poverty-declaration/domain/repository/poverty-declaration-generator-analysis-result/query/poverty-declaration-generator.query.repository.gateway';
 import { PovertyDeclarationGeneratorEntity } from '@module/customer/documents-to-be-generated/module/poverty-declaration/domain/schema/entity/poverty-declaration-generator-analysis-result/poverty-declaration-generator.entity';
@@ -18,8 +17,6 @@ export class UpdatePovertyDeclarationGeneratorCompleteAnalysisUseCase {
   public constructor(
     @Inject(PovertyDeclarationGeneratorQueryRepositoryGateway)
     private readonly povertyDeclarationGeneratorQueryRepositoryGateway: PovertyDeclarationGeneratorQueryRepositoryGateway,
-    @Inject(ExportDocumentGateway)
-    private readonly exportDocumentGateway: ExportDocumentGateway,
     @Inject(PovertyDeclarationGeneratorCommandRepositoryGateway)
     private readonly povertyDeclarationGeneratorCommandRepositoryGateway: PovertyDeclarationGeneratorCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -40,17 +37,9 @@ export class UpdatePovertyDeclarationGeneratorCompleteAnalysisUseCase {
       throw new PovertyDeclarationGeneratorDoesNotContainCompleteAnalysisError();
     }
 
-    const convertHtmlToMarkdown = this.exportDocumentGateway.convertHtmlToMarkdown(
-      dto.povertyDeclarationGeneratorCompleteAnalysis,
-    );
-
-    const convertMarkdownToHtml = await this.exportDocumentGateway.convertMarkdownToHtml(
-      convertHtmlToMarkdown,
-    );
-
     const updatedPovertyDeclarationGenerator = new PovertyDeclarationGeneratorEntity({
       ...povertyDeclarationGenerator,
-      povertyDeclarationGeneratorCompleteAnalysis: convertHtmlToMarkdown,
+      povertyDeclarationGeneratorCompleteAnalysis: dto.povertyDeclarationGeneratorCompleteAnalysis,
     });
 
     const povertyDeclarationGeneratorTransaction =
@@ -65,7 +54,7 @@ export class UpdatePovertyDeclarationGeneratorCompleteAnalysisUseCase {
     await transaction.commit();
 
     return UpdatePovertyDeclarationGeneratorCompleteAnalysisResponseDto.build({
-      povertyDeclarationGeneratorCompleteAnalysis: convertMarkdownToHtml,
+      povertyDeclarationGeneratorCompleteAnalysis: dto.povertyDeclarationGeneratorCompleteAnalysis,
     });
   }
 }

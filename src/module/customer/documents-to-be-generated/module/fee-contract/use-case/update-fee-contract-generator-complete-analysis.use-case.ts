@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 import { FeeContractGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/fee-contract/domain/repository/fee-contract-generator-analysis-result/command/fee-contract-generator.command.repository.gateway';
 import { FeeContractGeneratorQueryRepositoryGateway } from '@module/customer/documents-to-be-generated/module/fee-contract/domain/repository/fee-contract-generator-analysis-result/query/fee-contract-generator.query.repository.gateway';
 import { FeeContractGeneratorEntity } from '@module/customer/documents-to-be-generated/module/fee-contract/domain/schema/entity/fee-contract-generator-analysis-result/fee-contract-generator.entity';
@@ -18,8 +17,6 @@ export class UpdateFeeContractGeneratorCompleteAnalysisUseCase {
   public constructor(
     @Inject(FeeContractGeneratorQueryRepositoryGateway)
     private readonly feeContractGeneratorQueryRepositoryGateway: FeeContractGeneratorQueryRepositoryGateway,
-    @Inject(ExportDocumentGateway)
-    private readonly exportDocumentGateway: ExportDocumentGateway,
     @Inject(FeeContractGeneratorCommandRepositoryGateway)
     private readonly feeContractGeneratorCommandRepositoryGateway: FeeContractGeneratorCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -40,17 +37,9 @@ export class UpdateFeeContractGeneratorCompleteAnalysisUseCase {
       throw new FeeContractGeneratorDoesNotContainCompleteAnalysisError();
     }
 
-    const convertHtmlToMarkdown = this.exportDocumentGateway.convertHtmlToMarkdown(
-      dto.feeContractGeneratorCompleteAnalysis,
-    );
-
-    const convertMarkdownToHtml = await this.exportDocumentGateway.convertMarkdownToHtml(
-      convertHtmlToMarkdown,
-    );
-
     const updatedFeeContractGenerator = new FeeContractGeneratorEntity({
       ...feeContractGenerator,
-      feeContractGeneratorCompleteAnalysis: convertHtmlToMarkdown,
+      feeContractGeneratorCompleteAnalysis: dto.feeContractGeneratorCompleteAnalysis,
     });
 
     const feeContractGeneratorTransaction =
@@ -65,7 +54,7 @@ export class UpdateFeeContractGeneratorCompleteAnalysisUseCase {
     await transaction.commit();
 
     return UpdateFeeContractGeneratorCompleteAnalysisResponseDto.build({
-      feeContractGeneratorCompleteAnalysis: convertMarkdownToHtml,
+      feeContractGeneratorCompleteAnalysis: dto.feeContractGeneratorCompleteAnalysis,
     });
   }
 }

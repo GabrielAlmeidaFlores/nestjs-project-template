@@ -2451,7 +2451,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Geração automática de procuração ad judicia et extra com IA, personalizada com os dados do cliente, poderes específicos para atuação previdenciária e cláusulas de substabelecimento.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f'),
+      id: new PaymentPlanPaidResourceId('62920277-3f4f-4082-a6d6-cf3309cb1ad2'),
       resource: PaymentPlanPaidResourceTypeEnum.JEF_WAIVER_DECLARATION_GENERATOR_COMPLETE_ANALYSIS,
       creditCost: 2,
       title: 'DECLARAÇÃO DE RENÚNCIA AO EXCEDENTE DO JEF - GERAÇÃO',
@@ -2459,7 +2459,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Geração automática de declaração de renúncia ao excedente do valor da causa para adequação ao rito do Juizado Especial Federal (JEF), conforme Lei 10.259/2001, com dados do cliente.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a'),
+      id: new PaymentPlanPaidResourceId('fe647a60-7453-4ddb-9ec7-f691a222948d'),
       resource: PaymentPlanPaidResourceTypeEnum.POVERTY_DECLARATION_GENERATOR_COMPLETE_ANALYSIS,
       creditCost: 2,
       title: 'DECLARAÇÃO DE HIPOSSUFICIÊNCIA - GERAÇÃO',
