@@ -2434,6 +2434,38 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise simplificada de indeferimento do BPC ao Idoso com IA. Verifica critério de idade e renda per capita familiar, identifica o fundamento da negativa e informa de forma objetiva e acessível sobre a possibilidade de reversão do indeferimento. Versão resumida para apresentação ao cliente ou familiar.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('0adc825a-c2b8-489f-8c99-062052ea0520'),
+      resource: PaymentPlanPaidResourceTypeEnum.FEE_CONTRACT_GENERATOR_COMPLETE_ANALYSIS,
+      creditCost: 2,
+      title: 'CONTRATO DE HONORÁRIOS - GERAÇÃO',
+      description:
+        'Geração automática de contrato de honorários advocatícios com IA, personalizado com os dados do cliente, cláusulas de honorários, obrigações das partes e condições de pagamento.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('7e6afbb2-127f-4b6a-a55c-d8a5d15ef027'),
+      resource: PaymentPlanPaidResourceTypeEnum.POWER_OF_ATTORNEY_GENERATOR_COMPLETE_ANALYSIS,
+      creditCost: 2,
+      title: 'PROCURAÇÃO - GERAÇÃO',
+      description:
+        'Geração automática de procuração ad judicia et extra com IA, personalizada com os dados do cliente, poderes específicos para atuação previdenciária e cláusulas de substabelecimento.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f'),
+      resource: PaymentPlanPaidResourceTypeEnum.JEF_WAIVER_DECLARATION_GENERATOR_COMPLETE_ANALYSIS,
+      creditCost: 2,
+      title: 'DECLARAÇÃO DE RENÚNCIA AO EXCEDENTE DO JEF - GERAÇÃO',
+      description:
+        'Geração automática de declaração de renúncia ao excedente do valor da causa para adequação ao rito do Juizado Especial Federal (JEF), conforme Lei 10.259/2001, com dados do cliente.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a'),
+      resource: PaymentPlanPaidResourceTypeEnum.POVERTY_DECLARATION_GENERATOR_COMPLETE_ANALYSIS,
+      creditCost: 2,
+      title: 'DECLARAÇÃO DE HIPOSSUFICIÊNCIA - GERAÇÃO',
+      description:
+        'Geração automática de declaração de hipossuficiência financeira com IA para obtenção dos benefícios da justiça gratuita, personalizada com os dados do cliente conforme art. 99 do CPC.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {
