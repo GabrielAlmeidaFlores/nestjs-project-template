@@ -271,6 +271,14 @@ import { GeneralUrbanRetirementReviewTimeAcceleratorTypeormCommandRepository } f
 import { GeneralUrbanRetirementReviewTimeAcceleratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-review-time-accelerator/general-urban-retirement-review-time-accelerator.typeorm.query.repository';
 import { InitialPetitionGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/initial-petition-generator-analysis-result/initial-petition-generator-analysis-result.typeorm.command.repository';
 import { InitialPetitionGeneratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/initial-petition-generator-analysis-result/initial-petition-generator-analysis-result.typeorm.query.repository';
+import { FeeContractGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/fee-contract-generator-analysis-result/fee-contract-generator-analysis-result.typeorm.command.repository';
+import { FeeContractGeneratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/fee-contract-generator-analysis-result/fee-contract-generator-analysis-result.typeorm.query.repository';
+import { PowerOfAttorneyGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/power-of-attorney-generator-analysis-result/power-of-attorney-generator-analysis-result.typeorm.command.repository';
+import { PowerOfAttorneyGeneratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/power-of-attorney-generator-analysis-result/power-of-attorney-generator-analysis-result.typeorm.query.repository';
+import { JefWaiverDeclarationGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/jef-waiver-declaration-generator-analysis-result/jef-waiver-declaration-generator-analysis-result.typeorm.command.repository';
+import { JefWaiverDeclarationGeneratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/jef-waiver-declaration-generator-analysis-result/jef-waiver-declaration-generator-analysis-result.typeorm.query.repository';
+import { PovertyDeclarationGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/poverty-declaration-generator-analysis-result/poverty-declaration-generator-analysis-result.typeorm.command.repository';
+import { PovertyDeclarationGeneratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/poverty-declaration-generator-analysis-result/poverty-declaration-generator-analysis-result.typeorm.query.repository';
 import { InsuranceQualityAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis/insurance-quality-analysis.typeorm.command.repository';
 import { InsuranceQualityAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis/insurance-quality-analysis.typeorm.query.repository';
 import { InsuranceQualityAnalysisDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis-document/insurance-quality-analysis-document.typeorm.command.repository';
@@ -1314,6 +1322,14 @@ import { FullOpinionGeneratorCommandRepositoryGateway } from '@module/customer/d
 import { FullOpinionGeneratorQueryRepositoryGateway } from '@module/customer/documents-to-be-generated/module/full-opinion/domain/repository/full-opinion-generator-analysis-result/query/full-opinion-generator.query.repository.gateway';
 import { InitialPetitionGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/initial-petition/domain/repository/initial-petition-generator-analysis-result/command/initial-petition-generator.command.repository.gateway';
 import { InitialPetitionGeneratorQueryRepositoryGateway } from '@module/customer/documents-to-be-generated/module/initial-petition/domain/repository/initial-petition-generator-analysis-result/query/initial-petition-generator.query.repository.gateway';
+import { FeeContractGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/fee-contract/domain/repository/fee-contract-generator-analysis-result/command/fee-contract-generator.command.repository.gateway';
+import { FeeContractGeneratorQueryRepositoryGateway } from '@module/customer/documents-to-be-generated/module/fee-contract/domain/repository/fee-contract-generator-analysis-result/query/fee-contract-generator.query.repository.gateway';
+import { PowerOfAttorneyGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/power-of-attorney/domain/repository/power-of-attorney-generator-analysis-result/command/power-of-attorney-generator.command.repository.gateway';
+import { PowerOfAttorneyGeneratorQueryRepositoryGateway } from '@module/customer/documents-to-be-generated/module/power-of-attorney/domain/repository/power-of-attorney-generator-analysis-result/query/power-of-attorney-generator.query.repository.gateway';
+import { JefWaiverDeclarationGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/jef-waiver-declaration/domain/repository/jef-waiver-declaration-generator-analysis-result/command/jef-waiver-declaration-generator.command.repository.gateway';
+import { JefWaiverDeclarationGeneratorQueryRepositoryGateway } from '@module/customer/documents-to-be-generated/module/jef-waiver-declaration/domain/repository/jef-waiver-declaration-generator-analysis-result/query/jef-waiver-declaration-generator.query.repository.gateway';
+import { PovertyDeclarationGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/poverty-declaration/domain/repository/poverty-declaration-generator-analysis-result/command/poverty-declaration-generator.command.repository.gateway';
+import { PovertyDeclarationGeneratorQueryRepositoryGateway } from '@module/customer/documents-to-be-generated/module/poverty-declaration/domain/repository/poverty-declaration-generator-analysis-result/query/poverty-declaration-generator.query.repository.gateway';
 import { LegalProceedingDetailCommandRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/command/legal-proceeding-detail.command.repository.gateway';
 import { LegalProceedingDetailQueryRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/legal-proceeding-detail.query.repository.gateway';
 import { MiniAdvisorCommandRepositoryGateway } from '@module/customer/mini-advisor/domain/repository/mini-advisor/command/mini-advisor.command.repository.gateway';
@@ -1823,6 +1839,38 @@ const classProvider: ClassProvider[] = [
   {
     provide: InitialPetitionGeneratorQueryRepositoryGateway,
     useClass: InitialPetitionGeneratorTypeormQueryRepository,
+  },
+  {
+    provide: FeeContractGeneratorCommandRepositoryGateway,
+    useClass: FeeContractGeneratorTypeormCommandRepository,
+  },
+  {
+    provide: FeeContractGeneratorQueryRepositoryGateway,
+    useClass: FeeContractGeneratorTypeormQueryRepository,
+  },
+  {
+    provide: PowerOfAttorneyGeneratorCommandRepositoryGateway,
+    useClass: PowerOfAttorneyGeneratorTypeormCommandRepository,
+  },
+  {
+    provide: PowerOfAttorneyGeneratorQueryRepositoryGateway,
+    useClass: PowerOfAttorneyGeneratorTypeormQueryRepository,
+  },
+  {
+    provide: JefWaiverDeclarationGeneratorCommandRepositoryGateway,
+    useClass: JefWaiverDeclarationGeneratorTypeormCommandRepository,
+  },
+  {
+    provide: JefWaiverDeclarationGeneratorQueryRepositoryGateway,
+    useClass: JefWaiverDeclarationGeneratorTypeormQueryRepository,
+  },
+  {
+    provide: PovertyDeclarationGeneratorCommandRepositoryGateway,
+    useClass: PovertyDeclarationGeneratorTypeormCommandRepository,
+  },
+  {
+    provide: PovertyDeclarationGeneratorQueryRepositoryGateway,
+    useClass: PovertyDeclarationGeneratorTypeormQueryRepository,
   },
   {
     provide: AdministrativeRequestGeneratorCommandRepositoryGateway,

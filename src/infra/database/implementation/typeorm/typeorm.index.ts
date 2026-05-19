@@ -724,6 +724,10 @@ import { GeneralUrbanRetirementReviewSpecialPeriodTypeormEntity } from '@infra/d
 import { GeneralUrbanRetirementReviewTimeAcceleratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-review-time-accelerator.typeorm.entity';
 import { GeneralUrbanRetirementReviewTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-review.typeorm.entity';
 import { InitialPetitionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/initial-petition-generator.typeorm.entity';
+import { FeeContractGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/fee-contract-generator.typeorm.entity';
+import { PowerOfAttorneyGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/power-of-attorney-generator.typeorm.entity';
+import { JefWaiverDeclarationGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/jef-waiver-declaration-generator.typeorm.entity';
+import { PovertyDeclarationGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/poverty-declaration-generator.typeorm.entity';
 import { InsuranceQualityAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis-document.typeorm.entity';
 import { InsuranceQualityAnalysisInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis-inss-benefit.typeorm.entity';
 import { InsuranceQualityAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis-legal-proceeding.typeorm.entity';
@@ -1300,6 +1304,10 @@ export class TypeormIndex {
     MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingTypeormEntity,
     MedicalAndSocialReportObjectionGeneratorAnalysisResultTypeormEntity,
     InitialPetitionGeneratorTypeormEntity,
+    FeeContractGeneratorTypeormEntity,
+    PowerOfAttorneyGeneratorTypeormEntity,
+    JefWaiverDeclarationGeneratorTypeormEntity,
+    PovertyDeclarationGeneratorTypeormEntity,
     AdministrativeRequestGeneratorTypeormEntity,
     FullOpinionGeneratorTypeormEntity,
     MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,

@@ -337,6 +337,10 @@ import { GetGeneralUrbanRetirementReviewSpecialPeriodQueryResultAutoMapperProfil
 import { GeneralUrbanRetirementReviewTimeAcceleratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-review-time-accelerator/general-urban-retirement-review-time-accelerator-entity.auto-mapper.profile';
 import { GetGeneralUrbanRetirementReviewTimeAcceleratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-review-time-accelerator/get-general-urban-retirement-review-time-accelerator-query-result.auto-mapper.profile';
 import { InitialPetitionGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/initial-petition-generator-analysis-result/initial-petition-generator-analysis-result-entity.auto-mapper.profile';
+import { FeeContractGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/fee-contract-generator-analysis-result/fee-contract-generator-analysis-result-entity.auto-mapper.profile';
+import { PowerOfAttorneyGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/power-of-attorney-generator-analysis-result/power-of-attorney-generator-analysis-result-entity.auto-mapper.profile';
+import { JefWaiverDeclarationGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/jef-waiver-declaration-generator-analysis-result/jef-waiver-declaration-generator-analysis-result-entity.auto-mapper.profile';
+import { PovertyDeclarationGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/poverty-declaration-generator-analysis-result/poverty-declaration-generator-analysis-result-entity.auto-mapper.profile';
 import { GetInsuranceQualityAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis/get-insurance-quality-analysis-with-relations-query-result.auto-mapper.profile';
 import { InsuranceQualityAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis/insurance-quality-analysis-entity.auto-mapper.profile';
 import { GetInsuranceQualityAnalysisDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis-document/get-insurance-quality-analysis-document-query-result.auto-mapper.profile';
@@ -1308,6 +1312,10 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetMedicalAndSocialReportObjectionGeneratorAnalysisWithRelationsQueryResultAutoMapperProfile,
     MedicalAndSocialReportObjectionGeneratorAnalysisResultEntityAutoMapperProfile,
     InitialPetitionGeneratorEntityAutoMapperProfile,
+    FeeContractGeneratorEntityAutoMapperProfile,
+    PowerOfAttorneyGeneratorEntityAutoMapperProfile,
+    JefWaiverDeclarationGeneratorEntityAutoMapperProfile,
+    PovertyDeclarationGeneratorEntityAutoMapperProfile,
     AdministrativeRequestGeneratorEntityAutoMapperProfile,
     FullOpinionGeneratorEntityAutoMapperProfile,
     GetMedicalAndSocialReportObjectionGeneratorAnalysisResultQueryResultAutoMapperProfile,
