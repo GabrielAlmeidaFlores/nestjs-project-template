@@ -168,6 +168,8 @@ export class SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCas
         technicalObservation: technicalObservationHtml,
         conventionalPeriodStartDate: dto.conventionalPeriodStartDate,
         conventionalPeriodEndDate: dto.conventionalPeriodEndDate,
+        originalPeriod: `${dto.originalPeriodStartDate.toLocaleDateString('pt-BR')} a ${dto.originalPeriodEndDate.toLocaleDateString('pt-BR')}`,
+        conventionalPeriod: `${dto.conventionalPeriodStartDate.toLocaleDateString('pt-BR')} a ${dto.conventionalPeriodEndDate.toLocaleDateString('pt-BR')}`,
       },
     );
   }
