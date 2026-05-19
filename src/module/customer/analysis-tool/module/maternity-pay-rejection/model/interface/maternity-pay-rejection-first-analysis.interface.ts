@@ -1,0 +1,35 @@
+export interface MaternityPayRejectionFirstAnalysisInterface {
+  insuredStatusManteined: boolean;
+  insuredStatusAnalysisConclusion: string;
+  carency?: {
+    isExempt: boolean;
+    status: string;
+    details: string;
+    legalBasis: string;
+    contributionCount?: string;
+  };
+  gracePeriod: {
+    withinTheGracePeriod: boolean;
+    situation: string;
+    applicableGracePeriod: string;
+    endOfGracePeriod: string;
+  };
+  benefitInformation: {
+    situation: string;
+    duration: string;
+    startDate: string;
+    concessionDate: string;
+    startOfTheLeave: string;
+    endOfTheLeave: string;
+    totalLeaveDuration: string;
+    amountBenefit: string;
+    calculationBasis: string;
+  };
+  requirementDeadline: {
+    triggeringEventDate: string;
+    requirementDate: string;
+    statuoryDeadline: string;
+    details: string;
+    justification: string;
+  };
+}

@@ -21,7 +21,7 @@ export class GeminiService implements GenerativeIaGateway {
   private static readonly TEMPERATURE_FOR_MARKDOWN_MODE = 0.1;
   private static readonly TOP_P_VALUE = 0.95;
   private static readonly TOP_K_VALUE = 40;
-  private static readonly AI_CALL_TIMEOUT_MS = 80_000;
+  private static readonly AI_CALL_TIMEOUT_MS = 150_000;
   private static readonly TIMEOUT_ERROR_MESSAGE = 'GEMINI_CALL_TIMEOUT';
 
   protected readonly _type = GeminiService.name;
@@ -64,6 +64,14 @@ formatting rules:
 - technology references: do not mention internal tools, systems, or technologies used to generate the response.
 - identifiers and metadata: do not return identifiers, system references, codes, tracking values, or any form of metadata. return only the human-readable information requested by the user.
 - technical terms: avoid mentioning implementation terms related to internal data structures or system identifiers. present only the final information relevant to the user.
+`,
+      `
+json mode rules (apply when JSON output is explicitly requested):
+- return exclusively a valid JSON object with no text, explanation, or markdown outside the JSON.
+- all text-content fields inside the JSON (analysis, summaries, reports, conclusions) must use rich markdown formatting: headers (#, ##, ###), bold (**text**), bullet lists (- item), numbered lists (1. item), and tables (| col |) where appropriate. never use plain unstructured paragraphs for analytical content.
+- fields containing detailed reports or comprehensive analysis must be thorough and well-structured with at minimum: an introduction, multiple headed sections, and a conclusion.
+- fields containing summarized or simplified text must still use proper markdown formatting.
+- never invent or fabricate data. when information is unavailable, state it explicitly and continue with what is available.
 `,
     ];
   }
@@ -113,7 +121,7 @@ formatting rules:
   public async generateHighQualityResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
   ): Promise<string | null> {
-    const MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE = 16_000;
+    const MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE = 24_000;
     const MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE = 8_192;
 
     const maxOutputTokens = props.responseConfig
@@ -156,7 +164,6 @@ formatting rules:
         props,
         model,
         maxOutputTokens,
-        isRetry,
       );
 
       span.setAttributes({
@@ -189,7 +196,6 @@ formatting rules:
     props: GenerateResponseInputModel,
     model: string,
     maxOutputTokens: number,
-    isRetry = false,
   ): Promise<GeminiResultOutputModel> {
     const promptPart: Part[] = [];
     const systemInstructionParts: Part[] = [];
@@ -359,7 +365,7 @@ formatting rules:
         ) {
           const fallbackModel = this.FALLBACK_MODELS[model];
 
-          if (fallbackModel !== undefined && !isRetry) {
+          if (fallbackModel !== undefined) {
             const fallbackText = await this.generateResponseFromPromptAndFiles(
               props,
               fallbackModel,

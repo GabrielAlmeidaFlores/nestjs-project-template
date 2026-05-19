@@ -1,0 +1,29 @@
+import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { DisabilityRetirementPlanningResultId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-result/value-object/disability-retirement-planning-result-id.value-object';
+
+import type { DisabilityRetirementPlanningEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/disability-retirement-planning.entity';
+import type { DisabilityRetirementPlanningResultEntityPropsInterface } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-result/disability-retirement-planning-result.entity.props.interface';
+
+export class DisabilityRetirementPlanningResultEntity extends BaseEntity<DisabilityRetirementPlanningResultId> {
+  public readonly disabilityRetirementPlanning: DisabilityRetirementPlanningEntity;
+  public readonly disabilityRetirementPlanningCompleteAnalysis: string | null;
+  public readonly disabilityRetirementPlanningSimplifiedAnalysis: string | null;
+  public readonly disabilityRetirementPlanningCompleteAnalysisDownload:
+    | string
+    | null;
+
+  protected readonly _type = DisabilityRetirementPlanningResultEntity.name;
+
+  public constructor(
+    props: DisabilityRetirementPlanningResultEntityPropsInterface,
+  ) {
+    super(DisabilityRetirementPlanningResultId, props);
+    this.disabilityRetirementPlanning = props.disabilityRetirementPlanning;
+    this.disabilityRetirementPlanningCompleteAnalysis =
+      props.disabilityRetirementPlanningCompleteAnalysis ?? null;
+    this.disabilityRetirementPlanningSimplifiedAnalysis =
+      props.disabilityRetirementPlanningSimplifiedAnalysis ?? null;
+    this.disabilityRetirementPlanningCompleteAnalysisDownload =
+      props.disabilityRetirementPlanningCompleteAnalysisDownload ?? null;
+  }
+}
