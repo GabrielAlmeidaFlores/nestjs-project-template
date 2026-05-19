@@ -60,6 +60,7 @@ export class GetTeacherRetirementPlanningRemunerationCalculationRppsUseCase {
     const calculation = this.remunerationCalculatorGateway.calculate(
       remunerations.map((item) =>
         RemunerationDataInputModel.build({
+          remunerationDate: item.contributionDate,
           remunerationAmount: item.amount,
         }),
       ),

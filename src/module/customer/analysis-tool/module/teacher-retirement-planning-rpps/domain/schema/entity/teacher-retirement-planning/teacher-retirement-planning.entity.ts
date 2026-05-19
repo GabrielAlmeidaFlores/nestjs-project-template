@@ -8,7 +8,7 @@ import type { TeacherRetirementPlanningRppsEntityPropsInterface } from '@module/
 import type { TeacherRetirementPlanningRppsResultEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning-result/teacher-retirement-planning-result.entity';
 
 export class TeacherRetirementPlanningRppsEntity extends BaseEntity<TeacherRetirementPlanningRppsId> {
-  public readonly federativeEntity: TeacherRetirementPlanningRppsFederativeEntityEnum;
+  public readonly federativeEntity: TeacherRetirementPlanningRppsFederativeEntityEnum | null;
   public readonly state: StateCodeEnum | null;
   public readonly municipality: string | null;
   public readonly analysisName: string | null;
@@ -23,7 +23,7 @@ export class TeacherRetirementPlanningRppsEntity extends BaseEntity<TeacherRetir
 
   public constructor(props: TeacherRetirementPlanningRppsEntityPropsInterface) {
     super(TeacherRetirementPlanningRppsId, props);
-    this.federativeEntity = props.federativeEntity;
+    this.federativeEntity = props.federativeEntity ?? null;
     this.state = props.state ?? null;
     this.municipality = props.municipality ?? null;
     this.analysisName = props.analysisName ?? null;

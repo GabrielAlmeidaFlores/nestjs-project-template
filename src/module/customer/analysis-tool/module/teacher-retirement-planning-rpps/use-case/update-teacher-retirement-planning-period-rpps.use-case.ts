@@ -84,8 +84,8 @@ export class UpdateTeacherRetirementPlanningPeriodRppsUseCase {
       analysisName: planning.analysisName,
       currentPosition: planning.currentPosition,
       activityType: planning.activityType,
-      publicServiceStartDate: planning.publicServiceStartDate,
-      careerStartDate: planning.careerStartDate,
+      publicServiceStartDate: planning.publicServiceStartDate ?? null,
+      careerStartDate: planning.careerStartDate ?? null,
     });
 
     const transactionOperations: TransactionType[] = [];
@@ -118,11 +118,11 @@ export class UpdateTeacherRetirementPlanningPeriodRppsUseCase {
       const period = new TeacherRetirementPlanningRppsPeriodEntity({
         id: new TeacherRetirementPlanningRppsPeriodId(),
         startDate: periodDto.startDate,
-        endDate: periodDto.endDate,
-        positionName: periodDto.positionName,
-        careerName: periodDto.careerName,
-        serviceType: periodDto.serviceType,
-        department: periodDto.department,
+        endDate: periodDto.endDate ?? null,
+        positionName: periodDto.positionName ?? null,
+        careerName: periodDto.careerName ?? null,
+        serviceType: periodDto.serviceType ?? null,
+        department: periodDto.department ?? null,
         teacherRetirementPlanning: planningEntity,
       });
 
@@ -146,10 +146,10 @@ export class UpdateTeacherRetirementPlanningPeriodRppsUseCase {
           id: new TeacherRetirementPlanningRppsPeriodItemId(),
           startDate,
           endDate,
-          institutionName: itemDto.institutionName,
-          institutionType: itemDto.institutionType,
-          educationLevel: itemDto.educationLevel,
-          rolePerformed: itemDto.rolePerformed,
+          institutionName: itemDto.institutionName ?? null,
+          institutionType: itemDto.institutionType ?? null,
+          educationLevel: itemDto.educationLevel ?? null,
+          rolePerformed: itemDto.rolePerformed ?? null,
           teacherRetirementPlanningPeriod: period,
         });
 
@@ -199,21 +199,21 @@ export class UpdateTeacherRetirementPlanningPeriodRppsUseCase {
   private resolveItemDates(
     periodDto: {
       startDate: Date;
-      endDate: Date;
+      endDate?: Date | null;
     },
     itemDto: CreateTeacherRetirementPlanningPeriodItemRequestDto,
-  ): { startDate: Date; endDate: Date } {
+  ): { startDate: Date; endDate: Date | null } {
     if (
       itemDto.workloadType ===
       TeacherRetirementPlanningRppsPeriodItemWorkloadTypeEnum.FULL_TIME
     ) {
       return {
         startDate: periodDto.startDate,
-        endDate: periodDto.endDate,
+        endDate: periodDto.endDate ?? null,
       };
     }
 
-    if (!itemDto.startDate || !itemDto.endDate) {
+    if (itemDto.endDate === undefined) {
       throw new TeacherRetirementPlanningRppsPeriodItemDatesRequiredForPartTimeError();
     }
 

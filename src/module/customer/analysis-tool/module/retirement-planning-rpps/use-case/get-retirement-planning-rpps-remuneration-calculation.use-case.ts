@@ -2,8 +2,10 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { RemunerationDataInputModel } from '@module/customer/analysis-tool/lib/remuneration-calculator/model/input/remuneration-data.input.model';
+import { RemunerationCalculatorGateway } from '@module/customer/analysis-tool/lib/remuneration-calculator/remuneration-calculator.gateway';
 import { RetirementPlanningRppsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps/query/retirement-planning-rpps.query.repository.gateway';
-import { RetirementPlanningRppsRemunerationCalculationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps-remuneration-calculation/query/retirement-planning-rpps-remuneration-calculation.query.repository.gateway';
+import { RetirementPlanningRppsRemunerationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps-remuneration/retirement-planning-rpps-remuneration.query.repository.gateway';
 import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
 import { GetRetirementPlanningRppsRemunerationCalculationResponseDto } from '@module/customer/analysis-tool/module/retirement-planning-rpps/dto/response/get-retirement-planning-rpps-remuneration-calculation.response.dto';
 import { RetirementPlanningRppsNotFoundError } from '@module/customer/analysis-tool/module/retirement-planning-rpps/error/retirement-planning-rpps-not-found.error';
@@ -19,8 +21,10 @@ export class GetRetirementPlanningRppsRemunerationCalculationUseCase {
   public constructor(
     @Inject(RetirementPlanningRppsQueryRepositoryGateway)
     private readonly retirementPlanningRppsQueryRepositoryGateway: RetirementPlanningRppsQueryRepositoryGateway,
-    @Inject(RetirementPlanningRppsRemunerationCalculationQueryRepositoryGateway)
-    private readonly retirementPlanningRppsRemunerationCalculationQueryRepositoryGateway: RetirementPlanningRppsRemunerationCalculationQueryRepositoryGateway,
+    @Inject(RetirementPlanningRppsRemunerationQueryRepositoryGateway)
+    private readonly retirementPlanningRppsRemunerationQueryRepositoryGateway: RetirementPlanningRppsRemunerationQueryRepositoryGateway,
+    @Inject(RemunerationCalculatorGateway)
+    private readonly remunerationCalculatorGateway: RemunerationCalculatorGateway,
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
   ) {}
@@ -46,14 +50,23 @@ export class GetRetirementPlanningRppsRemunerationCalculationUseCase {
       RetirementPlanningRppsNotFoundError,
     );
 
-    const calculation =
-      await this.retirementPlanningRppsRemunerationCalculationQueryRepositoryGateway.findOneByRetirementPlanningRppsId(
+    const remunerations =
+      await this.retirementPlanningRppsRemunerationQueryRepositoryGateway.findByRetirementPlanningRppsId(
         retirementPlanningRppsId,
       );
 
-    if (!calculation) {
+    if (remunerations.length === 0) {
       throw new RetirementPlanningRppsRemunerationCalculationNotFoundError();
     }
+
+    const calculation = this.remunerationCalculatorGateway.calculate(
+      remunerations.map((remuneration) =>
+        RemunerationDataInputModel.build({
+          remunerationDate: remuneration.remunerationDate,
+          remunerationAmount: remuneration.remunerationAmount,
+        }),
+      ),
+    );
 
     return GetRetirementPlanningRppsRemunerationCalculationResponseDto.build({
       ...calculation,

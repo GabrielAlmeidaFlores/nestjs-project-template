@@ -6,7 +6,7 @@ import type { TeacherRetirementPlanningRppsId } from '@module/customer/analysis-
 import type { TeacherRetirementPlanningRppsResultEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning-rpps/domain/schema/entity/teacher-retirement-planning-result/teacher-retirement-planning-result.entity';
 
 export interface TeacherRetirementPlanningRppsEntityPropsInterface extends BaseEntityPropsInterface<TeacherRetirementPlanningRppsId> {
-  federativeEntity: TeacherRetirementPlanningRppsFederativeEntityEnum;
+  federativeEntity?: TeacherRetirementPlanningRppsFederativeEntityEnum | null;
   state?: StateCodeEnum | null;
   municipality?: string | null;
   analysisName?: string | null;
