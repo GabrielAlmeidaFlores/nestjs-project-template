@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 import { JefWaiverDeclarationGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/jef-waiver-declaration/domain/repository/jef-waiver-declaration-generator-analysis-result/command/jef-waiver-declaration-generator.command.repository.gateway';
 import { JefWaiverDeclarationGeneratorQueryRepositoryGateway } from '@module/customer/documents-to-be-generated/module/jef-waiver-declaration/domain/repository/jef-waiver-declaration-generator-analysis-result/query/jef-waiver-declaration-generator.query.repository.gateway';
 import { JefWaiverDeclarationGeneratorEntity } from '@module/customer/documents-to-be-generated/module/jef-waiver-declaration/domain/schema/entity/jef-waiver-declaration-generator-analysis-result/jef-waiver-declaration-generator.entity';
@@ -18,8 +17,6 @@ export class UpdateJefWaiverDeclarationGeneratorCompleteAnalysisUseCase {
   public constructor(
     @Inject(JefWaiverDeclarationGeneratorQueryRepositoryGateway)
     private readonly jefWaiverDeclarationGeneratorQueryRepositoryGateway: JefWaiverDeclarationGeneratorQueryRepositoryGateway,
-    @Inject(ExportDocumentGateway)
-    private readonly exportDocumentGateway: ExportDocumentGateway,
     @Inject(JefWaiverDeclarationGeneratorCommandRepositoryGateway)
     private readonly jefWaiverDeclarationGeneratorCommandRepositoryGateway: JefWaiverDeclarationGeneratorCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -40,17 +37,9 @@ export class UpdateJefWaiverDeclarationGeneratorCompleteAnalysisUseCase {
       throw new JefWaiverDeclarationGeneratorDoesNotContainCompleteAnalysisError();
     }
 
-    const convertHtmlToMarkdown = this.exportDocumentGateway.convertHtmlToMarkdown(
-      dto.jefWaiverDeclarationGeneratorCompleteAnalysis,
-    );
-
-    const convertMarkdownToHtml = await this.exportDocumentGateway.convertMarkdownToHtml(
-      convertHtmlToMarkdown,
-    );
-
     const updatedJefWaiverDeclarationGenerator = new JefWaiverDeclarationGeneratorEntity({
       ...jefWaiverDeclarationGenerator,
-      jefWaiverDeclarationGeneratorCompleteAnalysis: convertHtmlToMarkdown,
+      jefWaiverDeclarationGeneratorCompleteAnalysis: dto.jefWaiverDeclarationGeneratorCompleteAnalysis,
     });
 
     const jefWaiverDeclarationGeneratorTransaction =
@@ -65,7 +54,7 @@ export class UpdateJefWaiverDeclarationGeneratorCompleteAnalysisUseCase {
     await transaction.commit();
 
     return UpdateJefWaiverDeclarationGeneratorCompleteAnalysisResponseDto.build({
-      jefWaiverDeclarationGeneratorCompleteAnalysis: convertMarkdownToHtml,
+      jefWaiverDeclarationGeneratorCompleteAnalysis: dto.jefWaiverDeclarationGeneratorCompleteAnalysis,
     });
   }
 }

@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 import { PowerOfAttorneyGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/power-of-attorney/domain/repository/power-of-attorney-generator-analysis-result/command/power-of-attorney-generator.command.repository.gateway';
 import { PowerOfAttorneyGeneratorQueryRepositoryGateway } from '@module/customer/documents-to-be-generated/module/power-of-attorney/domain/repository/power-of-attorney-generator-analysis-result/query/power-of-attorney-generator.query.repository.gateway';
 import { PowerOfAttorneyGeneratorEntity } from '@module/customer/documents-to-be-generated/module/power-of-attorney/domain/schema/entity/power-of-attorney-generator-analysis-result/power-of-attorney-generator.entity';
@@ -18,8 +17,6 @@ export class UpdatePowerOfAttorneyGeneratorCompleteAnalysisUseCase {
   public constructor(
     @Inject(PowerOfAttorneyGeneratorQueryRepositoryGateway)
     private readonly powerOfAttorneyGeneratorQueryRepositoryGateway: PowerOfAttorneyGeneratorQueryRepositoryGateway,
-    @Inject(ExportDocumentGateway)
-    private readonly exportDocumentGateway: ExportDocumentGateway,
     @Inject(PowerOfAttorneyGeneratorCommandRepositoryGateway)
     private readonly powerOfAttorneyGeneratorCommandRepositoryGateway: PowerOfAttorneyGeneratorCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -40,17 +37,9 @@ export class UpdatePowerOfAttorneyGeneratorCompleteAnalysisUseCase {
       throw new PowerOfAttorneyGeneratorDoesNotContainCompleteAnalysisError();
     }
 
-    const convertHtmlToMarkdown = this.exportDocumentGateway.convertHtmlToMarkdown(
-      dto.powerOfAttorneyGeneratorCompleteAnalysis,
-    );
-
-    const convertMarkdownToHtml = await this.exportDocumentGateway.convertMarkdownToHtml(
-      convertHtmlToMarkdown,
-    );
-
     const updatedPowerOfAttorneyGenerator = new PowerOfAttorneyGeneratorEntity({
       ...powerOfAttorneyGenerator,
-      powerOfAttorneyGeneratorCompleteAnalysis: convertHtmlToMarkdown,
+      powerOfAttorneyGeneratorCompleteAnalysis: dto.powerOfAttorneyGeneratorCompleteAnalysis,
     });
 
     const powerOfAttorneyGeneratorTransaction =
@@ -65,7 +54,7 @@ export class UpdatePowerOfAttorneyGeneratorCompleteAnalysisUseCase {
     await transaction.commit();
 
     return UpdatePowerOfAttorneyGeneratorCompleteAnalysisResponseDto.build({
-      powerOfAttorneyGeneratorCompleteAnalysis: convertMarkdownToHtml,
+      powerOfAttorneyGeneratorCompleteAnalysis: dto.powerOfAttorneyGeneratorCompleteAnalysis,
     });
   }
 }
