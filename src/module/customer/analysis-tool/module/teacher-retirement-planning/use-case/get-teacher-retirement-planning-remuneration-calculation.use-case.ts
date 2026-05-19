@@ -60,6 +60,7 @@ export class GetTeacherRetirementPlanningRemunerationCalculationUseCase {
     const calculation = this.remunerationCalculatorGateway.calculate(
       remunerations.map((item) =>
         RemunerationDataInputModel.build({
+          remunerationDate: item.contributionDate,
           remunerationAmount: item.amount,
         }),
       ),
@@ -67,15 +68,15 @@ export class GetTeacherRetirementPlanningRemunerationCalculationUseCase {
 
     return GetTeacherRetirementPlanningRemunerationCalculationResponseDto.build(
       {
-        totalCompetencies: calculation.totalCompetencies ?? 0,
-        totalAmount: calculation.totalAmount ?? 0,
-        averageAmount: calculation.averageAmount ?? 0,
+        totalCompetencies: calculation.totalCompetencies,
+        totalAmount: calculation.totalAmount,
+        averageAmount: calculation.averageAmount,
         topEightyPercentCompetencies:
-          calculation.topEightyPercentCompetencies ?? 0,
+          calculation.topEightyPercentCompetencies,
         bottomTwentyPercentCompetencies:
-          calculation.bottomTwentyPercentCompetencies ?? 0,
+          calculation.bottomTwentyPercentCompetencies,
         topEightyPercentAverageAmount:
-          calculation.topEightyPercentAverageAmount ?? 0,
+          calculation.topEightyPercentAverageAmount,
       },
     );
   }
