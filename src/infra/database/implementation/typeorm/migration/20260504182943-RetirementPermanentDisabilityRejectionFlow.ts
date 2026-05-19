@@ -37,9 +37,14 @@ export class RetirementPermanentDisabilityRejectionFlow20260504182943 implements
     await queryRunner.query(
       `CREATE TABLE IF NOT EXISTS \`retirement_permanent_disability_rejection\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`analysis_name\` varchar(255) NULL, \`request_entry_date\` date NULL, \`denial_date\` date NULL, \`category\` enum ('urban_employee', 'rural_employee', 'domestic_employee', 'avulso_worker', 'individual_contributor_autonomous', 'individual_contributor_service_provider', 'mei', 'special_insured', 'optional_insured') NULL, \`retirement_permanent_disability_rejection_result_id\` varchar(36) NULL, \`retirement_permanent_disability_rejection_incapacity_id\` varchar(36) NULL, \`retirement_permanent_disability_rejection_insured_quality_id\` varchar(36) NULL, UNIQUE INDEX \`REL_rpdr_result\` (\`retirement_permanent_disability_rejection_result_id\`), UNIQUE INDEX \`REL_rpdr_incapacity\` (\`retirement_permanent_disability_rejection_incapacity_id\`), UNIQUE INDEX \`REL_rpdr_insured_quality\` (\`retirement_permanent_disability_rejection_insured_quality_id\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );
-    await queryRunner.query(
-      `ALTER TABLE \`analysis_tool_record\` ADD \`retirement_permanent_disability_rejection_id\` varchar(36) NULL`,
+    const columnExists = await queryRunner.query(
+      `SELECT COUNT(*) as count FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'analysis_tool_record' AND COLUMN_NAME = 'retirement_permanent_disability_rejection_id'`,
     );
+    if (columnExists[0].count === 0) {
+      await queryRunner.query(
+        `ALTER TABLE \`analysis_tool_record\` ADD \`retirement_permanent_disability_rejection_id\` varchar(36) NULL`,
+      );
+    }
     await queryRunner.query(
       `ALTER TABLE \`retirement_permanent_disability_rejection_document\` ADD CONSTRAINT \`FK_rpdr_document_rpdr\` FOREIGN KEY (\`retirement_permanent_disability_rejection_id\`) REFERENCES \`retirement_permanent_disability_rejection\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );

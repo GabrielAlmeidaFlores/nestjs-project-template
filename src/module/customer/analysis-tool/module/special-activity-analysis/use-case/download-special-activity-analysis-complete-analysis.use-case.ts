@@ -65,11 +65,6 @@ export class DownloadSpecialActivityAnalysisCompleteAnalysisUseCase {
       throw new OrganizationMemberNotFoundError();
     }
 
-    const promptResponse =
-      await this.getPaymentPlanPaidResourcePromptUseCase.execute(
-        PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_COMPLETE_ANALYSIS,
-      );
-
     const consumeCreditTransaction =
       await this.consumeOrganizationCreditUseCase.execute(
         organizationSessionData.organizationId,
@@ -197,20 +192,18 @@ export class DownloadSpecialActivityAnalysisCompleteAnalysisUseCase {
         updatedAnalysisToolRecordQueryResult.specialActivity
           .specialActivityResult;
 
-      let responseAi = currentResult.specialActivityCompleteAnalysisDownload;
+      const responseAi =
+        currentResult.specialActivityCompleteAnalysisDownload ??
+        this.extractDownloadContentFromCompleteAnalysis(
+          currentResult.specialActivityCompleteAnalysis as string,
+        );
 
       if (responseAi === null) {
-        const specialActivityCompleteAnalysisDownload =
-          await this.analysisProcessorGateway.getSpecialActivityCompleteAnalysis(
-            promptResponse.prompt,
-            [
-              Buffer.from(
-                currentResult.specialActivityCompleteAnalysis as string,
-                'utf-8',
-              ),
-            ],
-            false,
-          );
+        throw new SpecialActivityAnalysisDoesNotContainCompleteAnalysisError();
+      }
+
+      if (currentResult.specialActivityCompleteAnalysisDownload === null) {
+        const specialActivityCompleteAnalysisDownload = responseAi;
 
         const specialActivityResult = new SpecialActivityResultEntity({
           ...currentResult,
@@ -227,12 +220,6 @@ export class DownloadSpecialActivityAnalysisCompleteAnalysisUseCase {
           [consumeCreditTransaction, specialActivityResultTransaction],
         );
         await transaction.commit();
-
-        responseAi = specialActivityCompleteAnalysisDownload;
-      }
-
-      if (responseAi === null) {
-        throw new SpecialActivityAnalysisDoesNotContainCompleteAnalysisError();
       }
 
       return this.exportDocumentGateway.downloadFileAsStreamable(
@@ -248,15 +235,18 @@ export class DownloadSpecialActivityAnalysisCompleteAnalysisUseCase {
       throw new SpecialActivityAnalysisDoesNotContainCompleteAnalysisError();
     }
 
-    let responseAi = currentResult.specialActivityCompleteAnalysisDownload;
+    const responseAi =
+      currentResult.specialActivityCompleteAnalysisDownload ??
+      this.extractDownloadContentFromCompleteAnalysis(
+        currentResult.specialActivityCompleteAnalysis,
+      );
 
     if (responseAi === null) {
-      const specialActivityCompleteAnalysisDownload =
-        await this.analysisProcessorGateway.getSpecialActivityCompleteAnalysis(
-          promptResponse.prompt,
-          [Buffer.from(currentResult.specialActivityCompleteAnalysis, 'utf-8')],
-          false,
-        );
+      throw new SpecialActivityAnalysisDoesNotContainCompleteAnalysisError();
+    }
+
+    if (currentResult.specialActivityCompleteAnalysisDownload === null) {
+      const specialActivityCompleteAnalysisDownload = responseAi;
 
       const specialActivityResult = new SpecialActivityResultEntity({
         ...currentResult,
@@ -274,12 +264,6 @@ export class DownloadSpecialActivityAnalysisCompleteAnalysisUseCase {
         specialActivityResultTransaction,
       ]);
       await transaction.commit();
-
-      responseAi = specialActivityCompleteAnalysisDownload;
-    }
-
-    if (responseAi === null) {
-      throw new SpecialActivityAnalysisDoesNotContainCompleteAnalysisError();
     }
 
     return this.exportDocumentGateway.downloadFileAsStreamable(
@@ -288,5 +272,30 @@ export class DownloadSpecialActivityAnalysisCompleteAnalysisUseCase {
       'analise_completa_atividade_especial',
       exportOptions,
     );
+  }
+
+  private extractDownloadContentFromCompleteAnalysis(
+    specialActivityCompleteAnalysis: string,
+  ): string | null {
+    const trimmedAnalysis = specialActivityCompleteAnalysis.trim();
+
+    if (trimmedAnalysis.length === 0) {
+      return null;
+    }
+
+    try {
+      const parsedAnalysis = JSON.parse(trimmedAnalysis) as Record<
+        string,
+        unknown
+      >;
+      const analysisResult = parsedAnalysis['analysisResult'];
+
+      return typeof analysisResult === 'string' &&
+        analysisResult.trim().length > 0
+        ? analysisResult
+        : null;
+    } catch {
+      return trimmedAnalysis;
+    }
   }
 }

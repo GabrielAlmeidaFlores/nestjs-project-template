@@ -7,6 +7,7 @@ import { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domai
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { AdministrativeProcedureInssAnalysisId } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/value-object/administrative-procedure-inss-analysis-id/administrative-procedure-inss-analysis-id.value-object';
+import { AdministrativeProcedureInssAnalysisDocumentTypeEnum } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis-document/enum/administrative-procedure-inss-analysis-document-type.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
@@ -97,6 +98,9 @@ export class GetAdministrativeProcedureInssAnalysisDocumentResponseDto extends B
 
   @ResponseDtoStringProperty()
   public originalFileName: string;
+
+  @ResponseDtoEnumProperty(AdministrativeProcedureInssAnalysisDocumentTypeEnum)
+  public type: AdministrativeProcedureInssAnalysisDocumentTypeEnum;
 
   protected override readonly _type =
     GetAdministrativeProcedureInssAnalysisDocumentResponseDto.name;

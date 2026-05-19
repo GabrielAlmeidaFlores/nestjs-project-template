@@ -4,15 +4,16 @@ export class RpdrIncapacityPreviousBenefit20260507000000 implements MigrationInt
   name = 'RpdrIncapacityPreviousBenefit20260507000000';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `ALTER TABLE \`retirement_permanent_disability_rejection_incapacity\` DROP COLUMN \`previous_benefit_number\``,
-    );
-    await queryRunner.query(
-      `ALTER TABLE \`retirement_permanent_disability_rejection_incapacity\` DROP COLUMN \`previous_benefit_start_date\``,
-    );
-    await queryRunner.query(
-      `ALTER TABLE \`retirement_permanent_disability_rejection_incapacity\` DROP COLUMN \`previous_benefit_end_date\``,
-    );
+    const table = 'retirement_permanent_disability_rejection_incapacity';
+    for (const col of ['previous_benefit_number', 'previous_benefit_start_date', 'previous_benefit_end_date']) {
+      const [{ count }] = await queryRunner.query(
+        `SELECT COUNT(*) as count FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?`,
+        [table, col],
+      );
+      if (Number(count) > 0) {
+        await queryRunner.query(`ALTER TABLE \`${table}\` DROP COLUMN \`${col}\``);
+      }
+    }
     await queryRunner.query(
       `CREATE TABLE IF NOT EXISTS \`retirement_permanent_disability_rejection_incapacity_prev_ben\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`benefit_number\` varchar(100) NOT NULL, \`start_date\` date NULL, \`end_date\` date NULL, \`retirement_permanent_disability_rejection_incapacity_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );

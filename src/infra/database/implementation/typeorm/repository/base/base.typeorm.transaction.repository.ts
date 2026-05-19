@@ -26,12 +26,13 @@ export class BaseTypeormTransactionRepository implements BaseTransactionReposito
 
     const timeoutPromise = async (): Promise<void> => {
       if (!finalized && queryRunner.isTransactionActive) {
+        finalized = true;
+        clearTimeout(timeout);
         await queryRunner.rollbackTransaction();
-
         await queryRunner.release();
       }
     };
-    const timeoutInMilliseconds = 200_000;
+    const timeoutInMilliseconds = 600_000;
     const timeout = setTimeout(() => {
       void timeoutPromise();
     }, timeoutInMilliseconds);

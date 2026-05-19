@@ -116,6 +116,7 @@ export class GetAdministrativeProcedureInssAnalysisUseCase {
               return {
                 url,
                 originalFileName,
+                type: document.type,
               };
             },
           ),
@@ -126,6 +127,7 @@ export class GetAdministrativeProcedureInssAnalysisUseCase {
             GetAdministrativeProcedureInssAnalysisDocumentResponseDto.build({
               url: document.url.toString(),
               originalFileName: document.originalFileName.toString(),
+              type: document.type,
             }),
           );
       }
