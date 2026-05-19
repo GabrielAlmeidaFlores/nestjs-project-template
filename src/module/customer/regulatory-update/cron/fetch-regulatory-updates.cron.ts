@@ -48,13 +48,29 @@ export class FetchRegulatoryUpdatesCron implements OnModuleInit {
     }
   }
 
-  public async onModuleInit(): Promise<void> {
-    const existingTitlesAndDates =
-      await this.regulatoryUpdateQueryRepository.findAllTitlesAndDates();
-
-    if (existingTitlesAndDates.length === 0) {
-      this.logger.log('No existing updates found. Running initial fetch...');
-      await this.execute();
-    }
+  public onModuleInit(): void {
+    setImmediate(() => {
+      this.regulatoryUpdateQueryRepository
+        .findAllTitlesAndDates()
+        .then((existing) => {
+          if (existing.length === 0) {
+            this.logger.log(
+              'No existing updates found. Running initial fetch...',
+            );
+            this.execute().catch((err) =>
+              this.logger.error(
+                'Initial fetch failed',
+                err instanceof Error ? err.stack : err,
+              ),
+            );
+          }
+        })
+        .catch((err) =>
+          this.logger.error(
+            'Failed to check existing updates',
+            err instanceof Error ? err.stack : err,
+          ),
+        );
+    });
   }
 }
