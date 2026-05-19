@@ -59,6 +59,7 @@ export class GetGeneralUrbanRetirementAnalysisRemunerationCalculationUseCase {
     const calculation = this.remunerationCalculatorGateway.calculate(
       remunerations.map((item) =>
         RemunerationDataInputModel.build({
+          remunerationDate: item.remunerationDate,
           remunerationAmount: item.remunerationAmount,
         }),
       ),

@@ -9,11 +9,11 @@ import type { TeacherRetirementPlanningRppsPeriodItemId } from '@module/customer
 export class GetTeacherRetirementPlanningRppsPeriodItemQueryResult extends BaseBuildableObject {
   public readonly id: TeacherRetirementPlanningRppsPeriodItemId;
   public readonly startDate: Date;
-  public readonly endDate: Date;
-  public readonly institutionName: string;
-  public readonly institutionType: TeacherRetirementPlanningRppsPeriodItemInstitutionTypeEnum;
-  public readonly educationLevel: TeacherRetirementPlanningRppsPeriodItemEducationLevelEnum;
-  public readonly rolePerformed: TeacherRetirementPlanningRppsPeriodItemRolePerformedEnum;
+  public readonly endDate: Date | null;
+  public readonly institutionName: string | null;
+  public readonly institutionType: TeacherRetirementPlanningRppsPeriodItemInstitutionTypeEnum | null;
+  public readonly educationLevel: TeacherRetirementPlanningRppsPeriodItemEducationLevelEnum | null;
+  public readonly rolePerformed: TeacherRetirementPlanningRppsPeriodItemRolePerformedEnum | null;
   public readonly documents: GetTeacherRetirementPlanningRppsPeriodItemDocumentQueryResult[];
   public readonly createdAt: Date;
   public readonly updatedAt: Date;

@@ -222,7 +222,13 @@ export class SendMessageUseCase {
     organizationSessionData: OrganizationSessionDataModel,
     paymentPlanPaidResourceType: PaymentPlanPaidResourceTypeEnum,
   ): Promise<string> {
-    const mcpTools = await this.mcpToolsGateway.getAvailableTools();
+    const isMcpDisabled =
+      paymentPlanPaidResourceType ===
+      PaymentPlanPaidResourceTypeEnum.ELOY_CHAT_WINNING_LEGAL_THESIS_RESEARCH;
+
+    const mcpTools = isMcpDisabled
+      ? []
+      : await this.mcpToolsGateway.getAvailableTools();
 
     dto.json.message = `
 ${dto.json.message}

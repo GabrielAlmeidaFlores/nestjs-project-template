@@ -24,8 +24,8 @@ export class CreateTeacherRetirementPlanningPeriodItemDocumentRequestDto extends
 
 @RequestDto()
 export class CreateTeacherRetirementPlanningPeriodItemRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoDateProperty({ required: false })
-  public readonly startDate?: Date;
+  @RequestDtoDateProperty({ required: true })
+  public readonly startDate: Date;
 
   @RequestDtoDateProperty({ required: false })
   public readonly endDate?: Date;
@@ -38,32 +38,32 @@ export class CreateTeacherRetirementPlanningPeriodItemRequestDto extends BaseBui
   )
   public readonly workloadType?: TeacherRetirementPlanningRppsPeriodItemWorkloadTypeEnum;
 
-  @RequestDtoStringProperty({ required: true })
-  public readonly institutionName: string;
+  @RequestDtoStringProperty({ required: false })
+  public readonly institutionName?: string;
 
   @RequestDtoEnumProperty(
     TeacherRetirementPlanningRppsPeriodItemInstitutionTypeEnum,
     {
-      required: true,
+      required: false,
     },
   )
-  public readonly institutionType: TeacherRetirementPlanningRppsPeriodItemInstitutionTypeEnum;
+  public readonly institutionType?: TeacherRetirementPlanningRppsPeriodItemInstitutionTypeEnum;
 
   @RequestDtoEnumProperty(
     TeacherRetirementPlanningRppsPeriodItemEducationLevelEnum,
     {
-      required: true,
+      required: false,
     },
   )
-  public readonly educationLevel: TeacherRetirementPlanningRppsPeriodItemEducationLevelEnum;
+  public readonly educationLevel?: TeacherRetirementPlanningRppsPeriodItemEducationLevelEnum;
 
   @RequestDtoEnumProperty(
     TeacherRetirementPlanningRppsPeriodItemRolePerformedEnum,
     {
-      required: true,
+      required: false,
     },
   )
-  public readonly rolePerformed: TeacherRetirementPlanningRppsPeriodItemRolePerformedEnum;
+  public readonly rolePerformed?: TeacherRetirementPlanningRppsPeriodItemRolePerformedEnum;
 
   @RequestDtoObjectProperty(
     () => CreateTeacherRetirementPlanningPeriodItemDocumentRequestDto,
@@ -80,22 +80,22 @@ export class CreateTeacherRetirementPlanningPeriodDataRequestDto extends BaseBui
   @RequestDtoDateProperty({ required: true })
   public readonly startDate: Date;
 
-  @RequestDtoDateProperty({ required: true })
-  public readonly endDate: Date;
+  @RequestDtoDateProperty({ required: false })
+  public readonly endDate?: Date;
 
-  @RequestDtoStringProperty({ required: true })
-  public readonly positionName: string;
+  @RequestDtoStringProperty({ required: false })
+  public readonly positionName?: string;
 
-  @RequestDtoStringProperty({ required: true })
-  public readonly careerName: string;
+  @RequestDtoStringProperty({ required: false })
+  public readonly careerName?: string;
 
   @RequestDtoEnumProperty(TeacherRetirementPlanningRppsPeriodServiceTypeEnum, {
-    required: true,
+    required: false,
   })
-  public readonly serviceType: TeacherRetirementPlanningRppsPeriodServiceTypeEnum;
+  public readonly serviceType?: TeacherRetirementPlanningRppsPeriodServiceTypeEnum;
 
-  @RequestDtoStringProperty({ required: true })
-  public readonly department: string;
+  @RequestDtoStringProperty({ required: false })
+  public readonly department?: string;
 
   @RequestDtoObjectProperty(
     () => CreateTeacherRetirementPlanningPeriodItemRequestDto,

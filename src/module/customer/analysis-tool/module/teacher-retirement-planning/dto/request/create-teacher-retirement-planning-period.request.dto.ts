@@ -41,26 +41,26 @@ export class CreateTeacherRetirementPlanningPeriodItemRequestDto extends BaseBui
   @RequestDtoEnumProperty(
     TeacherRetirementPlanningPeriodItemInstitutionTypeEnum,
     {
-      required: true,
+      required: false,
     },
   )
-  public readonly institutionType: TeacherRetirementPlanningPeriodItemInstitutionTypeEnum;
+  public readonly institutionType?: TeacherRetirementPlanningPeriodItemInstitutionTypeEnum;
 
   @RequestDtoEnumProperty(
     TeacherRetirementPlanningPeriodItemEducationLevelEnum,
     {
-      required: true,
+      required: false,
     },
   )
-  public readonly educationLevel: TeacherRetirementPlanningPeriodItemEducationLevelEnum;
+  public readonly educationLevel?: TeacherRetirementPlanningPeriodItemEducationLevelEnum;
 
   @RequestDtoEnumProperty(
     TeacherRetirementPlanningPeriodItemRolePerformedEnum,
     {
-      required: true,
+      required: false,
     },
   )
-  public readonly rolePerformed: TeacherRetirementPlanningPeriodItemRolePerformedEnum;
+  public readonly rolePerformed?: TeacherRetirementPlanningPeriodItemRolePerformedEnum;
 
   @RequestDtoObjectProperty(
     () => CreateTeacherRetirementPlanningPeriodItemDocumentRequestDto,
