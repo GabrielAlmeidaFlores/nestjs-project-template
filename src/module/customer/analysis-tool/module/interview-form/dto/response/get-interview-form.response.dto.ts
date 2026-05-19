@@ -12,256 +12,256 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @ResponseDto()
 export class GetInterviewFormResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(InterviewFormId, { required: false })
-  public interviewFormId: InterviewFormId | null;
+  public interviewFormId?: InterviewFormId;
 
   @ResponseDtoStringProperty({ required: false })
-  public analysisToolClientId: string | null;
+  public analysisToolClientId?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public clientName: string | null;
+  public clientName?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public clientCpf: string | null;
+  public clientCpf?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public clientRg: string | null;
+  public clientRg?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public clientInssPassword: string | null;
+  public clientInssPassword?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public clientAddress: string | null;
+  public clientAddress?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public clientProfession: string | null;
+  public clientProfession?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public clientNit: string | null;
+  public clientNit?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public clientCtpsNumber: string | null;
+  public clientCtpsNumber?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public clientBirthDate: string | null;
+  public clientBirthDate?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public clientMaritalStatus: string | null;
+  public clientMaritalStatus?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public clientRace: string | null;
+  public clientRace?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public clientPhoneNumber: string | null;
+  public clientPhoneNumber?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public clientMotherName: string | null;
+  public clientMotherName?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public clientFatherName: string | null;
+  public clientFatherName?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public clientSpouseName: string | null;
+  public clientSpouseName?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public clientEmail: string | null;
+  public clientEmail?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public clientCtps: string | null;
+  public clientCtps?: string;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public clientHasDisclosure: boolean | null;
+  public clientHasDisclosure?: boolean;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public clientHasRpc: boolean | null;
+  public clientHasRpc?: boolean;
 
   @ResponseDtoStringProperty({ required: false })
-  public clientRegistrationDate: string | null;
+  public clientRegistrationDate?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public clientAge: string | null;
+  public clientAge?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public clientNeighborhood: string | null;
+  public clientNeighborhood?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public clientStreet: string | null;
+  public clientStreet?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public clientStreetNumber: string | null;
+  public clientStreetNumber?: string;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public clientIsMarriedOrInUnion: boolean | null;
+  public clientIsMarriedOrInUnion?: boolean;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public clientHasChildren: boolean | null;
+  public clientHasChildren?: boolean;
 
   @ResponseDtoStringProperty({ isArray: true, required: false })
-  public childrenNames: string[] | null;
+  public childrenNames?: string[];
 
   @ResponseDtoBooleanProperty({ required: false })
-  public isRetired: boolean | null;
+  public isRetired?: boolean;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public hasReceivedOrReceivesSocialSecurityBenefit: boolean | null;
+  public hasReceivedOrReceivesSocialSecurityBenefit?: boolean;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public hasReceivedOrReceivesWelfareBenefit: boolean | null;
+  public hasReceivedOrReceivesWelfareBenefit?: boolean;
 
   @ResponseDtoStringProperty({ required: false })
-  public socialSecurityBenefitType: string | null;
+  public socialSecurityBenefitType?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public socialSecurityBenefitNumber: string | null;
+  public socialSecurityBenefitNumber?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public welfareBenefitNumber: string | null;
+  public welfareBenefitNumber?: string;
 
   @ResponseDtoEnumProperty(InterviewFormBenefitTypeEnum, { required: false })
-  public desiredBenefitType: InterviewFormBenefitTypeEnum | null;
+  public desiredBenefitType?: InterviewFormBenefitTypeEnum;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public hasSocialSecurityDebt: boolean | null;
+  public hasSocialSecurityDebt?: boolean;
 
   @ResponseDtoStringProperty({ required: false })
-  public socialSecurityDebtDate: string | null;
+  public socialSecurityDebtDate?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public socialSecurityDebtAmount: string | null;
+  public socialSecurityDebtAmount?: string;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public receivesBolsaFamilia: boolean | null;
+  public receivesBolsaFamilia?: boolean;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public hasWorkedInSpecialActivities: boolean | null;
+  public hasWorkedInSpecialActivities?: boolean;
 
   @ResponseDtoStringProperty({ required: false })
-  public specialActivityType: string | null;
+  public specialActivityType?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public specialActivityAgent: string | null;
+  public specialActivityAgent?: string;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public hasPppOrLtcat: boolean | null;
+  public hasPppOrLtcat?: boolean;
 
   @ResponseDtoStringProperty({ required: false })
-  public pppOrLtcatDetails: string | null;
+  public pppOrLtcatDetails?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public isCompanyOpenOrClosed: string | null;
+  public isCompanyOpenOrClosed?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public companyName: string | null;
+  public companyName?: string;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public hasWorkedWithElectricity: boolean | null;
+  public hasWorkedWithElectricity?: boolean;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public hasWorkedAsVigilante: boolean | null;
+  public hasWorkedAsVigilante?: boolean;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public hasWorkedExposedToExcessiveNoise: boolean | null;
+  public hasWorkedExposedToExcessiveNoise?: boolean;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public hasWorkedInRuralArea: boolean | null;
+  public hasWorkedInRuralArea?: boolean;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public familyLivedInRuralAreaDuringChildhood: boolean | null;
+  public familyLivedInRuralAreaDuringChildhood?: boolean;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public hasWorkedInPublicService: boolean | null;
+  public hasWorkedInPublicService?: boolean;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public hasHeldPublicOffice: boolean | null;
+  public hasHeldPublicOffice?: boolean;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public hasBeenCommissionedByPublicAdministration: boolean | null;
+  public hasBeenCommissionedByPublicAdministration?: boolean;
 
   @ResponseDtoStringProperty({ required: false })
-  public hasBeenHospitalized: string | null;
+  public hasBeenHospitalized?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public hasHealthProblems: string | null;
+  public hasHealthProblems?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public hasHadAccident: string | null;
+  public hasHadAccident?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public hasHadWorkAccident: string | null;
+  public hasHadWorkAccident?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public hasMedicalTreatment: string | null;
+  public hasMedicalTreatment?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public takesContinuousMedication: string | null;
+  public takesContinuousMedication?: string;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public buysMedicationFromPopularPharmacy: boolean | null;
+  public buysMedicationFromPopularPharmacy?: boolean;
 
   @ResponseDtoEnumProperty(InterviewFormMedicalServiceTypeEnum, { required: false })
-  public medicalServiceType: InterviewFormMedicalServiceTypeEnum | null;
+  public medicalServiceType?: InterviewFormMedicalServiceTypeEnum;
 
   @ResponseDtoStringProperty({ required: false })
-  public attendingDoctorName: string | null;
+  public attendingDoctorName?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public treatmentLocation: string | null;
+  public treatmentLocation?: string;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public hasLabReports: boolean | null;
+  public hasLabReports?: boolean;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public hasMedicalRecords: boolean | null;
+  public hasMedicalRecords?: boolean;
 
   @ResponseDtoStringProperty({ required: false })
-  public hasAccidentReport: string | null;
+  public hasAccidentReport?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public hasAdministrativeClaimWithInss: string | null;
+  public hasAdministrativeClaimWithInss?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public hasOngoingLawsuit: string | null;
+  public hasOngoingLawsuit?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public hasPreviousLawsuit: string | null;
+  public hasPreviousLawsuit?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public hasRequestedAdministrativeOrJudicialReview: string | null;
+  public hasRequestedAdministrativeOrJudicialReview?: string;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public hasRgCpfProofOfResidence: boolean | null;
+  public hasRgCpfProofOfResidence?: boolean;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public hasPapAndJudicialProcessCopy: boolean | null;
+  public hasPapAndJudicialProcessCopy?: boolean;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public hasCnisExtract: boolean | null;
+  public hasCnisExtract?: boolean;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public hasPppAndLtcat: boolean | null;
+  public hasPppAndLtcat?: boolean;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public hasReservistCertificate: boolean | null;
+  public hasReservistCertificate?: boolean;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public hasRuralDocuments: boolean | null;
+  public hasRuralDocuments?: boolean;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public hasCompleteCtpsCopy: boolean | null;
+  public hasCompleteCtpsCopy?: boolean;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public hasPublicAdministrationWorkContract: boolean | null;
+  public hasPublicAdministrationWorkContract?: boolean;
 
   @ResponseDtoBooleanProperty({ required: false })
-  public hasOtherDocuments: boolean | null;
+  public hasOtherDocuments?: boolean;
 
   @ResponseDtoStringProperty({ required: false })
-  public otherDocumentsDescription: string | null;
+  public otherDocumentsDescription?: string;
 
   @ResponseDtoDateProperty({ required: false })
-  public createdAt: Date | null;
+  public createdAt?: Date;
 
   @ResponseDtoDateProperty({ required: false })
-  public updatedAt: Date | null;
+  public updatedAt?: Date;
 
   protected override readonly _type = GetInterviewFormResponseDto.name;
 }
