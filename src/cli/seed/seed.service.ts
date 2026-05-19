@@ -4,6 +4,7 @@ import { SeederInterface } from '@cli/seed/interface/seeder.interface';
 import { AdminSeeder } from '@cli/seed/seeder/admin.seeder';
 import { AffiliateCustomerConfigSeeder } from '@cli/seed/seeder/affiliate-customer-config.seeder';
 import { CidTenSeeder } from '@cli/seed/seeder/cid-ten.seeder';
+import { CreditPackSeeder } from '@cli/seed/seeder/credit-pack.seeder';
 import { CustomerTermsSeeder } from '@cli/seed/seeder/customer-terms.seeder';
 import { OrganizationCustomizationDocumentFooterTemplateSeeder } from '@cli/seed/seeder/organization-customization-document-footer-template.seeder';
 import { OrganizationCustomizationDocumentHeaderTemplateSeeder } from '@cli/seed/seeder/organization-customization-document-header-template.seeder';
@@ -29,10 +30,13 @@ export class SeedService {
     private readonly paymentPlanPaidResourceSeeder: PaymentPlanPaidResourceSeeder,
     private readonly paymentPlanPaidResourceIaConfigSeeder: PaymentPlanPaidResourceIaConfigSeeder,
     private readonly paymentPlanSeeder: PaymentPlanSeeder,
+    private readonly creditPackSeeder: CreditPackSeeder,
     private readonly organizationCustomizationDocumentHeaderTemplateSeeder: OrganizationCustomizationDocumentHeaderTemplateSeeder,
     private readonly organizationCustomizationDocumentFooterTemplateSeeder: OrganizationCustomizationDocumentFooterTemplateSeeder,
     private readonly regulatoryUpdateMonitoredSourceSeeder: RegulatoryUpdateMonitoredSourceSeeder,
   ) {}
+
+  private readonly batchSize = 50;
 
   public async seed(): Promise<void> {
     const seeders: Array<SeederInterface> = [
@@ -42,15 +46,16 @@ export class SeedService {
       this.paymentPlanPaidResourceSeeder,
       this.paymentPlanPaidResourceIaConfigSeeder,
       this.paymentPlanSeeder,
+      this.creditPackSeeder,
       this.cidTenSeeder,
       this.organizationCustomizationDocumentHeaderTemplateSeeder,
       this.organizationCustomizationDocumentFooterTemplateSeeder,
       this.regulatoryUpdateMonitoredSourceSeeder,
     ];
 
-    const transactions: Array<TransactionType> = [];
-
     for (const seeder of seeders) {
+      let transactions: Array<TransactionType> = [];
+
       try {
         const seederTransactions = await seeder.execute();
 
@@ -59,12 +64,13 @@ export class SeedService {
             `transactions to be executed: ${seederTransactions.length}`,
             seeder.constructor.name,
           );
-          transactions.push(...seederTransactions);
+          transactions = seederTransactions;
         } else {
           this.logger.log(
             `itens created: ${seederTransactions}`,
             seeder.constructor.name,
           );
+          continue;
         }
       } catch (error) {
         if (error instanceof Error) {
@@ -73,12 +79,22 @@ export class SeedService {
             error.stack,
           );
         }
+        continue;
       }
 
-      const transaction =
-        await this.baseTransactionRepositoryGateway.execute(transactions);
+      for (let i = 0; i < transactions.length; i += this.batchSize) {
+        const batch = transactions.slice(i, i + this.batchSize);
 
-      await transaction.commit();
+        this.logger.log(
+          `executing batch ${Math.floor(i / this.batchSize) + 1}/${Math.ceil(transactions.length / this.batchSize)} (${batch.length} transactions)`,
+          seeder.constructor.name,
+        );
+
+        const transaction =
+          await this.baseTransactionRepositoryGateway.execute(batch);
+
+        await transaction.commit();
+      }
     }
   }
 }

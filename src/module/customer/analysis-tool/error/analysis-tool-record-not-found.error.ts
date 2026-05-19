@@ -4,6 +4,6 @@ export class AnalysisToolRecordNotFoundError extends NotFoundError {
   protected override readonly _type = AnalysisToolRecordNotFoundError.name;
 
   public constructor() {
-    super('Análise rápida de CNIS não encontrada');
+    super('Registro da análise não encontrado.');
   }
 }

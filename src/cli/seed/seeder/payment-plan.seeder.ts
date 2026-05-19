@@ -79,13 +79,11 @@ export class PaymentPlanSeeder implements SeederInterface {
           planData.id,
         );
 
-      if (existingPlan) {
-        continue;
+      if (!existingPlan) {
+        transactions.push(
+          this.paymentPlanCommandRepositoryGateway.createPaymentPlan(planData),
+        );
       }
-
-      transactions.push(
-        this.paymentPlanCommandRepositoryGateway.createPaymentPlan(planData),
-      );
 
       const existingEnabledResources =
         await this.paymentPlanEnabledPaidResourceQueryRepositoryGateway.findManyByPaymentPlanId(

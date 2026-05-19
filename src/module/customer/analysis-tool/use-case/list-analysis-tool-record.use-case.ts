@@ -15,6 +15,8 @@ import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-pr
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
+import type { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-relations.query.result';
+
 @Injectable()
 export class ListAnalysisToolRecordUseCase {
   protected readonly _type = ListAnalysisToolRecordUseCase.name;
@@ -83,29 +85,15 @@ export class ListAnalysisToolRecordUseCase {
             ...analysisToolRecord.analysisToolClient,
           });
 
-          const analysis =
-            analysisToolRecord.cnisFastAnalysis ??
-            analysisToolRecord.retirementPlanningRpps ??
-            analysisToolRecord.retirementPlanningRgps ??
-            analysisToolRecord.judicialCaseAnalysis ??
-            analysisToolRecord.administrativeProcedureInssAnalysis ??
-            analysisToolRecord.medicalAndSocialReportObjectionGeneratorAnalysis ??
-            analysisToolRecord.specialActivity ??
-            analysisToolRecord.disabilityAssessmentForBpcAnalysis ??
-            analysisToolRecord.ruralTimelineAnalysis ??
-            analysisToolRecord.speechGenerator ??
-            analysisToolRecord.medicalQuestionGenerator ??
-            analysisToolRecord.perCapitaIncomeForBpcAnalysis ??
-            analysisToolRecord.insuranceQualityAnalysis ??
-            analysisToolRecord.audienceQuestionGenerator;
+          const analysisId = this.getAnalysisId(analysisToolRecord);
 
-          if (analysis === null) {
+          if (analysisId === null) {
             return null;
           }
 
           return GetAnalysisToolRecordResponseDto.build({
             ...analysisToolRecord,
-            analysisId: analysis.id,
+            analysisId,
             status: analysisToolRecord.status,
             analysisToolClient: client,
             createdBy,
@@ -119,5 +107,66 @@ export class ListAnalysisToolRecordUseCase {
       ...analysisToolRecordList,
       resource,
     });
+  }
+
+  private getAnalysisId(
+    analysisToolRecord: GetAnalysisToolRecordWithRelationsQueryResult,
+  ): GetAnalysisToolRecordResponseDto['analysisId'] | null {
+    const analysis =
+      analysisToolRecord.cnisFastAnalysis ??
+      analysisToolRecord.retirementPlanningRpps ??
+      analysisToolRecord.retirementPlanningRgps ??
+      analysisToolRecord.disabilityRetirementPlanningGrant ??
+      analysisToolRecord.teacherRetirementPlanning ??
+      analysisToolRecord.generalUrbanRetirementGrant ??
+      analysisToolRecord.generalUrbanRetirementAnalysis ??
+      analysisToolRecord.generalUrbanRetirementReview ??
+      analysisToolRecord.judicialCaseAnalysis ??
+      analysisToolRecord.administrativeProcedureInssAnalysis ??
+      analysisToolRecord.medicalAndSocialReportObjectionGeneratorAnalysis ??
+      analysisToolRecord.specialActivity ??
+      analysisToolRecord.disabilityAssessmentForBpcAnalysis ??
+      analysisToolRecord.ruralOrHybridRetirementRejection ??
+      analysisToolRecord.ruralOrHybridRetirementAnalysis ??
+      analysisToolRecord.ruralTimelineAnalysis ??
+      analysisToolRecord.speechGenerator ??
+      analysisToolRecord.medicalQuestionGenerator ??
+      analysisToolRecord.perCapitaIncomeForBpcAnalysis ??
+      analysisToolRecord.insuranceQualityAnalysis ??
+      analysisToolRecord.disabilityRetirementPlanning ??
+      analysisToolRecord.audienceQuestionGenerator ??
+      analysisToolRecord.survivorPensionAnalysis ??
+      analysisToolRecord.specialRetirementGrant ??
+      analysisToolRecord.specialRetirementRejection ??
+      analysisToolRecord.maternityPayGrant ??
+      analysisToolRecord.deathBenefitGrant ??
+      analysisToolRecord.generalUrbanRetirementDenial ??
+      analysisToolRecord.disabilityRetirementPlanningRejection ??
+      analysisToolRecord.bpcDisabilityGrant ??
+      analysisToolRecord.bpcDisabilityDenial ??
+      analysisToolRecord.bpcDisabilityTermination ??
+      analysisToolRecord.deathBenefitGrant ??
+      analysisToolRecord.temporaryIncapacityBenefitRejection ??
+      analysisToolRecord.permanentIncapacityBenefitTerminated ??
+      analysisToolRecord.deathBenefitRejection ??
+      analysisToolRecord.bpcElderlyAnalysis ??
+      analysisToolRecord.bpcElderlyCessation ??
+      analysisToolRecord.teacherRetirementPlanningRejection ??
+      analysisToolRecord.accidentAssistanceTerminated ??
+      analysisToolRecord.temporaryDisabilityBenefitsTerminated ??
+      analysisToolRecord.maternityPayRejection ??
+      analysisToolRecord.retirementPermanentDisabilityRejection ??
+      analysisToolRecord.retirementPermanentDisabilityRevision ??
+      analysisToolRecord.specialCategoryRetirementAnalysis ??
+      analysisToolRecord.temporaryDisabilityBenefitsGrant ??
+      analysisToolRecord.elderlyBpcRejection ??
+      analysisToolRecord.bpcElderlyCessation;
+
+    return (
+      analysis?.id ??
+      analysisToolRecord.accidentAssistanceGrant?.accidentAssistanceGrantId ??
+      analysisToolRecord.accidentBenefitRejection?.accidentBenefitRejectionId ??
+      null
+    );
   }
 }

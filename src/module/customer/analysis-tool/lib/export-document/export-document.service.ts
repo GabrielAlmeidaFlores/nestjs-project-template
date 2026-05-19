@@ -46,6 +46,55 @@ function pxToMm(px: number): number {
   return (px * MM_PER_INCH) / CSS_PX_PER_INCH;
 }
 
+function normalizeMarkdownTables(markdown: string): string {
+  const text = markdown.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+  const lines = text.split('\n');
+  const output: string[] = [];
+  let i = 0;
+
+  while (i < lines.length) {
+    const line = lines[i] ?? '';
+    const isTableRow = /^\s*\|/.test(line);
+
+    if (isTableRow) {
+      const tableLines: string[] = [];
+      while (i < lines.length && /^\s*\|/.test(lines[i] ?? '')) {
+        tableLines.push((lines[i] ?? '').trimEnd());
+        i++;
+      }
+
+      const secondLine = tableLines[1] ?? '';
+      const hasSeparator =
+        tableLines.length >= 2 && /^\s*\|[\s\-|:]+\|/.test(secondLine);
+
+      let normalizedTable: string[];
+      if (!hasSeparator && tableLines.length >= 1) {
+        const firstLine = tableLines[0] ?? '';
+        const headerCells = (firstLine.match(/\|/g) ?? []).length - 1;
+        const sepCells = Math.max(1, headerCells);
+        const separatorRow =
+          '| ' + Array(sepCells).fill('---').join(' | ') + ' |';
+        normalizedTable = [firstLine, separatorRow, ...tableLines.slice(1)];
+      } else {
+        normalizedTable = tableLines;
+      }
+
+      if (output.length > 0 && output[output.length - 1] !== '') {
+        output.push('');
+      }
+
+      output.push(...normalizedTable);
+      output.push('');
+    } else {
+      output.push(line);
+      i++;
+    }
+  }
+
+  return output.join('\n');
+}
+
 function escapeTableCell(text: string): string {
   return text
     .trim()
@@ -117,13 +166,14 @@ export class ExportDocumentService implements ExportDocumentGateway {
   }
 
   public async convertMarkdownToHtml(markdown: string): Promise<string> {
+    const normalized = normalizeMarkdownTables(markdown);
     const file = await unified()
       .use(remarkParse)
       .use(remarkGfm)
       .use(remarkRehype, { allowDangerousHtml: true })
       .use(rehypeRaw)
       .use(rehypeStringify)
-      .process(markdown);
+      .process(normalized);
 
     return String(file);
   }
@@ -137,9 +187,9 @@ export class ExportDocumentService implements ExportDocumentGateway {
         font-size: 12pt;
         color: #111;
       }
-      h1 { font-size: 24pt; margin-bottom: 10px; color: #222; }
-      h2 { font-size: 20pt; margin-bottom: 8px; color: #333; }
-      h3 { font-size: 16pt; margin-bottom: 6px; color: #444; }
+      h1 { font-size: 24pt; margin-bottom: 10px; color: #222 !important; }
+      h2 { font-size: 20pt; margin-bottom: 8px; color: #222 !important; }
+      h3 { font-size: 16pt; margin-bottom: 6px; color: #222 !important; }
       p { margin: 8px 0; }
       strong { font-weight: bold; }
       em { font-style: italic; }
@@ -173,9 +223,12 @@ export class ExportDocumentService implements ExportDocumentGateway {
     const isHtml =
       typeof markdownContent === 'string' &&
       markdownContent.trimStart().startsWith('<');
+    const normalizedContent = isHtml
+      ? markdownContent
+      : this._normalizeMarkdownHeadings(markdownContent);
     const htmlContent = isHtml
       ? markdownContent
-      : await this.convertMarkdownToHtml(markdownContent);
+      : await this.convertMarkdownToHtml(normalizedContent);
 
     switch (format.toLowerCase()) {
       case 'pdf':
@@ -207,6 +260,23 @@ export class ExportDocumentService implements ExportDocumentGateway {
       type: contentType,
       disposition: `attachment; filename="${filename}"`,
     });
+  }
+
+  private _normalizeMarkdownHeadings(markdown: string): string {
+    let firstH1Found = false;
+    return markdown
+      .split('\n')
+      .map((line) => {
+        if (/^# [^#]/.test(line)) {
+          if (!firstH1Found) {
+            firstH1Found = true;
+            return line;
+          }
+          return `## ${line.slice(2)}`;
+        }
+        return line;
+      })
+      .join('\n');
   }
 
   private _buildFullHtmlDocument(htmlBody: string): string {

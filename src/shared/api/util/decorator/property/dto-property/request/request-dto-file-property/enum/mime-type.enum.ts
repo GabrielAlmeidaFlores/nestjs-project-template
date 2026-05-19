@@ -6,6 +6,8 @@ export enum MimeTypeEnum {
   IMAGE_SVG_XML = 'image/svg+xml',
   IMAGE_BMP = 'image/bmp',
   APPLICATION_PDF = 'application/pdf',
+  APPLICATION_MSWORD = 'application/msword',
+  APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_WORDPROCESSINGML_DOCUMENT = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   AUDIO_MPEG = 'audio/mpeg',
   AUDIO_WAV = 'audio/wav',
   AUDIO_X_WAV = 'audio/x-wav',

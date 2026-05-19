@@ -18,8 +18,8 @@ import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/d
 export class PaymentPlanPaidResourceTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'resource',
-    type: 'simple-enum',
-    enum: PaymentPlanPaidResourceTypeEnum,
+    type: 'varchar',
+    length: 255,
     unique: true,
   })
   public resource: PaymentPlanPaidResourceTypeEnum;
