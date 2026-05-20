@@ -15,7 +15,8 @@ export class PovertyDeclarationGeneratorTypeormCommandRepository
   extends BaseTypeormCommandRepository<PovertyDeclarationGeneratorTypeormEntity>
   implements PovertyDeclarationGeneratorCommandRepositoryGateway
 {
-  protected readonly _type = PovertyDeclarationGeneratorTypeormCommandRepository.name;
+  protected readonly _type =
+    PovertyDeclarationGeneratorTypeormCommandRepository.name;
 
   public constructor(
     @InjectRepository(PovertyDeclarationGeneratorTypeormEntity)

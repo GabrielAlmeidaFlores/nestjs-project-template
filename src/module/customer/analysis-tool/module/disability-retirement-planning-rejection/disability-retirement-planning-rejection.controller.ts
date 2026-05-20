@@ -14,6 +14,8 @@ import { DisabilityRetirementPlanningRejectionTimeAcceleratorId } from '@module/
 import { AnalyzeDisabilityRetirementPlanningRejectionPppRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/dto/request/analyze-disability-retirement-planning-rejection-ppp.request.dto';
 import { AnalyzeDisabilityRetirementPlanningRejectionTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/dto/request/analyze-disability-retirement-planning-rejection-time-accelerator.request.dto';
 import { CreateDisabilityRetirementPlanningRejectionRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/dto/request/create-disability-retirement-planning-rejection.request.dto';
+import { ListDisabilityRetirementPlanningRejectionPeriodsRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/dto/request/list-disability-retirement-planning-rejection-periods.request.dto';
+import { ListDisabilityRetirementPlanningRejectionTimeAcceleratorsRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/dto/request/list-disability-retirement-planning-rejection-time-accelerators.request.dto';
 import { SaveDisabilityRetirementPlanningRejectionPeriodsRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/dto/request/save-disability-retirement-planning-rejection-periods.request.dto';
 import { UpdateDisabilityRetirementPlanningRejectionTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/dto/request/update-disability-retirement-planning-rejection-time-accelerator.request.dto';
 import { UpdateDisabilityRetirementPlanningRejectionRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/dto/request/update-disability-retirement-planning-rejection.request.dto';
@@ -26,6 +28,8 @@ import { CreateDisabilityRetirementPlanningRejectionResultResponseDto } from '@m
 import { CreateDisabilityRetirementPlanningRejectionResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/dto/response/create-disability-retirement-planning-rejection.response.dto';
 import { DeleteDisabilityRetirementPlanningRejectionTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/dto/response/delete-disability-retirement-planning-rejection-time-accelerator.response.dto';
 import { GetDisabilityRetirementPlanningRejectionResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/dto/response/get-disability-retirement-planning-rejection.response.dto';
+import { ListDisabilityRetirementPlanningRejectionPeriodsResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/dto/response/list-disability-retirement-planning-rejection-periods.response.dto';
+import { ListDisabilityRetirementPlanningRejectionTimeAcceleratorsResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/dto/response/list-disability-retirement-planning-rejection-time-accelerators.response.dto';
 import { SaveDisabilityRetirementPlanningRejectionPeriodsResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/dto/response/save-disability-retirement-planning-rejection-periods.response.dto';
 import { UpdateDisabilityRetirementPlanningRejectionTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/dto/response/update-disability-retirement-planning-rejection-time-accelerator.response.dto';
 import { UpdateDisabilityRetirementPlanningRejectionResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/dto/response/update-disability-retirement-planning-rejection.response.dto';
@@ -40,6 +44,8 @@ import { DeleteDisabilityRetirementPlanningRejectionTimeAcceleratorUseCase } fro
 import { DownloadDisabilityRetirementPlanningRejectionCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/use-case/download-disability-retirement-planning-rejection-complete-analysis.use-case';
 import { DownloadDisabilityRetirementPlanningRejectionSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/use-case/download-disability-retirement-planning-rejection-simplified-analysis.use-case';
 import { GetDisabilityRetirementPlanningRejectionUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/use-case/get-disability-retirement-planning-rejection.use-case';
+import { ListDisabilityRetirementPlanningRejectionPeriodsUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/use-case/list-disability-retirement-planning-rejection-periods.use-case';
+import { ListDisabilityRetirementPlanningRejectionTimeAcceleratorsUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/use-case/list-disability-retirement-planning-rejection-time-accelerators.use-case';
 import { SaveDisabilityRetirementPlanningRejectionPeriodsUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/use-case/save-disability-retirement-planning-rejection-periods.use-case';
 import { UpdateDisabilityRetirementPlanningRejectionTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/use-case/update-disability-retirement-planning-rejection-time-accelerator.use-case';
 import { UpdateDisabilityRetirementPlanningRejectionUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/use-case/update-disability-retirement-planning-rejection.use-case';
@@ -77,6 +83,8 @@ export class DisabilityRetirementPlanningRejectionController {
     private readonly createDisabilityRetirementPlanningRejectionResultUseCase: CreateDisabilityRetirementPlanningRejectionResultUseCase,
     private readonly downloadDisabilityRetirementPlanningRejectionCompleteAnalysisUseCase: DownloadDisabilityRetirementPlanningRejectionCompleteAnalysisUseCase,
     private readonly downloadDisabilityRetirementPlanningRejectionSimplifiedAnalysisUseCase: DownloadDisabilityRetirementPlanningRejectionSimplifiedAnalysisUseCase,
+    private readonly listDisabilityRetirementPlanningRejectionPeriodsUseCase: ListDisabilityRetirementPlanningRejectionPeriodsUseCase,
+    private readonly listDisabilityRetirementPlanningRejectionTimeAcceleratorsUseCase: ListDisabilityRetirementPlanningRejectionTimeAcceleratorsUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -554,6 +562,77 @@ export class DisabilityRetirementPlanningRejectionController {
       organizationSessionData,
       disabilityRetirementPlanningRejectionId,
       format,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Listar períodos da análise de indeferimento de aposentadoria da pessoa com deficiência',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':id/period',
+      method: RequestMethod.GET,
+    },
+    tag: ['indeferimento-aposentadoria-pessoa-com-deficiencia'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Lista de períodos retornada com sucesso.',
+      type: ListDisabilityRetirementPlanningRejectionPeriodsResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async listPeriods(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'id',
+      new ParseValueObjectPipe(DisabilityRetirementPlanningRejectionId),
+    )
+    disabilityRetirementPlanningRejectionId: DisabilityRetirementPlanningRejectionId,
+    @Query() dto: ListDisabilityRetirementPlanningRejectionPeriodsRequestDto,
+  ): Promise<ListDisabilityRetirementPlanningRejectionPeriodsResponseDto> {
+    return await this.listDisabilityRetirementPlanningRejectionPeriodsUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      disabilityRetirementPlanningRejectionId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Listar aceleradores de tempo da análise de indeferimento de aposentadoria da pessoa com deficiência',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':id/time-accelerator',
+      method: RequestMethod.GET,
+    },
+    tag: ['indeferimento-aposentadoria-pessoa-com-deficiencia'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Lista de aceleradores de tempo retornada com sucesso.',
+      type: ListDisabilityRetirementPlanningRejectionTimeAcceleratorsResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async listTimeAccelerators(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'id',
+      new ParseValueObjectPipe(DisabilityRetirementPlanningRejectionId),
+    )
+    disabilityRetirementPlanningRejectionId: DisabilityRetirementPlanningRejectionId,
+    @Query()
+    dto: ListDisabilityRetirementPlanningRejectionTimeAcceleratorsRequestDto,
+  ): Promise<ListDisabilityRetirementPlanningRejectionTimeAcceleratorsResponseDto> {
+    return await this.listDisabilityRetirementPlanningRejectionTimeAcceleratorsUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      disabilityRetirementPlanningRejectionId,
+      dto,
     );
   }
 }
