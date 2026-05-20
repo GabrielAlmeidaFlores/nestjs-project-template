@@ -70,8 +70,7 @@ export class GetGeneralUrbanRetirementAnalysisRemunerationCalculationUseCase {
         totalCompetencies: calculation.totalCompetencies,
         totalAmount: calculation.totalAmount,
         averageAmount: calculation.averageAmount,
-        topEightyPercentCompetencies:
-          calculation.topEightyPercentCompetencies,
+        topEightyPercentCompetencies: calculation.topEightyPercentCompetencies,
         bottomTwentyPercentCompetencies:
           calculation.bottomTwentyPercentCompetencies,
         topEightyPercentAverageAmount:
