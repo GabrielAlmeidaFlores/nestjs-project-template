@@ -12,5 +12,6 @@ export class CreatePowerOfAttorneyGeneratorResponseDto extends BaseBuildableDtoO
   @ResponseDtoStringProperty({ required: false })
   public powerOfAttorneyGeneratorCompleteAnalysis?: string;
 
-  protected override readonly _type = CreatePowerOfAttorneyGeneratorResponseDto.name;
+  protected override readonly _type =
+    CreatePowerOfAttorneyGeneratorResponseDto.name;
 }

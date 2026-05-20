@@ -8,8 +8,8 @@ import {
   ParseEnumPipe,
 } from '@nestjs/common';
 
-import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
+import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { FeeContractGeneratorId } from '@module/customer/documents-to-be-generated/module/fee-contract/domain/schema/entity/fee-contract-generator-analysis-result/value-object/fee-contract-generator-id/fee-contract-generator-id.value-object';
 import { UpdateFeeContractGeneratorCompleteAnalysisRequestDto } from '@module/customer/documents-to-be-generated/module/fee-contract/dto/request/update-fee-contract-generator-complete-analysis.request.dto';
 import { CreateFeeContractGeneratorResponseDto } from '@module/customer/documents-to-be-generated/module/fee-contract/dto/response/create-fee-contract-generator-analysis-result.response.dto';
@@ -24,13 +24,6 @@ import { UpdateJefWaiverDeclarationGeneratorCompleteAnalysisResponseDto } from '
 import { CreateJefWaiverDeclarationGeneratorUseCase } from '@module/customer/documents-to-be-generated/module/jef-waiver-declaration/use-case/create-jef-waiver-declaration-generator.use-case';
 import { DownloadJefWaiverDeclarationGeneratorCompleteAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/jef-waiver-declaration/use-case/download-jef-waiver-declaration-generator-complete-analysis.use-case';
 import { UpdateJefWaiverDeclarationGeneratorCompleteAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/jef-waiver-declaration/use-case/update-jef-waiver-declaration-generator-complete-analysis.use-case';
-import { PowerOfAttorneyGeneratorId } from '@module/customer/documents-to-be-generated/module/power-of-attorney/domain/schema/entity/power-of-attorney-generator-analysis-result/value-object/power-of-attorney-generator-id/power-of-attorney-generator-id.value-object';
-import { UpdatePowerOfAttorneyGeneratorCompleteAnalysisRequestDto } from '@module/customer/documents-to-be-generated/module/power-of-attorney/dto/request/update-power-of-attorney-generator-complete-analysis.request.dto';
-import { CreatePowerOfAttorneyGeneratorResponseDto } from '@module/customer/documents-to-be-generated/module/power-of-attorney/dto/response/create-power-of-attorney-generator-analysis-result.response.dto';
-import { UpdatePowerOfAttorneyGeneratorCompleteAnalysisResponseDto } from '@module/customer/documents-to-be-generated/module/power-of-attorney/dto/response/update-power-of-attorney-generator-complete-analysis.response.dto';
-import { CreatePowerOfAttorneyGeneratorUseCase } from '@module/customer/documents-to-be-generated/module/power-of-attorney/use-case/create-power-of-attorney-generator.use-case';
-import { DownloadPowerOfAttorneyGeneratorCompleteAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/power-of-attorney/use-case/download-power-of-attorney-generator-complete-analysis.use-case';
-import { UpdatePowerOfAttorneyGeneratorCompleteAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/power-of-attorney/use-case/update-power-of-attorney-generator-complete-analysis.use-case';
 import { PovertyDeclarationGeneratorId } from '@module/customer/documents-to-be-generated/module/poverty-declaration/domain/schema/entity/poverty-declaration-generator-analysis-result/value-object/poverty-declaration-generator-id/poverty-declaration-generator-id.value-object';
 import { UpdatePovertyDeclarationGeneratorCompleteAnalysisRequestDto } from '@module/customer/documents-to-be-generated/module/poverty-declaration/dto/request/update-poverty-declaration-generator-complete-analysis.request.dto';
 import { CreatePovertyDeclarationGeneratorResponseDto } from '@module/customer/documents-to-be-generated/module/poverty-declaration/dto/response/create-poverty-declaration-generator-analysis-result.response.dto';
@@ -38,6 +31,13 @@ import { UpdatePovertyDeclarationGeneratorCompleteAnalysisResponseDto } from '@m
 import { CreatePovertyDeclarationGeneratorUseCase } from '@module/customer/documents-to-be-generated/module/poverty-declaration/use-case/create-poverty-declaration-generator.use-case';
 import { DownloadPovertyDeclarationGeneratorCompleteAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/poverty-declaration/use-case/download-poverty-declaration-generator-complete-analysis.use-case';
 import { UpdatePovertyDeclarationGeneratorCompleteAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/poverty-declaration/use-case/update-poverty-declaration-generator-complete-analysis.use-case';
+import { PowerOfAttorneyGeneratorId } from '@module/customer/documents-to-be-generated/module/power-of-attorney/domain/schema/entity/power-of-attorney-generator-analysis-result/value-object/power-of-attorney-generator-id/power-of-attorney-generator-id.value-object';
+import { UpdatePowerOfAttorneyGeneratorCompleteAnalysisRequestDto } from '@module/customer/documents-to-be-generated/module/power-of-attorney/dto/request/update-power-of-attorney-generator-complete-analysis.request.dto';
+import { CreatePowerOfAttorneyGeneratorResponseDto } from '@module/customer/documents-to-be-generated/module/power-of-attorney/dto/response/create-power-of-attorney-generator-analysis-result.response.dto';
+import { UpdatePowerOfAttorneyGeneratorCompleteAnalysisResponseDto } from '@module/customer/documents-to-be-generated/module/power-of-attorney/dto/response/update-power-of-attorney-generator-complete-analysis.response.dto';
+import { CreatePowerOfAttorneyGeneratorUseCase } from '@module/customer/documents-to-be-generated/module/power-of-attorney/use-case/create-power-of-attorney-generator.use-case';
+import { DownloadPowerOfAttorneyGeneratorCompleteAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/power-of-attorney/use-case/download-power-of-attorney-generator-complete-analysis.use-case';
+import { UpdatePowerOfAttorneyGeneratorCompleteAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/power-of-attorney/use-case/update-power-of-attorney-generator-complete-analysis.use-case';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
@@ -83,7 +83,8 @@ export class ClientDocumentsController {
     guard: [OrganizationSessionGuard],
   })
   public async generateFeeContract(
-    @GetOrganizationSessionData() organizationSessionData: OrganizationSessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Param('clientId', new ParseValueObjectPipe(AnalysisToolClientId))
     clientId: AnalysisToolClientId,
   ): Promise<CreateFeeContractGeneratorResponseDto> {
@@ -109,7 +110,8 @@ export class ClientDocumentsController {
     guard: [OrganizationSessionGuard],
   })
   public async downloadFeeContract(
-    @GetOrganizationSessionData() organizationSessionData: OrganizationSessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Param('documentId', new ParseValueObjectPipe(FeeContractGeneratorId))
     documentId: FeeContractGeneratorId,
     @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
@@ -133,7 +135,8 @@ export class ClientDocumentsController {
     tag: ['documentos-cliente'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Análise completa do contrato de honorários atualizada com sucesso.',
+      description:
+        'Análise completa do contrato de honorários atualizada com sucesso.',
       type: UpdateFeeContractGeneratorCompleteAnalysisResponseDto,
     },
     guard: [],
@@ -167,7 +170,8 @@ export class ClientDocumentsController {
     guard: [OrganizationSessionGuard],
   })
   public async generatePowerOfAttorney(
-    @GetOrganizationSessionData() organizationSessionData: OrganizationSessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Param('clientId', new ParseValueObjectPipe(AnalysisToolClientId))
     clientId: AnalysisToolClientId,
   ): Promise<CreatePowerOfAttorneyGeneratorResponseDto> {
@@ -193,7 +197,8 @@ export class ClientDocumentsController {
     guard: [OrganizationSessionGuard],
   })
   public async downloadPowerOfAttorney(
-    @GetOrganizationSessionData() organizationSessionData: OrganizationSessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Param('documentId', new ParseValueObjectPipe(PowerOfAttorneyGeneratorId))
     documentId: PowerOfAttorneyGeneratorId,
     @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
@@ -245,13 +250,15 @@ export class ClientDocumentsController {
     tag: ['documentos-cliente'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
-      description: 'Declaração de renúncia ao excedente do JEF gerada com sucesso.',
+      description:
+        'Declaração de renúncia ao excedente do JEF gerada com sucesso.',
       type: CreateJefWaiverDeclarationGeneratorResponseDto,
     },
     guard: [OrganizationSessionGuard],
   })
   public async generateJefWaiverDeclaration(
-    @GetOrganizationSessionData() organizationSessionData: OrganizationSessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Param('clientId', new ParseValueObjectPipe(AnalysisToolClientId))
     clientId: AnalysisToolClientId,
   ): Promise<CreateJefWaiverDeclarationGeneratorResponseDto> {
@@ -271,14 +278,19 @@ export class ClientDocumentsController {
     tag: ['documentos-cliente'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Arquivo da declaração de renúncia ao excedente do JEF retornado para download.',
+      description:
+        'Arquivo da declaração de renúncia ao excedente do JEF retornado para download.',
       type: Buffer,
     },
     guard: [OrganizationSessionGuard],
   })
   public async downloadJefWaiverDeclaration(
-    @GetOrganizationSessionData() organizationSessionData: OrganizationSessionDataModel,
-    @Param('documentId', new ParseValueObjectPipe(JefWaiverDeclarationGeneratorId))
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'documentId',
+      new ParseValueObjectPipe(JefWaiverDeclarationGeneratorId),
+    )
     documentId: JefWaiverDeclarationGeneratorId,
     @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
     format: ExportDocumentFormatEnum = ExportDocumentFormatEnum.PDF,
@@ -291,7 +303,8 @@ export class ClientDocumentsController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Atualizar análise completa da declaração de renúncia ao excedente do JEF',
+    summary:
+      'Atualizar análise completa da declaração de renúncia ao excedente do JEF',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'jef-waiver-declaration/:documentId/complete-analysis',
@@ -301,13 +314,17 @@ export class ClientDocumentsController {
     tag: ['documentos-cliente'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Análise completa da declaração de renúncia ao excedente do JEF atualizada com sucesso.',
+      description:
+        'Análise completa da declaração de renúncia ao excedente do JEF atualizada com sucesso.',
       type: UpdateJefWaiverDeclarationGeneratorCompleteAnalysisResponseDto,
     },
     guard: [],
   })
   public async updateJefWaiverDeclarationCompleteAnalysis(
-    @Param('documentId', new ParseValueObjectPipe(JefWaiverDeclarationGeneratorId))
+    @Param(
+      'documentId',
+      new ParseValueObjectPipe(JefWaiverDeclarationGeneratorId),
+    )
     documentId: JefWaiverDeclarationGeneratorId,
     @Body() dto: UpdateJefWaiverDeclarationGeneratorCompleteAnalysisRequestDto,
   ): Promise<UpdateJefWaiverDeclarationGeneratorCompleteAnalysisResponseDto> {
@@ -335,7 +352,8 @@ export class ClientDocumentsController {
     guard: [OrganizationSessionGuard],
   })
   public async generatePovertyDeclaration(
-    @GetOrganizationSessionData() organizationSessionData: OrganizationSessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Param('clientId', new ParseValueObjectPipe(AnalysisToolClientId))
     clientId: AnalysisToolClientId,
   ): Promise<CreatePovertyDeclarationGeneratorResponseDto> {
@@ -355,14 +373,19 @@ export class ClientDocumentsController {
     tag: ['documentos-cliente'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Arquivo da declaração de hipossuficiência retornado para download.',
+      description:
+        'Arquivo da declaração de hipossuficiência retornado para download.',
       type: Buffer,
     },
     guard: [OrganizationSessionGuard],
   })
   public async downloadPovertyDeclaration(
-    @GetOrganizationSessionData() organizationSessionData: OrganizationSessionDataModel,
-    @Param('documentId', new ParseValueObjectPipe(PovertyDeclarationGeneratorId))
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'documentId',
+      new ParseValueObjectPipe(PovertyDeclarationGeneratorId),
+    )
     documentId: PovertyDeclarationGeneratorId,
     @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
     format: ExportDocumentFormatEnum = ExportDocumentFormatEnum.PDF,
@@ -385,13 +408,17 @@ export class ClientDocumentsController {
     tag: ['documentos-cliente'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Análise completa da declaração de hipossuficiência atualizada com sucesso.',
+      description:
+        'Análise completa da declaração de hipossuficiência atualizada com sucesso.',
       type: UpdatePovertyDeclarationGeneratorCompleteAnalysisResponseDto,
     },
     guard: [],
   })
   public async updatePovertyDeclarationCompleteAnalysis(
-    @Param('documentId', new ParseValueObjectPipe(PovertyDeclarationGeneratorId))
+    @Param(
+      'documentId',
+      new ParseValueObjectPipe(PovertyDeclarationGeneratorId),
+    )
     documentId: PovertyDeclarationGeneratorId,
     @Body() dto: UpdatePovertyDeclarationGeneratorCompleteAnalysisRequestDto,
   ): Promise<UpdatePovertyDeclarationGeneratorCompleteAnalysisResponseDto> {

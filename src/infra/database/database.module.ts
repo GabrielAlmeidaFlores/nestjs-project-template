@@ -192,6 +192,7 @@ import { DisabilityRetirementPlanningRejectionTypeormQueryRepository } from '@in
 import { DisabilityRetirementPlanningRejectionDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-rejection-document/disability-retirement-planning-rejection-document.typeorm.command.repository';
 import { DisabilityRetirementPlanningRejectionInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-rejection-inss-benefit/disability-retirement-planning-rejection-inss-benefit.typeorm.command.repository';
 import { DisabilityRetirementPlanningRejectionPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-rejection-period/disability-retirement-planning-rejection-period.typeorm.command.repository';
+import { DisabilityRetirementPlanningRejectionPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-rejection-period/disability-retirement-planning-rejection-period.typeorm.query.repository';
 import { DisabilityRetirementPlanningRejectionPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-rejection-period-document/disability-retirement-planning-rejection-period-document.typeorm.command.repository';
 import { DisabilityRetirementPlanningRejectionPeriodEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-rejection-period-earnings-history/disability-retirement-planning-rejection-period-earnings-history.typeorm.command.repository';
 import { DisabilityRetirementPlanningRejectionResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-rejection-result/disability-retirement-planning-rejection-result.typeorm.command.repository';
@@ -885,6 +886,7 @@ import { DisabilityRetirementPlanningRejectionQueryRepositoryGateway } from '@mo
 import { DisabilityRetirementPlanningRejectionDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/repository/disability-retirement-planning-rejection-document/command/disability-retirement-planning-rejection-document.command.repository.gateway';
 import { DisabilityRetirementPlanningRejectionInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/repository/disability-retirement-planning-rejection-inss-benefit/command/disability-retirement-planning-rejection-inss-benefit.command.repository.gateway';
 import { DisabilityRetirementPlanningRejectionPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/repository/disability-retirement-planning-rejection-period/command/disability-retirement-planning-rejection-period.command.repository.gateway';
+import { DisabilityRetirementPlanningRejectionPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/repository/disability-retirement-planning-rejection-period/query/disability-retirement-planning-rejection-period.query.repository.gateway';
 import { DisabilityRetirementPlanningRejectionPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/repository/disability-retirement-planning-rejection-period-document/command/disability-retirement-planning-rejection-period-document.command.repository.gateway';
 import { DisabilityRetirementPlanningRejectionPeriodEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/repository/disability-retirement-planning-rejection-period-earnings-history/command/disability-retirement-planning-rejection-period-earnings-history.command.repository.gateway';
 import { DisabilityRetirementPlanningRejectionResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/repository/disability-retirement-planning-rejection-result/command/disability-retirement-planning-rejection-result.command.repository.gateway';
@@ -4173,6 +4175,10 @@ const classProvider: ClassProvider[] = [
       DisabilityRetirementPlanningRejectionPeriodCommandRepositoryGateway,
     useClass:
       DisabilityRetirementPlanningRejectionPeriodTypeormCommandRepository,
+  },
+  {
+    provide: DisabilityRetirementPlanningRejectionPeriodQueryRepositoryGateway,
+    useClass: DisabilityRetirementPlanningRejectionPeriodTypeormQueryRepository,
   },
   {
     provide:

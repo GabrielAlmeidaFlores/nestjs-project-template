@@ -7,5 +7,6 @@ export class UpdateJefWaiverDeclarationGeneratorCompleteAnalysisResponseDto exte
   @ResponseDtoStringProperty()
   public jefWaiverDeclarationGeneratorCompleteAnalysis: string;
 
-  protected override readonly _type = UpdateJefWaiverDeclarationGeneratorCompleteAnalysisResponseDto.name;
+  protected override readonly _type =
+    UpdateJefWaiverDeclarationGeneratorCompleteAnalysisResponseDto.name;
 }

@@ -12,5 +12,6 @@ export class CreateFeeContractGeneratorResponseDto extends BaseBuildableDtoObjec
   @ResponseDtoStringProperty({ required: false })
   public feeContractGeneratorCompleteAnalysis?: string;
 
-  protected override readonly _type = CreateFeeContractGeneratorResponseDto.name;
+  protected override readonly _type =
+    CreateFeeContractGeneratorResponseDto.name;
 }
