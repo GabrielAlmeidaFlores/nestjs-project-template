@@ -11,7 +11,8 @@ import { OrganizationSessionDataModel } from '@shared/api/util/decorator/propert
 
 @Injectable()
 export class DownloadFeeContractGeneratorCompleteAnalysisUseCase {
-  protected readonly _type = DownloadFeeContractGeneratorCompleteAnalysisUseCase.name;
+  protected readonly _type =
+    DownloadFeeContractGeneratorCompleteAnalysisUseCase.name;
 
   public constructor(
     @Inject(FeeContractGeneratorQueryRepositoryGateway)
@@ -33,7 +34,8 @@ export class DownloadFeeContractGeneratorCompleteAnalysisUseCase {
         FeeContractGeneratorNotFoundError,
       );
 
-    const responseAi = feeContractGenerator.feeContractGeneratorCompleteAnalysis;
+    const responseAi =
+      feeContractGenerator.feeContractGeneratorCompleteAnalysis;
 
     if (responseAi === null) {
       throw new FeeContractGeneratorDoesNotContainCompleteAnalysisError();

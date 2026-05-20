@@ -12,7 +12,8 @@ import { PowerOfAttorneyGeneratorNotFoundError } from '@module/customer/document
 
 @Injectable()
 export class UpdatePowerOfAttorneyGeneratorCompleteAnalysisUseCase {
-  protected readonly _type = UpdatePowerOfAttorneyGeneratorCompleteAnalysisUseCase.name;
+  protected readonly _type =
+    UpdatePowerOfAttorneyGeneratorCompleteAnalysisUseCase.name;
 
   public constructor(
     @Inject(PowerOfAttorneyGeneratorQueryRepositoryGateway)
@@ -33,13 +34,16 @@ export class UpdatePowerOfAttorneyGeneratorCompleteAnalysisUseCase {
         PowerOfAttorneyGeneratorNotFoundError,
       );
 
-    if (powerOfAttorneyGenerator.powerOfAttorneyGeneratorCompleteAnalysis === null) {
+    if (
+      powerOfAttorneyGenerator.powerOfAttorneyGeneratorCompleteAnalysis === null
+    ) {
       throw new PowerOfAttorneyGeneratorDoesNotContainCompleteAnalysisError();
     }
 
     const updatedPowerOfAttorneyGenerator = new PowerOfAttorneyGeneratorEntity({
       ...powerOfAttorneyGenerator,
-      powerOfAttorneyGeneratorCompleteAnalysis: dto.powerOfAttorneyGeneratorCompleteAnalysis,
+      powerOfAttorneyGeneratorCompleteAnalysis:
+        dto.powerOfAttorneyGeneratorCompleteAnalysis,
     });
 
     const powerOfAttorneyGeneratorTransaction =
@@ -54,7 +58,8 @@ export class UpdatePowerOfAttorneyGeneratorCompleteAnalysisUseCase {
     await transaction.commit();
 
     return UpdatePowerOfAttorneyGeneratorCompleteAnalysisResponseDto.build({
-      powerOfAttorneyGeneratorCompleteAnalysis: dto.powerOfAttorneyGeneratorCompleteAnalysis,
+      powerOfAttorneyGeneratorCompleteAnalysis:
+        dto.powerOfAttorneyGeneratorCompleteAnalysis,
     });
   }
 }

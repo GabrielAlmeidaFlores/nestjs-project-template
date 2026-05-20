@@ -4,7 +4,9 @@ import { JefWaiverDeclarationGeneratorId } from '@module/customer/documents-to-b
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 export class JefWaiverDeclarationGeneratorEntity extends BaseEntity<JefWaiverDeclarationGeneratorId> {
-  @Description('Análise completa do gerador de declaração de renúncia ao excedente do JEF.')
+  @Description(
+    'Análise completa do gerador de declaração de renúncia ao excedente do JEF.',
+  )
   public readonly jefWaiverDeclarationGeneratorCompleteAnalysis: string | null;
 
   protected readonly _type = JefWaiverDeclarationGeneratorEntity.name;

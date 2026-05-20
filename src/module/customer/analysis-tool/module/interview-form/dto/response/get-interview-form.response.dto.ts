@@ -197,7 +197,9 @@ export class GetInterviewFormResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoBooleanProperty({ required: false })
   public buysMedicationFromPopularPharmacy?: boolean;
 
-  @ResponseDtoEnumProperty(InterviewFormMedicalServiceTypeEnum, { required: false })
+  @ResponseDtoEnumProperty(InterviewFormMedicalServiceTypeEnum, {
+    required: false,
+  })
   public medicalServiceType?: InterviewFormMedicalServiceTypeEnum;
 
   @ResponseDtoStringProperty({ required: false })
