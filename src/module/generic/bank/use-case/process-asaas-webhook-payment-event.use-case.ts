@@ -260,6 +260,11 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
       return;
     }
 
+    await this.ensurePaymentPlanBankPaymentLinkExists(
+      organizationPaymentPlan.id,
+      bankPayment,
+    );
+
     if (bankPayment.status === PaymentStatusEnum.CONFIRMED) {
       await this.processAffiliateTransferGateway.process(
         bankPayment.id,
