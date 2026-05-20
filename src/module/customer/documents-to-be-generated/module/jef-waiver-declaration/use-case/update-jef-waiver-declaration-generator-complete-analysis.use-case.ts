@@ -12,7 +12,8 @@ import { JefWaiverDeclarationGeneratorNotFoundError } from '@module/customer/doc
 
 @Injectable()
 export class UpdateJefWaiverDeclarationGeneratorCompleteAnalysisUseCase {
-  protected readonly _type = UpdateJefWaiverDeclarationGeneratorCompleteAnalysisUseCase.name;
+  protected readonly _type =
+    UpdateJefWaiverDeclarationGeneratorCompleteAnalysisUseCase.name;
 
   public constructor(
     @Inject(JefWaiverDeclarationGeneratorQueryRepositoryGateway)
@@ -33,14 +34,19 @@ export class UpdateJefWaiverDeclarationGeneratorCompleteAnalysisUseCase {
         JefWaiverDeclarationGeneratorNotFoundError,
       );
 
-    if (jefWaiverDeclarationGenerator.jefWaiverDeclarationGeneratorCompleteAnalysis === null) {
+    if (
+      jefWaiverDeclarationGenerator.jefWaiverDeclarationGeneratorCompleteAnalysis ===
+      null
+    ) {
       throw new JefWaiverDeclarationGeneratorDoesNotContainCompleteAnalysisError();
     }
 
-    const updatedJefWaiverDeclarationGenerator = new JefWaiverDeclarationGeneratorEntity({
-      ...jefWaiverDeclarationGenerator,
-      jefWaiverDeclarationGeneratorCompleteAnalysis: dto.jefWaiverDeclarationGeneratorCompleteAnalysis,
-    });
+    const updatedJefWaiverDeclarationGenerator =
+      new JefWaiverDeclarationGeneratorEntity({
+        ...jefWaiverDeclarationGenerator,
+        jefWaiverDeclarationGeneratorCompleteAnalysis:
+          dto.jefWaiverDeclarationGeneratorCompleteAnalysis,
+      });
 
     const jefWaiverDeclarationGeneratorTransaction =
       this.jefWaiverDeclarationGeneratorCommandRepositoryGateway.updateJefWaiverDeclarationGenerator(
@@ -53,8 +59,11 @@ export class UpdateJefWaiverDeclarationGeneratorCompleteAnalysisUseCase {
     );
     await transaction.commit();
 
-    return UpdateJefWaiverDeclarationGeneratorCompleteAnalysisResponseDto.build({
-      jefWaiverDeclarationGeneratorCompleteAnalysis: dto.jefWaiverDeclarationGeneratorCompleteAnalysis,
-    });
+    return UpdateJefWaiverDeclarationGeneratorCompleteAnalysisResponseDto.build(
+      {
+        jefWaiverDeclarationGeneratorCompleteAnalysis:
+          dto.jefWaiverDeclarationGeneratorCompleteAnalysis,
+      },
+    );
   }
 }

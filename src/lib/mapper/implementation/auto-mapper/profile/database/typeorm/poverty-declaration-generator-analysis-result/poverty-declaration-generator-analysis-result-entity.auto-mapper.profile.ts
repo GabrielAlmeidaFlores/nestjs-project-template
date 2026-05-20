@@ -8,7 +8,8 @@ import { PovertyDeclarationGeneratorId } from '@module/customer/documents-to-be-
 
 @Injectable()
 export class PovertyDeclarationGeneratorEntityAutoMapperProfile {
-  protected readonly _type = PovertyDeclarationGeneratorEntityAutoMapperProfile.name;
+  protected readonly _type =
+    PovertyDeclarationGeneratorEntityAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();

@@ -7,5 +7,6 @@ export class UpdatePowerOfAttorneyGeneratorCompleteAnalysisResponseDto extends B
   @ResponseDtoStringProperty()
   public powerOfAttorneyGeneratorCompleteAnalysis: string;
 
-  protected override readonly _type = UpdatePowerOfAttorneyGeneratorCompleteAnalysisResponseDto.name;
+  protected override readonly _type =
+    UpdatePowerOfAttorneyGeneratorCompleteAnalysisResponseDto.name;
 }

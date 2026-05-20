@@ -15,7 +15,8 @@ export class PowerOfAttorneyGeneratorTypeormCommandRepository
   extends BaseTypeormCommandRepository<PowerOfAttorneyGeneratorTypeormEntity>
   implements PowerOfAttorneyGeneratorCommandRepositoryGateway
 {
-  protected readonly _type = PowerOfAttorneyGeneratorTypeormCommandRepository.name;
+  protected readonly _type =
+    PowerOfAttorneyGeneratorTypeormCommandRepository.name;
 
   public constructor(
     @InjectRepository(PowerOfAttorneyGeneratorTypeormEntity)

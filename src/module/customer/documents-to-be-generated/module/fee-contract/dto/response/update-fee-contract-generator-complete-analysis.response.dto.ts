@@ -7,5 +7,6 @@ export class UpdateFeeContractGeneratorCompleteAnalysisResponseDto extends BaseB
   @ResponseDtoStringProperty()
   public feeContractGeneratorCompleteAnalysis: string;
 
-  protected override readonly _type = UpdateFeeContractGeneratorCompleteAnalysisResponseDto.name;
+  protected override readonly _type =
+    UpdateFeeContractGeneratorCompleteAnalysisResponseDto.name;
 }

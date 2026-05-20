@@ -8,7 +8,8 @@ import { JefWaiverDeclarationGeneratorId } from '@module/customer/documents-to-b
 
 @Injectable()
 export class JefWaiverDeclarationGeneratorEntityAutoMapperProfile {
-  protected readonly _type = JefWaiverDeclarationGeneratorEntityAutoMapperProfile.name;
+  protected readonly _type =
+    JefWaiverDeclarationGeneratorEntityAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();
