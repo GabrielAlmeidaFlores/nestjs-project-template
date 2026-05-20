@@ -12,7 +12,13 @@ export class GetRetirementPlanningRppsRemunerationCalculationResponseDto extends
   public totalAmount?: number;
 
   @ResponseDtoNumberProperty({ required: false })
+  public totalUpdatedAmount?: number;
+
+  @ResponseDtoNumberProperty({ required: false })
   public averageAmount?: number;
+
+  @ResponseDtoNumberProperty({ required: false })
+  public averageUpdatedAmount?: number;
 
   @ResponseDtoNumberProperty({ required: false })
   public topEightyPercentCompetencies?: number;
@@ -22,6 +28,9 @@ export class GetRetirementPlanningRppsRemunerationCalculationResponseDto extends
 
   @ResponseDtoNumberProperty({ required: false })
   public topEightyPercentAverageAmount?: number;
+
+  @ResponseDtoNumberProperty({ required: false })
+  public topEightyPercentAverageUpdatedAmount?: number;
 
   @ResponseDtoDateProperty({ required: false })
   public createdAt?: Date;

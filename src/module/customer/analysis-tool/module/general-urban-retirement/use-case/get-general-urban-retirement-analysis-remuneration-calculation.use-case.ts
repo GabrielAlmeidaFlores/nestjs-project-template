@@ -59,6 +59,7 @@ export class GetGeneralUrbanRetirementAnalysisRemunerationCalculationUseCase {
     const calculation = this.remunerationCalculatorGateway.calculate(
       remunerations.map((item) =>
         RemunerationDataInputModel.build({
+          remunerationDate: item.remunerationDate,
           remunerationAmount: item.remunerationAmount,
         }),
       ),
@@ -66,15 +67,14 @@ export class GetGeneralUrbanRetirementAnalysisRemunerationCalculationUseCase {
 
     return GetGeneralUrbanRetirementAnalysisRemunerationCalculationResponseDto.build(
       {
-        totalCompetencies: calculation.totalCompetencies ?? 0,
-        totalAmount: calculation.totalAmount ?? 0,
-        averageAmount: calculation.averageAmount ?? 0,
-        topEightyPercentCompetencies:
-          calculation.topEightyPercentCompetencies ?? 0,
+        totalCompetencies: calculation.totalCompetencies,
+        totalAmount: calculation.totalAmount,
+        averageAmount: calculation.averageAmount,
+        topEightyPercentCompetencies: calculation.topEightyPercentCompetencies,
         bottomTwentyPercentCompetencies:
-          calculation.bottomTwentyPercentCompetencies ?? 0,
+          calculation.bottomTwentyPercentCompetencies,
         topEightyPercentAverageAmount:
-          calculation.topEightyPercentAverageAmount ?? 0,
+          calculation.topEightyPercentAverageAmount,
       },
     );
   }

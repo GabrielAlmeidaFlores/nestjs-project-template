@@ -12,16 +12,10 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: qa
     steps:
       - name: 📦 Checkout Repository
         uses: actions/checkout@v4
-
-      - name: ⚙️ Configure Docker for Insecure Registry
-        run: |
-          REGISTRY_HOST=$(echo "${{ vars.REGISTRY_URL }}" | cut -d/ -f1)
-          echo "{ \"insecure-registries\": [\"$REGISTRY_HOST\"] }" | sudo tee /etc/docker/daemon.json
-          sudo systemctl restart docker
 
       - name: 🔐 Docker Login to Registry
         run: |
@@ -30,11 +24,11 @@ jobs:
       - name: 🐳 Build Docker Image
         run: |
           docker build --no-cache -t ${{ vars.REGISTRY_URL }}:${{ env.ACTION_ENV }} .
-          
+
       - name: 📤 Push Docker Image
         run: |
           docker push ${{ vars.REGISTRY_URL }}:${{ env.ACTION_ENV }}
-  
+
   deploy:
     needs: build
     runs-on: qa
@@ -45,7 +39,7 @@ jobs:
       - name: 🔐 Docker Login to Registry
         run: |
           echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login $(echo "${{ vars.REGISTRY_URL }}" | cut -d/ -f1) -u ${{ secrets.REGISTRY_USER }} --password-stdin
-        
+
       - name: 📥 Pull Docker Image
         run: |
           cd ${{ env.WORKING_DIRECTORY }}
@@ -55,7 +49,7 @@ jobs:
         run: |
           cd ${{ env.WORKING_DIRECTORY }}
           echo -e '${{ vars.QA_ENVS }}' > ${{ env.WORKING_DIRECTORY }}/.${{ env.ACTION_ENV }}-${{ env.PROJECT_NAME }}.env
-        
+
       - name: 🚀 Deploy Docker
         run: |
           cd ${{ env.WORKING_DIRECTORY }}
