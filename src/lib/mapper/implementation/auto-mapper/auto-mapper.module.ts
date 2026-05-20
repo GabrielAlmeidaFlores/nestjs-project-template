@@ -280,6 +280,7 @@ import { DisabilityRetirementPlanningResultEntityAutoMapperProfile } from '@lib/
 import { GetDisabilityRetirementPlanningResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-retirement-planning-result/get-disability-retirement-planning-result-query-result.auto-mapper.profile';
 import { ElderlyBpcRejectionEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/elderly-bpc-rejection/elderly-bpc-rejection-entity.auto-mapper.profile';
 import { ElderlyBpcRejectionResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/elderly-bpc-rejection/elderly-bpc-rejection-result-entity.auto-mapper.profile';
+import { FeeContractGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/fee-contract-generator-analysis-result/fee-contract-generator-analysis-result-entity.auto-mapper.profile';
 import { FullOpinionGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/full-opinion-generator-analysis-result/full-opinion-generator-analysis-result-entity.auto-mapper.profile';
 import { GeneralUrbanRetirementAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-analysis/general-urban-retirement-analysis-entity.auto-mapper.profile';
 import { GetGeneralUrbanRetirementAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-analysis/get-general-urban-retirement-analysis-query-result.auto-mapper.profile';
@@ -347,6 +348,9 @@ import { GetInsuranceQualityAnalysisLegalProceedingQueryResultAutoMapperProfile 
 import { InsuranceQualityAnalysisLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis-legal-proceeding/insurance-quality-analysis-legal-proceeding-entity.auto-mapper.profile';
 import { GetInsuranceQualityAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis-result/get-insurance-quality-analysis-result-query-result.auto-mapper.profile';
 import { InsuranceQualityAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis-result/insurance-quality-analysis-result-entity.auto-mapper.profile';
+import { GetInterviewFormQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/interview-form/get-interview-form-query-result.auto-mapper.profile';
+import { InterviewFormEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/interview-form/interview-form-entity.auto-mapper.profile';
+import { JefWaiverDeclarationGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/jef-waiver-declaration-generator-analysis-result/jef-waiver-declaration-generator-analysis-result-entity.auto-mapper.profile';
 import { GetJudicialCaseAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis/get-judicial-case-analysis-query-result.auto-mapper.profile';
 import { GetJudicialCaseAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis/get-judicial-case-analysis-with-relations-query-result.auto-mapper.profile';
 import { JudicialCaseAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis/judicial-case-analysis-entity.auto-mapper.profile';
@@ -483,6 +487,8 @@ import { PermanentIncapacityBenefitTerminatedInsuredStatusDocumentEntityAutoMapp
 import { PermanentIncapacityBenefitTerminatedResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/permanent-incapacity-benefit-terminated-result/permanent-incapacity-benefit-terminated-result-entity.auto-mapper.profile';
 import { PermanentIncapacityBenefitTerminatedWorkPeriodsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/permanent-incapacity-benefit-terminated-work-periods/permanent-incapacity-benefit-terminated-work-periods-entity.auto-mapper.profile';
 import { PermanentIncapacityBenefitTerminatedWorkPeriodsEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/permanent-incapacity-benefit-terminated-work-periods-earnings-history/permanent-incapacity-benefit-terminated-work-periods-earnings-history-entity.auto-mapper.profile';
+import { PovertyDeclarationGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/poverty-declaration-generator-analysis-result/poverty-declaration-generator-analysis-result-entity.auto-mapper.profile';
+import { PowerOfAttorneyGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/power-of-attorney-generator-analysis-result/power-of-attorney-generator-analysis-result-entity.auto-mapper.profile';
 import { RegulatoryUpdateEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/regulatory-update/regulatory-update-entity.auto-mapper.profile';
 import { RegulatoryUpdateEmailPreferenceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/regulatory-update-email-preference/regulatory-update-email-preference-entity.auto-mapper.profile';
 import { RegulatoryUpdateMonitoredSourceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/regulatory-update-monitored-source/regulatory-update-monitored-source-entity.auto-mapper.profile';
@@ -717,7 +723,6 @@ import { TemporaryIncapacityBenefitRejectionWorkPeriodsEntityAutoMapperProfile }
 import { TemporaryIncapacityBenefitRejectionWorkPeriodsEarningsHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/temporary-incapacity-benefit-rejection-work-periods-earnings-history/temporary-incapacity-benefit-rejection-work-periods-earnings-history-entity.auto-mapper.profile';
 import { GetTutorialQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/tutorial/get-tutorial-query-result.auto-mapper.profile';
 import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/tutorial/tutorial-entity.auto-mapper.profile';
-
 @Module({
   imports: [
     AutomapperModule.forRoot({
@@ -769,6 +774,8 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetInsuranceQualityAnalysisInssBenefitQueryResultAutoMapperProfile,
     InsuranceQualityAnalysisLegalProceedingEntityAutoMapperProfile,
     GetInsuranceQualityAnalysisLegalProceedingQueryResultAutoMapperProfile,
+    InterviewFormEntityAutoMapperProfile,
+    GetInterviewFormQueryResultAutoMapperProfile,
     GetSpeechGeneratorDocumentQueryResultAutoMapperProfile,
     SpeechGeneratorDocumentEntityAutoMapperProfile,
     GetSpeechGeneratorResultQueryResultAutoMapperProfile,
@@ -1304,6 +1311,10 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     GetMedicalAndSocialReportObjectionGeneratorAnalysisWithRelationsQueryResultAutoMapperProfile,
     MedicalAndSocialReportObjectionGeneratorAnalysisResultEntityAutoMapperProfile,
     InitialPetitionGeneratorEntityAutoMapperProfile,
+    FeeContractGeneratorEntityAutoMapperProfile,
+    PowerOfAttorneyGeneratorEntityAutoMapperProfile,
+    JefWaiverDeclarationGeneratorEntityAutoMapperProfile,
+    PovertyDeclarationGeneratorEntityAutoMapperProfile,
     AdministrativeRequestGeneratorEntityAutoMapperProfile,
     FullOpinionGeneratorEntityAutoMapperProfile,
     GetMedicalAndSocialReportObjectionGeneratorAnalysisResultQueryResultAutoMapperProfile,
