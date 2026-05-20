@@ -8,7 +8,8 @@ import { PowerOfAttorneyGeneratorId } from '@module/customer/documents-to-be-gen
 
 @Injectable()
 export class PowerOfAttorneyGeneratorEntityAutoMapperProfile {
-  protected readonly _type = PowerOfAttorneyGeneratorEntityAutoMapperProfile.name;
+  protected readonly _type =
+    PowerOfAttorneyGeneratorEntityAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();

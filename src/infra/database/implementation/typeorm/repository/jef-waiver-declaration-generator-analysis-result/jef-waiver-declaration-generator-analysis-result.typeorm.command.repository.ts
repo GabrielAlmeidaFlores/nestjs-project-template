@@ -15,7 +15,8 @@ export class JefWaiverDeclarationGeneratorTypeormCommandRepository
   extends BaseTypeormCommandRepository<JefWaiverDeclarationGeneratorTypeormEntity>
   implements JefWaiverDeclarationGeneratorCommandRepositoryGateway
 {
-  protected readonly _type = JefWaiverDeclarationGeneratorTypeormCommandRepository.name;
+  protected readonly _type =
+    JefWaiverDeclarationGeneratorTypeormCommandRepository.name;
 
   public constructor(
     @InjectRepository(JefWaiverDeclarationGeneratorTypeormEntity)

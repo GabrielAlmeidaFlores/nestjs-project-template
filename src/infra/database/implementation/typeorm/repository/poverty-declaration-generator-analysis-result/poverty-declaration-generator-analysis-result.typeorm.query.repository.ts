@@ -13,7 +13,8 @@ import type { ConstructorType } from '@shared/system/type/constructor.type';
 
 @Injectable()
 export class PovertyDeclarationGeneratorTypeormQueryRepository implements PovertyDeclarationGeneratorQueryRepositoryGateway {
-  protected readonly _type = PovertyDeclarationGeneratorTypeormQueryRepository.name;
+  protected readonly _type =
+    PovertyDeclarationGeneratorTypeormQueryRepository.name;
 
   public constructor(
     @InjectRepository(PovertyDeclarationGeneratorTypeormEntity)

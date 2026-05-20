@@ -12,5 +12,6 @@ export class CreateJefWaiverDeclarationGeneratorResponseDto extends BaseBuildabl
   @ResponseDtoStringProperty({ required: false })
   public jefWaiverDeclarationGeneratorCompleteAnalysis?: string;
 
-  protected override readonly _type = CreateJefWaiverDeclarationGeneratorResponseDto.name;
+  protected override readonly _type =
+    CreateJefWaiverDeclarationGeneratorResponseDto.name;
 }

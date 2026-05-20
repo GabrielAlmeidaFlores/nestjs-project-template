@@ -7,5 +7,6 @@ export class UpdatePovertyDeclarationGeneratorCompleteAnalysisResponseDto extend
   @ResponseDtoStringProperty()
   public povertyDeclarationGeneratorCompleteAnalysis: string;
 
-  protected override readonly _type = UpdatePovertyDeclarationGeneratorCompleteAnalysisResponseDto.name;
+  protected override readonly _type =
+    UpdatePovertyDeclarationGeneratorCompleteAnalysisResponseDto.name;
 }
