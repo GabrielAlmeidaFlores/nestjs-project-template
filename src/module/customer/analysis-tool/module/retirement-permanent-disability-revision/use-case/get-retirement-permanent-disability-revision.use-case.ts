@@ -180,19 +180,19 @@ export class GetRetirementPermanentDisabilityRevisionUseCase {
     if (analysisQueryResult.document.length > 0) {
       const documents = await Promise.all(
         analysisQueryResult.document.map(async (doc) => {
-          const url = await this.fileProcessorGateway.getFileSignedUrl(
+          const buffer = await this.fileProcessorGateway.getFileBuffer(
             doc.document,
           );
           const originalFileName =
             await this.fileProcessorGateway.getOriginalFileName(doc.document);
 
-          return { url, originalFileName };
+          return { base64: buffer.toString('base64'), originalFileName };
         }),
       );
 
       response.documents = documents.map((doc) =>
         GetRetirementPermanentDisabilityRevisionDocumentResponseDto.build({
-          url: doc.url.toString(),
+          base64: doc.base64,
           originalFileName: doc.originalFileName.toString(),
         }),
       );
