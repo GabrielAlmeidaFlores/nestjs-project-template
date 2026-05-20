@@ -18,6 +18,8 @@ import { DeleteDisabilityRetirementPlanningRejectionTimeAcceleratorUseCase } fro
 import { DownloadDisabilityRetirementPlanningRejectionCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/use-case/download-disability-retirement-planning-rejection-complete-analysis.use-case';
 import { DownloadDisabilityRetirementPlanningRejectionSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/use-case/download-disability-retirement-planning-rejection-simplified-analysis.use-case';
 import { GetDisabilityRetirementPlanningRejectionUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/use-case/get-disability-retirement-planning-rejection.use-case';
+import { ListDisabilityRetirementPlanningRejectionPeriodsUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/use-case/list-disability-retirement-planning-rejection-periods.use-case';
+import { ListDisabilityRetirementPlanningRejectionTimeAcceleratorsUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/use-case/list-disability-retirement-planning-rejection-time-accelerators.use-case';
 import { SaveDisabilityRetirementPlanningRejectionPeriodsUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/use-case/save-disability-retirement-planning-rejection-periods.use-case';
 import { UpdateDisabilityRetirementPlanningRejectionTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/use-case/update-disability-retirement-planning-rejection-time-accelerator.use-case';
 import { UpdateDisabilityRetirementPlanningRejectionUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/use-case/update-disability-retirement-planning-rejection.use-case';
@@ -57,6 +59,8 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateDisabilityRetirementPlanningRejectionResultUseCase,
     DownloadDisabilityRetirementPlanningRejectionCompleteAnalysisUseCase,
     DownloadDisabilityRetirementPlanningRejectionSimplifiedAnalysisUseCase,
+    ListDisabilityRetirementPlanningRejectionPeriodsUseCase,
+    ListDisabilityRetirementPlanningRejectionTimeAcceleratorsUseCase,
   ],
 })
 export class DisabilityRetirementPlanningRejectionModule {

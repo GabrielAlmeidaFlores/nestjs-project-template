@@ -12,5 +12,6 @@ export class CreatePovertyDeclarationGeneratorResponseDto extends BaseBuildableD
   @ResponseDtoStringProperty({ required: false })
   public povertyDeclarationGeneratorCompleteAnalysis?: string;
 
-  protected override readonly _type = CreatePovertyDeclarationGeneratorResponseDto.name;
+  protected override readonly _type =
+    CreatePovertyDeclarationGeneratorResponseDto.name;
 }

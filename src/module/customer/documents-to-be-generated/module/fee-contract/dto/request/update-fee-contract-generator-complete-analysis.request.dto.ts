@@ -7,5 +7,6 @@ export class UpdateFeeContractGeneratorCompleteAnalysisRequestDto extends BaseBu
   @RequestDtoStringProperty()
   public feeContractGeneratorCompleteAnalysis: string;
 
-  protected override readonly _type = UpdateFeeContractGeneratorCompleteAnalysisRequestDto.name;
+  protected override readonly _type =
+    UpdateFeeContractGeneratorCompleteAnalysisRequestDto.name;
 }

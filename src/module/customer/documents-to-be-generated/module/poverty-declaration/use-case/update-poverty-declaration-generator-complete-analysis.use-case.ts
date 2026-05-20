@@ -12,7 +12,8 @@ import { PovertyDeclarationGeneratorNotFoundError } from '@module/customer/docum
 
 @Injectable()
 export class UpdatePovertyDeclarationGeneratorCompleteAnalysisUseCase {
-  protected readonly _type = UpdatePovertyDeclarationGeneratorCompleteAnalysisUseCase.name;
+  protected readonly _type =
+    UpdatePovertyDeclarationGeneratorCompleteAnalysisUseCase.name;
 
   public constructor(
     @Inject(PovertyDeclarationGeneratorQueryRepositoryGateway)
@@ -33,14 +34,19 @@ export class UpdatePovertyDeclarationGeneratorCompleteAnalysisUseCase {
         PovertyDeclarationGeneratorNotFoundError,
       );
 
-    if (povertyDeclarationGenerator.povertyDeclarationGeneratorCompleteAnalysis === null) {
+    if (
+      povertyDeclarationGenerator.povertyDeclarationGeneratorCompleteAnalysis ===
+      null
+    ) {
       throw new PovertyDeclarationGeneratorDoesNotContainCompleteAnalysisError();
     }
 
-    const updatedPovertyDeclarationGenerator = new PovertyDeclarationGeneratorEntity({
-      ...povertyDeclarationGenerator,
-      povertyDeclarationGeneratorCompleteAnalysis: dto.povertyDeclarationGeneratorCompleteAnalysis,
-    });
+    const updatedPovertyDeclarationGenerator =
+      new PovertyDeclarationGeneratorEntity({
+        ...povertyDeclarationGenerator,
+        povertyDeclarationGeneratorCompleteAnalysis:
+          dto.povertyDeclarationGeneratorCompleteAnalysis,
+      });
 
     const povertyDeclarationGeneratorTransaction =
       this.povertyDeclarationGeneratorCommandRepositoryGateway.updatePovertyDeclarationGenerator(
@@ -54,7 +60,8 @@ export class UpdatePovertyDeclarationGeneratorCompleteAnalysisUseCase {
     await transaction.commit();
 
     return UpdatePovertyDeclarationGeneratorCompleteAnalysisResponseDto.build({
-      povertyDeclarationGeneratorCompleteAnalysis: dto.povertyDeclarationGeneratorCompleteAnalysis,
+      povertyDeclarationGeneratorCompleteAnalysis:
+        dto.povertyDeclarationGeneratorCompleteAnalysis,
     });
   }
 }

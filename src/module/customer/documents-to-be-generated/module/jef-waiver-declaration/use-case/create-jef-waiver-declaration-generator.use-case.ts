@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
+import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { DocumentGeneratorProcessorGateway } from '@module/customer/documents-to-be-generated/lib/document-generator-processor/document-generator-processor.gateway';
 import { JefWaiverDeclarationGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/jef-waiver-declaration/domain/repository/jef-waiver-declaration-generator-analysis-result/command/jef-waiver-declaration-generator.command.repository.gateway';
 import { JefWaiverDeclarationGeneratorEntity } from '@module/customer/documents-to-be-generated/module/jef-waiver-declaration/domain/schema/entity/jef-waiver-declaration-generator-analysis-result/jef-waiver-declaration-generator.entity';
@@ -62,9 +62,10 @@ export class CreateJefWaiverDeclarationGeneratorUseCase {
         [clientDataBuffer],
       );
 
-    const jefWaiverDeclarationGenerator = new JefWaiverDeclarationGeneratorEntity({
-      jefWaiverDeclarationGeneratorCompleteAnalysis,
-    });
+    const jefWaiverDeclarationGenerator =
+      new JefWaiverDeclarationGeneratorEntity({
+        jefWaiverDeclarationGeneratorCompleteAnalysis,
+      });
 
     const createTransaction =
       this.jefWaiverDeclarationGeneratorCommandRepositoryGateway.createJefWaiverDeclarationGenerator(

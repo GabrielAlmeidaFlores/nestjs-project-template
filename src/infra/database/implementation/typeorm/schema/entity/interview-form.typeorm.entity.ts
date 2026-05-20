@@ -125,22 +125,46 @@ export class InterviewFormTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'client_has_rpc', type: 'boolean', nullable: true })
   public clientHasRpc: boolean | null;
 
-  @Column({ name: 'client_registration_date', type: 'varchar', length: 20, nullable: true })
+  @Column({
+    name: 'client_registration_date',
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+  })
   public clientRegistrationDate: string | null;
 
   @Column({ name: 'client_age', type: 'varchar', length: 20, nullable: true })
   public clientAge: string | null;
 
-  @Column({ name: 'client_neighborhood', type: 'varchar', length: 255, nullable: true })
+  @Column({
+    name: 'client_neighborhood',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
   public clientNeighborhood: string | null;
 
-  @Column({ name: 'client_street', type: 'varchar', length: 255, nullable: true })
+  @Column({
+    name: 'client_street',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
   public clientStreet: string | null;
 
-  @Column({ name: 'client_street_number', type: 'varchar', length: 20, nullable: true })
+  @Column({
+    name: 'client_street_number',
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+  })
   public clientStreetNumber: string | null;
 
-  @Column({ name: 'client_is_married_or_in_union', type: 'boolean', nullable: true })
+  @Column({
+    name: 'client_is_married_or_in_union',
+    type: 'boolean',
+    nullable: true,
+  })
   public clientIsMarriedOrInUnion: boolean | null;
 
   @Column({ name: 'client_has_children', type: 'boolean', nullable: true })
