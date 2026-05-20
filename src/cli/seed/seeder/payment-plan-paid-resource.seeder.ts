@@ -1251,7 +1251,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise de sentenças e acordos trabalhistas do instituidor com IA para reconhecimento previdenciário no indeferimento de pensão por morte. Examina robustez da decisão, períodos reconhecidos, remunerações e a melhor estratégia de aproveitamento perante o INSS.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4890-abcd-ef1234567890'),
+      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4890-abcd-ef1234567891'),
       resource:
         PaymentPlanPaidResourceTypeEnum.SPECIAL_CATEGORY_RETIREMENT_COMPLETE_ANALYSIS,
       creditCost: 10,
@@ -2436,7 +2436,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
     }),
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('0adc825a-c2b8-489f-8c99-062052ea0520'),
-      resource: PaymentPlanPaidResourceTypeEnum.FEE_CONTRACT_GENERATOR_COMPLETE_ANALYSIS,
+      resource:
+        PaymentPlanPaidResourceTypeEnum.FEE_CONTRACT_GENERATOR_COMPLETE_ANALYSIS,
       creditCost: 2,
       title: 'CONTRATO DE HONORÁRIOS - GERAÇÃO',
       description:
@@ -2444,7 +2445,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
     }),
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('7e6afbb2-127f-4b6a-a55c-d8a5d15ef027'),
-      resource: PaymentPlanPaidResourceTypeEnum.POWER_OF_ATTORNEY_GENERATOR_COMPLETE_ANALYSIS,
+      resource:
+        PaymentPlanPaidResourceTypeEnum.POWER_OF_ATTORNEY_GENERATOR_COMPLETE_ANALYSIS,
       creditCost: 2,
       title: 'PROCURAÇÃO - GERAÇÃO',
       description:
@@ -2452,7 +2454,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
     }),
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('62920277-3f4f-4082-a6d6-cf3309cb1ad2'),
-      resource: PaymentPlanPaidResourceTypeEnum.JEF_WAIVER_DECLARATION_GENERATOR_COMPLETE_ANALYSIS,
+      resource:
+        PaymentPlanPaidResourceTypeEnum.JEF_WAIVER_DECLARATION_GENERATOR_COMPLETE_ANALYSIS,
       creditCost: 2,
       title: 'DECLARAÇÃO DE RENÚNCIA AO EXCEDENTE DO JEF - GERAÇÃO',
       description:
@@ -2460,7 +2463,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
     }),
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('fe647a60-7453-4ddb-9ec7-f691a222948d'),
-      resource: PaymentPlanPaidResourceTypeEnum.POVERTY_DECLARATION_GENERATOR_COMPLETE_ANALYSIS,
+      resource:
+        PaymentPlanPaidResourceTypeEnum.POVERTY_DECLARATION_GENERATOR_COMPLETE_ANALYSIS,
       creditCost: 2,
       title: 'DECLARAÇÃO DE HIPOSSUFICIÊNCIA - GERAÇÃO',
       description:
