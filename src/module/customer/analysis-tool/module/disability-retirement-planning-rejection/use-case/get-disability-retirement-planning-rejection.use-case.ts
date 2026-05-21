@@ -152,9 +152,9 @@ export class GetDisabilityRetirementPlanningRejectionUseCase {
           ),
       }),
       ...(rejectionDocumentResponseDtos.length > 0 && {
-          disabilityRetirementPlanningRejectionDocument:
-            rejectionDocumentResponseDtos,
-        }),
+        disabilityRetirementPlanningRejectionDocument:
+          rejectionDocumentResponseDtos,
+      }),
       ...(periodResponseDtos.length > 0 && {
         disabilityRetirementPlanningRejectionPeriod: periodResponseDtos,
       }),
