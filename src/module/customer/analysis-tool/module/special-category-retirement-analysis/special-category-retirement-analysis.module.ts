@@ -7,6 +7,7 @@ import { MarkdownConverterModule } from '@lib/markdown-converter/markdown-conver
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
+import { RemunerationCalculatorModule } from '@module/customer/analysis-tool/lib/remuneration-calculator/remuneration-calculator.module';
 import { SpecialCategoryRetirementAnalysisController } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/special-category-retirement-analysis.controller';
 import { AddSpecialCategoryRetirementAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/add-special-category-retirement-analysis-period-document.use-case';
 import { AnalyzeSpecialCategoryRetirementAdministrativeProcedureUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/analyze-special-category-retirement-administrative-procedure.use-case';
@@ -25,6 +26,7 @@ import { GenerateSpecialCategoryRetirementAnalysisConversionUseCase } from '@mod
 import { GenerateSpecialCategoryRetirementAnalysisFullTextUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/generate-special-category-retirement-analysis-full-text.use-case';
 import { GenerateSpecialCategoryRetirementAnalysisRulesUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/generate-special-category-retirement-analysis-rules.use-case';
 import { GetSpecialCategoryRetirementAnalysisByIdUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/get-special-category-retirement-analysis-by-id.use-case';
+import { GetSpecialCategoryRetirementAnalysisRemunerationCalculationUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/get-special-category-retirement-analysis-remuneration-calculation.use-case';
 import { GetSpecialCategoryRetirementAnalysisTimelineUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/get-special-category-retirement-analysis-timeline.use-case';
 import { ListSpecialCategoryRetirementAnalysisRemunerationUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/list-special-category-retirement-analysis-remuneration.use-case';
 import { UpdateSpecialCategoryRetirementAnalysisRemunerationBatchUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/update-special-category-retirement-analysis-remuneration-batch.use-case';
@@ -50,6 +52,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     OrganizationCreditModule,
     OrganizationSessionModule,
     PaymentPlanModule,
+    RemunerationCalculatorModule,
   ],
   controllers: [SpecialCategoryRetirementAnalysisController],
   providers: [
@@ -64,6 +67,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     AddSpecialCategoryRetirementAnalysisPeriodDocumentUseCase,
     DeleteSpecialCategoryRetirementAnalysisPeriodDocumentUseCase,
     GetSpecialCategoryRetirementAnalysisTimelineUseCase,
+    GetSpecialCategoryRetirementAnalysisRemunerationCalculationUseCase,
     ListSpecialCategoryRetirementAnalysisRemunerationUseCase,
     CreateSpecialCategoryRetirementAnalysisRemunerationUseCase,
     UpdateSpecialCategoryRetirementAnalysisRemunerationUseCase,
@@ -90,6 +94,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     AddSpecialCategoryRetirementAnalysisPeriodDocumentUseCase,
     DeleteSpecialCategoryRetirementAnalysisPeriodDocumentUseCase,
     GetSpecialCategoryRetirementAnalysisTimelineUseCase,
+    GetSpecialCategoryRetirementAnalysisRemunerationCalculationUseCase,
     ListSpecialCategoryRetirementAnalysisRemunerationUseCase,
     CreateSpecialCategoryRetirementAnalysisRemunerationUseCase,
     UpdateSpecialCategoryRetirementAnalysisRemunerationUseCase,
