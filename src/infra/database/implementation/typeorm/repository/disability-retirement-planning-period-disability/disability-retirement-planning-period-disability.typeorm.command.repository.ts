@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
+import { CidTenTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cid-ten.typeorm.entity';
 import { DisabilityRetirementPlanningPeriodDisabilityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period-disability.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { DisabilityRetirementPlanningPeriodDisabilityCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning-period-disability/command/disability-retirement-planning-period-disability.command.repository.gateway';
@@ -35,6 +36,13 @@ export class DisabilityRetirementPlanningPeriodDisabilityTypeormCommandRepositor
       DisabilityRetirementPlanningPeriodDisabilityEntity,
       DisabilityRetirementPlanningPeriodDisabilityTypeormEntity,
     );
+
+    if (props.cidTenId !== null) {
+      mappedData.cidTen = CidTenTypeormEntity.build({
+        id: props.cidTenId,
+      } as CidTenTypeormEntity);
+    }
+
     return this.create(mappedData);
   }
 

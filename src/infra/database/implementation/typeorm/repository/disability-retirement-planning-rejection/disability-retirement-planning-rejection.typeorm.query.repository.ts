@@ -43,6 +43,9 @@ export class DisabilityRetirementPlanningRejectionTypeormQueryRepository
           },
           disabilityRetirementPlanningRejectionTimeAccelerator: true,
           disabilityRetirementPlanningRejectionInssBenefit: true,
+          analysisToolRecord: {
+            analysisToolClient: true,
+          },
         },
       },
       err,

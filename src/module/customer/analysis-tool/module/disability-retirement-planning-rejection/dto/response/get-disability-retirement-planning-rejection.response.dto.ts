@@ -1,4 +1,10 @@
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { Email } from '@core/domain/schema/value-object/email/email.value-object';
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
+import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
+import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
+import { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/enum/analysis-tool-client-type.enum';
+import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { DisabilityRetirementPlanningRejectionCategoryEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection/enum/disability-retirement-planning-rejection-category.enum';
 import { DisabilityRetirementPlanningRejectionDenialReasonEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection/enum/disability-retirement-planning-rejection-denial-reason.enum';
 import { DisabilityRetirementPlanningRejectionRetirementTypeEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection/enum/disability-retirement-planning-rejection-retirement-type.enum';
@@ -38,6 +44,9 @@ export class GetDisabilityRetirementPlanningRejectionResultResponseDto extends B
 export class GetDisabilityRetirementPlanningRejectionDocumentResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
   public document: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public originalFileName?: string;
 
   @ResponseDtoEnumProperty(
     DisabilityRetirementPlanningRejectionDocumentTypeEnum,
@@ -148,6 +157,36 @@ export class GetDisabilityRetirementPlanningRejectionPeriodResponseDto extends B
 }
 
 @ResponseDto()
+export class GetDisabilityRetirementPlanningRejectionAnalysisToolClientResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(AnalysisToolClientId)
+  public analysisToolClientId: AnalysisToolClientId;
+
+  @ResponseDtoStringProperty({ required: false })
+  public name?: string;
+
+  @ResponseDtoValueObjectProperty(FederalDocument, { required: false })
+  public federalDocument?: FederalDocument;
+
+  @ResponseDtoValueObjectProperty(Email, { required: false })
+  public email?: Email;
+
+  @ResponseDtoValueObjectProperty(PhoneNumber, { required: false })
+  public phoneNumber?: PhoneNumber;
+
+  @ResponseDtoDateProperty({ required: false })
+  public birthDate?: Date;
+
+  @ResponseDtoEnumProperty(GenderEnum, { required: false })
+  public gender?: GenderEnum;
+
+  @ResponseDtoEnumProperty(AnalysisToolClientTypeEnum, { required: false })
+  public clientType?: AnalysisToolClientTypeEnum;
+
+  protected override readonly _type =
+    GetDisabilityRetirementPlanningRejectionAnalysisToolClientResponseDto.name;
+}
+
+@ResponseDto()
 export class GetDisabilityRetirementPlanningRejectionResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(DisabilityRetirementPlanningRejectionId)
   public disabilityRetirementPlanningRejectionId: DisabilityRetirementPlanningRejectionId;
@@ -186,6 +225,12 @@ export class GetDisabilityRetirementPlanningRejectionResponseDto extends BaseBui
 
   @ResponseDtoStringProperty({ required: false, isArray: true })
   public inssBenefitNumber?: string[];
+
+  @ResponseDtoObjectProperty(
+    () => GetDisabilityRetirementPlanningRejectionAnalysisToolClientResponseDto,
+    { required: false },
+  )
+  public analysisToolClient?: GetDisabilityRetirementPlanningRejectionAnalysisToolClientResponseDto;
 
   @ResponseDtoObjectProperty(
     () => GetDisabilityRetirementPlanningRejectionResultResponseDto,

@@ -128,6 +128,9 @@ export class GetDisabilityRetirementPlanningPeriodDisabilityResponseDto extends 
   @ResponseDtoStringProperty()
   public activityImpact: string;
 
+  @ResponseDtoValueObjectProperty(CidTenId, { required: false })
+  public cidTenId?: CidTenId;
+
   @ResponseDtoObjectProperty(
     () => GetDisabilityRetirementPlanningCidResponseDto,
     {

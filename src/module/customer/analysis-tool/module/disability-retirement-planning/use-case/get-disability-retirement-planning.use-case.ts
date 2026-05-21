@@ -143,6 +143,9 @@ export class GetDisabilityRetirementPlanningUseCase {
                 }),
                 disabilityDescription: disability.disabilityDescription,
                 activityImpact: disability.activityImpact,
+                ...(disability.cidTenId !== null && {
+                  cidTenId: new CidTenId(disability.cidTenId),
+                }),
                 ...(cid !== null && {
                   cid: GetDisabilityRetirementPlanningCidResponseDto.build({
                     id: cid.id,

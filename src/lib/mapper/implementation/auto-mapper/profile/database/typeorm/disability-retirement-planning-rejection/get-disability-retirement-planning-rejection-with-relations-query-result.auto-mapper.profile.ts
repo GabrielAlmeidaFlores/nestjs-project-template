@@ -86,6 +86,9 @@ export class GetDisabilityRetirementPlanningRejectionWithRelationsQueryResultAut
           source.disabilityRetirementPlanningRejectionInssBenefit ?? []
         ).map((b) => this.mapInssBenefit(b, grantId));
 
+        const analysisToolClient =
+          source.analysisToolRecord?.analysisToolClient ?? null;
+
         return GetDisabilityRetirementPlanningRejectionWithRelationsQueryResult.build(
           {
             id: grantId,
@@ -110,6 +113,19 @@ export class GetDisabilityRetirementPlanningRejectionWithRelationsQueryResultAut
             disabilityRetirementPlanningRejectionTimeAccelerator:
               timeAccelerators,
             disabilityRetirementPlanningRejectionInssBenefit: inssBenefits,
+            analysisToolClient:
+              analysisToolClient !== null
+                ? {
+                    analysisToolClientId: analysisToolClient.id,
+                    name: analysisToolClient.name,
+                    federalDocument: analysisToolClient.federalDocument,
+                    birthDate: analysisToolClient.birthDate,
+                    email: analysisToolClient.email,
+                    phoneNumber: analysisToolClient.phoneNumber,
+                    gender: analysisToolClient.gender,
+                    clientType: analysisToolClient.clientType,
+                  }
+                : null,
           },
         );
       }),

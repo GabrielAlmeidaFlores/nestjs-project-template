@@ -1,6 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 
+import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { Email } from '@core/domain/schema/value-object/email/email.value-object';
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
+import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
+import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
+import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { DisabilityRetirementPlanningRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/repository/disability-retirement-planning-rejection/query/disability-retirement-planning-rejection.query.repository.gateway';
 import { DisabilityRetirementPlanningRejectionId } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection/value-object/disability-retirement-planning-rejection-id/disability-retirement-planning-rejection-id.value-object';
 import { DisabilityRetirementPlanningRejectionDocumentEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection-document/disability-retirement-planning-rejection-document.entity';
@@ -10,6 +16,7 @@ import { DisabilityRetirementPlanningRejectionPeriodEarningsHistoryEntity } from
 import { DisabilityRetirementPlanningRejectionResultEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection-result/disability-retirement-planning-rejection-result.entity';
 import {
   GetDisabilityRetirementPlanningRejectionDocumentResponseDto,
+  GetDisabilityRetirementPlanningRejectionAnalysisToolClientResponseDto,
   GetDisabilityRetirementPlanningRejectionPeriodDocumentResponseDto,
   GetDisabilityRetirementPlanningRejectionPeriodEarningsHistoryResponseDto,
   GetDisabilityRetirementPlanningRejectionPeriodResponseDto,
@@ -38,6 +45,8 @@ export class GetDisabilityRetirementPlanningRejectionUseCase {
   public constructor(
     @Inject(DisabilityRetirementPlanningRejectionQueryRepositoryGateway)
     private readonly disabilityRetirementPlanningRejectionQueryRepositoryGateway: DisabilityRetirementPlanningRejectionQueryRepositoryGateway,
+    @Inject(FileProcessorGateway)
+    private readonly fileProcessorGateway: FileProcessorGateway,
   ) {}
 
   public async execute(
@@ -62,6 +71,15 @@ export class GetDisabilityRetirementPlanningRejectionUseCase {
         this.findPeriodEarningsHistories(periodEarningsHistories, period),
       ),
     );
+
+    const rejectionDocumentResponseDtos =
+      denial.disabilityRetirementPlanningRejectionDocument !== null
+        ? await Promise.all(
+            denial.disabilityRetirementPlanningRejectionDocument.map((doc) =>
+              this.buildDocumentResponseDto(doc),
+            ),
+          )
+        : [];
 
     return GetDisabilityRetirementPlanningRejectionResponseDto.build({
       disabilityRetirementPlanningRejectionId: denial.id,
@@ -92,18 +110,50 @@ export class GetDisabilityRetirementPlanningRejectionUseCase {
               (b) => b.inssBenefit,
             ),
         }),
+      ...(denial.analysisToolClient !== null && {
+        analysisToolClient:
+          GetDisabilityRetirementPlanningRejectionAnalysisToolClientResponseDto.build(
+            {
+              analysisToolClientId: new AnalysisToolClientId(
+                denial.analysisToolClient.analysisToolClientId,
+              ),
+              ...(denial.analysisToolClient.name !== null && {
+                name: denial.analysisToolClient.name,
+              }),
+              ...(denial.analysisToolClient.federalDocument !== null && {
+                federalDocument: new FederalDocument(
+                  denial.analysisToolClient.federalDocument,
+                ),
+              }),
+              ...(denial.analysisToolClient.email !== null && {
+                email: new Email(denial.analysisToolClient.email),
+              }),
+              ...(denial.analysisToolClient.phoneNumber !== null && {
+                phoneNumber: new PhoneNumber(
+                  denial.analysisToolClient.phoneNumber,
+                ),
+              }),
+              ...(denial.analysisToolClient.birthDate !== null && {
+                birthDate: denial.analysisToolClient.birthDate,
+              }),
+              ...(denial.analysisToolClient.gender !== null && {
+                gender: denial.analysisToolClient.gender as GenderEnum,
+              }),
+              ...(denial.analysisToolClient.clientType !== null && {
+                clientType: denial.analysisToolClient.clientType,
+              }),
+            },
+          ),
+      }),
       ...(denial.disabilityRetirementPlanningRejectionResult !== null && {
         disabilityRetirementPlanningRejectionResult:
           this.buildResultResponseDto(
             denial.disabilityRetirementPlanningRejectionResult,
           ),
       }),
-      ...(denial.disabilityRetirementPlanningRejectionDocument !== null &&
-        denial.disabilityRetirementPlanningRejectionDocument.length > 0 && {
+      ...(rejectionDocumentResponseDtos.length > 0 && {
           disabilityRetirementPlanningRejectionDocument:
-            denial.disabilityRetirementPlanningRejectionDocument.map((doc) =>
-              this.buildDocumentResponseDto(doc),
-            ),
+            rejectionDocumentResponseDtos,
         }),
       ...(periodResponseDtos.length > 0 && {
         disabilityRetirementPlanningRejectionPeriod: periodResponseDtos,
@@ -131,11 +181,27 @@ export class GetDisabilityRetirementPlanningRejectionUseCase {
     });
   }
 
-  private buildDocumentResponseDto(
+  private async buildDocumentResponseDto(
     document: DisabilityRetirementPlanningRejectionDocumentEntity,
-  ): GetDisabilityRetirementPlanningRejectionDocumentResponseDto {
+  ): Promise<GetDisabilityRetirementPlanningRejectionDocumentResponseDto> {
+    let resolvedDocument = document.document;
+    let originalFileName: string | undefined;
+
+    try {
+      const [fileBuffer, resolvedOriginalFileName] = await Promise.all([
+        this.fileProcessorGateway.getFileBuffer(document.document),
+        this.fileProcessorGateway.getOriginalFileName(document.document),
+      ]);
+
+      resolvedDocument = fileBuffer.toString('base64');
+      originalFileName = resolvedOriginalFileName;
+    } catch {
+      originalFileName = undefined;
+    }
+
     return GetDisabilityRetirementPlanningRejectionDocumentResponseDto.build({
-      document: document.document,
+      document: resolvedDocument,
+      ...(originalFileName !== undefined && { originalFileName }),
       type: document.type,
     });
   }
