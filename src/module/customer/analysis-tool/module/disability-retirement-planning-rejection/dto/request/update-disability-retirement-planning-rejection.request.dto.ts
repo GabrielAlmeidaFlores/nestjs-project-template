@@ -8,6 +8,7 @@ import { RequestDtoEnumProperty } from '@shared/api/util/decorator/property/dto-
 import { RequestDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-string-property/request-dto-string-property.decorator';
 import { RequestDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-value-object-property/request-dto-value-object-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
+import { Matches } from 'class-validator';
 
 @RequestDto()
 export class UpdateDisabilityRetirementPlanningRejectionRequestDto extends BaseBuildableDtoObject {
@@ -47,6 +48,11 @@ export class UpdateDisabilityRetirementPlanningRejectionRequestDto extends BaseB
   public denialReasonDescription?: string;
 
   @RequestDtoStringProperty({ required: false, isArray: true })
+  @Matches(/^(?:\d{10}|\d{3}\.\d{3}\.\d{3}-\d)$/, {
+    each: true,
+    message:
+      "o campo 'inssBenefitNumber' deve conter 10 digitos (com ou sem mascara)",
+  })
   public inssBenefitNumber?: string[];
 
   protected override readonly _type =

@@ -1,5 +1,8 @@
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
+import type { GenderEnum } from '@core/domain/schema/enum/gender.enum';
+import type { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/enum/analysis-tool-client-type.enum';
+
 import type { GetDisabilityRetirementPlanningRejectionTimeAcceleratorQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/repository/disability-retirement-planning-rejection-time-accelerator/query/result/get-disability-retirement-planning-rejection-time-accelerator.query.result';
 import type { DisabilityRetirementPlanningRejectionCategoryEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection/enum/disability-retirement-planning-rejection-category.enum';
 import type { DisabilityRetirementPlanningRejectionDenialReasonEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning-rejection/domain/schema/entity/disability-retirement-planning-rejection/enum/disability-retirement-planning-rejection-denial-reason.enum';
@@ -44,6 +47,16 @@ export class GetDisabilityRetirementPlanningRejectionWithRelationsQueryResult ex
   public readonly disabilityRetirementPlanningRejectionInssBenefit:
     | DisabilityRetirementPlanningRejectionInssBenefitEntity[]
     | null;
+  public readonly analysisToolClient: {
+    analysisToolClientId: string;
+    name: string | null;
+    federalDocument: string | null;
+    birthDate: Date | null;
+    email: string | null;
+    phoneNumber: string | null;
+    gender: GenderEnum | null;
+    clientType: AnalysisToolClientTypeEnum | null;
+  } | null;
 
   protected override readonly _type =
     GetDisabilityRetirementPlanningRejectionWithRelationsQueryResult.name;

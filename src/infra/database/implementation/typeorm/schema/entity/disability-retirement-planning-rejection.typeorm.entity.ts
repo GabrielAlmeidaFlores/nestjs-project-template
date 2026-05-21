@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
+import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { DisabilityRetirementPlanningRejectionDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-rejection-document.typeorm.entity';
 import { DisabilityRetirementPlanningRejectionInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-rejection-inss-benefit.typeorm.entity';
@@ -107,6 +108,16 @@ export class DisabilityRetirementPlanningRejectionTypeormEntity extends BaseType
     (entity) => entity.disabilityRetirementPlanningRejection,
   )
   public disabilityRetirementPlanningRejectionInssBenefit?: DisabilityRetirementPlanningRejectionInssBenefitTypeormEntity[];
+
+  @OneToOne(
+    () => AnalysisToolRecordTypeormEntity,
+    (entity) => entity.disabilityRetirementPlanningRejection,
+    {
+      nullable: true,
+      eager: false,
+    },
+  )
+  public analysisToolRecord?: AnalysisToolRecordTypeormEntity | null;
 
   protected override readonly _type =
     DisabilityRetirementPlanningRejectionTypeormEntity.name;

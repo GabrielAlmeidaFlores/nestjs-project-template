@@ -2,6 +2,7 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { CidTenTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cid-ten.typeorm.entity';
 import { DisabilityRetirementPlanningPeriodDisabilityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period-disability.typeorm.entity';
 import { DisabilityRetirementPlanningPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
@@ -86,6 +87,11 @@ export class DisabilityRetirementPlanningPeriodDisabilityEntityAutoMapperProfile
         disabilityType: source.disabilityType,
         disabilityDescription: source.disabilityDescription,
         activityImpact: source.activityImpact,
+        ...(source.cidTenId !== null && {
+          cidTen: CidTenTypeormEntity.build({
+            id: source.cidTenId,
+          } as CidTenTypeormEntity),
+        }),
         disabilityRetirementPlanningPeriod,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
