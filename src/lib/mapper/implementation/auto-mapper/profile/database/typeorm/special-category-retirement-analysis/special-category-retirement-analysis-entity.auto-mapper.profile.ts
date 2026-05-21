@@ -10,6 +10,7 @@ import { SpecialCategoryRetirementAnalysisResultTypeormEntity } from '@infra/dat
 import { SpecialCategoryRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
+import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { GetSpecialCategoryRetirementAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis/query/result/get-special-category-retirement-analysis-with-relations.query.result';
 import { GetSpecialCategoryRetirementAnalysisPeriodDocumentQueryResult } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-period-document/query/result/get-special-category-retirement-analysis-period-document.query.result';
 import { GetSpecialCategoryRetirementAnalysisRemunerationQueryResult } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-remuneration/query/result/get-special-category-retirement-analysis-remuneration.query.result';
@@ -211,6 +212,9 @@ export class SpecialCategoryRetirementAnalysisEntityAutoMapperProfile {
       Object.assign(result, {
         id: parentId,
         specialCategoryRetirementAnalysisId: parentId,
+        analysisToolRecordId: source.analysisToolRecord
+          ? new AnalysisToolRecordId(source.analysisToolRecord.id)
+          : null,
         analysisToolClientId,
         analysisCustomName: source.analysisCustomName,
         retirementAnalysisObjectiveType: source.retirementAnalysisObjectiveType,
