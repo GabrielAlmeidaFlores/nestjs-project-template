@@ -38,6 +38,7 @@ import { DeleteSpecialCategoryRetirementAnalysisResponseDto } from '@module/cust
 import { GenerateSpecialCategoryRetirementAnalysisConversionResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/generate-special-category-retirement-analysis-conversion.response.dto';
 import { GenerateSpecialCategoryRetirementAnalysisFullTextResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/generate-special-category-retirement-analysis-full-text.response.dto';
 import { GenerateSpecialCategoryRetirementAnalysisRulesResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/generate-special-category-retirement-analysis-rules.response.dto';
+import { GetSpecialCategoryRetirementAnalysisRemunerationCalculationResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/get-special-category-retirement-analysis-remuneration-calculation.response.dto';
 import { GetSpecialCategoryRetirementAnalysisTimelineResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/get-special-category-retirement-analysis-timeline.response.dto';
 import { GetSpecialCategoryRetirementAnalysisResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/get-special-category-retirement-analysis.response.dto';
 import { ListSpecialCategoryRetirementAnalysisRemunerationResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/list-special-category-retirement-analysis-remuneration.response.dto';
@@ -62,6 +63,7 @@ import { GenerateSpecialCategoryRetirementAnalysisConversionUseCase } from '@mod
 import { GenerateSpecialCategoryRetirementAnalysisFullTextUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/generate-special-category-retirement-analysis-full-text.use-case';
 import { GenerateSpecialCategoryRetirementAnalysisRulesUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/generate-special-category-retirement-analysis-rules.use-case';
 import { GetSpecialCategoryRetirementAnalysisByIdUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/get-special-category-retirement-analysis-by-id.use-case';
+import { GetSpecialCategoryRetirementAnalysisRemunerationCalculationUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/get-special-category-retirement-analysis-remuneration-calculation.use-case';
 import { GetSpecialCategoryRetirementAnalysisTimelineUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/get-special-category-retirement-analysis-timeline.use-case';
 import { ListSpecialCategoryRetirementAnalysisRemunerationUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/list-special-category-retirement-analysis-remuneration.use-case';
 import { UpdateSpecialCategoryRetirementAnalysisRemunerationBatchUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/update-special-category-retirement-analysis-remuneration-batch.use-case';
@@ -97,6 +99,7 @@ export class SpecialCategoryRetirementAnalysisController {
     private readonly addPeriodDocumentUseCase: AddSpecialCategoryRetirementAnalysisPeriodDocumentUseCase,
     private readonly deletePeriodDocumentUseCase: DeleteSpecialCategoryRetirementAnalysisPeriodDocumentUseCase,
     private readonly getTimelineUseCase: GetSpecialCategoryRetirementAnalysisTimelineUseCase,
+    private readonly getRemunerationCalculationUseCase: GetSpecialCategoryRetirementAnalysisRemunerationCalculationUseCase,
     private readonly listRemunerationUseCase: ListSpecialCategoryRetirementAnalysisRemunerationUseCase,
     private readonly updateRemunerationUseCase: UpdateSpecialCategoryRetirementAnalysisRemunerationUseCase,
     private readonly deleteRemunerationUseCase: DeleteSpecialCategoryRetirementAnalysisRemunerationUseCase,
@@ -466,6 +469,33 @@ export class SpecialCategoryRetirementAnalysisController {
       organizationSessionData,
       specialCategoryRetirementAnalysisId,
       filters,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Obter cálculo das remunerações da análise',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':id/remuneration-calculation',
+      method: RequestMethod.GET,
+    },
+    tag: ['categoria-especial'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Cálculo das remunerações obtido com sucesso.',
+      type: GetSpecialCategoryRetirementAnalysisRemunerationCalculationResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async getRemunerationCalculation(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('id', new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId))
+    specialCategoryRetirementAnalysisId: SpecialCategoryRetirementAnalysisId,
+  ): Promise<GetSpecialCategoryRetirementAnalysisRemunerationCalculationResponseDto> {
+    return await this.getRemunerationCalculationUseCase.execute(
+      organizationSessionData,
+      specialCategoryRetirementAnalysisId,
     );
   }
 
