@@ -12,19 +12,23 @@ import {
 import { SpecialCategoryRetirementAnalysisNotFoundError } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/error/special-category-retirement-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 
+const PLANO_REAL_START_DATE = '1994-07-01T00:00:00';
+
 @Injectable()
 export class ListSpecialCategoryRetirementAnalysisRemunerationUseCase {
   protected readonly _type =
     ListSpecialCategoryRetirementAnalysisRemunerationUseCase.name;
 
-  private readonly planoRealStartDate = new Date(1994, 6, 1);
+  private readonly planoRealStartDate: Date;
 
   public constructor(
     @Inject(SpecialCategoryRetirementAnalysisQueryRepositoryGateway)
     private readonly specialCategoryRetirementAnalysisQueryRepositoryGateway: SpecialCategoryRetirementAnalysisQueryRepositoryGateway,
     @Inject(RemunerationCalculatorGateway)
     private readonly remunerationCalculatorGateway: RemunerationCalculatorGateway,
-  ) {}
+  ) {
+    this.planoRealStartDate = new Date(PLANO_REAL_START_DATE);
+  }
 
   public async execute(
     organizationSessionData: OrganizationSessionDataModel,
@@ -66,14 +70,10 @@ export class ListSpecialCategoryRetirementAnalysisRemunerationUseCase {
               existing.specialCategoryRetirementAnalysisRemunerationId,
             remunerationReferenceMonthYear:
               existing.remunerationReferenceMonthYear,
-            ...(existing.remunerationGrossAmount !== null && {
-              remunerationGrossAmount: existing.remunerationGrossAmount,
-            }),
-            ...(remunerationDetail !== null && {
-              correctionFactor: remunerationDetail.correctionFactor,
-              updatedRemunerationAmount:
-                remunerationDetail.updatedRemunerationAmount,
-            }),
+            remunerationGrossAmount: existing.remunerationGrossAmount,
+            correctionFactor: remunerationDetail?.correctionFactor ?? null,
+            updatedRemunerationAmount:
+              remunerationDetail?.updatedRemunerationAmount ?? null,
           }),
         );
       } else {
