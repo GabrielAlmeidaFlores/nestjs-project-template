@@ -11,7 +11,8 @@ import { OrganizationSessionDataModel } from '@shared/api/util/decorator/propert
 
 @Injectable()
 export class DownloadPovertyDeclarationGeneratorCompleteAnalysisUseCase {
-  protected readonly _type = DownloadPovertyDeclarationGeneratorCompleteAnalysisUseCase.name;
+  protected readonly _type =
+    DownloadPovertyDeclarationGeneratorCompleteAnalysisUseCase.name;
 
   public constructor(
     @Inject(PovertyDeclarationGeneratorQueryRepositoryGateway)
@@ -33,7 +34,8 @@ export class DownloadPovertyDeclarationGeneratorCompleteAnalysisUseCase {
         PovertyDeclarationGeneratorNotFoundError,
       );
 
-    const responseAi = povertyDeclarationGenerator.povertyDeclarationGeneratorCompleteAnalysis;
+    const responseAi =
+      povertyDeclarationGenerator.povertyDeclarationGeneratorCompleteAnalysis;
 
     if (responseAi === null) {
       throw new PovertyDeclarationGeneratorDoesNotContainCompleteAnalysisError();

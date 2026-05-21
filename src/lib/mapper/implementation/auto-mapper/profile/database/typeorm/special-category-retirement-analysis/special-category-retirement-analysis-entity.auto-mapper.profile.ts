@@ -209,6 +209,7 @@ export class SpecialCategoryRetirementAnalysisEntityAutoMapperProfile {
       const result =
         new GetSpecialCategoryRetirementAnalysisWithRelationsQueryResult();
       Object.assign(result, {
+        id: parentId,
         specialCategoryRetirementAnalysisId: parentId,
         analysisToolClientId,
         analysisCustomName: source.analysisCustomName,

@@ -11,7 +11,8 @@ import { OrganizationSessionDataModel } from '@shared/api/util/decorator/propert
 
 @Injectable()
 export class DownloadPowerOfAttorneyGeneratorCompleteAnalysisUseCase {
-  protected readonly _type = DownloadPowerOfAttorneyGeneratorCompleteAnalysisUseCase.name;
+  protected readonly _type =
+    DownloadPowerOfAttorneyGeneratorCompleteAnalysisUseCase.name;
 
   public constructor(
     @Inject(PowerOfAttorneyGeneratorQueryRepositoryGateway)
@@ -33,7 +34,8 @@ export class DownloadPowerOfAttorneyGeneratorCompleteAnalysisUseCase {
         PowerOfAttorneyGeneratorNotFoundError,
       );
 
-    const responseAi = powerOfAttorneyGenerator.powerOfAttorneyGeneratorCompleteAnalysis;
+    const responseAi =
+      powerOfAttorneyGenerator.powerOfAttorneyGeneratorCompleteAnalysis;
 
     if (responseAi === null) {
       throw new PowerOfAttorneyGeneratorDoesNotContainCompleteAnalysisError();
