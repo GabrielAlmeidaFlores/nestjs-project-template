@@ -1,8 +1,8 @@
-import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
+import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
 import type { RetirementPermanentDisabilityRevisionLegalProceedingId } from '@module/customer/analysis-tool/module/retirement-permanent-disability-revision/domain/schema/entity/retirement-permanent-disability-revision-legal-proceeding/value-object/retirement-permanent-disability-revision-legal-proceeding-id.value-object';
 
-export class GetRetirementPermanentDisabilityRevisionLegalProceedingQueryResult extends BaseBuildableDtoObject {
+export class GetRetirementPermanentDisabilityRevisionLegalProceedingQueryResult extends BaseBuildableObject {
   public readonly id: RetirementPermanentDisabilityRevisionLegalProceedingId;
   public readonly legalProceedingNumber: string;
   public readonly createdAt: Date;
