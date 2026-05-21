@@ -186,7 +186,7 @@ export class GetRetirementPermanentDisabilityRevisionUseCase {
           const originalFileName =
             await this.fileProcessorGateway.getOriginalFileName(doc.document);
 
-          return { url, originalFileName };
+          return { url, originalFileName, type: doc.type };
         }),
       );
 
@@ -194,6 +194,7 @@ export class GetRetirementPermanentDisabilityRevisionUseCase {
         GetRetirementPermanentDisabilityRevisionDocumentResponseDto.build({
           url: doc.url.toString(),
           originalFileName: doc.originalFileName.toString(),
+          type: doc.type,
         }),
       );
     }
