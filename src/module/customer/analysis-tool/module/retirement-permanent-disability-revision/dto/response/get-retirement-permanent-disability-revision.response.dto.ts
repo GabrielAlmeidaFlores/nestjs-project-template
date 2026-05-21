@@ -187,7 +187,7 @@ export class GetRetirementPermanentDisabilityRevisionResponsibleResponseDto exte
 @ResponseDto()
 export class GetRetirementPermanentDisabilityRevisionDocumentResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
-  public url: string;
+  public base64: string;
 
   @ResponseDtoStringProperty()
   public originalFileName: string;

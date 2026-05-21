@@ -12,7 +12,8 @@ import { FeeContractGeneratorNotFoundError } from '@module/customer/documents-to
 
 @Injectable()
 export class UpdateFeeContractGeneratorCompleteAnalysisUseCase {
-  protected readonly _type = UpdateFeeContractGeneratorCompleteAnalysisUseCase.name;
+  protected readonly _type =
+    UpdateFeeContractGeneratorCompleteAnalysisUseCase.name;
 
   public constructor(
     @Inject(FeeContractGeneratorQueryRepositoryGateway)
@@ -39,7 +40,8 @@ export class UpdateFeeContractGeneratorCompleteAnalysisUseCase {
 
     const updatedFeeContractGenerator = new FeeContractGeneratorEntity({
       ...feeContractGenerator,
-      feeContractGeneratorCompleteAnalysis: dto.feeContractGeneratorCompleteAnalysis,
+      feeContractGeneratorCompleteAnalysis:
+        dto.feeContractGeneratorCompleteAnalysis,
     });
 
     const feeContractGeneratorTransaction =
@@ -54,7 +56,8 @@ export class UpdateFeeContractGeneratorCompleteAnalysisUseCase {
     await transaction.commit();
 
     return UpdateFeeContractGeneratorCompleteAnalysisResponseDto.build({
-      feeContractGeneratorCompleteAnalysis: dto.feeContractGeneratorCompleteAnalysis,
+      feeContractGeneratorCompleteAnalysis:
+        dto.feeContractGeneratorCompleteAnalysis,
     });
   }
 }

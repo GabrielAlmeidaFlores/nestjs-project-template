@@ -80,7 +80,39 @@ export class GetRetirementPermanentDisabilityRevisionUseCase {
       }),
       analysisToolClient:
         GetRetirementPermanentDisabilityRevisionClientResponseDto.build({
-          ...analysisToolRecordQueryResult.analysisToolClient,
+          id: analysisToolRecordQueryResult.analysisToolClient.id,
+          ...(analysisToolRecordQueryResult.analysisToolClient.name !==
+            null && {
+            name: analysisToolRecordQueryResult.analysisToolClient.name,
+          }),
+          ...(analysisToolRecordQueryResult.analysisToolClient
+            .federalDocument !== null && {
+            federalDocument:
+              analysisToolRecordQueryResult.analysisToolClient.federalDocument,
+          }),
+          ...(analysisToolRecordQueryResult.analysisToolClient.email !==
+            null && {
+            email: analysisToolRecordQueryResult.analysisToolClient.email,
+          }),
+          ...(analysisToolRecordQueryResult.analysisToolClient.phoneNumber !==
+            null && {
+            phoneNumber:
+              analysisToolRecordQueryResult.analysisToolClient.phoneNumber,
+          }),
+          ...(analysisToolRecordQueryResult.analysisToolClient.birthDate !==
+            null && {
+            birthDate:
+              analysisToolRecordQueryResult.analysisToolClient.birthDate,
+          }),
+          ...(analysisToolRecordQueryResult.analysisToolClient.gender !==
+            null && {
+            gender: analysisToolRecordQueryResult.analysisToolClient.gender,
+          }),
+          ...(analysisToolRecordQueryResult.analysisToolClient.clientType !==
+            null && {
+            clientType:
+              analysisToolRecordQueryResult.analysisToolClient.clientType,
+          }),
         }),
       ...(analysisQueryResult.legalProceeding.length > 0 && {
         legalProceedingNumber: analysisQueryResult.legalProceeding.map(
@@ -169,30 +201,32 @@ export class GetRetirementPermanentDisabilityRevisionUseCase {
       }),
       createdBy:
         GetRetirementPermanentDisabilityRevisionResponsibleResponseDto.build({
-          ...analysisToolRecordQueryResult.createdBy.customer,
+          id: analysisToolRecordQueryResult.createdBy.customer.id,
+          name: analysisToolRecordQueryResult.createdBy.customer.name,
         }),
       updatedBy:
         GetRetirementPermanentDisabilityRevisionResponsibleResponseDto.build({
-          ...analysisToolRecordQueryResult.updatedBy.customer,
+          id: analysisToolRecordQueryResult.updatedBy.customer.id,
+          name: analysisToolRecordQueryResult.updatedBy.customer.name,
         }),
     });
 
     if (analysisQueryResult.document.length > 0) {
       const documents = await Promise.all(
         analysisQueryResult.document.map(async (doc) => {
-          const url = await this.fileProcessorGateway.getFileSignedUrl(
+          const buffer = await this.fileProcessorGateway.getFileBuffer(
             doc.document,
           );
           const originalFileName =
             await this.fileProcessorGateway.getOriginalFileName(doc.document);
 
-          return { url, originalFileName, type: doc.type };
+          return { base64: buffer.toString('base64'), originalFileName, type: doc.type };
         }),
       );
 
       response.documents = documents.map((doc) =>
         GetRetirementPermanentDisabilityRevisionDocumentResponseDto.build({
-          url: doc.url.toString(),
+          base64: doc.base64,
           originalFileName: doc.originalFileName.toString(),
           type: doc.type,
         }),

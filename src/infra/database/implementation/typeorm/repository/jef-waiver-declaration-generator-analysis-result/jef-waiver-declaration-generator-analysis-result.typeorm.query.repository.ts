@@ -13,7 +13,8 @@ import type { ConstructorType } from '@shared/system/type/constructor.type';
 
 @Injectable()
 export class JefWaiverDeclarationGeneratorTypeormQueryRepository implements JefWaiverDeclarationGeneratorQueryRepositoryGateway {
-  protected readonly _type = JefWaiverDeclarationGeneratorTypeormQueryRepository.name;
+  protected readonly _type =
+    JefWaiverDeclarationGeneratorTypeormQueryRepository.name;
 
   public constructor(
     @InjectRepository(JefWaiverDeclarationGeneratorTypeormEntity)

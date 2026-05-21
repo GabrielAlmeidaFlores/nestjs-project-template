@@ -11,7 +11,8 @@ import { OrganizationSessionDataModel } from '@shared/api/util/decorator/propert
 
 @Injectable()
 export class DownloadJefWaiverDeclarationGeneratorCompleteAnalysisUseCase {
-  protected readonly _type = DownloadJefWaiverDeclarationGeneratorCompleteAnalysisUseCase.name;
+  protected readonly _type =
+    DownloadJefWaiverDeclarationGeneratorCompleteAnalysisUseCase.name;
 
   public constructor(
     @Inject(JefWaiverDeclarationGeneratorQueryRepositoryGateway)
@@ -33,7 +34,8 @@ export class DownloadJefWaiverDeclarationGeneratorCompleteAnalysisUseCase {
         JefWaiverDeclarationGeneratorNotFoundError,
       );
 
-    const responseAi = jefWaiverDeclarationGenerator.jefWaiverDeclarationGeneratorCompleteAnalysis;
+    const responseAi =
+      jefWaiverDeclarationGenerator.jefWaiverDeclarationGeneratorCompleteAnalysis;
 
     if (responseAi === null) {
       throw new JefWaiverDeclarationGeneratorDoesNotContainCompleteAnalysisError();

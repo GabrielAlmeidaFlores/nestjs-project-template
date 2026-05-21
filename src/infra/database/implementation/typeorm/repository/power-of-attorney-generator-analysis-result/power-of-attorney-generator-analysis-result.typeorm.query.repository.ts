@@ -13,7 +13,8 @@ import type { ConstructorType } from '@shared/system/type/constructor.type';
 
 @Injectable()
 export class PowerOfAttorneyGeneratorTypeormQueryRepository implements PowerOfAttorneyGeneratorQueryRepositoryGateway {
-  protected readonly _type = PowerOfAttorneyGeneratorTypeormQueryRepository.name;
+  protected readonly _type =
+    PowerOfAttorneyGeneratorTypeormQueryRepository.name;
 
   public constructor(
     @InjectRepository(PowerOfAttorneyGeneratorTypeormEntity)
