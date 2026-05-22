@@ -1,6 +1,7 @@
 import { SurvivorPensionAnalysisId } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis/value-object/survivor-pension-analysis-id/survivor-pension-analysis-id.value-object';
 import { SurvivorPensionAnalysisDeceasedWorkHistoryId } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-deceased-work-history/value-object/survivor-pension-analysis-deceased-work-history-id/survivor-pension-analysis-deceased-work-history-id.value-object';
 import { GetSurvivorPensionAnalysisDeceasedWorkHistoryPeriodResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/get-survivor-pension-analysis-deceased-work-history-period.response.dto';
+import { SurvivorPensionAnalysisRemunerationResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/survivor-pension-analysis-remuneration.response.dto';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
@@ -20,6 +21,12 @@ export class GetSurvivorPensionAnalysisDeceasedWorkHistoryResponseDto extends Ba
 
   @ResponseDtoDateProperty({ required: false })
   public endDate?: Date;
+
+  @ResponseDtoObjectProperty(
+    () => SurvivorPensionAnalysisRemunerationResponseDto,
+    { isArray: true },
+  )
+  public remunerations: SurvivorPensionAnalysisRemunerationResponseDto[];
 
   @ResponseDtoObjectProperty(
     () => GetSurvivorPensionAnalysisDeceasedWorkHistoryPeriodResponseDto,

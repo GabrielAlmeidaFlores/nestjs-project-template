@@ -368,6 +368,7 @@ export class CreateSurvivorPensionAnalysisResultUseCase {
           ? {
               startDate: spaData.deceasedWorkHistory.startDate,
               endDate: spaData.deceasedWorkHistory.endDate,
+              remunerations: spaData.deceasedWorkHistory.remunerations,
               periods: spaData.deceasedWorkHistory.periods.map((p) => ({
                 startDate: p.startDate,
                 endDate: p.endDate,

@@ -5,7 +5,9 @@ import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/anal
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
 import { OrganizationCustomizationExportDocumentOptionsResolverModule } from '@module/customer/analysis-tool/lib/organization-customization-resolver/organization-customization-export-document-options-resolver.module';
+import { RemunerationCalculatorModule } from '@module/customer/analysis-tool/lib/remuneration-calculator/remuneration-calculator.module';
 import { SurvivorPensionAnalysisController } from '@module/customer/analysis-tool/module/survivor-pension-analysis/survivor-pension-analysis.controller';
+import { CalculateSurvivorPensionAnalysisRemunerationUseCase } from '@module/customer/analysis-tool/module/survivor-pension-analysis/use-case/calculate-survivor-pension-analysis-remuneration.use-case';
 import { CreateSurvivorPensionAnalysisBenefitOriginatorIdentificationUseCase } from '@module/customer/analysis-tool/module/survivor-pension-analysis/use-case/create-survivor-pension-analysis-benefit-originator-identification.use-case';
 import { CreateSurvivorPensionAnalysisCustomerProfileIdentificationUseCase } from '@module/customer/analysis-tool/module/survivor-pension-analysis/use-case/create-survivor-pension-analysis-customer-profile-identification.use-case';
 import { CreateSurvivorPensionAnalysisDeceasedBenefitDependentsUseCase } from '@module/customer/analysis-tool/module/survivor-pension-analysis/use-case/create-survivor-pension-analysis-deceased-benefit-dependents.use-case';
@@ -63,6 +65,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     OrganizationCreditModule,
     PaymentPlanModule,
     FileProcessorModule,
+    RemunerationCalculatorModule,
   ],
   controllers: [SurvivorPensionAnalysisController],
   providers: [
@@ -107,6 +110,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     ListSurvivorPensionAnalysisResultDependentPensionAnalysesUseCase,
     DownloadSurvivorPensionAnalysisCompleteAnalysisUseCase,
     DownloadSurvivorPensionAnalysisSimplifiedAnalysisUseCase,
+    CalculateSurvivorPensionAnalysisRemunerationUseCase,
   ],
   exports: [],
 })

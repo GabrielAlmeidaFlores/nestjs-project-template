@@ -5,10 +5,12 @@ import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analy
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { RuralOrHybridRetirementRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection/query/rural-or-hybrid-retirement-rejection.query.repository.gateway';
 import { RuralOrHybridRetirementRejectionId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id.value-object';
+import { RuralOrHybridRetirementRejectionDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-document/enum/rural-or-hybrid-retirement-rejection-document-type.enum';
 import {
   GetRuralOrHybridRetirementRejectionResponseDto,
   GetRuralOrHybridRetirementRejectionAnalysisToolClientResponseDto,
   GetRuralOrHybridRetirementRejectionCnisDocumentResponseDto,
+  GetRuralOrHybridRetirementRejectionDocumentResponseDto,
   GetRuralOrHybridRetirementRejectionInssBenefitResponseDto,
   GetRuralOrHybridRetirementRejectionLegalProceedingResponseDto,
   GetRuralOrHybridRetirementRejectionResultResponseDto,
@@ -57,12 +59,24 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
     ]);
 
     const cnisDocumentEntity =
-      result.ruralOrHybridRetirementRejectionDocument?.[0] ?? null;
+      (result.ruralOrHybridRetirementRejectionDocument ?? []).find(
+        (doc) =>
+          doc.type === RuralOrHybridRetirementRejectionDocumentTypeEnum.CNIS,
+      ) ?? null;
 
     const cnisDocument =
       cnisDocumentEntity !== null && cnisDocumentEntity.document !== null
         ? await this.buildCnisDocumentResponse(cnisDocumentEntity.document)
         : null;
+
+    const topLevelDocuments = await Promise.all(
+      (result.ruralOrHybridRetirementRejectionDocument ?? [])
+        .filter((doc) => doc.document !== null)
+        .map(async (doc) => ({
+          type: doc.type,
+          ...(await this.buildSubEntityDocumentData(doc.document as string)),
+        })),
+    );
 
     const [
       allPeriodDocuments,
@@ -163,6 +177,15 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
         dateOfRejection: result.dateOfRejection,
       }),
       ...(cnisDocument !== null && { cnisDocument }),
+      ...(topLevelDocuments.length > 0 && {
+        ruralOrHybridRetirementRejectionDocument: topLevelDocuments.map((d) =>
+          GetRuralOrHybridRetirementRejectionDocumentResponseDto.build({
+            document: d.document,
+            originalFileName: d.originalFileName,
+            ...(d.type !== null && { type: d.type }),
+          }),
+        ),
+      }),
       createdAt: result.createdAt,
       updatedAt: result.updatedAt,
       ...(result.ruralOrHybridRetirementRejectionResult !== null && {
