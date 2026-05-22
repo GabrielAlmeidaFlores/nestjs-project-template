@@ -27,6 +27,7 @@ import {
   GetDisabilityRetirementPlanningResponseDto,
   GetDisabilityRetirementPlanningResultResponseDto,
 } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/get-disability-retirement-planning.response.dto';
+import { GetDisabilityRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/get-disability-retirement-planning-remuneration.response.dto';
 import { DisabilityRetirementPlanningNotFoundError } from '@module/customer/analysis-tool/module/disability-retirement-planning/error/disability-retirement-planning-not-found.error';
 import {
   DisabilityRetirementPlanningCompleteAnalysisModel,
@@ -358,6 +359,13 @@ export class GetDisabilityRetirementPlanningUseCase {
       (entity) => entity.benefitNumber,
     );
 
+    const remunerations = queryResult.remunerations.map((remuneration) =>
+      GetDisabilityRetirementPlanningRemunerationResponseDto.build({
+        remunerationDate: remuneration.remunerationDate,
+        remunerationAmount: remuneration.remunerationAmount,
+      }),
+    );
+
     const client = analysisToolRecordQueryResult.analysisToolClient;
 
     const analysisToolClient = GetAnalysisToolClientResponseDto.build({
@@ -406,6 +414,7 @@ export class GetDisabilityRetirementPlanningUseCase {
       legalProceedingNumber,
       inssBenefitNumber,
       totalRemunerations: queryResult.remunerations.length,
+      ...(remunerations.length > 0 && { remunerations }),
       ...(disabilityRetirementPlanningResult !== null && {
         disabilityRetirementPlanningResult,
       }),
