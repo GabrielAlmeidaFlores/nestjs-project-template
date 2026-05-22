@@ -16,6 +16,7 @@ import { GetSurvivorPensionAnalysisDocumentResponseDto } from '@module/customer/
 import { GetSurvivorPensionAnalysisResultDependentPensionAnalysisResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/get-survivor-pension-analysis-result-dependent-pension-analysis.response.dto';
 import { GetSurvivorPensionAnalysisResultRetirementRuleResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/get-survivor-pension-analysis-result-retirement-rule.response.dto';
 import { GetSurvivorPensionAnalysisResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/get-survivor-pension-analysis.response.dto';
+import { SurvivorPensionAnalysisRemunerationResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/survivor-pension-analysis-remuneration.response.dto';
 import { SurvivorPensionAnalysisNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -312,6 +313,13 @@ export class GetSurvivorPensionAnalysisUseCase {
             ...(spaData.deceasedWorkHistory.endDate !== null && {
               endDate: spaData.deceasedWorkHistory.endDate,
             }),
+            remunerations: spaData.deceasedWorkHistory.remunerations.map(
+              (remuneration) =>
+                SurvivorPensionAnalysisRemunerationResponseDto.build({
+                  remunerationDate: remuneration.remunerationDate,
+                  remunerationAmount: remuneration.remunerationAmount,
+                }),
+            ),
             periods: dwhPeriodDtoList,
             createdAt: spaData.deceasedWorkHistory.createdAt,
             updatedAt: spaData.deceasedWorkHistory.updatedAt,
