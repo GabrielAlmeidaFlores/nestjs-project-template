@@ -84,22 +84,22 @@ export class DownloadDisabilityRetirementPlanningSimplifiedAnalysisUseCase {
       throw new DisabilityRetirementPlanningDoesNotContainCompleteAnalysisError();
     }
 
+    const promptResponse =
+      await this.getPaymentPlanPaidResourcePromptUseCase.execute(
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_SIMPLIFIED_ANALYSIS,
+      );
+
+    const consumeCreditTransaction =
+      await this.consumeOrganizationCreditUseCase.execute(
+        organizationSessionData.organizationId,
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_SIMPLIFIED_ANALYSIS,
+        organizationMember.id,
+      );
+
     let simplifiedAnalysis =
       queryResult.result.disabilityRetirementPlanningSimplifiedAnalysis;
 
     if (simplifiedAnalysis === null) {
-      const promptResponse =
-        await this.getPaymentPlanPaidResourcePromptUseCase.execute(
-          PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_SIMPLIFIED_ANALYSIS,
-        );
-
-      const consumeCreditTransaction =
-        await this.consumeOrganizationCreditUseCase.execute(
-          organizationSessionData.organizationId,
-          PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_SIMPLIFIED_ANALYSIS,
-          organizationMember.id,
-        );
-
       const aiResponse =
         await this.analysisProcessorGateway.getDisabilityRetirementPlanningSimplifiedAnalysis(
           promptResponse.prompt,
@@ -152,6 +152,11 @@ export class DownloadDisabilityRetirementPlanningSimplifiedAnalysisUseCase {
         );
         await transaction.commit();
       }
+    } else {
+      const transaction = await this.baseTransactionRepositoryGateway.execute([
+        consumeCreditTransaction,
+      ]);
+      await transaction.commit();
     }
 
     return this.exportDocumentGateway.downloadFileAsStreamable(
