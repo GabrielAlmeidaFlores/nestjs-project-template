@@ -8,8 +8,14 @@ export class GetDisabilityRetirementPlanningRemunerationResponseDto extends Base
   @ResponseDtoDateProperty()
   public remunerationDate: Date;
 
-  @ResponseDtoNumberProperty()
-  public remunerationAmount: number;
+  @ResponseDtoNumberProperty({ required: false })
+  public remunerationAmount?: number;
+
+  @ResponseDtoNumberProperty({ required: false })
+  public correctionFactor?: number;
+
+  @ResponseDtoNumberProperty({ required: false })
+  public updatedRemunerationAmount?: number;
 
   protected override readonly _type =
     GetDisabilityRetirementPlanningRemunerationResponseDto.name;
