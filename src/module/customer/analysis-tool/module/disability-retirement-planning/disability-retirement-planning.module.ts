@@ -4,6 +4,7 @@ import { DatabaseModule } from '@infra/database/database.module';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
+import { RemunerationCalculatorModule } from '@module/customer/analysis-tool/lib/remuneration-calculator/remuneration-calculator.module';
 import { DisabilityRetirementPlanningController } from '@module/customer/analysis-tool/module/disability-retirement-planning/disability-retirement-planning.controller';
 import { AnalyzeDisabilityRetirementPlanningAdministrativeProcessUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/analyze-disability-retirement-planning-administrative-process.use-case';
 import { CreateDisabilityRetirementPlanningPeriodUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/create-disability-retirement-planning-period.use-case';
@@ -34,6 +35,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     OrganizationCreditModule,
     OrganizationSessionModule,
     PaymentPlanModule,
+    RemunerationCalculatorModule,
   ],
   controllers: [DisabilityRetirementPlanningController],
   providers: [
