@@ -5,6 +5,7 @@ import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analy
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { RuralOrHybridRetirementRejectionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/repository/rural-or-hybrid-retirement-rejection/query/rural-or-hybrid-retirement-rejection.query.repository.gateway';
 import { RuralOrHybridRetirementRejectionId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id.value-object';
+import { RuralOrHybridRetirementRejectionDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-document/enum/rural-or-hybrid-retirement-rejection-document-type.enum';
 import {
   GetRuralOrHybridRetirementRejectionResponseDto,
   GetRuralOrHybridRetirementRejectionAnalysisToolClientResponseDto,
@@ -26,7 +27,6 @@ import {
   GetRuralOrHybridRetirementRejectionTimeAcceleratorResponseDto,
 } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/dto/response/get-rural-or-hybrid-retirement-rejection.response.dto';
 import { RuralOrHybridRetirementRejectionNotFoundError } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/error/rural-or-hybrid-retirement-rejection-not-found.error';
-import { RuralOrHybridRetirementRejectionDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-document/enum/rural-or-hybrid-retirement-rejection-document-type.enum';
 
 import type { RuralOrHybridRetirementRejectionFirstAnalysisInterface } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/model/interface/rural-or-hybrid-retirement-rejection-first-analysis.interface';
 import type { RuralOrHybridRetirementRejectionResultInterface } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/model/interface/rural-or-hybrid-retirement-rejection-result.interface';
@@ -60,7 +60,8 @@ export class GetRuralOrHybridRetirementRejectionUseCase {
 
     const cnisDocumentEntity =
       (result.ruralOrHybridRetirementRejectionDocument ?? []).find(
-        (doc) => doc.type === RuralOrHybridRetirementRejectionDocumentTypeEnum.CNIS,
+        (doc) =>
+          doc.type === RuralOrHybridRetirementRejectionDocumentTypeEnum.CNIS,
       ) ?? null;
 
     const cnisDocument =
