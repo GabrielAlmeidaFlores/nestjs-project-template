@@ -7,6 +7,7 @@ import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone
 import { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/enum/analysis-tool-client-type.enum';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { RuralOrHybridRetirementRejectionActivityTypeEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/enum/rural-or-hybrid-retirement-rejection-activity-type.enum';
+import { RuralOrHybridRetirementRejectionDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-document/enum/rural-or-hybrid-retirement-rejection-document-type.enum';
 import { RuralOrHybridRetirementRejectionRequestedBenefitEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/enum/rural-or-hybrid-retirement-rejection-requested-benefit.enum';
 import { RuralOrHybridRetirementRejectionId } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection/value-object/rural-or-hybrid-retirement-rejection-id.value-object';
 import { RuralOrHybridRetirementRejectionProductionDestinationEnum } from '@module/customer/analysis-tool/module/rural-or-hybrid-retirement-rejection/domain/schema/entity/rural-or-hybrid-retirement-rejection-period/enum/rural-or-hybrid-retirement-rejection-production-destination.enum';
@@ -81,6 +82,26 @@ export class GetRuralOrHybridRetirementRejectionCnisDocumentResponseDto extends 
 
   protected override readonly _type =
     GetRuralOrHybridRetirementRejectionCnisDocumentResponseDto.name;
+}
+
+@ResponseDto()
+export class GetRuralOrHybridRetirementRejectionDocumentResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(Base64, {
+    required: false,
+    description: 'Arquivo em Base64',
+  })
+  public document?: Base64;
+
+  @ResponseDtoEnumProperty(RuralOrHybridRetirementRejectionDocumentTypeEnum, {
+    required: false,
+  })
+  public type?: RuralOrHybridRetirementRejectionDocumentTypeEnum;
+
+  @ResponseDtoStringProperty({ required: false })
+  public originalFileName?: string;
+
+  protected override readonly _type =
+    GetRuralOrHybridRetirementRejectionDocumentResponseDto.name;
 }
 
 @ResponseDto()
@@ -561,6 +582,12 @@ export class GetRuralOrHybridRetirementRejectionResponseDto extends BaseBuildabl
     { required: false },
   )
   public cnisDocument?: GetRuralOrHybridRetirementRejectionCnisDocumentResponseDto;
+
+  @ResponseDtoObjectProperty(
+    () => GetRuralOrHybridRetirementRejectionDocumentResponseDto,
+    { required: false, isArray: true },
+  )
+  public ruralOrHybridRetirementRejectionDocument?: GetRuralOrHybridRetirementRejectionDocumentResponseDto[];
 
   @ResponseDtoObjectProperty(
     () => GetRuralOrHybridRetirementRejectionResultResponseDto,
