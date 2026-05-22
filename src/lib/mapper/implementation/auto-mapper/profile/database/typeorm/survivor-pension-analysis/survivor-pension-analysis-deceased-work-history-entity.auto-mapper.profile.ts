@@ -43,6 +43,7 @@ export class SurvivorPensionAnalysisDeceasedWorkHistoryEntityAutoMapperProfile {
         ),
         startDate: source.startDate,
         endDate: source.endDate,
+        remunerations: source.remunerations ?? [],
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
@@ -70,6 +71,7 @@ export class SurvivorPensionAnalysisDeceasedWorkHistoryEntityAutoMapperProfile {
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
+        remunerations: source.remunerations,
         survivorPensionAnalysis: SurvivorPensionAnalysisTypeormEntity.build({
           id: source.survivorPensionAnalysisId.toString(),
         } as SurvivorPensionAnalysisTypeormEntity),

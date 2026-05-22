@@ -7,6 +7,7 @@ import { SurvivorPensionAnalysisDeceasedWorkHistoryTypeormEntity } from '@infra/
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { GetSurvivorPensionAnalysisDeceasedWorkHistoryQueryResult } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-deceased-work-history/query/result/get-survivor-pension-analysis-deceased-work-history.query.result';
 import { GetSurvivorPensionAnalysisDeceasedWorkHistoryPeriodQueryResult } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-deceased-work-history-period/query/result/get-survivor-pension-analysis-deceased-work-history-period.query.result';
+import { GetSurvivorPensionAnalysisDeceasedWorkHistoryRemunerationQueryResult } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/repository/survivor-pension-analysis-deceased-work-history-remuneration/query/result/get-survivor-pension-analysis-deceased-work-history-remuneration.query.result';
 import { SurvivorPensionAnalysisId } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis/value-object/survivor-pension-analysis-id/survivor-pension-analysis-id.value-object';
 import { SurvivorPensionAnalysisDeceasedWorkHistoryId } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-deceased-work-history/value-object/survivor-pension-analysis-deceased-work-history-id/survivor-pension-analysis-deceased-work-history-id.value-object';
 
@@ -44,6 +45,15 @@ export class GetSurvivorPensionAnalysisDeceasedWorkHistoryQueryResultAutoMapperP
         ),
       );
 
+      const remunerations = (source.remunerations ?? []).map((remuneration) =>
+        GetSurvivorPensionAnalysisDeceasedWorkHistoryRemunerationQueryResult.build(
+          {
+            remunerationDate: remuneration.remunerationDate,
+            remunerationAmount: remuneration.remunerationAmount,
+          },
+        ),
+      );
+
       return GetSurvivorPensionAnalysisDeceasedWorkHistoryQueryResult.build({
         id: new SurvivorPensionAnalysisDeceasedWorkHistoryId(source.id),
         survivorPensionAnalysisId: new SurvivorPensionAnalysisId(
@@ -51,6 +61,7 @@ export class GetSurvivorPensionAnalysisDeceasedWorkHistoryQueryResultAutoMapperP
         ),
         startDate: source.startDate,
         endDate: source.endDate,
+        remunerations,
         periods,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
