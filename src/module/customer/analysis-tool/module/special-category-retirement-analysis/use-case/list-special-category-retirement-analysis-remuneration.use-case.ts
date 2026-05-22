@@ -1,9 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 
+import { RemunerationDataInputModel } from '@module/customer/analysis-tool/lib/remuneration-calculator/model/input/remuneration-data.input.model';
+import { RemunerationCalculatorGateway } from '@module/customer/analysis-tool/lib/remuneration-calculator/remuneration-calculator.gateway';
 import { SpecialCategoryRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis/query/special-category-retirement-analysis.query.repository.gateway';
 import { GetSpecialCategoryRetirementAnalysisRemunerationQueryResult } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-remuneration/query/result/get-special-category-retirement-analysis-remuneration.query.result';
 import { SpecialCategoryRetirementAnalysisId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/value-object/special-category-retirement-analysis-id/special-category-retirement-analysis-id.value-object';
-import { SpecialCategoryRetirementAnalysisRemunerationId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-remuneration/value-object/special-category-retirement-analysis-remuneration-id/special-category-retirement-analysis-remuneration-id.value-object';
 import {
   ListSpecialCategoryRetirementAnalysisRemunerationResponseDto,
   SpecialCategoryRetirementAnalysisRemunerationItemResponseDto,
@@ -16,9 +17,13 @@ export class ListSpecialCategoryRetirementAnalysisRemunerationUseCase {
   protected readonly _type =
     ListSpecialCategoryRetirementAnalysisRemunerationUseCase.name;
 
+  private readonly planoRealStartDate = new Date(1994, 6, 1);
+
   public constructor(
     @Inject(SpecialCategoryRetirementAnalysisQueryRepositoryGateway)
     private readonly specialCategoryRetirementAnalysisQueryRepositoryGateway: SpecialCategoryRetirementAnalysisQueryRepositoryGateway,
+    @Inject(RemunerationCalculatorGateway)
+    private readonly remunerationCalculatorGateway: RemunerationCalculatorGateway,
   ) {}
 
   public async execute(
@@ -32,24 +37,7 @@ export class ListSpecialCategoryRetirementAnalysisRemunerationUseCase {
         SpecialCategoryRetirementAnalysisNotFoundError,
       );
 
-    if (queryResult.workPeriods.length === 0) {
-      return ListSpecialCategoryRetirementAnalysisRemunerationResponseDto.build(
-        { data: [] },
-      );
-    }
-
-    const allStartDates = queryResult.workPeriods.map(
-      (wp) => wp.workPeriodStartDate,
-    );
-    const allEndDates = queryResult.workPeriods.map(
-      (wp) => wp.workPeriodEndDate,
-    );
-
-    const earliestStart = allStartDates.reduce((min, d) => (d < min ? d : min));
-    const latestEnd = allEndDates.reduce((max, d) => (d > max ? d : max));
-
-    const months = this.generateMonthRange(earliestStart, latestEnd);
-
+    const months = this.generateMonthRange(this.planoRealStartDate, new Date());
     const remunerationByMonthKey = this.buildRemunerationMap(
       queryResult.remunerations,
     );
@@ -62,6 +50,16 @@ export class ListSpecialCategoryRetirementAnalysisRemunerationUseCase {
       const existing = remunerationByMonthKey.get(key) ?? null;
 
       if (existing !== null) {
+        const remunerationDetail =
+          existing.remunerationGrossAmount !== null
+            ? this.remunerationCalculatorGateway.calculateRemuneration(
+                RemunerationDataInputModel.build({
+                  remunerationDate: existing.remunerationReferenceMonthYear,
+                  remunerationAmount: existing.remunerationGrossAmount,
+                }),
+              )
+            : null;
+
         items.push(
           SpecialCategoryRetirementAnalysisRemunerationItemResponseDto.build({
             specialCategoryRetirementAnalysisRemunerationId:
@@ -71,13 +69,16 @@ export class ListSpecialCategoryRetirementAnalysisRemunerationUseCase {
             ...(existing.remunerationGrossAmount !== null && {
               remunerationGrossAmount: existing.remunerationGrossAmount,
             }),
+            ...(remunerationDetail !== null && {
+              correctionFactor: remunerationDetail.correctionFactor,
+              updatedRemunerationAmount:
+                remunerationDetail.updatedRemunerationAmount,
+            }),
           }),
         );
       } else {
         items.push(
           SpecialCategoryRetirementAnalysisRemunerationItemResponseDto.build({
-            specialCategoryRetirementAnalysisRemunerationId:
-              new SpecialCategoryRetirementAnalysisRemunerationId(),
             remunerationReferenceMonthYear: monthYear,
           }),
         );
