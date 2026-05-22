@@ -2,6 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { SpecialCategoryRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis/query/special-category-retirement-analysis.query.repository.gateway';
@@ -39,6 +41,8 @@ export class GenerateSpecialCategoryRetirementAnalysisFullTextUseCase {
     private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
     @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
+    @Inject(AnalysisToolRecordCommandRepositoryGateway)
+    private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
   ) {}
 
   public async execute(
@@ -157,12 +161,17 @@ export class GenerateSpecialCategoryRetirementAnalysisFullTextUseCase {
       });
 
     const updateTransaction =
-      await this.baseTransactionRepositoryGateway.execute(
+      await this.baseTransactionRepositoryGateway.execute([
         this.resultCommandRepositoryGateway.updateSpecialCategoryRetirementAnalysisResult(
           resultEntity.id,
           updatedResultEntity,
         ),
-      );
+        this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecordStatus(
+          queryResult.analysisToolRecordId,
+          AnalysisStatusEnum.COMPLETED,
+          organizationMember.id,
+        ),
+      ]);
 
     await updateTransaction.commit();
 
