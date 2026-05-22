@@ -8,6 +8,7 @@ import { SurvivorPensionAnalysisDeceasedWorkHistoryId } from '@module/customer/a
 import { GetSurvivorPensionAnalysisDeceasedWorkHistoryPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/get-survivor-pension-analysis-deceased-work-history-period-document.response.dto';
 import { GetSurvivorPensionAnalysisDeceasedWorkHistoryPeriodResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/get-survivor-pension-analysis-deceased-work-history-period.response.dto';
 import { GetSurvivorPensionAnalysisDeceasedWorkHistoryResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/get-survivor-pension-analysis-deceased-work-history.response.dto';
+import { SurvivorPensionAnalysisRemunerationResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/survivor-pension-analysis-remuneration.response.dto';
 import { SurvivorPensionAnalysisDeceasedWorkHistoryNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-deceased-work-history-not-found.error';
 import { SurvivorPensionAnalysisNotFoundError } from '@module/customer/analysis-tool/module/survivor-pension-analysis/error/survivor-pension-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -90,11 +91,19 @@ export class GetSurvivorPensionAnalysisDeceasedWorkHistoryUseCase {
       }),
     );
 
+    const remunerations = dwhResult.remunerations.map((remuneration) =>
+      SurvivorPensionAnalysisRemunerationResponseDto.build({
+        remunerationDate: remuneration.remunerationDate,
+        remunerationAmount: remuneration.remunerationAmount,
+      }),
+    );
+
     return GetSurvivorPensionAnalysisDeceasedWorkHistoryResponseDto.build({
       survivorPensionAnalysisDeceasedWorkHistoryId: dwhResult.id,
       survivorPensionAnalysisId: dwhResult.survivorPensionAnalysisId,
       ...(dwhResult.startDate !== null && { startDate: dwhResult.startDate }),
       ...(dwhResult.endDate !== null && { endDate: dwhResult.endDate }),
+      remunerations,
       periods,
       createdAt: dwhResult.createdAt,
       updatedAt: dwhResult.updatedAt,
