@@ -1,5 +1,5 @@
 import { GenerateContentParameters, GoogleGenAI, Part } from '@google/genai';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import * as fileType from 'file-type';
 
 import { GenerativeIaApiKeyInvalidError } from '@infra/generative-ia/error/generative-ia-api-key-invalid.error';
@@ -11,6 +11,7 @@ import { GeminiResultOutputModel } from '@infra/generative-ia/implementation/gem
 import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
 import { GenerativeIaPartType } from '@infra/generative-ia/type/generative-ia-part.type';
 import { GenerativeIaApplicationVariable } from '@shared/system/constant/application-variable/source/generative-ia.application-variable';
+import { ObservabilityErrorLogInputModel } from '@shared/system/observability/model/input/observability-error-log.input.model';
 import { ObservabilityLogInputModel } from '@shared/system/observability/model/input/observability-log.input.model';
 import { ObservabilityGateway } from '@shared/system/observability/observability.gateway';
 import { withSpan } from '@shared/system/tracing/tracer';
@@ -25,6 +26,8 @@ export class GeminiService implements GenerativeIaGateway {
   private static readonly TIMEOUT_ERROR_MESSAGE = 'GEMINI_CALL_TIMEOUT';
 
   protected readonly _type = GeminiService.name;
+
+  private readonly logger = new Logger(GeminiService.name);
 
   private readonly FALLBACK_MODELS: Record<string, string>;
 
@@ -442,6 +445,25 @@ json mode rules (apply when JSON output is explicitly requested):
           const functionName = functionCall.name ?? '';
           const functionParams = functionCall.args ?? {};
 
+          this.observabilityGateway.emitInfo(
+            ObservabilityLogInputModel.build({
+              scope: GeminiService.name,
+              message: `Function calling iteration ${callCount + 1}/${MAX_FUNCTION_CALLS} - calling tool: ${functionName}`,
+              attributes: {
+                'llm.function_calling.iteration': callCount + 1,
+                'llm.function_calling.max_iterations': MAX_FUNCTION_CALLS,
+                'llm.function_calling.tool_name': functionName,
+                'llm.function_calling.tool_params':
+                  JSON.stringify(functionParams).substring(0, 500),
+                'llm.model': model,
+              },
+            }),
+          );
+
+          this.logger.log(
+            `Function calling iteration ${callCount + 1}/${MAX_FUNCTION_CALLS} - tool: ${functionName} | params: ${JSON.stringify(functionParams).substring(0, 500)}`,
+          );
+
           try {
             const handler = toolHandlers[functionName] as
               | ((params: Record<string, unknown>) => Promise<unknown>)
@@ -471,6 +493,23 @@ json mode rules (apply when JSON output is explicitly requested):
                 .replace(/\\/g, '/')
                 .substring(0, MAX_ERROR_MESSAGE_LENGTH);
             }
+
+            this.observabilityGateway.emitError(
+              ObservabilityErrorLogInputModel.build({
+                scope: GeminiService.name,
+                message: `Function calling tool error: ${functionName} - ${errorMessage}`,
+                attributes: {
+                  'llm.function_calling.iteration': callCount + 1,
+                  'llm.function_calling.tool_name': functionName,
+                  'llm.function_calling.error': errorMessage,
+                  'llm.model': model,
+                },
+              }),
+            );
+
+            this.logger.error(
+              `Function calling tool error at iteration ${callCount + 1}/${MAX_FUNCTION_CALLS} - tool: ${functionName} | error: ${errorMessage}`,
+            );
 
             functionResponses.push({
               functionResponse: {
@@ -517,8 +556,26 @@ json mode rules (apply when JSON output is explicitly requested):
       }
     }
 
+    this.observabilityGateway.emitError(
+      ObservabilityErrorLogInputModel.build({
+        scope: GeminiService.name,
+        message: `Function calling loop exhausted MAX_FUNCTION_CALLS (${MAX_FUNCTION_CALLS}) without producing a text response`,
+        attributes: {
+          'llm.function_calling.max_iterations': MAX_FUNCTION_CALLS,
+          'llm.model': model,
+          'llm.token.input': totalInputTokens,
+          'llm.token.output': totalOutputTokens,
+          'llm.token.total': totalTokens,
+        },
+      }),
+    );
+
+    this.logger.error(
+      `Function calling loop exhausted ${MAX_FUNCTION_CALLS} iterations without text response | model: ${model} | tokens: ${totalTokens}`,
+    );
+
     return GeminiResultOutputModel.build({
-      text: 'Houve um erro ao processar sua mensagem. Por favor, tente novamente.',
+      text: null,
       model,
       inputTokens: totalInputTokens,
       outputTokens: totalOutputTokens,

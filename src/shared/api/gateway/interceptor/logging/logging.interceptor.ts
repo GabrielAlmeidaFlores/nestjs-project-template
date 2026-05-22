@@ -47,6 +47,10 @@ export class LoggingInterceptor implements NestInterceptor {
     'private_key',
   ];
 
+  private static readonly SILENT_CONSOLE_ROUTES = [
+    '/customer/organization-credit/available',
+  ];
+
   protected readonly _type = LoggingInterceptor.name;
   private readonly logger = new Logger(LoggingInterceptor.name);
   private readonly otlpLogger = logs.getLogger(LoggingInterceptor.name);
@@ -78,6 +82,10 @@ export class LoggingInterceptor implements NestInterceptor {
 
     const now = Date.now();
 
+    const isSilentRoute = LoggingInterceptor.SILENT_CONSOLE_ROUTES.some(
+      (route) => url.includes(route),
+    );
+
     return next.handle().pipe(
       tap({
         next: (responseData: unknown) => {
@@ -105,7 +113,8 @@ export class LoggingInterceptor implements NestInterceptor {
           const hasResponse =
             typeof responseData === 'object' && responseData !== null;
 
-          this.logger.log(`
+          if (!isSilentRoute) {
+            this.logger.log(`
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📥 REQUEST
 
@@ -119,7 +128,8 @@ export class LoggingInterceptor implements NestInterceptor {
 🔹 Status: ${statusCode}
 🔹 Duration: ${duration}ms${hasResponse ? `\n🔹 Response:\n${truncatedResponse}${isTruncated ? '\n... (truncated)' : ''}` : ''}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          `);
+            `);
+          }
 
           this.emitSuccessLog({
             method,
@@ -149,7 +159,8 @@ export class LoggingInterceptor implements NestInterceptor {
                 )
               : 'N/A';
 
-          this.logger.error(`
+          if (!isSilentRoute) {
+            this.logger.error(`
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📥 REQUEST
 
@@ -165,7 +176,8 @@ export class LoggingInterceptor implements NestInterceptor {
 🔹 Error: ${error.message}
 🔹 Stack: ${stackTrace}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          `);
+            `);
+          }
 
           this.emitErrorLog({
             method,
