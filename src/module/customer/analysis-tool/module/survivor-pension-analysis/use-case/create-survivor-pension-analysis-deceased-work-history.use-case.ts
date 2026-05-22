@@ -60,6 +60,7 @@ export class CreateSurvivorPensionAnalysisDeceasedWorkHistoryUseCase {
       ...(dto.endDate !== undefined && {
         endDate: dto.endDate,
       }),
+      remunerations: dto.remunerations ?? [],
     });
 
     const txn = await this.baseTransactionRepositoryGateway.execute([

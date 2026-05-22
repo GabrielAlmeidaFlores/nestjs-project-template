@@ -16,6 +16,7 @@ import { DisabilityRetirementPlanningQueryRepositoryGateway } from '@module/cust
 import { DisabilityDocumentViabilityEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/enum/disability-document-viability.enum';
 import { DisabilityRetirementPlanningActivityTypeEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/enum/disability-retirement-planning-activity-type.enum';
 import { DisabilityRetirementPlanningId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
+import { GetDisabilityRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/get-disability-retirement-planning-remuneration.response.dto';
 import {
   GetDisabilityRetirementPlanningCidResponseDto,
   GetDisabilityRetirementPlanningDocumentResponseDto,
@@ -27,7 +28,6 @@ import {
   GetDisabilityRetirementPlanningResponseDto,
   GetDisabilityRetirementPlanningResultResponseDto,
 } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/get-disability-retirement-planning.response.dto';
-import { GetDisabilityRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/get-disability-retirement-planning-remuneration.response.dto';
 import { DisabilityRetirementPlanningNotFoundError } from '@module/customer/analysis-tool/module/disability-retirement-planning/error/disability-retirement-planning-not-found.error';
 import {
   DisabilityRetirementPlanningCompleteAnalysisModel,

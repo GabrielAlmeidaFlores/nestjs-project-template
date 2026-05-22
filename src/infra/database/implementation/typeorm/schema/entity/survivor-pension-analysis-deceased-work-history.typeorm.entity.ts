@@ -5,6 +5,8 @@ import { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodTypeormEntity } from '@
 import { SurvivorPensionAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/survivor-pension-analysis.typeorm.entity';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 
+import type { SurvivorPensionAnalysisDeceasedWorkHistoryRemunerationType } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-deceased-work-history/survivor-pension-analysis-deceased-work-history.entity.props.interface';
+
 @Entity({ name: 'spa_deceased_work_history' })
 export class SurvivorPensionAnalysisDeceasedWorkHistoryTypeormEntity extends BaseTypeormEntity {
   @Column({
@@ -22,6 +24,15 @@ export class SurvivorPensionAnalysisDeceasedWorkHistoryTypeormEntity extends Bas
     transformer: DateOnlyTransformer,
   })
   public endDate: Date | null;
+
+  @Column({
+    name: 'remunerations',
+    type: 'json',
+    nullable: true,
+  })
+  public remunerations:
+    | SurvivorPensionAnalysisDeceasedWorkHistoryRemunerationType[]
+    | null;
 
   @OneToOne(
     () => SurvivorPensionAnalysisTypeormEntity,
