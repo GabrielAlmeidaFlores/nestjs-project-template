@@ -8,6 +8,7 @@ import { DisabilityRetirementPlanningDocumentTypeEnum } from '@module/customer/a
 import { DisabilityRetirementPlanningPeriodDisabilityCategoryEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-disability/enum/disability-retirement-planning-period-disability-category.enum';
 import { DisabilityRetirementPlanningPeriodDisabilityDocumentTypeEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-disability-document/enum/disability-retirement-planning-period-disability-document-type.enum';
 import { DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-special-time-document/enum/disability-retirement-planning-period-special-time-document-type.enum';
+import { GetDisabilityRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/get-disability-retirement-planning-remuneration.response.dto';
 import { DisabilityRetirementPlanningCompleteAnalysisModel } from '@module/customer/analysis-tool/module/disability-retirement-planning/model/generic/disability-retirement-planning-complete-analysis.model';
 import { RetirementPlanningPeriodServiceTypeEnum } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-period/enum/retirement-planning-period-service-type.enum';
 import { RetirementPlanningDisabilityDegreeEnum } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-degree-enum';
@@ -270,6 +271,12 @@ export class GetDisabilityRetirementPlanningResponseDto extends BaseBuildableDto
 
   @ResponseDtoNumberProperty({ required: false })
   public totalRemunerations?: number;
+
+  @ResponseDtoObjectProperty(
+    () => GetDisabilityRetirementPlanningRemunerationResponseDto,
+    { required: false, isArray: true },
+  )
+  public remunerations?: GetDisabilityRetirementPlanningRemunerationResponseDto[];
 
   @ResponseDtoObjectProperty(
     () => GetDisabilityRetirementPlanningResultResponseDto,

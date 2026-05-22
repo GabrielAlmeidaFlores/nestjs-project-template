@@ -67,6 +67,7 @@ export class UpdateSurvivorPensionAnalysisDeceasedWorkHistoryUseCase {
       survivorPensionAnalysisId: dwhQueryResult.survivorPensionAnalysisId,
       startDate: dto.startDate ?? dwhQueryResult.startDate,
       endDate: dto.endDate ?? dwhQueryResult.endDate,
+      remunerations: dto.remunerations ?? dwhQueryResult.remunerations,
     });
 
     const txn = await this.baseTransactionRepositoryGateway.execute([

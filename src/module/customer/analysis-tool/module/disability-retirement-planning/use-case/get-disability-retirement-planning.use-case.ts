@@ -16,6 +16,7 @@ import { DisabilityRetirementPlanningQueryRepositoryGateway } from '@module/cust
 import { DisabilityDocumentViabilityEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/enum/disability-document-viability.enum';
 import { DisabilityRetirementPlanningActivityTypeEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/enum/disability-retirement-planning-activity-type.enum';
 import { DisabilityRetirementPlanningId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
+import { GetDisabilityRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/get-disability-retirement-planning-remuneration.response.dto';
 import {
   GetDisabilityRetirementPlanningCidResponseDto,
   GetDisabilityRetirementPlanningDocumentResponseDto,
@@ -358,6 +359,13 @@ export class GetDisabilityRetirementPlanningUseCase {
       (entity) => entity.benefitNumber,
     );
 
+    const remunerations = queryResult.remunerations.map((remuneration) =>
+      GetDisabilityRetirementPlanningRemunerationResponseDto.build({
+        remunerationDate: remuneration.remunerationDate,
+        remunerationAmount: remuneration.remunerationAmount,
+      }),
+    );
+
     const client = analysisToolRecordQueryResult.analysisToolClient;
 
     const analysisToolClient = GetAnalysisToolClientResponseDto.build({
@@ -406,6 +414,7 @@ export class GetDisabilityRetirementPlanningUseCase {
       legalProceedingNumber,
       inssBenefitNumber,
       totalRemunerations: queryResult.remunerations.length,
+      ...(remunerations.length > 0 && { remunerations }),
       ...(disabilityRetirementPlanningResult !== null && {
         disabilityRetirementPlanningResult,
       }),

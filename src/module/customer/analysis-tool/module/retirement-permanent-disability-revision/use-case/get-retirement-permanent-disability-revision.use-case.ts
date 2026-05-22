@@ -220,7 +220,11 @@ export class GetRetirementPermanentDisabilityRevisionUseCase {
           const originalFileName =
             await this.fileProcessorGateway.getOriginalFileName(doc.document);
 
-          return { base64: buffer.toString('base64'), originalFileName, type: doc.type };
+          return {
+            base64: buffer.toString('base64'),
+            originalFileName,
+            type: doc.type,
+          };
         }),
       );
 

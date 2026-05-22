@@ -18,6 +18,7 @@ import { SurvivorPensionAnalysisDeceasedWorkHistoryPeriodId } from '@module/cust
 import { SurvivorPensionAnalysisResultId } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-result/value-object/survivor-pension-analysis-result-id/survivor-pension-analysis-result-id.value-object';
 import { SurvivorPensionAnalysisResultDependentPensionAnalysisId } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-result-dependent-pension-analysis/value-object/survivor-pension-analysis-result-dependent-pension-analysis-id/survivor-pension-analysis-result-dependent-pension-analysis-id.value-object';
 import { SurvivorPensionAnalysisResultRetirementRuleId } from '@module/customer/analysis-tool/module/survivor-pension-analysis/domain/schema/entity/survivor-pension-analysis-result-retirement-rule/value-object/survivor-pension-analysis-result-retirement-rule-id/survivor-pension-analysis-result-retirement-rule-id.value-object';
+import { CalculateSurvivorPensionAnalysisRemunerationRequestDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/request/calculate-survivor-pension-analysis-remuneration.request.dto';
 import { CreateSurvivorPensionAnalysisBenefitOriginatorIdentificationRequestDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/request/create-survivor-pension-analysis-benefit-originator-identification.request.dto';
 import { CreateSurvivorPensionAnalysisCustomerProfileIdentificationRequestDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/request/create-survivor-pension-analysis-customer-profile-identification.request.dto';
 import { CreateSurvivorPensionAnalysisDeceasedBenefitDependentsRequestDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/request/create-survivor-pension-analysis-deceased-benefit-dependents.request.dto';
@@ -37,6 +38,7 @@ import { UpdateSurvivorPensionAnalysisCustomerProfileIdentificationRequestDto } 
 import { UpdateSurvivorPensionAnalysisDeceasedBenefitDependentsRequestDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/request/update-survivor-pension-analysis-deceased-benefit-dependents.request.dto';
 import { UpdateSurvivorPensionAnalysisDeceasedWorkHistoryPeriodRequestDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/request/update-survivor-pension-analysis-deceased-work-history-period.request.dto';
 import { UpdateSurvivorPensionAnalysisDeceasedWorkHistoryRequestDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/request/update-survivor-pension-analysis-deceased-work-history.request.dto';
+import { CalculateSurvivorPensionAnalysisRemunerationResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/calculate-survivor-pension-analysis-remuneration.response.dto';
 import { CreateSurvivorPensionAnalysisBenefitOriginatorIdentificationResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/create-survivor-pension-analysis-benefit-originator-identification.response.dto';
 import { CreateSurvivorPensionAnalysisCustomerProfileIdentificationResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/create-survivor-pension-analysis-customer-profile-identification.response.dto';
 import { CreateSurvivorPensionAnalysisDeceasedBenefitDependentsResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/create-survivor-pension-analysis-deceased-benefit-dependents.response.dto';
@@ -76,6 +78,7 @@ import { UpdateSurvivorPensionAnalysisCustomerProfileIdentificationResponseDto }
 import { UpdateSurvivorPensionAnalysisDeceasedBenefitDependentsResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/update-survivor-pension-analysis-deceased-benefit-dependents.response.dto';
 import { UpdateSurvivorPensionAnalysisDeceasedWorkHistoryPeriodResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/update-survivor-pension-analysis-deceased-work-history-period.response.dto';
 import { UpdateSurvivorPensionAnalysisDeceasedWorkHistoryResponseDto } from '@module/customer/analysis-tool/module/survivor-pension-analysis/dto/response/update-survivor-pension-analysis-deceased-work-history.response.dto';
+import { CalculateSurvivorPensionAnalysisRemunerationUseCase } from '@module/customer/analysis-tool/module/survivor-pension-analysis/use-case/calculate-survivor-pension-analysis-remuneration.use-case';
 import { CreateSurvivorPensionAnalysisBenefitOriginatorIdentificationUseCase } from '@module/customer/analysis-tool/module/survivor-pension-analysis/use-case/create-survivor-pension-analysis-benefit-originator-identification.use-case';
 import { CreateSurvivorPensionAnalysisCustomerProfileIdentificationUseCase } from '@module/customer/analysis-tool/module/survivor-pension-analysis/use-case/create-survivor-pension-analysis-customer-profile-identification.use-case';
 import { CreateSurvivorPensionAnalysisDeceasedBenefitDependentsUseCase } from '@module/customer/analysis-tool/module/survivor-pension-analysis/use-case/create-survivor-pension-analysis-deceased-benefit-dependents.use-case';
@@ -174,6 +177,7 @@ export class SurvivorPensionAnalysisController {
     private readonly listSurvivorPensionAnalysisDpasUseCase: ListSurvivorPensionAnalysisResultDependentPensionAnalysesUseCase,
     private readonly downloadSurvivorPensionAnalysisCompleteAnalysisUseCase: DownloadSurvivorPensionAnalysisCompleteAnalysisUseCase,
     private readonly downloadSurvivorPensionAnalysisSimplifiedAnalysisUseCase: DownloadSurvivorPensionAnalysisSimplifiedAnalysisUseCase,
+    private readonly calculateSurvivorPensionAnalysisRemunerationUseCase: CalculateSurvivorPensionAnalysisRemunerationUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -260,6 +264,35 @@ export class SurvivorPensionAnalysisController {
       sessionData,
       organizationSessionData,
       survivorPensionAnalysisId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Calcular remunerações da análise de pensão por morte',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'remuneration-calculation',
+      method: RequestMethod.POST,
+      type: CalculateSurvivorPensionAnalysisRemunerationRequestDto,
+    },
+    tag: ['pensao-por-morte'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Remunerações calculadas com sucesso.',
+      type: CalculateSurvivorPensionAnalysisRemunerationResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async calculateRemuneration(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Body() dto: CalculateSurvivorPensionAnalysisRemunerationRequestDto,
+  ): Promise<CalculateSurvivorPensionAnalysisRemunerationResponseDto> {
+    return this.calculateSurvivorPensionAnalysisRemunerationUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
     );
   }
 

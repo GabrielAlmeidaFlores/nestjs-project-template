@@ -30,6 +30,8 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 @Injectable()
 export class SendMessageUseCase {
   private static readonly MAX_HISTORY_MESSAGES = 10;
+  private static readonly AI_RESPONSE_FALLBACK_MESSAGE =
+    'Houve um erro ao processar sua mensagem. Por favor, tente novamente.';
 
   protected readonly _type = SendMessageUseCase.name;
 
@@ -146,6 +148,9 @@ export class SendMessageUseCase {
       paymentPlanPaidResourceType,
     );
 
+    const isAiResponseFailure =
+      aiResponse === SendMessageUseCase.AI_RESPONSE_FALLBACK_MESSAGE;
+
     const assistantMessage = MessageModel.build({
       id: new Guid(),
       conversationId,
@@ -154,15 +159,19 @@ export class SendMessageUseCase {
       content: aiResponse,
       timestamp: new Date(),
       paymentPlanPaidResourceType,
-      creditCost: costCalculation.creditCost,
+      ...(!isAiResponseFailure
+        ? { creditCost: costCalculation.creditCost }
+        : {}),
     });
 
     await this.conversationCacheGateway.addMessage(assistantMessage);
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute([
-      consumeCreditTransaction,
-    ]);
-    await transaction.commit();
+    if (!isAiResponseFailure) {
+      const transaction = await this.baseTransactionRepositoryGateway.execute([
+        consumeCreditTransaction,
+      ]);
+      await transaction.commit();
+    }
 
     return SendMessageResponseDto.build({
       assistantMessage: MessageItemResponseDto.build({
@@ -366,7 +375,7 @@ EXEMPLOS DE AÇÕES QUE REQUEREM ATUALIZAÇÃO:
       );
 
     if (aiResponse === null) {
-      return 'Desculpe, não foi possível gerar uma resposta no momento.';
+      return SendMessageUseCase.AI_RESPONSE_FALLBACK_MESSAGE;
     }
 
     return aiResponse.trim();

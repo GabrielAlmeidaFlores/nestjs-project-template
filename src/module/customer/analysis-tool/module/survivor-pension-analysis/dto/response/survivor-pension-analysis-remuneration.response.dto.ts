@@ -4,7 +4,7 @@ import { ResponseDtoNumberProperty } from '@shared/api/util/decorator/property/d
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
-export class GetDisabilityRetirementPlanningRemunerationResponseDto extends BaseBuildableDtoObject {
+export class SurvivorPensionAnalysisRemunerationResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoDateProperty()
   public remunerationDate: Date;
 
@@ -18,5 +18,5 @@ export class GetDisabilityRetirementPlanningRemunerationResponseDto extends Base
   public updatedRemunerationAmount?: number;
 
   protected override readonly _type =
-    GetDisabilityRetirementPlanningRemunerationResponseDto.name;
+    SurvivorPensionAnalysisRemunerationResponseDto.name;
 }
