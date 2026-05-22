@@ -27,7 +27,9 @@ export class GeminiService implements GenerativeIaGateway {
 
   protected readonly _type = GeminiService.name;
 
-  private readonly logger = new Logger(GeminiService.name);
+  private readonly logger: Logger;
+
+  private readonly LOG_PARAMS_MAX_LENGTH: number;
 
   private readonly FALLBACK_MODELS: Record<string, string>;
 
@@ -42,6 +44,8 @@ export class GeminiService implements GenerativeIaGateway {
     @Inject(ObservabilityGateway)
     private readonly observabilityGateway: ObservabilityGateway,
   ) {
+    this.logger = new Logger(GeminiService.name);
+    this.LOG_PARAMS_MAX_LENGTH = 500;
     this.hashSubstringLength = 32;
     this.urlRegex = /\bhttps?:\/\/[^\s"'<>]+/i;
     this.fileTypeCache = new Map<string, string>();
@@ -453,15 +457,16 @@ json mode rules (apply when JSON output is explicitly requested):
                 'llm.function_calling.iteration': callCount + 1,
                 'llm.function_calling.max_iterations': MAX_FUNCTION_CALLS,
                 'llm.function_calling.tool_name': functionName,
-                'llm.function_calling.tool_params':
-                  JSON.stringify(functionParams).substring(0, 500),
+                'llm.function_calling.tool_params': JSON.stringify(
+                  functionParams,
+                ).substring(0, this.LOG_PARAMS_MAX_LENGTH),
                 'llm.model': model,
               },
             }),
           );
 
           this.logger.log(
-            `Function calling iteration ${callCount + 1}/${MAX_FUNCTION_CALLS} - tool: ${functionName} | params: ${JSON.stringify(functionParams).substring(0, 500)}`,
+            `Function calling iteration ${callCount + 1}/${MAX_FUNCTION_CALLS} - tool: ${functionName} | params: ${JSON.stringify(functionParams).substring(0, this.LOG_PARAMS_MAX_LENGTH)}`,
           );
 
           try {
