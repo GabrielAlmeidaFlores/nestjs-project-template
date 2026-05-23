@@ -2070,7 +2070,7 @@ export class TypeormIndex {
     username: DatabaseApplicationVariable.DATABASE_USERNAME,
     password: DatabaseApplicationVariable.DATABASE_PASSWORD,
     database: DatabaseApplicationVariable.DATABASE_NAME,
-    synchronize: false,
+    synchronize: DatabaseApplicationVariable.DATABASE_SYNCHRONIZE,
   };
 
   protected readonly _type = TypeormIndex.name;
