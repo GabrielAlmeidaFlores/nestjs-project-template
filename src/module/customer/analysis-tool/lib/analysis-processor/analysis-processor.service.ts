@@ -9512,7 +9512,7 @@ Processed CNIS analysis:
             'Conclusão técnica completa da análise, incluindo carência, qualidade de segurado, pontos de atenção e viabilidade preliminar do benefício, retorno estritamente em Markdown detalhado.',
         },
         manteinedInsuredQuality: {
-          type: 'string',
+          type: 'boolean',
           description:
             'Indica se a qualidade de segurado foi mantida na DFG, considerando períodos de contribuição e eventuais períodos de graça.',
         },
