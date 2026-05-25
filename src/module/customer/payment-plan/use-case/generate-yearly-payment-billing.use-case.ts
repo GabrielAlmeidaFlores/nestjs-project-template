@@ -179,8 +179,7 @@ export class GenerateYearlyPaymentBillingUseCase {
         const organizationPaymentPlanEnabledPaidResource =
           new OrganizationPaymentPlanEnabledPaidResourceEntity({
             organizationPaymentPlan: organizationPaymentPlan.id,
-            paymentPlanPaidResource:
-              enabledResource.paymentPlanPaidResourceId,
+            paymentPlanPaidResource: enabledResource.paymentPlanPaidResourceId,
           });
 
         return this.organizationPaymentPlanEnabledPaidResourceCommandRepository.createOrganizationPaymentPlanEnabledPaidResource(
@@ -192,15 +191,13 @@ export class GenerateYearlyPaymentBillingUseCase {
 
     let organizationPaymentPlanAffiliateCommissionTransaction = null;
     if (discountResult !== null) {
-      const commission = new OrganizationPaymentPlanAffiliateCommissionEntity(
-        {
-          organizationPaymentPlan: organizationPaymentPlan.id,
-          affiliateCustomer: discountResult.affiliateCustomerId,
-          commissionPercentage: discountResult.commissionPercentage,
-          createdAt: now,
-          updatedAt: now,
-        },
-      );
+      const commission = new OrganizationPaymentPlanAffiliateCommissionEntity({
+        organizationPaymentPlan: organizationPaymentPlan.id,
+        affiliateCustomer: discountResult.affiliateCustomerId,
+        commissionPercentage: discountResult.commissionPercentage,
+        createdAt: now,
+        updatedAt: now,
+      });
       organizationPaymentPlanAffiliateCommissionTransaction =
         this.organizationPaymentPlanAffiliateCommissionCommandRepository.createOrganizationPaymentPlanAffiliateCommission(
           commission,
