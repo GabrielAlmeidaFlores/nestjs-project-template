@@ -169,8 +169,8 @@ export class TemporaryDisabilityBenefitsTerminatedFirstAnalysisModel extends Bas
   @ResponseDtoStringProperty()
   public analysisConclusion: string;
 
-  @ResponseDtoStringProperty()
-  public manteinedInsuredQuality: string;
+  @ResponseDtoBooleanProperty()
+  public manteinedInsuredQuality: boolean;
 
   @ResponseDtoBooleanProperty()
   public graceExtensionDueToInvoluntaryUnemployment: boolean;
