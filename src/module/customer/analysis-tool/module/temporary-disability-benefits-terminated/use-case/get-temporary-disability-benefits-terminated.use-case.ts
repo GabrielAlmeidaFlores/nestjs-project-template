@@ -517,6 +517,7 @@ export class GetTemporaryDisabilityBenefitsTerminatedUseCase {
           ),
         ),
         analysisConclusion: raw.analysisConclusion,
+        manteinedInsuredQuality: raw.manteinedInsuredQuality,
         graceExtensionDueToInvoluntaryUnemployment:
           raw.graceExtensionDueToInvoluntaryUnemployment,
         requestToExtendGracePeriod: raw.requestToExtendGracePeriod,

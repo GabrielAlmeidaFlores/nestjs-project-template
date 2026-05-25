@@ -61,6 +61,7 @@ export interface TemporaryDisabilityBenefitsTerminatedFirstAnalysisInterface {
     observation: string;
   }>;
   analysisConclusion: string;
+  manteinedInsuredQuality: string;
   graceExtensionDueToInvoluntaryUnemployment: boolean;
   requestToExtendGracePeriod: boolean;
   graceExempt: boolean;
