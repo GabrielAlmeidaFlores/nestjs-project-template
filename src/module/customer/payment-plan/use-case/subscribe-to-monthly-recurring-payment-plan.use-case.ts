@@ -122,6 +122,7 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
       creditCardInfo,
       creditCardHolderInfo,
       externalReference: paymentPlan.id.toString(),
+      remoteIp: reply.request.ip,
     });
 
     const bankSubscription =

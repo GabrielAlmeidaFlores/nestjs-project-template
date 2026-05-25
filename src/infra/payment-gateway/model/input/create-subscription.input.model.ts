@@ -14,6 +14,7 @@ export class CreateSubscriptionInputModel extends BaseBuildableObject {
   public readonly externalReference: string;
   public readonly creditCardInfo: CreditCardInfoInputModel;
   public readonly creditCardHolderInfo: CreditCardHolderInfoInputModel;
+  public readonly remoteIp: string;
 
   protected override readonly _type = CreateSubscriptionInputModel.name;
 }
