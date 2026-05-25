@@ -228,7 +228,7 @@ export class AsaasService extends PaymentGateway {
       nextDueDate: props.nextDueDate,
       cycle: cycleMap[props.cycle],
       description: props.description,
-      billingType: 'UNDEFINED',
+      billingType: 'CREDIT_CARD',
       externalReference: props.externalReference,
       creditCard: {
         holderName: props.creditCardInfo.holderName,
@@ -237,7 +237,7 @@ export class AsaasService extends PaymentGateway {
         expiryYear: props.creditCardInfo.expiryYear,
         ccv: props.creditCardInfo.ccv,
       },
-      creditCardHolder: {
+      creditCardHolderInfo: {
         name: props.creditCardHolderInfo.name,
         email: props.creditCardHolderInfo.email.toString(),
         cpfCnpj: props.creditCardHolderInfo.federalDocument.toString(),
@@ -245,6 +245,7 @@ export class AsaasService extends PaymentGateway {
         addressNumber: props.creditCardHolderInfo.addressNumber,
         phone: props.creditCardHolderInfo.phone.toString(),
       },
+      remoteIp: props.remoteIp,
     };
 
     try {

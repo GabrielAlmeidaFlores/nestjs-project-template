@@ -15,6 +15,7 @@ import { PurchaseCreditPackResponseDto } from '@module/customer/credit-pack/dto/
 import { CreditPackInactiveError } from '@module/customer/credit-pack/error/credit-pack-inactive.error';
 import { CreditPackNotFoundError } from '@module/customer/credit-pack/error/credit-pack-not-found.error';
 import { BankPaymentCommandRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/command/bank-payment.command.repository.gateway';
+import { BankPaymentQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/query/bank-payment.query.repository.gateway';
 import { BankPaymentEntity } from '@module/generic/bank/domain/schema/entity/bank-payment/bank-payment.entity';
 import { PaymentMethodEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-method.enum';
 import { PaymentStatusEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-status.enum';
@@ -34,6 +35,8 @@ export class PurchaseCreditPackUseCase {
     private readonly organizationCreditPackPurchaseCommandRepository: OrganizationCreditPackPurchaseCommandRepositoryGateway,
     @Inject(BankPaymentCommandRepositoryGateway)
     private readonly bankPaymentCommandRepository: BankPaymentCommandRepositoryGateway,
+    @Inject(BankPaymentQueryRepositoryGateway)
+    private readonly bankPaymentQueryRepository: BankPaymentQueryRepositoryGateway,
     @Inject(CustomerQueryRepositoryGateway)
     private readonly customerQueryRepository: CustomerQueryRepositoryGateway,
     @Inject(PaymentGateway)
@@ -83,19 +86,31 @@ export class PurchaseCreditPackUseCase {
       }),
     );
 
-    const bankPayment = new BankPaymentEntity({
-      bankExternalId: createBillingResult.id,
-      paymentMethod: PaymentMethodEnum.UNDEFINED,
-      amount: new DecimalValue(creditPack.price.toString()),
-      status: PaymentStatusEnum.PENDING,
-      dueDate,
-      paymentDate: null,
-      installmentNumber: null,
-      pixQrCode: createBillingResult.pixQrCode ?? null,
-      pixCopyPaste: createBillingResult.pixCopyPaste ?? null,
-      bankSlipUrl: createBillingResult.bankSlipUrl ?? null,
-      bankSlipCode: createBillingResult.bankSlipCode ?? null,
-    });
+    const existingBankPayment =
+      await this.bankPaymentQueryRepository.findOneBankPaymentByBankExternalId(
+        createBillingResult.id,
+      );
+
+    const bankPayment = existingBankPayment
+      ? new BankPaymentEntity({
+          id: existingBankPayment.id,
+          bankExternalId: existingBankPayment.bankExternalId,
+          paymentMethod: existingBankPayment.paymentMethod,
+          amount: existingBankPayment.amount,
+          status: existingBankPayment.status,
+          dueDate: existingBankPayment.dueDate,
+          paymentDate: existingBankPayment.paymentDate,
+          installmentNumber: existingBankPayment.installmentNumber,
+        })
+      : new BankPaymentEntity({
+          bankExternalId: createBillingResult.id,
+          paymentMethod: PaymentMethodEnum.UNDEFINED,
+          amount: new DecimalValue(creditPack.price.toString()),
+          status: PaymentStatusEnum.PENDING,
+          dueDate,
+          paymentDate: null,
+          installmentNumber: null,
+        });
 
     const organizationCreditPackPurchase =
       new OrganizationCreditPackPurchaseEntity({
@@ -106,8 +121,12 @@ export class PurchaseCreditPackUseCase {
         bankPaymentId: bankPayment.id,
       });
 
+    const bankPaymentTransaction = existingBankPayment
+      ? []
+      : [this.bankPaymentCommandRepository.createBankPayment(bankPayment)];
+
     const transaction = await this.baseTransactionRepositoryGateway.execute([
-      this.bankPaymentCommandRepository.createBankPayment(bankPayment),
+      ...bankPaymentTransaction,
       this.organizationCreditPackPurchaseCommandRepository.createOrganizationCreditPackPurchase(
         organizationCreditPackPurchase,
       ),
@@ -116,13 +135,10 @@ export class PurchaseCreditPackUseCase {
 
     return PurchaseCreditPackResponseDto.build({
       bankPaymentId: bankPayment.id.toString(),
-      pixQrCode:
-        bankPayment.pixQrCode !== null
-          ? bankPayment.pixQrCode.toString()
-          : null,
-      pixCopyPaste: bankPayment.pixCopyPaste ?? null,
-      bankSlipUrl: bankPayment.bankSlipUrl ?? null,
-      bankSlipCode: bankPayment.bankSlipCode ?? null,
+      pixQrCode: createBillingResult.pixQrCode?.toString() ?? null,
+      pixCopyPaste: createBillingResult.pixCopyPaste ?? null,
+      bankSlipUrl: createBillingResult.bankSlipUrl ?? null,
+      bankSlipCode: createBillingResult.bankSlipCode ?? null,
     });
   }
 }

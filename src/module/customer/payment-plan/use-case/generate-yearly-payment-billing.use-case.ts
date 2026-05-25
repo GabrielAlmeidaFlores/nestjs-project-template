@@ -28,6 +28,7 @@ import { InvalidPaymentPlanCycleError } from '@module/customer/payment-plan/erro
 import { MissingInstallmentInfoError } from '@module/customer/payment-plan/error/missing-installment-info.error';
 import { PaymentPlanNotFoundError } from '@module/customer/payment-plan/error/payment-plan-not-found.error';
 import { BankPaymentCommandRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/command/bank-payment.command.repository.gateway';
+import { BankPaymentQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/query/bank-payment.query.repository.gateway';
 import { BankPaymentEntity } from '@module/generic/bank/domain/schema/entity/bank-payment/bank-payment.entity';
 import { PaymentMethodEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-method.enum';
 import { PaymentStatusEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-status.enum';
@@ -52,6 +53,8 @@ export class GenerateYearlyPaymentBillingUseCase {
     private readonly organizationPaymentPlanBankPaymentCommandRepository: OrganizationPaymentPlanBankPaymentCommandRepositoryGateway,
     @Inject(BankPaymentCommandRepositoryGateway)
     private readonly bankPaymentCommandRepository: BankPaymentCommandRepositoryGateway,
+    @Inject(BankPaymentQueryRepositoryGateway)
+    private readonly bankPaymentQueryRepository: BankPaymentQueryRepositoryGateway,
     @Inject(PaymentGateway)
     private readonly paymentGateway: PaymentGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -117,102 +120,117 @@ export class GenerateYearlyPaymentBillingUseCase {
     if (typeof createBillingResult.installment !== 'string') {
       throw new MissingInstallmentInfoError();
     }
-    {
-      const organizationPaymentPlan = new OrganizationPaymentPlanEntity({
-        id: organizationPaymentPlanId,
-        bankExternalId: createBillingResult.installment,
-        name: paymentPlan.name,
-        description: `Cobrança - ${paymentPlan.name}`,
-        price: paymentPlan.price,
-        maxMemberCount: paymentPlan.maxMemberCount,
-        monthlyCreditAmount: paymentPlan.monthlyCreditAmount,
-        cycle: paymentPlan.cycle,
-        organization: new OrganizationId(organizationId),
-        paymentPlan: paymentPlan.id,
-        totalInstallments: dto.installments,
-        canceled: false,
-        affiliateCustomerId: discountResult?.affiliateCustomerId ?? null,
-      });
 
-      const bankPayment = new BankPaymentEntity({
-        bankExternalId: createBillingResult.id,
-        paymentMethod: PaymentMethodEnum.UNDEFINED,
-        amount: createBillingResult.value,
-        status: PaymentStatusEnum.PENDING,
-        dueDate,
-        paymentDate: null,
-        installmentNumber: 1,
-        pixQrCode: createBillingResult.pixQrCode ?? null,
-        pixCopyPaste: createBillingResult.pixCopyPaste ?? null,
-        bankSlipUrl: createBillingResult.bankSlipUrl ?? null,
-        bankSlipCode: createBillingResult.bankSlipCode ?? null,
-      });
+    const existingBankPayment =
+      await this.bankPaymentQueryRepository.findOneBankPaymentByBankExternalId(
+        createBillingResult.id,
+      );
 
-      const paymentPlanEnabledResources =
-        await this.paymentPlanEnabledPaidResourceQueryRepository.findManyByPaymentPlanId(
-          paymentPlan.id,
-        );
-
-      const organizationPaymentPlanBankPayment =
-        new OrganizationPaymentPlanBankPaymentEntity({
-          organizationPaymentPlan: organizationPaymentPlan.id,
-          bankPayment: bankPayment.id,
+    const bankPayment = existingBankPayment
+      ? new BankPaymentEntity({
+          id: existingBankPayment.id,
+          bankExternalId: existingBankPayment.bankExternalId,
+          paymentMethod: existingBankPayment.paymentMethod,
+          amount: existingBankPayment.amount,
+          status: existingBankPayment.status,
+          dueDate: existingBankPayment.dueDate,
+          paymentDate: existingBankPayment.paymentDate,
+          installmentNumber: existingBankPayment.installmentNumber,
+        })
+      : new BankPaymentEntity({
+          bankExternalId: createBillingResult.id,
+          paymentMethod: PaymentMethodEnum.UNDEFINED,
+          amount: createBillingResult.value,
+          status: PaymentStatusEnum.PENDING,
+          dueDate,
+          paymentDate: null,
+          installmentNumber: 1,
         });
 
-      const organizationPaymentPlanEnabledPaidResourceTransactions =
-        paymentPlanEnabledResources.map((enabledResource) => {
-          const organizationPaymentPlanEnabledPaidResource =
-            new OrganizationPaymentPlanEnabledPaidResourceEntity({
-              organizationPaymentPlan: organizationPaymentPlan.id,
-              paymentPlanPaidResource:
-                enabledResource.paymentPlanPaidResourceId,
-            });
+    const organizationPaymentPlan = new OrganizationPaymentPlanEntity({
+      id: organizationPaymentPlanId,
+      bankExternalId: createBillingResult.installment,
+      name: paymentPlan.name,
+      description: `Cobrança - ${paymentPlan.name}`,
+      price: paymentPlan.price,
+      maxMemberCount: paymentPlan.maxMemberCount,
+      monthlyCreditAmount: paymentPlan.monthlyCreditAmount,
+      cycle: paymentPlan.cycle,
+      organization: new OrganizationId(organizationId),
+      paymentPlan: paymentPlan.id,
+      totalInstallments: dto.installments,
+      canceled: false,
+      affiliateCustomerId: discountResult?.affiliateCustomerId ?? null,
+    });
 
-          return this.organizationPaymentPlanEnabledPaidResourceCommandRepository.createOrganizationPaymentPlanEnabledPaidResource(
-            organizationPaymentPlanEnabledPaidResource,
-          );
-        });
+    const paymentPlanEnabledResources =
+      await this.paymentPlanEnabledPaidResourceQueryRepository.findManyByPaymentPlanId(
+        paymentPlan.id,
+      );
 
-      const now = new Date();
+    const organizationPaymentPlanBankPayment =
+      new OrganizationPaymentPlanBankPaymentEntity({
+        organizationPaymentPlan: organizationPaymentPlan.id,
+        bankPayment: bankPayment.id,
+      });
 
-      let organizationPaymentPlanAffiliateCommissionTransaction = null;
-      if (discountResult !== null) {
-        const commission = new OrganizationPaymentPlanAffiliateCommissionEntity(
-          {
+    const organizationPaymentPlanEnabledPaidResourceTransactions =
+      paymentPlanEnabledResources.map((enabledResource) => {
+        const organizationPaymentPlanEnabledPaidResource =
+          new OrganizationPaymentPlanEnabledPaidResourceEntity({
             organizationPaymentPlan: organizationPaymentPlan.id,
-            affiliateCustomer: discountResult.affiliateCustomerId,
-            commissionPercentage: discountResult.commissionPercentage,
-            createdAt: now,
-            updatedAt: now,
-          },
+            paymentPlanPaidResource:
+              enabledResource.paymentPlanPaidResourceId,
+          });
+
+        return this.organizationPaymentPlanEnabledPaidResourceCommandRepository.createOrganizationPaymentPlanEnabledPaidResource(
+          organizationPaymentPlanEnabledPaidResource,
         );
-        organizationPaymentPlanAffiliateCommissionTransaction =
-          this.organizationPaymentPlanAffiliateCommissionCommandRepository.createOrganizationPaymentPlanAffiliateCommission(
-            commission,
-          );
-      }
-
-      const transaction = await this.baseTransactionRepositoryGateway.execute([
-        this.bankPaymentCommandRepository.createBankPayment(bankPayment),
-        this.organizationPaymentPlanCommandRepository.createOrganizationPaymentPlan(
-          organizationPaymentPlan,
-        ),
-        this.organizationPaymentPlanBankPaymentCommandRepository.createOrganizationPaymentPlanBankPayment(
-          organizationPaymentPlanBankPayment,
-        ),
-        ...organizationPaymentPlanEnabledPaidResourceTransactions,
-        ...(organizationPaymentPlanAffiliateCommissionTransaction !== null
-          ? [organizationPaymentPlanAffiliateCommissionTransaction]
-          : []),
-      ]);
-
-      await transaction.commit();
-
-      return GenerateYearlyPaymentBillingResponseDto.build({
-        bankPaymentId: bankPayment.id.toString(),
-        bankSlipUrl: bankPayment.bankSlipUrl ?? null,
-        bankSlipCode: bankPayment.bankSlipCode ?? null,
       });
+
+    const now = new Date();
+
+    let organizationPaymentPlanAffiliateCommissionTransaction = null;
+    if (discountResult !== null) {
+      const commission = new OrganizationPaymentPlanAffiliateCommissionEntity(
+        {
+          organizationPaymentPlan: organizationPaymentPlan.id,
+          affiliateCustomer: discountResult.affiliateCustomerId,
+          commissionPercentage: discountResult.commissionPercentage,
+          createdAt: now,
+          updatedAt: now,
+        },
+      );
+      organizationPaymentPlanAffiliateCommissionTransaction =
+        this.organizationPaymentPlanAffiliateCommissionCommandRepository.createOrganizationPaymentPlanAffiliateCommission(
+          commission,
+        );
     }
+
+    const bankPaymentTransaction = existingBankPayment
+      ? []
+      : [this.bankPaymentCommandRepository.createBankPayment(bankPayment)];
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute([
+      ...bankPaymentTransaction,
+      this.organizationPaymentPlanCommandRepository.createOrganizationPaymentPlan(
+        organizationPaymentPlan,
+      ),
+      this.organizationPaymentPlanBankPaymentCommandRepository.createOrganizationPaymentPlanBankPayment(
+        organizationPaymentPlanBankPayment,
+      ),
+      ...organizationPaymentPlanEnabledPaidResourceTransactions,
+      ...(organizationPaymentPlanAffiliateCommissionTransaction !== null
+        ? [organizationPaymentPlanAffiliateCommissionTransaction]
+        : []),
+    ]);
+
+    await transaction.commit();
+
+    return GenerateYearlyPaymentBillingResponseDto.build({
+      bankPaymentId: bankPayment.id.toString(),
+      bankSlipUrl: createBillingResult.bankSlipUrl ?? null,
+      bankSlipCode: createBillingResult.bankSlipCode ?? null,
+    });
   }
 }
