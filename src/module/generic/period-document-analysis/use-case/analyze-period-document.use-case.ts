@@ -18,6 +18,7 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 interface AnalyzePeriodDocumentAiResultInterface {
   observacaoTecnica: string;
   dataFim?: string;
+  tempoContribuicao?: string;
 }
 
 @Injectable()
@@ -94,6 +95,10 @@ export class AnalyzePeriodDocumentUseCase {
       technicalObservation: result.observacaoTecnica,
       ...(result.dataFim !== undefined &&
         result.dataFim !== '' && { endDate: result.dataFim }),
+      ...(result.tempoContribuicao !== undefined &&
+        result.tempoContribuicao !== '' && {
+          contributionTime: result.tempoContribuicao,
+        }),
     });
   }
 
@@ -111,8 +116,13 @@ export class AnalyzePeriodDocumentUseCase {
           description:
             'Data de fim do período sugerida com base nos documentos analisados, formato YYYY-MM-DD. Retorne string vazia se não for possível determinar.',
         },
+        tempoContribuicao: {
+          type: 'string',
+          description:
+            'Tempo de contribuição ganho no período analisado, calculado da data de início até a data fim sugerida. Formato "X anos, Y meses e Z dias" (ex: "1 ano, 1 mês e 1 dia"). Retorne string vazia se a data fim não puder ser determinada.',
+        },
       },
-      required: ['observacaoTecnica', 'dataFim'],
+      required: ['observacaoTecnica', 'dataFim', 'tempoContribuicao'],
     };
   }
 
