@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
+import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
@@ -10,6 +11,8 @@ import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-pr
 import { GetTemporaryDisabilityBenefitsTerminatedWithRelationsQueryResult } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/repository/temporary-disability-benefits-terminated/query/result/get-temporary-disability-benefits-terminated-with-relations.query.result';
 import { TemporaryDisabilityBenefitsTerminatedQueryRepositoryGateway } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/repository/temporary-disability-benefits-terminated/query/temporary-disability-benefits-terminated.query.repository.gateway';
 import { TemporaryDisabilityBenefitsTerminatedId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/schema/entity/temporary-disability-benefits-terminated/value-object/temporary-disability-benefits-terminated-id.value-object';
+import { TemporaryDisabilityBenefitsTerminatedDocumentTypeEnum } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/schema/entity/temporary-disability-benefits-terminated-document/enum/temporary-disability-benefits-terminated-document-type.enum';
+import { TemporaryDisabilityBenefitsTerminatedDocumentEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/schema/entity/temporary-disability-benefits-terminated-document/temporary-disability-benefits-terminated-document.entity';
 import { TemporaryDisabilityBenefitsTerminatedWorkPeriodsPendencyReasonEnum } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/schema/entity/temporary-disability-benefits-terminated-work-periods/enum/temporary-disability-benefits-terminated-work-periods-pendency-reason.enum';
 import {
   GetTemporaryDisabilityBenefitsTerminatedAnalysisToolClientResponseDto,
@@ -60,7 +63,19 @@ export class GetTemporaryDisabilityBenefitsTerminatedUseCase {
         TemporaryDisabilityBenefitsTerminatedNotFoundError,
       );
 
-    const documents = await this.buildDocumentsResponse(result);
+    const documents = await Promise.all(
+      (result.documents ?? [])
+        .filter(
+          (d: TemporaryDisabilityBenefitsTerminatedDocumentEntity) =>
+            d.fileName !== null && d.type !== null,
+        )
+        .map(async (doc: TemporaryDisabilityBenefitsTerminatedDocumentEntity) =>
+          this.buildDocumentsResponse(
+            doc.fileName as string,
+            doc.type as TemporaryDisabilityBenefitsTerminatedDocumentTypeEnum,
+          ),
+        ),
+    );
 
     const firstAnalysis =
       result.result !== null && result.result.firstAnalysis !== null
@@ -179,20 +194,19 @@ export class GetTemporaryDisabilityBenefitsTerminatedUseCase {
   }
 
   private async buildDocumentsResponse(
-    result: GetTemporaryDisabilityBenefitsTerminatedWithRelationsQueryResult,
-  ): Promise<GetTemporaryDisabilityBenefitsTerminatedDocumentResponseDto[]> {
-    const documentPromises = result.documents.map(async (doc) => {
-      const signedUrl = await this.fileProcessorGateway.getFileSignedUrl(
-        doc.fileName,
-      );
+    fileName: string,
+    type: TemporaryDisabilityBenefitsTerminatedDocumentTypeEnum,
+  ): Promise<GetTemporaryDisabilityBenefitsTerminatedDocumentResponseDto> {
+    const [buffer, originalFileName] = await Promise.all([
+      this.fileProcessorGateway.getFileBuffer(fileName),
+      this.fileProcessorGateway.getOriginalFileName(fileName),
+    ]);
 
-      return GetTemporaryDisabilityBenefitsTerminatedDocumentResponseDto.build({
-        document: signedUrl.toString(),
-        type: doc.type,
-      });
+    return GetTemporaryDisabilityBenefitsTerminatedDocumentResponseDto.build({
+      document: new Base64(buffer.toString('base64')),
+      originalFileName,
+      type,
     });
-
-    return Promise.all(documentPromises);
   }
 
   private buildDisabilityAnalysisResponse(
