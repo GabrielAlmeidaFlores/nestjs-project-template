@@ -6,8 +6,8 @@ import type { TemporaryDisabilityBenefitsTerminatedDocumentTypeEnum } from '@mod
 import type { TemporaryDisabilityBenefitsTerminatedDocumentEntityPropsInterface } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/schema/entity/temporary-disability-benefits-terminated-document/temporary-disability-benefits-terminated-document.entity.props.interface';
 
 export class TemporaryDisabilityBenefitsTerminatedDocumentEntity extends BaseEntity<TemporaryDisabilityBenefitsTerminatedDocumentId> {
-  public readonly fileName: string;
-  public readonly type: TemporaryDisabilityBenefitsTerminatedDocumentTypeEnum;
+  public readonly fileName: string | null;
+  public readonly type: TemporaryDisabilityBenefitsTerminatedDocumentTypeEnum | null;
   public readonly temporaryDisabilityBenefitsTerminatedId: TemporaryDisabilityBenefitsTerminatedId;
 
   protected readonly _type =

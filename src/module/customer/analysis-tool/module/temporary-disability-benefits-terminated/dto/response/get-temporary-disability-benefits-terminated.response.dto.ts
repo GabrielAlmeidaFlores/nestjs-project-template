@@ -87,13 +87,16 @@ export class GetTemporaryDisabilityBenefitsTerminatedResultResponseDto extends B
 
 @ResponseDto()
 export class GetTemporaryDisabilityBenefitsTerminatedDocumentResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoStringProperty()
-  public document: string;
+  @ResponseDtoValueObjectProperty(Base64)
+  public document: Base64;
 
   @ResponseDtoEnumProperty(
     TemporaryDisabilityBenefitsTerminatedDocumentTypeEnum,
   )
   public type: TemporaryDisabilityBenefitsTerminatedDocumentTypeEnum;
+
+  @ResponseDtoStringProperty()
+  public originalFileName: string;
 
   protected override readonly _type =
     GetTemporaryDisabilityBenefitsTerminatedDocumentResponseDto.name;
