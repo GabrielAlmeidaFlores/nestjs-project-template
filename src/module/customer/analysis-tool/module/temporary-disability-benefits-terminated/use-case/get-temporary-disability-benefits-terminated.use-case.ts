@@ -70,10 +70,7 @@ export class GetTemporaryDisabilityBenefitsTerminatedUseCase {
             d.fileName !== null && d.type !== null,
         )
         .map(async (doc: TemporaryDisabilityBenefitsTerminatedDocumentEntity) =>
-          this.buildDocumentsResponse(
-            doc.fileName as string,
-            doc.type as TemporaryDisabilityBenefitsTerminatedDocumentTypeEnum,
-          ),
+          this.buildDocumentsResponse(doc.fileName, doc.type),
         ),
     );
 

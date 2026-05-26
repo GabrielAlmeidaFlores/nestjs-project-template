@@ -19,6 +19,7 @@ import { TemporaryDisabilityBenefitsTerminatedWorkPeriodsTypeormEntity } from '@
 import { TemporaryDisabilityBenefitsTerminatedTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/temporary-disability-benefits-terminated.typeorm.entity';
 import { GetTemporaryDisabilityBenefitsTerminatedWithRelationsQueryResult } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/repository/temporary-disability-benefits-terminated/query/result/get-temporary-disability-benefits-terminated-with-relations.query.result';
 import { TemporaryDisabilityBenefitsTerminatedId } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/schema/entity/temporary-disability-benefits-terminated/value-object/temporary-disability-benefits-terminated-id.value-object';
+import { TemporaryDisabilityBenefitsTerminatedDocumentEntity } from '@module/customer/analysis-tool/module/temporary-disability-benefits-terminated/domain/schema/entity/temporary-disability-benefits-terminated-document/temporary-disability-benefits-terminated-document.entity';
 
 @Injectable()
 export class GetTemporaryDisabilityBenefitsTerminatedWithRelationsQueryResultAutoMapperProfile {
@@ -47,7 +48,7 @@ export class GetTemporaryDisabilityBenefitsTerminatedWithRelationsQueryResultAut
 
         const documents = (source.documents ?? []).map((doc) =>
           this.mapDocument(doc),
-        );
+        ) as unknown as TemporaryDisabilityBenefitsTerminatedDocumentEntity[];
 
         const inssBenefits = (source.inssBenefits ?? []).map((b) =>
           this.mapInssBenefit(b),
@@ -120,7 +121,7 @@ export class GetTemporaryDisabilityBenefitsTerminatedWithRelationsQueryResultAut
 
   private mapDocument(
     source: TemporaryDisabilityBenefitsTerminatedDocumentTypeormEntity,
-  ): GetTemporaryDisabilityBenefitsTerminatedWithRelationsQueryResult['documents'][number] {
+  ): { id: string; fileName: string; type: string } {
     return {
       id: source.id,
       fileName: source.fileName,
