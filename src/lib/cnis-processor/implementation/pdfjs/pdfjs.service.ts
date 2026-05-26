@@ -1,3 +1,6 @@
+import { join } from 'path';
+import { pathToFileURL } from 'url';
+
 import { Injectable } from '@nestjs/common';
 import moment from 'moment';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
@@ -23,10 +26,16 @@ import {
 
 export class PdfUtil {
   protected readonly _type = PdfUtil.name;
+  private readonly standardFontDataUrl = pathToFileURL(
+    join(process.cwd(), 'node_modules', 'pdfjs-dist', 'standard_fonts') + '/',
+  ).href;
 
   protected async parsePdfToJson(pdfData: Buffer): Promise<RawPdfJsonType> {
     const data = new Uint8Array(pdfData);
-    const loadingTask = pdfjsLib.getDocument({ data });
+    const loadingTask = pdfjsLib.getDocument({
+      data,
+      standardFontDataUrl: this.standardFontDataUrl,
+    });
     const pdfDocument = await loadingTask.promise;
 
     const allPdfItems: RawPdfJsonType = [];
