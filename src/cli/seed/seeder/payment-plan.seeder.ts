@@ -115,9 +115,11 @@ export class PaymentPlanSeeder implements SeederInterface {
       );
 
       for (const paidResource of allPaidResources) {
-        const resourceIdString = paidResourceIdsByType.get(paidResource.resource);
+        const resourceIdString = paidResourceIdsByType.get(
+          paidResource.resource,
+        );
 
-        if (!resourceIdString) {
+        if (resourceIdString === undefined) {
           continue;
         }
 
