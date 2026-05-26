@@ -163,6 +163,7 @@ export class GetMaternityPayGrantUseCase {
           );
 
           return GetMaternityPayGrantPeriodResponseDto.build({
+            maternityPayGrantPeriodId: p.id,
             startDate: p.startDate,
             ...(p.endDate !== null && { endDate: p.endDate }),
             category: p.category,
