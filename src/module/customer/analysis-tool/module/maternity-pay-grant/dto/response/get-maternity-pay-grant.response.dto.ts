@@ -8,6 +8,7 @@ import { MaternityPayGrantTriggeringEventEnum } from '@module/customer/analysis-
 import { MaternityPayGrantId } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant/value-object/maternity-pay-grant-id.value-object';
 import { MaternityPayGrantPeriodConsiderationEnum } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-period/enum/maternity-pay-grant-period-consideration.enum';
 import { MaternityPayGrantPeriodPendencyReasonEnum } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-period/enum/maternity-pay-grant-period-pendency-reason.enum';
+import { MaternityPayGrantPeriodId } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/entity/maternity-pay-grant-period/value-object/maternity-pay-grant-period-id.value-object';
 import { MaternityPayGrantCategoryEnum } from '@module/customer/analysis-tool/module/maternity-pay-grant/domain/schema/enum/maternity-pay-grant-category.enum';
 import { MaternityPayGrantCompleteAnalysisModel } from '@module/customer/analysis-tool/module/maternity-pay-grant/model/generic/maternity-pay-grant-complete-analysis.model';
 import { MaternityPayGrantFirstAnalysisModel } from '@module/customer/analysis-tool/module/maternity-pay-grant/model/generic/maternity-pay-grant-first-analysis.model';
@@ -106,6 +107,9 @@ export class GetMaternityPayGrantPeriodEarningsHistoryResponseDto extends BaseBu
 
 @ResponseDto()
 export class GetMaternityPayGrantPeriodResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(MaternityPayGrantPeriodId)
+  public maternityPayGrantPeriodId: MaternityPayGrantPeriodId;
+
   @ResponseDtoDateProperty({ required: false })
   public startDate?: Date;
 

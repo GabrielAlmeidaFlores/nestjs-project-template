@@ -99,7 +99,10 @@ export class CreateMaternityPayGrantResultUseCase {
     const maternityPayGrantResultEntity =
       maternityPayGrantQueryResult.maternityPayGrantResult;
 
-    if (maternityPayGrantResultEntity === null) {
+    if (
+      maternityPayGrantResultEntity === null ||
+      maternityPayGrantResultEntity.firstAnalysis === null
+    ) {
       throw new MaternityPayGrantResultNotFoundError();
     }
 

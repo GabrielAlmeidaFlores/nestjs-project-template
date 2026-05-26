@@ -5,7 +5,7 @@ export class MaternityPayGrantResultNotFoundError extends NotFoundError {
 
   public constructor() {
     super(
-      'Resultado da análise de salário-maternidade não encontrado. Por favor, gere a análise completa antes de realizar esta ação.',
+      'Diagnóstico integrado de salário-maternidade não encontrado. Gere a primeira análise antes de continuar para as regras aplicáveis.',
     );
   }
 }
