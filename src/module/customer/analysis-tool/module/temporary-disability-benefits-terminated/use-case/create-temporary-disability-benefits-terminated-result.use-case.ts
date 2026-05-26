@@ -93,7 +93,9 @@ export class CreateTemporaryDisabilityBenefitsTerminatedResultUseCase {
         TemporaryDisabilityBenefitsTerminatedNotFoundError,
       );
 
-    const cnisDocument = temporaryDisabilityBenefitsTerminated.documents.find(
+    const cnisDocument = (
+      temporaryDisabilityBenefitsTerminated.documents ?? []
+    ).find(
       (doc) =>
         doc.type === TemporaryDisabilityBenefitsTerminatedDocumentTypeEnum.CNIS,
     );
@@ -337,7 +339,7 @@ export class CreateTemporaryDisabilityBenefitsTerminatedResultUseCase {
       category: rejection.category,
       myInssPassword: rejection.myInssPassword,
       benefitCessationReason: rejection.benefitCessationReason,
-      documents: rejection.documents.map((document) => ({
+      documents: (rejection.documents ?? []).map((document) => ({
         id: document.id,
         type: document.type,
       })),
@@ -425,7 +427,7 @@ export class CreateTemporaryDisabilityBenefitsTerminatedResultUseCase {
     cnisBuffer: Buffer,
   ): Promise<Buffer[]> {
     const otherDocumentBuffers = await Promise.all(
-      rejection.documents
+      (rejection.documents ?? [])
         .filter((doc) => doc.fileName !== cnisDocumentPath)
         .map((doc) => this.fileProcessorGateway.getFileBuffer(doc.fileName)),
     );

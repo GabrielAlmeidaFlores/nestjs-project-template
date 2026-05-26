@@ -149,8 +149,8 @@ export class CreateTemporaryDisabilityBenefitsTerminatedInssDecisionAnalysisUseC
     >,
   ): Promise<Buffer[]> {
     return Promise.all(
-      temporaryDisabilityBenefitsTerminated.documents.map((document) =>
-        this.fileProcessorGateway.getFileBuffer(document.fileName),
+      (temporaryDisabilityBenefitsTerminated.documents ?? []).map((document) =>
+        this.fileProcessorGateway.getFileBuffer(document.fileName as string),
       ),
     );
   }
