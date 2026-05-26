@@ -10,5 +10,8 @@ export class AnalyzePeriodDocumentResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty({ required: false })
   public endDate?: string;
 
+  @ResponseDtoStringProperty({ required: false })
+  public contributionTime?: string;
+
   protected override readonly _type = AnalyzePeriodDocumentResponseDto.name;
 }

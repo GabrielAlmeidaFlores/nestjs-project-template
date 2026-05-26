@@ -208,11 +208,11 @@ Análise processada do CNIS:
                       description:
                         'Indica se a regra oferece o maior valor no cenário mais vantajoso',
                     },
-                    retirementAnalysis: {
-                      type: 'string',
-                      description:
-                        'Análise detalhada da aposentadoria em formato markdown',
-                    },
+              retirementAnalysis: {
+                type: 'string',
+                description:
+                  'Análise detalhada desta regra de aposentadoria em Markdown rico, incluindo requisitos, cálculo da RMI e valor da causa. Use títulos (###), tabelas, listas e negrito para destacar valores e conclusões.',
+              },
                     isEligible: {
                       type: 'boolean',
                       description:
@@ -2496,8 +2496,16 @@ Análise processada do CNIS:
 - A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON.
 - Retorne estritamente um objeto JSON compatível com o schema solicitado.
 - O campo \`completeAnalysisDownload\` deve conter a análise detalhada em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML.
-- O campo \`analysisResult\` deve conter um texto explicativo completo sobre o resultado da análise e as perspectivas processuais do caso.
-- Não incluir tag <br> na resposta no campo \`analysisResult\`.
+## Instruções para os campos em Markdown
+Os campos \`retirementAnalysis\` (por regra) e \`analysisResult\` (análise geral) devem ser gerados em **Markdown rico**, com:
+- Títulos com ## e ###
+- Subtítulos e seções bem definidas
+- Tabelas Markdown (| coluna | coluna |) para apresentar dados comparativos, requisitos, datas e valores
+- Listas com marcadores (- item) ou numeradas (1. item) para enumerar critérios, documentos, pendências
+- Negrito (**texto**) para destacar termos técnicos, datas, valores monetários e conclusões
+- Seções como: Resumo do Caso, Análise do Indeferimento, Tempo de Contribuição, Grau de Deficiência, Enquadramento Legal, Conclusão, Estratégia Recomendada
+- O texto deve ser extenso, detalhado e juridicamente fundamentado, com referências às normas aplicáveis (LC 142/2013, Decreto 8.145/2013)
+- Não incluir tag <br> na resposta.
 
 Análise processada do CNIS:
   ${cnisAnalysisJson}
@@ -2516,6 +2524,7 @@ Análise processada do CNIS:
       }),
     );
   }
+
   public async getBpcElderlyAnalysisCompleteAnalysis(
     systemInstruction: string,
     files: Buffer[],
@@ -4373,12 +4382,12 @@ Processed CNIS analysis:
         analysisResult: {
           type: 'string',
           description:
-            'Texto explicativo completo sobre o resultado da análise, perspectivas processuais e recomendações para o caso de indeferimento.',
+            'Texto explicativo completo em Markdown rico sobre o resultado da análise, perspectivas processuais e recomendações para o caso de indeferimento. Use títulos (## e ###), tabelas Markdown, listas com marcadores, negrito para termos técnicos e valores, e seções bem definidas. Não use tags HTML ou <br>.',
         },
         completeAnalysisDownload: {
           type: 'string',
           description:
-            'Análise completa em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML. Deve conter todos os dados analisados, e uma explicação técnica de todos os dados.',
+            'Análise completa em Markdown, pronta para exportação em PDF/DOCX. Use apenas UM título # (H1) para o título do documento e ## (H2) para as seções. Não use tags HTML.',
         },
       },
       required: [
