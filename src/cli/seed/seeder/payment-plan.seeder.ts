@@ -12,6 +12,7 @@ import { PaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/e
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
 import { PaymentPlanEnabledPaidResourceEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-enabled-paid-resource/payment-plan-enabled-paid-resource-entity';
 import { PaymentPlanEnabledPaidResourceId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-enabled-paid-resource/value-object/payment-plan-enabled-paid-resource-id/payment-plan-enabled-paid-resource-id.value-object';
+import { PaymentPlanPaidResourceId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/value-object/payment-plan-paid-resource-id/payment-plan-paid-resource-id.value-object';
 import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 
 import type { SeederInterface } from '@cli/seed/interface/seeder.interface';
@@ -72,6 +73,23 @@ export class PaymentPlanSeeder implements SeederInterface {
     const transactions: Array<TransactionType> = [];
 
     const allPaidResources = PAYMENT_PLAN_PAID_RESOURCE_SEED;
+    const paidResourceIdsByType = new Map<string, string>();
+
+    for (const paidResource of allPaidResources) {
+      const resourceFromDb =
+        await this.paymentPlanPaidResourceQueryRepositoryGateway.findOnePaymentPlanPaidResourceByResourceType(
+          paidResource.resource,
+        );
+
+      if (!resourceFromDb) {
+        continue;
+      }
+
+      paidResourceIdsByType.set(
+        paidResource.resource,
+        resourceFromDb.id.toString(),
+      );
+    }
 
     for (const planData of PAYMENT_PLAN_SEED_DATA) {
       const existingPlan =
@@ -97,7 +115,11 @@ export class PaymentPlanSeeder implements SeederInterface {
       );
 
       for (const paidResource of allPaidResources) {
-        const resourceIdString = paidResource.id.toString();
+        const resourceIdString = paidResourceIdsByType.get(paidResource.resource);
+
+        if (!resourceIdString) {
+          continue;
+        }
 
         if (existingResourceIds.has(resourceIdString)) {
           continue;
@@ -106,7 +128,9 @@ export class PaymentPlanSeeder implements SeederInterface {
         const enablePaidResource = new PaymentPlanEnabledPaidResourceEntity({
           id: new PaymentPlanEnabledPaidResourceId(),
           paymentPlan: planData.id,
-          paymentPlanPaidResource: paidResource.id,
+          paymentPlanPaidResource: new PaymentPlanPaidResourceId(
+            resourceIdString,
+          ),
           createdAt: new Date(),
           updatedAt: new Date(),
         });
