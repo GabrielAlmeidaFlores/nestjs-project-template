@@ -1,3 +1,7 @@
 export enum EventEnum {
-  UPDATE_LEGAL_PROCEEDING_DATA = 'legal-proceeding.update-data',
+  USER_REGISTERED = 'user.registered',
+  POST_CREATED = 'post.created',
+  POST_DELETED = 'post.deleted',
+  COMMENT_CREATED = 'comment.created',
+  COMMENT_DELETED = 'comment.deleted',
 }

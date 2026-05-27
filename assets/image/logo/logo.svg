@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 40" width="120" height="40">
-  <rect width="120" height="40" rx="6" fill="#1a1a2e"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 40" width="1200" height="800">
+  <rect width="150" height="40" rx="6" fill="#1a1a2e"/>
   <text x="10" y="26" font-family="monospace" font-size="14" font-weight="bold" fill="#e0e0e0">nestjs</text>
   <text x="68" y="26" font-family="monospace" font-size="14" fill="#e53935">template</text>
 </svg>
