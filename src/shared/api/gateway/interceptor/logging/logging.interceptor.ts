@@ -47,9 +47,7 @@ export class LoggingInterceptor implements NestInterceptor {
     'private_key',
   ];
 
-  private static readonly SILENT_CONSOLE_ROUTES = [
-    '/customer/organization-credit/available',
-  ];
+  private static readonly SILENT_CONSOLE_ROUTES: string[] = [];
 
   protected readonly _type = LoggingInterceptor.name;
   private readonly logger = new Logger(LoggingInterceptor.name);
