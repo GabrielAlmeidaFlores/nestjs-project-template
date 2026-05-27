@@ -4,6 +4,6 @@ export class EmailAlreadyInUseError extends InvalidInputError {
   protected override readonly _type = EmailAlreadyInUseError.name;
 
   public constructor() {
-    super('O email já está em uso');
+    super('The email address is already in use.');
   }
 }

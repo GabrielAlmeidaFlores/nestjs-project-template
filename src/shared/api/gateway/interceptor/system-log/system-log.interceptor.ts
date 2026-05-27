@@ -184,7 +184,7 @@ export class SystemLogInterceptor implements NestInterceptor {
       })
       .catch((err: unknown) => {
         const message = err instanceof Error ? err.message : String(err);
-        this.logger.error(`Falha ao gravar log em system_logs: ${message}`);
+        this.logger.error(`Failed to write log to system_logs: ${message}`);
       });
   }
 

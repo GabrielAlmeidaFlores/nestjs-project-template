@@ -4,12 +4,12 @@ import { IsArray, IsEnum, IsOptional } from 'class-validator';
 
 import { BaseDtoProperty } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/base-dto-property.decorator';
 
-import type { BaseDtoPropertyDecoratorPropsInputModel } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/model/input/base-dto-property.decorator.props.input.model';
+import type { BaseDtoPropertyInputType } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/model/input/base-dto-property.decorator.props.input.model';
 import type { ValidationArguments } from 'class-validator';
 
 export function BaseDtoEnumProperty(
   enumType: object,
-  props?: BaseDtoPropertyDecoratorPropsInputModel,
+  props?: BaseDtoPropertyInputType,
 ): PropertyDecorator {
   const propertyIsRequired = props?.required ?? true;
   const isArray = props?.isArray === true;
@@ -20,7 +20,7 @@ export function BaseDtoEnumProperty(
     message: (args: ValidationArguments) => {
       const enumValues = Object.values(enumType);
       const allowedValue = enumValues.join(', ');
-      return `o campo '${args.property}' não é compatível com os valores esperados: ${allowedValue}`;
+      return `field '${args.property}' is not compatible with the expected values: ${allowedValue}`;
     },
   });
 

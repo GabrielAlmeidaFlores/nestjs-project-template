@@ -9,7 +9,7 @@ export class InvalidApplicationVariableTypeError extends UnexpectedError {
     currentValue: string;
   }) {
     super(
-      `A variável de ambiente "${props.variableName}" deveria ser do tipo "${props.expectedType}", mas o valor recebido foi do tipo"${typeof props.currentValue}"`,
+      `Environment variable "${props.variableName}" should be of type "${props.expectedType}", but received value of type "${typeof props.currentValue}".`,
     );
   }
 }

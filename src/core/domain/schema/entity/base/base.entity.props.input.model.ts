@@ -5,10 +5,9 @@ import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-obje
 export class BaseEntityPropsInputModel<
   Id extends Guid,
 > extends BaseBuildableObject {
-  protected override readonly _type = BaseEntityPropsInputModel.name;
-
   public id?: Id | null;
   public createdAt?: Date | null;
   public updatedAt?: Date | null;
   public deletedAt?: Date | null;
+  protected override readonly _type = BaseEntityPropsInputModel.name;
 }

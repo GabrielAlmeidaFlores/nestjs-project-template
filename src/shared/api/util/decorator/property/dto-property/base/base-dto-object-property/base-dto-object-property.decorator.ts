@@ -5,7 +5,7 @@ import { IsDefined, IsOptional, ValidateNested } from 'class-validator';
 
 import { BaseDtoProperty } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/base-dto-property.decorator';
 
-import type { BaseDtoPropertyDecoratorPropsInputModel } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/model/input/base-dto-property.decorator.props.input.model';
+import type { BaseDtoPropertyInputType } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/model/input/base-dto-property.decorator.props.input.model';
 import type { TypeHelpOptions } from 'class-transformer';
 import type { ValidationArguments } from 'class-validator';
 
@@ -121,7 +121,7 @@ function buildJsonToObjectTransform(
 
 export function BaseDtoObjectProperty(
   typeFunction: (type?: TypeHelpOptions) => Function,
-  props?: BaseDtoPropertyDecoratorPropsInputModel,
+  props?: BaseDtoPropertyInputType,
 ): PropertyDecorator {
   const propertyIsRequired: boolean = (props?.required ?? true) === true;
   const isArray: boolean = props?.isArray === true;
@@ -146,7 +146,7 @@ export function BaseDtoObjectProperty(
     message: (args: ValidationArguments) => {
       const functionName = typeFunction().name;
       const functionType = isArray ? `Array<${functionName}>` : functionName;
-      return `o campo '${args.property}' não é compatível com o tipo ${functionType}`;
+      return `field '${args.property}' is not compatible with type ${functionType}`;
     },
   });
 
@@ -164,7 +164,7 @@ export function BaseDtoObjectProperty(
     decorators.unshift(
       IsDefined({
         message: (args: ValidationArguments) => {
-          return `o campo '${args.property}' é obrigatório`;
+          return `field '${args.property}' is required`;
         },
       }),
     );

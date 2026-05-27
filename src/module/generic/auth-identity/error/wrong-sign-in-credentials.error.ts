@@ -4,8 +4,6 @@ export class WrongSignInCredentialsError extends ForbiddenError {
   protected override readonly _type = WrongSignInCredentialsError.name;
 
   public constructor() {
-    super(
-      'Credenciais inválidas. Por favor, verifique seus dados e tente novamente',
-    );
+    super('Invalid credentials. Please check your details and try again.');
   }
 }

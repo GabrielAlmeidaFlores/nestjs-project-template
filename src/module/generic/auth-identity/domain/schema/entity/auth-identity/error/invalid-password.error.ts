@@ -5,7 +5,7 @@ export class InvalidPasswordError extends InvalidInputError {
 
   public constructor(props: { maxLength: number; minLength: number }) {
     super(
-      `A senha deve conter de ${props.minLength} a ${props.maxLength} caracteres.`,
+      `Password must be between ${props.minLength} and ${props.maxLength} characters.`,
     );
   }
 }

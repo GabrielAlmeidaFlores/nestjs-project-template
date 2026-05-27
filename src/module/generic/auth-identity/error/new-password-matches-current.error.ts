@@ -4,6 +4,6 @@ export class NewPasswordMatchesCurrentError extends InvalidInputError {
   protected override readonly _type = NewPasswordMatchesCurrentError.name;
 
   public constructor() {
-    super('A nova senha não pode ser a mesma que a antiga');
+    super('The new password cannot be the same as the current password.');
   }
 }
