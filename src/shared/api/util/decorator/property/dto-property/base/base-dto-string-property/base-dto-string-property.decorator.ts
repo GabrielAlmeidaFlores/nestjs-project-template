@@ -3,11 +3,11 @@ import { IsString, IsOptional, IsArray } from 'class-validator';
 
 import { BaseDtoProperty } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/base-dto-property.decorator';
 
-import type { BaseDtoPropertyDecoratorPropsInputModel } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/model/input/base-dto-property.decorator.props.input.model';
+import type { BaseDtoPropertyInputType } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/model/input/base-dto-property.decorator.props.input.model';
 import type { ValidationArguments } from 'class-validator';
 
 export function BaseDtoStringProperty(
-  props?: BaseDtoPropertyDecoratorPropsInputModel,
+  props?: BaseDtoPropertyInputType,
 ): PropertyDecorator {
   const propertyIsRequired = props?.required ?? true;
   const isArray = props?.isArray === true;
@@ -17,7 +17,7 @@ export function BaseDtoStringProperty(
   const validation = IsString({
     each: isArray,
     message: (args: ValidationArguments) => {
-      return `o campo '${args.property}' deve ser do tipo 'string'`;
+      return `field '${args.property}' must be of type 'string'`;
     },
   });
 

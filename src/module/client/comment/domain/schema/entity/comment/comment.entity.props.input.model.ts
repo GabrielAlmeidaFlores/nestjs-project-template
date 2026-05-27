@@ -5,9 +5,8 @@ import type { PostId } from '@module/client/post/domain/schema/entity/post/value
 import type { UserId } from '@module/client/user/domain/schema/entity/user/value-object/user-id/user-id.value-object';
 
 export class CommentEntityPropsInputModel extends BaseEntityPropsInputModel<CommentId> {
-  protected override readonly _type = CommentEntityPropsInputModel.name;
-
   public postId: PostId;
   public authorId: UserId;
   public content: string;
+  protected override readonly _type = CommentEntityPropsInputModel.name;
 }

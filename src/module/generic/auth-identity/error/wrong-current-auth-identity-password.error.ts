@@ -5,6 +5,6 @@ export class WrongCurrentAuthIdentityPasswordError extends InvalidInputError {
     WrongCurrentAuthIdentityPasswordError.name;
 
   public constructor() {
-    super('A senha atual não está correta');
+    super('The current password is incorrect.');
   }
 }

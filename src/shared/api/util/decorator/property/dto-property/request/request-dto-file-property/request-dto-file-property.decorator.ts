@@ -6,10 +6,10 @@ import { IsFile, HasMimeType, IsFiles } from 'nestjs-form-data';
 import { BaseDtoProperty } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/base-dto-property.decorator';
 import { FileModel } from '@shared/system/model/generic/file.model';
 
-import type { RequestDtoFilePropertyDecoratorPropsInputModel } from '@shared/api/util/decorator/property/dto-property/request/request-dto-file-property/model/input/request-dto-file-property.decorator.props.input.model';
+import type { RequestDtoFilePropertyInputType } from '@shared/api/util/decorator/property/dto-property/request/request-dto-file-property/model/input/request-dto-file-property.decorator.props.input.model';
 
 export function RequestDtoFileProperty(
-  props?: RequestDtoFilePropertyDecoratorPropsInputModel,
+  props?: RequestDtoFilePropertyInputType,
 ): PropertyDecorator {
   const propertyIsRequired = props?.required ?? true;
 
@@ -36,7 +36,7 @@ export function RequestDtoFileProperty(
             (args.value as { originalName?: string } | undefined)
               ?.originalName ?? 'desconhecido';
           const allowedValue = props.allowedMimeType?.join(', ');
-          return `o campo '${args.property}' recebeu o mimetype '${receivedMimeType}' (arquivo: ${receivedFileName}), mas os valores esperados são: ${allowedValue}`;
+          return `field '${args.property}' received mimetype '${receivedMimeType}' (file: ${receivedFileName}), but the expected values are: ${allowedValue}`;
         },
       }),
     );

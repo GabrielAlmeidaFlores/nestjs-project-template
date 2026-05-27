@@ -4,6 +4,6 @@ export class InvalidEmailError extends InvalidInputError {
   protected override readonly _type = InvalidEmailError.name;
 
   public constructor() {
-    super('O email informado não é válido');
+    super('The provided email address is not valid.');
   }
 }

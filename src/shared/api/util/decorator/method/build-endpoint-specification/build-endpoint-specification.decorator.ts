@@ -35,7 +35,7 @@ import { FileModel } from '@shared/system/model/generic/file.model';
 
 import type { CanActivate, Type } from '@nestjs/common';
 import type { ApiResponseOptions } from '@nestjs/swagger';
-import type { BuildEndpointSpecificationDecoratorPropsInputModel } from '@shared/api/util/decorator/method/build-endpoint-specification/model/input/build-endpoint-specification.decorator.props.input.model';
+import type { BuildEndpointSpecificationType } from '@shared/api/util/decorator/method/build-endpoint-specification/model/input/build-endpoint-specification.decorator.props.input.model';
 import type { BuildEndpointHttpSpecificationType } from '@shared/api/util/decorator/method/build-endpoint-specification/type/build-endpoint-http-specification.type';
 import type { BuildEndpointSuccessResponseSpecificationType } from '@shared/api/util/decorator/method/build-endpoint-specification/type/build-endpoint-success-response-specification.type';
 import type { BuildEndpointThrottleSpecificationType } from '@shared/api/util/decorator/method/build-endpoint-specification/type/build-endpoint-throttle-specification.type';
@@ -237,7 +237,7 @@ function buildEndpointUserLevelSpecification(
 }
 
 export function BuildEndpointSpecification(
-  props: BuildEndpointSpecificationDecoratorPropsInputModel,
+  props: BuildEndpointSpecificationType,
 ): MethodDecorator {
   const isEndpointDeprecated = props.deprecated ?? false;
 

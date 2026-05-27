@@ -5,7 +5,7 @@ export class AccountDeactivatedError extends UnauthorizedError {
 
   public constructor() {
     super(
-      'Sua conta foi desativada. Entre em contato com o suporte para mais informações.',
+      'Your account has been deactivated. Please contact support for more information.',
     );
   }
 }

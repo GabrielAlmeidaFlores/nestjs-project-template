@@ -9,7 +9,7 @@ export class ResponseValidationError extends UnexpectedError {
     errorMessage: string;
   }) {
     super(
-      `Um erro foi encontrado ao tentar validar a propriedade '${props.dtoProperty}' no response DTO '${props.dtoName}': ${props.errorMessage}`,
+      `An error was found while validating property '${props.dtoProperty}' in response DTO '${props.dtoName}': ${props.errorMessage}`,
     );
   }
 }

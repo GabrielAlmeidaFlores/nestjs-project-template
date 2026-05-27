@@ -5,7 +5,7 @@ export class IncompleteSourceDataForMappingError extends UnexpectedError {
 
   public constructor(props: { sourceClass: string; destinationClass: string }) {
     super(
-      `Falha ao mapear de '${props.sourceClass}' para '${props.destinationClass}'. O objeto de origem não possui todas as propriedades obrigatórias para construir o destino`,
+      `Failed to map from '${props.sourceClass}' to '${props.destinationClass}'. The source object is missing required properties to construct the destination.`,
     );
   }
 }

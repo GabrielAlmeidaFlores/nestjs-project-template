@@ -21,9 +21,7 @@ export class ParseValueObjectPipe<
     const paramName = metadata.data;
 
     if (!value) {
-      throw new BadRequestException(
-        `O parâmetro '${paramName}' não pode ser nulo.`,
-      );
+      throw new BadRequestException(`Parameter '${paramName}' cannot be null.`);
     }
 
     try {

@@ -5,7 +5,7 @@ export class InvalidFormDataStructureError extends UnexpectedError {
 
   public constructor() {
     super(
-      'Estrutura de form-data inválida: a requisição deve conter apenas campos do tipo FileModel e um único campo "json" com o objeto da requisição',
+      'Invalid form-data structure: the request must contain only FileModel fields and a single "json" field with the request object.',
     );
   }
 }

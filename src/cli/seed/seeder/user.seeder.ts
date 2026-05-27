@@ -17,10 +17,10 @@ import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/enti
 export class UserSeeder extends BaseSeeder {
   protected readonly _type = UserSeeder.name;
 
-  private readonly adminEmail = 'admin@example.com';
-  private readonly adminPassword = 'Admin@123456';
-  private readonly adminName = 'Admin';
-  private readonly adminUsername = 'admin';
+  private readonly adminEmail: string;
+  private readonly adminPassword: string;
+  private readonly adminName: string;
+  private readonly adminUsername: string;
 
   public constructor(
     @Inject(AuthIdentityQueryRepositoryGateway)
@@ -33,6 +33,10 @@ export class UserSeeder extends BaseSeeder {
     private readonly userCommandRepositoryGateway: UserCommandRepositoryGateway,
   ) {
     super();
+    this.adminEmail = 'admin@example.com';
+    this.adminPassword = 'Admin@123456';
+    this.adminName = 'Admin';
+    this.adminUsername = 'admin';
   }
 
   public async execute(): Promise<Array<TransactionType>> {

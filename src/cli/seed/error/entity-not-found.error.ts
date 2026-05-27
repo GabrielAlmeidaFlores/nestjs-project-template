@@ -4,6 +4,6 @@ export class EntityNotFoundError extends UnexpectedError {
   protected override readonly _type = EntityNotFoundError.name;
 
   public constructor() {
-    super('Entidade não encontrada.');
+    super('Entity not found.');
   }
 }

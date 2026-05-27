@@ -5,9 +5,8 @@ import type { AuthIdentityId } from '@module/generic/auth-identity/domain/schema
 import type { HashedPassword } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/hashed-password/hashed-password.value-object';
 
 export class AuthIdentityEntityPropsInputModel extends BaseEntityPropsInputModel<AuthIdentityId> {
-  protected override readonly _type = AuthIdentityEntityPropsInputModel.name;
-
   public email: Email;
   public password: string | HashedPassword;
   public isActive?: boolean | null;
+  protected override readonly _type = AuthIdentityEntityPropsInputModel.name;
 }

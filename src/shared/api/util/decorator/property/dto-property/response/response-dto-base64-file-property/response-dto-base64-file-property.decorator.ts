@@ -3,10 +3,10 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { BaseDtoProperty } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/base-dto-property.decorator';
 
-import type { BaseDtoPropertyDecoratorPropsInputModel } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/model/input/base-dto-property.decorator.props.input.model';
+import type { BaseDtoPropertyInputType } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/model/input/base-dto-property.decorator.props.input.model';
 
 export function ResponseDtoBase64FileProperty(
-  props?: BaseDtoPropertyDecoratorPropsInputModel,
+  props?: BaseDtoPropertyInputType,
 ): PropertyDecorator {
   const propertyIsRequired = props?.required ?? true;
 

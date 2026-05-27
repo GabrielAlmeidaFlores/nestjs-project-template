@@ -6,7 +6,7 @@ import { IsOptional, registerDecorator } from 'class-validator';
 import { BaseDtoProperty } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/base-dto-property.decorator';
 
 import type { BaseValueObject } from '@core/domain/schema/value-object/base/base.value-object';
-import type { BaseDtoPropertyDecoratorPropsInputModel } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/model/input/base-dto-property.decorator.props.input.model';
+import type { BaseDtoPropertyInputType } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/model/input/base-dto-property.decorator.props.input.model';
 import type { ValidationArguments, ValidationOptions } from 'class-validator';
 
 function IsValidValueObject<T extends BaseValueObject<T>>(
@@ -56,7 +56,7 @@ function IsValidValueObject<T extends BaseValueObject<T>>(
 
 export function RequestDtoValueObjectProperty<T extends BaseValueObject<T>>(
   valueObjectClass: new (value: string) => T,
-  props?: BaseDtoPropertyDecoratorPropsInputModel,
+  props?: BaseDtoPropertyInputType,
 ): PropertyDecorator {
   const propertyIsRequired = props?.required ?? true;
   const isArray = props?.isArray === true;

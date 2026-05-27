@@ -4,11 +4,11 @@ import { IsArray, IsDate, IsOptional } from 'class-validator';
 
 import { BaseDtoProperty } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/base-dto-property.decorator';
 
-import type { BaseDtoPropertyDecoratorPropsInputModel } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/model/input/base-dto-property.decorator.props.input.model';
+import type { BaseDtoPropertyInputType } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/model/input/base-dto-property.decorator.props.input.model';
 import type { ValidationArguments } from 'class-validator';
 
 export function BaseDtoDateProperty(
-  props?: BaseDtoPropertyDecoratorPropsInputModel,
+  props?: BaseDtoPropertyInputType,
 ): PropertyDecorator {
   const propertyIsRequired = props?.required ?? true;
   const isArray = props?.isArray === true;
@@ -30,7 +30,7 @@ export function BaseDtoDateProperty(
   const validation = IsDate({
     each: isArray,
     message: (args: ValidationArguments) =>
-      `o campo '${args.property}' deve ser do tipo 'date'`,
+      `field '${args.property}' must be of type 'date'`,
   });
 
   const decorators = [baseDtoProperty, transform, validation];

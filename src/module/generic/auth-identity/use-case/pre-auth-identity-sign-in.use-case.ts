@@ -7,6 +7,8 @@ import { AccountDeactivatedError } from '@module/generic/auth-identity/error/acc
 import { WrongSignInCredentialsError } from '@module/generic/auth-identity/error/wrong-sign-in-credentials.error';
 import { EmailMFAGateway } from '@module/generic/auth-identity/lib/email-mfa/email-mfa.gateway';
 
+import type { GetAuthIdentityWithRelationsQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity-with-relations.query.result';
+
 @Injectable()
 export class PreAuthIdentitySignInUseCase {
   protected readonly _type = PreAuthIdentitySignInUseCase.name;
@@ -30,7 +32,7 @@ export class PreAuthIdentitySignInUseCase {
 
   private async fetchActiveAuthIdentityOrThrow(
     dto: PreAuthIdentitySignInRequestDto,
-  ) {
+  ): Promise<GetAuthIdentityWithRelationsQueryResult> {
     const authIdentity =
       await this.authIdentityQueryRepositoryGateway.findOneAuthIdentityByEmailWithRelations(
         dto.email,
