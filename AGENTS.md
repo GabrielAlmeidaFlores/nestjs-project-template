@@ -2,6 +2,26 @@
 
 This guide provides essential information for AI coding agents working in this NestJS backend codebase.
 
+---
+
+## AI Agent Mandatory Workflow ⚠️ READ FIRST
+
+**Before making ANY modification to this codebase, every AI agent MUST:**
+
+1. **Read this entire `AGENTS.md` file** — treat it as the single source of truth for architecture decisions, patterns, and rules.
+2. **Follow every rule and pattern documented here** — no exceptions unless the rule itself states one.
+3. **Never introduce patterns that contradict what is documented here**.
+
+**When completing a task, every AI agent MUST also:**
+
+4. **Identify new patterns** — if during the task a new recurring pattern, constraint, or architectural decision is applied that is not yet documented, add it to `AGENTS.md` in the appropriate section.
+5. **Document pitfalls discovered** — if a bug or mistake was caused by a missing rule, add it to the "Common Pitfalls & Solutions" section.
+6. **Keep examples current** — if an example in this file references deleted or renamed code, update the example.
+
+**Why this matters:** `AGENTS.md` is a living document. Its value grows every time an agent discovers and records a pattern. An undocumented pattern is a pattern that will be violated in the future.
+
+---
+
 ## Table of Contents
 
 1. [Architecture Overview](#architecture-overview)
@@ -3260,71 +3280,241 @@ This is a duplicate of Rule 12 above and applies specifically to the `payment-pl
 
 ---
 
-## Testing Guidelines
+## Testing Guidelines ⚠️ MANDATORY
 
-### Test Structure
+**Unit tests are NOT optional.** Every AI agent MUST create `*.spec.ts` files for every new piece of code it produces. Tests are part of the definition of "done" — code without tests is incomplete.
 
-- Test files: `*.spec.ts` alongside source files
-- Unit tests: Test use cases in isolation
-- Integration tests: Test controllers with mocked use cases
-- E2E tests: Test full flow
+### What MUST be tested (non-exhaustive)
 
-### Use Case Testing
+| Layer | What to test | Test file location |
+|---|---|---|
+| Use Cases | All `execute()` paths: happy path, all error branches, edge cases | `use-case/{name}.use-case.spec.ts` |
+| Domain Entities | Constructor validation, business methods, `validate*` static methods | `domain/schema/entity/{name}/{name}.entity.spec.ts` |
+| Value Objects | Valid input accepted, invalid input throws expected error | `domain/schema/value-object/{name}/{name}.value-object.spec.ts` (or next to entity) |
+| Error Classes | Instantiation and message content | `error/{name}.error.spec.ts` |
+| AutoMapper Profiles | ORM→Domain mapping, Domain→ORM mapping, missing-relation error | `profile/{name}.profile.spec.ts` |
+
+### Test File Naming Convention
+
+```
+{source-file-name}.spec.ts
+```
+
+Examples:
+- `create-post.use-case.ts` → `create-post.use-case.spec.ts`
+- `post.entity.ts` → `post.entity.spec.ts`
+- `post-id.value-object.ts` → `post-id.value-object.spec.ts`
+- `post-not-found.error.ts` → `post-not-found.error.spec.ts`
+
+### Use Case Test Pattern (MANDATORY)
+
+Every use case MUST have tests covering:
+1. **Happy path** — correct input produces expected output and calls repositories with correct args
+2. **Not-found branch** — throws the correct `*NotFoundError` when entity doesn't exist
+3. **Conflict branch** — throws the correct `*AlreadyExistsError` / `*ConflictError` when applicable
+4. **Transaction commit** — `transaction.commit()` is called when write operations succeed
 
 ```typescript
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreateAnalysisUseCase } from './create-analysis.use-case';
-import { AnalysisCommandRepositoryGateway } from '../domain/repository/analysis/command/analysis.command.repository.gateway';
 
-describe('CreateAnalysisUseCase', () => {
-  let useCase: CreateAnalysisUseCase;
-  let mockRepository: jest.Mocked<AnalysisCommandRepositoryGateway>;
+import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { PostNotFoundError } from '@module/social/post/error/post-not-found.error';
+import { PostQueryRepositoryGateway } from '@module/social/post/domain/repository/post/query/post.query.repository.gateway';
+import { PostCommandRepositoryGateway } from '@module/social/post/domain/repository/post/command/post.command.repository.gateway';
+import { GetPostUseCase } from './get-post.use-case';
+import { PostEntity } from '../domain/schema/entity/post/post.entity';
+import { PostId } from '../domain/schema/entity/post/value-object/post-id/post-id.value-object';
+
+describe('GetPostUseCase', () => {
+  let useCase: GetPostUseCase;
+  let postQueryRepository: jest.Mocked<PostQueryRepositoryGateway>;
+
+  const postId = new PostId();
 
   beforeEach(async () => {
-    mockRepository = {
-      create: jest.fn(),
-    } as any;
+    postQueryRepository = {
+      findOnePostById: jest.fn(),
+    } as unknown as jest.Mocked<PostQueryRepositoryGateway>;
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        CreateAnalysisUseCase,
-        {
-          provide: AnalysisCommandRepositoryGateway,
-          useValue: mockRepository,
-        },
+        GetPostUseCase,
+        { provide: PostQueryRepositoryGateway, useValue: postQueryRepository },
       ],
     }).compile();
 
-    useCase = module.get<CreateAnalysisUseCase>(CreateAnalysisUseCase);
+    useCase = module.get(GetPostUseCase);
   });
 
-  it('should create an analysis', async () => {
-    const dto = {
-      /* test data */
-    };
-    const expectedEntity = {
-      /* expected result */
-    };
+  describe('execute', () => {
+    it('should return the post when found', async () => {
+      const post = new PostEntity({ id: postId, title: 'Hello', content: 'World', authorId: new UserId() });
+      postQueryRepository.findOnePostById.mockResolvedValue(post);
 
-    mockRepository.create.mockResolvedValue(expectedEntity);
+      const result = await useCase.execute(postId);
+
+      expect(result.postId).toEqual(postId);
+      expect(postQueryRepository.findOnePostById).toHaveBeenCalledWith(postId);
+    });
+
+    it('should throw PostNotFoundError when post does not exist', async () => {
+      postQueryRepository.findOnePostById.mockResolvedValue(null);
+
+      await expect(useCase.execute(postId)).rejects.toThrow(PostNotFoundError);
+    });
+  });
+});
+```
+
+### Write Use Case Test Pattern (with transaction)
+
+```typescript
+describe('CreatePostUseCase', () => {
+  let useCase: CreatePostUseCase;
+  let postCommandRepository: jest.Mocked<PostCommandRepositoryGateway>;
+  let transactionGateway: jest.Mocked<BaseTransactionRepositoryGateway>;
+
+  const commitMock = jest.fn();
+  const transactionMock = { commit: commitMock };
+
+  beforeEach(async () => {
+    commitMock.mockClear();
+    postCommandRepository = {
+      createPost: jest.fn().mockReturnValue(jest.fn()),
+    } as unknown as jest.Mocked<PostCommandRepositoryGateway>;
+
+    transactionGateway = {
+      execute: jest.fn().mockResolvedValue(transactionMock),
+    } as unknown as jest.Mocked<BaseTransactionRepositoryGateway>;
+
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        CreatePostUseCase,
+        { provide: PostCommandRepositoryGateway, useValue: postCommandRepository },
+        { provide: BaseTransactionRepositoryGateway, useValue: transactionGateway },
+      ],
+    }).compile();
+
+    useCase = module.get(CreatePostUseCase);
+  });
+
+  it('should create a post and commit the transaction', async () => {
+    const sessionData = /* build mock session */;
+    const dto = CreatePostRequestDto.build({ title: 'My Post', content: 'Content here' });
 
     const result = await useCase.execute(sessionData, dto);
 
-    expect(result).toBeDefined();
-    expect(mockRepository.create).toHaveBeenCalledWith(
-      expect.any(AnalysisEntity),
+    expect(transactionGateway.execute).toHaveBeenCalled();
+    expect(commitMock).toHaveBeenCalledTimes(1); // transaction MUST be committed
+    expect(result.postId).toBeDefined();
+  });
+});
+```
+
+### Domain Entity Test Pattern
+
+```typescript
+describe('PostEntity', () => {
+  const validProps = {
+    title: 'My Post',
+    content: 'Some content',
+    authorId: new UserId(),
+  };
+
+  it('should create a PostEntity with valid props', () => {
+    const entity = new PostEntity(validProps);
+    expect(entity.title).toBe('My Post');
+    expect(entity.content).toBe('Some content');
+  });
+
+  describe('validateTitle', () => {
+    it('should throw InvalidPostTitleError when title is empty', () => {
+      expect(() => PostEntity.validateTitle('')).toThrow(InvalidPostTitleError);
+    });
+
+    it('should throw InvalidPostTitleError when title exceeds max length', () => {
+      const longTitle = 'a'.repeat(256);
+      expect(() => PostEntity.validateTitle(longTitle)).toThrow(InvalidPostTitleError);
+    });
+
+    it('should not throw for a valid title', () => {
+      expect(() => PostEntity.validateTitle('Valid Title')).not.toThrow();
+    });
+  });
+});
+```
+
+### Value Object Test Pattern
+
+```typescript
+describe('PostId', () => {
+  it('should auto-generate a UUID when no value is provided', () => {
+    const id = new PostId();
+    expect(id.toString()).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
+    );
+  });
+
+  it('should accept a valid UUID string', () => {
+    const uuid = '550e8400-e29b-41d4-a716-446655440000';
+    const id = new PostId(uuid);
+    expect(id.toString()).toBe(uuid);
+  });
+
+  it('should throw when given an invalid value', () => {
+    expect(() => new PostId('not-a-uuid')).toThrow();
+  });
+});
+```
+
+### AutoMapper Profile Test Pattern
+
+AutoMapper profile tests verify that the convertor functions produce the expected domain/ORM objects and that missing required relations throw `IncompleteSourceDataForMappingError`.
+
+```typescript
+describe('PostEntityAutoMapperProfile', () => {
+  it('should map PostTypeormEntity to PostEntity', () => {
+    const orm = PostTypeormEntity.build({
+      id: 'valid-uuid',
+      title: 'Test',
+      content: 'Body',
+      authorId: 'author-uuid',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    });
+
+    const domain = mapper.map(orm, PostTypeormEntity, PostEntity);
+
+    expect(domain).toBeInstanceOf(PostEntity);
+    expect(domain.title).toBe('Test');
+  });
+
+  it('should throw IncompleteSourceDataForMappingError when required relation is missing', () => {
+    const orm = PostTypeormEntity.build({ id: 'valid-uuid', title: 'Test', content: 'Body' });
+    // required relation "author" is not loaded
+    expect(() => mapper.map(orm, PostTypeormEntity, PostEntity)).toThrow(
+      IncompleteSourceDataForMappingError,
     );
   });
 });
 ```
 
-### Testing Best Practices
+### Testing Rules ⚠️ MANDATORY
 
-- Mock external dependencies (databases, APIs)
-- Focus on use case logic, not infrastructure
-- Test business rules and edge cases
-- Use meaningful test descriptions
-- Arrange-Act-Assert pattern
+- ✅ **ALWAYS create `*.spec.ts` alongside every new use case, entity, value object, and error**
+- ✅ Test the happy path AND every error/exception branch
+- ✅ Verify `transaction.commit()` is called in write use case tests
+- ✅ Use `jest.Mocked<T>` for typed mocks — never use `as any` without justification
+- ✅ Use `beforeEach` to reset mocks so tests are independent
+- ✅ Test description strings must be in English and clearly describe the scenario
+- ✅ Use the **Arrange-Act-Assert** (AAA) pattern for clarity
+- ✅ Run `yarn test` after creating tests to confirm they pass
+- ❌ NO test files that only contain a `describe` block with no `it` assertions
+- ❌ NO `it('should work', () => {})` placeholder tests — every test must assert something
+- ❌ NO testing of NestJS framework code (guards, pipes, decorators) — test business logic only
+- ❌ NO database connections in unit tests — always mock repositories
+- ❌ NO `console.log` in test files
 
 ---
 
@@ -3377,8 +3567,13 @@ When creating a new feature, follow this checklist:
 - [ ] Create controller in `{feature}.controller.ts`
 - [ ] Register use cases and controller in `{feature}.module.ts`
 - [ ] Create domain-specific errors in `error/`
-- [ ] Write tests for use cases
+- [ ] **Write unit tests for every use case** (`use-case/*.spec.ts`)
+- [ ] **Write unit tests for every domain entity** (`domain/schema/entity/**/*.spec.ts`)
+- [ ] **Write unit tests for every value object** (`*value-object.spec.ts`)
+- [ ] **Write unit tests for AutoMapper profiles** (`profile/*.spec.ts`)
+- [ ] Run `yarn test` and confirm all tests pass
 - [ ] Generate and apply database migration
+- [ ] Update `AGENTS.md` if any new patterns were applied during this task
 
 ---
 
