@@ -2,7 +2,6 @@ import { Inject } from '@nestjs/common';
 import bcrypt from 'bcrypt';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
 import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
 import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
 import { AuthIdentityEntity } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/auth-identity.entity';
@@ -10,6 +9,7 @@ import { UpdateAuthIdentityRequestDto } from '@module/generic/auth-identity/dto/
 import { UpdateAuthIdentityResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-update-password.response.dto';
 import { NewPasswordMatchesCurrentError } from '@module/generic/auth-identity/error/new-password-matches-current.error';
 import { WrongCurrentAuthIdentityPasswordError } from '@module/generic/auth-identity/error/wrong-current-auth-identity-password.error';
+import { WrongSignInCredentialsError } from '@module/generic/auth-identity/error/wrong-sign-in-credentials.error';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 export class UpdateAuthIdentityPasswordUseCase {
@@ -34,7 +34,7 @@ export class UpdateAuthIdentityPasswordUseCase {
       );
 
     if (authIdentity === null) {
-      throw new CustomerNotFoundError();
+      throw new WrongSignInCredentialsError();
     }
     const isSamePassword = bcrypt.compareSync(
       dto.password,

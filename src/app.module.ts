@@ -4,13 +4,11 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { JwtModule } from '@nestjs/jwt';
 import { ScheduleModule } from '@nestjs/schedule';
 import { minutes, ThrottlerModule } from '@nestjs/throttler';
-import { MemoryStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
 
 import { DatabaseModule } from '@infra/database/database.module';
-import { AdminModule } from '@module/admin/admin.module';
-import { CustomerModule } from '@module/customer/customer.module';
-import { GenericModule } from '@module/generic/generic.module';
-import { SupportModule } from '@module/support/support.module';
+import { AuthIdentityModule } from '@module/generic/auth-identity/auth-identity.module';
+import { PostModule } from '@module/social/post/post.module';
+import { UserModule } from '@module/social/user/user.module';
 import { SystemLogInterceptor } from '@shared/api/gateway/interceptor/system-log/system-log.interceptor';
 import { CacheStorageApplicationVariable } from '@shared/system/constant/application-variable/source/cache-storage.application-variable';
 import { FrameworkApplicationVariable } from '@shared/system/constant/application-variable/source/framework.application-variable';
@@ -21,14 +19,9 @@ import { ObservabilityModule } from '@shared/system/observability/observability.
     EventEmitterModule.forRoot(),
     ObservabilityModule,
     DatabaseModule,
-    AdminModule,
-    GenericModule,
-    CustomerModule,
-    SupportModule,
-    NestjsFormDataModule.config({
-      isGlobal: true,
-      storage: MemoryStoredFile,
-    }),
+    AuthIdentityModule,
+    UserModule,
+    PostModule,
     JwtModule.register({
       global: true,
       secret: FrameworkApplicationVariable.FRAMEWORK_JWT_SECRET,

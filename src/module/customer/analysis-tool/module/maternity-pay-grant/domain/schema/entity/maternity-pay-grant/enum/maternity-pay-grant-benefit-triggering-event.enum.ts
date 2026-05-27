@@ -1,6 +1,0 @@
-export enum MaternityPayGrantBenefitTriggeringEventEnum {
-  CHILDBIRTH = 'CHILDBIRTH',
-  STILLBIRTH = 'STILLBIRTH',
-  ADOPTION = 'ADOPTION',
-  SPOUSE_OR_PARTNER_DEATH = 'SPOUSE_OR_PARTNER_DEATH',
-}

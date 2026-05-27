@@ -22,7 +22,7 @@ export class AuthIdentityForgotPasswordUseCase {
     const email = dto.email;
 
     const authIdentity =
-      await this.authIdentityQueryRepositoryGateway.findOneAuthIdentityByEmailOrFederalDocumentWithRelations(
+      await this.authIdentityQueryRepositoryGateway.findOneAuthIdentityByEmailWithRelations(
         email,
       );
 
@@ -30,15 +30,9 @@ export class AuthIdentityForgotPasswordUseCase {
       throw new WrongSignInCredentialsError();
     }
 
-    const authIdentityName = authIdentity.customer?.name;
-
-    if (authIdentityName === undefined) {
-      throw new WrongSignInCredentialsError();
-    }
-
     await this.emailForgotPassword.generatePersistAndSendForgotPasswordCode(
       authIdentity.id,
-      authIdentityName,
+      authIdentity.email.toString(),
       email,
     );
   }

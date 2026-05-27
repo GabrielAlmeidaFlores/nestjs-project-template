@@ -1,39 +1,20 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
-import { AdminId } from '@module/admin/account/domain/schema/entity/admin/value-object/admin-id/admin-id.value-object';
 import { InvalidPasswordError } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/error/invalid-customer-name.error';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { HashedPassword } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/hashed-password/hashed-password.value-object';
-import { SupportAttendantId } from '@module/support/account/domain/schema/entity/support-attendant/value-object/support-attendant-id/support-attendant-id.value-object';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { Email } from '@core/domain/schema/value-object/email/email.value-object';
-import type { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
-import type { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import type { AuthIdentityEntityPropsInterface } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/auth-identity.entity.props.interface';
 
 export class AuthIdentityEntity extends BaseEntity<AuthIdentityId> {
-  @Description('E-mail do cliente.')
+  @Description('User email.')
   public readonly email: Email;
 
-  @Description('Documento federal do cliente.')
-  public readonly federalDocument: FederalDocument;
-
-  @Description('Senha do cliente.')
+  @Description('User password.')
   public readonly password: string | HashedPassword;
 
-  @Description('Segredo do aplicativo autenticador do cliente.')
-  public readonly authenticatorAppSecret: string | null;
-
-  @Description('Cliente associado à identidade de autenticação.')
-  public readonly customer: CustomerId | null;
-
-  @Description('Administrador associado à identidade de autenticação.')
-  public readonly admin: AdminId | null;
-
-  @Description('Atendente de suporte associado à identidade de autenticação.')
-  public readonly supportAttendant: SupportAttendantId | null;
-
-  @Description('Indica se a identidade de autenticação está ativa.')
+  @Description('Indicates whether the auth identity is active.')
   public readonly isActive: boolean;
 
   protected readonly _type = AuthIdentityEntity.name;
@@ -44,12 +25,7 @@ export class AuthIdentityEntity extends BaseEntity<AuthIdentityId> {
     super(AuthIdentityId, props);
 
     this.email = props.email;
-    this.federalDocument = props.federalDocument;
     this.password = props.password;
-    this.authenticatorAppSecret = props.authenticatorAppSecret ?? null;
-    this.customer = props.customer ?? null;
-    this.admin = props.admin ?? null;
-    this.supportAttendant = props.supportAttendant ?? null;
     this.isActive = props.isActive ?? true;
   }
 

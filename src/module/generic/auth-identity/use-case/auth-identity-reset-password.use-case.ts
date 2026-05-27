@@ -34,7 +34,7 @@ export class AuthIdentityResetPasswordUseCase {
     dto: AuthIdentityResetPasswordRequestDto,
   ): Promise<AuthIdentityResetPasswordResponseDto> {
     const authIdentity =
-      await this.authIdentityQueryRepositoryGateway.findOneAuthIdentityByEmailOrFederalDocument(
+      await this.authIdentityQueryRepositoryGateway.findOneAuthIdentityByEmail(
         dto.email,
       );
 

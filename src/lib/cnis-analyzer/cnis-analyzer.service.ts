@@ -41,7 +41,6 @@ import {
   CnisModel,
   CnisSessionSocialSecurityAffiliationEarningsHistoryModel,
 } from '@lib/cnis-processor/model/generic/cnis.model';
-import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 
 @Injectable()
 export class CnisAnalyzerService implements CnisAnalyzerGateway {
@@ -82,7 +81,6 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
   public analyzeCnisDocument(
     data: CnisModel,
-    analysisToolClient: AnalysisToolClientEntity,
   ): Promise<CnisAnalysisResultModel> {
     const idade = this.calculateAge(
       data.affiliateIdentification?.dataDeNascimento,
@@ -200,7 +198,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       salarioSBPreReforma,
     );
 
-    const gender = analysisToolClient.gender === GenderEnum.MALE ? 'M' : 'F';
+    const gender = GenderEnum.MALE === GenderEnum.MALE ? 'M' : 'F';
 
     const points = this.calculatePontos(idade.anos, consolidadoResumido);
 

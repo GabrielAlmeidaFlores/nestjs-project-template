@@ -3,7 +3,6 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
-import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { AuthIdentityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/auth-identity.typeorm.entity';
 import { GetAuthIdentityQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity.query.result';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
@@ -23,48 +22,46 @@ export class GetAuthIdentityQueryResultAutoMapperProfile {
   }
 
   private mapOrmEntityToQueryResult(): void {
-    const convertOrmEntityToDomainEntity = (
+    const convert = (
       source: AuthIdentityTypeormEntity,
-    ): GetAuthIdentityQueryResult => {
-      return GetAuthIdentityQueryResult.build({
-        ...source,
+    ): GetAuthIdentityQueryResult =>
+      GetAuthIdentityQueryResult.build({
         id: new AuthIdentityId(source.id),
-        federalDocument: new FederalDocument(source.federalDocument),
         email: new Email(source.email),
         password: new HashedPassword(source.password),
+        isActive: source.isActive,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
-    };
-
-    const mappingFunction = constructUsing(convertOrmEntityToDomainEntity);
 
     createMap(
       this.mapper,
       AuthIdentityTypeormEntity,
       GetAuthIdentityQueryResult,
-      mappingFunction,
+      constructUsing(convert),
     );
   }
 
   private mapQueryResultToOrmEntity(): void {
-    const convertDomainEntityToOrmEntity = (
+    const convert = (
       source: GetAuthIdentityQueryResult,
-    ): AuthIdentityTypeormEntity => {
-      return AuthIdentityTypeormEntity.build({
-        ...source,
+    ): AuthIdentityTypeormEntity =>
+      AuthIdentityTypeormEntity.build({
         id: source.id.toString(),
         email: source.email.toString(),
-        federalDocument: source.federalDocument.toString(),
         password: source.password.toString(),
+        isActive: source.isActive,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
-    };
-
-    const mappingFunction = constructUsing(convertDomainEntityToOrmEntity);
 
     createMap(
       this.mapper,
       GetAuthIdentityQueryResult,
       AuthIdentityTypeormEntity,
-      mappingFunction,
+      constructUsing(convert),
     );
   }
 }
