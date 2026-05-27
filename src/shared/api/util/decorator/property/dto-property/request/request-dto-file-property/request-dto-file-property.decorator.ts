@@ -6,10 +6,10 @@ import { IsFile, HasMimeType, IsFiles } from 'nestjs-form-data';
 import { BaseDtoProperty } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/base-dto-property.decorator';
 import { FileModel } from '@shared/system/model/generic/file.model';
 
-import type { RequestDtoFilePropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/request/request-dto-file-property/request-dto-file-property.decorator.props.interface';
+import type { RequestDtoFilePropertyDecoratorPropsInputModel } from '@shared/api/util/decorator/property/dto-property/request/request-dto-file-property/model/input/request-dto-file-property.decorator.props.input.model';
 
 export function RequestDtoFileProperty(
-  props?: RequestDtoFilePropertyDecoratorPropsInterface,
+  props?: RequestDtoFilePropertyDecoratorPropsInputModel,
 ): PropertyDecorator {
   const propertyIsRequired = props?.required ?? true;
 

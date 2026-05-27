@@ -10,16 +10,16 @@ import { PostTypeormCommandRepository } from '@infra/database/implementation/typ
 import { PostTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/post/post.typeorm.query.repository';
 import { UserTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/user/user.typeorm.command.repository';
 import { UserTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/user/user.typeorm.query.repository';
+import { TypeormModule } from '@infra/database/implementation/typeorm/typeorm.module';
 import { MapperModule } from '@lib/mapper/mapper.module';
+import { CommentCommandRepositoryGateway } from '@module/client/comment/domain/repository/comment/command/comment.command.repository.gateway';
+import { CommentQueryRepositoryGateway } from '@module/client/comment/domain/repository/comment/query/comment.query.repository.gateway';
+import { PostCommandRepositoryGateway } from '@module/client/post/domain/repository/post/command/post.command.repository.gateway';
+import { PostQueryRepositoryGateway } from '@module/client/post/domain/repository/post/query/post.query.repository.gateway';
+import { UserCommandRepositoryGateway } from '@module/client/user/domain/repository/user/command/user.command.repository.gateway';
+import { UserQueryRepositoryGateway } from '@module/client/user/domain/repository/user/query/user.query.repository.gateway';
 import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
 import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
-import { CommentCommandRepositoryGateway } from '@module/social/comment/domain/repository/comment/command/comment.command.repository.gateway';
-import { CommentQueryRepositoryGateway } from '@module/social/comment/domain/repository/comment/query/comment.query.repository.gateway';
-import { PostCommandRepositoryGateway } from '@module/social/post/domain/repository/post/command/post.command.repository.gateway';
-import { PostQueryRepositoryGateway } from '@module/social/post/domain/repository/post/query/post.query.repository.gateway';
-import { UserCommandRepositoryGateway } from '@module/social/user/domain/repository/user/command/user.command.repository.gateway';
-import { UserQueryRepositoryGateway } from '@module/social/user/domain/repository/user/query/user.query.repository.gateway';
-import { TypeormModule } from '@infra/database/implementation/typeorm/typeorm.module';
 
 const classProvider: ClassProvider[] = [
   {

@@ -6,9 +6,9 @@ import { TransactionType } from '@core/domain/repository/base/transaction/type/t
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
 import { PostTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/post.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { PostCommandRepositoryGateway } from '@module/social/post/domain/repository/post/command/post.command.repository.gateway';
-import { PostEntity } from '@module/social/post/domain/schema/entity/post/post.entity';
-import { PostId } from '@module/social/post/domain/schema/entity/post/value-object/post-id/post-id.value-object';
+import { PostCommandRepositoryGateway } from '@module/client/post/domain/repository/post/command/post.command.repository.gateway';
+import { PostEntity } from '@module/client/post/domain/schema/entity/post/post.entity';
+import { PostId } from '@module/client/post/domain/schema/entity/post/value-object/post-id/post-id.value-object';
 
 @Injectable()
 export class PostTypeormCommandRepository
@@ -26,12 +26,20 @@ export class PostTypeormCommandRepository
   }
 
   public createPost(entity: PostEntity): TransactionType {
-    const mapped = this.mapperGateway.map(entity, PostEntity, PostTypeormEntity);
+    const mapped = this.mapperGateway.map(
+      entity,
+      PostEntity,
+      PostTypeormEntity,
+    );
     return this.create(mapped);
   }
 
   public updatePost(postId: PostId, entity: PostEntity): TransactionType {
-    const mapped = this.mapperGateway.map(entity, PostEntity, PostTypeormEntity);
+    const mapped = this.mapperGateway.map(
+      entity,
+      PostEntity,
+      PostTypeormEntity,
+    );
     return this.update(postId.toString(), mapped);
   }
 

@@ -7,10 +7,10 @@ import { ListDataOutputModel } from '@core/domain/repository/base/query/model/ou
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { CommentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/comment.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { CommentQueryRepositoryGateway } from '@module/social/comment/domain/repository/comment/query/comment.query.repository.gateway';
-import { GetCommentQueryResult } from '@module/social/comment/domain/repository/comment/query/result/get-comment.query.result';
-import { CommentId } from '@module/social/comment/domain/schema/entity/comment/value-object/comment-id/comment-id.value-object';
-import { PostId } from '@module/social/post/domain/schema/entity/post/value-object/post-id/post-id.value-object';
+import { CommentQueryRepositoryGateway } from '@module/client/comment/domain/repository/comment/query/comment.query.repository.gateway';
+import { GetCommentQueryResult } from '@module/client/comment/domain/repository/comment/query/result/get-comment.query.result';
+import { CommentId } from '@module/client/comment/domain/schema/entity/comment/value-object/comment-id/comment-id.value-object';
+import { PostId } from '@module/client/post/domain/schema/entity/post/value-object/post-id/post-id.value-object';
 
 @Injectable()
 export class CommentTypeormQueryRepository
@@ -56,6 +56,11 @@ export class CommentTypeormQueryRepository
       this.mapperGateway.map(item, CommentTypeormEntity, GetCommentQueryResult),
     );
 
-    return new ListDataOutputModel({ page: result.page, limit: result.limit, totalItems: result.totalItems, resource });
+    return new ListDataOutputModel({
+      page: result.page,
+      limit: result.limit,
+      totalItems: result.totalItems,
+      resource,
+    });
   }
 }

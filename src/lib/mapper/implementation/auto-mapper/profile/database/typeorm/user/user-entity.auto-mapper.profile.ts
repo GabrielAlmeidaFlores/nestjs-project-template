@@ -2,11 +2,12 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
-import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { UserTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/user.typeorm.entity';
-import { GetUserQueryResult } from '@module/social/user/domain/repository/user/query/result/get-user.query.result';
-import { UserEntity } from '@module/social/user/domain/schema/entity/user/user.entity';
-import { UserId } from '@module/social/user/domain/schema/entity/user/value-object/user-id/user-id.value-object';
+import { GetUserQueryResult } from '@module/client/user/domain/repository/user/query/result/get-user.query.result';
+import { UserEntity } from '@module/client/user/domain/schema/entity/user/user.entity';
+import { UserEntityPropsInputModel } from '@module/client/user/domain/schema/entity/user/user.entity.props.input.model';
+import { UserId } from '@module/client/user/domain/schema/entity/user/value-object/user-id/user-id.value-object';
+import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 
 @Injectable()
 export class UserEntityAutoMapperProfile {
@@ -24,16 +25,18 @@ export class UserEntityAutoMapperProfile {
 
   private mapOrmEntityToDomainEntity(): void {
     const convert = (source: UserTypeormEntity): UserEntity =>
-      new UserEntity({
-        id: new UserId(source.id),
-        authIdentityId: new AuthIdentityId(source.authIdentityId),
-        name: source.name,
-        username: source.username,
-        bio: source.bio,
-        createdAt: source.createdAt,
-        updatedAt: source.updatedAt,
-        deletedAt: source.deletedAt,
-      });
+      new UserEntity(
+        UserEntityPropsInputModel.build({
+          id: new UserId(source.id),
+          authIdentityId: new AuthIdentityId(source.authIdentityId),
+          name: source.name,
+          username: source.username,
+          bio: source.bio,
+          createdAt: source.createdAt,
+          updatedAt: source.updatedAt,
+          deletedAt: source.deletedAt,
+        }),
+      );
 
     createMap(
       this.mapper,

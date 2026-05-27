@@ -7,10 +7,10 @@ import { ListDataOutputModel } from '@core/domain/repository/base/query/model/ou
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { UserTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/user.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
+import { GetUserQueryResult } from '@module/client/user/domain/repository/user/query/result/get-user.query.result';
+import { UserQueryRepositoryGateway } from '@module/client/user/domain/repository/user/query/user.query.repository.gateway';
+import { UserId } from '@module/client/user/domain/schema/entity/user/value-object/user-id/user-id.value-object';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
-import { UserQueryRepositoryGateway } from '@module/social/user/domain/repository/user/query/user.query.repository.gateway';
-import { GetUserQueryResult } from '@module/social/user/domain/repository/user/query/result/get-user.query.result';
-import { UserId } from '@module/social/user/domain/schema/entity/user/value-object/user-id/user-id.value-object';
 
 @Injectable()
 export class UserTypeormQueryRepository
@@ -27,9 +27,7 @@ export class UserTypeormQueryRepository
     super(repository);
   }
 
-  public async findOneUserById(
-    id: UserId,
-  ): Promise<GetUserQueryResult | null> {
+  public async findOneUserById(id: UserId): Promise<GetUserQueryResult | null> {
     const data = await this.findOne({ where: { id: id.toString() } });
 
     if (data === null) {

@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 
-import { SeederInterface } from '@cli/seed/interface/seeder.interface';
+import { BaseSeeder } from '@cli/seed/base.seeder';
 import { UserSeeder } from '@cli/seed/seeder/user.seeder';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
@@ -20,7 +20,7 @@ export class SeedService {
   }
 
   public async seed(): Promise<void> {
-    const seeders: Array<SeederInterface> = [this.userSeeder];
+    const seeders: Array<BaseSeeder> = [this.userSeeder];
 
     for (const seeder of seeders) {
       let transactions: Array<TransactionType> = [];

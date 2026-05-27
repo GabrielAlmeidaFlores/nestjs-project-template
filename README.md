@@ -1,143 +1,211 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# NestJS Project Template
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A production-ready NestJS backend template built with **Clean Architecture** and **Domain-Driven Design (DDD)** principles.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Tech Stack
 
-## Description
+| Concern | Technology |
+|---|---|
+| Framework | NestJS (Fastify adapter) |
+| Language | TypeScript (strict mode) |
+| Database | MySQL + TypeORM |
+| Validation | class-validator / class-transformer |
+| Object mapping | AutoMapper (`@automapper/nestjs`) |
+| Email | SendGrid |
+| Storage | AWS S3 (via `BucketGateway`) |
+| AI | Generative AI (via `AiGateway`) |
+| Cache | Redis (via `CacheGateway`) |
+| API docs | OpenAPI / Swagger |
+| Testing | Jest |
+| Package manager | Yarn |
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Architecture
 
-## Project setup
+This template follows **Clean Architecture** with **CQRS** (Command Query Responsibility Segregation):
 
-```bash
-$ yarn install
+```
+Presentation  →  Application  →  Domain  ←  Infrastructure
+(Controllers)    (Use Cases)    (Entities)   (TypeORM, S3, …)
 ```
 
-## Compile and run the project
+Modules are organized by **user level** under `src/module/`:
 
-```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+```
+src/module/
+├── admin/     # Admin-only features
+├── client/    # Client/user-facing features (includes the social network example)
+│   ├── user/
+│   ├── post/
+│   └── comment/
+└── generic/   # Shared across all user levels
+    └── auth-identity/
 ```
 
-## Run tests
+For the full architecture reference — including rules, patterns, and examples — see [AGENTS.md](./AGENTS.md).
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 22.x
+- MySQL 8.x
+- Yarn
+
+### Installation
 
 ```bash
-# unit tests
-$ yarn run test
+yarn config set ignore-engines true   # required if running Node 24+
+yarn install
+```
 
+### Environment Variables
+
+Copy `.env.example` to `.env` and fill in the values:
+
+```bash
+cp .env.example .env
+```
+
+Key variables:
+
+```env
+# Database
+DATABASE_HOST=localhost
+DATABASE_PORT=3306
+DATABASE_NAME=nestjs_template
+DATABASE_USER=root
+DATABASE_PASSWORD=secret
+
+# Auth
+JWT_SECRET=your-secret-key
+JWT_EXPIRES_IN=7d
+
+# Email (SendGrid)
+EMAIL_SEND_GRID_KEY=SG.xxx
+EMAIL_SENDER=no-reply@example.com
+EMAIL_TEMPLATE_DIR_RELATIVE_PATH=assets/email-template
+APP_FRONTEND_URL=http://localhost:3000
+
+# Storage (AWS S3)
+BUCKET_NAME=my-bucket
+AWS_REGION=us-east-1
+AWS_ACCESS_KEY_ID=xxx
+AWS_SECRET_ACCESS_KEY=xxx
+
+# AI (optional)
+OPENAI_API_KEY=sk-xxx
+
+# Cache (Redis, optional)
+REDIS_HOST=localhost
+REDIS_PORT=6379
+```
+
+## Development
+
+```bash
+# Start with hot reload
+yarn dev
+
+# Start with debugger
+yarn start:debug
+
+# Build for production
+yarn build
+
+# Run production build
+yarn start:prod
+```
+
+## Testing
+
+```bash
+# Run all tests
+yarn test
+
+# Watch mode
+yarn test:watch
+
+# Coverage report
+yarn test:cov
+
+# Single file
+yarn jest path/to/file.spec.ts
 ```
 
 ## Database Migrations
 
-This project uses TypeORM for database migrations. Migrations are version control for your database schema.
+```bash
+# Apply pending migrations
+yarn migration:run
 
-### Running Migrations
+# Generate migration from entity changes
+yarn migration:generate src/migrations/DescriptiveName
 
-Execute all pending migrations:
+# Revert last migration
+yarn migration:revert
+```
+
+> **Important**: Always run `yarn migration:run` before deploying. The migrations table is `tb_migration`.
+
+## Seeding
 
 ```bash
-$ yarn migration:run
+# Run the database seeder (creates the default admin + user)
+yarn seed
 ```
 
-### Creating a New Migration
-
-When you make changes to your entities (adding/modifying fields, tables, etc.), generate a migration:
+## Code Quality
 
 ```bash
-$ yarn migration:generate src/migrations/DescriptiveName
+# Lint and auto-fix
+yarn lint
+
+# Format with Prettier
+yarn format
 ```
 
-This will automatically detect schema changes and create a migration file.
+## Project Structure
 
-### Reverting Migrations
-
-To undo the last executed migration:
-
-```bash
-$ yarn migration:revert
+```
+src/
+├── core/           # Shared domain primitives (BaseEntity, BaseValueObject, errors)
+├── module/         # Feature modules organized by user level
+│   ├── admin/
+│   ├── client/
+│   └── generic/
+├── infra/          # Infrastructure implementations
+│   ├── database/   # TypeORM entities & repositories
+│   ├── ai/
+│   ├── email/
+│   └── storage/
+├── lib/            # Shared libraries (AutoMapper profiles, event bus, processors)
+├── shared/         # API utilities (guards, decorators, pipes, DTOs)
+└── cli/            # CLI scripts & seeders
 ```
 
-### Important Notes
+Path aliases:
 
-- **Always run migrations before deploying** to ensure database schema is up to date
-- **Migration files are located in** `src/migrations/`
-- **Migrations are ignored by ESLint** (configured in package.json)
-- Migrations run in chronological order based on their timestamp
+| Alias | Resolves to |
+|---|---|
+| `@core/*` | `src/core/*` |
+| `@module/*` | `src/module/*` |
+| `@infra/*` | `src/infra/*` |
+| `@lib/*` | `src/lib/*` |
+| `@shared/*` | `src/shared/*` |
+| `@cli/*` | `src/cli/*` |
 
-### Manual Migration Registration
+## Architecture Checklist (new feature)
 
-If you created tables manually without migrations and need to register them:
-
-```sql
--- Connect to your database and run:
-INSERT INTO tb_migration (timestamp, name) 
-VALUES (1768402214340, 'InitDb1768402214340');
-```
-
-Replace the timestamp and name with your migration details.
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-P
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ yarn install -g mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- [ ] Domain entity + value objects + entity props model
+- [ ] Repository gateways (query & command)
+- [ ] TypeORM entity + repository implementations + AutoMapper profile
+- [ ] Register repositories in `DatabaseModule`
+- [ ] Use cases + DTOs (request & response) + domain errors
+- [ ] Controller + module
+- [ ] Unit tests for use cases, entities, value objects
+- [ ] Database migration
+- [ ] Update `AGENTS.md` if new patterns were introduced
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+MIT

@@ -1,22 +1,24 @@
 import { Body, HttpStatus, RequestMethod, Res } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 
+import { AuthIdentityForgotPasswordValidateCodeRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-forgot-password-code.request.dto';
+import { AuthIdentityForgotPasswordRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-forgot-password.request.dto';
+import { AuthIdentityResetPasswordRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-reset-password.request.dto';
 import { AuthIdentitySignInRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-sign-in.request.dto';
 import { AuthIdentitySignUpRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-sign-up.request.dto';
 import { UpdateAuthIdentityRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-update-password.request.dto';
-import { AuthIdentityForgotPasswordRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-forgot-password.request.dto';
-import { AuthIdentityForgotPasswordValidateCodeRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-forgot-password-code.request.dto';
-import { AuthIdentityResetPasswordRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-reset-password.request.dto';
+import { PreAuthIdentitySignInRequestDto } from '@module/generic/auth-identity/dto/request/pre-auth-identity-sign-in.request.dto';
+import { AuthIdentityForgotPasswordCodeResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-forgot-password-code.response.dto';
+import { AuthIdentityResetPasswordResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-reset-password.response.dto';
 import { AuthIdentitySignInResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-sign-in.response.dto';
 import { AuthIdentitySignUpResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-sign-up.response.dto';
 import { UpdateAuthIdentityResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-update-password.response.dto';
-import { AuthIdentityForgotPasswordCodeResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-forgot-password-code.response.dto';
-import { AuthIdentityResetPasswordResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-reset-password.response.dto';
+import { AuthIdentityForgotPasswordValidateCodeUseCase } from '@module/generic/auth-identity/use-case/auth-identity-forgot-password-validate-code.use-case';
+import { AuthIdentityForgotPasswordUseCase } from '@module/generic/auth-identity/use-case/auth-identity-forgot-password.use-case';
+import { AuthIdentityResetPasswordUseCase } from '@module/generic/auth-identity/use-case/auth-identity-reset-password.use-case';
 import { AuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-in.use-case';
 import { AuthIdentitySignOutUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-out.use-case';
-import { AuthIdentityForgotPasswordUseCase } from '@module/generic/auth-identity/use-case/auth-identity-forgot-password.use-case';
-import { AuthIdentityForgotPasswordValidateCodeUseCase } from '@module/generic/auth-identity/use-case/auth-identity-forgot-password-validate-code.use-case';
-import { AuthIdentityResetPasswordUseCase } from '@module/generic/auth-identity/use-case/auth-identity-reset-password.use-case';
+import { PreAuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/pre-auth-identity-sign-in.use-case';
 import { UpdateAuthIdentityPasswordUseCase } from '@module/generic/auth-identity/use-case/update-auth-identity-password.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { GenericControllerRoute } from '@shared/api/util/decorator/class/controller-route/generic-controller-route.decorator';
@@ -35,6 +37,7 @@ export class AuthIdentityController {
     private readonly authIdentitySignInUseCase: AuthIdentitySignInUseCase,
     private readonly authIdentitySignOutUseCase: AuthIdentitySignOutUseCase,
     private readonly authIdentitySignUpUseCase: AuthIdentitySignUpUseCaseGateway,
+    private readonly preAuthIdentitySignInUseCase: PreAuthIdentitySignInUseCase,
     private readonly authIdentityForgotPasswordUseCase: AuthIdentityForgotPasswordUseCase,
     private readonly authIdentityForgotPasswordValidateCodeUseCase: AuthIdentityForgotPasswordValidateCodeUseCase,
     private readonly authIdentityResetPasswordUseCase: AuthIdentityResetPasswordUseCase,
@@ -88,6 +91,29 @@ export class AuthIdentityController {
     @Body() dto: AuthIdentitySignInRequestDto,
   ): Promise<AuthIdentitySignInResponseDto> {
     return await this.authIdentitySignInUseCase.execute(reply, dto);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Request sign-in verification code',
+    http: {
+      path: 'sign-in/pre',
+      method: RequestMethod.POST,
+      type: PreAuthIdentitySignInRequestDto,
+    },
+    tag: ['auth'],
+    successResponse: {
+      statusCode: HttpStatus.NO_CONTENT,
+      description: 'Verification code sent to the registered email.',
+    },
+    throttle: {
+      limit: 5,
+      ttlInMinutes: 2,
+    },
+  })
+  public async preAuthIdentitySignIn(
+    @Body() dto: PreAuthIdentitySignInRequestDto,
+  ): Promise<void> {
+    return await this.preAuthIdentitySignInUseCase.execute(dto);
   }
 
   @BuildEndpointSpecification({

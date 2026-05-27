@@ -1,4 +1,4 @@
-import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base.entity.props.interface';
+import type { BaseEntityPropsInputModel } from '@core/domain/schema/entity/base/base.entity.props.input.model';
 import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import type { InvalidInputError } from '@core/error/invalid-input.error';
 import type { ConstructorType } from '@shared/system/type/constructor.type';
@@ -11,7 +11,7 @@ export abstract class BaseEntity<Id extends Guid> {
 
   protected constructor(
     idConstructor: ConstructorType<Id>,
-    props: BaseEntityPropsInterface<Id>,
+    props: BaseEntityPropsInputModel<Id>,
   ) {
     this.id = props.id ?? new idConstructor();
     this.createdAt = props.createdAt ?? new Date();

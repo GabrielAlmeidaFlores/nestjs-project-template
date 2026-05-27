@@ -4,12 +4,12 @@ import { IsArray, IsEnum, IsOptional } from 'class-validator';
 
 import { BaseDtoProperty } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/base-dto-property.decorator';
 
-import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/interface/base-dto-property.decorator.props.interface';
+import type { BaseDtoPropertyDecoratorPropsInputModel } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/model/input/base-dto-property.decorator.props.input.model';
 import type { ValidationArguments } from 'class-validator';
 
 export function BaseDtoEnumProperty(
   enumType: object,
-  props?: BaseDtoPropertyDecoratorPropsInterface,
+  props?: BaseDtoPropertyDecoratorPropsInputModel,
 ): PropertyDecorator {
   const propertyIsRequired = props?.required ?? true;
   const isArray = props?.isArray === true;

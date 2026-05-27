@@ -6,9 +6,9 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { minutes, ThrottlerModule } from '@nestjs/throttler';
 
 import { DatabaseModule } from '@infra/database/database.module';
+import { PostModule } from '@module/client/post/post.module';
+import { UserModule } from '@module/client/user/user.module';
 import { AuthIdentityModule } from '@module/generic/auth-identity/auth-identity.module';
-import { PostModule } from '@module/social/post/post.module';
-import { UserModule } from '@module/social/user/user.module';
 import { SystemLogInterceptor } from '@shared/api/gateway/interceptor/system-log/system-log.interceptor';
 import { CacheStorageApplicationVariable } from '@shared/system/constant/application-variable/source/cache-storage.application-variable';
 import { FrameworkApplicationVariable } from '@shared/system/constant/application-variable/source/framework.application-variable';

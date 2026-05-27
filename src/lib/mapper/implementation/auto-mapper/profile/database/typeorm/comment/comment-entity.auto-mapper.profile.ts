@@ -3,11 +3,12 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { CommentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/comment.typeorm.entity';
-import { CommentEntity } from '@module/social/comment/domain/schema/entity/comment/comment.entity';
-import { CommentId } from '@module/social/comment/domain/schema/entity/comment/value-object/comment-id/comment-id.value-object';
-import { GetCommentQueryResult } from '@module/social/comment/domain/repository/comment/query/result/get-comment.query.result';
-import { PostId } from '@module/social/post/domain/schema/entity/post/value-object/post-id/post-id.value-object';
-import { UserId } from '@module/social/user/domain/schema/entity/user/value-object/user-id/user-id.value-object';
+import { GetCommentQueryResult } from '@module/client/comment/domain/repository/comment/query/result/get-comment.query.result';
+import { CommentEntity } from '@module/client/comment/domain/schema/entity/comment/comment.entity';
+import { CommentEntityPropsInputModel } from '@module/client/comment/domain/schema/entity/comment/comment.entity.props.input.model';
+import { CommentId } from '@module/client/comment/domain/schema/entity/comment/value-object/comment-id/comment-id.value-object';
+import { PostId } from '@module/client/post/domain/schema/entity/post/value-object/post-id/post-id.value-object';
+import { UserId } from '@module/client/user/domain/schema/entity/user/value-object/user-id/user-id.value-object';
 
 @Injectable()
 export class CommentEntityAutoMapperProfile {
@@ -25,15 +26,17 @@ export class CommentEntityAutoMapperProfile {
 
   private mapOrmEntityToDomainEntity(): void {
     const convert = (source: CommentTypeormEntity): CommentEntity =>
-      new CommentEntity({
-        id: new CommentId(source.id),
-        postId: new PostId(source.postId),
-        authorId: new UserId(source.authorId),
-        content: source.content,
-        createdAt: source.createdAt,
-        updatedAt: source.updatedAt,
-        deletedAt: source.deletedAt,
-      });
+      new CommentEntity(
+        CommentEntityPropsInputModel.build({
+          id: new CommentId(source.id),
+          postId: new PostId(source.postId),
+          authorId: new UserId(source.authorId),
+          content: source.content,
+          createdAt: source.createdAt,
+          updatedAt: source.updatedAt,
+          deletedAt: source.deletedAt,
+        }),
+      );
 
     createMap(
       this.mapper,

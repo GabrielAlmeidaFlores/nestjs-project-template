@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { AuthIdentityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/auth-identity.typeorm.entity';
 import { AuthIdentityEntity } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/auth-identity.entity';
+import { AuthIdentityEntityPropsInputModel } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/auth-identity.entity.props.input.model';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { HashedPassword } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/hashed-password/hashed-password.value-object';
 
@@ -23,15 +24,17 @@ export class AuthIdentityEntityAutoMapperProfile {
 
   private mapOrmEntityToDomainEntity(): void {
     const convert = (source: AuthIdentityTypeormEntity): AuthIdentityEntity =>
-      new AuthIdentityEntity({
-        id: new AuthIdentityId(source.id),
-        email: new Email(source.email),
-        password: new HashedPassword(source.password),
-        isActive: source.isActive,
-        createdAt: source.createdAt,
-        updatedAt: source.updatedAt,
-        deletedAt: source.deletedAt,
-      });
+      new AuthIdentityEntity(
+        AuthIdentityEntityPropsInputModel.build({
+          id: new AuthIdentityId(source.id),
+          email: new Email(source.email),
+          password: new HashedPassword(source.password),
+          isActive: source.isActive,
+          createdAt: source.createdAt,
+          updatedAt: source.updatedAt,
+          deletedAt: source.deletedAt,
+        }),
+      );
 
     createMap(
       this.mapper,
