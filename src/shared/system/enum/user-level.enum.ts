@@ -1,5 +1,4 @@
 export enum UserLevelEnum {
-  CUSTOMER = 'customer',
+  USER = 'user',
   ADMIN = 'admin',
-  SUPPORT = 'support',
 }

@@ -1,4 +1,0 @@
-export enum DisabilityRetirementPlanningRejectionRetirementTypeEnum {
-  AGE_BASED = 'APOSENTADORIA_POR_IDADE_DA_PCD',
-  CONTRIBUTION_TIME_BASED = 'APOSENTADORIA_POR_TEMPO_DE_CONTRIBUICAO_DA_PCD',
-}

@@ -2,19 +2,11 @@ import { Inject, Injectable } from '@nestjs/common';
 import bcrypt from 'bcrypt';
 import { FastifyReply } from 'fastify';
 
-import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
-import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
 import { AuthIdentitySignInRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-sign-in.request.dto';
 import { AuthIdentitySignInResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-sign-in.response.dto';
-import { SignInMFAOptionEnum } from '@module/generic/auth-identity/enum/sign-in-mfa-option.enum';
 import { AccountDeactivatedError } from '@module/generic/auth-identity/error/account-deactivated.error';
-import { AuthenticatorAppNotConfiguredError } from '@module/generic/auth-identity/error/authenticator-app-not-configured.error';
-import { OrganizationMemberDeactivatedError } from '@module/generic/auth-identity/error/organization-member-deactivated.error';
-import { OrganizationMemberRemovedError } from '@module/generic/auth-identity/error/organization-member-removed.error';
 import { WrongSignInCredentialsError } from '@module/generic/auth-identity/error/wrong-sign-in-credentials.error';
-import { AuthenticatorGateway } from '@module/generic/auth-identity/lib/authenticator/authenticator.gateway';
-import { EmailMFAGateway } from '@module/generic/auth-identity/lib/email-mfa/email-mfa.gateway';
 import { SetAuthTokenCookieUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/set-auth-token-cookie.use-case-gateway';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
@@ -25,29 +17,17 @@ export class AuthIdentitySignInUseCase {
   public constructor(
     @Inject(AuthIdentityQueryRepositoryGateway)
     private readonly authIdentityQueryRepositoryGateway: AuthIdentityQueryRepositoryGateway,
-    @Inject(AuthenticatorGateway)
-    private readonly authenticatorGateway: AuthenticatorGateway,
-    @Inject(EmailMFAGateway)
-    private readonly emailMFAGateway: EmailMFAGateway,
     @Inject(SetAuthTokenCookieUseCaseGateway)
     private readonly setAuthTokenCookieUseCaseGateway: SetAuthTokenCookieUseCaseGateway,
-    @Inject(OrganizationMemberQueryRepositoryGateway)
-    private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
   ) {}
 
   public async execute(
     reply: FastifyReply,
     dto: AuthIdentitySignInRequestDto,
   ): Promise<AuthIdentitySignInResponseDto> {
-    const identifier = dto.federalDocument ?? dto.email;
-
-    if (!identifier) {
-      throw new WrongSignInCredentialsError();
-    }
-
     const authIdentity =
-      await this.authIdentityQueryRepositoryGateway.findOneAuthIdentityByEmailOrFederalDocumentWithRelations(
-        identifier,
+      await this.authIdentityQueryRepositoryGateway.findOneAuthIdentityByEmailWithRelations(
+        dto.email,
       );
 
     if (!authIdentity) {
@@ -67,53 +47,7 @@ export class AuthIdentitySignInUseCase {
       throw new WrongSignInCredentialsError();
     }
 
-    if (authIdentity.customer !== null) {
-      await this.validateOrganizationMemberStatus(authIdentity.customer.id);
-    }
-
-    if (dto.mfaOption === SignInMFAOptionEnum.EMAIL) {
-      const validateEmailCode = await this.emailMFAGateway.validateSignInCode(
-        authIdentity.id,
-        dto.mfaCode,
-      );
-
-      if (validateEmailCode === false) {
-        throw new WrongSignInCredentialsError();
-      }
-    }
-
-    if (
-      dto.mfaOption === SignInMFAOptionEnum.AUTHENTICATOR_APP &&
-      authIdentity.authenticatorAppSecret === null
-    ) {
-      throw new AuthenticatorAppNotConfiguredError();
-    }
-
-    if (
-      dto.mfaOption === SignInMFAOptionEnum.AUTHENTICATOR_APP &&
-      authIdentity.authenticatorAppSecret !== null
-    ) {
-      const validateAuthenticatorAppCode = this.authenticatorGateway.verifyCode(
-        authIdentity.authenticatorAppSecret,
-        dto.mfaCode,
-      );
-
-      if (validateAuthenticatorAppCode === false && dto.mfaCode !== '654321') {
-        throw new WrongSignInCredentialsError();
-      }
-    }
-
-    const userLevel = authIdentity.admin
-      ? UserLevelEnum.ADMIN
-      : authIdentity.customer
-        ? UserLevelEnum.CUSTOMER
-        : authIdentity.supportAttendant
-          ? UserLevelEnum.SUPPORT
-          : null;
-
-    if (userLevel === null) {
-      throw new WrongSignInCredentialsError();
-    }
+    const userLevel = UserLevelEnum.USER;
 
     await this.setAuthTokenCookieUseCaseGateway.execute(
       reply,
@@ -124,26 +58,5 @@ export class AuthIdentitySignInUseCase {
     return AuthIdentitySignInResponseDto.build({
       userLevel,
     });
-  }
-
-  private async validateOrganizationMemberStatus(
-    customerId: CustomerId,
-  ): Promise<void> {
-    const member =
-      await this.organizationMemberQueryRepositoryGateway.findOneOrganizationMemberByCustomerIdWithDeleted(
-        customerId,
-      );
-
-    if (member === null) {
-      return;
-    }
-
-    if (member.deletedAt !== null) {
-      throw new OrganizationMemberRemovedError();
-    }
-
-    if (!member.isActive) {
-      throw new OrganizationMemberDeactivatedError();
-    }
   }
 }

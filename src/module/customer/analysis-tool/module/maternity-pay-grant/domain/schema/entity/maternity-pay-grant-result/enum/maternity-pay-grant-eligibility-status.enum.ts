@@ -1,5 +1,0 @@
-export enum MaternityPayGrantEligibilityStatusEnum {
-  ELIGIBLE = 'ELIGIBLE',
-  NOT_ELIGIBLE = 'NOT_ELIGIBLE',
-  ELIGIBLE_WITH_PENDENCIES = 'ELIGIBLE_WITH_PENDENCIES',
-}

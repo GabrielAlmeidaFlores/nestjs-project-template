@@ -22,7 +22,7 @@ export class AuthIdentityForgotPasswordValidateCodeUseCase {
     const { email, code } = dto;
 
     const authIdentity =
-      await this.authIdentityQueryRepository.findOneAuthIdentityByEmailOrFederalDocument(
+      await this.authIdentityQueryRepository.findOneAuthIdentityByEmail(
         email,
       );
     if (!authIdentity) {
