@@ -7,10 +7,10 @@ import { ListDataOutputModel } from '@core/domain/repository/base/query/model/ou
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { PostTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/post.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { PostQueryRepositoryGateway } from '@module/social/post/domain/repository/post/query/post.query.repository.gateway';
-import { GetPostQueryResult } from '@module/social/post/domain/repository/post/query/result/get-post.query.result';
-import { PostId } from '@module/social/post/domain/schema/entity/post/value-object/post-id/post-id.value-object';
-import { UserId } from '@module/social/user/domain/schema/entity/user/value-object/user-id/user-id.value-object';
+import { PostQueryRepositoryGateway } from '@module/client/post/domain/repository/post/query/post.query.repository.gateway';
+import { GetPostQueryResult } from '@module/client/post/domain/repository/post/query/result/get-post.query.result';
+import { PostId } from '@module/client/post/domain/schema/entity/post/value-object/post-id/post-id.value-object';
+import { UserId } from '@module/client/user/domain/schema/entity/user/value-object/user-id/user-id.value-object';
 
 @Injectable()
 export class PostTypeormQueryRepository
@@ -27,9 +27,7 @@ export class PostTypeormQueryRepository
     super(repository);
   }
 
-  public async findOnePostById(
-    id: PostId,
-  ): Promise<GetPostQueryResult | null> {
+  public async findOnePostById(id: PostId): Promise<GetPostQueryResult | null> {
     const data = await this.findOne({ where: { id: id.toString() } });
 
     if (data === null) {
@@ -42,13 +40,20 @@ export class PostTypeormQueryRepository
   public async listPosts(
     pagination: ListDataInputModel,
   ): Promise<ListDataOutputModel<GetPostQueryResult>> {
-    const result = await this.list(pagination, { order: { createdAt: 'DESC' } });
+    const result = await this.list(pagination, {
+      order: { createdAt: 'DESC' },
+    });
 
     const resource = result.resource.map((item) =>
       this.mapperGateway.map(item, PostTypeormEntity, GetPostQueryResult),
     );
 
-    return new ListDataOutputModel({ page: result.page, limit: result.limit, totalItems: result.totalItems, resource });
+    return new ListDataOutputModel({
+      page: result.page,
+      limit: result.limit,
+      totalItems: result.totalItems,
+      resource,
+    });
   }
 
   public async listPostsByAuthorId(
@@ -64,6 +69,11 @@ export class PostTypeormQueryRepository
       this.mapperGateway.map(item, PostTypeormEntity, GetPostQueryResult),
     );
 
-    return new ListDataOutputModel({ page: result.page, limit: result.limit, totalItems: result.totalItems, resource });
+    return new ListDataOutputModel({
+      page: result.page,
+      limit: result.limit,
+      totalItems: result.totalItems,
+      resource,
+    });
   }
 }

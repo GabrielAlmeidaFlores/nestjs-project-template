@@ -5,7 +5,7 @@ import { HashedPassword } from '@module/generic/auth-identity/domain/schema/enti
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { Email } from '@core/domain/schema/value-object/email/email.value-object';
-import type { AuthIdentityEntityPropsInterface } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/auth-identity.entity.props.interface';
+import type { AuthIdentityEntityPropsInputModel } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/auth-identity.entity.props.input.model';
 
 export class AuthIdentityEntity extends BaseEntity<AuthIdentityId> {
   @Description('User email.')
@@ -19,7 +19,7 @@ export class AuthIdentityEntity extends BaseEntity<AuthIdentityId> {
 
   protected readonly _type = AuthIdentityEntity.name;
 
-  public constructor(props: AuthIdentityEntityPropsInterface) {
+  public constructor(props: AuthIdentityEntityPropsInputModel) {
     AuthIdentityEntity.validatePassword(props.password);
 
     super(AuthIdentityId, props);

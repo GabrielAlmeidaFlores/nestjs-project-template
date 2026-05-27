@@ -5,7 +5,7 @@ import { IsDefined, IsOptional, ValidateNested } from 'class-validator';
 
 import { BaseDtoProperty } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/base-dto-property.decorator';
 
-import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/interface/base-dto-property.decorator.props.interface';
+import type { BaseDtoPropertyDecoratorPropsInputModel } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/model/input/base-dto-property.decorator.props.input.model';
 import type { TypeHelpOptions } from 'class-transformer';
 import type { ValidationArguments } from 'class-validator';
 
@@ -121,7 +121,7 @@ function buildJsonToObjectTransform(
 
 export function BaseDtoObjectProperty(
   typeFunction: (type?: TypeHelpOptions) => Function,
-  props?: BaseDtoPropertyDecoratorPropsInterface,
+  props?: BaseDtoPropertyDecoratorPropsInputModel,
 ): PropertyDecorator {
   const propertyIsRequired: boolean = (props?.required ?? true) === true;
   const isArray: boolean = props?.isArray === true;

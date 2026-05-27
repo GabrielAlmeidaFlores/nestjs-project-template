@@ -22,6 +22,8 @@ export class SendGridService implements EmailGateway {
     const emailTemplateParametersCopy: Record<string, string> = {
       ...props.emailTemplateParameters,
       currentYear: new Date().getFullYear().toString(),
+      appName: EmailApplicationVariable.APP_NAME,
+      supportEmail: EmailApplicationVariable.APP_SUPPORT_EMAIL,
     };
 
     Object.keys(emailTemplateParametersCopy).forEach((key) => {

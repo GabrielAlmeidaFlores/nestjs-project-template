@@ -7,7 +7,7 @@ export class SignozApplicationVariable extends AppConfig {
   public static readonly source = new EnvironmentVariableService();
 
   public static readonly defaultSignozEndpoint = 'http://localhost:4318';
-  public static readonly defaultServiceName = 'agiliza-previ-back';
+  public static readonly defaultServiceName = 'nestjs-template';
 
   public static readonly SIGNOZ_ENDPOINT =
     SignozApplicationVariable.source.getValueOrDefault(

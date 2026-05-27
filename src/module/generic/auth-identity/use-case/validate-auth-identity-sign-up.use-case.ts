@@ -7,9 +7,7 @@ import type { ValidateAuthIdentitySignUpRequestDto } from '@module/generic/auth-
 import type { ValidateAuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/validate-auth-identity-sign-up.use-case-gateway';
 
 @Injectable()
-export class ValidateAuthIdentitySignUpUseCase
-  implements ValidateAuthIdentitySignUpUseCaseGateway
-{
+export class ValidateAuthIdentitySignUpUseCase implements ValidateAuthIdentitySignUpUseCaseGateway {
   protected readonly _type = ValidateAuthIdentitySignUpUseCase.name;
 
   public constructor(

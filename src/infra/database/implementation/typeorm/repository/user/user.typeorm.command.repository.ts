@@ -6,9 +6,9 @@ import { TransactionType } from '@core/domain/repository/base/transaction/type/t
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
 import { UserTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/user.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { UserCommandRepositoryGateway } from '@module/social/user/domain/repository/user/command/user.command.repository.gateway';
-import { UserEntity } from '@module/social/user/domain/schema/entity/user/user.entity';
-import { UserId } from '@module/social/user/domain/schema/entity/user/value-object/user-id/user-id.value-object';
+import { UserCommandRepositoryGateway } from '@module/client/user/domain/repository/user/command/user.command.repository.gateway';
+import { UserEntity } from '@module/client/user/domain/schema/entity/user/user.entity';
+import { UserId } from '@module/client/user/domain/schema/entity/user/value-object/user-id/user-id.value-object';
 
 @Injectable()
 export class UserTypeormCommandRepository

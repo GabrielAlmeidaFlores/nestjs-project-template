@@ -6,11 +6,11 @@ import { IsOptional, ValidateNested } from 'class-validator';
 import { BaseDtoProperty } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/base-dto-property.decorator';
 
 import type { BaseValueObject } from '@core/domain/schema/value-object/base/base.value-object';
-import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/interface/base-dto-property.decorator.props.interface';
+import type { BaseDtoPropertyDecoratorPropsInputModel } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/model/input/base-dto-property.decorator.props.input.model';
 
 export function ResponseDtoValueObjectProperty<T extends BaseValueObject<T>>(
   valueObjectClass: new (value: string) => T,
-  props?: BaseDtoPropertyDecoratorPropsInterface,
+  props?: BaseDtoPropertyDecoratorPropsInputModel,
 ): PropertyDecorator {
   const propertyIsRequired = props?.required ?? true;
   const isArray = props?.isArray === true;

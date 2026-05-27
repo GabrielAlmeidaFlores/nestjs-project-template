@@ -4,7 +4,7 @@ import { Expose } from 'class-transformer';
 
 import { DTO_PROPS_SYMBOL } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/symbol/dto-props.symbol';
 
-import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/interface/base-dto-property.decorator.props.interface';
+import type { BaseDtoPropertyDecoratorPropsInputModel } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/model/input/base-dto-property.decorator.props.input.model';
 import type { DtoPropMetaType } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/type/dto-props-metadata.type';
 
 import 'reflect-metadata';
@@ -60,7 +60,7 @@ function createStoreMetadataDecorator(
 
 export function BaseDtoProperty(
   designType: unknown,
-  props?: BaseDtoPropertyDecoratorPropsInterface,
+  props?: BaseDtoPropertyDecoratorPropsInputModel,
 ): PropertyDecorator {
   const propertyIsRequired = props?.required ?? true;
   const isArray = props?.isArray === true;

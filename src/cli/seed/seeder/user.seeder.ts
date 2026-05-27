@@ -1,18 +1,20 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { SeederInterface } from '@cli/seed/interface/seeder.interface';
+import { BaseSeeder } from '@cli/seed/base.seeder';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
+import { UserCommandRepositoryGateway } from '@module/client/user/domain/repository/user/command/user.command.repository.gateway';
+import { UserQueryRepositoryGateway } from '@module/client/user/domain/repository/user/query/user.query.repository.gateway';
+import { UserEntity } from '@module/client/user/domain/schema/entity/user/user.entity';
+import { UserEntityPropsInputModel } from '@module/client/user/domain/schema/entity/user/user.entity.props.input.model';
 import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
 import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
 import { AuthIdentityEntity } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/auth-identity.entity';
+import { AuthIdentityEntityPropsInputModel } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/auth-identity.entity.props.input.model';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
-import { UserCommandRepositoryGateway } from '@module/social/user/domain/repository/user/command/user.command.repository.gateway';
-import { UserQueryRepositoryGateway } from '@module/social/user/domain/repository/user/query/user.query.repository.gateway';
-import { UserEntity } from '@module/social/user/domain/schema/entity/user/user.entity';
 
 @Injectable()
-export class UserSeeder implements SeederInterface {
+export class UserSeeder extends BaseSeeder {
   protected readonly _type = UserSeeder.name;
 
   private readonly adminEmail = 'admin@example.com';
@@ -29,7 +31,9 @@ export class UserSeeder implements SeederInterface {
     private readonly userQueryRepositoryGateway: UserQueryRepositoryGateway,
     @Inject(UserCommandRepositoryGateway)
     private readonly userCommandRepositoryGateway: UserCommandRepositoryGateway,
-  ) {}
+  ) {
+    super();
+  }
 
   public async execute(): Promise<Array<TransactionType>> {
     const email = new Email(this.adminEmail);
@@ -45,12 +49,14 @@ export class UserSeeder implements SeederInterface {
 
     const authIdentityId = new AuthIdentityId();
 
-    const authIdentity = new AuthIdentityEntity({
-      id: authIdentityId,
-      email,
-      password: this.adminPassword,
-      isActive: true,
-    });
+    const authIdentity = new AuthIdentityEntity(
+      AuthIdentityEntityPropsInputModel.build({
+        id: authIdentityId,
+        email,
+        password: this.adminPassword,
+        isActive: true,
+      }),
+    );
 
     const existingUser =
       await this.userQueryRepositoryGateway.findOneUserByUsername(
@@ -61,12 +67,14 @@ export class UserSeeder implements SeederInterface {
       return [];
     }
 
-    const user = new UserEntity({
-      authIdentityId,
-      name: this.adminName,
-      username: this.adminUsername,
-      bio: null,
-    });
+    const user = new UserEntity(
+      UserEntityPropsInputModel.build({
+        authIdentityId,
+        name: this.adminName,
+        username: this.adminUsername,
+        bio: null,
+      }),
+    );
 
     return [
       this.authIdentityCommandRepositoryGateway.createAuthIdentity(

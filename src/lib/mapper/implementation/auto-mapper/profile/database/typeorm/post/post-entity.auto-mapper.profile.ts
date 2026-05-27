@@ -3,10 +3,11 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { PostTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/post.typeorm.entity';
-import { GetPostQueryResult } from '@module/social/post/domain/repository/post/query/result/get-post.query.result';
-import { PostEntity } from '@module/social/post/domain/schema/entity/post/post.entity';
-import { PostId } from '@module/social/post/domain/schema/entity/post/value-object/post-id/post-id.value-object';
-import { UserId } from '@module/social/user/domain/schema/entity/user/value-object/user-id/user-id.value-object';
+import { GetPostQueryResult } from '@module/client/post/domain/repository/post/query/result/get-post.query.result';
+import { PostEntity } from '@module/client/post/domain/schema/entity/post/post.entity';
+import { PostEntityPropsInputModel } from '@module/client/post/domain/schema/entity/post/post.entity.props.input.model';
+import { PostId } from '@module/client/post/domain/schema/entity/post/value-object/post-id/post-id.value-object';
+import { UserId } from '@module/client/user/domain/schema/entity/user/value-object/user-id/user-id.value-object';
 
 @Injectable()
 export class PostEntityAutoMapperProfile {
@@ -24,14 +25,16 @@ export class PostEntityAutoMapperProfile {
 
   private mapOrmEntityToDomainEntity(): void {
     const convert = (source: PostTypeormEntity): PostEntity =>
-      new PostEntity({
-        id: new PostId(source.id),
-        authorId: new UserId(source.authorId),
-        content: source.content,
-        createdAt: source.createdAt,
-        updatedAt: source.updatedAt,
-        deletedAt: source.deletedAt,
-      });
+      new PostEntity(
+        PostEntityPropsInputModel.build({
+          id: new PostId(source.id),
+          authorId: new UserId(source.authorId),
+          content: source.content,
+          createdAt: source.createdAt,
+          updatedAt: source.updatedAt,
+          deletedAt: source.deletedAt,
+        }),
+      );
 
     createMap(
       this.mapper,

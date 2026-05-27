@@ -2,21 +2,21 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
+import { UserCommandRepositoryGateway } from '@module/client/user/domain/repository/user/command/user.command.repository.gateway';
+import { UserEntity } from '@module/client/user/domain/schema/entity/user/user.entity';
+import { UserEntityPropsInputModel } from '@module/client/user/domain/schema/entity/user/user.entity.props.input.model';
 import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
 import { AuthIdentityEntity } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/auth-identity.entity';
+import { AuthIdentityEntityPropsInputModel } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/auth-identity.entity.props.input.model';
 import { AuthIdentitySignUpRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-sign-up.request.dto';
 import { ValidateAuthIdentitySignUpRequestDto } from '@module/generic/auth-identity/dto/request/validate-auth-identity-sign-up.request.dto';
 import { AuthIdentitySignUpResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-sign-up.response.dto';
 import { ValidateAuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/validate-auth-identity-sign-up.use-case-gateway';
-import { UserCommandRepositoryGateway } from '@module/social/user/domain/repository/user/command/user.command.repository.gateway';
-import { UserEntity } from '@module/social/user/domain/schema/entity/user/user.entity';
 
 import type { AuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/auth-identity-sign-up.use-case-gateway';
 
 @Injectable()
-export class AuthIdentitySignUpUseCase
-  implements AuthIdentitySignUpUseCaseGateway
-{
+export class AuthIdentitySignUpUseCase implements AuthIdentitySignUpUseCaseGateway {
   protected readonly _type = AuthIdentitySignUpUseCase.name;
 
   public constructor(
@@ -37,16 +37,20 @@ export class AuthIdentitySignUpUseCase
       ValidateAuthIdentitySignUpRequestDto.build({ email: dto.email }),
     );
 
-    const authIdentity = new AuthIdentityEntity({
-      email: new Email(dto.email.toString()),
-      password: dto.password,
-    });
+    const authIdentity = new AuthIdentityEntity(
+      AuthIdentityEntityPropsInputModel.build({
+        email: new Email(dto.email.toString()),
+        password: dto.password,
+      }),
+    );
 
-    const user = new UserEntity({
-      authIdentityId: authIdentity.id,
-      name: dto.name,
-      username: dto.username,
-    });
+    const user = new UserEntity(
+      UserEntityPropsInputModel.build({
+        authIdentityId: authIdentity.id,
+        name: dto.name,
+        username: dto.username,
+      }),
+    );
 
     const createAuthIdentity =
       this.authIdentityCommandRepositoryGateway.createAuthIdentity(

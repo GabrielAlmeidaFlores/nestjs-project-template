@@ -21,10 +21,6 @@ import { SystemLogCommandGateway } from '@shared/system/system-log/system-log.co
 
 import type { FastifyRequest, FastifyReply } from 'fastify';
 
-/**
- * Persiste chamadas HTTP em `system_logs`. Independente do {@link LoggingInterceptor}
- * (console / OpenTelemetry).
- */
 @Injectable()
 export class SystemLogInterceptor implements NestInterceptor {
   private static readonly MAX_STACK_DB_LENGTH = 20000;

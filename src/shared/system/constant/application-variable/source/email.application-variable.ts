@@ -15,6 +15,20 @@ export class EmailApplicationVariable {
       String,
     );
 
+  public static readonly APP_NAME =
+    EmailApplicationVariable.source.getValueOrDefault<string>(
+      'APP_NAME',
+      String,
+      'NestJS Template',
+    );
+
+  public static readonly APP_SUPPORT_EMAIL =
+    EmailApplicationVariable.source.getValueOrDefault<string>(
+      'APP_SUPPORT_EMAIL',
+      String,
+      'support@example.com',
+    );
+
   public static readonly EMAIL_SIGN_IN_VERIFICATION_CODE_TEMPLATE =
     EmailApplicationVariable.source.getValueOrDefault<string>(
       'EMAIL_SIGN_IN_VERIFICATION_CODE_TEMPLATE',
@@ -26,7 +40,7 @@ export class EmailApplicationVariable {
     EmailApplicationVariable.source.getValueOrDefault<string>(
       'EMAIL_SIGN_IN_VERIFICATION_CODE_SUBJECT',
       String,
-      'Agiliza Previ - Código de verificação',
+      'Verification Code',
     );
 
   public static readonly EMAIL_FORGOT_PASSWORD_CODE_TEMPLATE =
@@ -40,63 +54,7 @@ export class EmailApplicationVariable {
     EmailApplicationVariable.source.getValueOrDefault<string>(
       'EMAIL_FORGOT_PASSWORD_SUBJECT',
       String,
-      'Agiliza Previ - Esqueceu senha',
-    );
-
-  public static readonly EMAIL_PAYMENT_PLAN_PURCHASE_TEMPLATE =
-    EmailApplicationVariable.source.getValueOrDefault<string>(
-      'EMAIL_PAYMENT_PLAN_PURCHASE_TEMPLATE',
-      String,
-      'payment-plan-purchase.html',
-    );
-
-  public static readonly EMAIL_PAYMENT_PLAN_PURCHASE_SUBJECT =
-    EmailApplicationVariable.source.getValueOrDefault<string>(
-      'EMAIL_PAYMENT_PLAN_PURCHASE_SUBJECT',
-      String,
-      'Agiliza Previ - Confirmação de Pagamento do Plano',
-    );
-
-  public static readonly EMAIL_LEGAL_PROCEEDING_UPDATE_TEMPLATE =
-    EmailApplicationVariable.source.getValueOrDefault<string>(
-      'EMAIL_LEGAL_PROCEEDING_UPDATE_TEMPLATE',
-      String,
-      'legal-proceeding-update.html',
-    );
-
-  public static readonly EMAIL_LEGAL_PROCEEDING_UPDATE_SUBJECT =
-    EmailApplicationVariable.source.getValueOrDefault<string>(
-      'EMAIL_LEGAL_PROCEEDING_UPDATE_SUBJECT',
-      String,
-      'Agiliza Previ - Atualização de Processo',
-    );
-
-  public static readonly EMAIL_ORGANIZATION_INVITE_TEMPLATE =
-    EmailApplicationVariable.source.getValueOrDefault<string>(
-      'EMAIL_ORGANIZATION_INVITE_TEMPLATE',
-      String,
-      'convite-organizacao.html',
-    );
-
-  public static readonly EMAIL_ORGANIZATION_INVITE_SUBJECT =
-    EmailApplicationVariable.source.getValueOrDefault<string>(
-      'EMAIL_ORGANIZATION_INVITE_SUBJECT',
-      String,
-      'Agiliza Previ - Convite para Organização',
-    );
-
-  public static readonly EMAIL_SUPPORT_ATTENDANT_INVITE_TEMPLATE =
-    EmailApplicationVariable.source.getValueOrDefault<string>(
-      'EMAIL_SUPPORT_ATTENDANT_INVITE_TEMPLATE',
-      String,
-      'convite-suporte-tecnico.html',
-    );
-
-  public static readonly EMAIL_SUPPORT_ATTENDANT_INVITE_SUBJECT =
-    EmailApplicationVariable.source.getValueOrDefault<string>(
-      'EMAIL_SUPPORT_ATTENDANT_INVITE_SUBJECT',
-      String,
-      'Agiliza Previ - Convite de Suporte Técnico',
+      'Reset Your Password',
     );
 
   public static readonly EMAIL_SEND_GRID_KEY =

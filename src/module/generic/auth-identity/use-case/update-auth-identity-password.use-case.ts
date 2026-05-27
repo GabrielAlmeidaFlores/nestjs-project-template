@@ -5,6 +5,7 @@ import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/t
 import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
 import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
 import { AuthIdentityEntity } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/auth-identity.entity';
+import { AuthIdentityEntityPropsInputModel } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/auth-identity.entity.props.input.model';
 import { UpdateAuthIdentityRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-update-password.request.dto';
 import { UpdateAuthIdentityResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-update-password.response.dto';
 import { NewPasswordMatchesCurrentError } from '@module/generic/auth-identity/error/new-password-matches-current.error';
@@ -50,10 +51,17 @@ export class UpdateAuthIdentityPasswordUseCase {
     if (isSamePasswordAsPrevious) {
       throw new NewPasswordMatchesCurrentError();
     }
-    const authEntity = new AuthIdentityEntity({
-      ...authIdentity,
-      password: dto.newPassword,
-    });
+    const authEntity = new AuthIdentityEntity(
+      AuthIdentityEntityPropsInputModel.build({
+        id: authIdentity.id,
+        email: authIdentity.email,
+        password: dto.newPassword,
+        isActive: authIdentity.isActive,
+        createdAt: authIdentity.createdAt,
+        updatedAt: authIdentity.updatedAt,
+        deletedAt: authIdentity.deletedAt,
+      }),
+    );
 
     const updateAuthIdentity =
       this.authIdentityCommandRepositoryGateway.updateAuthIdentity(

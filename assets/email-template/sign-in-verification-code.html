@@ -1,108 +1,136 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Código de Acesso</title>
+    <title>Your Sign-In Code</title>
     <style>
       body {
         margin: 0;
         padding: 0;
-        background-color: #ffffff;
+        background-color: #f4f6f9;
         font-family: Arial, sans-serif;
         color: #1a1a1a;
+      }
+      .wrapper {
+        padding: 32px 16px;
       }
       .container {
         max-width: 540px;
         margin: 0 auto;
-        padding: 24px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
       }
-      .logo {
+      .logo-bar {
+        background-color: #1a1a2e;
+        padding: 24px 32px;
         text-align: center;
-        margin: 32px;
-        margin-bottom: 64px;
+      }
+      .logo-text {
+        display: inline-block;
+        font-family: monospace;
+        font-size: 20px;
+        font-weight: bold;
+        color: #e0e0e0;
+        letter-spacing: 1px;
+      }
+      .body {
+        padding: 32px;
       }
       .title {
-        font-size: 24px;
+        font-size: 22px;
         font-weight: bold;
         margin-bottom: 16px;
         color: #0f2033;
       }
       .content {
-        font-size: 16px;
-        line-height: 1.5;
-        color: #161515;
+        font-size: 15px;
+        line-height: 1.6;
+        color: #333333;
       }
       .code-box {
-        margin-top: 32px;
-        margin-right: auto;
-        margin-left: auto;
-        padding: 24px;
+        margin: 28px auto;
+        padding: 20px 32px;
         text-align: center;
-        font-size: 32px;
+        font-size: 34px;
         font-weight: bold;
-        color: #52525c;
+        color: #1a1a2e;
+        letter-spacing: 6px;
+        background-color: #f0f4ff;
+        border-radius: 6px;
         width: fit-content;
-        letter-spacing: 2px;
-        background-color: #f7fafc;
-        margin-top: 8px;
+        border: 1px solid #d0d8f0;
+      }
+      .expiry-note {
+        font-size: 13px;
+        color: #888888;
+        text-align: center;
+        margin-top: -12px;
+        margin-bottom: 24px;
+      }
+      .divider {
+        border: none;
+        border-top: 1px solid #eeeeee;
+        margin: 28px 0;
       }
       .footer {
-        color: #000000;
-        font-size: 16px;
-        margin-top: 40px;
+        font-size: 13px;
+        color: #666666;
+        line-height: 1.6;
       }
-      .footer-email {
-        color: #000000;
+      .footer a {
+        color: #2d77b1;
         text-decoration: none;
       }
-      .footer-email:hover {
+      .footer a:hover {
         text-decoration: underline;
       }
       .bottom-bar {
-        max-width: 540px;
-        min-height: 24px;
-        align-content: center;
-        margin-left: auto;
-        margin-right: auto;
-        background-color: #2d77b1;
-        color: #ffffff;
-        padding: 16px;
-        font-size: 10px;
-        margin-top: 20px;
+        background-color: #1a1a2e;
+        color: #aaaaaa;
+        padding: 14px 32px;
+        font-size: 11px;
+        text-align: center;
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <div class="logo">
-        <img
-          src="https://i.imgur.com/afpoGXp_d.webp?maxwidth=760&fidelity=grand"
-          alt="Ilustração de renovação"
-          width="200"
-        />
+    <div class="wrapper">
+      <div class="container">
+        <div class="logo-bar">
+          <span class="logo-text">{{appName}}</span>
+        </div>
+        <div class="body">
+          <div class="title">Your Sign-In Code</div>
+          <div class="content">
+            <p>Hi {{name}},</p>
+            <p>
+              Use the verification code below to complete your sign-in.
+              Do not share this code with anyone.
+            </p>
+          </div>
+          <div class="code-box">{{code}}</div>
+          <p class="expiry-note">This code expires in 3 minutes.</p>
+          <div class="content">
+            <p>
+              If you did not attempt to sign in, please secure your account
+              immediately and contact our support team.
+            </p>
+          </div>
+          <hr class="divider" />
+          <div class="footer">
+            <p>
+              Need help? Contact us at
+              <a href="mailto:{{supportEmail}}">{{supportEmail}}</a>
+            </p>
+            <p>— The {{appName}} Team</p>
+          </div>
+        </div>
+        <div class="bottom-bar">
+          &copy; {{currentYear}} {{appName}}. All rights reserved.
+        </div>
       </div>
-      <div class="title">Código de Acesso</div>
-      <div class="content">
-        <p>Olá {{name}},</p>
-        <p>
-          Seja bem-vindo ao AgilizaPrevi! Aqui está seu código para finalizar a
-          autenticação:
-        </p>
-      </div>
-      <div class="code-box">{{code}}</div>
-      <div class="footer">
-        <p>
-          Dúvidas? Estamos aqui para ajudar:
-          <a class="footer-email" href="mailto:suporte@agilizaprevi.com"
-            >suporte@agilizaprevi.com</a
-          >
-        </p>
-        <p>Equipe AgilizaPrevi.</p>
-      </div>
-    </div>
-    <div class="bottom-bar">
-      © {{currentYear}}  AgilizaPrevi. Todos os direitos reservados
     </div>
   </body>
 </html>

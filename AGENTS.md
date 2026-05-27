@@ -77,9 +77,17 @@ src/
 │   │   └── repository/           # Base repository gateways
 │   └── error/                    # Base error classes
 │
-├── module/                        # Feature modules (Clean Architecture)
-│   ├── customer/                 # Customer-facing features
-│   │   └── analysis-tool/
+├── module/                        # Feature modules — organized by USER LEVEL
+│   ├── admin/                    # Admin-only features (UserLevelEnum.ADMIN)
+│   │   └── {feature}/
+│   │       ├── domain/
+│   │       ├── use-case/
+│   │       ├── dto/
+│   │       ├── error/
+│   │       ├── *.controller.ts
+│   │       └── *.module.ts
+│   ├── client/                   # Client-facing features (UserLevelEnum.USER)
+│   │   └── {feature}/
 │   │       ├── domain/           # Domain layer
 │   │       │   ├── schema/
 │   │       │   │   ├── entity/  # Domain entities
@@ -95,12 +103,14 @@ src/
 │   │       ├── dto/             # Presentation layer
 │   │       │   ├── request/     # Input DTOs
 │   │       │   └── response/    # Output DTOs
-│   │       ├── interface/       # TypeScript interfaces (shared within the module)
+│   │       ├── model/           # Shared data models (input.model / output.model)
+│   │       │   ├── input/       # *.input.model.ts — data flowing into a layer
+│   │       │   └── output/      # *.output.model.ts — data flowing out of a layer
 │   │       ├── error/           # Domain-specific errors
 │   │       ├── *.controller.ts  # HTTP controllers
 │   │       └── *.module.ts      # NestJS module
-│   ├── admin/                    # Admin features
-│   └── generic/                  # Generic/shared features
+│   └── generic/                  # Generic/shared features (multiple user levels)
+│       └── {feature}/
 │
 ├── infra/                         # Infrastructure layer
 │   ├── database/
@@ -193,25 +203,23 @@ export class ParentEntity extends BaseEntity<ParentId> {
 
 ```typescript
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
-import { AnalysisId } from './value-object/analysis-id/analysis-id.value-object';
-import { AnalysisStatusEnum } from './enum/analysis-status.enum';
+import { PostId } from './value-object/post-id/post-id.value-object';
+import { UserId } from '@module/client/user/domain/schema/entity/user/value-object/user-id/user-id.value-object';
 
-export class AnalysisEntity extends BaseEntity<AnalysisId> {
-  public readonly clientId: ClientId;
-  public readonly status: AnalysisStatusEnum;
-  public readonly completedAt: Date | null;
+export class PostEntity extends BaseEntity<PostId> {
+  public readonly authorId: UserId;
+  public readonly content: string;
 
-  protected readonly _type = AnalysisEntity.name;
+  protected readonly _type = PostEntity.name;
 
-  public constructor(props: AnalysisEntityPropsInterface) {
-    super(AnalysisId, props);
-    this.clientId = props.clientId;
-    this.status = props.status;
-    this.completedAt = props.completedAt ?? null;
+  public constructor(props: PostEntityPropsInputModel) {
+    super(PostId, props);
+    this.authorId = props.authorId;
+    this.content = props.content;
   }
 
-  public isCompleted(): boolean {
-    return this.status === AnalysisStatusEnum.COMPLETED;
+  public isOwnedBy(userId: UserId): boolean {
+    return this.authorId.toString() === userId.toString();
   }
 }
 ```
@@ -269,15 +277,15 @@ export class SomeEntity extends BaseEntity<SomeId> {
 **Example — required field (validated before `super()`)**:
 
 ```typescript
-export class CustomerEntity extends BaseEntity<CustomerId> {
+export class UserEntity extends BaseEntity<UserId> {
   public readonly name: string;
 
-  protected readonly _type = CustomerEntity.name;
+  protected readonly _type = UserEntity.name;
 
-  public constructor(props: CustomerEntityPropsInterface) {
-    CustomerEntity.validateName(props.name);
+  public constructor(props: UserEntityPropsInputModel) {
+    UserEntity.validateName(props.name);
 
-    super(CustomerId, props);
+    super(UserId, props);
     this.name = props.name;
   }
 
@@ -292,7 +300,7 @@ export class CustomerEntity extends BaseEntity<CustomerId> {
         name.length <= maxLength,
         nameRegex.test(name),
       ],
-      () => new InvalidCustomerNameError({ minLength, maxLength }),
+      () => new InvalidUserNameError({ minLength, maxLength }),
     );
   }
 }
@@ -315,8 +323,8 @@ export class CustomerEntity extends BaseEntity<CustomerId> {
 ```typescript
 import { BaseValueObject } from '@core/domain/schema/value-object/base/base.value-object';
 
-export class AnalysisId extends BaseValueObject<string> {
-  protected readonly _type = AnalysisId.name;
+export class PostId extends BaseValueObject<string> {
+  protected readonly _type = PostId.name;
 
   public constructor(value: string) {
     super(value);
@@ -325,7 +333,7 @@ export class AnalysisId extends BaseValueObject<string> {
 
   private validate(): void {
     if (!this.value || typeof this.value !== 'string') {
-      throw new Error('Invalid Analysis ID');
+      throw new Error('Invalid Post ID');
     }
   }
 }
@@ -349,22 +357,22 @@ export class AnalysisId extends BaseValueObject<string> {
 
 ```typescript
 // Query Gateway
-export abstract class AnalysisQueryRepositoryGateway {
-  public abstract findById(id: AnalysisId): Promise<AnalysisEntity | null>;
+export abstract class PostQueryRepositoryGateway {
+  public abstract findOnePostById(id: PostId): Promise<PostEntity | null>;
 
-  public abstract listByClientId(
-    clientId: ClientId,
+  public abstract listPostsByAuthorId(
+    authorId: UserId,
     pagination: ListDataInputModel,
-  ): Promise<ListDataOutputModel<AnalysisEntity>>;
+  ): Promise<ListDataOutputModel<PostEntity>>;
 }
 
 // Command Gateway
-export abstract class AnalysisCommandRepositoryGateway {
-  public abstract create(entity: AnalysisEntity): Promise<AnalysisEntity>;
+export abstract class PostCommandRepositoryGateway {
+  public abstract createPost(entity: PostEntity): TransactionType;
 
-  public abstract update(entity: AnalysisEntity): Promise<AnalysisEntity>;
+  public abstract updatePost(id: PostId, entity: PostEntity): TransactionType;
 
-  public abstract delete(id: AnalysisId): Promise<void>;
+  public abstract deletePost(id: PostId): TransactionType;
 }
 ```
 
@@ -378,7 +386,7 @@ export abstract class AnalysisCommandRepositoryGateway {
 - ✅ Single responsibility (one business operation)
 - ✅ Orchestrate domain entities and gateways
 - ✅ Keep ALL business logic within the use case (private methods)
-- ✅ Use interfaces defined at the top of the file for internal types
+- ✅ Use internal classes at the top of the file for internal types (NO `interface` keyword)
 - ✅ Injectable with `@Injectable()` decorator
 - ✅ Inject gateways via constructor
 - ❌ NO separate `*.util.ts` files for business logic
@@ -390,70 +398,43 @@ export abstract class AnalysisCommandRepositoryGateway {
 
 ```typescript
 import { Inject, Injectable } from '@nestjs/common';
-import {} from /* domain imports */ '@module/{domain}/domain/...';
-import {} from /* DTO imports */ '@module/{domain}/dto/...';
-
-// Internal interfaces for the use case
-interface InternalDataStructure {
-  field1: string;
-  field2: number;
-}
+import { PostQueryRepositoryGateway } from '@module/client/post/domain/repository/post/query/post.query.repository.gateway';
+import { GetPostRequestDto } from '@module/client/post/dto/request/get-post.request.dto';
+import { GetPostResponseDto } from '@module/client/post/dto/response/get-post.response.dto';
+import { PostNotFoundError } from '@module/client/post/error/post-not-found.error';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 @Injectable()
-export class ProcessAnalysisUseCase {
-  protected readonly _type = ProcessAnalysisUseCase.name;
+export class GetPostUseCase {
+  protected readonly _type = GetPostUseCase.name;
 
   public constructor(
-    @Inject(AnalysisQueryRepositoryGateway)
-    private readonly analysisQueryRepositoryGateway: AnalysisQueryRepositoryGateway,
-    @Inject(AnalysisCommandRepositoryGateway)
-    private readonly analysisCommandRepositoryGateway: AnalysisCommandRepositoryGateway,
+    @Inject(PostQueryRepositoryGateway)
+    private readonly postQueryRepositoryGateway: PostQueryRepositoryGateway,
   ) {}
 
   public async execute(
     sessionData: SessionDataModel,
-    dto: ProcessAnalysisRequestDto,
-  ): Promise<ProcessAnalysisResponseDto> {
-    // 1. Fetch data
-    const analysis = await this.analysisQueryRepositoryGateway.findById(dto.id);
+    dto: GetPostRequestDto,
+  ): Promise<GetPostResponseDto> {
+    const post = await this.fetchPostOrThrow(dto.postId);
 
-    if (!analysis) {
-      throw new AnalysisNotFoundError();
-    }
-
-    // 2. Business logic (using private methods)
-    const processedData = this.processData(analysis);
-    const result = this.calculateResult(processedData);
-
-    // 3. Persist changes
-    const updated =
-      await this.analysisCommandRepositoryGateway.update(analysis);
-
-    // 4. Return DTO
-    return ProcessAnalysisResponseDto.build({
-      id: updated.id,
-      result,
+    return GetPostResponseDto.build({
+      postId: post.id,
+      authorId: post.authorId,
+      content: post.content,
+      createdAt: post.createdAt,
     });
   }
 
-  private processData(analysis: AnalysisEntity): InternalDataStructure {
-    // Complex business logic here
-    return {
-      field1: this.transformField1(analysis),
-      field2: this.calculateField2(analysis),
-    };
-  }
+  private async fetchPostOrThrow(postId: PostId): Promise<PostEntity> {
+    const post = await this.postQueryRepositoryGateway.findOnePostById(postId);
 
-  private transformField1(analysis: AnalysisEntity): string {
-    return analysis.name.toUpperCase();
-  }
+    if (!post) {
+      throw new PostNotFoundError();
+    }
 
-  private calculateField2(analysis: AnalysisEntity): number {
-    return analysis.items.length * 2;
-  }
-
-  private calculateResult(data: InternalDataStructure): number {
-    return data.field2 * 100;
+    return post;
   }
 }
 ```
@@ -565,29 +546,28 @@ try {
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
-import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis/enum/analysis-status.enum';
 
-@Entity({ name: 'analysis' })
-export class AnalysisTypeormEntity extends BaseTypeormEntity {
-  @Column({ name: 'client_id', type: 'uuid' })
-  public clientId: string;
+@Entity({ name: 'post' })
+export class PostTypeormEntity extends BaseTypeormEntity {
+  @Column({ name: 'author_id', type: 'uuid' })
+  public authorId: string;
 
-  @Column({ name: 'status', type: 'varchar', length: 50 })
-  public status: AnalysisStatusEnum;
+  @Column({ name: 'content', type: 'text' })
+  public content: string;
 
   @Column({
-    name: 'completed_at',
+    name: 'published_at',
     type: 'timestamp',
     nullable: true,
     transformer: DateTransformer,
   })
-  public completedAt: Date | null;
+  public publishedAt: Date | null;
 
-  @ManyToOne(() => ClientTypeormEntity, (entity) => entity.analyses)
-  @JoinColumn({ name: 'client_id' })
-  public client?: ClientTypeormEntity;
+  @ManyToOne(() => UserTypeormEntity, (entity) => entity.posts)
+  @JoinColumn({ name: 'author_id' })
+  public author?: UserTypeormEntity;
 
-  protected override readonly _type = AnalysisTypeormEntity.name;
+  protected override readonly _type = PostTypeormEntity.name;
 }
 ```
 
@@ -613,23 +593,23 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { AnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis/query/analysis.query.repository.gateway';
-import { AnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis/analysis.entity';
-import { AnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/analysis/value-object/analysis-id/analysis-id.value-object';
-import { AnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis.typeorm.entity';
+import { PostQueryRepositoryGateway } from '@module/client/post/domain/repository/post/query/post.query.repository.gateway';
+import { PostEntity } from '@module/client/post/domain/schema/entity/post/post.entity';
+import { PostId } from '@module/client/post/domain/schema/entity/post/value-object/post-id/post-id.value-object';
+import { PostTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/post.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 
 @Injectable()
-export class AnalysisTypeormQueryRepository implements AnalysisQueryRepositoryGateway {
-  protected readonly _type = AnalysisTypeormQueryRepository.name;
+export class PostTypeormQueryRepository implements PostQueryRepositoryGateway {
+  protected readonly _type = PostTypeormQueryRepository.name;
 
   public constructor(
-    @InjectRepository(AnalysisTypeormEntity)
-    private readonly repository: Repository<AnalysisTypeormEntity>,
+    @InjectRepository(PostTypeormEntity)
+    private readonly repository: Repository<PostTypeormEntity>,
     private readonly mapperGateway: MapperGateway,
   ) {}
 
-  public async findById(id: AnalysisId): Promise<AnalysisEntity | null> {
+  public async findOnePostById(id: PostId): Promise<PostEntity | null> {
     const result = await this.repository.findOne({
       where: { id: id.toString() },
     });
@@ -638,11 +618,7 @@ export class AnalysisTypeormQueryRepository implements AnalysisQueryRepositoryGa
       return null;
     }
 
-    return this.mapperGateway.map(
-      result,
-      AnalysisTypeormEntity,
-      AnalysisEntity,
-    );
+    return this.mapperGateway.map(result, PostTypeormEntity, PostEntity);
   }
 }
 ```
@@ -666,32 +642,75 @@ export class AnalysisTypeormQueryRepository implements AnalysisQueryRepositoryGa
 **Example**:
 
 ```typescript
-import { Controller, Post, Body, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Body, HttpStatus, RequestMethod } from '@nestjs/common';
 
-import { ProcessAnalysisUseCase } from './use-case/process-analysis.use-case';
-import { ProcessAnalysisRequestDto } from './dto/request/process-analysis.request.dto';
-import { ProcessAnalysisResponseDto } from './dto/response/process-analysis.response.dto';
+import { CreatePostUseCase } from './use-case/create-post.use-case';
+import { GetPostUseCase } from './use-case/get-post.use-case';
+import { CreatePostRequestDto } from './dto/request/create-post.request.dto';
+import { CreatePostResponseDto } from './dto/response/create-post.response.dto';
+import { GetPostResponseDto } from './dto/response/get-post.response.dto';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { GenericControllerRoute } from '@shared/api/util/decorator/class/generic-controller-route/generic-controller-route.decorator';
+import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
+import { UserLevelEnum } from '@shared/api/util/decorator/method/build-endpoint-specification/enum/user-level.enum';
+import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object/parse-value-object.pipe';
+import { PostId } from '@module/client/post/domain/schema/entity/post/value-object/post-id/post-id.value-object';
 
-@ApiTags('Analysis')
-@Controller('customer/analysis')
-@UseGuards(AuthGuard)
-export class AnalysisController {
+@GenericControllerRoute('post')
+export class PostController {
+  protected readonly _type = PostController.name;
+
   public constructor(
-    private readonly processAnalysisUseCase: ProcessAnalysisUseCase,
+    private readonly createPostUseCase: CreatePostUseCase,
+    private readonly getPostUseCase: GetPostUseCase,
   ) {}
 
-  @Post('process')
-  @ApiOperation({ summary: 'Process an analysis' })
-  @ApiResponse({ status: 200, type: ProcessAnalysisResponseDto })
-  public async process(
+  @BuildEndpointSpecification({
+    summary: 'Criar publicação',
+    userLevel: [UserLevelEnum.USER],
+    http: {
+      path: '',
+      method: RequestMethod.POST,
+      type: CreatePostRequestDto,
+    },
+    tag: ['post'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Publicação criada com sucesso.',
+      type: CreatePostResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async create(
     @GetSessionData() sessionData: SessionDataModel,
-    @Body() dto: ProcessAnalysisRequestDto,
-  ): Promise<ProcessAnalysisResponseDto> {
-    return this.processAnalysisUseCase.execute(sessionData, dto);
+    @Body() dto: CreatePostRequestDto,
+  ): Promise<CreatePostResponseDto> {
+    return this.createPostUseCase.execute(sessionData, dto);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Obter publicação por ID',
+    userLevel: [UserLevelEnum.USER, UserLevelEnum.ADMIN],
+    http: {
+      path: ':postId',
+      method: RequestMethod.GET,
+    },
+    tag: ['post'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Publicação encontrada com sucesso.',
+      type: GetPostResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async getById(
+    @GetSessionData() sessionData: SessionDataModel,
+    @Param('postId', new ParseValueObjectPipe(PostId))
+    postId: PostId,
+  ): Promise<GetPostResponseDto> {
+    return this.getPostUseCase.execute(sessionData, postId);
   }
 }
 ```
@@ -709,7 +728,7 @@ export class AnalysisController {
 - ✅ **CRITICAL: DTOs MUST use optional properties (`field?: Type`) for nullable fields, NEVER `field: Type | null`**
 - ✅ **CRITICAL: When building DTOs from domain data with `null` values, omit the property entirely (do NOT pass `null` or `undefined`)**
 - ✅ **CRITICAL: If a field is a value object or enum in the domain, it MUST remain a value object or enum in the DTO** (do NOT convert to primitives like string)
-- ✅ **CRITICAL: DTO property names MUST match the value object/enum class name (camelCase)** to maintain maximum similarity (e.g., `PaymentPlanId` → `paymentPlanId`, NOT `planId`)
+- ✅ **CRITICAL: DTO property names MUST match the value object/enum class name (camelCase)** to maintain maximum similarity (e.g., `PostId` → `postId`, NOT `id`)
 - ✅ **CRITICAL: Update/PATCH response DTOs MUST return the entity ID (as a value object), NOT a success boolean or message**
 - ✅ **CRITICAL: Value Objects in Request DTOs MUST use `@RequestDtoValueObjectProperty(ValueObjectClass)` decorator, NEVER `@RequestDtoStringProperty` or `@RequestDtoNumberProperty`**
 - ❌ NO business logic
@@ -726,101 +745,100 @@ export class AnalysisController {
 import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
 import { RequestDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-string-property/request-dto-string-property.decorator';
 import { RequestDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-value-object-property/request-dto-value-object-property.decorator';
-import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
+import { PostId } from '@module/client/post/domain/schema/entity/post/value-object/post-id/post-id.value-object';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @RequestDto()
-export class ProcessAnalysisRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoValueObjectProperty(PaymentPlanId) // ✅ CORRECT: Value Object uses dedicated decorator
-  public paymentPlanId: PaymentPlanId; // ✅ CORRECT: Type is Value Object, not primitive
+export class CreateCommentRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoValueObjectProperty(PostId) // ✅ CORRECT: Value Object uses dedicated decorator
+  public postId: PostId; // ✅ CORRECT: Type is Value Object, not primitive
 
   @RequestDtoStringProperty() // ✅ CORRECT: Primitive string uses string decorator
-  public description: string;
+  public content: string;
 
-  protected override readonly _type = ProcessAnalysisRequestDto.name;
+  protected override readonly _type = CreateCommentRequestDto.name;
 }
 
 // ❌ WRONG - Request DTO with incorrect decorator for Value Object
 @RequestDto()
-export class WrongProcessAnalysisRequestDto extends BaseBuildableDtoObject {
+export class WrongCreateCommentRequestDto extends BaseBuildableDtoObject {
   @RequestDtoStringProperty() // ❌ WRONG: Should use @RequestDtoValueObjectProperty
-  public paymentPlanId: string; // ❌ WRONG: Should be PaymentPlanId value object
+  public postId: string; // ❌ WRONG: Should be PostId value object
 
-  protected override readonly _type = WrongProcessAnalysisRequestDto.name;
+  protected override readonly _type = WrongCreateCommentRequestDto.name;
 }
 
 // Response DTO - CORRECT: Using value objects and enums with proper naming
-import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis/enum/analysis-status.enum';
-import { AnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/analysis/value-object/analysis-id/analysis-id.value-object';
-import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
+import { PostId } from '@module/client/post/domain/schema/entity/post/value-object/post-id/post-id.value-object';
+import { UserId } from '@module/client/user/domain/schema/entity/user/value-object/user-id/user-id.value-object';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
-import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
-import { ResponseDtoNumberProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-number-property/response-dto-number-property.decorator';
+import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
+import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
-export class ProcessAnalysisResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoValueObjectProperty(AnalysisId) // ✅ CORRECT: Value object preserved
-  public analysisId: AnalysisId; // ✅ CORRECT: Property name matches class name (camelCase)
+export class GetPostResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(PostId) // ✅ CORRECT: Value object preserved
+  public postId: PostId; // ✅ CORRECT: Property name matches class name (camelCase)
 
-  @ResponseDtoValueObjectProperty(PaymentPlanId) // ✅ CORRECT: Value object preserved
-  public paymentPlanId: PaymentPlanId; // ✅ CORRECT: Full name "paymentPlanId", NOT shortened "planId"
+  @ResponseDtoValueObjectProperty(UserId) // ✅ CORRECT: Value object preserved
+  public authorId: UserId; // ✅ CORRECT: Full name "authorId", not shortened "user"
 
-  @ResponseDtoEnumProperty(AnalysisStatusEnum) // ✅ CORRECT: Enum preserved
-  public analysisStatus: AnalysisStatusEnum; // ✅ CORRECT: Property name matches enum name pattern
+  @ResponseDtoStringProperty()
+  public content: string; // ✅ CORRECT: Primitive for plain text
 
-  @ResponseDtoNumberProperty()
-  public result: number; // ✅ CORRECT: Primitive for calculations
+  @ResponseDtoDateProperty()
+  public createdAt: Date;
 
-  protected override readonly _type = ProcessAnalysisResponseDto.name;
+  protected override readonly _type = GetPostResponseDto.name;
 }
 
 // ❌ WRONG - Converting value objects to primitives
 @ResponseDto()
-export class WrongAnalysisResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoStringProperty() // ❌ WRONG: Should be AnalysisId value object
+export class WrongGetPostResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty() // ❌ WRONG: Should be PostId value object
   public id: string;
 
-  @ResponseDtoStringProperty() // ❌ WRONG: Should be AnalysisStatusEnum
-  public status: string;
+  @ResponseDtoStringProperty() // ❌ WRONG: Should be UserId value object
+  public author: string;
 
-  protected override readonly _type = WrongAnalysisResponseDto.name;
+  protected override readonly _type = WrongGetPostResponseDto.name;
 }
 
 // ❌ WRONG - Update response with success boolean
 @ResponseDto()
-export class WrongUpdateAnalysisResponseDto extends BaseBuildableDtoObject {
+export class WrongUpdatePostResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoBooleanProperty() // ❌ WRONG: Should return the ID, not success
   public success: boolean;
 
-  protected override readonly _type = WrongUpdateAnalysisResponseDto.name;
+  protected override readonly _type = WrongUpdatePostResponseDto.name;
 }
 
 // ✅ CORRECT - Update response with ID value object
 @ResponseDto()
-export class UpdateAnalysisResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoValueObjectProperty(AnalysisId) // ✅ CORRECT: Returns the ID
-  public analysisId: AnalysisId;
+export class UpdatePostResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(PostId) // ✅ CORRECT: Returns the ID
+  public postId: PostId;
 
-  protected override readonly _type = UpdateAnalysisResponseDto.name;
+  protected override readonly _type = UpdatePostResponseDto.name;
 }
 
 // ✅ CORRECT - Handling null values when building DTOs
 // When domain data has null values, omit the property instead of passing null
-const responseDto = CreateAnalysisResponseDto.build({
-  analysisId: new AnalysisId('123'),
+const responseDto = GetPostResponseDto.build({
+  postId: new PostId('123'),
+  authorId: new UserId('456'),
+  content: 'Hello world',
   // ✅ CORRECT: Use conditional spreading to omit null properties
-  ...(clientName !== null && { clientName }),
-  ...(clientEmail !== null && { clientEmail }),
-  ...(completedAt !== null && { completedAt }),
+  ...(publishedAt !== null && { publishedAt }),
 });
 
 // ❌ WRONG - Passing null or undefined to DTO builder
-const wrongDto = CreateAnalysisResponseDto.build({
-  analysisId: new AnalysisId('123'),
-  clientName: null, // ❌ WRONG: Don't pass null
-  clientEmail: undefined, // ❌ WRONG: Don't pass undefined
+const wrongDto = GetPostResponseDto.build({
+  postId: new PostId('123'),
+  publishedAt: null, // ❌ WRONG: Don't pass null
+  editedAt: undefined, // ❌ WRONG: Don't pass undefined
 });
 ```
 
@@ -835,16 +853,18 @@ const wrongDto = CreateAnalysisResponseDto.build({
 
 ```typescript
 // Domain entity (can have null)
-const entity = new AnalysisEntity({
-  clientName: string | null,
-  clientEmail: Email | null,
-});
+const post = new PostEntity(PostEntityPropsInputModel.build({
+  authorId: userId,
+  content: 'Hello world',
+  // bio is optional/nullable
+}));
 
 // DTO builder (omit null values)
-return ResponseDto.build({
-  requiredField: entity.id,
-  ...(entity.clientName !== null && { clientName: entity.clientName }),
-  ...(entity.clientEmail !== null && { clientEmail: entity.clientEmail }),
+return GetPostResponseDto.build({
+  postId: post.id,
+  authorId: post.authorId,
+  content: post.content,
+  ...(post.publishedAt !== null && { publishedAt: post.publishedAt }),
 });
 ```
 
@@ -893,15 +913,17 @@ import { Mapper, createMap, constructUsing } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
-import { AnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis.typeorm.entity';
+import { PostTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/post.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
-import { AnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis/analysis.entity';
-import { AnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/analysis/value-object/analysis-id/analysis-id.value-object';
-import { ClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/client/client.entity';
+import { PostEntity } from '@module/client/post/domain/schema/entity/post/post.entity';
+import { PostEntityPropsInputModel } from '@module/client/post/domain/schema/entity/post/post.entity.props.input.model';
+import { PostId } from '@module/client/post/domain/schema/entity/post/value-object/post-id/post-id.value-object';
+import { UserTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/user.typeorm.entity';
+import { UserEntity } from '@module/client/user/domain/schema/entity/user/user.entity';
 
 @Injectable()
-export class AnalysisEntityAutoMapperProfile {
-  protected readonly _type = AnalysisEntityAutoMapperProfile.name;
+export class PostEntityAutoMapperProfile {
+  protected readonly _type = PostEntityAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();
@@ -909,39 +931,39 @@ export class AnalysisEntityAutoMapperProfile {
 
   private createMappings(): void {
     const convertOrmToDomain = (
-      source: AnalysisTypeormEntity,
-    ): AnalysisEntity => {
+      source: PostTypeormEntity,
+    ): PostEntity => {
       // ✅ CORRECT: Check for required relations and throw IncompleteSourceDataForMappingError
-      if (!source.client) {
+      if (!source.author) {
         throw new IncompleteSourceDataForMappingError({
-          destinationClass: AnalysisEntity.name,
-          sourceClass: AnalysisTypeormEntity.name,
+          destinationClass: PostEntity.name,
+          sourceClass: PostTypeormEntity.name,
         });
       }
 
-      const client = this.mapper.map(
-        source.client,
-        ClientTypeormEntity,
-        ClientEntity,
+      const author = this.mapper.map(
+        source.author,
+        UserTypeormEntity,
+        UserEntity,
       );
 
-      // ✅ CORRECT: Explicitly map each property
-      return new AnalysisEntity({
-        id: new AnalysisId(source.id),
-        clientId: new ClientId(source.clientId),
-        status: source.status,
-        completedAt: source.completedAt,
-        createdAt: source.createdAt,
-        updatedAt: source.updatedAt,
-        deletedAt: source.deletedAt,
-        client,
-      });
+      // ✅ CORRECT: Explicitly map each property using .build()
+      return new PostEntity(
+        PostEntityPropsInputModel.build({
+          id: new PostId(source.id),
+          authorId: author.id,
+          content: source.content,
+          createdAt: source.createdAt,
+          updatedAt: source.updatedAt,
+          deletedAt: source.deletedAt,
+        }),
+      );
     };
 
     createMap(
       this.mapper,
-      AnalysisTypeormEntity,
-      AnalysisEntity,
+      PostTypeormEntity,
+      PostEntity,
       constructUsing(convertOrmToDomain),
     );
   }
@@ -971,19 +993,24 @@ if (!source.relation) {
 
 ```typescript
 // ❌ WRONG - TypeORM entities have internal metadata that shouldn't be spread
-return AnalysisEntity.build({
-  ...source, // ❌ BAD: Spreads TypeORM metadata and methods
-  id: new AnalysisId(source.id),
-});
+return new PostEntity(
+  PostEntityPropsInputModel.build({
+    ...source, // ❌ BAD: Spreads TypeORM metadata and methods
+    id: new PostId(source.id),
+  }),
+);
 
 // ✅ CORRECT - Explicitly map only what's needed
-return AnalysisEntity.build({
-  id: new AnalysisId(source.id),
-  name: source.name,
-  status: source.status,
-  createdAt: source.createdAt,
-  // ... all other properties explicitly
-});
+return new PostEntity(
+  PostEntityPropsInputModel.build({
+    id: new PostId(source.id),
+    authorId: new UserId(source.authorId),
+    content: source.content,
+    createdAt: source.createdAt,
+    updatedAt: source.updatedAt,
+    deletedAt: source.deletedAt,
+  }),
+);
 ```
 
 #### ⚠️ CRITICAL: Domain→ORM Relation Mapping — ALWAYS use `this.mapper.map()`
@@ -992,20 +1019,20 @@ return AnalysisEntity.build({
 
 ```typescript
 // ❌ WRONG — casting with only the ID (bypasses the registered mapper profile)
-const ruralOrHybridRetirementRejection =
-  source.ruralOrHybridRetirementRejection !== null
+const commentAuthor =
+  source.author !== null
     ? ({
-        id: source.ruralOrHybridRetirementRejection.id.toString(),
-      } as RuralOrHybridRetirementRejectionTypeormEntity)
+        id: source.author.id.toString(),
+      } as UserTypeormEntity)
     : null;
 
 // ✅ CORRECT — delegate to the registered mapper profile
-const ruralOrHybridRetirementRejection =
-  source.ruralOrHybridRetirementRejection !== null
+const commentAuthor =
+  source.author !== null
     ? this.mapper.map(
-        source.ruralOrHybridRetirementRejection,
-        RuralOrHybridRetirementRejectionEntity,
-        RuralOrHybridRetirementRejectionTypeormEntity,
+        source.author,
+        UserTypeormEntity,
+        UserEntity,
       )
     : null;
 ```
@@ -1045,70 +1072,85 @@ protected override readonly _type = ClassName.name;
 
 ```typescript
 // ❌ WRONG - adding _type to an abstract gateway class used as DI token
-export abstract class AnalysisQueryRepositoryGateway {
-  protected readonly _type = AnalysisQueryRepositoryGateway.name; // ❌ causes TS2720
-  public abstract findById(id: AnalysisId): Promise<AnalysisEntity | null>;
+export abstract class PostQueryRepositoryGateway {
+  protected readonly _type = PostQueryRepositoryGateway.name; // ❌ causes TS2720
+  public abstract findOnePostById(id: PostId): Promise<PostEntity | null>;
 }
 
 // ✅ CORRECT - abstract gateway has NO _type
-export abstract class AnalysisQueryRepositoryGateway {
-  public abstract findById(id: AnalysisId): Promise<AnalysisEntity | null>;
+export abstract class PostQueryRepositoryGateway {
+  public abstract findOnePostById(id: PostId): Promise<PostEntity | null>;
 }
 
 // ✅ CORRECT - the implementing class has _type
 @Injectable()
-export class AnalysisTypeormQueryRepository implements AnalysisQueryRepositoryGateway {
-  protected readonly _type = AnalysisTypeormQueryRepository.name; // ✅
+export class PostTypeormQueryRepository implements PostQueryRepositoryGateway {
+  protected readonly _type = PostTypeormQueryRepository.name; // ✅
 }
+```
+
+**⚠️ EXCEPTION 2: Decorator Config Models** — Classes used exclusively as inline object literals in decorator calls (e.g. `@BuildEndpointSpecification({ ... })`) must **NOT** have `protected _type`. TypeScript decorator syntax requires passing a plain `{ ... }` object literal, and `protected _type` makes the class structurally incompatible with those literals. These are pure config containers for decorator metadata.
+
+- Decorator config models (`*DecoratorPropsInputModel`) — always passed as inline `{ ... }` to decorators
+
+> **Note:** Entity props input models (`*EntityPropsInputModel`) DO have `protected _type` and that is correct — they are always constructed via `ClassName.build({ ... })`, which uses `PublicPropertyType<T>` and therefore excludes protected members from the required input.
+
+**Key rule at all entity construction sites**: Always use `.build()`:
+```typescript
+// ✅ CORRECT — .build() excludes _type from the required input shape
+new PostEntity(PostEntityPropsInputModel.build({ authorId: userId, content: 'Hello' }));
+
+// ❌ WRONG — plain object literal fails because _type is missing
+new PostEntity({ authorId: userId, content: 'Hello' });
 ```
 
 **Examples**:
 
 ```typescript
 // Entity
-export class AnalysisEntity extends BaseEntity<AnalysisId> {
-  protected readonly _type = AnalysisEntity.name;
+export class PostEntity extends BaseEntity<PostId> {
+  protected readonly _type = PostEntity.name;
 }
 
 // TypeORM Entity
-@Entity({ name: 'customer' })
-export class CustomerTypeormEntity extends BaseTypeormEntity {
-  protected override readonly _type = CustomerTypeormEntity.name;
+@Entity({ name: 'post' })
+export class PostTypeormEntity extends BaseTypeormEntity {
+  protected override readonly _type = PostTypeormEntity.name;
 }
 
 // DTO
 @RequestDto()
-export class CreateAnalysisRequestDto extends BaseBuildableDtoObject {
-  protected override readonly _type = CreateAnalysisRequestDto.name;
+export class CreatePostRequestDto extends BaseBuildableDtoObject {
+  protected override readonly _type = CreatePostRequestDto.name;
 }
 
 // Use Case
 @Injectable()
-export class CreateAnalysisUseCase {
-  protected readonly _type = CreateAnalysisUseCase.name;
+export class CreatePostUseCase {
+  protected readonly _type = CreatePostUseCase.name;
 }
 
 // Error
-export class AnalysisNotFoundError extends NotFoundError {
-  protected override readonly _type = AnalysisNotFoundError.name;
+export class PostNotFoundError extends NotFoundError {
+  protected override readonly _type = PostNotFoundError.name;
 }
 
 // Repository
 @Injectable()
-export class AnalysisTypeormQueryRepository {
-  protected readonly _type = AnalysisTypeormQueryRepository.name;
+export class PostTypeormQueryRepository {
+  protected readonly _type = PostTypeormQueryRepository.name;
 }
 
 // Controller
-@GenericControllerRoute('analysis')
-export class AnalysisController {
-  protected readonly _type = AnalysisController.name;
+@GenericControllerRoute('post')
+export class PostController {
+  protected readonly _type = PostController.name;
 }
 
 // Module
 @Module({})
-export class AnalysisModule {
-  protected readonly _type = AnalysisModule.name;
+export class PostModule {
+  protected readonly _type = PostModule.name;
 }
 ```
 
@@ -1133,11 +1175,11 @@ BaseError (abstract)
 ```typescript
 import { NotFoundError } from '@core/error/not-found.error';
 
-export class AnalysisNotFoundError extends NotFoundError {
-  protected override readonly _type = AnalysisNotFoundError.name;
+export class PostNotFoundError extends NotFoundError {
+  protected override readonly _type = PostNotFoundError.name;
 
   public constructor() {
-    super('Análise não encontrada. Por favor, verifique o ID informado.');
+    super('Publicação não encontrada. Por favor, verifique o ID informado.');
   }
 }
 ```
@@ -1253,27 +1295,110 @@ export class SomeService {
 - Enums that are used across multiple unrelated modules
 - True application-wide configuration (should be in dedicated config files)
 
-### 4. `interface/` vs `model/` Folder Separation ⚠️ MANDATORY
+### 4. No TypeScript `interface` — Use `input.model` / `output.model` Classes ⚠️ MANDATORY
 
-**CRITICAL**: TypeScript interfaces and classes are fundamentally different and MUST live in separate folders.
+**CRITICAL**: TypeScript `interface` declarations are **forbidden** in this codebase. Every data shape must be a class that extends `BaseBuildableObject`.
 
-- **`interface/`** — TypeScript `interface` declarations shared within the module (e.g. AI response shapes, query result structures, JSON schemas). Example: `rural-or-hybrid-retirement-analysis-result.interface.ts`
-- **`model/`** — TypeScript `class` declarations (plain data models that are not entities or DTOs). Example: a `SomeModel` class with methods or computed properties.
+**Rule: `interface` → `class` extending `BaseBuildableObject`**
+
+| Direction | File suffix | Class suffix | Location |
+|-----------|-------------|--------------|----------|
+| Data flowing **in** to a layer/function | `*.input.model.ts` | `*InputModel` | `model/input/` |
+| Data flowing **out** of a layer/function | `*.output.model.ts` | `*OutputModel` | `model/output/` |
+| Entity constructor arguments | `*.entity.props.input.model.ts` | `*EntityPropsInputModel` | next to the entity file |
+
+**Why?**
+
+- Classes are instantiatable, inspectable, and extensible
+- `BaseBuildableObject.build()` provides a unified construction API
+- No hidden `interface` files scattered across the codebase
+- Consistent naming makes data flow immediately obvious
+
+**❌ WRONG — TypeScript interface:**
+
+```typescript
+export interface PostEntityPropsInterface {
+  authorId: UserId;
+  content: string;
+}
+
+export interface AnalysisResultInterface {
+  score: number;
+  label: string;
+}
+```
+
+**✅ CORRECT — `BaseBuildableObject` class:**
+
+```typescript
+import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
+import type { UserId } from '...';
+
+export class PostEntityPropsInputModel extends BaseBuildableObject {
+  protected override readonly _type = PostEntityPropsInputModel.name;
+  public authorId: UserId;
+  public content: string;
+}
+
+export class AnalysisResultOutputModel extends BaseBuildableObject {
+  protected override readonly _type = AnalysisResultOutputModel.name;
+  public score: number;
+  public label: string;
+}
+```
+
+**Entity props models** follow the same rule. `BaseEntityPropsInputModel<Id>` is the base class for all entity constructor argument types:
+
+```typescript
+// core/domain/schema/entity/base/base.entity.props.input.model.ts
+export class BaseEntityPropsInputModel<Id extends Guid> extends BaseBuildableObject {
+  protected override readonly _type = BaseEntityPropsInputModel.name;
+  public id?: Id | null;
+  public createdAt?: Date | null;
+  public updatedAt?: Date | null;
+  public deletedAt?: Date | null;
+}
+
+// module/client/post/domain/schema/entity/post/post.entity.props.input.model.ts
+export class PostEntityPropsInputModel extends BaseEntityPropsInputModel<PostId> {
+  protected override readonly _type = PostEntityPropsInputModel.name;
+  public authorId: UserId;
+  public content: string;
+}
+```
+
+**Abstract contracts** (e.g. seeders) become abstract classes:
+
+```typescript
+// ❌ WRONG
+export interface SeederInterface { execute(): Promise<...>; }
+
+// ✅ CORRECT
+export abstract class BaseSeeder {
+  protected abstract readonly _type: string;
+  public abstract execute(): Promise<Array<TransactionType>> | Array<TransactionType> | Promise<number>;
+}
+```
 
 **Rules:**
 
-- ✅ Interfaces go in `interface/` at the module root
-- ✅ Classes go in `model/` at the module root
-- ❌ NEVER put interface files inside `model/interface/` — `model` implies a class, not an interface
-- ❌ NEVER mix interfaces and classes in the same folder
+- ✅ All data shapes → `*.input.model.ts` or `*.output.model.ts` classes extending `BaseBuildableObject`
+- ✅ Entity constructor arg types → `*.entity.props.input.model.ts` class extending `BaseEntityPropsInputModel<Id>`
+- ✅ Abstract contracts → abstract class (NO `interface`)
+- ✅ Use `protected override readonly _type = ClassName.name` in every class
+- ✅ Model classes live in `model/input/` or `model/output/` inside the feature folder
+- ❌ NO `interface` keyword anywhere in application code
+- ❌ NO `*.interface.ts` files
+- ❌ NO `interface/` folders
 
 ```
-src/module/customer/analysis-tool/module/{feature}/
+src/module/{user-level}/{feature}/
 ├── domain/
 ├── dto/
 ├── error/
-├── interface/   ← *.interface.ts files go here
-├── model/       ← class-based models go here (if needed)
+├── model/
+│   ├── input/   ← *.input.model.ts files (data flowing in)
+│   └── output/  ← *.output.model.ts files (data flowing out)
 ├── use-case/
 ├── *.controller.ts
 └── *.module.ts
@@ -1445,11 +1570,11 @@ export class Base64FileRequestDto extends BaseBuildableDtoObject {
 ```typescript
 // Frontend sends:
 {
-  "type": "CNIS_DOCUMENT",
+  "type": "PROFILE_PICTURE",
   "files": [
     {
-      "base64": "data:application/pdf;base64,JVBERi0xLjQKJeLjz9MK...",
-      "originalFileName": "cnis-document.pdf"
+      "base64": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAA...",
+      "originalFileName": "avatar.jpg"
     }
   ]
 }
@@ -1570,30 +1695,30 @@ public fileName: string;
 #### Query Repository (Read Operations)
 
 ```typescript
-export abstract class AnalysisQueryRepositoryGateway {
+export abstract class PostQueryRepositoryGateway {
   // findOne* - Returns single entity or null
-  public abstract findOneAnalysisById(
-    id: AnalysisId,
-  ): Promise<GetAnalysisQueryResult | null>;
+  public abstract findOnePostById(
+    id: PostId,
+  ): Promise<GetPostQueryResult | null>;
 
-  public abstract findOneAnalysisByName(
-    name: string,
-  ): Promise<GetAnalysisQueryResult | null>;
+  public abstract findOnePostByAuthorId(
+    authorId: UserId,
+  ): Promise<GetPostQueryResult | null>;
 
   // findOne*WithRelations - Returns entity with TypeORM relations
-  public abstract findOneAnalysisByIdWithRelations(
-    id: AnalysisId,
-  ): Promise<GetAnalysisWithRelationsQueryResult | null>;
+  public abstract findOnePostByIdWithRelations(
+    id: PostId,
+  ): Promise<GetPostWithRelationsQueryResult | null>;
 
   // list* - Returns paginated results
-  public abstract listAnalysisByClientId(
-    clientId: ClientId,
+  public abstract listPostsByAuthorId(
+    authorId: UserId,
     pagination: ListDataInputModel,
-  ): Promise<ListDataOutputModel<AnalysisEntity>>;
+  ): Promise<ListDataOutputModel<PostEntity>>;
 
   // count* - Returns count
-  public abstract countAnalysisByStatus(
-    status: AnalysisStatusEnum,
+  public abstract countPostsByAuthorId(
+    authorId: UserId,
   ): Promise<number>;
 }
 ```
@@ -1601,24 +1726,18 @@ export abstract class AnalysisQueryRepositoryGateway {
 #### Command Repository (Write Operations)
 
 ```typescript
-export abstract class AnalysisCommandRepositoryGateway {
+export abstract class PostCommandRepositoryGateway {
   // create* - Returns TransactionType
-  public abstract createAnalysis(props: AnalysisEntity): TransactionType;
+  public abstract createPost(props: PostEntity): TransactionType;
 
   // update* - Returns TransactionType
-  public abstract updateAnalysis(
-    analysisId: AnalysisId,
-    props: AnalysisEntity,
-  ): TransactionType;
-
-  // Custom update methods
-  public abstract updateAnalysisStatus(
-    analysisId: AnalysisId,
-    status: AnalysisStatusEnum,
+  public abstract updatePost(
+    postId: PostId,
+    props: PostEntity,
   ): TransactionType;
 
   // delete* - Returns TransactionType (soft delete)
-  public abstract deleteAnalysis(analysisId: AnalysisId): TransactionType;
+  public abstract deletePost(postId: PostId): TransactionType;
 }
 ```
 
@@ -1651,37 +1770,37 @@ import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/sche
 import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 
-@Entity({ name: 'analysis' })
-export class AnalysisTypeormEntity extends BaseTypeormEntity {
+@Entity({ name: 'post' })
+export class PostTypeormEntity extends BaseTypeormEntity {
   // String columns
-  @Column({ name: 'name', type: 'varchar', length: 100 })
-  public name: string;
+  @Column({ name: 'title', type: 'varchar', length: 100 })
+  public title: string;
 
   // Nullable columns
-  @Column({ name: 'description', type: 'text', nullable: true })
-  public description: string | null;
+  @Column({ name: 'body', type: 'text', nullable: true })
+  public body: string | null;
 
   // Enum columns
   @Column({ name: 'status', type: 'varchar', length: 50 })
-  public status: AnalysisStatusEnum;
+  public status: PostStatusEnum;
 
   // DATE columns - ALWAYS use DateOnlyTransformer
   @Column({
-    name: 'birth_date',
+    name: 'scheduled_date',
     type: 'date',
     nullable: true,
     transformer: DateOnlyTransformer,
   })
-  public birthDate: Date | null;
+  public scheduledDate: Date | null;
 
   // TIMESTAMP/DATETIME columns - ALWAYS use DateTransformer
   @Column({
-    name: 'completed_at',
+    name: 'published_at',
     type: 'timestamp',
     nullable: true,
     transformer: DateTransformer,
   })
-  public completedAt: Date | null;
+  public publishedAt: Date | null;
 
   // Encrypted columns
   @Column({
@@ -1692,23 +1811,23 @@ export class AnalysisTypeormEntity extends BaseTypeormEntity {
   })
   public sensitiveData: string;
 
-  // ManyToOne relationship (TypeORM creates client_id FK automatically)
-  @ManyToOne(() => ClientTypeormEntity, (entity) => entity.analyses)
-  @JoinColumn({ name: 'client_id' })
-  public client?: ClientTypeormEntity;
+  // ManyToOne relationship (TypeORM creates author_id FK automatically)
+  @ManyToOne(() => UserTypeormEntity, (entity) => entity.posts)
+  @JoinColumn({ name: 'author_id' })
+  public author?: UserTypeormEntity;
 
   // OneToMany relationship
-  @OneToMany(() => AnalysisItemTypeormEntity, (entity) => entity.analysis)
-  public items?: AnalysisItemTypeormEntity[];
+  @OneToMany(() => CommentTypeormEntity, (entity) => entity.post)
+  public comments?: CommentTypeormEntity[];
 
-  protected override readonly _type = AnalysisTypeormEntity.name;
+  protected override readonly _type = PostTypeormEntity.name;
 }
 ```
 
 **CRITICAL Rules**:
 
-- ✅ Database columns: `snake_case` (e.g., `created_at`, `client_id`)
-- ✅ TypeScript properties: `camelCase` (e.g., `createdAt`, `clientId`)
+- ✅ Database columns: `snake_case` (e.g., `created_at`, `author_id`)
+- ✅ TypeScript properties: `camelCase` (e.g., `createdAt`, `authorId`)
 - ✅ Always use `@Column({ name: 'snake_case' })`
 - ✅ **Date columns (`type: 'date'`) MUST use `DateOnlyTransformer`**
 - ✅ **Timestamp/datetime columns (`type: 'timestamp'` or `type: 'datetime'`) MUST use `DateTransformer`**
@@ -1782,29 +1901,29 @@ TypeORM automatically creates the foreign key column in the database when you us
 **❌ WRONG - DO NOT DO THIS:**
 
 ```typescript
-@Entity({ name: 'analysis' })
-export class AnalysisTypeormEntity extends BaseTypeormEntity {
+@Entity({ name: 'post' })
+export class PostTypeormEntity extends BaseTypeormEntity {
   // ❌ WRONG: Duplicate column for FK
-  @Column({ name: 'client_id', type: 'uuid' })
-  public clientId: string;
+  @Column({ name: 'author_id', type: 'uuid' })
+  public authorId: string;
 
   // The relation already manages this column!
-  @ManyToOne(() => ClientTypeormEntity, (entity) => entity.analyses)
-  @JoinColumn({ name: 'client_id' })
-  public client?: ClientTypeormEntity;
+  @ManyToOne(() => UserTypeormEntity, (entity) => entity.posts)
+  @JoinColumn({ name: 'author_id' })
+  public author?: UserTypeormEntity;
 }
 ```
 
 **✅ CORRECT - Follow This Pattern:**
 
 ```typescript
-@Entity({ name: 'analysis' })
-export class AnalysisTypeormEntity extends BaseTypeormEntity {
+@Entity({ name: 'post' })
+export class PostTypeormEntity extends BaseTypeormEntity {
   // ✅ CORRECT: Only define the relation with @JoinColumn
-  // TypeORM automatically creates the 'client_id' column in database
-  @ManyToOne(() => ClientTypeormEntity, (entity) => entity.analyses)
-  @JoinColumn({ name: 'client_id' })
-  public client?: ClientTypeormEntity;
+  // TypeORM automatically creates the 'author_id' column in database
+  @ManyToOne(() => UserTypeormEntity, (entity) => entity.posts)
+  @JoinColumn({ name: 'author_id' })
+  public author?: UserTypeormEntity;
 }
 ```
 
@@ -1816,31 +1935,33 @@ export class AnalysisTypeormEntity extends BaseTypeormEntity {
 // In Repository
 const result = await this.findOne({
   where: { id: id.toString() },
-  relations: { client: true }, // Load the relation
+  relations: { author: true }, // Load the relation
 });
 
 // In AutoMapper - Extract ID from loaded relation
-const convert = (source: AnalysisTypeormEntity): AnalysisEntity => {
-  return new AnalysisEntity({
-    id: new AnalysisId(source.id),
-    clientId: source.client?.id ? new ClientId(source.client.id) : null,
-    // ...other fields
-  });
+const convert = (source: PostTypeormEntity): PostEntity => {
+  return new PostEntity(
+    PostEntityPropsInputModel.build({
+      id: new PostId(source.id),
+      authorId: source.author?.id ? new UserId(source.author.id) : null,
+      // ...other fields
+    }),
+  );
 };
 ```
 
 **Option 2: Use TypeORM's @RelationId decorator (AVOID in this codebase)**
 
 ```typescript
-@Entity({ name: 'analysis' })
-export class AnalysisTypeormEntity extends BaseTypeormEntity {
-  @ManyToOne(() => ClientTypeormEntity, (entity) => entity.analyses)
-  @JoinColumn({ name: 'client_id' })
-  public client?: ClientTypeormEntity;
+@Entity({ name: 'post' })
+export class PostTypeormEntity extends BaseTypeormEntity {
+  @ManyToOne(() => UserTypeormEntity, (entity) => entity.posts)
+  @JoinColumn({ name: 'author_id' })
+  public author?: UserTypeormEntity;
 
   // TypeORM populates this automatically (without loading relation)
-  @RelationId((entity: AnalysisTypeormEntity) => entity.client)
-  public clientId?: string;
+  @RelationId((entity: PostTypeormEntity) => entity.author)
+  public authorId?: string;
 }
 ```
 
@@ -1865,24 +1986,48 @@ Solution: Add `relations: { relationName: true }` to repository query
 
 #### Controller Route Decorators
 
+All controllers use `@GenericControllerRoute`. The user-level folder (`admin/`, `client/`, `generic/`) is an **organizational** decision — access control is enforced at the endpoint level via `userLevel` inside `@BuildEndpointSpecification`, not by different route decorator classes.
+
 ```typescript
-// Generic routes (no prefix)
+// client/ module — accessible by regular users (and optionally admins)
+@GenericControllerRoute('post')
+export class PostController {
+  protected readonly _type = PostController.name;
+}
+
+// generic/ module — accessible by any authenticated user level
 @GenericControllerRoute('auth-identity')
 export class AuthIdentityController {
   protected readonly _type = AuthIdentityController.name;
 }
 
-// Customer routes (prefix: /customer)
-@CustomerControllerRoute('analysis')
-export class AnalysisController {
-  protected readonly _type = AnalysisController.name;
-} // Results in: /customer/analysis/*
+// admin/ module — restricted to admins via userLevel in each endpoint
+@GenericControllerRoute('admin/users')
+export class AdminUserController {
+  protected readonly _type = AdminUserController.name;
+}
+```
 
-// Admin routes (prefix: /admin)
-@AdminControllerRoute('users')
-export class UsersController {
-  protected readonly _type = UsersController.name;
-} // Results in: /admin/users/*
+**Access control** is declared per-endpoint using `userLevel`:
+
+```typescript
+// Client-only endpoint
+@BuildEndpointSpecification({
+  userLevel: [UserLevelEnum.USER],
+  ...
+})
+
+// Admin-only endpoint
+@BuildEndpointSpecification({
+  userLevel: [UserLevelEnum.ADMIN],
+  ...
+})
+
+// Both levels
+@BuildEndpointSpecification({
+  userLevel: [UserLevelEnum.USER, UserLevelEnum.ADMIN],
+  ...
+})
 ```
 
 #### BuildEndpointSpecification Pattern
@@ -1894,27 +2039,27 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 import { Body, Param } from '@nestjs/common';
 import { RequestMethod, HttpStatus } from '@nestjs/common';
 
-@CustomerControllerRoute('analysis')
-export class AnalysisController {
+@GenericControllerRoute('post')
+export class PostController {
   public constructor(
-    private readonly createAnalysisUseCase: CreateAnalysisUseCase,
-    private readonly getAnalysisUseCase: GetAnalysisUseCase,
+    private readonly createPostUseCase: CreatePostUseCase,
+    private readonly getPostUseCase: GetPostUseCase,
   ) {}
 
   // POST endpoint with body
   @BuildEndpointSpecification({
-    summary: 'Criar nova análise',
-    userLevel: [UserLevelEnum.CUSTOMER, UserLevelEnum.ADMIN],
+    summary: 'Criar nova publicação',
+    userLevel: [UserLevelEnum.USER, UserLevelEnum.ADMIN],
     http: {
       path: '',
       method: RequestMethod.POST,
-      type: CreateAnalysisRequestDto,
+      type: CreatePostRequestDto,
     },
-    tag: ['analise'],
+    tag: ['post'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
-      description: 'Análise criada com sucesso.',
-      type: CreateAnalysisResponseDto,
+      description: 'Publicação criada com sucesso.',
+      type: CreatePostResponseDto,
     },
     guard: [AuthGuard],
     throttle: {
@@ -1924,35 +2069,36 @@ export class AnalysisController {
   })
   public async create(
     @GetSessionData() sessionData: SessionDataModel,
-    @Body() dto: CreateAnalysisRequestDto,
-  ): Promise<CreateAnalysisResponseDto> {
-    return this.createAnalysisUseCase.execute(sessionData, dto);
+    @Body() dto: CreatePostRequestDto,
+  ): Promise<CreatePostResponseDto> {
+    return this.createPostUseCase.execute(sessionData, dto);
   }
 
   // GET endpoint with path parameter
   @BuildEndpointSpecification({
-    summary: 'Obter análise por ID',
-    userLevel: [UserLevelEnum.CUSTOMER, UserLevelEnum.ADMIN],
+    summary: 'Obter publicação por ID',
+    userLevel: [UserLevelEnum.USER, UserLevelEnum.ADMIN],
     http: {
-      path: ':id',
+      path: ':postId',
       method: RequestMethod.GET,
     },
-    tag: ['analise'],
+    tag: ['post'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Análise encontrada com sucesso.',
-      type: GetAnalysisResponseDto,
+      description: 'Publicação encontrada com sucesso.',
+      type: GetPostResponseDto,
     },
     guard: [AuthGuard],
   })
   public async getById(
     @GetSessionData() sessionData: SessionDataModel,
-    @Param('id') id: string,
-  ): Promise<GetAnalysisResponseDto> {
-    return this.getAnalysisUseCase.execute(sessionData, { id });
+    @Param('postId', new ParseValueObjectPipe(PostId))
+    postId: PostId,
+  ): Promise<GetPostResponseDto> {
+    return this.getPostUseCase.execute(sessionData, postId);
   }
 
-  protected readonly _type = AnalysisController.name;
+  protected readonly _type = PostController.name;
 }
 ```
 
@@ -2006,22 +2152,22 @@ The same input from the controller parameter should flow directly to the use cas
 
 ```typescript
 // Controller
-public async deactivateCustomer(
-  @Param('customerId', new ParseValueObjectPipe(CustomerId))
-  customerId: CustomerId,
-): Promise<DeactivateCustomerResponseDto> {
+public async deletePost(
+  @Param('postId', new ParseValueObjectPipe(PostId))
+  postId: PostId,
+): Promise<DeletePostResponseDto> {
   // ❌ WRONG: Wrapping in DTO just adds unnecessary layer
-  const dto = DeactivateCustomerRequestDto.build({
-    customerId,
+  const dto = DeletePostRequestDto.build({
+    postId,
   });
-  return this.deactivateCustomerUseCase.execute(dto);
+  return this.deletePostUseCase.execute(dto);
 }
 
 // Use Case - ❌ WRONG: Unnecessary request DTO
 public async execute(
-  dto: DeactivateCustomerRequestDto,
-): Promise<DeactivateCustomerResponseDto> {
-  await this.validateCustomerExists(dto.customerId);
+  dto: DeletePostRequestDto,
+): Promise<DeletePostResponseDto> {
+  await this.validatePostExists(dto.postId);
   // ...
 }
 ```
@@ -2030,22 +2176,22 @@ public async execute(
 
 ```typescript
 // Controller
-public async deactivateCustomer(
-  @Param('customerId', new ParseValueObjectPipe(CustomerId))
-  customerId: CustomerId,
-): Promise<DeactivateCustomerResponseDto> {
+public async deletePost(
+  @Param('postId', new ParseValueObjectPipe(PostId))
+  postId: PostId,
+): Promise<DeletePostResponseDto> {
   // ✅ CORRECT: Pass Value Object directly to use case
-  return this.deactivateCustomerUseCase.execute(customerId);
+  return this.deletePostUseCase.execute(postId);
 }
 
 // Use Case - ✅ CORRECT: Accept Value Object directly
 public async execute(
-  customerId: CustomerId,
-): Promise<DeactivateCustomerResponseDto> {
-  await this.validateCustomerExists(customerId);
+  postId: PostId,
+): Promise<DeletePostResponseDto> {
+  await this.validatePostExists(postId);
   // ...
-  return DeactivateCustomerResponseDto.build({
-    customerId,
+  return DeletePostResponseDto.build({
+    postId,
   });
 }
 ```
@@ -2067,11 +2213,11 @@ public async execute(
 - ✅ If controller has no Request DTO, use case should NOT have one either
 - ✅ Use cases accept only what they need (no unnecessary wrapper objects)
 - ✅ Request DTOs are used for **request body** validation and **complex query parameters**
-- ✅ **`@Param` variable name MUST match the Value Object class name in camelCase** (e.g., `SpecialCategoryRetirementAnalysisId` → `specialCategoryRetirementAnalysisId`)
+- ✅ **`@Param` variable name MUST match the Value Object class name in camelCase** (e.g., `PostId` → `postId`)
 - ✅ If the parent ID param is not used in the method logic, **do not declare it at all** — NestJS will still match the route correctly
 - ❌ NO unnecessary Request DTOs just to wrap a single path parameter
 - ❌ NO intermediate wrapper objects in use case signatures
-- ❌ NO generic names like `id`, `analysisId`, `workPeriodId` — always use the full Value Object class name in camelCase
+- ❌ NO generic names like `id`, `postId`, `commentId` used with the wrong VO type — always use the full Value Object class name in camelCase
 - ❌ NO unused `@Param` declarations — if the param is not used, omit it entirely
 
 **How ParseValueObjectPipe Works:**
@@ -2084,22 +2230,22 @@ public async execute(
 
 **`@Param` Variable Naming Rule:**
 
-The variable name MUST match the Value Object class name in camelCase — never use generic names like `id`, `analysisId`, or `workPeriodId`.
+The variable name MUST match the Value Object class name in camelCase — never use generic names like `id`, `postId`, or `commentId` where the wrong type could be inferred.
 
 ```typescript
-// ❌ WRONG — generic name
-@Param('id', new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId))
-id: SpecialCategoryRetirementAnalysisId,
+// ❌ WRONG — generic name that doesn't reflect the VO class
+@Param('id', new ParseValueObjectPipe(PostId))
+id: PostId,
 
 // ✅ CORRECT — name matches the Value Object class (camelCase)
-@Param('id', new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId))
-specialCategoryRetirementAnalysisId: SpecialCategoryRetirementAnalysisId,
+@Param('id', new ParseValueObjectPipe(PostId))
+postId: PostId,
 
 // ✅ CORRECT — parent ID not used in logic: don't declare it at all
-// The route `:analysisId/work-period/:workPeriodId` still matches correctly
-public async deleteWorkPeriod(
-  @Param('workPeriodId', new ParseValueObjectPipe(WorkPeriodId))
-  specialCategoryRetirementAnalysisWorkPeriodId: WorkPeriodId,
+// The route `:postId/comment/:commentId` still matches correctly
+public async deleteComment(
+  @Param('commentId', new ParseValueObjectPipe(CommentId))
+  commentId: CommentId,
 ): Promise<...> { ... }
 ```
 
@@ -2121,26 +2267,22 @@ This applies to all HTTP methods: POST, GET, PATCH, DELETE.
 **Examples of correct resource hierarchy:**
 
 ```
-POST   /:analysisId/work-period                             ← create child
-PATCH  /:analysisId/work-period/:workPeriodId               ← update child
-DELETE /:analysisId/work-period/:workPeriodId               ← delete child
-POST   /:workPeriodId/period-document                       ← create grandchild
-DELETE /:workPeriodId/period-document/:periodDocumentId     ← delete grandchild
-PATCH  /:analysisId/remuneration/:remunerationId            ← update child
-DELETE /:analysisId/remuneration/:remunerationId            ← delete child
+POST   /:postId/comment                      ← create child
+PATCH  /:postId/comment/:commentId           ← update child
+DELETE /:postId/comment/:commentId           ← delete child
 ```
 
 **❌ WRONG — parent ID in the request body:**
 
 ```typescript
-// ❌ BAD: analysisId belongs in the route, not the body
+// ❌ BAD: postId belongs in the route, not the body
 @RequestDto()
-export class CreateWorkPeriodRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoValueObjectProperty(AnalysisId)
-  public analysisId: AnalysisId; // ❌ Should be a route param
+export class CreateCommentRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoValueObjectProperty(PostId)
+  public postId: PostId; // ❌ Should be a route param
 
-  @RequestDtoDateProperty()
-  public startDate: Date;
+  @RequestDtoStringProperty()
+  public content: string;
 }
 ```
 
@@ -2149,38 +2291,38 @@ export class CreateWorkPeriodRequestDto extends BaseBuildableDtoObject {
 ```typescript
 // ✅ DTO only contains data fields
 @RequestDto()
-export class CreateWorkPeriodRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoDateProperty()
-  public startDate: Date;
+export class CreateCommentRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoStringProperty()
+  public content: string;
 }
 
 // ✅ Controller: parent ID comes from route
-@BuildEndpointSpecification({ http: { path: ':analysisId/work-period', method: RequestMethod.POST, ... }, ... })
-public async createWorkPeriod(
-  @Param('analysisId', new ParseValueObjectPipe(AnalysisId))
-  analysisId: AnalysisId,
-  @Body() dto: CreateWorkPeriodRequestDto,
-): Promise<CreateWorkPeriodResponseDto> {
-  return this.createWorkPeriodUseCase.execute(analysisId, dto);
+@BuildEndpointSpecification({ http: { path: ':postId/comment', method: RequestMethod.POST, ... }, ... })
+public async createComment(
+  @Param('postId', new ParseValueObjectPipe(PostId))
+  postId: PostId,
+  @Body() dto: CreateCommentRequestDto,
+): Promise<CreateCommentResponseDto> {
+  return this.createCommentUseCase.execute(postId, dto);
 }
 
 // ✅ Use case receives parent ID as explicit parameter
 public async execute(
-  analysisId: AnalysisId,
-  dto: CreateWorkPeriodRequestDto,
-): Promise<CreateWorkPeriodResponseDto> { ... }
+  postId: PostId,
+  dto: CreateCommentRequestDto,
+): Promise<CreateCommentResponseDto> { ... }
 ```
 
 **When the parent ID is not used in the use case logic** (e.g., PATCH/DELETE where only the child ID is needed), still declare the `@Param` with a `_` prefix to signal intentional non-use:
 
 ```typescript
-public async deleteWorkPeriod(
-  @Param('analysisId', new ParseValueObjectPipe(AnalysisId))
-  _analysisId: AnalysisId,           // ← declared for REST hierarchy, not used in logic
-  @Param('workPeriodId', new ParseValueObjectPipe(WorkPeriodId))
-  workPeriodId: WorkPeriodId,
-): Promise<DeleteWorkPeriodResponseDto> {
-  return this.deleteWorkPeriodUseCase.execute(workPeriodId);
+public async deleteComment(
+  @Param('postId', new ParseValueObjectPipe(PostId))
+  _postId: PostId,           // ← declared for REST hierarchy, not used in logic
+  @Param('commentId', new ParseValueObjectPipe(CommentId))
+  commentId: CommentId,
+): Promise<DeleteCommentResponseDto> {
+  return this.deleteCommentUseCase.execute(commentId);
 }
 ```
 
@@ -2191,7 +2333,7 @@ public async deleteWorkPeriod(
 - ✅ When the parent ID is unused in logic, prefix the parameter with `_`
 - ✅ DTOs contain only data fields — never entity relationship IDs
 - ❌ NO parent IDs in request body DTOs
-- ❌ NO flat routes like `work-period/:id` when a parent resource exists
+- ❌ NO flat routes like `comment/:commentId` when a parent resource exists
 
 ---
 
@@ -2230,10 +2372,10 @@ export class ListDataRequestDto extends BaseBuildableDtoObject {
 }
 
 // Controller: Accept DTO, convert to domain model
-public async listPaymentPlans(
+public async listPosts(
   @Query() dto: ListDataRequestDto,
-): Promise<ListPaymentPlansResponseDto> {
-  return await this.listPaymentPlansUseCase.execute(
+): Promise<ListPostsResponseDto> {
+  return await this.listPostsUseCase.execute(
     new ListDataInputModel(dto),  // Convert DTO to domain model
   );
 }
@@ -2241,7 +2383,7 @@ public async listPaymentPlans(
 // Use Case: Accept domain model
 public async execute(
   pagination: ListDataInputModel,
-): Promise<ListPaymentPlansResponseDto> {
+): Promise<ListPostsResponseDto> {
   // Use pagination.page, pagination.limit, etc.
   const results = await this.repository.list(pagination);
   return results;
@@ -2252,10 +2394,10 @@ public async execute(
 
 ```typescript
 // ❌ WRONG: Using domain model directly for query parameters
-public async listPaymentPlans(
+public async listPosts(
   @Query() listData: ListDataInputModel,  // No validation, no OpenAPI docs
-): Promise<ListPaymentPlansResponseDto> {
-  return await this.listPaymentPlansUseCase.execute(listData);
+): Promise<ListPostsResponseDto> {
+  return await this.listPostsUseCase.execute(listData);
 }
 ```
 
@@ -2301,22 +2443,18 @@ Use Case executes with domain model
 **✅ CORRECT — QueryParam class:**
 
 ```typescript
-// domain/repository/analysis-tool-record/query/param/list-analysis-tool-record.query.param.ts
+// domain/repository/post/query/param/list-post.query.param.ts
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 
-export class ListAffiliateCommissionsQueryParam extends ListDataInputModel {
-  public readonly from: Date | null;
-  public readonly to: Date | null;
-  public readonly plan: OrganizationPaymentPlanId | null;
+export class ListPostQueryParam extends ListDataInputModel {
+  public readonly authorId: UserId | null;
   public readonly searchBy: string | null;
 
-  protected override readonly _type = ListAffiliateCommissionsQueryParam.name;
+  protected override readonly _type = ListPostQueryParam.name;
 
-  public constructor(props: Partial<ListAffiliateCommissionsQueryParam> = {}) {
+  public constructor(props: Partial<ListPostQueryParam> = {}) {
     super(props);
-    this.from = props.from ?? null;
-    this.to = props.to ?? null;
-    this.plan = props.plan ?? null;
+    this.authorId = props.authorId ?? null;
     this.searchBy = props.searchBy ?? null;
   }
 }
@@ -2326,10 +2464,8 @@ export class ListAffiliateCommissionsQueryParam extends ListDataInputModel {
 
 ```typescript
 // ❌ WRONG: Never use an interface or object literal as a filter domain model
-export interface ListAffiliateCommissionsFiltersInputModel {
-  from?: Date;
-  to?: Date;
-  plan?: OrganizationPaymentPlanId;
+export interface ListPostFiltersInputModel {
+  authorId?: UserId;
   searchBy?: string;
 }
 ```
@@ -2339,13 +2475,13 @@ export interface ListAffiliateCommissionsFiltersInputModel {
 ```
 HTTP Request
     ↓
-@Query() dto: ListAffiliateCommissionsRequestDto   (DTO — HTTP layer)
+@Query() dto: ListPostRequestDto   (DTO — HTTP layer)
     ↓
-new ListAffiliateCommissionsQueryParam(dto)         (QueryParam — domain layer)
+new ListPostQueryParam(dto)         (QueryParam — domain layer)
     ↓
-use-case.execute(affiliateCustomerId, queryParam)
+use-case.execute(queryParam)
     ↓
-repository.findManyByAffiliateCustomerIdWithFilters(id, queryParam)
+repository.listPostsByFilter(queryParam)
 ```
 
 **Rules**:
@@ -2361,16 +2497,16 @@ repository.findManyByAffiliateCustomerIdWithFilters(id, queryParam)
 
 ```typescript
 import { BaseValueObject } from '@core/domain/schema/value-object/base/base.value-object';
-import { InvalidAnalysisIdError } from './error/invalid-analysis-id.error';
+import { InvalidPostIdError } from './error/invalid-post-id.error';
 
-export class AnalysisId extends BaseValueObject<string> {
-  protected readonly _type = AnalysisId.name;
+export class PostId extends BaseValueObject<string> {
+  protected readonly _type = PostId.name;
 
   public constructor(value: string) {
     super(value);
 
-    if (!AnalysisId.isValid(value)) {
-      throw new InvalidAnalysisIdError();
+    if (!PostId.isValid(value)) {
+      throw new InvalidPostIdError();
     }
   }
 
@@ -2381,7 +2517,7 @@ export class AnalysisId extends BaseValueObject<string> {
     return uuidRegex.test(value);
   }
 
-  public equals(other: AnalysisId): boolean {
+  public equals(other: PostId): boolean {
     return this.value === other.value;
   }
 
@@ -2412,19 +2548,23 @@ ID value objects that extend `Guid` automatically generate a UUID when no value 
 ```typescript
 import { randomUUID } from 'node:crypto';
 
-const entity = new AnalysisEntity({
-  id: new AnalysisId(randomUUID()), // ❌ WRONG: Manually generating UUID
-  name: 'Test',
-});
+const entity = new PostEntity(
+  PostEntityPropsInputModel.build({
+    id: new PostId(randomUUID()), // ❌ WRONG: Manually generating UUID
+    title: 'Test',
+  }),
+);
 ```
 
 **✅ CORRECT - Auto-Generation:**
 
 ```typescript
-const entity = new AnalysisEntity({
-  id: new AnalysisId(), // ✅ CORRECT: ID class auto-generates UUID
-  name: 'Test',
-});
+const entity = new PostEntity(
+  PostEntityPropsInputModel.build({
+    id: new PostId(), // ✅ CORRECT: ID class auto-generates UUID
+    title: 'Test',
+  }),
+);
 ```
 
 **Why This Matters:**
@@ -2448,9 +2588,9 @@ public constructor(value?: string) {
 
 **When to Provide a Value:**
 
-- ✅ When mapping from database (existing ID): `new AnalysisId(source.id)`
-- ✅ When receiving from API/DTO: `new AnalysisId(dto.analysisId)`
-- ❌ When creating new entities: `new AnalysisId()` (NO parameter)
+- ✅ When mapping from database (existing ID): `new PostId(source.id)`
+- ✅ When receiving from API/DTO: `new PostId(dto.postId)`
+- ❌ When creating new entities: `new PostId()` (NO parameter)
 
 ### 9. Module Registration Patterns
 
@@ -2459,33 +2599,33 @@ public constructor(value?: string) {
 ```typescript
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from '@infra/database/database.module';
-import { AnalysisController } from '@module/customer/analysis/analysis.controller';
-import { CreateAnalysisUseCase } from '@module/customer/analysis/use-case/create-analysis.use-case';
-import { GetAnalysisUseCase } from '@module/customer/analysis/use-case/get-analysis.use-case';
+import { PostController } from '@module/client/post/post.controller';
+import { CreatePostUseCase } from '@module/client/post/use-case/create-post.use-case';
+import { GetPostUseCase } from '@module/client/post/use-case/get-post.use-case';
 
 @Module({
   imports: [
     DatabaseModule, // REQUIRED for repository access
   ],
-  controllers: [AnalysisController],
+  controllers: [PostController],
   providers: [
     // Use cases
-    CreateAnalysisUseCase,
-    GetAnalysisUseCase,
+    CreatePostUseCase,
+    GetPostUseCase,
 
     // Use case gateway registrations (if needed for cross-module usage)
     // {
-    //   provide: CreateAnalysisUseCaseGateway,
-    //   useClass: CreateAnalysisUseCase,
+    //   provide: CreatePostUseCaseGateway,
+    //   useClass: CreatePostUseCase,
     // },
   ],
   exports: [
     // Export gateways for use in other modules
-    // CreateAnalysisUseCaseGateway,
+    // CreatePostUseCaseGateway,
   ],
 })
-export class AnalysisModule {
-  protected readonly _type = AnalysisModule.name;
+export class PostModule {
+  protected readonly _type = PostModule.name;
 }
 ```
 
@@ -2497,14 +2637,14 @@ export class AnalysisModule {
 const providers: ClassProvider[] = [
   // Query repository
   {
-    provide: AnalysisQueryRepositoryGateway,
-    useClass: AnalysisTypeormQueryRepository,
+    provide: PostQueryRepositoryGateway,
+    useClass: PostTypeormQueryRepository,
   },
 
   // Command repository
   {
-    provide: AnalysisCommandRepositoryGateway,
-    useClass: AnalysisTypeormCommandRepository,
+    provide: PostCommandRepositoryGateway,
+    useClass: PostTypeormCommandRepository,
   },
 
   // ... more repositories
@@ -2525,16 +2665,16 @@ const providers: ClassProvider[] = [
 
 ```typescript
 // Creating DTOs
-const dto = CreateAnalysisResponseDto.build({
-  id: '123',
-  name: 'Analysis 1',
+const dto = CreatePostResponseDto.build({
+  postId: new PostId('123'),
+  title: 'My Post',
 });
 
 // Creating TypeORM entities (for testing/mocking)
-const entity = AnalysisTypeormEntity.build({
+const entity = PostTypeormEntity.build({
   id: '123',
-  name: 'Analysis 1',
-  status: AnalysisStatusEnum.PENDING,
+  title: 'My Post',
+  status: PostStatusEnum.PUBLISHED,
 });
 ```
 
@@ -2548,11 +2688,10 @@ const entity = AnalysisTypeormEntity.build({
 ### 11. Enum Patterns
 
 ```typescript
-export enum AnalysisStatusEnum {
-  PENDING = 'pending',
-  IN_PROGRESS = 'in_progress',
-  COMPLETED = 'completed',
-  FAILED = 'failed',
+export enum PostStatusEnum {
+  DRAFT = 'draft',
+  PUBLISHED = 'published',
+  ARCHIVED = 'archived',
 }
 ```
 
@@ -2574,8 +2713,8 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class AnalysisEntityAutoMapperProfile {
-  protected readonly _type = AnalysisEntityAutoMapperProfile.name;
+export class PostEntityAutoMapperProfile {
+  protected readonly _type = PostEntityAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();
@@ -2587,30 +2726,32 @@ export class AnalysisEntityAutoMapperProfile {
   }
 
   private mapOrmEntityToDomainEntity(): void {
-    const convert = (source: AnalysisTypeormEntity): AnalysisEntity => {
-      return new AnalysisEntity({
-        id: new AnalysisId(source.id),
-        name: source.name,
-        status: source.status,
-        createdAt: source.createdAt,
-        updatedAt: source.updatedAt,
-        deletedAt: source.deletedAt,
-      });
+    const convert = (source: PostTypeormEntity): PostEntity => {
+      return new PostEntity(
+        PostEntityPropsInputModel.build({
+          id: new PostId(source.id),
+          title: source.title,
+          status: source.status,
+          createdAt: source.createdAt,
+          updatedAt: source.updatedAt,
+          deletedAt: source.deletedAt,
+        }),
+      );
     };
 
     createMap(
       this.mapper,
-      AnalysisTypeormEntity,
-      AnalysisEntity,
+      PostTypeormEntity,
+      PostEntity,
       constructUsing(convert),
     );
   }
 
   private mapDomainEntityToOrmEntity(): void {
-    const convert = (source: AnalysisEntity): AnalysisTypeormEntity => {
-      return AnalysisTypeormEntity.build({
+    const convert = (source: PostEntity): PostTypeormEntity => {
+      return PostTypeormEntity.build({
         id: source.id.toString(),
-        name: source.name,
+        title: source.title,
         status: source.status,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
@@ -2620,8 +2761,8 @@ export class AnalysisEntityAutoMapperProfile {
 
     createMap(
       this.mapper,
-      AnalysisEntity,
-      AnalysisTypeormEntity,
+      PostEntity,
+      PostTypeormEntity,
       constructUsing(convert),
     );
   }
@@ -2645,25 +2786,25 @@ Use when the computed value belongs to a different entity, involves a separate r
 
 ```typescript
 // 1. Specialized method in the relevant query gateway
-export abstract class SupportTicketQueryRepositoryGateway {
-  public abstract countResolvedTicketsByAttendantIds(
-    attendantIds: SupportAttendantId[],
-  ): Promise<Map<SupportAttendantId, number>>; // single query, no N+1
+export abstract class CommentQueryRepositoryGateway {
+  public abstract countCommentsByPostIds(
+    postIds: PostId[],
+  ): Promise<Map<PostId, number>>; // single query, no N+1
 }
 
 // 2. Use case fetches and combines
-const list = await this.attendantRepo.listSupportAttendants(pagination);
+const list = await this.postRepo.listPosts(pagination);
 
-const resolvedCountMap =
-  await this.ticketRepo.countResolvedTicketsByAttendantIds(
-    list.resource.map((a) => a.id),
+const commentCountMap =
+  await this.commentRepo.countCommentsByPostIds(
+    list.resource.map((p) => p.id),
   );
 
-const resource = list.resource.map((attendant) =>
-  GetSupportAttendantResponseDto.build({
-    supportAttendantId: attendant.id,
-    name: attendant.name,
-    resolvedTicketsCount: resolvedCountMap.get(attendant.id) ?? 0, // ✅ only in DTO
+const resource = list.resource.map((post) =>
+  GetPostResponseDto.build({
+    postId: post.id,
+    title: post.title,
+    commentsCount: commentCountMap.get(post.id) ?? 0, // ✅ only in DTO
   }),
 );
 ```
@@ -2674,7 +2815,7 @@ const resource = list.resource.map((attendant) =>
 
 Use when the calculation is an intrinsic part of the query (e.g., COUNT via JOIN/subquery on the same table) and the field would never make sense without that context. Must be standardized:
 
-- The field must be declared with a clear name indicating it is computed (e.g., `resolvedTicketsCount`, not `count`)
+- The field must be declared with a clear name indicating it is computed (e.g., `commentsCount`, not `count`)
 - The TypeORM repository query is responsible for populating it using a **separate count query** (QueryBuilder is prohibited — see Repository Implementation rules)
 - The query result documents (via field name) that the value is computed
 
@@ -2683,12 +2824,11 @@ Since `QueryBuilder` is prohibited, implement batch counts via a separate `find`
 ```typescript
 // ✅ CORRECT — batch count without QueryBuilder
 const countPerResult = await Promise.all(
-  resultIds.map(async (id) => ({
+  postIds.map(async (id) => ({
     id,
-    count: await manager.getRepository(TicketTypeormEntity).count({
+    count: await manager.getRepository(CommentTypeormEntity).count({
       where: {
-        assignedAttendant: { id: id.toString() },
-        status: SupportTicketStatusEnum.RESOLVED,
+        post: { id: id.toString() },
       },
     }),
   })),
@@ -2702,7 +2842,7 @@ const countPerResult = await Promise.all(
 - ✅ **Standard**: query results mirror entity fields — only stored data
 - ✅ **Prefer** specialized query + use case to combine data from different repositories
 - ✅ When computed fields are added to the query result, name them explicitly (no abbreviations)
-- ✅ Specialized ticket repository method is batch-aware (accepts array of IDs, returns `Map`) to avoid N+1
+- ✅ Specialized child repository method is batch-aware (accepts array of IDs, returns `Map`) to avoid N+1
 - ✅ Naming: `count{Entity}By{Criteria}` for counting methods, returning `Map<ValueObjectId, number>`
 - ✅ The use case is responsible for fetching and combining data from multiple repositories
 - ❌ NO N+1 (one query per item): always use batch IDs with `IN (...) GROUP BY`
@@ -2714,19 +2854,19 @@ JavaScript `Map` uses **reference equality** for object keys. When using a Value
 
 ```typescript
 // ✅ CORRECT implementation pattern — reuse input VO instances as keys
-const countByIdString = new Map(rows.map((r) => [r.attendantId, Number(r.count)]));
-const result = new Map<SupportAttendantId, number>();
-for (const id of attendantIds) {
+const countByIdString = new Map(rows.map((r) => [r.postId, Number(r.count)]));
+const result = new Map<PostId, number>();
+for (const id of postIds) {
   result.set(id, countByIdString.get(id.toString()) ?? 0); // id = same reference passed in
 }
 
 // ✅ CORRECT use case lookup — same reference used in both the input and the lookup
-const ids = list.resource.map((a) => a.id);
-const countMap = await repo.countByIds(ids);
-list.resource.map((a) => countMap.get(a.id) ?? 0); // a.id is the same reference as ids[i]
+const ids = list.resource.map((p) => p.id);
+const countMap = await repo.countCommentsByPostIds(ids);
+list.resource.map((p) => countMap.get(p.id) ?? 0); // p.id is the same reference as ids[i]
 
 // ❌ WRONG — creating a new VO for lookup (different reference → Map.get returns undefined)
-countMap.get(new SupportAttendantId(attendant.id.toString())) // ❌ always misses
+countMap.get(new PostId(post.id.toString())) // ❌ always misses
 ```
 
 
@@ -2739,18 +2879,18 @@ countMap.get(new SupportAttendantId(attendant.id.toString())) // ❌ always miss
 **❌ WRONG - Multiple classes in one file:**
 
 ```typescript
-// rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result.ts
-export class GetRuralTimelineAnalysisDocumentQueryResult { ... }
-export class GetRuralTimelineAnalysisPeriodQueryResult { ... }
-export class GetRuralTimelineAnalysisWithRelationsQueryResult { ... }
+// post/query/result/get-post-with-relations.query.result.ts
+export class GetPostAuthorQueryResult { ... }
+export class GetPostCommentsQueryResult { ... }
+export class GetPostWithRelationsQueryResult { ... }
 ```
 
 **✅ CORRECT - Each class in its own file:**
 
 ```
-rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result.ts
-rural-timeline-analysis-document/query/result/get-rural-timeline-analysis-document.query.result.ts
-rural-timeline-analysis-period/query/result/get-rural-timeline-analysis-period.query.result.ts
+post/query/result/get-post-with-relations.query.result.ts
+post-author/query/result/get-post-author.query.result.ts
+comment/query/result/get-comment.query.result.ts
 ```
 
 **Rules**:
@@ -2763,50 +2903,51 @@ rural-timeline-analysis-period/query/result/get-rural-timeline-analysis-period.q
 
 ---
 
-### Entity Props Interface ⚠️ MANDATORY
+### Entity Props Input Model ⚠️ MANDATORY
 
-**CRITICAL**: Entity props interfaces MUST extend `BaseEntityPropsInterface<IdType>`. **NEVER redeclare `id`, `createdAt`, `updatedAt`, or `deletedAt`** — these are already provided by the base interface.
+**CRITICAL**: Entity props models MUST extend `BaseEntityPropsInputModel<IdType>` (a class, never an interface). **NEVER redeclare `id`, `createdAt`, `updatedAt`, or `deletedAt`** — these are already provided by the base class.
 
-**❌ WRONG - Redeclaring base fields:**
+**❌ WRONG - Using an interface:**
 
 ```typescript
-export interface AnalysisEntityPropsInterface {
-  id?: AnalysisId; // ❌ Already in BaseEntityPropsInterface
-  createdAt?: Date; // ❌ Already in BaseEntityPropsInterface
-  updatedAt?: Date; // ❌ Already in BaseEntityPropsInterface
-  deletedAt?: Date | null; // ❌ Already in BaseEntityPropsInterface
-  name: string;
+export interface PostEntityPropsInterface {
+  id?: PostId; // ❌ interfaces are forbidden
+  content: string;
 }
 ```
 
-**✅ CORRECT - Extending BaseEntityPropsInterface:**
+**✅ CORRECT - Extending BaseEntityPropsInputModel:**
 
 ```typescript
-import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base.entity.props.interface';
-import type { AnalysisId } from './value-object/analysis-id/analysis-id.value-object';
+import { BaseEntityPropsInputModel } from '@core/domain/schema/entity/base/base.entity.props.input.model';
+import type { PostId } from './value-object/post-id/post-id.value-object';
 
-export interface AnalysisEntityPropsInterface extends BaseEntityPropsInterface<AnalysisId> {
-  name: string; // ✅ Only domain-specific fields
+export class PostEntityPropsInputModel extends BaseEntityPropsInputModel<PostId> {
+  protected override readonly _type = PostEntityPropsInputModel.name;
+  public content: string; // ✅ Only domain-specific fields
 }
 ```
 
-**`BaseEntityPropsInterface` already provides:**
+**`BaseEntityPropsInputModel` already provides:**
 
 ```typescript
-interface BaseEntityPropsInterface<Id extends Guid> {
-  id?: Id | null;
-  createdAt?: Date | null;
-  updatedAt?: Date | null;
-  deletedAt?: Date | null;
+class BaseEntityPropsInputModel<Id extends Guid> extends BaseBuildableObject {
+  public id?: Id | null;
+  public createdAt?: Date | null;
+  public updatedAt?: Date | null;
+  public deletedAt?: Date | null;
 }
 ```
 
 **Rules**:
 
-- ✅ Always extend `BaseEntityPropsInterface<YourEntityId>`
-- ✅ Only declare domain-specific fields in the interface body
-- ✅ Import `BaseEntityPropsInterface` from `@core/domain/schema/entity/base/base.entity.props.interface`
-- ❌ NEVER declare `id`, `createdAt`, `updatedAt`, or `deletedAt` in entity props interfaces
+- ✅ Always extend `BaseEntityPropsInputModel<YourEntityId>`
+- ✅ Only declare domain-specific fields in the class body
+- ✅ File name: `{entity-name}.entity.props.input.model.ts`
+- ✅ Class name: `{Entity}EntityPropsInputModel`
+- ✅ Import `BaseEntityPropsInputModel` from `@core/domain/schema/entity/base/base.entity.props.input.model`
+- ❌ NEVER use `interface` for entity props — always a class
+- ❌ NEVER declare `id`, `createdAt`, `updatedAt`, or `deletedAt` in entity props models
 
 ---
 
@@ -2821,7 +2962,7 @@ module/{feature}/
 │   │   ├── entity/
 │   │   │   ├── {entity-name}/
 │   │   │   │   ├── {entity-name}.entity.ts
-│   │   │   │   ├── {entity-name}.entity.props.interface.ts
+│   │   │   │   ├── {entity-name}.entity.props.input.model.ts
 │   │   │   │   ├── enum/
 │   │   │   │   │   └── {enum-name}.enum.ts
 │   │   │   │   └── value-object/
@@ -3067,8 +3208,8 @@ private async fetchAnalysisOrThrow(id: AnalysisId): Promise<AnalysisEntity> {
 
 ```typescript
 {
-  provide: AnalysisCommandRepositoryGateway,
-  useClass: AnalysisTypeormCommandRepository,
+  provide: PostCommandRepositoryGateway,
+  useClass: PostTypeormCommandRepository,
 }
 ```
 
@@ -3099,16 +3240,16 @@ Always specify inverse relations in entities for bidirectional relationships:
 
 ```typescript
 @Entity()
-export class AnalysisTypeormEntity {
-  @ManyToOne(() => ClientTypeormEntity, (entity) => entity.analyses)
-  @JoinColumn({ name: 'client_id' })
-  public client: ClientTypeormEntity;
+export class PostTypeormEntity {
+  @ManyToOne(() => UserTypeormEntity, (entity) => entity.posts)
+  @JoinColumn({ name: 'author_id' })
+  public author: UserTypeormEntity;
 }
 
 @Entity()
-export class ClientTypeormEntity {
-  @OneToMany(() => AnalysisTypeormEntity, (entity) => entity.client)
-  public analyses: AnalysisTypeormEntity[];
+export class UserTypeormEntity {
+  @OneToMany(() => PostTypeormEntity, (entity) => entity.author)
+  public posts: PostTypeormEntity[];
 }
 ```
 
@@ -3177,106 +3318,6 @@ return ListMyResourceResponseDto.build({ ...result, resource });
 ### 9. `ListDataInputModel` — `page` and `limit` default to 1 and 10
 
 `ListDataInputModel` guards against `0` or negative values — `page=0` becomes `1` and `limit=0` becomes `10`. This prevents `totalPages = Infinity` (division by zero) which causes response DTO validation failures.
-
-### 10. Service Desk — Security invariants
-
-- **requesterEmail**: NEVER use the value from the request DTO. Always read the email from `fetchRequesterData()` (the authenticated user's identity).
-- **ticketNumber generation**: Use a retry loop (up to 5 attempts) catching `UQ_support_ticket_org_number` unique constraint violations to handle concurrent requests safely.
-- **Transaction consistency**: Ticket creation (DB metadata + attachments) must be in a single transaction. If bucket upload succeeds but DB commit fails, call `compensateBucketUploads()` to clean up orphaned files.
-- **Attendant access control**: `assertAccess()` must validate `isActive` and `supportType` when `orgSession === null` — any `SUPPORT` user must not bypass scope.
-- **Attendant message ownership**: An attendant can only send messages on tickets assigned to them (`assignedAttendantId === attendant.id`).
-
-### 11. Affiliate — `paymentPlanDiscountRedemptionLimit` is a cap, not a counter
-
-`paymentPlanDiscountRedemptionLimit` is a **maximum number of redemptions allowed** and never decreases. The current usage count is tracked separately (`usedCount`). The correct validity check is:
-
-```typescript
-// WRONG
-affiliate.paymentPlanDiscountRedemptionLimit > 0
-
-// CORRECT
-usedCount < affiliate.paymentPlanDiscountRedemptionLimit
-```
-
-When a discount is expired or the limit is reached, return an empty/zero-discount response — do **not** throw 404. Keep the same response DTO shape and do **not** set the affiliate cookie.
-
----
-
-### 12. AI Analysis JSON Schema Pattern ⚠️ MANDATORY
-
-**RULE**: The JSON structure returned by the AI model MUST be defined via a `private get*JsonSchema(): object` method inside `AnalysisProcessorService`. **NEVER describe the JSON structure in the prompt/seeder text.**
-
-The prompt (stored in the DB via the seeder) is responsible only for **instructions and context** — what the AI should analyse and how. The **schema** enforces the output shape.
-
-**❌ WRONG — JSON structure described in the prompt:**
-
-```
-// In payment-plan-paid-resource-ia-config.seeder.ts
-prompt: `...
-ESTRUTURA OBRIGATÓRIA DO JSON:
-{
-  "resumoDoCaso": "...",
-  "sinteseDoCnis": "..."
-}
-`
-```
-
-**✅ CORRECT — JSON structure defined in the analysis-processor schema method:**
-
-```typescript
-// In analysis-processor.service.ts
-private getMyAnalysisJsonSchema(): object {
-  return {
-    type: 'object',
-    properties: {
-      insuredStatus:   { type: 'boolean', description: '...' },
-      gracePeriods: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            event:       { type: 'string' },
-            date:        { type: 'string' },
-            observation: { type: 'string' },
-          },
-          required: ['event', 'date', 'observation'],
-        },
-      },
-    },
-    required: ['insuredStatus', 'gracePeriods'],
-  };
-}
-```
-
-The schema **must exactly match** the corresponding `*Interface` file under `interface/`. If the interface has key `insuredStatus: boolean`, the schema must have `insuredStatus: { type: 'boolean' }`.
-
-**Rules:**
-
-- ✅ JSON schema is defined in `AnalysisProcessorService` as a private `get{Feature}JsonSchema()` method
-- ✅ Schema keys and types must match the `*Interface` file exactly
-- ✅ Use `required: [...]` in the schema so the AI is forced to return all mandatory fields
-- ✅ Prompt text describes only the analysis instructions (no JSON structure)
-- ✅ Seeder prompt is kept clear and concise — no JSON examples or schema
-- ❌ NO JSON structure in prompts or seeders — the prompt **NEVER** mentions field names, JSON objects, or example values
-- ❌ NO mismatch between schema keys and interface fields
-
----
-
-### 13. Seeder Completeness Rules ⚠️ MANDATORY
-
-**RULE 1 — Seed ALL enum values, not just the one that triggered an error.**
-
-When a `PaymentPlanPaidResourceIaConfigNotFoundError` (or similar) occurs for one resource type, always check whether **all** other values of the same enum family are also seeded. A missing entry for one type strongly implies other types are missing too.
-
-**RULE 2 — Time Accelerators are generic resource types shared across features.**
-
-`TIME_ACCELERATOR_*` resource types (e.g. `TIME_ACCELERATOR_RURAL_TIME_ANALYSIS`, `TIME_ACCELERATOR_MILITARY_SERVICE_ANALYSIS`) are **generic** and already seeded once for the whole platform. When implementing a new analysis feature that uses time accelerators, do **NOT** create new `PaymentPlanPaidResource` seed entries for them — they reuse the existing ones.
-
-Only the analysis-specific types (e.g. `RURAL_OR_HYBRID_RETIREMENT_REJECTION_FIRST_ANALYSIS`, `RURAL_OR_HYBRID_RETIREMENT_REJECTION_COMPLETE_ANALYSIS`, `RURAL_OR_HYBRID_RETIREMENT_REJECTION_SIMPLIFIED_ANALYSIS`) need their own seed entries.
-
-**RULE 3 — Seeder prompt never mentions JSON.**
-
-This is a duplicate of Rule 12 above and applies specifically to the `payment-plan-paid-resource-ia-config.seeder.ts` file. The `prompt` field stored in the DB is for **instructions only**. The JSON schema shape is exclusively the responsibility of the `get*JsonSchema()` method in `AnalysisProcessorService`.
 
 ---
 
@@ -3624,83 +3665,3 @@ export class MyTypeormEntity extends BaseBuildableObject {
 ---
 
 **Remember**: Clean Architecture is about separation of concerns and dependency direction. The domain is the heart of your application, and everything else supports it.
-
----
-
-## Novo tipo de análise: checklist obrigatório para aparecer na listagem ⚠️
-
-Ao criar um **novo tipo de análise** (novo módulo em `analysis-tool/module/`), são necessários **4 passos obrigatórios** para que ele apareça corretamente na listagem `/customer/analysis-tool/analysis-tool-record`.
-
-### 1. Enum `AnalysisToolRecordTypeEnum`
-Adicione o novo tipo em:
-`src/module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum.ts`
-
-```typescript
-MY_NEW_ANALYSIS = 'meu_novo_tipo',
-```
-
----
-
-### 2. Relação na entidade `AnalysisToolRecordTypeormEntity`
-Adicione o campo `@OneToOne` correspondente em:
-`src/infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity.ts`
-
-```typescript
-@OneToOne(() => MyNewAnalysisTypeormEntity, { nullable: true, eager: false })
-@JoinColumn({ name: 'my_new_analysis_id' })
-public myNewAnalysis?: MyNewAnalysisTypeormEntity | null;
-```
-
----
-
-### 3. `atLeastOneRelationNotNull` no query repository ❌ PONTO MAIS ESQUECIDO
-Arquivo: `src/infra/database/implementation/typeorm/repository/analysis-tool-record/analysis-tool-record.typeorm.query.repository.ts`
-
-Existem **dois** arrays `atLeastOneRelationNotNull` no arquivo (um no método `listByOrganizationIdAndAuthIdentityId`, outro no método de estatísticas por ano). Adicione a nova relação em **ambos**:
-
-```typescript
-{ myNewAnalysis: Not(IsNull()) },
-```
-
-Também adicione a relação no método `getEntityRelationsKey()` no mesmo arquivo:
-
-```typescript
-'myNewAnalysis',
-```
-
-> **Por que isso existe?** A query de listagem exige que o registro tenha ao menos uma relação não-nula para ser retornado. Sem isso, registros do novo tipo são silenciosamente omitidos da listagem — o BD tem os dados, mas a query não os retorna.
-
----
-
-### 4. Chain de `analysis` no use case de listagem ❌ PONTO MAIS ESQUECIDO
-Arquivo: `src/module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case.ts`
-
-Adicione a nova análise na chain de `??` da variável `analysis`:
-
-```typescript
-const analysis =
-  analysisToolRecord.cnisFastAnalysis ??
-  // ... demais tipos ...
-  analysisToolRecord.myNewAnalysis; // ← adicionar aqui
-```
-
-> **Se o tipo tiver campo de ID customizado** (como `myNewAnalysisId` em vez de `.id`), adicione nos casos especiais de `analysisId` logo abaixo:
-> ```typescript
-> const analysisId =
->   analysis?.id ??
->   analysisToolRecord.myNewAnalysis?.myNewAnalysisId ?? // ← caso especial
->   null;
-> ```
-
-> **Por que isso existe?** Mesmo que a query retorne o registro, o use case descarta qualquer item onde `analysisId === null`. Se a análise não estiver na chain, o `analysisId` nunca é preenchido e o registro é filtrado antes de chegar ao frontend.
-
----
-
-### Resumo rápido
-
-| Arquivo | O que fazer |
-|--------|-------------|
-| `enum/analysis-tool-record-type.enum.ts` | Adicionar valor do enum |
-| `schema/entity/analysis-tool-record.typeorm.entity.ts` | Adicionar `@OneToOne` |
-| `repository/analysis-tool-record/...query.repository.ts` | Adicionar em **ambos** os `atLeastOneRelationNotNull` e em `getEntityRelationsKey()` |
-| `use-case/list-analysis-tool-record.use-case.ts` | Adicionar na chain `analysis ??` |
