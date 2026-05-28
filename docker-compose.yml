@@ -43,7 +43,6 @@ services:
     container_name: clickhouse
     hostname: clickhouse
     ports:
-      - '9000:9000'
       - '8123:8123'
     volumes:
       - clickhouse:/var/lib/clickhouse/

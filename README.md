@@ -100,7 +100,7 @@ ZooKeeper is a distributed coordination service. ClickHouse uses it internally t
 
 #### `clickhouse`
 
-**Image:** `clickhouse/clickhouse-server:24.3-alpine` | **Ports:** `9000` (native TCP), `8123` (HTTP)
+**Image:** `clickhouse/clickhouse-server:24.3-alpine` | **Port:** `8123` (HTTP, host-accessible for debugging)
 
 ClickHouse is a column-oriented OLAP database. SigNoz stores all observability data here:
 
@@ -109,6 +109,8 @@ ClickHouse is a column-oriented OLAP database. SigNoz stores all observability d
 - **Logs** → `signoz_logs` database
 
 ClickHouse is optimized for high-throughput time-series insertions and fast aggregation queries — which is exactly the workload that distributed tracing and metrics produce. A traditional row-store database (like Postgres) would be far too slow for this.
+
+The native TCP port `9000` is used exclusively for internal container-to-container communication (SigNoz services connect via `tcp://clickhouse:9000` inside the Docker network) and is **not bound to the host** to avoid conflicting with MinIO, which also listens on `9000`. The HTTP port `8123` is exposed on the host for ad-hoc debug queries.
 
 #### `signoz-migrate`
 
