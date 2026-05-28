@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { apiReference } from '@scalar/nestjs-api-reference';
 
 import { ApiCookieEnum } from '@shared/api/enum/api-cookie.enum';
 import { ConflictErrorExceptionFilter } from '@shared/api/gateway/exception-filter/conflict.error.exception-filter';
@@ -26,7 +27,7 @@ import { FrameworkApplicationVariable } from '@shared/system/constant/applicatio
 
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 import type { ValidationError } from 'class-validator';
-import type { RawServerDefault } from 'fastify';
+import type { FastifyInstance, RawServerDefault } from 'fastify';
 import type { PackageJson } from 'type-fest';
 
 class AppConfigUtils {
@@ -269,10 +270,29 @@ export class AppConfig extends AppConfigUtils {
 
     const document = SwaggerModule.createDocument(this.app, build);
 
-    SwaggerModule.setup(
-      `${FrameworkApplicationVariable.FRAMEWORK_BASE_PATH}/docs`,
-      this.app,
-      document,
+    const basePath = FrameworkApplicationVariable.FRAMEWORK_BASE_PATH;
+    const docsJsonPath = `/${basePath}/docs-json`;
+    const docsPath = `/${basePath}/docs`;
+
+    const fastifyInstance = this.app
+      .getHttpAdapter()
+      .getInstance() as FastifyInstance;
+
+    fastifyInstance.get(docsJsonPath, (_req, reply) => {
+      void reply.type('application/json').send(document);
+    });
+
+    this.app.use(
+      docsPath,
+      apiReference({
+        withFastify: true,
+        url: docsJsonPath,
+        theme: 'default',
+        defaultHttpClient: {
+          targetKey: 'node',
+          clientKey: 'fetch',
+        },
+      }),
     );
 
     return this;

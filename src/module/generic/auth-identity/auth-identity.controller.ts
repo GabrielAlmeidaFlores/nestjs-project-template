@@ -17,7 +17,6 @@ import { AuthIdentityForgotPasswordValidateCodeUseCase } from '@module/generic/a
 import { AuthIdentityForgotPasswordUseCase } from '@module/generic/auth-identity/use-case/auth-identity-forgot-password.use-case';
 import { AuthIdentityResetPasswordUseCase } from '@module/generic/auth-identity/use-case/auth-identity-reset-password.use-case';
 import { AuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-in.use-case';
-import { AuthIdentitySignOutUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-out.use-case';
 import { PreAuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/pre-auth-identity-sign-in.use-case';
 import { UpdateAuthIdentityPasswordUseCase } from '@module/generic/auth-identity/use-case/update-auth-identity-password.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -35,7 +34,6 @@ export class AuthIdentityController {
 
   public constructor(
     private readonly authIdentitySignInUseCase: AuthIdentitySignInUseCase,
-    private readonly authIdentitySignOutUseCase: AuthIdentitySignOutUseCase,
     private readonly authIdentitySignUpUseCase: AuthIdentitySignUpUseCaseGateway,
     private readonly preAuthIdentitySignInUseCase: PreAuthIdentitySignInUseCase,
     private readonly authIdentityForgotPasswordUseCase: AuthIdentityForgotPasswordUseCase,
@@ -225,26 +223,5 @@ export class AuthIdentityController {
     @GetSessionData() sessionData: SessionDataModel,
   ): AuthIdentitySignInResponseDto {
     return AuthIdentitySignInResponseDto.build(sessionData);
-  }
-
-  @BuildEndpointSpecification({
-    summary: 'Sign out',
-    userLevel: [UserLevelEnum.USER, UserLevelEnum.ADMIN],
-    http: {
-      path: 'sign-out',
-      method: RequestMethod.HEAD,
-    },
-    tag: ['auth'],
-    successResponse: {
-      statusCode: HttpStatus.NO_CONTENT,
-      description: 'Session invalidated successfully.',
-    },
-    guard: [AuthGuard],
-  })
-  public async authIdentitySignOut(
-    @Res({ passthrough: true }) reply: FastifyReply,
-    @GetSessionData() sessionData: SessionDataModel,
-  ): Promise<void> {
-    return await this.authIdentitySignOutUseCase.execute(reply, sessionData);
   }
 }

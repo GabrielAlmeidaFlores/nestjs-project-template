@@ -5,6 +5,7 @@ import Redis from 'ioredis';
 
 import { CacheStorageGateway } from '@infra/cache-storage/cache-storage.gateway';
 import { CacheStorageApplicationVariable } from '@shared/system/constant/application-variable/source/cache-storage.application-variable';
+import { withSpan } from '@shared/system/tracing/tracer';
 
 @Injectable()
 export class RedisService implements CacheStorageGateway {
@@ -24,23 +25,29 @@ export class RedisService implements CacheStorageGateway {
   }
 
   public async deleteData(key: string): Promise<void> {
-    await this.redis.del(key);
+    return withSpan('redis.deleteData', async () => {
+      await this.redis.del(key);
+    });
   }
 
   public async setData(key: string, value: string, ttl = 3600): Promise<void> {
-    const encryptedValue = this.encryptData(value);
-    await this.redis.set(key, encryptedValue, 'EX', ttl);
+    return withSpan('redis.setData', async () => {
+      const encryptedValue = this.encryptData(value);
+      await this.redis.set(key, encryptedValue, 'EX', ttl);
+    });
   }
 
   public async getData(key: string): Promise<string | null> {
-    const encryptedValue = await this.redis.get(key);
+    return withSpan('redis.getData', async () => {
+      const encryptedValue = await this.redis.get(key);
 
-    const dataIsAvailable = encryptedValue !== null;
-    if (dataIsAvailable) {
-      return this.decryptData(encryptedValue);
-    }
+      const dataIsAvailable = encryptedValue !== null;
+      if (dataIsAvailable) {
+        return this.decryptData(encryptedValue);
+      }
 
-    return null;
+      return null;
+    });
   }
 
   public encryptData(value: string): string {

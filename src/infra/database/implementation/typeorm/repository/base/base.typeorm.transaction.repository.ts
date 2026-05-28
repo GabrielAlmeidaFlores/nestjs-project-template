@@ -4,6 +4,7 @@ import { DataSource } from 'typeorm';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionOutputModel } from '@core/domain/repository/base/transaction/model/output/transaction.output.model';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
+import { withSpan } from '@shared/system/tracing/tracer';
 
 @Injectable()
 export class BaseTypeormTransactionRepository implements BaseTransactionRepositoryGateway {
@@ -14,59 +15,61 @@ export class BaseTypeormTransactionRepository implements BaseTransactionReposito
   public async execute(
     events: TransactionType | TransactionType[],
   ): Promise<TransactionOutputModel> {
-    if (!Array.isArray(events)) {
-      events = [events];
-    }
+    return withSpan('typeorm.transaction', async () => {
+      if (!Array.isArray(events)) {
+        events = [events];
+      }
 
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
+      const queryRunner = this.dataSource.createQueryRunner();
+      await queryRunner.connect();
+      await queryRunner.startTransaction();
 
-    let finalized = false;
+      let finalized = false;
 
-    const timeoutPromise = async (): Promise<void> => {
-      if (!finalized && queryRunner.isTransactionActive) {
+      const timeoutPromise = async (): Promise<void> => {
+        if (!finalized && queryRunner.isTransactionActive) {
+          finalized = true;
+          clearTimeout(timeout);
+          await queryRunner.rollbackTransaction();
+          await queryRunner.release();
+        }
+      };
+      const timeoutInMilliseconds = 600_000;
+      const timeout = setTimeout(() => {
+        void timeoutPromise();
+      }, timeoutInMilliseconds);
+
+      const finalize = async (action: 'commit' | 'rollback'): Promise<void> => {
+        if (finalized) {
+          return;
+        }
         finalized = true;
         clearTimeout(timeout);
-        await queryRunner.rollbackTransaction();
-        await queryRunner.release();
+
+        if (action === 'commit') {
+          await queryRunner.commitTransaction();
+        } else if (queryRunner.isTransactionActive) {
+          await queryRunner.rollbackTransaction();
+        }
+
+        if (!queryRunner.isReleased) {
+          await queryRunner.release();
+        }
+      };
+
+      const commit = async (): Promise<void> => finalize('commit');
+      const rollback = async (): Promise<void> => finalize('rollback');
+
+      try {
+        for (const event of events) {
+          await event(queryRunner.manager);
+        }
+
+        return new TransactionOutputModel(commit, rollback);
+      } catch (error) {
+        await rollback();
+        throw error;
       }
-    };
-    const timeoutInMilliseconds = 600_000;
-    const timeout = setTimeout(() => {
-      void timeoutPromise();
-    }, timeoutInMilliseconds);
-
-    const finalize = async (action: 'commit' | 'rollback'): Promise<void> => {
-      if (finalized) {
-        return;
-      }
-      finalized = true;
-      clearTimeout(timeout);
-
-      if (action === 'commit') {
-        await queryRunner.commitTransaction();
-      } else if (queryRunner.isTransactionActive) {
-        await queryRunner.rollbackTransaction();
-      }
-
-      if (!queryRunner.isReleased) {
-        await queryRunner.release();
-      }
-    };
-
-    const commit = async (): Promise<void> => finalize('commit');
-    const rollback = async (): Promise<void> => finalize('rollback');
-
-    try {
-      for (const event of events) {
-        await event(queryRunner.manager);
-      }
-
-      return new TransactionOutputModel(commit, rollback);
-    } catch (error) {
-      await rollback();
-      throw error;
-    }
+    });
   }
 }

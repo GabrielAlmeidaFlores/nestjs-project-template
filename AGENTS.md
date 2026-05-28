@@ -3325,6 +3325,23 @@ return ListMyResourceResponseDto.build({ ...result, resource });
 
 **Unit tests are NOT optional.** Every AI agent MUST create `*.spec.ts` files for every new piece of code it produces. Tests are part of the definition of "done" — code without tests is incomplete.
 
+### ⚠️ CRITICAL: Every Use Case MUST Have a Spec File
+
+**This is the single most important testing rule.** A use case file (`*.use-case.ts`) without a sibling `*.use-case.spec.ts` is considered **incomplete code**. No exceptions.
+
+The spec file MUST:
+- Live **next to** the use case file (same directory)
+- Cover **every code path** in `execute()`: happy path + every `if (!x) throw` branch
+- Verify `transaction.commit()` is called for all write operations
+- Never connect to a real database — all repositories are mocked
+
+**Checklist for every use case spec:**
+- [ ] `beforeEach` resets all mocks via `jest.fn()` re-assignment
+- [ ] Happy path verifies the returned DTO has the expected values
+- [ ] Each `throw new SomeError()` has a corresponding `it('should throw SomeError when ...')`
+- [ ] Write use cases: `expect(commitMock).toHaveBeenCalledTimes(1)`
+- [ ] Write use cases: `expect(transactionGateway.execute).toHaveBeenCalled()`
+
 ### What MUST be tested (non-exhaustive)
 
 | Layer | What to test | Test file location |
@@ -3355,22 +3372,34 @@ Every use case MUST have tests covering:
 3. **Conflict branch** — throws the correct `*AlreadyExistsError` / `*ConflictError` when applicable
 4. **Transaction commit** — `transaction.commit()` is called when write operations succeed
 
+**Read use case (no transaction):**
+
 ```typescript
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { PostNotFoundError } from '@module/social/post/error/post-not-found.error';
-import { PostQueryRepositoryGateway } from '@module/social/post/domain/repository/post/query/post.query.repository.gateway';
-import { PostCommandRepositoryGateway } from '@module/social/post/domain/repository/post/command/post.command.repository.gateway';
+import { PostQueryRepositoryGateway } from '@module/client/post/domain/repository/post/query/post.query.repository.gateway';
+import { GetPostQueryResult } from '@module/client/post/domain/repository/post/query/result/get-post.query.result';
+import { PostId } from '@module/client/post/domain/schema/entity/post/value-object/post-id/post-id.value-object';
+import { PostNotFoundError } from '@module/client/post/error/post-not-found.error';
+import { UserId } from '@module/client/user/domain/schema/entity/user/value-object/user-id/user-id.value-object';
 import { GetPostUseCase } from './get-post.use-case';
-import { PostEntity } from '../domain/schema/entity/post/post.entity';
-import { PostId } from '../domain/schema/entity/post/value-object/post-id/post-id.value-object';
 
 describe('GetPostUseCase', () => {
   let useCase: GetPostUseCase;
   let postQueryRepository: jest.Mocked<PostQueryRepositoryGateway>;
 
   const postId = new PostId();
+  const authorId = new UserId();
+  const now = new Date();
+
+  const mockPost = GetPostQueryResult.build({
+    id: postId,
+    authorId,
+    content: 'Hello world',
+    createdAt: now,
+    updatedAt: now,
+    deletedAt: null,
+  });
 
   beforeEach(async () => {
     postQueryRepository = {
@@ -3388,17 +3417,17 @@ describe('GetPostUseCase', () => {
   });
 
   describe('execute', () => {
-    it('should return the post when found', async () => {
-      const post = new PostEntity({ id: postId, title: 'Hello', content: 'World', authorId: new UserId() });
-      postQueryRepository.findOnePostById.mockResolvedValue(post);
+    it('should return the post DTO when the post exists', async () => {
+      postQueryRepository.findOnePostById.mockResolvedValue(mockPost);
 
       const result = await useCase.execute(postId);
 
       expect(result.postId).toEqual(postId);
+      expect(result.content).toBe('Hello world');
       expect(postQueryRepository.findOnePostById).toHaveBeenCalledWith(postId);
     });
 
-    it('should throw PostNotFoundError when post does not exist', async () => {
+    it('should throw PostNotFoundError when the post does not exist', async () => {
       postQueryRepository.findOnePostById.mockResolvedValue(null);
 
       await expect(useCase.execute(postId)).rejects.toThrow(PostNotFoundError);
@@ -3407,30 +3436,75 @@ describe('GetPostUseCase', () => {
 });
 ```
 
-### Write Use Case Test Pattern (with transaction)
+**Write use case (with transaction):**
 
 ```typescript
+import { Test, TestingModule } from '@nestjs/testing';
+
+import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { TransactionOutputModel } from '@core/domain/repository/base/transaction/model/output/transaction.output.model';
+import { PostCommandRepositoryGateway } from '@module/client/post/domain/repository/post/command/post.command.repository.gateway';
+import { PostQueryRepositoryGateway } from '@module/client/post/domain/repository/post/query/post.query.repository.gateway';
+import { PostId } from '@module/client/post/domain/schema/entity/post/value-object/post-id/post-id.value-object';
+import { CreatePostRequestDto } from '@module/client/post/dto/request/create-post.request.dto';
+import { UserQueryRepositoryGateway } from '@module/client/user/domain/repository/user/query/user.query.repository.gateway';
+import { GetUserQueryResult } from '@module/client/user/domain/repository/user/query/result/get-user.query.result';
+import { UserId } from '@module/client/user/domain/schema/entity/user/value-object/user-id/user-id.value-object';
+import { UserNotFoundError } from '@module/client/user/error/user-not-found.error';
+import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
+import { CreatePostUseCase } from './create-post.use-case';
+
 describe('CreatePostUseCase', () => {
   let useCase: CreatePostUseCase;
+  let userQueryRepository: jest.Mocked<UserQueryRepositoryGateway>;
   let postCommandRepository: jest.Mocked<PostCommandRepositoryGateway>;
   let transactionGateway: jest.Mocked<BaseTransactionRepositoryGateway>;
 
-  const commitMock = jest.fn();
-  const transactionMock = { commit: commitMock };
+  const commitMock = jest.fn().mockResolvedValue(undefined);
+  const authIdentityId = new AuthIdentityId();
+  const userId = new UserId();
+  const now = new Date();
+
+  const mockSessionData = SessionDataModel.build({
+    authIdentityId,
+    sessionId: authIdentityId,
+    userLevel: UserLevelEnum.USER,
+  });
+
+  const mockUser = GetUserQueryResult.build({
+    id: userId,
+    authIdentityId,
+    name: 'Test User',
+    username: 'testuser',
+    bio: null,
+    createdAt: now,
+    updatedAt: now,
+    deletedAt: null,
+  });
 
   beforeEach(async () => {
     commitMock.mockClear();
+
+    userQueryRepository = {
+      findOneUserByAuthIdentityId: jest.fn(),
+    } as unknown as jest.Mocked<UserQueryRepositoryGateway>;
+
     postCommandRepository = {
       createPost: jest.fn().mockReturnValue(jest.fn()),
     } as unknown as jest.Mocked<PostCommandRepositoryGateway>;
 
     transactionGateway = {
-      execute: jest.fn().mockResolvedValue(transactionMock),
+      execute: jest.fn().mockResolvedValue(
+        new TransactionOutputModel(commitMock, jest.fn()),
+      ),
     } as unknown as jest.Mocked<BaseTransactionRepositoryGateway>;
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         CreatePostUseCase,
+        { provide: UserQueryRepositoryGateway, useValue: userQueryRepository },
         { provide: PostCommandRepositoryGateway, useValue: postCommandRepository },
         { provide: BaseTransactionRepositoryGateway, useValue: transactionGateway },
       ],
@@ -3439,15 +3513,26 @@ describe('CreatePostUseCase', () => {
     useCase = module.get(CreatePostUseCase);
   });
 
-  it('should create a post and commit the transaction', async () => {
-    const sessionData = /* build mock session */;
-    const dto = CreatePostRequestDto.build({ title: 'My Post', content: 'Content here' });
+  describe('execute', () => {
+    it('should create a post and commit the transaction', async () => {
+      userQueryRepository.findOneUserByAuthIdentityId.mockResolvedValue(mockUser);
+      const dto = CreatePostRequestDto.build({ content: 'My post content' });
 
-    const result = await useCase.execute(sessionData, dto);
+      const result = await useCase.execute(mockSessionData, dto);
 
-    expect(transactionGateway.execute).toHaveBeenCalled();
-    expect(commitMock).toHaveBeenCalledTimes(1); // transaction MUST be committed
-    expect(result.postId).toBeDefined();
+      expect(result.postId).toBeInstanceOf(PostId);
+      expect(postCommandRepository.createPost).toHaveBeenCalledTimes(1);
+      expect(transactionGateway.execute).toHaveBeenCalledTimes(1);
+      expect(commitMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('should throw UserNotFoundError when the user does not exist', async () => {
+      userQueryRepository.findOneUserByAuthIdentityId.mockResolvedValue(null);
+      const dto = CreatePostRequestDto.build({ content: 'My post content' });
+
+      await expect(useCase.execute(mockSessionData, dto)).rejects.toThrow(UserNotFoundError);
+      expect(commitMock).not.toHaveBeenCalled();
+    });
   });
 });
 ```
