@@ -94,7 +94,7 @@ The `app` service only starts after `postgres`, `redis`, and `minio-init` are he
 
 #### `zookeeper-1`
 
-**Image:** `bitnami/zookeeper:3.7.1`
+**Image:** `zookeeper:3.8`
 
 ZooKeeper is a distributed coordination service. ClickHouse uses it internally to manage distributed state, leader election, and replicated merge tree metadata — even in single-node mode. It has no user-facing port and is an internal dependency only.
 

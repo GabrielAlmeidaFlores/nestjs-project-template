@@ -30,17 +30,15 @@ x-db-depend: &db-depend
 
 services:
   zookeeper-1:
-    image: bitnami/zookeeper:3.7.1
+    image: zookeeper:3.8
     container_name: zookeeper-1
     hostname: zookeeper-1
-    user: root
     restart: on-failure
     environment:
-      ALLOW_ANONYMOUS_LOGIN: 'yes'
-      ZOO_SERVER_ID: 1
-      ZOO_AUTOPURGE_INTERVAL: 1
+      ZOO_MY_ID: 1
+      ZOO_AUTOPURGE_PURGE_INTERVAL: 1
     volumes:
-      - zookeeper-1:/bitnami/zookeeper
+      - zookeeper-1:/data
 
   clickhouse:
     <<: *clickhouse-defaults
