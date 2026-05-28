@@ -14,6 +14,7 @@ import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { BucketGateway } from '@infra/bucket/bucket.gateway';
 import { BucketApplicationVariable } from '@shared/system/constant/application-variable/source/bucket.application-variable';
 import { FileModel } from '@shared/system/model/generic/file.model';
+import { withSpan } from '@shared/system/tracing/tracer';
 
 @Injectable()
 export class S3Service implements BucketGateway {
@@ -23,6 +24,9 @@ export class S3Service implements BucketGateway {
   private readonly s3BucketName: string;
 
   public constructor() {
+    const customEndpoint = BucketApplicationVariable.BUCKET_S3_ENDPOINT;
+    const hasCustomEndpoint = customEndpoint.length > 0;
+
     const params: S3ClientConfig = {
       region: BucketApplicationVariable.BUCKET_S3_REGION,
       credentials: {
@@ -30,6 +34,10 @@ export class S3Service implements BucketGateway {
         secretAccessKey:
           BucketApplicationVariable.BUCKET_S3_ACCESS_KEY_CREDENTIAL,
       },
+      ...(hasCustomEndpoint && {
+        endpoint: customEndpoint,
+        forcePathStyle: true,
+      }),
     };
 
     this.s3Client = new S3Client(params);
@@ -37,86 +45,98 @@ export class S3Service implements BucketGateway {
   }
 
   public async getOriginalFileName(fileName: string): Promise<string> {
-    const head = await this.s3Client.send(
-      new HeadObjectCommand({ Bucket: this.s3BucketName, Key: fileName }),
-    );
+    return withSpan('s3.getOriginalFileName', async () => {
+      const head = await this.s3Client.send(
+        new HeadObjectCommand({ Bucket: this.s3BucketName, Key: fileName }),
+      );
 
-    const metaVal = head.Metadata?.['original-filename'];
-    return metaVal !== undefined
-      ? decodeURIComponent(metaVal)
-      : new Guid().toString();
+      const metaVal = head.Metadata?.['original-filename'];
+      return metaVal !== undefined
+        ? decodeURIComponent(metaVal)
+        : new Guid().toString();
+    });
   }
 
   public async update(file: FileModel, fileLocation: string): Promise<string> {
-    const fileMetadata = await fileType.fileTypeFromBuffer(file.buffer);
-    const fileMimeType = fileMetadata?.mime ?? 'application/octet-stream';
+    return withSpan('s3.update', async () => {
+      const fileMetadata = await fileType.fileTypeFromBuffer(file.buffer);
+      const fileMimeType = fileMetadata?.mime ?? 'application/octet-stream';
 
-    await this.s3Client.send(
-      new PutObjectCommand({
-        Bucket: this.s3BucketName,
-        Key: fileLocation,
-        Body: file.buffer,
-        ContentType: fileMimeType,
-        Metadata: {
-          'original-filename': encodeURIComponent(file.originalName),
-        },
-      }),
-    );
+      await this.s3Client.send(
+        new PutObjectCommand({
+          Bucket: this.s3BucketName,
+          Key: fileLocation,
+          Body: file.buffer,
+          ContentType: fileMimeType,
+          Metadata: {
+            'original-filename': encodeURIComponent(file.originalName),
+          },
+        }),
+      );
 
-    return fileLocation;
+      return fileLocation;
+    });
   }
 
   public async create(file: FileModel): Promise<string> {
-    const fileMetadata = await fileType.fileTypeFromBuffer(file.buffer);
-    const fileName = new Guid().toString();
-    const fileMimeType = fileMetadata?.mime ?? 'application/octet-stream';
+    return withSpan('s3.create', async () => {
+      const fileMetadata = await fileType.fileTypeFromBuffer(file.buffer);
+      const fileName = new Guid().toString();
+      const fileMimeType = fileMetadata?.mime ?? 'application/octet-stream';
 
-    await this.s3Client.send(
-      new PutObjectCommand({
-        Bucket: this.s3BucketName,
-        Key: fileName,
-        Body: file.buffer,
-        ContentType: fileMimeType,
-        Metadata: {
-          'original-filename': encodeURIComponent(file.originalName),
-        },
-      }),
-    );
+      await this.s3Client.send(
+        new PutObjectCommand({
+          Bucket: this.s3BucketName,
+          Key: fileName,
+          Body: file.buffer,
+          ContentType: fileMimeType,
+          Metadata: {
+            'original-filename': encodeURIComponent(file.originalName),
+          },
+        }),
+      );
 
-    return fileName;
+      return fileName;
+    });
   }
 
   public async getSignedUrl(fileName: string): Promise<URL> {
-    const command = new GetObjectCommand({
-      Bucket: this.s3BucketName,
-      Key: fileName,
-    });
+    return withSpan('s3.getSignedUrl', async () => {
+      const command = new GetObjectCommand({
+        Bucket: this.s3BucketName,
+        Key: fileName,
+      });
 
-    const signedUrl = await getSignedUrl(this.s3Client, command, {
-      expiresIn: BucketApplicationVariable.BUCKET_S3_SIGNED_URL_EXPIRES_IN,
-    });
+      const signedUrl = await getSignedUrl(this.s3Client, command, {
+        expiresIn: BucketApplicationVariable.BUCKET_S3_SIGNED_URL_EXPIRES_IN,
+      });
 
-    return new URL(signedUrl);
+      return new URL(signedUrl);
+    });
   }
 
   public async getBuffer(fileName: string): Promise<Buffer> {
-    const command = new GetObjectCommand({
-      Bucket: this.s3BucketName,
-      Key: fileName,
+    return withSpan('s3.getBuffer', async () => {
+      const command = new GetObjectCommand({
+        Bucket: this.s3BucketName,
+        Key: fileName,
+      });
+
+      const response = await this.s3Client.send(command);
+
+      const byteArray = await response.Body?.transformToByteArray();
+      return Buffer.from(byteArray as Uint8Array);
     });
-
-    const response = await this.s3Client.send(command);
-
-    const byteArray = await response.Body?.transformToByteArray();
-    return Buffer.from(byteArray as Uint8Array);
   }
 
   public async delete(fileName: string): Promise<void> {
-    const command = new DeleteObjectCommand({
-      Bucket: this.s3BucketName,
-      Key: fileName,
-    });
+    return withSpan('s3.delete', async () => {
+      const command = new DeleteObjectCommand({
+        Bucket: this.s3BucketName,
+        Key: fileName,
+      });
 
-    await this.s3Client.send(command);
+      await this.s3Client.send(command);
+    });
   }
 }

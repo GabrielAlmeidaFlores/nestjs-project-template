@@ -7,6 +7,7 @@ import sgMail from '@sendgrid/mail';
 import { EmailGateway } from '@infra/email/email.gateway';
 import { SendHTMLEmailInputModel } from '@infra/email/model/input/send-html-email.input.model';
 import { EmailApplicationVariable } from '@shared/system/constant/application-variable/source/email.application-variable';
+import { withSpan } from '@shared/system/tracing/tracer';
 
 @Injectable()
 export class SendGridService implements EmailGateway {
@@ -17,39 +18,41 @@ export class SendGridService implements EmailGateway {
   }
 
   public async sendHTMLEmail(props: SendHTMLEmailInputModel): Promise<void> {
-    let emailTemplate = this.getEmailTemplate(props.emailTemplateName);
+    return withSpan('sendgrid.sendHTMLEmail', async () => {
+      let emailTemplate = this.getEmailTemplate(props.emailTemplateName);
 
-    const emailTemplateParametersCopy: Record<string, string> = {
-      ...props.emailTemplateParameters,
-      currentYear: new Date().getFullYear().toString(),
-      appName: EmailApplicationVariable.APP_NAME,
-      supportEmail: EmailApplicationVariable.APP_SUPPORT_EMAIL,
-    };
+      const emailTemplateParametersCopy: Record<string, string> = {
+        ...props.emailTemplateParameters,
+        currentYear: new Date().getFullYear().toString(),
+        appName: EmailApplicationVariable.APP_NAME,
+        supportEmail: EmailApplicationVariable.APP_SUPPORT_EMAIL,
+      };
 
-    Object.keys(emailTemplateParametersCopy).forEach((key) => {
-      const regex = new RegExp(`{{${key}}}`, 'g');
-      const value = emailTemplateParametersCopy[key];
+      Object.keys(emailTemplateParametersCopy).forEach((key) => {
+        const regex = new RegExp(`{{${key}}}`, 'g');
+        const value = emailTemplateParametersCopy[key];
 
-      if (value !== undefined) {
-        emailTemplate = emailTemplate.replace(regex, value);
-      }
-    });
+        if (value !== undefined) {
+          emailTemplate = emailTemplate.replace(regex, value);
+        }
+      });
 
-    await sgMail.send({
-      to: props.to,
-      from: EmailApplicationVariable.EMAIL_SENDER,
-      subject: props.subject,
-      html: emailTemplate,
-      ...(props.attachments && props.attachments.length > 0
-        ? {
-            attachments: props.attachments.map((attachment) => ({
-              filename: attachment.filename,
-              contentType: attachment.contentType,
-              content: attachment.content.toString('base64'),
-              disposition: 'attachment',
-            })),
-          }
-        : {}),
+      await sgMail.send({
+        to: props.to,
+        from: EmailApplicationVariable.EMAIL_SENDER,
+        subject: props.subject,
+        html: emailTemplate,
+        ...(props.attachments && props.attachments.length > 0
+          ? {
+              attachments: props.attachments.map((attachment) => ({
+                filename: attachment.filename,
+                contentType: attachment.contentType,
+                content: attachment.content.toString('base64'),
+                disposition: 'attachment',
+              })),
+            }
+          : {}),
+      });
     });
   }
 

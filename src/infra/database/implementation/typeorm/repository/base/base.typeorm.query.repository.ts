@@ -1,6 +1,7 @@
 import { Like } from 'typeorm';
 
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
+import { withSpan } from '@shared/system/tracing/tracer';
 
 import type { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import type { NotFoundError } from '@core/error/not-found.error';
@@ -19,11 +20,15 @@ export abstract class BaseTypeormQueryRepository<T extends BaseTypeormEntity> {
   protected constructor(protected readonly repository: Repository<T>) {}
 
   protected async count(options: FindOneOptions<T>): Promise<number> {
-    return await this.repository.count(options);
+    return withSpan('typeorm.count', async () => {
+      return await this.repository.count(options);
+    });
   }
 
   protected async findOne(options: FindOneOptions<T>): Promise<T | null> {
-    return await this.repository.findOne(options);
+    return withSpan('typeorm.findOne', async () => {
+      return await this.repository.findOne(options);
+    });
   }
 
   protected async findOneOrFail(
@@ -40,65 +45,69 @@ export abstract class BaseTypeormQueryRepository<T extends BaseTypeormEntity> {
   }
 
   protected async find(options: FindManyOptions<T>): Promise<Array<T>> {
-    return await this.repository.find(options);
+    return withSpan('typeorm.find', async () => {
+      return await this.repository.find(options);
+    });
   }
 
   protected async list(
     listBaseDto: ListDataInputModel,
     options?: FindManyOptions<T>,
   ): Promise<ListDataOutputModel<T>> {
-    const maxItemsPerQuery = 100;
-    if (listBaseDto.limit > maxItemsPerQuery) {
-      listBaseDto.limit = maxItemsPerQuery;
-    }
+    return withSpan('typeorm.list', async () => {
+      const maxItemsPerQuery = 100;
+      if (listBaseDto.limit > maxItemsPerQuery) {
+        listBaseDto.limit = maxItemsPerQuery;
+      }
 
-    if (listBaseDto.limit < 1) {
-      listBaseDto.limit = 1;
-    }
+      if (listBaseDto.limit < 1) {
+        listBaseDto.limit = 1;
+      }
 
-    if (listBaseDto.page < 0) {
-      listBaseDto.page = 0;
-    }
+      if (listBaseDto.page < 0) {
+        listBaseDto.page = 0;
+      }
 
-    const sortField = listBaseDto.sortField;
-    const order = this.generateSortOrder(sortField);
+      const sortField = listBaseDto.sortField;
+      const order = this.generateSortOrder(sortField);
 
-    const field = listBaseDto.field;
-    const search = listBaseDto.search;
-    const where =
-      typeof search === 'string'
-        ? this.generateSearchWhere(field ?? null, search)
-        : {};
+      const field = listBaseDto.field;
+      const search = listBaseDto.search;
+      const where =
+        typeof search === 'string'
+          ? this.generateSearchWhere(field ?? null, search)
+          : {};
 
-    const currentPage = listBaseDto.page;
-    const itemsPerPage = listBaseDto.limit;
-    const paginationOffset = 1;
-    const skip = (currentPage - paginationOffset) * itemsPerPage;
+      const currentPage = listBaseDto.page;
+      const itemsPerPage = listBaseDto.limit;
+      const paginationOffset = 1;
+      const skip = (currentPage - paginationOffset) * itemsPerPage;
 
-    const resolvedOrder = options?.order ?? order;
-    const resolvedRelations = options?.relations ?? {};
-    const resolvedSelect = options?.select ?? {};
-    const resolvedWhere = options?.where
-      ? this.mergeWhereConditions(where, options.where)
-      : where;
+      const resolvedOrder = options?.order ?? order;
+      const resolvedRelations = options?.relations ?? {};
+      const resolvedSelect = options?.select ?? {};
+      const resolvedWhere = options?.where
+        ? this.mergeWhereConditions(where, options.where)
+        : where;
 
-    const findAndCountOptions: FindManyOptions<T> = {
-      take: itemsPerPage,
-      skip,
-      order: resolvedOrder,
-      relations: resolvedRelations,
-      select: resolvedSelect,
-      where: resolvedWhere,
-    };
+      const findAndCountOptions: FindManyOptions<T> = {
+        take: itemsPerPage,
+        skip,
+        order: resolvedOrder,
+        relations: resolvedRelations,
+        select: resolvedSelect,
+        where: resolvedWhere,
+      };
 
-    const [data, count] =
-      await this.repository.findAndCount(findAndCountOptions);
+      const [data, count] =
+        await this.repository.findAndCount(findAndCountOptions);
 
-    return new ListDataOutputModel({
-      page: currentPage,
-      limit: itemsPerPage,
-      totalItems: count,
-      resource: data,
+      return new ListDataOutputModel({
+        page: currentPage,
+        limit: itemsPerPage,
+        totalItems: count,
+        resource: data,
+      });
     });
   }
 

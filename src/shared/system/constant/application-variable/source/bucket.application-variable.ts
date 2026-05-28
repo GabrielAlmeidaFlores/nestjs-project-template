@@ -29,6 +29,13 @@ export class BucketApplicationVariable {
       String,
     );
 
+  public static readonly BUCKET_S3_ENDPOINT =
+    BucketApplicationVariable.source.getValueOrDefault<string>(
+      'BUCKET_S3_ENDPOINT',
+      String,
+      '',
+    );
+
   public static readonly BUCKET_S3_SIGNED_URL_EXPIRES_IN =
     BucketApplicationVariable.source.getValueOrDefault<number>(
       'BUCKET_S3_SIGNED_URL_EXPIRES_IN',

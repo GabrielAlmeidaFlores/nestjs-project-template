@@ -9,7 +9,6 @@ import { AuthIdentityForgotPasswordValidateCodeUseCase } from '@module/generic/a
 import { AuthIdentityForgotPasswordUseCase } from '@module/generic/auth-identity/use-case/auth-identity-forgot-password.use-case';
 import { AuthIdentityResetPasswordUseCase } from '@module/generic/auth-identity/use-case/auth-identity-reset-password.use-case';
 import { AuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-in.use-case';
-import { AuthIdentitySignOutUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-out.use-case';
 import { AuthIdentitySignUpUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-up.use-case';
 import { PreAuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/pre-auth-identity-sign-in.use-case';
 import { SetAuthTokenCookieUseCase } from '@module/generic/auth-identity/use-case/set-auth-token-cookie.use-case';
@@ -56,7 +55,6 @@ import { ValidateAuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-i
     AuthIdentitySignInUseCase,
     PreAuthIdentitySignInUseCase,
     UpdateAuthIdentityPasswordUseCase,
-    AuthIdentitySignOutUseCase,
     SetAuthTokenCookieUseCase,
     {
       provide: SetAuthTokenCookieUseCaseGateway,
