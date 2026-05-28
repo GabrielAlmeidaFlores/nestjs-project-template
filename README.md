@@ -8,12 +8,11 @@ A production-ready NestJS backend template built with **Clean Architecture** and
 |---|---|
 | Framework | NestJS (Fastify adapter) |
 | Language | TypeScript (strict mode) |
-| Database | MySQL + TypeORM |
+| Database | PostgreSQL + TypeORM |
 | Validation | class-validator / class-transformer |
 | Object mapping | AutoMapper (`@automapper/nestjs`) |
 | Email | SendGrid |
 | Storage | AWS S3 (via `BucketGateway`) |
-| AI | Generative AI (via `AiGateway`) |
 | Cache | Redis (via `CacheGateway`) |
 | API docs | OpenAPI / Swagger |
 | Testing | Jest |
@@ -48,7 +47,7 @@ For the full architecture reference — including rules, patterns, and examples 
 ### Prerequisites
 
 - Node.js 22.x
-- MySQL 8.x
+- PostgreSQL 16.x
 - Yarn
 
 ### Installation
@@ -71,9 +70,9 @@ Key variables:
 ```env
 # Database
 DATABASE_HOST=localhost
-DATABASE_PORT=3306
+DATABASE_PORT=5432
 DATABASE_NAME=nestjs_template
-DATABASE_USER=root
+DATABASE_USER=postgres
 DATABASE_PASSWORD=secret
 
 # Auth
@@ -91,9 +90,6 @@ BUCKET_NAME=my-bucket
 AWS_REGION=us-east-1
 AWS_ACCESS_KEY_ID=xxx
 AWS_SECRET_ACCESS_KEY=xxx
-
-# AI (optional)
-OPENAI_API_KEY=sk-xxx
 
 # Cache (Redis, optional)
 REDIS_HOST=localhost
@@ -175,9 +171,9 @@ src/
 │   └── generic/
 ├── infra/          # Infrastructure implementations
 │   ├── database/   # TypeORM entities & repositories
-│   ├── ai/
 │   ├── email/
-│   └── storage/
+│   ├── bucket/
+│   └── cache-storage/
 ├── lib/            # Shared libraries (AutoMapper profiles, event bus, processors)
 ├── shared/         # API utilities (guards, decorators, pipes, DTOs)
 └── cli/            # CLI scripts & seeders
