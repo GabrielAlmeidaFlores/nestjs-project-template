@@ -42,7 +42,7 @@ export class TypeormIndex {
   );
 
   public static readonly dataSourceConfig: DataSourceOptions = {
-    type: 'mysql',
+    type: 'postgres',
     host: DatabaseApplicationVariable.DATABASE_HOST,
     port: DatabaseApplicationVariable.DATABASE_PORT,
     username: DatabaseApplicationVariable.DATABASE_USERNAME,
