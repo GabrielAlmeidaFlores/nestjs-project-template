@@ -7,16 +7,13 @@ import { DatabaseApplicationVariable } from '@shared/system/constant/application
 config();
 
 const typeormDataSource = new DataSource({
-  type: 'mysql',
+  type: 'postgres',
   host: DatabaseApplicationVariable.DATABASE_HOST,
   port: DatabaseApplicationVariable.DATABASE_PORT,
   database: DatabaseApplicationVariable.DATABASE_NAME,
   username: DatabaseApplicationVariable.DATABASE_USERNAME,
   password: DatabaseApplicationVariable.DATABASE_PASSWORD,
   synchronize: false,
-  extra: {
-    trustServerCertificate: true,
-  },
   migrations: [__dirname + '/migration/*'],
   migrationsTableName: 'tb_migration',
   entities: TypeormIndex.entities,
