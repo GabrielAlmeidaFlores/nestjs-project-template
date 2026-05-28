@@ -100,7 +100,7 @@ ZooKeeper is a distributed coordination service. ClickHouse uses it internally t
 
 #### `clickhouse`
 
-**Image:** `clickhouse/clickhouse-server:23.8-alpine` | **Ports:** `9000` (native TCP), `8123` (HTTP)
+**Image:** `clickhouse/clickhouse-server:24.3-alpine` | **Ports:** `9000` (native TCP), `8123` (HTTP)
 
 ClickHouse is a column-oriented OLAP database. SigNoz stores all observability data here:
 
@@ -112,13 +112,13 @@ ClickHouse is optimized for high-throughput time-series insertions and fast aggr
 
 #### `signoz-migrate`
 
-**Image:** `signoz/migrate:0.48.1`
+**Image:** `signoz/migrate:latest`
 
 A one-shot container. It runs the SigNoz schema migration — creating tables, indexes, and TTL policies inside ClickHouse — then exits with code `0`. The `query-service` waits for this container to complete successfully before starting, guaranteeing the schema exists before any query is executed.
 
 #### `query-service`
 
-**Image:** `signoz/query-service:0.48.1`
+**Image:** `signoz/query-service:latest`
 
 The SigNoz backend API. It connects to ClickHouse and exposes a REST/GraphQL interface consumed by the frontend. Responsible for:
 
@@ -128,7 +128,7 @@ The SigNoz backend API. It connects to ClickHouse and exposes a REST/GraphQL int
 
 #### `frontend`
 
-**Image:** `signoz/frontend:0.48.1` | **Port:** `3301`
+**Image:** `signoz/frontend:latest` | **Port:** `3301`
 
 The SigNoz web UI served via nginx. Access it at `http://localhost:3301` to:
 
@@ -138,7 +138,7 @@ The SigNoz web UI served via nginx. Access it at `http://localhost:3301` to:
 
 #### `otel-collector`
 
-**Image:** `signoz/signoz-otel-collector:0.102.9` | **Ports:** `4317` (gRPC), `4318` (HTTP)
+**Image:** `signoz/signoz-otel-collector:latest` | **Ports:** `4317` (gRPC), `4318` (HTTP)
 
 The OpenTelemetry Collector is the pipeline between your application and ClickHouse. It:
 
