@@ -120,9 +120,9 @@ src/
 │   │           │   ├── entity/   # Database entities
 │   │           │   └── transformer/  # Custom transformers
 │   │           └── repository/   # Repository implementations
-│   ├── ai/                       # AI integrations
 │   ├── email/                    # Email service
-│   └── storage/                  # File storage
+│   ├── bucket/                   # File storage (AWS S3)
+│   └── cache-storage/            # Cache (Redis)
 │
 ├── lib/                           # Shared libraries
 │   ├── mapper/                   # AutoMapper (entity transformations)
@@ -1220,26 +1220,26 @@ export class PostNotFoundError extends NotFoundError {
 
 ```typescript
 // ❌ BAD: Constants and functions at module level
-const APOSENTADORIA_KEYS = [
-  'aposentadoriaPorIdadeUrbana',
-  'aposentadoriaPorIdadeRural',
+const ALLOWED_POST_STATUSES = [
+  'draft',
+  'published',
+  'archived',
 ] as const;
 
-const PERCENTUAL_MENORES_CONTRIBUICOES = 0.2;
+const MAX_PREVIEW_LENGTH = 100;
 
-function humanKey(key: string): string {
-  return key
-    .replace(/([A-Z])/g, ' $1')
-    .replace(/^./, (s) => s.toUpperCase())
-    .trim();
+function buildPreview(content: string): string {
+  return content.length > MAX_PREVIEW_LENGTH
+    ? content.slice(0, MAX_PREVIEW_LENGTH) + '...'
+    : content;
 }
 
 @Injectable()
 export class SomeService {
   public someMethod(): void {
     // Using module-level constants and functions
-    for (const key of APOSENTADORIA_KEYS) {
-      const formatted = humanKey(key);
+    for (const status of ALLOWED_POST_STATUSES) {
+      const preview = buildPreview(status);
       // ...
     }
   }
@@ -1254,25 +1254,25 @@ export class SomeService {
   protected readonly _type = SomeService.name;
 
   // ✅ GOOD: Constants as private readonly properties
-  private readonly APOSENTADORIA_KEYS = [
-    'aposentadoriaPorIdadeUrbana',
-    'aposentadoriaPorIdadeRural',
+  private readonly ALLOWED_POST_STATUSES = [
+    'draft',
+    'published',
+    'archived',
   ] as const;
 
-  private readonly PERCENTUAL_MENORES_CONTRIBUICOES = 0.2;
+  private readonly MAX_PREVIEW_LENGTH = 100;
 
   // ✅ GOOD: Helper function as private method
-  private humanKey(key: string): string {
-    return key
-      .replace(/([A-Z])/g, ' $1')
-      .replace(/^./, (s) => s.toUpperCase())
-      .trim();
+  private buildPreview(content: string): string {
+    return content.length > this.MAX_PREVIEW_LENGTH
+      ? content.slice(0, this.MAX_PREVIEW_LENGTH) + '...'
+      : content;
   }
 
   public someMethod(): void {
     // Using instance properties and methods
-    for (const key of this.APOSENTADORIA_KEYS) {
-      const formatted = this.humanKey(key);
+    for (const status of this.ALLOWED_POST_STATUSES) {
+      const preview = this.buildPreview(status);
       // ...
     }
   }
@@ -1839,8 +1839,8 @@ export class PostTypeormEntity extends BaseTypeormEntity {
 
 **Available Transformers**:
 
-- `DateOnlyTransformer` - Formats dates as 'YYYY-MM-DD' for MySQL DATE columns (REQUIRED for `type: 'date'`)
-- `DateTransformer` - Formats dates as ISO strings for MySQL TIMESTAMP/DATETIME columns (REQUIRED for `type: 'timestamp'` or `type: 'datetime'`)
+- `DateOnlyTransformer` - Formats dates as 'YYYY-MM-DD' for PostgreSQL DATE columns (REQUIRED for `type: 'date'`)
+- `DateTransformer` - Formats dates as ISO strings for PostgreSQL TIMESTAMP columns (REQUIRED for `type: 'timestamp'`)
 - `CryptographyTransformer` - Encrypts/decrypts sensitive data
 - `HashTransformer` - One-way password hashing
 
@@ -1848,7 +1848,7 @@ export class PostTypeormEntity extends BaseTypeormEntity {
 
 For columns declared as `type: 'decimal'` in TypeORM:
 
-- **TypeORM entity**: Keep property type as `string` (or `string | null`) — TypeORM returns decimals as strings from MySQL
+- **TypeORM entity**: Keep property type as `string` (or `string | null`) — TypeORM returns decimals as strings from PostgreSQL
 - **Domain entity / Query result**: Use `DecimalValue` (or `DecimalValue | null`) from `@core/domain/schema/value-object/decimal/decimal.value-object`
 - **AutoMapper ORM→Domain**: `new DecimalValue(source.field)` or `source.field !== null ? new DecimalValue(source.field) : null`
 - **AutoMapper Domain→ORM**: `source.field.toString()` or `source.field !== null ? source.field.toString() : null`
@@ -1881,15 +1881,15 @@ public grossAmount?: DecimalValue;
 
 **⚠️ CRITICAL: Choosing the Correct Date Transformer**
 
-MySQL has different date/time column types that require different transformers:
+PostgreSQL has different date/time column types that require different transformers:
 
 - **`type: 'date'`** → Use `DateOnlyTransformer` (stores 'YYYY-MM-DD', e.g., '2000-03-10')
-- **`type: 'timestamp'` or `type: 'datetime'`** → Use `DateTransformer` (stores full ISO datetime)
+- **`type: 'timestamp'`** → Use `DateTransformer` (stores full ISO datetime)
 
 Using the wrong transformer will cause database errors like:
 
 ```
-QueryFailedError: Incorrect date value: '2000-03-10T03:00:00.000Z' for column 'start_date'
+QueryFailedError: invalid input syntax for type date: "2000-03-10T03:00:00.000Z"
 ```
 
 #### ⚠️ CRITICAL: Foreign Key Relationships Pattern
@@ -3027,7 +3027,7 @@ import { Injectable, Inject } from '@nestjs/common';
 
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { AnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis/analysis.entity';
+import { AnalysisEntity } from '@module/client/post/domain/schema/entity/post/post.entity';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 ```
 
@@ -3066,7 +3066,7 @@ yarn jest path/to/file.spec.ts
 yarn jest --testNamePattern="pattern"
 
 # Run a specific test suite
-yarn jest src/module/customer/analysis-tool/module/insurance-quality-analysis
+yarn jest src/module/client/post
 ```
 
 ### Code Quality
@@ -3221,7 +3221,7 @@ private async fetchAnalysisOrThrow(id: AnalysisId): Promise<AnalysisEntity> {
 
 ### 3. TypeORM Date Fields Returning Strings
 
-**Problem**: Date validation fails because MySQL returns strings
+**Problem**: Date validation fails because PostgreSQL returns strings
 
 **Solution**: Use `DateTransformer` on date columns:
 
@@ -3563,7 +3563,7 @@ describe('PostEntityAutoMapperProfile', () => {
 
 - **Node Version**: 22.15.0 (specified in package.json engines)
 - **Package Manager**: Yarn (not npm)
-- **Database**: MySQL with TypeORM
+- **Database**: PostgreSQL with TypeORM
 - **API Framework**: Fastify (not Express)
 - **Validation**: class-validator and class-transformer for DTOs
 - **Documentation**: OpenAPI/Swagger (via decorators)
