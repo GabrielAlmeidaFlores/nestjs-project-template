@@ -1,8 +1,6 @@
-version: '3.8'
-
 x-clickhouse-defaults: &clickhouse-defaults
   restart: on-failure
-  image: clickhouse/clickhouse-server:23.8-alpine
+  image: clickhouse/clickhouse-server:24.3-alpine
   tty: true
   depends_on:
     - zookeeper-1
@@ -51,14 +49,14 @@ services:
       - clickhouse:/var/lib/clickhouse/
 
   signoz-migrate:
-    image: signoz/migrate:0.48.1
+    image: signoz/migrate:latest
     container_name: signoz-migrate
     <<: *db-depend
     command:
       - '--dsn=tcp://clickhouse:9000'
 
   query-service:
-    image: signoz/query-service:0.48.1
+    image: signoz/query-service:latest
     container_name: query-service
     hostname: query-service
     restart: on-failure
@@ -82,7 +80,7 @@ services:
         condition: service_completed_successfully
 
   frontend:
-    image: signoz/frontend:0.48.1
+    image: signoz/frontend:latest
     container_name: signoz-frontend
     restart: on-failure
     depends_on:
@@ -93,7 +91,7 @@ services:
       NGINX_CONFIG_ENVSUBST_OUTPUT_DIR: /etc/nginx/conf.d
 
   otel-collector:
-    image: signoz/signoz-otel-collector:0.102.9
+    image: signoz/signoz-otel-collector:latest
     container_name: otel-collector
     hostname: otel-collector
     restart: on-failure
